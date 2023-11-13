@@ -4,7 +4,7 @@ import { UserProfile } from 'types/user';
 
 export enum StartupScreen {
   None = 'None',
-  Home = 'Home',
+  Home = 'Log',
   Welcome = 'Welcome',
 }
 
@@ -28,8 +28,8 @@ export type MainNavigatorParamList = {
   Tabs: NavigatorScreenParams<TabNavigatorParamList>;
 };
 
-export type HomeNavigatorParamList = {
-  Home: undefined;
+export type LogNavigatorParamList = {
+  Log: undefined;
 };
 
 export type StartupNavigatorParamList = {
@@ -37,7 +37,7 @@ export type StartupNavigatorParamList = {
 };
 
 export type TabNavigatorParamList = {
-  HomeTab: undefined;
+  LogTab: undefined;
   MoreTab: {
     screen: string;
     params: object;

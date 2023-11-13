@@ -1,8 +1,9 @@
 import { Platform, StatusBar } from 'react-native';
 import React, { useEffect } from 'react';
 
-import HomeNavigator from './HomeNavigator';
-import { Icon } from '@rneui/base';
+// import { Icon } from '@rneui/base';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import LogNavigator from './LogNavigator';
 import MoreNavigator from './MoreNavigator';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { TabNavigatorParamList } from 'types/navigation';
@@ -32,7 +33,7 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      initialRouteName="HomeTab"
+      initialRouteName="LogTab"
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: theme.colors.brandSecondary,
@@ -47,15 +48,15 @@ const TabNavigator = () => {
         tabBarIconStyle: { top: 3 },
       }}>
       <Tab.Screen
-        name="HomeTab"
-        component={HomeNavigator}
+        name="LogTab"
+        component={LogNavigator}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Log',
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ color }) => (
             <Icon
-              name={'home-circle'}
-              type={'material-community'}
+              name={'file-lines'}
+              // type={'material-community'}
               color={color}
               size={28}
             />
@@ -70,8 +71,8 @@ const TabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ color }) => (
             <Icon
-              name={'microsoft-xbox-controller-menu'}
-              type={'material-community'}
+              name={'gear'}
+              // type={'material-community'}
               color={color}
               size={28}
             />

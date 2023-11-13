@@ -25,6 +25,9 @@
 		97E5EF2D1DF840CABDF8B4A9 /* SFUIText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 750008C8717A4D0F9DCA5AD8 /* SFUIText-Regular.otf */; };
 		9E698EAE435244B683FCFF32 /* SFUIText-BoldItalicG1.otf in Resources */ = {isa = PBXBuildFile; fileRef = 777336D6D2634B96863177A1 /* SFUIText-BoldItalicG1.otf */; };
 		A10986D829A95C4900B3FBEC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A10986D729A95C4900B3FBEC /* GoogleService-Info.plist */; };
+		A1AACB892B01BDC200130D6E /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1AACB862B01BDC100130D6E /* FontAwesome6_Regular.ttf */; };
+		A1AACB8A2B01BDC200130D6E /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1AACB872B01BDC100130D6E /* FontAwesome6_Solid.ttf */; };
+		A1AACB8B2B01BDC200130D6E /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1AACB882B01BDC100130D6E /* FontAwesome6_Brands.ttf */; };
 		A35F5B05D28C406E9C990AB2 /* SFUIText-RegularG2.otf in Resources */ = {isa = PBXBuildFile; fileRef = 48199A9D0E4A4F2088161619 /* SFUIText-RegularG2.otf */; };
 		A585991829C244C2B2460213 /* SFUIText-Heavy.otf in Resources */ = {isa = PBXBuildFile; fileRef = 118ED4DEC61944FEA8EAD00E /* SFUIText-Heavy.otf */; };
 		A6B7EBA525DB4790A615F5A7 /* SFUIText-BoldItalicG3.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2141A5E6D005461F9C0D9909 /* SFUIText-BoldItalicG3.otf */; };
@@ -100,6 +103,9 @@
 		A13A5BF3287C8137006FAF4A /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		A13A5BF4287C8137006FAF4A /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
 		A19CDDD72913158100AE5D3F /* RCPilot.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = RCPilot.entitlements; path = RCPilot/RCPilot.entitlements; sourceTree = "<group>"; };
+		A1AACB862B01BDC100130D6E /* FontAwesome6_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Regular.ttf; sourceTree = "<group>"; };
+		A1AACB872B01BDC100130D6E /* FontAwesome6_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Solid.ttf; sourceTree = "<group>"; };
+		A1AACB882B01BDC100130D6E /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		A48C97E12D094724943D7381 /* SFUIText-RegularG1.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-RegularG1.otf"; path = "../assets/fonts/SFUIText/SFUIText-RegularG1.otf"; sourceTree = "<group>"; };
 		C1A94B2FFA2C45AE93875C71 /* SFUIText-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-Medium.otf"; path = "../assets/fonts/SFUIText/SFUIText-Medium.otf"; sourceTree = "<group>"; };
 		C95BA0D099564EB0AAEFE796 /* SFUIText-Semibold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-Semibold.otf"; path = "../assets/fonts/SFUIText/SFUIText-Semibold.otf"; sourceTree = "<group>"; };
@@ -239,6 +245,9 @@
 		A13A5BE4287C8137006FAF4A /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				A1AACB882B01BDC100130D6E /* FontAwesome6_Brands.ttf */,
+				A1AACB862B01BDC100130D6E /* FontAwesome6_Regular.ttf */,
+				A1AACB872B01BDC100130D6E /* FontAwesome6_Solid.ttf */,
 				A13A5BE5287C8137006FAF4A /* Fontisto.ttf */,
 				A13A5BE6287C8137006FAF4A /* Octicons.ttf */,
 				A13A5BE7287C8137006FAF4A /* Feather.ttf */,

@@ -1,19 +1,19 @@
-import { HomeNavigatorParamList } from 'types/navigation';
-import HomeScreen from 'components/HomeScreen';
+import { LogNavigatorParamList } from 'types/navigation';
+import LogScreen from 'components/LogScreen';
 import React from 'react';
 import { SvgXml } from 'react-native-svg';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { getSvg } from '@react-native-ajp-elements/ui';
 import { useTheme } from 'theme';
 
-const HomeStack = createNativeStackNavigator<HomeNavigatorParamList>();
+const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
 
-const HomeNavigator = () => {
+const LogNavigator = () => {
   const theme = useTheme();
 
   return (
-    <HomeStack.Navigator
-      initialRouteName="Home"
+    <LogStack.Navigator
+      initialRouteName="Log"
       screenOptions={{
         headerStyle: {
           backgroundColor: theme.colors.screenHeaderBackground,
@@ -23,9 +23,9 @@ const HomeNavigator = () => {
         },
         headerTintColor: theme.colors.screenHeaderBackButton,
       }}>
-      <HomeStack.Screen
-        name="Home"
-        component={HomeScreen}
+      <LogStack.Screen
+        name="Log"
+        component={LogScreen}
         options={{
           headerShadowVisible: false,
           // eslint-disable-next-line react/no-unstable-nested-components
@@ -39,8 +39,8 @@ const HomeNavigator = () => {
           ),
         }}
       />
-    </HomeStack.Navigator>
+    </LogStack.Navigator>
   );
 };
 
-export default HomeNavigator;
+export default LogNavigator;

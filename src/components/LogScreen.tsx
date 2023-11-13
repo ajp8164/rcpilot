@@ -2,7 +2,7 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from 'theme';
 
-const HomeScreen = () => {
+const LogScreen = () => {
   const theme = useTheme();
 
   return (
@@ -13,4 +13,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default LogScreen;

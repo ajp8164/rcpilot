@@ -1,10 +1,13 @@
 import { Platform, StatusBar } from 'react-native';
 import React, { useEffect } from 'react';
 
+import BatteriesNavigator from './BatteriesNavigator';
 // import { Icon } from '@rneui/base';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import LogNavigator from './LogNavigator';
-import MoreNavigator from './MoreNavigator';
+import ModelsNavigator from './ModelsNavigator';
+import ScanNavigator from './ScanNavigator';
+import SetupNavigator from './SetupNavigator';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { TabNavigatorParamList } from 'types/navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -56,7 +59,6 @@ const TabNavigator = () => {
           tabBarIcon: ({ color }) => (
             <Icon
               name={'file-lines'}
-              // type={'material-community'}
               color={color}
               size={28}
             />
@@ -64,15 +66,59 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="MoreTab"
-        component={MoreNavigator}
+        name="ModelsTab"
+        component={ModelsNavigator}
         options={{
-          tabBarLabel: 'More',
+          tabBarLabel: 'Models',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: ({ color }) => (
+            <Icon
+              name={'plane-up'}
+              color={color}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="BatteriesTab"
+        component={BatteriesNavigator}
+        options={{
+          tabBarLabel: 'Batteries',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: ({ color }) => (
+            <Icon
+              name={'battery-full'}
+              color={color}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SetupTab"
+        component={SetupNavigator}
+        options={{
+          tabBarLabel: 'Setup',
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ color }) => (
             <Icon
               name={'gear'}
-              // type={'material-community'}
+              color={color}
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="ScanTab"
+        component={ScanNavigator}
+        options={{
+          tabBarLabel: 'Scan',
+          // eslint-disable-next-line react/no-unstable-nested-components
+          tabBarIcon: ({ color }) => (
+            <Icon
+              name={'qrcode'}
               color={color}
               size={28}
             />

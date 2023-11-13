@@ -8,13 +8,30 @@ export enum StartupScreen {
   Welcome = 'Welcome',
 }
 
-export type MoreNavigatorParamList = {
+export type BatteriesNavigatorParamList = {
+  Batteries: undefined;
+};
+
+export type LogNavigatorParamList = {
+  Log: undefined;
+};
+
+export type MainNavigatorParamList = {
+  Startup: NavigatorScreenParams<StartupNavigatorParamList>;
+  Tabs: NavigatorScreenParams<TabNavigatorParamList>;
+};
+
+export type ModelsNavigatorParamList = {
+  Models: undefined;
+};
+
+export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
   Content: {
     content: ContentView;
   };
-  More: {
+  Setup: {
     subNav?: string;
   };
   UserAccount: undefined;
@@ -23,13 +40,8 @@ export type MoreNavigatorParamList = {
   };
 };
 
-export type MainNavigatorParamList = {
-  Startup: NavigatorScreenParams<StartupNavigatorParamList>;
-  Tabs: NavigatorScreenParams<TabNavigatorParamList>;
-};
-
-export type LogNavigatorParamList = {
-  Log: undefined;
+export type ScanNavigatorParamList = {
+  Scan: undefined;
 };
 
 export type StartupNavigatorParamList = {
@@ -37,8 +49,11 @@ export type StartupNavigatorParamList = {
 };
 
 export type TabNavigatorParamList = {
+  BatteriesTab: undefined;
   LogTab: undefined;
-  MoreTab: {
+  ModelsTab: undefined;
+  ScanTab: undefined;
+  SetupTab: {
     screen: string;
     params: object;
   };

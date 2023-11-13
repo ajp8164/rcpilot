@@ -1,23 +1,23 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
-import { MoreNavigatorParamList } from 'types/navigation';
-import MoreScreen from 'components/MoreScreen';
 import React from 'react';
+import { SetupNavigatorParamList } from 'types/navigation';
+import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
 import UserProfileScreen from 'components/UserProfileScreen';
 import { appConfig } from 'config';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const MoreStack = createNativeStackNavigator<MoreNavigatorParamList>();
+const SetupStack = createNativeStackNavigator<SetupNavigatorParamList>();
 
-const MoreNavigator = () => {
+const SetupNavigator = () => {
   const theme = useTheme();
 
   return (
-    <MoreStack.Navigator
-      initialRouteName="More"
+    <SetupStack.Navigator
+      initialRouteName="Setup"
       screenOptions={{
         headerLargeTitleShadowVisible: theme.mode === 'light',
         headerLargeStyle: {
@@ -31,30 +31,30 @@ const MoreNavigator = () => {
         },
         headerTintColor: theme.colors.screenHeaderBackButton,
       }}>
-      <MoreStack.Screen
-        name="More"
-        component={MoreScreen}
+      <SetupStack.Screen
+        name="Setup"
+        component={SetupScreen}
         options={{
-          title: 'More',
+          title: 'Setup',
           headerLeft: () => null,
           headerLargeTitle: true,
         }}
       />
-      <MoreStack.Screen
+      <SetupStack.Screen
         name="UserAccount"
         component={UserAccountScreen}
         options={{
           headerLargeTitle: true,
         }}
       />
-      <MoreStack.Screen
+      <SetupStack.Screen
         name="UserProfile"
         component={UserProfileScreen}
         options={{
           title: '',
         }}
       />
-      <MoreStack.Screen
+      <SetupStack.Screen
         name="AppSettings"
         component={AppSettingsScreen}
         options={{
@@ -62,7 +62,7 @@ const MoreNavigator = () => {
           headerLargeTitle: true,
         }}
       />
-      <MoreStack.Screen
+      <SetupStack.Screen
         name="Content"
         component={ContentScreen}
         options={{
@@ -70,7 +70,7 @@ const MoreNavigator = () => {
           headerLargeTitle: true,
         }}
       />
-      <MoreStack.Screen
+      <SetupStack.Screen
         name="About"
         component={AboutScreen}
         options={{
@@ -78,8 +78,8 @@ const MoreNavigator = () => {
           headerLargeTitle: true,
         }}
       />
-    </MoreStack.Navigator>
+    </SetupStack.Navigator>
   );
 };
 
-export default MoreNavigator;
+export default SetupNavigator;

@@ -1,17 +1,17 @@
-import { LogNavigatorParamList } from 'types/navigation';
-import LogScreen from 'components/LogScreen';
 import React from 'react';
+import { ScanNavigatorParamList } from 'types/navigation';
+import ScanScreen from 'components/ScanScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
+const ScanStack = createNativeStackNavigator<ScanNavigatorParamList>();
 
-const LogNavigator = () => {
+const ScanNavigator = () => {
   const theme = useTheme();
 
   return (
-    <LogStack.Navigator
-    initialRouteName="Log"
+    <ScanStack.Navigator
+    initialRouteName="Scan"
     screenOptions={{
       headerLargeTitleShadowVisible: theme.mode === 'light',
       headerLargeStyle: {
@@ -25,17 +25,17 @@ const LogNavigator = () => {
       },
       headerTintColor: theme.colors.screenHeaderBackButton,
     }}>
-      <LogStack.Screen
-        name="Log"
-        component={LogScreen}
+      <ScanStack.Screen
+        name="Scan"
+        component={ScanScreen}
         options={{
-          title: 'Log',
+          title: 'Scan',
           headerLeft: () => null,
           headerLargeTitle: true,
         }}
       />
-    </LogStack.Navigator>
+    </ScanStack.Navigator>
   );
 };
 
-export default LogNavigator;
+export default ScanNavigator;

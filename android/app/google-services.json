@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "664186373314",
+    "project_id": "rc-pilot-cdb19",
+    "storage_bucket": "rc-pilot-cdb19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664186373314:android:c93bb339626ced3c37a75b",
+        "android_client_info": {
+          "package_name": "app.rcpilot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664186373314-b65otphfv8o80pjhgjpl784c4ahp5ii9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.rcpilot",
+            "certificate_hash": "cbe78a12cd38438ba6e95605d14a2e85c227d304"
+          }
+        },
+        {
+          "client_id": "664186373314-1lfjgqpnbinfcp3oatlcf3agkr549l7r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjo5M2WQtepZHLkKhLkpF03nfPT-flYQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "664186373314-1lfjgqpnbinfcp3oatlcf3agkr549l7r.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "664186373314-nhbeovgmj149gqib0h34cvufv9ovsn15.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "app.rcpilot",
+                "app_store_id": "1530230413"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

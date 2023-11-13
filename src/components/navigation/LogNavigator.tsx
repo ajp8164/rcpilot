@@ -30,8 +30,6 @@ const LogNavigator = () => {
         component={LogScreen}
         options={{
           title: 'Log',
-          headerLeft: () => null,
-          headerLargeTitle: true,
         }}
       />
     </LogStack.Navigator>

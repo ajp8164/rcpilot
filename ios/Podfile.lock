@@ -1321,6 +1321,8 @@ PODS:
     - React-perflogger (= 0.72.6)
   - ReactNativeAvoidSoftinput (3.1.6):
     - React-Core
+  - ReactNativeCameraKit (13.0.0):
+    - React-Core
   - ReactNativeUiLib (3.0.9):
     - React
   - RecaptchaInterop (100.0.0)
@@ -1499,6 +1501,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeAvoidSoftinput (from `../node_modules/react-native-avoid-softinput`)
+  - ReactNativeCameraKit (from `../node_modules/react-native-camera-kit`)
   - ReactNativeUiLib (from `../node_modules/react-native-ui-lib`)
   - rn-fetch-blob (from `../node_modules/rn-fetch-blob`)
   - "RNAppleAuthentication (from `../node_modules/@invertase/react-native-apple-authentication`)"
@@ -1698,6 +1701,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativeAvoidSoftinput:
     :path: "../node_modules/react-native-avoid-softinput"
+  ReactNativeCameraKit:
+    :path: "../node_modules/react-native-camera-kit"
   ReactNativeUiLib:
     :path: "../node_modules/react-native-ui-lib"
   rn-fetch-blob:
@@ -1857,6 +1862,7 @@ SPEC CHECKSUMS:
   React-utils: 1dc03e6e55f56388b6fdde3768a66c885bacb627
   ReactCommon: cfe086d2e2ec9f2907c66666c856082608fba822
   ReactNativeAvoidSoftinput: 6af0bca4e89fc6fa560ef26a486eaf30414f09f0
+  ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
   ReactNativeUiLib: 8d3804947431a465a69f09c5e785c988314612a9
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba

@@ -1,17 +1,17 @@
-import { LogNavigatorParamList } from 'types/navigation';
-import LogScreen from 'components/LogScreen';
+import { BatteriesNavigatorParamList } from 'types/navigation';
+import BatteriesScreen from 'components/BatteriesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
+const BatteriesStack = createNativeStackNavigator<BatteriesNavigatorParamList>();
 
-const LogNavigator = () => {
+const BatteriesNavigator = () => {
   const theme = useTheme();
 
   return (
-    <LogStack.Navigator
-    initialRouteName="Log"
+    <BatteriesStack.Navigator
+    initialRouteName="Batteries"
     screenOptions={{
       headerLargeTitleShadowVisible: theme.mode === 'light',
       headerLargeStyle: {
@@ -25,17 +25,17 @@ const LogNavigator = () => {
       },
       headerTintColor: theme.colors.screenHeaderBackButton,
     }}>
-      <LogStack.Screen
-        name="Log"
-        component={LogScreen}
+      <BatteriesStack.Screen
+        name="Batteries"
+        component={BatteriesScreen}
         options={{
-          title: 'Log',
+          title: 'Batteries',
           headerLeft: () => null,
           headerLargeTitle: true,
         }}
       />
-    </LogStack.Navigator>
+    </BatteriesStack.Navigator>
   );
 };
 
-export default LogNavigator;
+export default BatteriesNavigator;

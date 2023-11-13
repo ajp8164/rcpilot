@@ -1,17 +1,17 @@
-import { LogNavigatorParamList } from 'types/navigation';
-import LogScreen from 'components/LogScreen';
+import { ModelsNavigatorParamList } from 'types/navigation';
+import ModelsScreen from 'components/ModelsScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
+const ModelsStack = createNativeStackNavigator<ModelsNavigatorParamList>();
 
-const LogNavigator = () => {
+const ModelsNavigator = () => {
   const theme = useTheme();
 
   return (
-    <LogStack.Navigator
-    initialRouteName="Log"
+    <ModelsStack.Navigator
+    initialRouteName="Models"
     screenOptions={{
       headerLargeTitleShadowVisible: theme.mode === 'light',
       headerLargeStyle: {
@@ -25,17 +25,17 @@ const LogNavigator = () => {
       },
       headerTintColor: theme.colors.screenHeaderBackButton,
     }}>
-      <LogStack.Screen
-        name="Log"
-        component={LogScreen}
+      <ModelsStack.Screen
+        name="Models"
+        component={ModelsScreen}
         options={{
-          title: 'Log',
+          title: 'Models',
           headerLeft: () => null,
           headerLargeTitle: true,
         }}
       />
-    </LogStack.Navigator>
+    </ModelsStack.Navigator>
   );
 };
 
-export default LogNavigator;
+export default ModelsNavigator;

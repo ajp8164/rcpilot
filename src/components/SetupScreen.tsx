@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, ListItem } from '@react-native-ajp-elements/ui';
+import React, { useContext, useEffect } from 'react';
 import {
-  MoreNavigatorParamList,
+  SetupNavigatorParamList,
   TabNavigatorParamList,
 } from 'types/navigation';
-import React, { useContext, useEffect } from 'react';
 
 import { AuthContext } from 'lib/auth';
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
@@ -17,11 +17,11 @@ import { selectUserProfile } from 'store/selectors/userSelectors';
 import { useSelector } from 'react-redux';
 
 export type Props = CompositeScreenProps<
-  NativeStackScreenProps<MoreNavigatorParamList, 'More'>,
+  NativeStackScreenProps<SetupNavigatorParamList, 'Setup'>,
   NativeStackScreenProps<TabNavigatorParamList>
 >;
 
-const MoreScreen = ({ navigation, route }: Props) => {
+const SetupScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -88,4 +88,4 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   emptyListContainer: {},
 }));
 
-export default MoreScreen;
+export default SetupScreen;

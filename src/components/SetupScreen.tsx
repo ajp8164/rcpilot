@@ -42,7 +42,66 @@ const SetupScreen = ({ navigation, route }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider />
+      <Divider text={'PILOTS'}/>
+      <ListItem
+        title={'Andy Phillipson'}
+        subtitle={'Logged 12:35 over 7 events'}
+        position={['first']}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Select or Create a Pilot...'}
+        position={['last']}
+        onPress={() => null}
+      />
+      <Divider text={'GLOBALS'}/>
+      <ListItem
+        title={'Event Locations'}
+        position={['first']}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Event Styles'}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Model Categories'}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Model Fuels'}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Model Propellers'}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'List Templates'}
+        position={['last']}
+        onPress={() => null}
+      />
+      <Divider text={'DATABASE'}/>
+      <ListItem
+        title={'Vitals'}
+        position={['first']}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Access With'}
+        value={'Dropbox'}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Dropbox Access'}
+        onPress={() => null}
+      />
+      <ListItem
+        title={'Reporting'}
+        position={['last']}
+        onPress={() => null}
+      />
+      <Divider text={'ACCOUNT'}/>
       {userProfile ? (
         <ListItem
           title={userProfile.name || userProfile.email || 'My Account'}
@@ -61,7 +120,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
           onPress={() => auth.presentSignInModal()}
         />
       )}
-      <Divider />
+      <Divider text={'MISCELLANEOUS'}/>
       <ListItem
         title={'App Settings'}
         position={['first']}
@@ -76,6 +135,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
         leftImageType={'material-community'}
         onPress={() => navigation.navigate('About')}
       />
+      <Divider/>
     </ScrollView>
   );
 };

@@ -30,7 +30,12 @@ export type ModelsNavigatorParamList = {
   Model: {
     modelId: string;
   };
+  NewModelNavigator: undefined;
+};
+
+export type NewModelNavigatorParamList = {
   NewModel: undefined;
+  ModelType: undefined;
 };
 
 export type SetupNavigatorParamList = {

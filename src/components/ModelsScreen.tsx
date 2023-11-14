@@ -35,7 +35,7 @@ const ModelsScreen = ({ navigation }: Props) => {
             <Icon
               name={'plus'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('NewModel')}/>
+              onPress={() => navigation.navigate('NewModelNavigator')}/>
           </>
         );
       },

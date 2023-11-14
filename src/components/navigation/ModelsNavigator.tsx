@@ -1,7 +1,7 @@
 import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
-import NewModelScreen from 'components/NewModelScreen';
+import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -40,10 +40,10 @@ const ModelsNavigator = () => {
         component={ModelScreen}
         />
       <ModelsStack.Screen
-        name='NewModel'
-        component={NewModelScreen}
+        name='NewModelNavigator'
+        component={NewModelNavigator}
         options={{
-          title: 'New Model',
+          headerShown: false,
           presentation: 'modal'
         }}
       />

@@ -4,15 +4,22 @@ import { ModelViewMethods, ModelViewProps } from './types';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { NewModelNavigatorParamList } from 'types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { makeStyles } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/core';
 
 type ModelView = ModelViewMethods;
+
+type NavigationProps = StackNavigationProp<NewModelNavigatorParamList, 'NewModel'>;
 
 const ModelView = (props: ModelViewProps) => {
   const { modelId } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
+
+  const navigation = useNavigation<NavigationProps>();
 
   const [batteryLoggingEnabled, setBatteryLoggingEnabled] = useState(false);
   const [fuelLoggingEnabled, setFuelLoggingEnabled] = useState(false);
@@ -52,7 +59,7 @@ const ModelView = (props: ModelViewProps) => {
         <ListItem
           title={'Model Type'}
           position={['first']}
-          onPress={() => null}
+          onPress={() => navigation.navigate('ModelType')}
         />
       }
       <ListItem

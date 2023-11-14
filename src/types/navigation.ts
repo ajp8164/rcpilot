@@ -10,6 +10,10 @@ export enum StartupScreen {
 
 export type BatteriesNavigatorParamList = {
   Batteries: undefined;
+  Battery: {
+    batteryId: string;
+  };
+  NewBattery: undefined;
 };
 
 export type LogNavigatorParamList = {

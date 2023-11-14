@@ -12,7 +12,7 @@ import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'Models'>;
 
-const ModelsScreen = ({ navigation }: Props) => {  
+const ModelsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 

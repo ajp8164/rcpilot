@@ -23,6 +23,10 @@ export type MainNavigatorParamList = {
 
 export type ModelsNavigatorParamList = {
   Models: undefined;
+  Model: {
+    modelId: string;
+  };
+  NewModel: undefined;
 };
 
 export type SetupNavigatorParamList = {

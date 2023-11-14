@@ -1,5 +1,7 @@
+import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
+import NewModelScreen from 'components/NewModelScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -11,7 +13,7 @@ const ModelsNavigator = () => {
 
   return (
     <ModelsStack.Navigator
-    initialRouteName="Models"
+    initialRouteName='Models'
     screenOptions={{
       headerLargeTitleShadowVisible: theme.mode === 'light',
       headerLargeStyle: {
@@ -26,12 +28,23 @@ const ModelsNavigator = () => {
       headerTintColor: theme.colors.screenHeaderBackButton,
     }}>
       <ModelsStack.Screen
-        name="Models"
+        name='Models'
         component={ModelsScreen}
         options={{
           title: 'Models',
-          headerLeft: () => null,
           headerLargeTitle: true,
+        }}
+      />
+      <ModelsStack.Screen
+        name='Model'
+        component={ModelScreen}
+        />
+      <ModelsStack.Screen
+        name='NewModel'
+        component={NewModelScreen}
+        options={{
+          title: 'New Model',
+          presentation: 'modal'
         }}
       />
     </ModelsStack.Navigator>

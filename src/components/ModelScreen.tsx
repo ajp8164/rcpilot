@@ -37,7 +37,7 @@ const ModelScreen = ({ route, navigation }: Props) => {
   return (
     <SafeAreaView
       edges={['left', 'right']}
-      style={[theme.styles.view, { paddingHorizontal: 0 }]}>
+      style={theme.styles.view}>
         <ModelView modelId={modelId} />
     </SafeAreaView>
   );

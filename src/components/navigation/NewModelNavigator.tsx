@@ -1,3 +1,4 @@
+import EventStyleScreen from 'components/EventStyleScreen';
 import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelTypeScreen from 'components/ModelTypeScreen';
 import { NewModelNavigatorParamList } from 'types/navigation';
@@ -34,6 +35,14 @@ const NewModelNavigator = () => {
         options={{
           title: 'New Model',
           presentation: 'modal'
+        }}
+      />
+      <NewModelStack.Screen
+        name='EventStyle'
+        component={EventStyleScreen}
+        options={{
+          title: 'Default Style',
+          presentation: 'card'
         }}
       />
       <NewModelStack.Screen

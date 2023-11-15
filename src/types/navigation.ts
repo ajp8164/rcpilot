@@ -33,6 +33,7 @@ export type ModelsNavigatorParamList = {
     modelId: string;
   };
   ModelCategory: undefined;
+  Propeller: undefined;
 };
 
 export type NewModelNavigatorParamList = {
@@ -40,6 +41,7 @@ export type NewModelNavigatorParamList = {
   ModelCategory: undefined;
   ModelType: undefined;
   NewModel: undefined;
+  Propeller: undefined;
 };
 
 export type SetupNavigatorParamList = {

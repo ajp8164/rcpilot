@@ -4,6 +4,7 @@ import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
+import PropellerScreen from 'components/PropellerScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -54,6 +55,14 @@ const ModelsNavigator = () => {
         component={EventStyleScreen}
         options={{
           title: 'Default Style',
+          presentation: 'card'
+        }}
+      />
+      <ModelsStack.Screen
+        name='Propeller'
+        component={PropellerScreen}
+        options={{
+          title: 'Default Propeller',
           presentation: 'card'
         }}
       />

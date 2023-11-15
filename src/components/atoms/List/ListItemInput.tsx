@@ -23,7 +23,7 @@ const ListItemInput = (props: Props) => {
       extraContentComponentRight={
         <View style={{flexDirection: 'row'}}>
           {label && <Text style={s.inputLabel}>{label}</Text>}
-          <Icon name={'pencil'} style={s.inputIcon} />
+          <Icon name={'pencil'} style={label ? s.inputIconWithLabel : s.inputIcon} />
         </View>
       } />
   )
@@ -34,6 +34,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingRight: 0
   },
   inputIcon: {
+    top: -4.5,
+    marginLeft: 5,
+    color: theme.colors.subtleGray,
+  },
+  inputIconWithLabel: {
     top: 3,
     color: theme.colors.subtleGray,
   },

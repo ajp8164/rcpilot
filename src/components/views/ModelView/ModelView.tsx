@@ -175,35 +175,38 @@ const ModelView = (props: ModelViewProps) => {
       <Divider />
       <ListItem
         title={'Default Style'}
+        value={'None'}
         position={['first']}
         onPress={() => navigation.navigate('EventStyle')}
       />
       <ListItem
         title={'Default Propeller'}
+        value={'None'}
         position={['last']}
         onPress={() => navigation.navigate('Propeller')}
       />
       <Divider />
       <ListItem
         title={'QR Code Size'}
+        value={'None'}
         position={['first', 'last']}
         onPress={() => navigation.navigate('ScanCodeSize')}
       />
       <Divider />
-      <ListItem
+      <ListItemInput
         title={'Purchase Price'}
+        value={'Unknown'}
         position={['first']}
-        onPress={() => null}
       />
       {modelId &&
         <ListItemSwitch
-          title={'Model is Retired'}
+          title={'Airplane is Retired'}
           value={modelIsRetired}
           onValueChange={toggleModelIsRetired}
         />
       }
       <ListItemSwitch
-        title={'Model is Damaged'}
+        title={'Airplane is Damaged'}
         position={['last']}
         value={modelIsDamaged}
         onValueChange={toggleModelIsDamaged}

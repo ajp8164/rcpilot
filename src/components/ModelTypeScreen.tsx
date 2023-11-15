@@ -31,7 +31,7 @@ const ModelTypeScreen = () => {
           <ListItem
             key={index}
             title={type.name}
-            position={index === 0 ? ['first'] : index === modelTypes.length - 1 ? ['last'] : []}
+            position={modelTypes.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === modelTypes.length - 1 ? ['last'] : []}
             rightImage={false}
             onPress={() => null}
           />)

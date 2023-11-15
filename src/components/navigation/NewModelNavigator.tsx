@@ -3,6 +3,7 @@ import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelTypeScreen from 'components/ModelTypeScreen';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import NewModelScreen from 'components/NewModelScreen';
+import PropellerScreen from 'components/PropellerScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -58,6 +59,14 @@ const NewModelNavigator = () => {
         component={ModelCategoryScreen}
         options={{
           title: 'Model Category',
+          presentation: 'card'
+        }}
+      />
+      <NewModelStack.Screen
+        name='Propeller'
+        component={PropellerScreen}
+        options={{
+          title: 'Default Propeller',
           presentation: 'card'
         }}
       />

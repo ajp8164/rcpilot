@@ -159,7 +159,7 @@ const ModelView = (props: ModelViewProps) => {
       <ListItem
         title={'Default Propeller'}
         position={['last']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('Propeller')}
       />
       <Divider />
       <ListItem

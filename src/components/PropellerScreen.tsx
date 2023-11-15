@@ -6,12 +6,12 @@ import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'ModelType'>;
+export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'Propeller'>;
 
-const ModelCategoryScreen = () => {
+const PropellerScreen = () => {
   const theme = useTheme();
 
-  const modelCategories = [
+  const propellers = [
     { name: 'None' },
   ];
 
@@ -20,19 +20,19 @@ const ModelCategoryScreen = () => {
       edges={['left', 'right']}
       style={theme.styles.view}>
       <Divider />
-      {modelCategories.map((category, index) => {
+      {propellers.map((category, index) => {
         return (
           <ListItem
             key={index}
             title={category.name}
-            position={modelCategories.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === modelCategories.length - 1 ? ['last'] : []}
+            position={propellers.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === propellers.length - 1 ? ['last'] : []}
             rightImage={false}
             onPress={() => null}
           />)
       })}
-      <Divider text={'You can manage categories through the Globals sexction in the Setup tab.'} />
+      <Divider text={'You can manage propellers through the Globals sexction in the Setup tab.'} />
     </SafeAreaView>
   );
 };
 
-export default ModelCategoryScreen;
+export default PropellerScreen;

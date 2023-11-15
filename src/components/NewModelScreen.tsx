@@ -3,12 +3,12 @@ import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
 import ModelView from 'components/views/ModelView';
-import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NewModelNavigatorParamList } from 'types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'NewModel'>;
+export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'NewModel'>;
 
 const NewModelScreen = ({ navigation }: Props) => {  
   const theme = useTheme();

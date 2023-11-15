@@ -30,11 +30,13 @@ export type ModelsNavigatorParamList = {
   Model: {
     modelId: string;
   };
+  ModelCategory: undefined;
   NewModelNavigator: undefined;
 };
 
 export type NewModelNavigatorParamList = {
   NewModel: undefined;
+  ModelCategory: undefined;
   ModelType: undefined;
 };
 

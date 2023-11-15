@@ -1,3 +1,4 @@
+import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
@@ -39,6 +40,14 @@ const ModelsNavigator = () => {
         name='Model'
         component={ModelScreen}
         />
+      <ModelsStack.Screen
+        name='ModelCategory'
+        component={ModelCategoryScreen}
+        options={{
+          title: 'Model Category',
+          presentation: 'card'
+        }}
+      />
       <ModelsStack.Screen
         name='NewModelNavigator'
         component={NewModelNavigator}

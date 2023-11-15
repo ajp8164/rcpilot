@@ -1,3 +1,4 @@
+import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelTypeScreen from 'components/ModelTypeScreen';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import NewModelScreen from 'components/NewModelScreen';
@@ -14,6 +15,7 @@ const NewModelNavigator = () => {
     <NewModelStack.Navigator
     initialRouteName='NewModel'
     screenOptions={{
+      headerBackTitle: 'Model',
       headerLargeTitleShadowVisible: theme.mode === 'light',
       headerLargeStyle: {
         backgroundColor: theme.colors.screenHeaderBackground,
@@ -39,6 +41,14 @@ const NewModelNavigator = () => {
         component={ModelTypeScreen}
         options={{
           title: 'Model Type',
+          presentation: 'card',
+        }}
+      />
+      <NewModelStack.Screen
+        name='ModelCategory'
+        component={ModelCategoryScreen}
+        options={{
+          title: 'Model Category',
           presentation: 'card'
         }}
       />

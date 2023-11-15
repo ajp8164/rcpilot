@@ -65,8 +65,8 @@ const ModelView = (props: ModelViewProps) => {
       <ListItem
         title={'Category'}
         position={modelId ? ['first', 'last'] : ['last']}
-        onPress={() => null}
-      />
+        onPress={() => navigation.navigate('ModelCategory')}
+        />
       <Divider />
       {!modelId &&
         <>

@@ -163,9 +163,9 @@ const ModelView = (props: ModelViewProps) => {
       />
       <Divider />
       <ListItem
-        title={'Barcode Size'}
+        title={'QR Code Size'}
         position={['first', 'last']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('ScanCodeSize')}
       />
       <Divider />
       <ListItem

@@ -6,6 +6,7 @@ import ModelsScreen from 'components/ModelsScreen';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import PropellerScreen from 'components/PropellerScreen';
 import React from 'react';
+import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -63,6 +64,14 @@ const ModelsNavigator = () => {
         component={PropellerScreen}
         options={{
           title: 'Default Propeller',
+          presentation: 'card'
+        }}
+      />
+      <ModelsStack.Screen
+        name='ScanCodeSize'
+        component={ScanCodeSizeScreen}
+        options={{
+          title: 'QR Code Size',
           presentation: 'card'
         }}
       />

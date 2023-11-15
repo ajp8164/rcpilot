@@ -1,9 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
+import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelViewMethods, ModelViewProps } from './types';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -26,6 +27,8 @@ const ModelView = (props: ModelViewProps) => {
   const [fuelLoggingEnabled, setFuelLoggingEnabled] = useState(false);
   const [modelIsDamaged, setModelIsDamaged] = useState(false);
   const [modelIsRetired, setModelIsRetired] = useState(false);
+  const [expandedLastFlight, setExpandedLastFlight] = useState(false);
+  const [lastFlightDate, setLastFlightDate] = useState<string>();
 
   const toggleBatteryLogging = (value: boolean) => {
     setBatteryLoggingEnabled(value);
@@ -41,6 +44,10 @@ const ModelView = (props: ModelViewProps) => {
 
   const toggleModelIsRetired = (value: boolean) => {
     setModelIsRetired(value);
+  };
+
+  const onLastFlightDateChange = (date?: Date) => {
+    date && setLastFlightDate(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
   };
 
   return (
@@ -95,11 +102,19 @@ const ModelView = (props: ModelViewProps) => {
             onPress={() => null}
           />
       }
-      <ListItem
-        title={'Last Flight'}
-        position={modelId ? [] : ['last']}
-        onPress={() => null}
-      />
+      <ListItemDate
+          title={'Last Flight'}
+          value={lastFlightDate
+            ? DateTime.fromISO(lastFlightDate).toFormat(
+              "MMM d, yyyy 'at' hh:mm a"
+            )
+            : 'Tap to Set...'}
+          pickerValue={lastFlightDate}
+          rightImage={false}
+          expanded={expandedLastFlight}
+          position={modelId ? [] : ['last']}
+          onPress={() => setExpandedLastFlight(!expandedLastFlight)}
+          onDateChange={onLastFlightDateChange} />
       {modelId &&
         <ListItem
             title={'Logged Flight Details'}

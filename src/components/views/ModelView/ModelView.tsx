@@ -43,7 +43,7 @@ const ModelView = (props: ModelViewProps) => {
   };
 
   return (
-    <View style={theme.styles.view}>
+    <View>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
@@ -154,7 +154,7 @@ const ModelView = (props: ModelViewProps) => {
       <ListItem
         title={'Default Style'}
         position={['first']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('EventStyle')}
       />
       <ListItem
         title={'Default Propeller'}

@@ -26,18 +26,20 @@ export type MainNavigatorParamList = {
 };
 
 export type ModelsNavigatorParamList = {
+  EventStyle: undefined;
+  NewModelNavigator: undefined;
   Models: undefined;
   Model: {
     modelId: string;
   };
   ModelCategory: undefined;
-  NewModelNavigator: undefined;
 };
 
 export type NewModelNavigatorParamList = {
-  NewModel: undefined;
+  EventStyle: undefined;
   ModelCategory: undefined;
   ModelType: undefined;
+  NewModel: undefined;
 };
 
 export type SetupNavigatorParamList = {

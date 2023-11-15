@@ -215,7 +215,7 @@ const ModelView = (props: ModelViewProps) => {
       <ListItem
         title={'Notes'}
         position={['first', 'last']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('Notes')}
       />
       <Divider />
       </ScrollView>

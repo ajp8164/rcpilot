@@ -3,6 +3,7 @@ import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelTypeScreen from 'components/ModelTypeScreen';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import NewModelScreen from 'components/NewModelScreen';
+import NotesScreen from 'components/NotesScreen';
 import PropellerScreen from 'components/PropellerScreen';
 import React from 'react';
 import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
@@ -76,6 +77,14 @@ const NewModelNavigator = () => {
         component={ScanCodeSizeScreen}
         options={{
           title: 'QR Code Size',
+          presentation: 'card'
+        }}
+      />
+      <NewModelStack.Screen
+        name='Notes'
+        component={NotesScreen}
+        options={{
+          title: 'Model Notes',
           presentation: 'card'
         }}
       />

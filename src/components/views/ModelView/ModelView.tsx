@@ -1,9 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem, ListItemSwitch } from '@react-native-ajp-elements/ui';
+import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelViewMethods, ModelViewProps } from './types';
 import React, { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { Divider } from '@react-native-ajp-elements/ui';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { makeStyles } from '@rneui/themed';
@@ -58,26 +59,32 @@ const ModelView = (props: ModelViewProps) => {
       {!modelId &&
         <ListItem
           title={'Model Type'}
+          value={'Airplane'}
           position={['first']}
           onPress={() => navigation.navigate('ModelType')}
         />
       }
       <ListItem
         title={'Category'}
+        value={'None'}
         position={modelId ? ['first', 'last'] : ['last']}
         onPress={() => navigation.navigate('ModelCategory')}
         />
       <Divider />
       {!modelId &&
         <>
-          <ListItem
+          <ListItemInput
             title={'Total Time'}
+            value={'10'}
+            label='hh:mm:ss'
+            keyboardType={'number-pad'}
             position={['first']}
-            onPress={() => null}
           />
-          <ListItem
+          <ListItemInput
             title={'Total Flights'}
-            onPress={() => null}
+            value={'No'}
+            label='Flights'
+            keyboardType={'number-pad'}
           />
         </>
       }
@@ -199,8 +206,6 @@ const ModelView = (props: ModelViewProps) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  view: {
-  },
 }));
 
 export default ModelView;

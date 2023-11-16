@@ -1,7 +1,8 @@
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteriesScreen from 'components/BatteriesScreen';
+import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
 import BatteryScreen from 'components/BatteryScreen';
-import NewBatteryScreen from 'components/NewBatteryScreen';
+import NewBatteryNavigator from './NewBatteryNavigator';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -39,12 +40,19 @@ const BatteriesNavigator = () => {
       <BatteriesStack.Screen
         name='Battery'
         component={BatteryScreen}
-        />
+      />
       <BatteriesStack.Screen
-        name='NewBattery'
-        component={NewBatteryScreen}
+        name='BatteryChemistry'
+        component={BatteryChemistryScreen}
         options={{
-          title: 'New Battery',
+          title: 'Chemistry',
+        }}
+      />
+      <BatteriesStack.Screen
+        name='NewBatteryNavigator'
+        component={NewBatteryNavigator}
+        options={{
+          headerShown: false,
           presentation: 'modal'
         }}
       />

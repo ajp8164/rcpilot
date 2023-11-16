@@ -1,5 +1,5 @@
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
-
+import { Divider } from '@react-native-ajp-elements/ui';
+import { ListItemCheckbox } from 'components/atoms/List/ListItemCheckbox';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import React from 'react';
@@ -22,13 +22,14 @@ const ModelCategoryScreen = () => {
       <Divider />
       {modelCategories.map((category, index) => {
         return (
-          <ListItem
+          <ListItemCheckbox
             key={index}
             title={category.name}
             position={modelCategories.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === modelCategories.length - 1 ? ['last'] : []}
-            rightImage={false}
+            checked={true}
             onPress={() => null}
-          />)
+          />
+        )
       })}
       <Divider text={'You can manage categories through the Globals sexction in the Setup tab.'} />
     </SafeAreaView>

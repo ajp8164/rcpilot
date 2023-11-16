@@ -21,8 +21,8 @@ const ListItemInput = (props: Props) => {
   return (
     <_ListItemInput
       {...props}
+      containerStyle={{...props.containerStyle, ...s.containerStyle}}
       inputTextStyle={s.inputText}
-      containerStyle={s.inputContainer}
       extraContentComponentRight={
         <View style={{flexDirection: 'row'}}>
           {label && <Text style={s.inputLabel}>{label}</Text>}
@@ -39,7 +39,8 @@ const ListItemInput = (props: Props) => {
 }
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  inputContainer: {
+  containerStyle: {
+    minHeight: 48,
     paddingRight: 0
   },
   inputIcon: {

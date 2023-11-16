@@ -10,11 +10,16 @@ const ListItemSwitch = (props: Props) => {
   const s = useStyles(theme);
   return (
     <_ListItemSwitch
-      {...props} />
-    );
+      {...props}
+      containerStyle={{...props.containerStyle, ...s.containerStyle}}
+    />
+  );
 }
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+  containerStyle: {
+    minHeight: 48
+  },
 }));
 
 export { ListItemSwitch };

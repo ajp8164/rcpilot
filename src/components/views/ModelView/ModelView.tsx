@@ -51,175 +51,174 @@ const ModelView = (props: ModelViewProps) => {
   };
 
   return (
-    <View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider />
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}
+      >
+    <Divider />
+    <ListItem
+      title={'Blade 150S'}
+      subtitle={'Blade'}
+      position={['first', 'last']}
+      onPress={() => null}
+    />
+    <Divider />
+    {!modelId &&
       <ListItem
-        title={'Blade 150S'}
-        subtitle={'Blade'}
-        position={['first', 'last']}
-        onPress={() => null}
+        title={'Model Type'}
+        value={'Airplane'}
+        position={['first']}
+        onPress={() => navigation.navigate('ModelType')}
       />
-      <Divider />
-      {!modelId &&
-        <ListItem
-          title={'Model Type'}
-          value={'Airplane'}
+    }
+    <ListItem
+      title={'Category'}
+      value={'None'}
+      position={modelId ? ['first', 'last'] : ['last']}
+      onPress={() => navigation.navigate('ModelCategory')}
+      />
+    <Divider />
+    {!modelId &&
+      <>
+        <ListItemInput
+          title={'Total Time'}
+          value={'10'}
+          label='hh:mm:ss'
+          keyboardType={'number-pad'}
           position={['first']}
-          onPress={() => navigation.navigate('ModelType')}
         />
-      }
-      <ListItem
-        title={'Category'}
-        value={'None'}
-        position={modelId ? ['first', 'last'] : ['last']}
-        onPress={() => navigation.navigate('ModelCategory')}
+        <ListItemInput
+          title={'Total Flights'}
+          value={'No'}
+          label='Flights'
+          keyboardType={'number-pad'}
         />
-      <Divider />
-      {!modelId &&
-        <>
-          <ListItemInput
-            title={'Total Time'}
-            value={'10'}
-            label='hh:mm:ss'
-            keyboardType={'number-pad'}
-            position={['first']}
-          />
-          <ListItemInput
-            title={'Total Flights'}
-            value={'No'}
-            label='Flights'
-            keyboardType={'number-pad'}
-          />
-        </>
-      }
-      {modelId &&
-        <ListItem
-            title={'Statistics'}
-            position={['first']}
-            onPress={() => null}
-          />
-      }
-      <ListItemDate
-          title={'Last Flight'}
-          value={lastFlightDate
-            ? DateTime.fromISO(lastFlightDate).toFormat(
-              "MMM d, yyyy 'at' hh:mm a"
-            )
-            : 'Tap to Set...'}
-          pickerValue={lastFlightDate}
-          rightImage={false}
-          expanded={expandedLastFlight}
-          position={modelId ? [] : ['last']}
-          onPress={() => setExpandedLastFlight(!expandedLastFlight)}
-          onDateChange={onLastFlightDateChange} />
-      {modelId &&
-        <ListItem
-            title={'Logged Flight Details'}
-            position={['last']}
-            onPress={() => null}
-          />
-      }
-      <Divider />
-      <ListItemSwitch
-        title={'Battery Logging'}
-        value={batteryLoggingEnabled}
-        position={['first']}
-        onValueChange={toggleBatteryLogging}
-      />
-      {batteryLoggingEnabled &&
-        <ListItem
-          title={'Favorite Batteries'}
-          onPress={() => null} />
-      }
-      <ListItemSwitch
-        title={'Fuel Logging'}
-        position={fuelLoggingEnabled ? [] : ['last']}
-        value={fuelLoggingEnabled}
-        onValueChange={toggleFuelLogging}
-      />
-      {fuelLoggingEnabled &&
-        <>
-          <ListItem
-            title={'Fuel Capacity'}
-            onPress={() => null}
-          />
-          <ListItem
-            title={'Total Fuel Consumed'}
-            position={['last']}
-            onPress={() => null}
-          />
-        </>
-      }
-      {modelId &&
-        <>
-          <Divider />
-          <ListItem
-            title={'Checklists'}
-            position={['first']}
-            onPress={() => null}
-          />
-          <ListItem
-            title={'Perform Maintenance'}
-            onPress={() => null}
-          />
-          <ListItem
-            title={'Maintenance Log'}
-            position={['last']}
-            onPress={() => null}
-          />
-        </>
-      }
-      <Divider />
+      </>
+    }
+    {modelId &&
       <ListItem
-        title={'Default Style'}
-        value={'None'}
-        position={['first']}
-        onPress={() => navigation.navigate('EventStyle')}
-      />
-      <ListItem
-        title={'Default Propeller'}
-        value={'None'}
-        position={['last']}
-        onPress={() => navigation.navigate('Propeller')}
-      />
-      <Divider />
-      <ListItem
-        title={'QR Code Size'}
-        value={'None'}
-        position={['first', 'last']}
-        onPress={() => navigation.navigate('ScanCodeSize')}
-      />
-      <Divider />
-      <ListItemInput
-        title={'Purchase Price'}
-        value={'Unknown'}
-        position={['first']}
-      />
-      {modelId &&
-        <ListItemSwitch
-          title={'Airplane is Retired'}
-          value={modelIsRetired}
-          onValueChange={toggleModelIsRetired}
+          title={'Statistics'}
+          position={['first']}
+          onPress={() => null}
         />
-      }
-      <ListItemSwitch
-        title={'Airplane is Damaged'}
-        position={['last']}
-        value={modelIsDamaged}
-        onValueChange={toggleModelIsDamaged}
-      />
-      <Divider />
+    }
+    <ListItemDate
+        title={'Last Flight'}
+        value={lastFlightDate
+          ? DateTime.fromISO(lastFlightDate).toFormat(
+            "MMM d, yyyy 'at' hh:mm a"
+          )
+          : 'Tap to Set...'}
+        pickerValue={lastFlightDate}
+        rightImage={false}
+        expanded={expandedLastFlight}
+        position={modelId ? [] : ['last']}
+        onPress={() => setExpandedLastFlight(!expandedLastFlight)}
+        onDateChange={onLastFlightDateChange} />
+    {modelId &&
       <ListItem
-        title={'Notes'}
-        position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes')}
+          title={'Logged Flight Details'}
+          position={['last']}
+          onPress={() => null}
+        />
+    }
+    <Divider />
+    <ListItemSwitch
+      title={'Battery Logging'}
+      value={batteryLoggingEnabled}
+      position={['first']}
+      onValueChange={toggleBatteryLogging}
+    />
+    {batteryLoggingEnabled &&
+      <ListItem
+        title={'Favorite Batteries'}
+        onPress={() => null} />
+    }
+    <ListItemSwitch
+      title={'Fuel Logging'}
+      position={fuelLoggingEnabled ? [] : ['last']}
+      value={fuelLoggingEnabled}
+      onValueChange={toggleFuelLogging}
+    />
+    {fuelLoggingEnabled &&
+      <>
+        <ListItem
+          title={'Fuel Capacity'}
+          onPress={() => null}
+        />
+        <ListItem
+          title={'Total Fuel Consumed'}
+          position={['last']}
+          onPress={() => null}
+        />
+      </>
+    }
+    {modelId &&
+      <>
+        <Divider />
+        <ListItem
+          title={'Checklists'}
+          position={['first']}
+          onPress={() => null}
+        />
+        <ListItem
+          title={'Perform Maintenance'}
+          onPress={() => null}
+        />
+        <ListItem
+          title={'Maintenance Log'}
+          position={['last']}
+          onPress={() => null}
+        />
+      </>
+    }
+    <Divider />
+    <ListItem
+      title={'Default Style'}
+      value={'None'}
+      position={['first']}
+      onPress={() => navigation.navigate('EventStyle')}
+    />
+    <ListItem
+      title={'Default Propeller'}
+      value={'None'}
+      position={['last']}
+      onPress={() => navigation.navigate('Propeller')}
+    />
+    <Divider />
+    <ListItem
+      title={'QR Code Size'}
+      value={'None'}
+      position={['first', 'last']}
+      onPress={() => navigation.navigate('ScanCodeSize')}
+    />
+    <Divider />
+    <ListItemInput
+      title={'Purchase Price'}
+      value={'Unknown'}
+      position={['first']}
+    />
+    {modelId &&
+      <ListItemSwitch
+        title={'Airplane is Retired'}
+        value={modelIsRetired}
+        onValueChange={toggleModelIsRetired}
       />
-      <Divider />
-      </ScrollView>
-    </View>
+    }
+    <ListItemSwitch
+      title={'Airplane is Damaged'}
+      position={['last']}
+      value={modelIsDamaged}
+      onValueChange={toggleModelIsDamaged}
+    />
+    <Divider />
+    <ListItem
+      title={'Notes'}
+      position={['first', 'last']}
+      onPress={() => navigation.navigate('Notes')}
+    />
+    <Divider />
+    </ScrollView>
   );
 };
 

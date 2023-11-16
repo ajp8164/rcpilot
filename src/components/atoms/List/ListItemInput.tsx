@@ -10,7 +10,10 @@ interface Props extends _ListItemInput {
 };
 
 const ListItemInput = (props: Props) => {
-  const { label } = props;
+  const {
+    inputDisabled,
+    label
+  } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -23,7 +26,13 @@ const ListItemInput = (props: Props) => {
       extraContentComponentRight={
         <View style={{flexDirection: 'row'}}>
           {label && <Text style={s.inputLabel}>{label}</Text>}
-          <Icon name={'pencil'} style={label ? s.inputIconWithLabel : s.inputIcon} />
+          <Icon
+            name={'pencil'}
+            style={[
+              label ? s.inputIconWithLabel : s.inputIcon,
+              inputDisabled ? s.inputIconDisabled : {},
+            ]}
+          />
         </View>
       } />
   )
@@ -37,6 +46,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: -4.5,
     marginLeft: 5,
     color: theme.colors.subtleGray,
+  },
+  inputIconDisabled: {
+    opacity: 0,
   },
   inputIconWithLabel: {
     top: 3,

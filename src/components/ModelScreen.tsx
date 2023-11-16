@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import ModelView from 'components/views/ModelView';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'Model'>;
@@ -34,7 +35,10 @@ const ModelScreen = ({ route, navigation }: Props) => {
   }, [navigation]);
 
   return (
-    <ModelView modelId={modelId} />
+    <View
+      style={theme.styles.view}>
+        <ModelView modelId={modelId} />
+    </View>
   );
 };
 

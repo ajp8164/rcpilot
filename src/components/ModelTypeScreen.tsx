@@ -24,7 +24,7 @@ const ModelTypeScreen = () => {
   return (
     <SafeAreaView
       edges={['left', 'right']}
-      style={[theme.styles.view, { paddingHorizontal: 0 }]}>
+      style={theme.styles.view}>
       <Divider />
       {modelTypes.map((type, index) => {
         return (

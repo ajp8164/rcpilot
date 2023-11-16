@@ -2,6 +2,7 @@ import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteriesScreen from 'components/BatteriesScreen';
 import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
 import BatteryScreen from 'components/BatteryScreen';
+import BatteryTintScreen from 'components/BatteryTintScreen';
 import NewBatteryNavigator from './NewBatteryNavigator';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -46,6 +47,13 @@ const BatteriesNavigator = () => {
         component={BatteryChemistryScreen}
         options={{
           title: 'Chemistry',
+        }}
+      />
+      <BatteriesStack.Screen
+        name='BatteryTint'
+        component={BatteryTintScreen}
+        options={{
+          title: 'Battery Tint',
         }}
       />
       <BatteriesStack.Screen

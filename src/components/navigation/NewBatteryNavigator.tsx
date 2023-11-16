@@ -1,4 +1,5 @@
 import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
+import BatteryTintScreen from 'components/BatteryTintScreen';
 import NavContext from './NavContext';
 import { NewBatteryNavigatorParamList } from 'types/navigation';
 import NewBatteryScreen from 'components/NewBatteryScreen';
@@ -41,6 +42,13 @@ const NewBatteryNavigator = () => {
           component={BatteryChemistryScreen}
           options={{
             title: 'Chemistry',
+          }}
+        />
+        <NewBatteryStack.Screen
+          name='BatteryTint'
+          component={BatteryTintScreen}
+          options={{
+            title: 'Battery Tint',
           }}
         />
       </NewBatteryStack.Navigator>

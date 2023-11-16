@@ -126,7 +126,7 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'Battery Tint'}
       value={'None'}
       position={['first']}
-      onPress={() => null}
+      onPress={() => navigation.navigate('BatteryTint')}
     />
     <ListItem
       title={'Barcode Size'}

@@ -14,6 +14,7 @@ export type BatteriesNavigatorParamList = {
     batteryId: string;
   };
   BatteryChemistry: undefined;
+  BatteryTint: undefined;
   NewBatteryNavigator: undefined;
 };
 
@@ -42,6 +43,7 @@ export type ModelsNavigatorParamList = {
 export type NewBatteryNavigatorParamList = {
   NewBattery: undefined;
   BatteryChemistry: undefined;
+  BatteryTint: undefined;
 };
 
 export type NewModelNavigatorParamList = {

@@ -16,6 +16,7 @@ export type BatteriesNavigatorParamList = {
   BatteryChemistry: undefined;
   BatteryTint: undefined;
   NewBatteryNavigator: undefined;
+  Notes: undefined;
   ScanCodeSize: undefined;
 };
 
@@ -45,6 +46,7 @@ export type NewBatteryNavigatorParamList = {
   NewBattery: undefined;
   BatteryChemistry: undefined;
   BatteryTint: undefined;
+  Notes: undefined;
   ScanCodeSize: undefined;
 };
 

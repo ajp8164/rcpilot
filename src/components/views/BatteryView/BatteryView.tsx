@@ -161,8 +161,8 @@ const BatteryView = (props: BatteryViewProps) => {
     <ListItem
       title={'Notes'}
       position={['first', 'last']}
-      onPress={() => null}
-    />
+      onPress={() => navigation.navigate('Notes')}
+      />
     <Divider />
     </ScrollView>
   );

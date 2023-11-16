@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import { Button } from '@rneui/base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewModelNavigatorParamList } from 'types/navigation';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import TextView from 'components/views/TextView';
 import { makeStyles } from '@rneui/themed';
 
@@ -41,21 +40,14 @@ const NotesScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[theme.styles.viewAlt, s.view]}>
-        <TextView
-          characterLimit={5000}
-          onTextChanged={onTextChanged}
-        />
-    </SafeAreaView>
+    <TextView
+      characterLimit={5000}
+      onTextChanged={onTextChanged}
+    />
   );
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  view: {
-    paddingHorizontal: 0,
-  },
   cancelButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

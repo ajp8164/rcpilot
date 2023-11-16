@@ -6,6 +6,7 @@ import { ListItemInput as _ListItemInput } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 
 interface Props extends _ListItemInput {
+  inputDisabled?: boolean;
   label?: string;
 };
 
@@ -22,6 +23,7 @@ const ListItemInput = (props: Props) => {
     <_ListItemInput
       {...props}
       containerStyle={{...props.containerStyle, ...s.containerStyle}}
+      contentStyle={s.inputContent}
       inputTextStyle={s.inputText}
       extraContentComponentRight={
         <View style={{flexDirection: 'row'}}>
@@ -54,6 +56,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   inputIconWithLabel: {
     top: 3,
     color: theme.colors.subtleGray,
+  },
+  inputContent: {
+    minWidth: '50%'
   },
   inputLabel: {
     ...theme.styles.textNormal,

@@ -137,16 +137,18 @@ const BatteryView = (props: BatteryViewProps) => {
     <Divider />
     <ListItemInput
       title={'Purchase Price'}
-      position={batteryId ? ['first'] : ['first', 'last']}
       value={'Unknown'}
       keyboardType={'number-pad'}
+      position={batteryId ? ['first'] : ['first', 'last']}
     />
     {batteryId &&
     <>
-      <ListItem
+      <ListItemInput
         title={'Operating Cost'}
-        onPress={() => null}
-      />
+        value={'Unknown'}
+        label={'per cycle'}
+        keyboardType={'number-pad'}
+        />
       <ListItemSwitch
         title={'Battery is Retired'}
         position={['last']}

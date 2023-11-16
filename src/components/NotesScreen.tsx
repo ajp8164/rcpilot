@@ -42,6 +42,7 @@ const NotesScreen = ({ navigation }: Props) => {
   return (
     <TextView
       characterLimit={5000}
+      placeholder={'Type your notes here.'}
       onTextChanged={onTextChanged}
     />
   );

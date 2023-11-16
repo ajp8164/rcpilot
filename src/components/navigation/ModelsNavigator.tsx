@@ -49,7 +49,6 @@ const ModelsNavigator = () => {
         component={ModelCategoryScreen}
         options={{
           title: 'Model Category',
-          presentation: 'card'
         }}
       />
       <ModelsStack.Screen
@@ -57,7 +56,6 @@ const ModelsNavigator = () => {
         component={EventStyleScreen}
         options={{
           title: 'Default Style',
-          presentation: 'card'
         }}
       />
       <ModelsStack.Screen
@@ -65,7 +63,6 @@ const ModelsNavigator = () => {
         component={PropellerScreen}
         options={{
           title: 'Default Propeller',
-          presentation: 'card'
         }}
       />
       <ModelsStack.Screen
@@ -73,7 +70,6 @@ const ModelsNavigator = () => {
         component={ScanCodeSizeScreen}
         options={{
           title: 'QR Code Size',
-          presentation: 'card'
         }}
       />
       <ModelsStack.Screen
@@ -81,7 +77,6 @@ const ModelsNavigator = () => {
         component={NotesScreen}
         options={{
           title: 'Model Notes',
-          presentation: 'card'
         }}
       />
       <ModelsStack.Screen

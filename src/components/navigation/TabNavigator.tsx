@@ -47,7 +47,6 @@ const TabNavigator = () => {
           backgroundColor: theme.colors.inactiveTabBackground,
           borderTopColor: theme.colors.tabBarBorder,
         },
-        tabBarHideOnKeyboard: true,
         tabBarIconStyle: { top: 3 },
       }}>
       <Tab.Screen

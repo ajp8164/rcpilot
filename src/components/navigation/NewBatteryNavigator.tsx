@@ -4,6 +4,7 @@ import NavContext from './NavContext';
 import { NewBatteryNavigatorParamList } from 'types/navigation';
 import NewBatteryScreen from 'components/NewBatteryScreen';
 import React from 'react';
+import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -49,6 +50,13 @@ const NewBatteryNavigator = () => {
           component={BatteryTintScreen}
           options={{
             title: 'Battery Tint',
+          }}
+        />
+        <NewBatteryStack.Screen
+          name='ScanCodeSize'
+          component={ScanCodeSizeScreen}
+          options={{
+            title: 'QR Code Size',
           }}
         />
       </NewBatteryStack.Navigator>

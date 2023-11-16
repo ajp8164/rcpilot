@@ -5,6 +5,7 @@ import BatteryScreen from 'components/BatteryScreen';
 import BatteryTintScreen from 'components/BatteryTintScreen';
 import NewBatteryNavigator from './NewBatteryNavigator';
 import React from 'react';
+import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -64,6 +65,13 @@ const BatteriesNavigator = () => {
           presentation: 'modal'
         }}
       />
+        <BatteriesStack.Screen
+          name='ScanCodeSize'
+          component={ScanCodeSizeScreen}
+          options={{
+            title: 'QR Code Size',
+          }}
+        />
     </BatteriesStack.Navigator>
   );
 };

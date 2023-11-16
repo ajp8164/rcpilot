@@ -129,10 +129,10 @@ const BatteryView = (props: BatteryViewProps) => {
       onPress={() => navigation.navigate('BatteryTint')}
     />
     <ListItem
-      title={'Barcode Size'}
+      title={'QR Code Size'}
       value={'None'}
       position={['last']}
-      onPress={() => null}
+      onPress={() => navigation.navigate('ScanCodeSize')}
     />
     <Divider />
     <ListItemInput

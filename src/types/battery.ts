@@ -8,6 +8,16 @@ export enum BatteryChemistry {
   Other = 'Other',
 }
 
+export enum BatteryTint {
+  Red = 'Red',
+  Orange = 'Orange',
+  Green = 'Green',
+  Cyan = 'Cyan',
+  Blue = 'Blue',
+  Violet = 'Violet',
+  None = 'None',
+}
+
 export enum BatteryCellArchitecture {
   SeriesCells = 'SeriesCells',
   SeriesParallelCells = 'SeriesParallelCells',

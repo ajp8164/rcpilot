@@ -20,8 +20,8 @@ const ModelView = (props: ModelViewProps) => {
 
   const [batteryLoggingEnabled, setBatteryLoggingEnabled] = useState(false);
   const [fuelLoggingEnabled, setFuelLoggingEnabled] = useState(false);
-  const [modelIsDamaged, setModelIsDamaged] = useState(false);
-  const [modelIsRetired, setModelIsRetired] = useState(false);
+  const [isDamaged, setIsDamaged] = useState(false);
+  const [isRetired, setIsRetired] = useState(false);
   const [expandedLastFlight, setExpandedLastFlight] = useState(false);
   const [lastFlightDate, setLastFlightDate] = useState<string>();
 
@@ -33,12 +33,12 @@ const ModelView = (props: ModelViewProps) => {
     setFuelLoggingEnabled(value);
   };
 
-  const toggleModelIsDamaged = (value: boolean) => {
-    setModelIsDamaged(value);
+  const toggleIsDamaged = (value: boolean) => {
+    setIsDamaged(value);
   };
 
-  const toggleModelIsRetired = (value: boolean) => {
-    setModelIsRetired(value);
+  const toggleIsRetired = (value: boolean) => {
+    setIsRetired(value);
   };
 
   const onLastFlightDateChange = (date?: Date) => {
@@ -207,15 +207,15 @@ const ModelView = (props: ModelViewProps) => {
       {modelId &&
         <ListItemSwitch
           title={'Airplane is Retired'}
-          value={modelIsRetired}
-          onValueChange={toggleModelIsRetired}
+          value={isRetired}
+          onValueChange={toggleIsRetired}
         />
       }
       <ListItemSwitch
         title={'Airplane is Damaged'}
         position={['last']}
-        value={modelIsDamaged}
-        onValueChange={toggleModelIsDamaged}
+        value={isDamaged}
+        onValueChange={toggleIsDamaged}
       />
       <Divider />
       <ListItem

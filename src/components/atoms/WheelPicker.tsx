@@ -150,7 +150,6 @@ const WheelPicker = ({
           }
         });
       }
-      console.log(pi);
       return pi;
     };
 

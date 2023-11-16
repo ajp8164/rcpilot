@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { LayoutChangeEvent, Text, TextInput, View } from 'react-native';
+import { Keyboard, LayoutChangeEvent, Text, TextInput, View } from 'react-native';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { TextViewMethods, TextViewProps } from './types';
 
@@ -10,7 +10,7 @@ import { makeStyles } from '@rneui/themed';
 import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 
 const REMAINING_VIEW_HEIGHT = 20;
-const INPUT_VERTICAL_MARGIN = 5;
+const INPUT_VERTICAL_MARGIN = 10;
 
 type TextView = TextViewMethods;
 
@@ -47,6 +47,9 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         refInput.current.focus();
       }
     }, 600);
+    return () => { 
+      Keyboard.dismiss();
+    }
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -97,6 +100,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   view: {
     paddingHorizontal: 5,
+    borderWidth: 2,
   },
   text: {
     ...theme.styles.textNormal,

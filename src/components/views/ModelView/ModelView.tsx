@@ -78,7 +78,7 @@ const ModelView = (props: ModelViewProps) => {
           <ListItemInput
             title={'Total Time'}
             value={'10'}
-            label='hh:mm:ss'
+            label='h:mm:ss'
             keyboardType={'number-pad'}
             position={['first']}
           />
@@ -93,6 +93,7 @@ const ModelView = (props: ModelViewProps) => {
       {modelId &&
         <ListItem
             title={'Statistics'}
+            value={'4:00 in a flight'}
             position={['first']}
             onPress={() => null}
           />
@@ -113,6 +114,7 @@ const ModelView = (props: ModelViewProps) => {
       {modelId &&
         <ListItem
           title={'Logged Flight Details'}
+          value={'0'}
           position={['last']}
           onPress={() => null}
         />
@@ -127,6 +129,7 @@ const ModelView = (props: ModelViewProps) => {
       {batteryLoggingEnabled &&
         <ListItem
           title={'Favorite Batteries'}
+          value={'1'}
           onPress={() => null}
         />
       }
@@ -138,14 +141,18 @@ const ModelView = (props: ModelViewProps) => {
       />
       {fuelLoggingEnabled &&
         <>
-          <ListItem
+          <ListItemInput
             title={'Fuel Capacity'}
-            onPress={() => null}
+            value={'Value'}
+            label='oz'
+            keyboardType={'number-pad'}
           />
-          <ListItem
+          <ListItemInput
             title={'Total Fuel Consumed'}
+            value={'0.00'}
+            label='gal'
+            inputDisabled={true}
             position={['last']}
-            onPress={() => null}
           />
         </>
       }
@@ -154,15 +161,18 @@ const ModelView = (props: ModelViewProps) => {
           <Divider />
           <ListItem
             title={'Checklists'}
+            value={'1'}
             position={['first']}
             onPress={() => null}
           />
           <ListItem
             title={'Perform Maintenance'}
+            value={'0'}
             onPress={() => null}
           />
           <ListItem
             title={'Maintenance Log'}
+            value={'0'}
             position={['last']}
             onPress={() => null}
           />

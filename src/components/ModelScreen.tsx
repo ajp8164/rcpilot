@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import ModelView from 'components/views/ModelView';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'Model'>;
@@ -35,11 +34,7 @@ const ModelScreen = ({ route, navigation }: Props) => {
   }, [navigation]);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-        <ModelView modelId={modelId} />
-    </SafeAreaView>
+    <ModelView modelId={modelId} />
   );
 };
 

@@ -13,7 +13,8 @@ export type BatteriesNavigatorParamList = {
   Battery: {
     batteryId: string;
   };
-  NewBattery: undefined;
+  BatteryChemistry: undefined;
+  NewBatteryNavigator: undefined;
 };
 
 export type LogNavigatorParamList = {
@@ -36,6 +37,11 @@ export type ModelsNavigatorParamList = {
   Notes: undefined;
   Propeller: undefined;
   ScanCodeSize: undefined;
+};
+
+export type NewBatteryNavigatorParamList = {
+  NewBattery: undefined;
+  BatteryChemistry: undefined;
 };
 
 export type NewModelNavigatorParamList = {

@@ -31,11 +31,13 @@ const BatteriesScreen = ({ navigation }: Props) => {
           <>
             <Icon
               name={'filter'}
-              style={s.headerIcon}/>
+              style={s.headerIcon}
+            />
             <Icon
               name={'plus'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('NewBattery')}/>
+              onPress={() => navigation.navigate('NewBatteryNavigator')}
+            />
           </>
         );
       },
@@ -45,7 +47,6 @@ const BatteriesScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
       <ScrollView
-        // contentContainerStyle={{ height: visibleViewHeight }}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'READY TO CHARGE'}/>

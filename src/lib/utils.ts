@@ -1,3 +1,9 @@
+export const toArrayOrdinals = (array: string[]): number[] => {
+  return array.map(str => {
+    return Number(str);
+  });
+};
+
 export const uuidv4 = () => {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     // eslint-disable-next-line no-bitwise

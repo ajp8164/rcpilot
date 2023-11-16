@@ -35,9 +35,8 @@ const ModelScreen = ({ route, navigation }: Props) => {
   }, [navigation]);
 
   return (
-    <View
-      style={theme.styles.view}>
-        <ModelView modelId={modelId} />
+    <View style={theme.styles.view}>
+      <ModelView modelId={modelId} />
     </View>
   );
 };

@@ -45,7 +45,6 @@ const ModelsScreen = ({ navigation }: Props) => {
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
       <ScrollView
-        // contentContainerStyle={{ height: visibleViewHeight }}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'HELICOPTERS'}/>

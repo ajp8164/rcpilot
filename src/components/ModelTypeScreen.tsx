@@ -1,5 +1,5 @@
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
-
+import { Divider } from '@react-native-ajp-elements/ui';
+import { ListItemCheckbox } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import React from 'react';
@@ -28,11 +28,11 @@ const ModelTypeScreen = () => {
       <Divider />
       {modelTypes.map((type, index) => {
         return (
-          <ListItem
+          <ListItemCheckbox
             key={index}
             title={type.name}
             position={modelTypes.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === modelTypes.length - 1 ? ['last'] : []}
-            rightImage={false}
+            checked={index === 0}
             onPress={() => null}
           />)
       })}

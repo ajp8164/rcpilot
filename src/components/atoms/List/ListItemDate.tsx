@@ -33,7 +33,9 @@ const ListItemDate = (props: Props) => {
     <>
       <_ListItem
         {...props} 
-        valueStyle={s.valueStyle} />
+        containerStyle={{...props.containerStyle, ...s.containerStyle}}
+        valueStyle={s.valueStyle}
+      />
       <ExpandableSection expanded={expanded}>
         <DateTimePicker
           mode={mode}
@@ -54,6 +56,9 @@ const ListItemDate = (props: Props) => {
   }
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  containerStyle: {
+    minHeight: 48
+  },
   valueStyle: {
     ...theme.styles.textDim
   }

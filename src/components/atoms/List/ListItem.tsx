@@ -11,11 +11,15 @@ const ListItem = (props: Props) => {
   return (
     <_ListItem
       {...props} 
+      containerStyle={{...props.containerStyle, ...s.containerStyle}}
       valueStyle={s.valueStyle} />
     );
 }
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  containerStyle: {
+    minHeight: 48
+  },
   valueStyle: {
     ...theme.styles.textDim
   }

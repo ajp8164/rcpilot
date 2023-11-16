@@ -87,10 +87,12 @@ const BatteryView = (props: BatteryViewProps) => {
         />
       }
       />
-    <ListItem
+    <ListItemInput
       title={'Discharge Rate'}
+      value={'Unknown'}
+      label='C'
+      keyboardType={'number-pad'}
       position={['last']}
-      onPress={() => null}
     />
     <Divider />
     {batteryId &&
@@ -112,28 +114,32 @@ const BatteryView = (props: BatteryViewProps) => {
       </>
     }
     {!batteryId &&
-      <ListItem
+      <ListItemInput
         title={'Total Cycles'}
+        value={'None'}
+        keyboardType={'number-pad'}
         position={['first', 'last']}
-        onPress={() => null}
       />
     }
     <Divider />
     <ListItem
       title={'Battery Tint'}
+      value={'None'}
       position={['first']}
       onPress={() => null}
     />
     <ListItem
       title={'Barcode Size'}
+      value={'None'}
       position={['last']}
       onPress={() => null}
     />
     <Divider />
-    <ListItem
+    <ListItemInput
       title={'Purchase Price'}
       position={batteryId ? ['first'] : ['first', 'last']}
-      onPress={() => null}
+      value={'Unknown'}
+      keyboardType={'number-pad'}
     />
     {batteryId &&
     <>

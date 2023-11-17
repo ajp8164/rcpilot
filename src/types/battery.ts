@@ -1,3 +1,5 @@
+import { ISODateString } from "types/common";
+
 export enum BatteryChemistry {
   LiPo = 'LiPo',
   LiIon = 'LiIon',
@@ -27,4 +29,10 @@ export type Battery = {
   id: string;
   chemistry: BatteryChemistry;
   cellConfiguration: number[];
+};
+
+export type BatteryCycle = {
+  id: string;
+  number: number;
+  date: ISODateString;
 };

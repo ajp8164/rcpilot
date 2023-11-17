@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
+import React, { useEffect } from 'react';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteryView from 'components/views/BatteryView';
 import { Button } from '@rneui/base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { makeStyles } from '@rneui/themed';
 
@@ -14,24 +14,26 @@ const NewBatteryScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  navigation.setOptions({
-    headerLeft: () => (
-      <Button
-        title={'Cancel'}
-        titleStyle={theme.styles.buttonClearTitle}
-        buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-        onPress={navigation.goBack}
-      />
-    ),
-    headerRight: () => (
-      <Button
-        title={'Save'}
-        titleStyle={theme.styles.buttonClearTitle}
-        buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-        onPress={() => null}
-      />
-    ),
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Button
+          title={'Cancel'}
+          titleStyle={theme.styles.buttonClearTitle}
+          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+          onPress={navigation.goBack}
+        />
+      ),
+      headerRight: () => (
+        <Button
+          title={'Save'}
+          titleStyle={theme.styles.buttonClearTitle}
+          buttonStyle={[theme.styles.buttonClear, s.saveButton]}
+          onPress={() => null}
+        />
+      ),
+    });
+  }, []);
 
   return (
     <SafeAreaView

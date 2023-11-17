@@ -22,16 +22,28 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
 
   const cycles: BatteryCycle[] = [{
     id: '1',
-    number: 1,
-    date: '2023-11-17T03:28:04.651Z'
-  }, {
-    id: '2',
-    number: 2,
-    date: '2023-10-17T03:28:04.651Z'
-  }, {
-    id: '3',
-    number: 3,
-    date: '2023-10-17T03:28:04.651Z'
+    cycleNumber: 1,
+    batteryId: '1',
+    ignoreInPlots: false,
+    discharge: {
+      date: '2023-11-17T03:28:04.651Z',
+      duration: '30:25', 
+      packVoltage: 11.1,
+      packResistance: 200,
+      // 1S/1P 2S/1P 3S/1P (series then parallel)
+      cellVoltage: [],
+      cellResisance: [],
+    },
+    charge: {
+      date: '2023-11-17T03:28:04.651Z',
+      amount: 450,
+      packVoltage: 11.1,
+      packResistance: 200,
+      // 1S/1P 2S/1P 3S/1P
+      cellVoltage: [],
+      cellResisance: [],
+    },
+    notes: '',
   }];
 
   const filterCycle = (cycle: BatteryCycle) => {
@@ -46,7 +58,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
 
     cycles.forEach(cycle => {
       if (filterCycle(cycle)) {
-        const groupTitle = DateTime.fromISO(cycle.date).toFormat(
+        const groupTitle = DateTime.fromISO(cycle.discharge.date).toFormat(
           'MMMM yyyy',
         );
         groupedCycles[groupTitle] = groupedCycles[groupTitle] || [];
@@ -76,7 +88,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
       renderItem={({item, index, section}) => (
         <ListItem
           key={index}
-          title={`#${item.number}`}
+          title={`#${item.cycleNumber}`}
           containerStyle={{marginHorizontal: 15}}
           position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
           onPress={() => navigation.navigate('BatteryCycle', {

@@ -13,6 +13,12 @@ export type BatteriesNavigatorParamList = {
   Battery: {
     batteryId: string;
   };
+  BatteryCellResistances: {
+    batteryCycleId: string;
+  };
+  BatteryCellVoltages: {
+    batteryCycleId: string;
+  };
   BatteryChemistry: undefined;
   BatteryCycles: undefined;
   BatteryCycle: {

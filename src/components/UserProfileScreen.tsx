@@ -1,7 +1,7 @@
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import {
   MainNavigatorParamList,
-  MoreNavigatorParamList,
+  SetupNavigatorParamList,
 } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import UserProfileView, { EditorState } from 'components/views/UserProfileView';
@@ -11,7 +11,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
 type Props = CompositeScreenProps<
-  NativeStackScreenProps<MoreNavigatorParamList, 'UserProfile'>,
+  NativeStackScreenProps<SetupNavigatorParamList, 'UserProfile'>,
   NativeStackScreenProps<MainNavigatorParamList>
 >;
 

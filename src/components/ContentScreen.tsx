@@ -4,15 +4,15 @@ import {
   Divider,
   ListItemAccordian,
 } from '@react-native-ajp-elements/ui';
-import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { MoreNavigatorParamList } from 'types/navigation';
 import { ContentContainer } from 'types/content';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = NativeStackScreenProps<MoreNavigatorParamList, 'Content'>;
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Content'>;
 
 const ContentScreen = ({ route, navigation }: Props) => {
   const theme = useTheme();
@@ -20,12 +20,9 @@ const ContentScreen = ({ route, navigation }: Props) => {
 
   const contentView = route.params.content;
 
-  useEffect(() => {
-    navigation.setOptions({
-      title: contentView.name || '',
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  navigation.setOptions({
+    title: contentView.name || '',
+  });
 
   const renderContent = (section: ContentContainer) => {
     if (section.items) {

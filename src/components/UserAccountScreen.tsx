@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, ListItem } from '@react-native-ajp-elements/ui';
 import {
   MainNavigatorParamList,
-  MoreNavigatorParamList,
+  SetupNavigatorParamList,
 } from 'types/navigation';
 import React, { useEffect } from 'react';
 
@@ -18,7 +18,7 @@ import { signOut } from 'lib/auth';
 import { useSelector } from 'react-redux';
 
 type Props = CompositeScreenProps<
-  NativeStackScreenProps<MoreNavigatorParamList, 'UserAccount'>,
+  NativeStackScreenProps<SetupNavigatorParamList, 'UserAccount'>,
   NativeStackScreenProps<MainNavigatorParamList>
 >;
 
@@ -28,12 +28,9 @@ const UserAccountScreen = ({ navigation }: Props) => {
 
   const userProfile = useSelector(selectUserProfile);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'My Account',
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  navigation.setOptions({
+    headerTitle: 'My Account',
+  });
 
   useEffect(() => {
     // Wait for sign out to complete before navigating away.

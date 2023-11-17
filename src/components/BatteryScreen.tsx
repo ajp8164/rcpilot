@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useEffect } from 'react';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteryView from 'components/views/BatteryView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
@@ -16,23 +16,22 @@ const BatteryScreen = ({ route, navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: ()  => {
-        return (
-          <>
-            <Icon
-              name={'chevron-up'}
-              style={s.headerIcon}/>
-            <Icon
-              name={'chevron-down'}
-              style={s.headerIcon}
-              onPress={() => null}/>
-          </>
-        );
-      },
-    });
-  }, [navigation]);
+  navigation.setOptions({
+    headerRight: ()  => {
+      return (
+        <>
+          <Icon
+            name={'chevron-up'}
+            style={s.headerIcon}
+            onPress={() => null}/>
+          <Icon
+            name={'chevron-down'}
+            style={s.headerIcon}
+            onPress={() => null}/>
+        </>
+      );
+    },
+  });
 
   return (
     <View style={theme.styles.view}>

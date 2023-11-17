@@ -16,7 +16,7 @@ interface Section {
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCycles'>;
 
-const BatteryCyclesScreen = () => {
+const BatteryCyclesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -79,7 +79,9 @@ const BatteryCyclesScreen = () => {
           title={`#${item.number}`}
           containerStyle={{marginHorizontal: 15}}
           position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
-          onPress={() => null}
+          onPress={() => navigation.navigate('BatteryCycle', {
+            batteryCycleId: '1',
+          })}
         />
       )}
       renderSectionHeader={({section: {title}}) => (

@@ -99,18 +99,19 @@ const ModelView = (props: ModelViewProps) => {
           />
       }
       <ListItemDate
-          title={'Last Flight'}
-          value={lastFlightDate
-            ? DateTime.fromISO(lastFlightDate).toFormat(
-              "MMM d, yyyy 'at' hh:mm a"
-            )
-            : 'Tap to Set...'}
-          pickerValue={lastFlightDate}
-          rightImage={false}
-          expanded={expandedLastFlight}
-          position={modelId ? [] : ['last']}
-          onPress={() => setExpandedLastFlight(!expandedLastFlight)}
-          onDateChange={onLastFlightDateChange} />
+        title={'Last Flight'}
+        value={lastFlightDate
+          ? DateTime.fromISO(lastFlightDate).toFormat(
+            "MMM d, yyyy 'at' hh:mm a"
+          )
+          : 'Tap to Set...'}
+        pickerValue={lastFlightDate}
+        rightImage={false}
+        expanded={expandedLastFlight}
+        position={modelId ? [] : ['last']}
+        onPress={() => setExpandedLastFlight(!expandedLastFlight)}
+        onDateChange={onLastFlightDateChange}
+      />
       {modelId &&
         <ListItem
           title={'Logged Flight Details'}
@@ -221,7 +222,7 @@ const ModelView = (props: ModelViewProps) => {
       <ListItem
         title={'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes')}
+        onPress={() => navigation.navigate('Notes', {})}
       />
       <Divider />
     </ScrollView>

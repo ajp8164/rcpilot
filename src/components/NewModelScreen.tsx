@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
 import ModelView from 'components/views/ModelView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewModelNavigatorParamList } from 'types/navigation';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { makeStyles } from '@rneui/themed';
 
@@ -14,26 +14,24 @@ const NewModelScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={navigation.goBack}
-        />
-      ),
-      headerRight: () => (
-        <Button
-          title={'Save'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-          onPress={() => null}
-        />
-      ),
-    });
-  }, [navigation]);
+  navigation.setOptions({
+    headerLeft: () => (
+      <Button
+        title={'Cancel'}
+        titleStyle={theme.styles.buttonClearTitle}
+        buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+        onPress={navigation.goBack}
+      />
+    ),
+    headerRight: () => (
+      <Button
+        title={'Save'}
+        titleStyle={theme.styles.buttonClearTitle}
+        buttonStyle={[theme.styles.buttonClear, s.saveButton]}
+        onPress={() => null}
+      />
+    ),
+  });
 
   return (
     <SafeAreaView

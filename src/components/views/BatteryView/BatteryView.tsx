@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { BatteriesNavigatorParamList, NewBatteryNavigatorParamList } from 'types/navigation';
 import { Battery, BatteryChemistry } from 'types/battery';
 import { BatteryViewMethods, BatteryViewProps } from './types';
 import { Divider, ListItemSwitch } from '@react-native-ajp-elements/ui';
@@ -6,7 +7,6 @@ import {ListItem, ListItemInput} from 'components/atoms/List';
 import React, { useState } from 'react';
 import { batteryCellConfigurationToString, getBatteryCellConfigurationItems } from 'lib/battery';
 
-import { NewBatteryNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import WheelPicker from 'components/atoms/WheelPicker';
@@ -18,11 +18,13 @@ import { useSetState } from '@react-native-ajp-elements/core';
 type BatteryView = BatteryViewMethods;
 
 type NavigationProps = StackNavigationProp<NewBatteryNavigatorParamList, 'NewBattery'>;
+type BaseNavigationProps = StackNavigationProp<BatteriesNavigatorParamList, 'Battery'>;
 
 const BatteryView = (props: BatteryViewProps) => {
   const { batteryId } = props;
 
   const navigation = useNavigation<NavigationProps>();
+  const baseNavigation = useNavigation<BaseNavigationProps>();
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -99,15 +101,17 @@ const BatteryView = (props: BatteryViewProps) => {
       <>
         <ListItem
           title={'Statistics'}
+          value={'No cycles'}
           position={['first']}
-          onPress={() => null}
+          rightImage={false}
         />
         <ListItem
           title={'Battery Performance'}
-          onPress={() => null}
+          onPress={() => baseNavigation.navigate('BatteryPerformance')}
         />
         <ListItem
           title={'Logged Cycle Details'}
+          value={'0'}
           position={['last']}
           onPress={() => null}
         />

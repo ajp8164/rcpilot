@@ -24,6 +24,7 @@ export type BatteriesNavigatorParamList = {
   BatteryCycle: {
     batteryCycleId: string;
   };
+  BatteryFilters: undefined;
   BatteryPerformance: undefined;
   BatteryTint: undefined;
   NewBatteryNavigator: undefined;

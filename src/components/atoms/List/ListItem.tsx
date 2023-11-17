@@ -27,7 +27,7 @@ const ListItem = (props: Props) => {
         props.disabled ? s.valuePosition : {},
         props.rightImage === undefined && props.value ? {} : s.valuePosition
       ]}
-      disabledStyle={s.disabled}
+      disabledStyle={{...s.disabled, ...props.disabledStyle}}
       rightImage={props.disabled === undefined ? props.rightImage : !props.disabled}
     />
     <ExpandableSection expanded={expanded}>

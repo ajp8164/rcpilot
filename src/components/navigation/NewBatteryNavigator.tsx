@@ -19,7 +19,6 @@ const NewBatteryNavigator = () => {
       <NewBatteryStack.Navigator
       initialRouteName='NewBattery'
       screenOptions={{
-        headerBackTitle: 'Battery',
         headerLargeTitleShadowVisible: theme.mode === 'light',
         headerLargeStyle: {
           backgroundColor: theme.colors.screenHeaderBackground,

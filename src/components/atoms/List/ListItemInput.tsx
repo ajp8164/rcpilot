@@ -13,7 +13,8 @@ interface Props extends _ListItemInput {
 const ListItemInput = (props: Props) => {
   const {
     inputDisabled,
-    label
+    label,
+    placeholder,
   } = props;
 
   const theme = useTheme();
@@ -30,8 +31,10 @@ const ListItemInput = (props: Props) => {
           {label && <Text style={s.inputLabel}>{label}</Text>}
           <Icon
             name={'pencil'}
+            size={18}
             style={[
               label ? s.inputIconWithLabel : s.inputIcon,
+              placeholder ? s.inputIconWithPlaceholder : s.inputIcon,
               inputDisabled ? s.inputIconDisabled : {},
             ]}
           />
@@ -46,7 +49,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingRight: 0
   },
   inputIcon: {
-    top: -4.5,
+    top: -3.5,
     marginLeft: 5,
     color: theme.colors.subtleGray,
   },
@@ -57,13 +60,18 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: 3,
     color: theme.colors.subtleGray,
   },
+  inputIconWithPlaceholder: {
+    top: 2,
+    marginRight: 18,
+    color: theme.colors.subtleGray,
+  },
   inputContent: {
     minWidth: '50%'
   },
   inputLabel: {
     ...theme.styles.textNormal,
     color: theme.colors.subtleGray,
-    marginHorizontal: 4
+    marginLeft: 4,
   },
   inputText: {
     ...theme.styles.textDim,

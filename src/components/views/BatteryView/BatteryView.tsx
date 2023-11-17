@@ -113,7 +113,7 @@ const BatteryView = (props: BatteryViewProps) => {
           title={'Logged Cycle Details'}
           value={'0'}
           position={['last']}
-          onPress={() => null}
+          onPress={() => baseNavigation.navigate('BatteryCycles')}
         />
       </>
     }

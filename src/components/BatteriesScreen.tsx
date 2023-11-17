@@ -1,11 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, ListItem } from '@react-native-ajp-elements/ui';
-import React, { useEffect } from 'react';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Button } from '@rneui/base';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
@@ -16,33 +16,31 @@ const BatteriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Edit'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.editButton]}
-          onPress={() => null}
-        />
-      ),
-      headerRight: ()  => {
-        return (
-          <>
-            <Icon
-              name={'filter'}
-              style={s.headerIcon}
-            />
-            <Icon
-              name={'plus'}
-              style={s.headerIcon}
-              onPress={() => navigation.navigate('NewBatteryNavigator')}
-            />
-          </>
-        );
-      },
-    });
-  }, [navigation]);
+  navigation.setOptions({
+    headerLeft: () => (
+      <Button
+        title={'Edit'}
+        titleStyle={theme.styles.buttonClearTitle}
+        buttonStyle={[theme.styles.buttonClear, s.editButton]}
+        onPress={() => null}
+      />
+    ),
+    headerRight: ()  => {
+      return (
+        <>
+          <Icon
+            name={'filter'}
+            style={s.headerIcon}
+          />
+          <Icon
+            name={'plus'}
+            style={s.headerIcon}
+            onPress={() => navigation.navigate('NewBatteryNavigator')}
+          />
+        </>
+      );
+    },
+  });
 
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>

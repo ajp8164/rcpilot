@@ -1,6 +1,7 @@
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteriesScreen from 'components/BatteriesScreen';
 import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
+import BatteryCycleScreen from 'components/BatteryCycleScreen';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
 import BatteryScreen from 'components/BatteryScreen';
@@ -59,6 +60,13 @@ const BatteriesNavigator = () => {
         options={{
           // headerLargeTitle: true,
           title: 'Cycles',
+        }}
+      />
+      <BatteriesStack.Screen
+        name='BatteryCycle'
+        component={BatteryCycleScreen}
+        options={{
+          title: 'Edit Cycle',
         }}
       />
       <BatteriesStack.Screen

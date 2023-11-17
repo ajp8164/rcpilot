@@ -15,10 +15,15 @@ export type BatteriesNavigatorParamList = {
   };
   BatteryChemistry: undefined;
   BatteryCycles: undefined;
+  BatteryCycle: {
+    batteryCycleId: string;
+  };
   BatteryPerformance: undefined;
   BatteryTint: undefined;
   NewBatteryNavigator: undefined;
-  Notes: undefined;
+  Notes: {
+    title?: string;
+  };
   ScanCodeSize: undefined;
 };
 
@@ -39,7 +44,9 @@ export type ModelsNavigatorParamList = {
     modelId: string;
   };
   ModelCategory: undefined;
-  Notes: undefined;
+  Notes: {
+    title?: string;
+  };
   Propeller: undefined;
   ScanCodeSize: undefined;
 };
@@ -48,7 +55,9 @@ export type NewBatteryNavigatorParamList = {
   NewBattery: undefined;
   BatteryChemistry: undefined;
   BatteryTint: undefined;
-  Notes: undefined;
+  Notes: {
+    title?: string;
+  };
   ScanCodeSize: undefined;
 };
 
@@ -57,7 +66,9 @@ export type NewModelNavigatorParamList = {
   ModelCategory: undefined;
   ModelType: undefined;
   NewModel: undefined;
-  Notes: undefined;
+  Notes: {
+    title?: string;
+  };
   Propeller: undefined;
   ScanCodeSize: undefined;
 };

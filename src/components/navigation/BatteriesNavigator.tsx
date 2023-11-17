@@ -5,6 +5,7 @@ import BatteryCellVoltagesScreen from 'components/BatteryCellVoltagesScreen';
 import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
 import BatteryCycleScreen from 'components/BatteryCycleScreen';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
+import BatteryFiltersScreen from 'components/BatteryFiltersScreen';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
 import BatteryScreen from 'components/BatteryScreen';
 import BatteryTintScreen from 'components/BatteryTintScreen';
@@ -83,6 +84,14 @@ const BatteriesNavigator = () => {
         component={BatteryCycleScreen}
         options={{
           title: 'Edit Cycle',
+        }}
+      />
+      <BatteriesStack.Screen
+        name='BatteryFilters'
+        component={BatteryFiltersScreen}
+        options={{
+          title: 'Filters for Batteries',
+          presentation: 'modal',
         }}
       />
       <BatteriesStack.Screen

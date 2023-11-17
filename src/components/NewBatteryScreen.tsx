@@ -5,7 +5,7 @@ import BatteryView from 'components/views/BatteryView';
 import { Button } from '@rneui/base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryNavigatorParamList } from 'types/navigation';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<NewBatteryNavigatorParamList, 'NewBattery'>;
@@ -37,11 +37,9 @@ const NewBatteryScreen = ({ navigation }: Props) => {
   }, []);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[theme.styles.view, { paddingHorizontal: 0 }]}>
+    <View style={[theme.styles.view]}>
       <BatteryView />
-    </SafeAreaView>
+    </View>
   );
 };
 

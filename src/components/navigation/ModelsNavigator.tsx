@@ -1,6 +1,6 @@
 import EventStyleScreen from 'components/EventStyleScreen';
 import ModelCategoryScreen from 'components/ModelCategoryScreen';
-import ModelFiltersScreen from 'components/ModelFiltersScreen';
+import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
@@ -60,11 +60,11 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='ModelFilters'
-        component={ModelFiltersScreen}
+        name='ModelFiltersNavigator'
+        component={ModelFiltersNavigator}
         options={{
-          title: 'Filter for Models',
-          presentation: 'modal',
+          headerShown: false,
+          presentation: 'modal'
         }}
       />
       <ModelsStack.Screen

@@ -51,12 +51,19 @@ export type ModelsNavigatorParamList = {
     modelId: string;
   };
   ModelCategory: undefined;
-  ModelFilters: undefined;
+  ModelFiltersNavigator: undefined;
   Notes: {
     title?: string;
   };
   Propeller: undefined;
   ScanCodeSize: undefined;
+};
+
+export type ModelFiltersNavigatorParamList = {
+  ModelFilters: undefined;
+  ModelFilterEditor: {
+    filterId: string;
+  };
 };
 
 export type NewBatteryNavigatorParamList = {

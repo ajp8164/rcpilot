@@ -1,14 +1,14 @@
-import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
+import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native-ui-lib';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryFilters'>;
+export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilters'>;
 
-const ModelFiltersScreen = () => {
+const ModelFiltersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
 
   const filters = [
@@ -64,7 +64,9 @@ const ModelFiltersScreen = () => {
         position={['first', 'last']}
         checked={true}
         onPress={() => null}
-        onPressInfo={() => null}
+        onPressInfo={() => navigation.navigate('ModelFilterEditor', {
+          filterId: '1',
+        })}
       />
       <Divider
         type={'note'}
@@ -80,7 +82,9 @@ const ModelFiltersScreen = () => {
             position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
             checked={true}
             onPress={() => null}
-            onPressInfo={() => null}
+            onPressInfo={() => navigation.navigate('ModelFilterEditor', {
+              filterId: '1',
+            })}
           />
         )
       })}

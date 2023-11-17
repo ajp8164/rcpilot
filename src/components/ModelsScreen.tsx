@@ -31,7 +31,7 @@ const ModelsScreen = ({ navigation }: Props) => {
             <Icon
               name={'filter'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('ModelFilters')}
+              onPress={() => navigation.navigate('ModelFiltersNavigator')}
               />
             <Icon
               name={'plus'}

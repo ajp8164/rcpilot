@@ -24,7 +24,7 @@ export type BatteriesNavigatorParamList = {
   BatteryCycle: {
     batteryCycleId: string;
   };
-  BatteryFilters: undefined;
+  BatteryFiltersNavigator: undefined;
   BatteryPerformance: undefined;
   BatteryTint: undefined;
   NewBatteryNavigator: undefined;
@@ -62,6 +62,13 @@ export type ModelsNavigatorParamList = {
 export type ModelFiltersNavigatorParamList = {
   ModelFilters: undefined;
   ModelFilterEditor: {
+    filterId: string;
+  };
+};
+
+export type BatteryFiltersNavigatorParamList = {
+  BatteryFilters: undefined;
+  BatteryFilterEditor: {
     filterId: string;
   };
 };

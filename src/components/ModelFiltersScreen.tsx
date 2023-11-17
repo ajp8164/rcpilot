@@ -8,35 +8,40 @@ import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryFilters'>;
 
-const BatteryFiltersScreen = () => {
+const ModelFiltersScreen = () => {
   const theme = useTheme();
 
   const filters = [
     {
-      name: '3S',
-      chemistry: {
+      name: 'Helicopters',
+      type: {
         select: 'any', // any, is, is not
         values: [],
+      },
+      lastEvent: {
+        select: 'any', // any, before, after, past
+        value: '2023-11-17T03:28:04.651Z',
       },
       totalTime: {
         select: 'any', // any, <, >, =, !=
         value: 0,
       },
-      capacity: {
-        select: 'any', // any, <, >, =, !=
-        value: 0,
+      logsBatteries: {
+        select: 'any', // any, yes, no
       },
-      cRating: {
+      logsFuel: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
       },
-      sCells: {
+      damaged: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
       },
-      pCells: {
-        select: 'any', // any, <, >, =, !=
-        value: 0,
+      vendor: {
+        select: 'any', // any, contains, missing
+        value: '',
+      },
+      notes: {
+        select: 'any', // any, contains, missing
+        value: '',
       }
     }
   ];
@@ -46,7 +51,7 @@ const BatteryFiltersScreen = () => {
       <Divider />
       <ListItemCheckboxInfo
         title={'No Filter'}
-        subtitle={'Matches all batteries'}
+        subtitle={'Matches all models'}
         position={['first', 'last']}
         hideInfo={true}
         checked={true}
@@ -54,8 +59,8 @@ const BatteryFiltersScreen = () => {
       />
       <Divider />
       <ListItemCheckboxInfo
-        title={'General Batteries Filter'}
-        subtitle={'Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.'}
+        title={'General Models Filter'}
+        subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
         position={['first', 'last']}
         checked={true}
         onPress={() => null}
@@ -63,15 +68,15 @@ const BatteryFiltersScreen = () => {
       />
       <Divider
         type={'note'}
-        text={'You can save the General Batteries Filter to remember a specific filter configuration for later use.'}
+        text={'You can save the General Models Filter to remember a specific filter configuration for later use.'}
       />
-      <Divider text={'SAVED BATTERY FILTERS'} />
+      <Divider text={'SAVED MODEL FILTERS'} />
       {filters.map((filter, index) => {
         return (
           <ListItemCheckboxInfo
             key={index}
             title={filter.name}
-            subtitle={`Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.`}
+            subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
             position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
             checked={true}
             onPress={() => null}
@@ -83,4 +88,4 @@ const BatteryFiltersScreen = () => {
   );
 };
 
-export default BatteryFiltersScreen;
+export default ModelFiltersScreen;

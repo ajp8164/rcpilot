@@ -23,7 +23,6 @@ const ModelsScreen = ({ navigation }: Props) => {
           title={'Edit'}
           titleStyle={theme.styles.buttonClearTitle}
           buttonStyle={[theme.styles.buttonClear, s.editButton]}
-          onPress={() => null}
         />
       ),
       headerRight: ()  => {
@@ -31,11 +30,14 @@ const ModelsScreen = ({ navigation }: Props) => {
           <>
             <Icon
               name={'filter'}
-              style={s.headerIcon}/>
+              style={s.headerIcon}
+              onPress={() => navigation.navigate('ModelFilters')}
+              />
             <Icon
               name={'plus'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('NewModelNavigator')}/>
+              onPress={() => navigation.navigate('NewModelNavigator')}
+            />
           </>
         );
       },

@@ -31,7 +31,7 @@ const ModelCategoryScreen = () => {
           />
         )
       })}
-      <Divider text={'You can manage categories through the Globals sexction in the Setup tab.'} />
+      <Divider text={'You can manage categories through the Globals section in the Setup tab.'} />
     </SafeAreaView>
   );
 };

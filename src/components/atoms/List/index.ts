@@ -6,4 +6,5 @@ export * from './ListItemCheckbox';
 export * from './ListItemCheckboxInfo';
 export * from './ListItemInput';
 // export * from './ListItemSwipable';
+export * from './ListItemSegmented';
 export * from './ListItemSwitch';

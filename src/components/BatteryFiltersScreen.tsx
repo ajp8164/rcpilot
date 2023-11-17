@@ -80,7 +80,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
             onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
               filterId: '1',
             })}
-              />
+          />
         )
       })}
     </View>

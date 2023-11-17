@@ -32,7 +32,7 @@ const BatteriesScreen = ({ navigation }: Props) => {
             <Icon
               name={'filter'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('BatteryFilters')}
+              onPress={() => navigation.navigate('BatteryFiltersNavigator')}
             />
             <Icon
               name={'plus'}

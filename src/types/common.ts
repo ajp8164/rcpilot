@@ -1,3 +1,4 @@
+export type DurationString = string;
 export type ISODateString = string;
 
 export type StreetAddress = {

@@ -4,11 +4,11 @@ import {
   Divider,
   ListItemAccordian,
 } from '@react-native-ajp-elements/ui';
+import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { ContentContainer } from 'types/content';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
@@ -20,9 +20,11 @@ const ContentScreen = ({ route, navigation }: Props) => {
 
   const contentView = route.params.content;
 
-  navigation.setOptions({
-    title: contentView.name || '',
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      title: contentView.name || '',
+    });
+  }, []);
 
   const renderContent = (section: ContentContainer) => {
     if (section.items) {

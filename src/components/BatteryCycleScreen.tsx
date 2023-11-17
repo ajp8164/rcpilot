@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { DateTime } from 'luxon';
@@ -20,24 +20,26 @@ const BatteryCycleScreen = ({ navigation }: Props) => {
   const [expandedCycleDate, setExpandedCycleDate] = useState(false);
   const [cycleDate, setCycleDate] = useState<string>('2023-11-17T03:28:04.651Z');
 
-  navigation.setOptions({
-    headerRight: ()  => {
-      return (
-        <>
-          <Icon
-            name={'chevron-up'}
-            style={s.headerIcon}
-            onPress={() => null}
-          />
-          <Icon
-            name={'chevron-down'}
-            style={s.headerIcon}
-            onPress={() => null}
-          />
-        </>
-      );
-    },
-  });
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: ()  => {
+        return (
+          <>
+            <Icon
+              name={'chevron-up'}
+              style={s.headerIcon}
+              onPress={() => null}
+            />
+            <Icon
+              name={'chevron-down'}
+              style={s.headerIcon}
+              onPress={() => null}
+            />
+          </>
+        );
+      },
+    });
+  }, []);
 
   const onCycleDateChange = (date?: Date) => {
     date && setCycleDate(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
@@ -85,10 +87,16 @@ const BatteryCycleScreen = ({ navigation }: Props) => {
     />
     <ListItem
       title={'Cell Voltage'}
+      onPress={() => navigation.navigate('BatteryCellVoltages', {
+        batteryCycleId: '1',
+      })}
     />
     <ListItem
       title={'Cell Resistance'}
       position={['last']}
+      onPress={() => navigation.navigate('BatteryCellResistances', {
+        batteryCycleId: '1',
+      })}
     />
     <Divider />
     <ListItemSwitch

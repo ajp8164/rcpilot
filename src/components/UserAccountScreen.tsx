@@ -28,8 +28,10 @@ const UserAccountScreen = ({ navigation }: Props) => {
 
   const userProfile = useSelector(selectUserProfile);
 
-  navigation.setOptions({
-    headerTitle: 'My Account',
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'My Account',
+    });
   });
 
   useEffect(() => {

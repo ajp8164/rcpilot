@@ -51,6 +51,7 @@ export type ModelsNavigatorParamList = {
     modelId: string;
   };
   ModelCategory: undefined;
+  ModelFilters: undefined;
   Notes: {
     title?: string;
   };

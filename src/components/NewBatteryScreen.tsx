@@ -1,14 +1,15 @@
 import { AppTheme, useTheme } from 'theme';
 import React, { useEffect } from 'react';
 
-import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteryView from 'components/views/BatteryView';
 import { Button } from '@rneui/base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NewBatteryNavigatorParamList } from 'types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'NewBatteryNavigator'>;
+export type Props = NativeStackScreenProps<NewBatteryNavigatorParamList, 'NewBattery'>;
+
 
 const NewBatteryScreen = ({ navigation }: Props) => {  
   const theme = useTheme();

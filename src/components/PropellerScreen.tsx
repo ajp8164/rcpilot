@@ -30,7 +30,7 @@ const PropellerScreen = () => {
             onPress={() => null}
           />)
       })}
-      <Divider text={'You can manage propellers through the Globals sexction in the Setup tab.'} />
+      <Divider text={'You can manage propellers through the Globals section in the Setup tab.'} />
     </SafeAreaView>
   );
 };

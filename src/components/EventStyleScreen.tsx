@@ -32,7 +32,7 @@ const EventStyleScreen = () => {
             onPress={() => null}
           />)
       })}
-      <Divider text={'You can manage styles through the Globals sexction in the Setup tab.'} />
+      <Divider text={'You can manage styles through the Globals section in the Setup tab.'} />
     </SafeAreaView>
   );
 };

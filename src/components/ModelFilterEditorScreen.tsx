@@ -128,8 +128,9 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         expanded={filter[ModelProperty.ModelType].editing}
         ExpandableComponent={
           <ListItem
-            title={'Value'}
-            value={filter[ModelProperty.ModelType].value}
+            title={'Any of these values...'}
+            titleStyle={!filter[ModelProperty.ModelType].value ? {color: theme.colors.assertive} : {}}
+            subtitle={filter[ModelProperty.ModelType].value || 'None'}
             position={['last']}
             onPress={() => navigation.navigate('ModelFilterModelTypes')}
           />

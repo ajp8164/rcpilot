@@ -1,12 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, ChecklistFrequencyUnit, ChecklistType } from 'types/model';
-import { ListItem, ListItemCheckboxInfo } from 'components/atoms/List';
-import React, { useEffect } from 'react';
+import { ChecklistAction, ChecklistFrequencyUnit } from 'types/model';
 
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
+import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
@@ -50,7 +49,7 @@ const FlightChecklistItemScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   doneButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

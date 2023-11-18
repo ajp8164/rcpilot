@@ -77,7 +77,7 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   doneButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

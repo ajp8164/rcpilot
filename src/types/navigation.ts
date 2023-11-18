@@ -107,6 +107,9 @@ export type FlightNavigatorParamList = {
   FlightBatteries: {
     modelId: string;
   };
+  FlightPreFlight: {
+    flightId: string;
+  }
 };
 
 export type SetupNavigatorParamList = {

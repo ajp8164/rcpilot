@@ -60,7 +60,9 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
           title={'Done'}
           titleStyle={theme.styles.buttonClearTitle}
           buttonStyle={[theme.styles.buttonClear, s.doneButton]}
-          onPress={() => null}
+          onPress={() => navigation.navigate('FlightPreFlight', {
+            flightId: '1',
+          })}
         />
       ),
     });

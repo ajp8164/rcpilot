@@ -8,6 +8,9 @@ interface Props extends _ListItem {
   checked: boolean;
   onPressInfo?: () => void;
   hideInfo?: boolean;
+  iconChecked?: string;
+  iconUnchecked?: string;
+  iconSize?: number;
 };
 
 const ListItemCheckboxInfo = (props: Props) => {
@@ -15,7 +18,10 @@ const ListItemCheckboxInfo = (props: Props) => {
     checked,
     onPressInfo,
     hideInfo,
-  } = props;
+    iconChecked = 'check',
+    iconUnchecked = '',
+    iconSize = 18,
+    } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -26,8 +32,8 @@ const ListItemCheckboxInfo = (props: Props) => {
       containerStyle={{...props.containerStyle, ...s.container}}
       leftImage={
         <Icon
-          name={'check'}
-          size={18}
+          name={checked ? iconChecked : iconUnchecked}
+          size={iconSize}
           style={checked ? {opacity: 1} : {opacity: 0}}
         />
       }

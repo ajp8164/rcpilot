@@ -54,7 +54,7 @@ const ModelsScreen = ({ navigation }: Props) => {
           title={'Blade 150S'}
           subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
           position={['first', 'last']}
-          onPress={() => navigation.navigate('Model', {
+          onPress={() => navigation.navigate('FlightNavigator', {
             modelId: '1'
           })}
         />

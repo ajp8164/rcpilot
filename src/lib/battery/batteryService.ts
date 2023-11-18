@@ -13,27 +13,23 @@ const getBatteryCellArchitecture = (battery: Battery): BatteryCellArchitecture =
 };
 
 export const batteryCellConfigurationToString = (battery: Battery) => {
-  const value = battery.cellConfiguration;
-  if (value) {
-    if (getBatteryCellArchitecture(battery) === BatteryCellArchitecture.SeriesParallelCells) {
-      const s = value[0];
-      const p = value[1];
-      const series =
-        s > 0
-          ? batterySPCellConfigurationItems[0][Number(s) - 1].labelShort || ''
-          : '';
-      const parallel =
-        p > 0
-          ? batterySPCellConfigurationItems[1][Number(p) - 1].labelShort || ''
-          : '';
+  if (getBatteryCellArchitecture(battery) === BatteryCellArchitecture.SeriesParallelCells) {
+    const s = battery.sCells;
+    const p = battery.pCells;
+    const series =
+      s > 0
+        ? batterySPCellConfigurationItems[0][Number(s) - 1].labelShort || ''
+        : '';
+    const parallel =
+      p > 0
+        ? batterySPCellConfigurationItems[1][Number(p) - 1].labelShort || ''
+        : '';
 
-      return `${series}${parallel.length > 0 ? ' / ' : ''}${parallel}`;
-    } else {
-      const s = value[0];
-      return batterySCellConfigurationItems[Number(s) - 1].label;
-    }
+    return `${series}${parallel.length > 0 ? ' / ' : ''}${parallel}`;
+  } else {
+    const s = battery.sCells;
+    return batterySCellConfigurationItems[Number(s) - 1].label;
   }
-  return '';
 };
 
 export const getBatteryCellConfigurationItems = (battery: Battery) => {

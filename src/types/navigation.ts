@@ -45,6 +45,9 @@ export type MainNavigatorParamList = {
 
 export type ModelsNavigatorParamList = {
   EventStyle: undefined;
+  FlightNavigator: {
+    modelId: string;
+  };
   NewModelNavigator: undefined;
   Models: undefined;
   Model: {
@@ -98,6 +101,12 @@ export type NewModelNavigatorParamList = {
   };
   Propeller: undefined;
   ScanCodeSize: undefined;
+};
+
+export type FlightNavigatorParamList = {
+  FlightBatteries: {
+    modelId: string;
+  };
 };
 
 export type SetupNavigatorParamList = {

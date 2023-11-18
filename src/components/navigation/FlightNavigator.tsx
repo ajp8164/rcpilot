@@ -1,7 +1,9 @@
 import FlightBatteriesScreen from 'components/FlightBatteriesScreen';
+import FlightChecklistItemScreen from 'components/FlightChecklistItemScreen';
 import { FlightNavigatorParamList } from 'types/navigation';
 import FlightPreFlightScreen from 'components/FlightPreFlightScreen';
 import NavContext from './NavContext';
+import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -40,6 +42,20 @@ const FlightNavigator = () => {
           component={FlightPreFlightScreen}
           options={{
             title: 'Pre-Flight',
+          }}
+        />
+        <FlightStack.Screen
+          name='FlightChecklistItem'
+          component={FlightChecklistItemScreen}
+          options={{
+            title: 'Checklist Item',
+          }}
+        />
+        <FlightStack.Screen
+          name='Notes'
+          component={NotesScreen}
+          options={{
+            title: 'Action Notes',
           }}
         />
       </FlightStack.Navigator>

@@ -208,7 +208,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
             titleStyle={!filter[ModelProperty.Vendor].value ? {color: theme.colors.assertive}: {}}
             subtitle={!filter[ModelProperty.Vendor].value ?  'Matching text not specified' : filter[ModelProperty.Vendor].value}
             position={['last']}
-            onPress={() => null}
+            onPress={() => navigation.navigate('Notes', {title: 'String Value'})}
           />
         }
       />
@@ -225,7 +225,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
             titleStyle={!filter[ModelProperty.Notes].value ? {color: theme.colors.assertive}: {}}
             subtitle={!filter[ModelProperty.Notes].value ?  'Matching text not specified' : filter[ModelProperty.Notes].value}
             position={['last']}
-            onPress={() => null}
+            onPress={() => navigation.navigate('Notes', {title: 'String Value'})}
           />
         }
       />

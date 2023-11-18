@@ -3,6 +3,7 @@ import ModelFilterModelTypesScreen from 'components/ModelFilterModelTypesScreen'
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import ModelFiltersScreen from 'components/ModelFiltersScreen';
 import NavContext from './NavContext';
+import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -48,6 +49,13 @@ const ModelFiltersNavigator = () => {
           component={ModelFilterModelTypesScreen}
           options={{
             title: 'Model Types',
+          }}
+        />
+        <ModelFiltersStack.Screen
+          name='Notes'
+          component={NotesScreen}
+          options={{
+            title: 'String Value',
           }}
         />
       </ModelFiltersStack.Navigator>

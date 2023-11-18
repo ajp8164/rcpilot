@@ -75,6 +75,7 @@ export type BatteryFiltersNavigatorParamList = {
   BatteryFilterEditor: {
     filterId: string;
   };
+  BatteryFilterChemistry: undefined;
 };
 
 export type NewBatteryNavigatorParamList = {

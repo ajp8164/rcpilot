@@ -1,3 +1,4 @@
+import BatteryFilterChemistryScreen from 'components/BatteryFilterChemistryScreen';
 import BatteryFilterEditorScreen from 'components/BatteryFilterEditorScreen';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import BatteryFiltersScreen from 'components/BatteryFiltersScreen';
@@ -42,7 +43,13 @@ const BatteryFiltersNavigator = () => {
             title: 'Filter Editor',
           }}
         />
-
+        <BatteryFiltersStack.Screen
+          name='BatteryFilterChemistry'
+          component={BatteryFilterChemistryScreen}
+          options={{
+            title: 'Chemistries',
+          }}
+        />
       </BatteryFiltersStack.Navigator>
     </NavContext.Provider>
   );

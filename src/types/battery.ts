@@ -27,8 +27,19 @@ export enum BatteryCellArchitecture {
 
 export type Battery = {
   id: string;
+  name: string;
   chemistry: BatteryChemistry;
-  cellConfiguration: number[];
+  vendor: string;
+  purchasePrice: number;
+  retired:  boolean;
+  inStorage: boolean;
+  cRating: number;
+  capacity: number;
+  sCells: number;
+  pCells: number;
+  totalCycles: number;
+  lastCycle: ISODateString;
+  notes: string;
 };
 
 export type BatteryCycle = {

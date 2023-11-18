@@ -85,10 +85,10 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
       style={s.sectionList}
       sections={groupCycles(cycles)}
       keyExtractor={item => item.id}
-      renderItem={({item, index, section}) => (
+      renderItem={({item: batteryCycle, index, section}) => (
         <ListItem
           key={index}
-          title={`#${item.cycleNumber}`}
+          title={`#${batteryCycle.cycleNumber}`}
           containerStyle={{marginHorizontal: 15}}
           position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
           onPress={() => navigation.navigate('BatteryCycle', {
@@ -119,7 +119,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     backgroundColor: theme.colors.listHeaderBackground,
   },
   sectionHeader: {
-    ...theme.styles.textNormal,
+    ...theme.styles.textSmall,
     ...theme.styles.textDim
   },
 }));

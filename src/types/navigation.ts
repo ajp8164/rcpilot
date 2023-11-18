@@ -110,6 +110,13 @@ export type FlightNavigatorParamList = {
   FlightPreFlight: {
     flightId: string;
   }
+  FlightChecklistItem: {
+    checklistId: string;
+    actionIndex: number;
+  }
+  Notes: {
+    title?: string;
+  }
 };
 
 export type SetupNavigatorParamList = {

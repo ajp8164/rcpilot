@@ -66,7 +66,10 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
             checked={true}
             position={checklist.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklist.actions.length - 1 ? ['last'] : []}
             onPress={() => null}
-            onPressInfo={() => null}
+            onPressInfo={() => navigation.navigate('FlightChecklistItem', {
+              checklistId: '1',
+              actionIndex: 0,
+            })}
            /> 
         );
       })}

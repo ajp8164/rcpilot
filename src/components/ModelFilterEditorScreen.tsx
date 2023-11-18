@@ -64,7 +64,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         />
       ),
     });
-  }, []);  
+  }, []);
 
   const toggleCreateSavedFilter = (value: boolean) => {
     setCreateSavedFilter(value);
@@ -131,7 +131,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
             title={'Value'}
             value={filter[ModelProperty.ModelType].value}
             position={['last']}
-            onPress={() => null}
+            onPress={() => navigation.navigate('ModelFilterModelTypes')}
           />
         }
       />

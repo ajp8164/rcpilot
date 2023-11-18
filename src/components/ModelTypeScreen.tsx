@@ -4,19 +4,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewModelNavigatorParamList } from 'types/navigation';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { modelTypes } from 'lib/model';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'ModelType'>;
-
-const modelTypes = [
-  { name: 'Airplane', icon: '' },
-  { name: 'Sailplane', icon: '' },
-  { name: 'Helicopter', icon: '' },
-  { name: 'Multicopter', icon: '' },
-  { name: 'Car', icon: '' },
-  { name: 'Boat', icon: '' },
-  { name: 'Robot', icon: '' },
-];
 
 const ModelTypeScreen = () => {
   const theme = useTheme();

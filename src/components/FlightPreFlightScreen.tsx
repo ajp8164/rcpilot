@@ -2,6 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistFrequencyUnit, ChecklistType } from 'types/model';
 import React, { useEffect } from 'react';
 
+import ActionBar from 'components/atoms/ActionBar';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
@@ -73,6 +74,17 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
            /> 
         );
       })}
+      <ActionBar
+        actions={[
+          {
+            label: 'Uncheck All Items',
+            onPress: () => null
+          }, {
+            label: 'Check All Items',
+            onPress: () => null
+          },
+        ]}
+      />
     </View>
   );
 };

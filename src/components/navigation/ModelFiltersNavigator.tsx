@@ -1,4 +1,5 @@
 import ModelFilterEditorScreen from 'components/ModelFilterEditorScreen';
+import ModelFilterModelTypesScreen from 'components/ModelFilterModelTypesScreen';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import ModelFiltersScreen from 'components/ModelFiltersScreen';
 import NavContext from './NavContext';
@@ -42,7 +43,13 @@ const ModelFiltersNavigator = () => {
             title: 'Filter Editor',
           }}
         />
-
+        <ModelFiltersStack.Screen
+          name='ModelFilterModelTypes'
+          component={ModelFilterModelTypesScreen}
+          options={{
+            title: 'Model Types',
+          }}
+        />
       </ModelFiltersStack.Navigator>
     </NavContext.Provider>
   );

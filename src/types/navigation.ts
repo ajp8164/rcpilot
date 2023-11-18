@@ -64,6 +64,7 @@ export type ModelFiltersNavigatorParamList = {
   ModelFilterEditor: {
     filterId: string;
   };
+  ModelFilterModelTypes: undefined;
 };
 
 export type BatteryFiltersNavigatorParamList = {

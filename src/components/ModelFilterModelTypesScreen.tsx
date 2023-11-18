@@ -30,7 +30,7 @@ const ModelFilterModelTypesScreen = ({ navigation }: Props) => {
         <Button
           title={'Done'}
           titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.updateButton]}
+          buttonStyle={[theme.styles.buttonClear, s.doneButton]}
           onPress={() => null}
         />
       ),
@@ -73,7 +73,7 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     paddingHorizontal: 0,
     minWidth: 0,
   },
-  updateButton: {
+  doneButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,

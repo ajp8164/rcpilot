@@ -28,7 +28,7 @@ const ModelFilterModelTypesScreen = ({ navigation }: Props) => {
       ),
       headerRight: () => (
         <Button
-          title={'Update'}
+          title={'Done'}
           titleStyle={theme.styles.buttonClearTitle}
           buttonStyle={[theme.styles.buttonClear, s.updateButton]}
           onPress={() => null}

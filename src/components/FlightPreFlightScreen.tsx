@@ -46,7 +46,9 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
           title={'Done'}
           titleStyle={theme.styles.buttonClearTitle}
           buttonStyle={[theme.styles.buttonClear, s.doneButton]}
-          onPress={() => null}
+          onPress={() => navigation.navigate('FlightTimer', {
+            flightId: '1'
+          })}
         />
       ),
     });

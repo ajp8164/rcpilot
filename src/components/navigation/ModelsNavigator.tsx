@@ -73,7 +73,7 @@ const ModelsNavigator = () => {
         component={FlightNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal'
+          presentation: 'fullScreenModal'
         }}
       />
       <ModelsStack.Screen

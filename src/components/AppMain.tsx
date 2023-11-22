@@ -15,6 +15,7 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { AppError } from 'lib/errors';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import ErrorBoundary from 'react-native-error-boundary';
+import {EventProvider} from 'lib/event';
 import { LinkingOptions } from '@react-navigation/native';
 import MainNavigator from 'components/navigation/MainNavigator';
 import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
@@ -24,6 +25,7 @@ import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
 import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
 import { useColorScheme } from 'react-native';
+import { useDeviceShake } from 'lib/useDeviceShake';
 import { useSelector } from 'react-redux';
 
 // See https://reactnavigation.org/docs/configuring-links
@@ -43,6 +45,7 @@ const AppMain = () => {
   const auth = useAuthContext(signInModalRef);
   const camera = useCameraContext(cameraModalRef);
   const network = useNetworkContext();
+  useDeviceShake();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(
     StartupScreen.None,
@@ -110,9 +113,11 @@ const AppMain = () => {
                 <NetworkConnectionBar />
                 <AuthContext.Provider value={auth}>
                   <CameraContext.Provider value={camera}>
-                    <MainNavigator startupScreen={startupScreen} />
-                    <SignInModal ref={signInModalRef} />
-                    <CameraModal ref={cameraModalRef} />
+                    <EventProvider>
+                      <MainNavigator startupScreen={startupScreen} />
+                      <SignInModal ref={signInModalRef} />
+                      <CameraModal ref={cameraModalRef} />
+                    </EventProvider>
                   </CameraContext.Provider>
                 </AuthContext.Provider>
               </NetworkContext.Provider>

@@ -1,0 +1,243 @@
+import { AppTheme, useTheme } from 'theme';
+import { ListItem, ListItemSwitch } from 'components/atoms/List';
+import { Pressable, Text, View } from 'react-native';
+import React, { ReactNode, useEffect, useState } from 'react';
+import { SwipeButton, viewport } from '@react-native-ajp-elements/ui';
+
+import { FlightNavigatorParamList } from 'types/navigation';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
+
+enum TimerState {
+  Initial,
+  Armed,
+  Running,
+  Paused,
+  Stopped,
+};
+
+type TimerButton = {
+  icon: string;
+  color: string;
+  onPress?: () => void | undefined;
+};
+
+export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightTimer'>;
+
+const FlightTimerScreen = ({ navigation }: Props) => {
+  const theme = useTheme();
+  const s = useStyles(theme);
+
+  const event = useEvent();
+  
+  const timerUsesButtons = false;
+
+  const [countdownTimerEnabled, setCountdownTimerEnabled] = useState(false);
+  const [timerState, setTimerState] = useState(TimerState.Initial);
+  
+  useEffect(() => {
+    event.on("deviceShake", () => console.log('SHAKE'));
+  }, []);
+
+  const toggleCountdownTimer = (value: boolean) => {
+    setCountdownTimerEnabled(value);
+  };
+
+  const onSwipeArmTimer = (isToggled: boolean) => {
+    isToggled ? armTimer() : disarmTimer();
+  };
+
+  const armTimer = () => {
+    setTimerState(TimerState.Armed);
+  };
+
+  const disarmTimer = () => {
+    setTimerState(TimerState.Initial);
+  };
+
+  const startTimer = () => {
+    setTimerState(TimerState.Running);
+  };
+
+  const pauseTimer = () => {
+    setTimerState(TimerState.Paused);
+  };
+
+  const stopTimer = () => {
+    setTimerState(TimerState.Stopped);
+  };
+
+  const renderTimerButtons = (): ReactNode => {
+    let leftButton: TimerButton = { icon: 'circle-check', color: theme.colors.assertive, onPress: armTimer };
+    let rightButton: TimerButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
+
+    if (timerState === TimerState.Armed)  {
+      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: disarmTimer };
+      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: startTimer };
+    } else if (timerState === TimerState.Running)  {
+      leftButton = { icon: 'circle-stop', color: theme.colors.stickyWhite, onPress: undefined };
+      rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: pauseTimer };
+    } else if (timerState === TimerState.Paused)  {
+      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: stopTimer };
+      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: startTimer };
+    } else if (timerState === TimerState.Stopped)  {
+      leftButton = { icon: 'circle-check', color: theme.colors.assertive, onPress: undefined };
+      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
+    }
+
+    return (
+      <>
+      <Pressable onPress={leftButton.onPress}>
+        <Icon
+          name={leftButton.icon}
+          size={52}
+          color={leftButton.color}
+          style={leftButton.onPress ? {opacity: 1} : {opacity: 0.3}}
+        />
+        </Pressable>
+        <Pressable onPress={rightButton.onPress}>
+          <Icon
+            name={rightButton.icon}
+            size={52}
+            color={rightButton.color}
+            style={rightButton.onPress ? {opacity: 1} : {opacity: 0.3}}
+          />
+        </Pressable>
+      </>
+    );
+  };
+
+  return (
+    <View style={s.view}>
+      <View style={s.upper}>
+        <Text style={s.timerValue}>
+          {'0:00'}
+        </Text>
+        <View style={s.timerType}>
+          <ListItemSwitch
+            title={'Countdown Timer'}
+            value={countdownTimerEnabled}
+            position={['first', 'last']}
+            containerStyle={s.listItemContainer}
+            titleStyle={s.listItemTitle}
+            onValueChange={toggleCountdownTimer}
+          />
+        </View>
+      </View>
+      <View style={s.lower}>
+        <View style={s.summary}>
+          <ListItem
+            title={'Goblin Buddy'}
+            subtitle={'Flight  2'}
+            position={['first']}
+            containerStyle={s.listItemContainer}
+            titleStyle={s.listItemTitle}
+            rightImage={false}
+          />
+          <ListItem
+            title={'Fuel Consumption Averages'}
+            subtitle={'No recent flights with this model'}
+            containerStyle={s.listItemContainer}
+            titleStyle={s.listItemTitle}
+            rightImage={false}
+          />
+          <ListItem
+            title={'Battery Logging'}
+            subtitle={'No batteries were selected'}
+            position={['last']}
+            containerStyle={s.listItemContainer}
+            titleStyle={s.listItemTitle}
+            rightImage={false}
+          />
+        </View>
+      </View>
+      {timerUsesButtons ?
+        <View style={s.timerButtons}>
+          {renderTimerButtons()}
+        </View>
+        :
+        <View style={s.timerSwipeable}>
+          <SwipeButton
+            trackColor={timerState === TimerState.Running ? theme.colors.blackTransparentSubtle : theme.colors.assertive}
+            text={'Slide to arm'}
+            textStyle={[theme.styles.textXL, {color: theme.colors.stickyWhite}]}
+            backText={timerState === TimerState.Running ? 'Timer running' : 'Slide to disarm'}
+            backTextStyle={[theme.styles.textXL, {color: theme.colors.stickyWhite}]}
+            padding={7}
+            height={60}
+            width={viewport.width - 45}
+            trackStartColor={timerState === TimerState.Running ? theme.colors.blackTransparentSubtle : theme.colors.success}
+            trackEndColor={timerState === TimerState.Running ? theme.colors.blackTransparentSubtle : theme.colors.success}
+            thumbStyle={timerState === TimerState.Running ? {opacity: 0, pointerEvents: 'none'} : {}}
+            onToggle={onSwipeArmTimer} />
+        </View>
+      }
+    </View>
+  );
+};
+
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  view: {
+    ...theme.styles.view,
+    backgroundColor: theme.colors.brandPrimary
+  },
+  doneButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  listItemContainer: {
+    backgroundColor: theme.colors.whiteTransparentSubtle,
+  },
+  listItemTitle: {
+    color: theme.colors.stickyWhite,
+  },
+  upper: {
+    height: '42%',
+    justifyContent: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.whiteTransparentSubtle,
+  },
+  timerValue: {
+    textAlign: 'center',
+    ...theme.styles.textNormal,
+    color: theme.colors.stickyWhite,
+    fontSize: 92,
+    letterSpacing: -5,
+  },
+  timerType: {
+    position: 'absolute',
+    bottom: 15,
+    left: 0,
+    right: 0,
+  },
+  lower: {
+    height: '42%',
+    bottom: 0,
+    top: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.whiteTransparentSubtle,
+  },
+  summary: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+  },
+  timerButtons: {
+    position: 'absolute',
+    bottom: theme.insets.bottom,
+    width: viewport.width,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  timerSwipeable: {
+    position: 'absolute',
+    bottom: theme.insets.bottom,
+    width: viewport.width,
+    alignItems: 'center',
+  }
+}));
+
+export default FlightTimerScreen;

@@ -114,6 +114,9 @@ export type FlightNavigatorParamList = {
     checklistId: string;
     actionIndex: number;
   }
+  FlightTimer: {
+    flightId: string;
+  }
   Notes: {
     title?: string;
   }

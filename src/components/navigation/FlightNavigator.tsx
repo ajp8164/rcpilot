@@ -2,6 +2,7 @@ import FlightBatteriesScreen from 'components/FlightBatteriesScreen';
 import FlightChecklistItemScreen from 'components/FlightChecklistItemScreen';
 import { FlightNavigatorParamList } from 'types/navigation';
 import FlightPreFlightScreen from 'components/FlightPreFlightScreen';
+import FlightTimerScreen from 'components/FlightTimerScreen';
 import NavContext from './NavContext';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
@@ -56,6 +57,17 @@ const FlightNavigator = () => {
           component={NotesScreen}
           options={{
             title: 'Action Notes',
+          }}
+        />
+        <FlightStack.Screen
+          name='FlightTimer'
+          component={FlightTimerScreen}
+          options={{
+            title: 'Flight Timer',
+            headerLargeStyle: { backgroundColor: theme.colors.brandPrimary },
+            headerTitleStyle: { color: theme.colors.stickyWhite },
+            headerTintColor: theme.colors.stickyWhite,
+            headerShadowVisible: false,
           }}
         />
       </FlightStack.Navigator>

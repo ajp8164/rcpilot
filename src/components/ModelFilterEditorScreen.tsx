@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, ListItemDate, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
+import { BooleanRelation, DateRelation, EnumRelation, ListItemFilterBoolean, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
+import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { Button } from '@rneui/base';
-import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,15 +15,15 @@ enum ModelProperty {
   ModelType = 'modelType',
   LastEvent ='lastEvent',
   TotalTime = 'totalTime',
-  LogBatteries = 'logBatteries',
-  LogFuel = 'logFuel',
+  LogsBatteries = 'logsBatteries',
+  LogsFuel = 'logsFuel',
   Damaged = 'damaged',
   Vendor = 'vendor',
   Notes = 'notes',
 };
 
 type FilterState = {
-  editing: boolean;
+  relation: BooleanRelation | DateRelation | EnumRelation | NumberRelation | StringRelation;
   value: string;
 };
 
@@ -34,15 +34,16 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
   const s = useStyles(theme);
 
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
+
   const [filter, setFilter] = useSetState<{[key in ModelProperty] : FilterState}>({
-    [ModelProperty.ModelType]: {editing: false, value: ''},
-    [ModelProperty.LastEvent]: {editing: false, value: ''},
-    [ModelProperty.TotalTime]: {editing: false, value: ''},
-    [ModelProperty.LogBatteries]: {editing: false, value: ''},
-    [ModelProperty.LogFuel]: {editing: false, value: ''},
-    [ModelProperty.Damaged]: {editing: false, value: ''},
-    [ModelProperty.Vendor]: {editing: false, value: ''},
-    [ModelProperty.Notes]: {editing: false, value: ''},
+    [ModelProperty.ModelType]: {relation: EnumRelation.Any, value: ''},
+    [ModelProperty.LastEvent]: {relation: DateRelation.Any, value: ''},
+    [ModelProperty.TotalTime]: {relation: NumberRelation.Any, value: ''},
+    [ModelProperty.LogsBatteries]: {relation: BooleanRelation.Any, value: ''},
+    [ModelProperty.LogsFuel]: {relation: BooleanRelation.Any, value: ''},
+    [ModelProperty.Damaged]: {relation: BooleanRelation.Any, value: ''},
+    [ModelProperty.Vendor]: {relation: StringRelation.Any, value: ''},
+    [ModelProperty.Notes]: {relation: StringRelation.Any, value: ''},
   });
 
   useEffect(() => {
@@ -70,25 +71,10 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
     setCreateSavedFilter(value);
   };
 
-  const onLastEventDateChange = (date?: Date) => {
-    // Set value while leaving the editing state unchanged.
-    date && setFilter({
-      [ModelProperty.LastEvent]: {
-        editing: filter[ModelProperty.LastEvent].editing,
-        value: DateTime.fromJSDate(date).toISO() || new Date().toISOString()
-      }
-    });
-  };
-
-  const onOperatorSelect = (property: ModelProperty, index: number) => {
-    // Set editing state while leaving the value unchanged.
+  const onFilterValueChange = (property: ModelProperty, value: FilterState) => {
     setFilter({
-      [property]: {
-        editing: index > 0,
-        value: filter[property].value,
-      }
+      [property]: value,
     });
-
   };
 
   return (
@@ -120,115 +106,86 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         onPress={() => null}
       />
       <Divider text={'This filter shows all the models that match all of these criteria.'}/>
-      <ListItemSegmented
+      <ListItemFilterEnum
         title={'Model Type'}
-        position={filter[ModelProperty.ModelType].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  Is  ' }, { label: 'Is Not' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.ModelType, index)}
-        expanded={filter[ModelProperty.ModelType].editing}
-        ExpandableComponent={
-          <ListItem
-            title={'Any of these values...'}
-            titleStyle={!filter[ModelProperty.ModelType].value ? {color: theme.colors.assertive} : {}}
-            subtitle={filter[ModelProperty.ModelType].value || 'None'}
-            position={['last']}
-            onPress={() => navigation.navigate('ModelFilterModelTypes')}
-          />
-        }
+        value={filter[ModelProperty.ModelType].value}
+        relation={EnumRelation.Any}
+        position={['first', 'last']}
+        pickerScreen={'ModelFilterModelTypes'}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.ModelType, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterDate
         title={'Last Event'}
-        position={filter[ModelProperty.LastEvent].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: 'Before' }, { label: 'After' }, { label: 'Past' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.LastEvent, index)}
-        expanded={filter[ModelProperty.LastEvent].editing}
-        ExpandableComponent={
-          <ListItemDate
-            title={'Date'}
-            value={filter[ModelProperty.LastEvent].value
-              ? DateTime.fromISO(filter[ModelProperty.LastEvent].value).toFormat(
-                "MMM d, yyyy 'at' hh:mm a"
-              )
-              : 'Tap to Set...'}
-            pickerValue={filter[ModelProperty.LastEvent].value}
-            rightImage={false}
-            expanded={filter[ModelProperty.LastEvent].editing}
-            position={['last']}
-            onDateChange={onLastEventDateChange}
-          />
-        }
+        value={filter[ModelProperty.LastEvent].value}
+        relation={DateRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.LastEvent, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterNumber
         title={'Total Time'}
-        position={filter[ModelProperty.TotalTime].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  <  ' }, { label: '  >  ' }, { label: '  =  ' }, { label: '  !=  ' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.TotalTime, index)}
-        expanded={filter[ModelProperty.TotalTime].editing}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            label={'h:mm'}
-            position={['last']}
-            value={filter[ModelProperty.TotalTime].value}
-          />
-        }
+        label={'h:mm'}
+        value={filter[ModelProperty.TotalTime].value}
+        relation={NumberRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.TotalTime, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
-        title={'Log Batteries'}
-        position={filter[ModelProperty.LogBatteries].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: 'Yes' }, { label: ' No ' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.LogBatteries, index)}
+      <ListItemFilterBoolean
+        title={'Logs Batteries'}
+        value={filter[ModelProperty.LogsBatteries].value}
+        relation={BooleanRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.LogsBatteries, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
-        title={'Log Fuel'}
-        position={filter[ModelProperty.LogFuel].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: 'Yes' }, { label: ' No ' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.LogFuel, index)}
+      <ListItemFilterBoolean
+        title={'Logs Fuel'}
+        value={filter[ModelProperty.LogsFuel].value}
+        relation={BooleanRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.LogsFuel, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterBoolean
         title={'Damaged'}
-        position={filter[ModelProperty.Damaged].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: 'Yes' }, { label: ' No ' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.Damaged, index)}
+        value={filter[ModelProperty.Damaged].value}
+        relation={BooleanRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.Damaged, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterString
         title={'Vendor'}
-        position={filter[ModelProperty.Vendor].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: 'Contains' }, { label: 'Missing' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.Vendor, index)}
-        expanded={filter[ModelProperty.Vendor].editing}
-        ExpandableComponent={
-          <ListItem
-            title={'The Text'}
-            titleStyle={!filter[ModelProperty.Vendor].value ? {color: theme.colors.assertive}: {}}
-            subtitle={!filter[ModelProperty.Vendor].value ?  'Matching text not specified' : filter[ModelProperty.Vendor].value}
-            position={['last']}
-            onPress={() => navigation.navigate('Notes', {title: 'String Value'})}
-          />
-        }
+        value={filter[ModelProperty.Vendor].value}
+        relation={StringRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.Vendor, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterString
         title={'Notes'}
-        position={filter[ModelProperty.Notes].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: 'Contains' }, { label: 'Missing' }]}
-        onChangeIndex={index => onOperatorSelect(ModelProperty.Notes, index)}
-        expanded={filter[ModelProperty.Notes].editing}
-        ExpandableComponent={
-          <ListItem
-            title={'The Text'}
-            titleStyle={!filter[ModelProperty.Notes].value ? {color: theme.colors.assertive}: {}}
-            subtitle={!filter[ModelProperty.Notes].value ?  'Matching text not specified' : filter[ModelProperty.Notes].value}
-            position={['last']}
-            onPress={() => navigation.navigate('Notes', {title: 'String Value'})}
-          />
-        }
+        value={filter[ModelProperty.Notes].value}
+        relation={StringRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.Notes, {relation, value});
+        } }
       />
       <View style={{height: theme.insets.bottom}}/>
     </ScrollView>

@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 
-interface Props extends _ListItem {
+export interface ListItemSegmentedInterface extends _ListItem {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
   initialIndex?: number;
@@ -13,7 +13,7 @@ interface Props extends _ListItem {
   segments: SegmentedControlItemProps[];
 };
 
-const ListItemSegmented = (props: Props) => {
+const ListItemSegmented = (props: ListItemSegmentedInterface) => {
   const {
     expanded = false,
     ExpandableComponent,

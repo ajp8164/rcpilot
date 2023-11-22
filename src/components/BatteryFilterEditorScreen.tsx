@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
+import { EnumRelation, ListItemFilterEnum, ListItemFilterNumber, NumberRelation } from 'components/molecules/filters';
+import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
@@ -20,7 +21,7 @@ enum BatteryProperty {
 };
 
 type FilterState = {
-  editing: boolean;
+  relation: EnumRelation | NumberRelation;
   value: string;
 };
 
@@ -31,13 +32,14 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
   const s = useStyles(theme);
 
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
+
   const [filter, setFilter] = useSetState<{[key in BatteryProperty] : FilterState}>({
-    [BatteryProperty.Chemistry]: {editing: false, value: ''},
-    [BatteryProperty.TotalTime]: {editing: false, value: ''},
-    [BatteryProperty.Capacity]: {editing: false, value: ''},
-    [BatteryProperty.CRating]: {editing: false, value: ''},
-    [BatteryProperty.SCells]: {editing: false, value: ''},
-    [BatteryProperty.PCells]: {editing: false, value: ''},
+    [BatteryProperty.Chemistry]: {relation: EnumRelation.Any, value: ''},
+    [BatteryProperty.TotalTime]: {relation: NumberRelation.Any, value: ''},
+    [BatteryProperty.Capacity]: {relation: NumberRelation.Any, value: ''},
+    [BatteryProperty.CRating]: {relation: NumberRelation.Any, value: ''},
+    [BatteryProperty.SCells]: {relation: NumberRelation.Any, value: ''},
+    [BatteryProperty.PCells]: {relation: NumberRelation.Any, value: ''},
   });
 
   useEffect(() => {
@@ -65,15 +67,10 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
     setCreateSavedFilter(value);
   };
 
-  const onOperatorSelect = (property: BatteryProperty, index: number) => {
-    // Set editing state while leaving the value unchanged.
+  const onFilterValueChange = (property: BatteryProperty, value: FilterState) => {
     setFilter({
-      [property]: {
-        editing: index > 0,
-        value: filter[property].value,
-      }
+      [property]: value,
     });
-
   };
 
   return (
@@ -105,102 +102,68 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         onPress={() => null}
       />
       <Divider text={'This filter shows all the models that match all of these criteria.'}/>
-      <ListItemSegmented
-        title={'Chemistry'}
-        position={filter[BatteryProperty.Chemistry].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  Is  ' }, { label: 'Is Not' }]}
-        onChangeIndex={index => onOperatorSelect(BatteryProperty.Chemistry, index)}
-        expanded={filter[BatteryProperty.Chemistry].editing}
-        ExpandableComponent={
-          <ListItem
-            title={'Any of these values...'}
-            titleStyle={!filter[BatteryProperty.Chemistry].value ? {color: theme.colors.assertive} : {}}
-            subtitle={filter[BatteryProperty.Chemistry].value || 'None'}
-            position={['last']}
-            onPress={() => navigation.navigate('BatteryFilterChemistry')}
-          />
-        }
+      <ListItemFilterEnum
+        title={'Model Type'}
+        value={filter[BatteryProperty.Chemistry].value}
+        relation={EnumRelation.Any}
+        position={['first', 'last']}
+        pickerScreen={'BatteryFilterChemistry'}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(BatteryProperty.Chemistry, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterNumber
         title={'Total Time'}
-        position={filter[BatteryProperty.TotalTime].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  <  ' }, { label: '  >  ' }, { label: '  =  ' }, { label: '  !=  ' }]}
-        onChangeIndex={index => onOperatorSelect(BatteryProperty.TotalTime, index)}
-        expanded={filter[BatteryProperty.TotalTime].editing}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            label={'h:mm'}
-            position={['last']}
-            onChangeText={() => null}
-            value={filter[BatteryProperty.TotalTime].value}
-          />
-        }
+        label={'h:mm'}
+        value={filter[BatteryProperty.TotalTime].value}
+        relation={NumberRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(BatteryProperty.TotalTime, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterNumber
         title={'Capacity'}
-        position={filter[BatteryProperty.Capacity].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  <  ' }, { label: '  >  ' }, { label: '  =  ' }, { label: '  !=  ' }]}
-        onChangeIndex={index => onOperatorSelect(BatteryProperty.Capacity, index)}
-        expanded={filter[BatteryProperty.Capacity].editing}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            position={['last']}
-            value={filter[BatteryProperty.Capacity].value}
-            onChangeText={() => null}
-          />
-        }
+        label={'mAh'}
+        value={filter[BatteryProperty.Capacity].value}
+        relation={NumberRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(BatteryProperty.Capacity, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterNumber
         title={'C Rating'}
-        position={filter[BatteryProperty.CRating].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  <  ' }, { label: '  >  ' }, { label: '  =  ' }, { label: '  !=  ' }]}
-        onChangeIndex={index => onOperatorSelect(BatteryProperty.CRating, index)}
-        expanded={filter[BatteryProperty.CRating].editing}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            position={['last']}
-            value={filter[BatteryProperty.CRating].value}
-            onChangeText={() => null}
-          />
-        }
+        label={'C'}
+        value={filter[BatteryProperty.Capacity].value}
+        relation={NumberRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(BatteryProperty.Capacity, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterNumber
         title={'S Cells'}
-        position={filter[BatteryProperty.SCells].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  <  ' }, { label: '  >  ' }, { label: '  =  ' }, { label: '  !=  ' }]}
-        onChangeIndex={index => onOperatorSelect(BatteryProperty.SCells, index)}
-        expanded={filter[BatteryProperty.SCells].editing}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            position={['last']}
-            value={filter[BatteryProperty.SCells].value}
-            onChangeText={() => null}
-          />
-        }
+        value={filter[BatteryProperty.SCells].value}
+        relation={NumberRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(BatteryProperty.SCells, {relation, value});
+        } }
       />
       <Divider />
-      <ListItemSegmented
+      <ListItemFilterNumber
         title={'P Cells'}
-        position={filter[BatteryProperty.PCells].editing ? ['first'] : ['first', 'last']}
-        segments={[{ label: 'Any' }, { label: '  <  ' }, { label: '  >  ' }, { label: '  =  ' }, { label: '  !=  ' }]}
-        onChangeIndex={index => onOperatorSelect(BatteryProperty.PCells, index)}
-        expanded={filter[BatteryProperty.PCells].editing}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            position={['last']}
-            value={filter[BatteryProperty.PCells].value}
-            onChangeText={() => null}
-          />
-        }
+        value={filter[BatteryProperty.PCells].value}
+        relation={NumberRelation.Any}
+        position={['first', 'last']}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(BatteryProperty.PCells, {relation, value});
+        } }
       />
       <View style={{height: theme.insets.bottom}}/>
     </ScrollView>  );

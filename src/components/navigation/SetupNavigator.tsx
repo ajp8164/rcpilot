@@ -1,6 +1,7 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
+import PilotScreen from 'components/PilotScreen';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
@@ -38,6 +39,13 @@ const SetupNavigator = () => {
           title: 'Setup',
           headerLeft: () => null,
           headerLargeTitle: true,
+        }}
+      />
+      <SetupStack.Screen
+        name="Pilot"
+        component={PilotScreen}
+        options={{
+          // headerLargeTitle: true,
         }}
       />
       <SetupStack.Screen

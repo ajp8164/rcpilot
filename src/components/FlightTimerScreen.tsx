@@ -1,3 +1,4 @@
+import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import { Picker, PickerItem, SwipeButton, viewport } from '@react-native-ajp-elements/ui';
@@ -32,13 +33,34 @@ const FlightTimerScreen = ({ navigation }: Props) => {
 
   const event = useEvent();
   
-  const timerUsesButtons = false;
+  const timerUsesButtons = true;
 
   const [countdownTimerEnabled, setCountdownTimerEnabled] = useState(false);
   const [timerState, setTimerState] = useState(TimerState.Initial);
-  
+
+  const timerMessageAnim = useSharedValue(1);
+  const duration = 950;
+  const easing = Easing.linear;
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: timerMessageAnim.value,
+    transform: [{ scale: timerMessageAnim.value / 5 + 1 }],
+  }));
+
   useEffect(() => {
-    event.on("deviceShake", () => console.log('SHAKE'));
+    timerMessageAnim.value =
+      withDelay(500,
+        withRepeat(
+          withSequence(
+            withTiming(0.1, { duration, easing }),
+            withTiming(1, { duration, easing }),
+          ),
+        -1
+        )
+      );
+  }, []);
+
+  useEffect(() => {
+    event.on('deviceShake', () => console.log('SHAKE'));
   }, []);
 
   const toggleCountdownTimer = (value: boolean) => {
@@ -136,9 +158,16 @@ const FlightTimerScreen = ({ navigation }: Props) => {
     <View style={s.view}>
       <View style={s.upper}>
         {(!countdownTimerEnabled || (countdownTimerEnabled && timerState !== TimerState.Initial)) && 
-          <Text style={s.timerValue}>
+          <Text style={[s.timerValue, timerState === TimerState.Armed ? s.timerValueArmed : {}]}>
             {'0:00'}
           </Text>
+        }
+        {timerState === TimerState.Armed &&
+          <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
+            <Text style={s.timerMessage}>
+              {timerUsesButtons ? 'Tap to Start Timer...' : 'Shake to Start Timer...'}
+            </Text>
+          </Animated.View>
         }
         {(countdownTimerEnabled && timerState === TimerState.Initial) &&
           <Picker
@@ -239,11 +268,23 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     fontSize: 92,
     letterSpacing: -5,
   },
+  timerValueArmed: {
+    opacity: 0.1
+  },
   timerType: {
     position: 'absolute',
     bottom: 15,
     left: 0,
     right: 0,
+  },
+  timerMessageContainer: {
+    position: 'absolute',
+    alignItems: 'center',
+    width: '100%',
+  },
+  timerMessage:  {
+    ...theme.styles.textLarge,
+    color: theme.colors.stickyWhite,
   },
   lower: {
     height: '42%',

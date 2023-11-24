@@ -169,7 +169,7 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
     </ScrollView>  );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   cancelButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
@@ -182,10 +182,11 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   },
   reset: {
     alignSelf: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
+    color: theme.colors.screenHeaderBackButton,
   },
   resetDisabled: {
-    opacity: 0.3
+    opacity: 0.3,
   }
 }));
 

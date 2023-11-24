@@ -44,7 +44,7 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
       headerRight: () => (
         <Button
           title={'Done'}
-          titleStyle={theme.styles.buttonClearTitle}
+          titleStyle={[theme.styles.buttonClearTitle, s.headerButton]}
           buttonStyle={[theme.styles.buttonClear, s.doneButton]}
           onPress={() => navigation.navigate('FlightTimer', {
             flightId: '1'
@@ -91,7 +91,10 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  headerButton: {
+    color: theme.colors.stickyWhite,
+  },
   doneButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

@@ -1,5 +1,6 @@
 import { ContentView } from 'types/content';
 import { NavigatorScreenParams } from '@react-navigation/core';
+import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
 
 export enum StartupScreen {
@@ -30,6 +31,7 @@ export type BatteriesNavigatorParamList = {
   NewBatteryNavigator: undefined;
   Notes: {
     title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
 };
@@ -57,6 +59,7 @@ export type ModelsNavigatorParamList = {
   ModelFiltersNavigator: undefined;
   Notes: {
     title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   };
   Propeller: undefined;
   ScanCodeSize: undefined;
@@ -70,6 +73,7 @@ export type ModelFiltersNavigatorParamList = {
   ModelFilterModelTypes: undefined;
   Notes: {
     title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   };
 };
 
@@ -87,6 +91,7 @@ export type NewBatteryNavigatorParamList = {
   BatteryTint: undefined;
   Notes: {
     title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
 };
@@ -98,6 +103,7 @@ export type NewModelNavigatorParamList = {
   NewModel: undefined;
   Notes: {
     title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   };
   Propeller: undefined;
   ScanCodeSize: undefined;
@@ -119,6 +125,7 @@ export type FlightNavigatorParamList = {
   }
   Notes: {
     title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   }
 };
 

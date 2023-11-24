@@ -43,18 +43,23 @@ const FlightChecklistItemScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {})}
+        onPress={() => navigation.navigate('Notes', {
+          headerButtonStyle: s.notesHeaderButtonStyle
+        })}
       />
     </View>
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   doneButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,
   },
+  notesHeaderButtonStyle: {
+    color: theme.colors.stickyWhite,
+  }
 }));
 
 export default FlightChecklistItemScreen;

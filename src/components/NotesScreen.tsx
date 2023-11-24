@@ -22,7 +22,7 @@ const NotesScreen = ({ navigation, route }: Props) => {
       headerLeft: () => (
         <Button
           title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
+          titleStyle={[theme.styles.buttonClearTitle, route.params.headerButtonStyle]}
           buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
           onPress={navigation.goBack}
         />
@@ -30,7 +30,7 @@ const NotesScreen = ({ navigation, route }: Props) => {
       headerRight: () => (
         <Button
           title={'Save'}
-          titleStyle={theme.styles.buttonClearTitle}
+          titleStyle={[theme.styles.buttonClearTitle, route.params.headerButtonStyle]}
           buttonStyle={[theme.styles.buttonClear, s.saveButton]}
           onPress={() => null}
         />

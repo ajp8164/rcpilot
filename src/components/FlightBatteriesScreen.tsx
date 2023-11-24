@@ -50,7 +50,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
       headerLeft: () => (
         <Button
           title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
+          titleStyle={[theme.styles.buttonClearTitle, s.headerButton]}
           buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
           onPress={() => setCancelFlightActionSheetVisible(true)}
         />
@@ -58,7 +58,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
       headerRight: () => (
         <Button
           title={'Done'}
-          titleStyle={theme.styles.buttonClearTitle}
+          titleStyle={[theme.styles.buttonClearTitle, s.headerButton]}
           buttonStyle={[theme.styles.buttonClear, s.doneButton]}
           onPress={() => navigation.navigate('FlightPreFlight', {
             flightId: '1',
@@ -149,6 +149,9 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  headerButton: {
+    color: theme.colors.stickyWhite,
+  },
   cancelButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

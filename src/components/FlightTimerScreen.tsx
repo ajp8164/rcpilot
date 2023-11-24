@@ -1,4 +1,4 @@
-import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, { Easing, FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import { Picker, PickerItem, SwipeButton, viewport } from '@react-native-ajp-elements/ui';
@@ -39,7 +39,7 @@ const FlightTimerScreen = ({ navigation }: Props) => {
   const [timerState, setTimerState] = useState(TimerState.Initial);
 
   const timerMessageAnim = useSharedValue(1);
-  const duration = 950;
+  const duration = 850;
   const easing = Easing.linear;
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: timerMessageAnim.value,
@@ -158,9 +158,9 @@ const FlightTimerScreen = ({ navigation }: Props) => {
     <View style={s.view}>
       <View style={s.upper}>
         {(!countdownTimerEnabled || (countdownTimerEnabled && timerState !== TimerState.Initial)) && 
-          <Text style={[s.timerValue, timerState === TimerState.Armed ? s.timerValueArmed : {}]}>
+          <Animated.Text entering={FadeIn} exiting={FadeOut} style={[s.timerValue, timerState === TimerState.Armed ? s.timerValueArmed : {}]}>
             {'0:00'}
-          </Text>
+          </Animated.Text>
         }
         {timerState === TimerState.Armed &&
           <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
@@ -170,11 +170,13 @@ const FlightTimerScreen = ({ navigation }: Props) => {
           </Animated.View>
         }
         {(countdownTimerEnabled && timerState === TimerState.Initial) &&
-          <Picker
-            placeholder={'none'}
-            itemWidth={[viewport.width / 2 - 5.5, viewport.width / 2 - 5.5]}
-            items={countdownTimerItems}
-            onValueChange={() => null} />
+          <Animated.View entering={FadeIn} exiting={FadeOut}>
+            <Picker
+              placeholder={'none'}
+              itemWidth={[viewport.width / 2 - 5.5, viewport.width / 2 - 5.5]}
+              items={countdownTimerItems}
+              onValueChange={() => null} />
+          </Animated.View>
         }
         <View style={s.timerType}>
           <ListItemSwitch

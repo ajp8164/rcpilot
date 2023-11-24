@@ -1,8 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemSwitch } from 'components/atoms/List';
+import { Picker, PickerItem, SwipeButton, viewport } from '@react-native-ajp-elements/ui';
 import { Pressable, Text, View } from 'react-native';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { SwipeButton, viewport } from '@react-native-ajp-elements/ui';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { FlightNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -109,12 +109,48 @@ const FlightTimerScreen = ({ navigation }: Props) => {
     );
   };
 
+  const countdownTimerItems = useMemo((): PickerItem[][] => {
+    const minutes: PickerItem[] = [];
+    const seconds: PickerItem[] = [];
+
+    for(let i = 0; i < 91; i++) {
+      minutes[i] = {
+        label: `${i} minute${i !== 1 ? 's' : ''}`,
+        value: `${i}`,
+        color: theme.colors.stickyWhite
+      };
+    }
+    for(let i = 0; i < 12; i++) {
+      seconds[i] = {
+        label: `${i * 5} seconds`,
+        value: `${i * 5}`,
+        color: theme.colors.stickyWhite
+      };
+    }
+
+    return [minutes, seconds];
+  }, []);
+
+
   return (
     <View style={s.view}>
       <View style={s.upper}>
-        <Text style={s.timerValue}>
-          {'0:00'}
-        </Text>
+        {(!countdownTimerEnabled || (countdownTimerEnabled && timerState !== TimerState.Initial)) && 
+          <Text style={s.timerValue}>
+            {'0:00'}
+          </Text>
+        }
+        {(countdownTimerEnabled && timerState === TimerState.Initial) &&
+          <View style={{}}>
+            <Picker
+              placeholder={'none'}
+              labelWidth={['50%', '50%']}
+              labels={['minutes', 'seconds']}
+              itemWidth={['50%', '50%']}
+              items={countdownTimerItems}
+              onValueChange={() => null} />
+          </View>
+        }
         <View style={s.timerType}>
           <ListItemSwitch
             title={'Countdown Timer'}

@@ -153,7 +153,6 @@ const FlightTimerScreen = ({ navigation }: Props) => {
     return [minutes, seconds];
   }, []);
 
-
   return (
     <View style={s.view}>
       <View style={s.upper}>
@@ -225,15 +224,15 @@ const FlightTimerScreen = ({ navigation }: Props) => {
           <SwipeButton
             trackColor={timerState === TimerState.Running ? theme.colors.blackTransparentSubtle : theme.colors.assertive}
             text={'Slide to arm'}
-            textStyle={[theme.styles.textXL, {color: theme.colors.stickyWhite}]}
+            textStyle={s.swipeText}
             backText={timerState === TimerState.Running ? 'Timer running' : 'Slide to disarm'}
-            backTextStyle={[theme.styles.textXL, {color: theme.colors.stickyWhite}]}
+            backTextStyle={s.swipeText}
             padding={7}
             height={60}
             width={viewport.width - 45}
             trackStartColor={timerState === TimerState.Running ? theme.colors.blackTransparentSubtle : theme.colors.success}
             trackEndColor={timerState === TimerState.Running ? theme.colors.blackTransparentSubtle : theme.colors.success}
-            thumbStyle={timerState === TimerState.Running ? {opacity: 0, pointerEvents: 'none'} : {}}
+            thumbStyle={timerState === TimerState.Running ? s.swipeThumbTimerRunning : {}}
             onToggle={onSwipeArmTimer} />
         </View>
       }
@@ -312,6 +311,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     bottom: theme.insets.bottom,
     width: viewport.width,
     alignItems: 'center',
+  },
+  swipeText: {
+    ...theme.styles.textXL,
+    color: theme.colors.stickyWhite,
+  },
+  swipeThumbTimerRunning: {
+    opacity: 0,
+    pointerEvents: 'none',
   }
 }));
 

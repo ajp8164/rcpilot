@@ -21,15 +21,15 @@ const FlightNavigator = () => {
       screenOptions={{
         headerLargeTitleShadowVisible: theme.mode === 'light',
         headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
+          backgroundColor: theme.colors.brandPrimary,
         },
         headerStyle: {
           backgroundColor: theme.colors.screenHeaderBackground,
         },
         headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
+          color: theme.colors.stickyWhite,
         },
-        headerTintColor: theme.colors.screenHeaderBackButton,
+        headerTintColor: theme.colors.stickyWhite,
       }}>
         <FlightStack.Screen
           name='FlightBatteries'

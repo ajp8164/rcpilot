@@ -135,6 +135,9 @@ export type SetupNavigatorParamList = {
   Content: {
     content: ContentView;
   };
+  Flights: {
+    pilotId: string;
+  };
   Pilot: undefined;
   Setup: {
     subNav?: string;

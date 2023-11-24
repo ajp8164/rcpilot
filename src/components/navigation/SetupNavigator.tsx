@@ -1,6 +1,7 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
+import FlightsScreen from 'components/FlightsScreen';
 import PilotScreen from 'components/PilotScreen';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -44,9 +45,10 @@ const SetupNavigator = () => {
       <SetupStack.Screen
         name="Pilot"
         component={PilotScreen}
-        options={{
-          // headerLargeTitle: true,
-        }}
+      />
+      <SetupStack.Screen
+        name="Flights"
+        component={FlightsScreen}
       />
       <SetupStack.Screen
         name="UserAccount"

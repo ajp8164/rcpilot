@@ -33,12 +33,14 @@ const PilotScreen = ({ navigation }: Props) => {
           position={['first', 'last']}
           onChangeText={() => null}
         /> 
-        <Divider text={'MODEl USAGE'}/>
+        <Divider text={'MODEL USAGE'}/>
         <ListItem
           title={'Blade 150S'}
           value={'0:04, 1 event'}
           position={['first', 'last']}
-          onPress={() => null}
+          onPress={() => navigation.navigate('Flights', {
+            pilotId: '1',
+          })}
         />
         <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
         <Divider text={'EVENT STYLES'}/>

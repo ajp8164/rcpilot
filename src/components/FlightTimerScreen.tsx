@@ -141,15 +141,11 @@ const FlightTimerScreen = ({ navigation }: Props) => {
           </Text>
         }
         {(countdownTimerEnabled && timerState === TimerState.Initial) &&
-          <View style={{}}>
-            <Picker
-              placeholder={'none'}
-              labelWidth={['50%', '50%']}
-              labels={['minutes', 'seconds']}
-              itemWidth={['50%', '50%']}
-              items={countdownTimerItems}
-              onValueChange={() => null} />
-          </View>
+          <Picker
+            placeholder={'none'}
+            itemWidth={[viewport.width / 2 - 5.5, viewport.width / 2 - 5.5]}
+            items={countdownTimerItems}
+            onValueChange={() => null} />
         }
         <View style={s.timerType}>
           <ListItemSwitch

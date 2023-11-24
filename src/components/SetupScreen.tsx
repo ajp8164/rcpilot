@@ -47,7 +47,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
         title={'Andy Phillipson'}
         subtitle={'Logged 12:35 over 7 events'}
         position={['first']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('Pilot')}
       />
       <ListItem
         title={'Select or Create a Pilot...'}

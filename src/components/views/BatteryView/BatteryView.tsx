@@ -17,14 +17,14 @@ import { useSetState } from '@react-native-ajp-elements/core';
 
 type BatteryView = BatteryViewMethods;
 
-type NavigationProps = StackNavigationProp<NewBatteryNavigatorParamList, 'NewBattery'>;
-type BaseNavigationProps = StackNavigationProp<BatteriesNavigatorParamList, 'Battery'>;
+type NavigationProps = 
+  StackNavigationProp<NewBatteryNavigatorParamList, 'NewBattery'> &
+  StackNavigationProp<BatteriesNavigatorParamList, 'Battery'>;
 
 const BatteryView = (props: BatteryViewProps) => {
   const { batteryId } = props;
 
   const navigation = useNavigation<NavigationProps>();
-  const baseNavigation = useNavigation<BaseNavigationProps>();
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -32,7 +32,18 @@ const BatteryView = (props: BatteryViewProps) => {
   const mockBattery: Battery = {
     id: batteryId || '-1',
     chemistry: BatteryChemistry.LiPo,
-    cellConfiguration: [1, 1],
+    sCells: 1,
+    pCells: 1,
+    name: '',
+    vendor: '',
+    purchasePrice: 0,
+    retired: false,
+    inStorage: false,
+    cRating: 0,
+    capacity: 0,
+    totalCycles: 0,
+    lastCycle: '',
+    notes: ''
   };
 
   const [battery, setBattery] = useSetState<Battery>(mockBattery);
@@ -84,7 +95,11 @@ const BatteryView = (props: BatteryViewProps) => {
           value={cellConfiguration}
           onValueChange={(_wheelIndex, value, _index) => {
             setCellConfiguration(value as string[]);
-            setBattery({ cellConfiguration: toArrayOrdinals(value as string[]) });
+            // setBattery({ cellConfiguration: toArrayOrdinals(value as string[]) });
+            setBattery({
+              sCells: toArrayOrdinals(value as string[])[0],
+              pCells: toArrayOrdinals(value as string[])[1]
+            });
           }}
         />
       }
@@ -107,13 +122,13 @@ const BatteryView = (props: BatteryViewProps) => {
         />
         <ListItem
           title={'Battery Performance'}
-          onPress={() => baseNavigation.navigate('BatteryPerformance')}
+          onPress={() => navigation.navigate('BatteryPerformance')}
         />
         <ListItem
           title={'Logged Cycle Details'}
           value={'0'}
           position={['last']}
-          onPress={() => baseNavigation.navigate('BatteryCycles')}
+          onPress={() => navigation.navigate('BatteryCycles')}
         />
       </>
     }

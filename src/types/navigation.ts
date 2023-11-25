@@ -1,4 +1,5 @@
 import { ContentView } from 'types/content';
+import { FlightOutcome } from 'types/flight';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
@@ -52,6 +53,9 @@ export type ModelsNavigatorParamList = {
   };
   FlightDetails: {
     flightId: string;
+  };
+  FlightOutcome: {
+    flightOutcome: FlightOutcome;
   };
   FlightNavigator: {
     modelId: string;
@@ -146,6 +150,9 @@ export type SetupNavigatorParamList = {
   };
   FlightDetails: {
     flightId: string;
+  };
+  FlightOutcome: {
+    flightOutcome: FlightOutcome;
   };
   Pilot: undefined;
   Setup: {

@@ -1,13 +1,14 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import { ScrollView, View } from 'react-native';
 
 import { Divider } from '@react-native-ajp-elements/ui';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { FlightOutcome } from 'types/flight';
+import { FlightRating } from 'components/molecules/FlightRating';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = 
@@ -17,18 +18,6 @@ export type Props =
 const FlightDetailsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
-  const rating = (): JSX.Element => {
-    const stars = [];
-    for (let  i = 0; i < 4; i++) {
-      stars.push(<Icon name={'star'} />);
-    }
-    return (
-      <View style={s.rating}>
-        {stars}
-      </View>
-    );
-  };
 
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
@@ -62,8 +51,11 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
         />
         <ListItem
           title={'Outcome'}
-          value={rating()}
+          value={<FlightRating value={FlightOutcome.Star4}/>}
           position={['last']}
+          onPress={() => navigation.navigate('FlightOutcome', {
+            flightOutcome: FlightOutcome.Star4,
+          })}
         />
         <Divider />
         <ListItem
@@ -112,7 +104,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  rating: {
+  outcome: {
     flexDirection: 'row',
   }
 }));

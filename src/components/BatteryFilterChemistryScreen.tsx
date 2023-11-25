@@ -9,7 +9,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
 import { chemistries } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
-import { modelTypes } from 'lib/model';
 
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilterChemistry'>;
 
@@ -59,7 +58,7 @@ const BatteryFilterChemistryScreen = ({ navigation }: Props) => {
           <ListItemCheckbox
             key={index}
             title={chemistry.name}
-            position={modelTypes.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === modelTypes.length - 1 ? ['last'] : []}
+            position={chemistries.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === chemistries.length - 1 ? ['last'] : []}
             checked={index === 0}
             onPress={() => null}
           />)

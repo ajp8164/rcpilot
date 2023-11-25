@@ -1,17 +1,19 @@
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelViewMethods, ModelViewProps } from './types';
+import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useState } from 'react';
 
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { NewModelNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/core';
 
 type ModelView = ModelViewMethods;
 
-type NavigationProps = StackNavigationProp<NewModelNavigatorParamList, 'NewModel'>;
+type NavigationProps =
+  StackNavigationProp<ModelsNavigatorParamList, 'Model'> &
+  StackNavigationProp<NewModelNavigatorParamList, 'NewModel'>;
 
 const ModelView = (props: ModelViewProps) => {
   const { modelId } = props;
@@ -117,7 +119,9 @@ const ModelView = (props: ModelViewProps) => {
           title={'Logged Flight Details'}
           value={'0'}
           position={['last']}
-          onPress={() => null}
+          onPress={() => navigation.navigate('Flights', {
+            pilotId: '1'
+          })}
         />
       }
       <Divider />

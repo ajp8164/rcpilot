@@ -47,6 +47,9 @@ export type MainNavigatorParamList = {
 
 export type ModelsNavigatorParamList = {
   EventStyle: undefined;
+  Flights: {
+    pilotId: string;
+  };
   FlightNavigator: {
     modelId: string;
   };

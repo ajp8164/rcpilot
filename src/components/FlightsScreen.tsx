@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { SectionList, SectionListData, Text, View } from 'react-native';
 
 import { DateTime } from 'luxon';
@@ -6,7 +7,6 @@ import { Flight } from 'types/flight';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
 interface Section {
@@ -14,7 +14,15 @@ interface Section {
   data: Flight[];
 };
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Flights'>;
+// export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Flights'>;
+// use union types
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Flights'> | NativeStackScreenProps<ModelsNavigatorParamList, 'Flights'>;
+
+// export type Props = CompositeScreenProps<
+//   NativeStackScreenProps<SetupNavigatorParamList, 'Setup'>,
+//   NativeStackScreenProps<NewModelNavigatorParamList, 'NewModel'>
+// >;
+
 
 const FlightsScreen = ({ navigation }: Props) => {
   const theme = useTheme();

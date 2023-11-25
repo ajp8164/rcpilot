@@ -1,5 +1,6 @@
 import EventStyleScreen from 'components/EventStyleScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
+import FlightsScreen from 'components/FlightsScreen';
 import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import ModelScreen from 'components/ModelScreen';
@@ -96,6 +97,10 @@ const ModelsNavigator = () => {
         options={{
           title: 'Model Notes',
         }}
+      />
+      <ModelsStack.Screen
+        name="Flights"
+        component={FlightsScreen}
       />
       <ModelsStack.Screen
         name='NewModelNavigator'

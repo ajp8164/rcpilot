@@ -1,3 +1,17 @@
+export type ModelUIAttribute = {
+  icon: string;
+};
+
+export enum ModelType {
+  Airplane = 'Airplane',
+  Sailplane = 'Sailplane',
+  Helicopter = 'Helicopter',
+  Multicopter = 'Multicopter',
+  Car = 'Car',
+  Boat = 'Boat',
+  Robot = 'Robot',
+};
+
 export enum ChecklistType {
   PreFlight = 'Pre-Flight',
   PostFlight =  'Post-Flight',

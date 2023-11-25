@@ -2,17 +2,15 @@ import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteriesScreen from 'components/BatteriesScreen';
 import BatteryCellResistancesScreen from 'components/BatteryCellResistancesScreen';
 import BatteryCellVoltagesScreen from 'components/BatteryCellVoltagesScreen';
-import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
 import BatteryCycleScreen from 'components/BatteryCycleScreen';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
 import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
 import BatteryScreen from 'components/BatteryScreen';
-import BatteryTintScreen from 'components/BatteryTintScreen';
 import NewBatteryNavigator from './NewBatteryNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
-import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
+import ValuePickerScreen from 'components/ValuePickerScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -49,13 +47,6 @@ const BatteriesNavigator = () => {
       <BatteriesStack.Screen
         name='Battery'
         component={BatteryScreen}
-      />
-      <BatteriesStack.Screen
-        name='BatteryChemistry'
-        component={BatteryChemistryScreen}
-        options={{
-          title: 'Chemistry',
-        }}
       />
       <BatteriesStack.Screen
         name='BatteryCellResistances'
@@ -103,13 +94,6 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryTint'
-        component={BatteryTintScreen}
-        options={{
-          title: 'Battery Tint',
-        }}
-      />
-      <BatteriesStack.Screen
         name='NewBatteryNavigator'
         component={NewBatteryNavigator}
         options={{
@@ -125,10 +109,10 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='ScanCodeSize'
-        component={ScanCodeSizeScreen}
+        name="ValuePicker"
+        component={ValuePickerScreen}
         options={{
-          title: 'QR Code Size',
+          title: '',
         }}
       />
     </BatteriesStack.Navigator>

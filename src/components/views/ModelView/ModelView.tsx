@@ -5,6 +5,8 @@ import React, { useState } from 'react';
 
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { ModelType } from 'types/model';
+import { ScanCodeSize } from 'types/common';
 import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/core';
@@ -26,6 +28,20 @@ const ModelView = (props: ModelViewProps) => {
   const [isRetired, setIsRetired] = useState(false);
   const [expandedLastFlight, setExpandedLastFlight] = useState(false);
   const [lastFlightDate, setLastFlightDate] = useState<string>();
+
+  const modelCategories = {
+    'id1': 'Mine',
+    'id2': 'None'
+  };
+  const modelStyles = {
+    'id0': '3D',
+    'id1': 'Sport',
+    'id2': 'None'
+  };
+  const modelPropellers = {
+    'id0': 'High Thrust',
+    'id2': 'None'
+  };
 
   const toggleBatteryLogging = (value: boolean) => {
     setBatteryLoggingEnabled(value);
@@ -61,18 +77,27 @@ const ModelView = (props: ModelViewProps) => {
       />
       <Divider />
       {!modelId &&
-        <ListItem
-          title={'Model Type'}
-          value={'Airplane'}
-          position={['first']}
-          onPress={() => navigation.navigate('ModelType')}
-        />
+      <ListItem
+        title={'Model Type'}
+        value={'Airplane'}
+        position={['first']}
+        onPress={() => navigation.navigate('ValuePicker', {
+          title: 'Model Type',
+          values: Object.values(ModelType),
+          selected: 'Helicopter',
+        })}
+      />
       }
       <ListItem
         title={'Category'}
         value={'None'}
         position={modelId ? ['first', 'last'] : ['last']}
-        onPress={() => navigation.navigate('ModelCategory')}
+        onPress={() => navigation.navigate('ValuePicker', {
+          title: 'Model Category',
+          kind: 'model categories',
+          values: modelCategories,
+          selected: 'id1',
+        })}
       />
       <Divider />
       {!modelId &&
@@ -188,20 +213,34 @@ const ModelView = (props: ModelViewProps) => {
         title={'Default Style'}
         value={'None'}
         position={['first']}
-        onPress={() => navigation.navigate('EventStyle')}
+        onPress={() => navigation.navigate('ValuePicker', {
+          title: 'Default Style',
+          kind: 'styles',
+          values: modelStyles,
+          selected: 'id1',
+        })}
       />
       <ListItem
         title={'Default Propeller'}
         value={'None'}
         position={['last']}
-        onPress={() => navigation.navigate('Propeller')}
+        onPress={() => navigation.navigate('ValuePicker', {
+          title: 'Default Propeller',
+          kind: 'propellers',
+          values: modelPropellers,
+          selected: 'id0',
+        })}
       />
       <Divider />
       <ListItem
         title={'QR Code Size'}
         value={'None'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('ScanCodeSize')}
+        onPress={() => navigation.navigate('ValuePicker', {
+          title: 'QR Code Size',
+          values: Object.values(ScanCodeSize),
+          selected: 'None',
+        })}
       />
       <Divider />
       <ListItemInput

@@ -21,20 +21,24 @@ export type BatteriesNavigatorParamList = {
   BatteryCellVoltages: {
     batteryCycleId: string;
   };
-  BatteryChemistry: undefined;
   BatteryCycles: undefined;
   BatteryCycle: {
     batteryCycleId: string;
   };
   BatteryFiltersNavigator: undefined;
   BatteryPerformance: undefined;
-  BatteryTint: undefined;
   NewBatteryNavigator: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
+  ValuePicker: {
+    title: string;
+    kind?: string;
+    values: string[] | {[key in string]: string};
+    selected: string;
+  };
 };
 
 export type LogNavigatorParamList = {
@@ -47,7 +51,6 @@ export type MainNavigatorParamList = {
 };
 
 export type ModelsNavigatorParamList = {
-  EventStyle: undefined;
   Flights: {
     pilotId: string;
   };
@@ -65,14 +68,18 @@ export type ModelsNavigatorParamList = {
   Model: {
     modelId: string;
   };
-  ModelCategory: undefined;
   ModelFiltersNavigator: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
   };
-  Propeller: undefined;
   ScanCodeSize: undefined;
+  ValuePicker: {
+    title: string;
+    kind?: string;
+    values: string[] | {[key in string]: string};
+    selected: string;
+  };
 };
 
 export type ModelFiltersNavigatorParamList = {
@@ -97,26 +104,32 @@ export type BatteryFiltersNavigatorParamList = {
 
 export type NewBatteryNavigatorParamList = {
   NewBattery: undefined;
-  BatteryChemistry: undefined;
-  BatteryTint: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
+  ValuePicker: {
+    title: string;
+    kind?: string;
+    values: string[] | {[key in string]: string};
+    selected: string;
+  };
 };
 
 export type NewModelNavigatorParamList = {
-  EventStyle: undefined;
-  ModelCategory: undefined;
-  ModelType: undefined;
   NewModel: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
   };
-  Propeller: undefined;
   ScanCodeSize: undefined;
+  ValuePicker: {
+    title: string;
+    kind?: string;
+    values: string[] | {[key in string]: string};
+    selected: string;
+  };
 };
 
 export type FlightNavigatorParamList = {

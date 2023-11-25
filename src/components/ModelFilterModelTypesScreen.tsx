@@ -5,10 +5,10 @@ import React, { useEffect } from 'react';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
+import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
-import { modelTypes } from 'lib/model';
 
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterModelTypes'>;
 
@@ -53,12 +53,12 @@ const ModelFilterModelTypesScreen = ({ navigation }: Props) => {
         onPress={() => null}
       />
       <Divider text={'MODEL TYPES TO INCLUDE IN RESULTS'}/>
-      {modelTypes.map((type, index) => {
+      {Object.values(ModelType).map((name, index) => {
         return (
           <ListItemCheckbox
             key={index}
-            title={type.name}
-            position={modelTypes.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === modelTypes.length - 1 ? ['last'] : []}
+            title={name}
+            position={Object.values(ModelType).length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === Object.values(ModelType).length - 1 ? ['last'] : []}
             checked={index === 0}
             onPress={() => null}
           />)

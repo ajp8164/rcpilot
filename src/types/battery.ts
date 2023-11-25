@@ -1,5 +1,9 @@
 import { DurationString, ISODateString } from "types/common";
 
+export type BatteryUIAttribute = {
+  icon: string;
+};
+
 export enum BatteryChemistry {
   LiPo = 'LiPo',
   LiIon = 'LiIon',

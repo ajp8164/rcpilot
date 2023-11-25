@@ -1,12 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, NewBatteryNavigatorParamList } from 'types/navigation';
-import { Battery, BatteryChemistry } from 'types/battery';
+import { Battery, BatteryChemistry, BatteryTint } from 'types/battery';
 import { BatteryViewMethods, BatteryViewProps } from './types';
 import { Divider, ListItemSwitch } from '@react-native-ajp-elements/ui';
 import {ListItem, ListItemInput} from 'components/atoms/List';
 import React, { useState } from 'react';
 import { batteryCellConfigurationToString, getBatteryCellConfigurationItems } from 'lib/battery';
 
+import { ScanCodeSize } from 'types/common';
 import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import WheelPicker from 'components/atoms/WheelPicker';
@@ -79,7 +80,11 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'Chemistry'}
       value={battery.chemistry}
       disabled={batteryId !== undefined}
-      onPress={() => navigation.navigate('BatteryChemistry')}
+      onPress={() => navigation.navigate('ValuePicker', {
+        title: 'Chemistry',
+        values: Object.values(BatteryChemistry),
+        selected: 'LiPo',
+      })}
     />
     <ListItem
       title={'Cell Configuration'}
@@ -145,13 +150,21 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'Battery Tint'}
       value={'None'}
       position={['first']}
-      onPress={() => navigation.navigate('BatteryTint')}
-    />
+      onPress={() => navigation.navigate('ValuePicker', {
+        title: 'Battery Tint',
+        values: Object.values(BatteryTint),
+        selected: 'None',
+      })}
+     />
     <ListItem
       title={'QR Code Size'}
       value={'None'}
       position={['last']}
-      onPress={() => navigation.navigate('ScanCodeSize')}
+      onPress={() => navigation.navigate('ValuePicker', {
+        title: 'QR Code Size',
+        values: Object.values(ScanCodeSize),
+        selected: 'None',
+      })}
     />
     <Divider />
     <ListItemInput

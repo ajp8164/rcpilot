@@ -50,6 +50,9 @@ export type ModelsNavigatorParamList = {
   Flights: {
     pilotId: string;
   };
+  FlightDetails: {
+    flightId: string;
+  };
   FlightNavigator: {
     modelId: string;
   };
@@ -140,6 +143,9 @@ export type SetupNavigatorParamList = {
   };
   Flights: {
     pilotId: string;
+  };
+  FlightDetails: {
+    flightId: string;
   };
   Pilot: undefined;
   Setup: {

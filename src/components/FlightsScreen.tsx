@@ -67,7 +67,9 @@ const FlightsScreen = ({ navigation }: Props) => {
           subtitle={`Fuel: 0.0oz; Batt: 150S #1`}
           containerStyle={{marginHorizontal: 15}}
           position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
-          onPress={() => null}
+          onPress={() => navigation.navigate('FlightDetails', {
+            flightId: '1'
+          })}
         />
       )}
       renderSectionHeader={({section: {title}}) => (

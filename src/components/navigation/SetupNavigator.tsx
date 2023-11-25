@@ -1,6 +1,7 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
+import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightsScreen from 'components/FlightsScreen';
 import PilotScreen from 'components/PilotScreen';
 import React from 'react';
@@ -49,6 +50,10 @@ const SetupNavigator = () => {
       <SetupStack.Screen
         name="Flights"
         component={FlightsScreen}
+      />
+      <SetupStack.Screen
+        name="FlightDetails"
+        component={FlightDetailsScreen}
       />
       <SetupStack.Screen
         name="UserAccount"

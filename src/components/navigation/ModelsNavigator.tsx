@@ -1,4 +1,5 @@
 import EventStyleScreen from 'components/EventStyleScreen';
+import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
 import FlightsScreen from 'components/FlightsScreen';
 import ModelCategoryScreen from 'components/ModelCategoryScreen';
@@ -101,6 +102,10 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name="Flights"
         component={FlightsScreen}
+      />
+      <ModelsStack.Screen
+        name="FlightDetails"
+        component={FlightDetailsScreen}
       />
       <ModelsStack.Screen
         name='NewModelNavigator'

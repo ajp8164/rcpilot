@@ -57,6 +57,15 @@ const ModelsScreen = ({ navigation }: Props) => {
           onPress={() => navigation.navigate('FlightNavigator', {
             modelId: '1'
           })}
+          rightImage={
+            <Icon
+              name={'circle-info'}
+              size={22}
+              onPress={() => navigation.navigate('Model', {
+                modelId: '1',
+              })}
+            />
+          }
         />
       </ScrollView>
     </SafeAreaView>

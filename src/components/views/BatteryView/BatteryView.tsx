@@ -107,7 +107,7 @@ const BatteryView = (props: BatteryViewProps) => {
     <ListItemInput
       title={'Discharge Rate'}
       value={'Unknown'}
-      label='C'
+      label={'C'}
       keyboardType={'number-pad'}
       position={['last']}
     />

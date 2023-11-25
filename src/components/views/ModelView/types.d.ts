@@ -3,7 +3,7 @@ import { ViewStyle } from 'react-native/types';
 
 export declare type ModelView = ModelViewMethods;
 
-declare const TextView: React.MemoExoticComponent<
+declare const ModelView: React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     ModelViewProps & React.RefAttributes<ModelViewMethods>
   >

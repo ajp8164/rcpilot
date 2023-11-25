@@ -2,12 +2,12 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
+import { BatteryChemistry } from 'types/battery';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
-import { chemistries } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilterChemistry'>;
@@ -53,12 +53,12 @@ const BatteryFilterChemistryScreen = ({ navigation }: Props) => {
         onPress={() => null}
       />
       <Divider text={'CHEMISTRIES TO INCLUDE IN RESULTS'}/>
-      {chemistries.map((chemistry, index) => {
+      {Object.values(BatteryChemistry).map((chemistry, index) => {
         return (
           <ListItemCheckbox
             key={index}
-            title={chemistry.name}
-            position={chemistries.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === chemistries.length - 1 ? ['last'] : []}
+            title={chemistry}
+            position={Object.values(BatteryChemistry).length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === Object.values(BatteryChemistry).length - 1 ? ['last'] : []}
             checked={index === 0}
             onPress={() => null}
           />)

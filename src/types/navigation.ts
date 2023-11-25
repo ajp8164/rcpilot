@@ -1,5 +1,6 @@
 import { ContentView } from 'types/content';
 import { FlightOutcome } from 'types/flight';
+import { IconProps } from 'types/common';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
@@ -38,6 +39,7 @@ export type BatteriesNavigatorParamList = {
     kind?: string;
     values: string[] | {[key in string]: string};
     selected: string;
+    icons?: {[key in string]: IconProps};
   };
 };
 
@@ -79,6 +81,7 @@ export type ModelsNavigatorParamList = {
     kind?: string;
     values: string[] | {[key in string]: string};
     selected: string;
+    icons?: {[key in string]: IconProps};
   };
 };
 
@@ -114,6 +117,7 @@ export type NewBatteryNavigatorParamList = {
     kind?: string;
     values: string[] | {[key in string]: string};
     selected: string;
+    icons?: {[key in string]: IconProps};
   };
 };
 
@@ -129,6 +133,7 @@ export type NewModelNavigatorParamList = {
     kind?: string;
     values: string[] | {[key in string]: string};
     selected: string;
+    icons?: {[key in string]: IconProps};
   };
 };
 

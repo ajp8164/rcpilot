@@ -11,6 +11,7 @@ import { ScanCodeSize } from 'types/common';
 import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import WheelPicker from 'components/atoms/WheelPicker';
+import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { toArrayOrdinals } from 'lib/utils';
 import { useNavigation } from '@react-navigation/core';
@@ -154,6 +155,7 @@ const BatteryView = (props: BatteryViewProps) => {
         title: 'Battery Tint',
         values: Object.values(BatteryTint),
         selected: 'None',
+        icons: batteryTintIcons,
       })}
      />
     <ListItem

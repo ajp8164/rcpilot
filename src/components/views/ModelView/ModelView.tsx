@@ -9,6 +9,7 @@ import { ModelType } from 'types/model';
 import { ScanCodeSize } from 'types/common';
 import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { modelTypeIcons } from 'lib/model';
 import { useNavigation } from '@react-navigation/core';
 
 type ModelView = ModelViewMethods;
@@ -85,6 +86,7 @@ const ModelView = (props: ModelViewProps) => {
           title: 'Model Type',
           values: Object.values(ModelType),
           selected: 'Helicopter',
+          icons: modelTypeIcons,
         })}
       />
       }

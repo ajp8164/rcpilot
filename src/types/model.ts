@@ -1,5 +1,6 @@
-export type ModelUIAttribute = {
+export type ModelUIAttributes = {
   icon: string;
+  iconColor: string;
 };
 
 export enum ModelType {

@@ -101,9 +101,9 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         rightImage={false}
         onPress={() => null}
       />
-      <Divider text={'This filter shows all the models that match all of these criteria.'}/>
+      <Divider text={'This filter shows all the batteries that match all of these criteria.'}/>
       <ListItemFilterEnum
-        title={'Model Type'}
+        title={'Chemistry'}
         value={filter[BatteryProperty.Chemistry].value}
         relation={EnumRelation.Any}
         position={['first', 'last']}

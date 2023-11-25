@@ -1,11 +1,9 @@
-import BatteryChemistryScreen from 'components/BatteryChemistryScreen';
-import BatteryTintScreen from 'components/BatteryTintScreen';
 import NavContext from './NavContext';
 import { NewBatteryNavigatorParamList } from 'types/navigation';
 import NewBatteryScreen from 'components/NewBatteryScreen';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
-import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
+import ValuePickerScreen from 'components/ValuePickerScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -39,31 +37,17 @@ const NewBatteryNavigator = () => {
           }}
         />
         <NewBatteryStack.Screen
-          name='BatteryChemistry'
-          component={BatteryChemistryScreen}
-          options={{
-            title: 'Chemistry',
-          }}
-        />
-        <NewBatteryStack.Screen
-          name='BatteryTint'
-          component={BatteryTintScreen}
-          options={{
-            title: 'Battery Tint',
-          }}
-        />
-        <NewBatteryStack.Screen
-          name='ScanCodeSize'
-          component={ScanCodeSizeScreen}
-          options={{
-            title: 'QR Code Size',
-          }}
-        />
-        <NewBatteryStack.Screen
           name='Notes'
           component={NotesScreen}
           options={{
             title: 'Battery Notes',
+          }}
+        />
+        <NewBatteryStack.Screen
+          name='ValuePicker'
+          component={ValuePickerScreen}
+          options={{
+            title: '',
           }}
         />
       </NewBatteryStack.Navigator>

@@ -1,10 +1,8 @@
 export type DurationString = string;
 export type ISODateString = string;
 
-export type StreetAddress = {
-  street1: string;
-  street2: string;
-  city: string;
-  state: string;
-  postalCode: string;
+export enum ScanCodeSize {
+  Large = 'Large',
+  Small = 'Small',
+  None = 'None',
 };

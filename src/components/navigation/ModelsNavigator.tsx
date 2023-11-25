@@ -1,18 +1,15 @@
-import EventStyleScreen from 'components/EventStyleScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
 import FlightOutcomeScreen from 'components/FlightOutcomeScreen';
 import FlightsScreen from 'components/FlightsScreen';
-import ModelCategoryScreen from 'components/ModelCategoryScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import NotesScreen from 'components/NotesScreen';
-import PropellerScreen from 'components/PropellerScreen';
 import React from 'react';
-import ScanCodeSizeScreen from 'components/ScanCodeSizeScreen';
+import ValuePickerScreen from 'components/ValuePickerScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -50,20 +47,6 @@ const ModelsNavigator = () => {
         component={ModelScreen}
         />
       <ModelsStack.Screen
-        name='ModelCategory'
-        component={ModelCategoryScreen}
-        options={{
-          title: 'Model Category',
-        }}
-      />
-      <ModelsStack.Screen
-        name='EventStyle'
-        component={EventStyleScreen}
-        options={{
-          title: 'Default Style',
-        }}
-      />
-      <ModelsStack.Screen
         name='ModelFiltersNavigator'
         component={ModelFiltersNavigator}
         options={{
@@ -77,20 +60,6 @@ const ModelsNavigator = () => {
         options={{
           headerShown: false,
           presentation: 'fullScreenModal'
-        }}
-      />
-      <ModelsStack.Screen
-        name='Propeller'
-        component={PropellerScreen}
-        options={{
-          title: 'Default Propeller',
-        }}
-      />
-      <ModelsStack.Screen
-        name='ScanCodeSize'
-        component={ScanCodeSizeScreen}
-        options={{
-          title: 'QR Code Size',
         }}
       />
       <ModelsStack.Screen
@@ -117,6 +86,13 @@ const ModelsNavigator = () => {
         options={{
           title: 'Flight Outcome',
           headerBackTitle: 'Flight'
+        }}
+      />
+      <ModelsStack.Screen
+        name="ValuePicker"
+        component={ValuePickerScreen}
+        options={{
+          title: '',
         }}
       />
       <ModelsStack.Screen

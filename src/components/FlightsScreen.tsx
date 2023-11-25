@@ -14,15 +14,9 @@ interface Section {
   data: Flight[];
 };
 
-// export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Flights'>;
-// use union types
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Flights'> | NativeStackScreenProps<ModelsNavigatorParamList, 'Flights'>;
-
-// export type Props = CompositeScreenProps<
-//   NativeStackScreenProps<SetupNavigatorParamList, 'Setup'>,
-//   NativeStackScreenProps<NewModelNavigatorParamList, 'NewModel'>
-// >;
-
+export type Props = 
+  NativeStackScreenProps<SetupNavigatorParamList, 'Flights'> &
+  NativeStackScreenProps<ModelsNavigatorParamList, 'Flights'>;
 
 const FlightsScreen = ({ navigation }: Props) => {
   const theme = useTheme();

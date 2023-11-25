@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import Icon, { FA6Style } from 'react-native-vector-icons/FontAwesome6';
+import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemCheckbox } from 'components/atoms/List';
@@ -12,7 +13,7 @@ import { useTheme } from 'theme';
 export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'ValuePicker'>;
 
 const ValuePickerScreen = ({ route, navigation }: Props) => {
-  const { title, kind, values: inputObject, selected } = route.params;
+  const { title, kind, values: inputObject, selected, icons } = route.params;
 
   const theme = useTheme();
 
@@ -47,13 +48,23 @@ const ValuePickerScreen = ({ route, navigation }: Props) => {
       edges={['left', 'right']}
       style={theme.styles.view}>
       <Divider />
-      {list.values.map((name, index) => {
+      {list.values.map((item, index) => {
         return (
           <ListItemCheckbox
             key={index}
-            title={name}
+            title={item}
+            leftImage={
+              icons ?
+                <Icon
+                  name={icons[item].name}
+                  color={icons[item].color || theme.colors.midGray}
+                  size={icons[item].size}
+                  style={icons[item].style}
+                />
+              : undefined
+            }
             position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
-            checked={name === list.selected}
+            checked={item === list.selected}
             onPress={() => null}
           />)
       })}

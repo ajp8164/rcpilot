@@ -1,11 +1,18 @@
-import { ModelType, ModelUIAttribute } from 'types/model';
+import { IconProps } from 'types/common';
+import { ModelType } from 'types/model';
 
-export const modelUIAttributes: {[key in ModelType]: ModelUIAttribute} = {
-  [ModelType.Airplane]: {icon:  ''},
-  [ModelType.Sailplane]: {icon:  ''},
-  [ModelType.Helicopter]: {icon:  ''},
-  [ModelType.Multicopter]: {icon:  ''},
-  [ModelType.Car]: {icon:  ''},
-  [ModelType.Boat]: {icon:  ''},
-  [ModelType.Robot]: {icon:  ''},
+const icon: IconProps = {
+  name: 'plane-up',
+  size: 28,
+  style: { width: 35 },
+};
+
+export const modelTypeIcons: {[key in ModelType]: IconProps} = {
+  [ModelType.Airplane]: {...icon, color: 'blue'},
+  [ModelType.Sailplane]: {...icon, color: 'blue'},
+  [ModelType.Helicopter]: {...icon, color: 'blue'},
+  [ModelType.Multicopter]: {...icon, color: 'blue'},
+  [ModelType.Car]: {...icon, color: 'blue'},
+  [ModelType.Boat]: {...icon, color: 'blue'},
+  [ModelType.Robot]: {...icon, color: 'blue'},
 }

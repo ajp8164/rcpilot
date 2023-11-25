@@ -1,13 +1,9 @@
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemCheckbox } from 'components/atoms/List';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NewModelNavigatorParamList } from 'types/navigation';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { modelTypes } from 'lib/model';
 import { useTheme } from 'theme';
-
-export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'ModelType'>;
 
 const ModelTypeScreen = () => {
   const theme = useTheme();

@@ -180,6 +180,13 @@ export type SetupNavigatorParamList = {
   UserProfile: {
     userProfile: UserProfile;
   };
+  ValuePicker: {
+    title: string;
+    kind?: string;
+    values: string[] | {[key in string]: string};
+    selected: string;
+    icons?: {[key in string]: IconProps};
+  };
 };
 
 export type ScanNavigatorParamList = {

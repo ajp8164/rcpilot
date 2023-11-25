@@ -2,6 +2,7 @@ import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
+import FlightOutcomeScreen from 'components/FlightOutcomeScreen';
 import FlightsScreen from 'components/FlightsScreen';
 import PilotScreen from 'components/PilotScreen';
 import React from 'react';
@@ -54,6 +55,17 @@ const SetupNavigator = () => {
       <SetupStack.Screen
         name="FlightDetails"
         component={FlightDetailsScreen}
+        options={{
+          title: 'Flight Details',
+        }}
+      />
+      <SetupStack.Screen
+        name="FlightOutcome"
+        component={FlightOutcomeScreen}
+        options={{
+          title: 'Flight Outcome',
+          headerBackTitle: 'Flight'
+        }}
       />
       <SetupStack.Screen
         name="UserAccount"

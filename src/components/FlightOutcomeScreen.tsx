@@ -27,12 +27,6 @@ const FlightOutcomeScreen = ({ route }:  Props) => {
       edges={['left', 'right']}
       style={theme.styles.view}>
       <Divider />
-      {/* <ListItemCheckbox
-        title={'Unspecified'}
-        position={['first']}
-        checked={ outcome === undefined}
-        onPress={() => null}
-      /> */}
       {options.map((value, index) => {
         return (
           <ListItemCheckbox

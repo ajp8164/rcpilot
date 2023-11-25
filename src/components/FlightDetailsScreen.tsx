@@ -19,6 +19,20 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const fuels = {
+    'id0': 'High Octane',
+    'id2': 'Unspecified'
+  };
+  const modelStyles = {
+    'id0': '3D',
+    'id1': 'Sport',
+    'id2': 'None'
+  };
+  const pilots = {
+    'id0': 'Andy',
+    'id2': 'Unknown'
+  };
+
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
       <ScrollView
@@ -62,8 +76,13 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           title={'Fuel'}
           position={['first']}
           value={'Unspecified'}
-          onPress={() => null}
-        />
+          onPress={() => navigation.navigate('ValuePicker', {
+            title: 'Fuel',
+            kind: 'fuel',
+            values: fuels,
+            selected: 'id2',
+          })}
+          />
         <ListItemInput
           title={'Fuel Consumed'}
           label={'oz'}
@@ -77,13 +96,23 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           title={'Pilot'}
           position={['first']}
           value={'Andy'}
-          onPress={() => null}
+          onPress={() => navigation.navigate('ValuePicker', {
+            title: 'Pilot',
+            kind: 'pilots',
+            values: pilots,
+            selected: 'id0',
+          })}
         />
         <ListItem
           title={'Style'}
           position={['last']}
           value={'Sport'}
-          onPress={() => null}
+          onPress={() => navigation.navigate('ValuePicker', {
+            title: 'Style',
+            kind: 'styles',
+            values: modelStyles,
+            selected: 'id2',
+          })}
         />
         <Divider text={'NOTES'} />
         <ListItem

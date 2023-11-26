@@ -10,9 +10,9 @@ import { isArray } from 'lodash';
 import { useSetState } from '@react-native-ajp-elements/core';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'ValuePicker'>;
+export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'EnumPicker'>;
 
-const ValuePickerScreen = ({ route, navigation }: Props) => {
+const EnumPickerScreen = ({ route, navigation }: Props) => {
   const { title, kind, values: inputObject, selected, icons } = route.params;
 
   const theme = useTheme();
@@ -75,4 +75,4 @@ const ValuePickerScreen = ({ route, navigation }: Props) => {
   );
 };
 
-export default ValuePickerScreen;
+export default EnumPickerScreen;

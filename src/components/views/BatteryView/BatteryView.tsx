@@ -81,7 +81,7 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'Chemistry'}
       value={battery.chemistry}
       disabled={batteryId !== undefined}
-      onPress={() => navigation.navigate('ValuePicker', {
+      onPress={() => navigation.navigate('EnumPicker', {
         title: 'Chemistry',
         values: Object.values(BatteryChemistry),
         selected: 'LiPo',
@@ -151,7 +151,7 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'Battery Tint'}
       value={'None'}
       position={['first']}
-      onPress={() => navigation.navigate('ValuePicker', {
+      onPress={() => navigation.navigate('EnumPicker', {
         title: 'Battery Tint',
         values: Object.values(BatteryTint),
         selected: 'None',
@@ -162,7 +162,7 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'QR Code Size'}
       value={'None'}
       position={['last']}
-      onPress={() => navigation.navigate('ValuePicker', {
+      onPress={() => navigation.navigate('EnumPicker', {
         title: 'QR Code Size',
         values: Object.values(ScanCodeSize),
         selected: 'None',

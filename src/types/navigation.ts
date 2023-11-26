@@ -34,7 +34,7 @@ export type BatteriesNavigatorParamList = {
     headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
-  ValuePicker: {
+  EnumPicker: {
     title: string;
     kind?: string;
     values: string[] | {[key in string]: string};
@@ -76,7 +76,7 @@ export type ModelsNavigatorParamList = {
     headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
-  ValuePicker: {
+  EnumPicker: {
     title: string;
     kind?: string;
     values: string[] | {[key in string]: string};
@@ -112,7 +112,7 @@ export type NewBatteryNavigatorParamList = {
     headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
-  ValuePicker: {
+  EnumPicker: {
     title: string;
     kind?: string;
     values: string[] | {[key in string]: string};
@@ -128,7 +128,7 @@ export type NewModelNavigatorParamList = {
     headerButtonStyle?: TextStyle | TextStyle[];
   };
   ScanCodeSize: undefined;
-  ValuePicker: {
+  EnumPicker: {
     title: string;
     kind?: string;
     values: string[] | {[key in string]: string};
@@ -180,7 +180,7 @@ export type SetupNavigatorParamList = {
   UserProfile: {
     userProfile: UserProfile;
   };
-  ValuePicker: {
+  EnumPicker: {
     title: string;
     kind?: string;
     values: string[] | {[key in string]: string};

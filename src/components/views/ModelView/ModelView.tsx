@@ -82,7 +82,7 @@ const ModelView = (props: ModelViewProps) => {
         title={'Model Type'}
         value={'Airplane'}
         position={['first']}
-        onPress={() => navigation.navigate('ValuePicker', {
+        onPress={() => navigation.navigate('EnumPicker', {
           title: 'Model Type',
           values: Object.values(ModelType),
           selected: 'Helicopter',
@@ -94,7 +94,7 @@ const ModelView = (props: ModelViewProps) => {
         title={'Category'}
         value={'None'}
         position={modelId ? ['first', 'last'] : ['last']}
-        onPress={() => navigation.navigate('ValuePicker', {
+        onPress={() => navigation.navigate('EnumPicker', {
           title: 'Model Category',
           kind: 'model categories',
           values: modelCategories,
@@ -215,7 +215,7 @@ const ModelView = (props: ModelViewProps) => {
         title={'Default Style'}
         value={'None'}
         position={['first']}
-        onPress={() => navigation.navigate('ValuePicker', {
+        onPress={() => navigation.navigate('EnumPicker', {
           title: 'Default Style',
           kind: 'styles',
           values: modelStyles,
@@ -226,7 +226,7 @@ const ModelView = (props: ModelViewProps) => {
         title={'Default Propeller'}
         value={'None'}
         position={['last']}
-        onPress={() => navigation.navigate('ValuePicker', {
+        onPress={() => navigation.navigate('EnumPicker', {
           title: 'Default Propeller',
           kind: 'propellers',
           values: modelPropellers,
@@ -238,7 +238,7 @@ const ModelView = (props: ModelViewProps) => {
         title={'QR Code Size'}
         value={'None'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('ValuePicker', {
+        onPress={() => navigation.navigate('EnumPicker', {
           title: 'QR Code Size',
           values: Object.values(ScanCodeSize),
           selected: 'None',

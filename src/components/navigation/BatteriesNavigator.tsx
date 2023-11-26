@@ -10,7 +10,7 @@ import BatteryScreen from 'components/BatteryScreen';
 import NewBatteryNavigator from './NewBatteryNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
-import ValuePickerScreen from 'components/ValuePickerScreen';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -109,8 +109,8 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name="ValuePicker"
-        component={ValuePickerScreen}
+        name="EnumPicker"
+        component={EnumPickerScreen}
         options={{
           title: '',
         }}

@@ -76,7 +76,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           title={'Fuel'}
           position={['first']}
           value={'Unspecified'}
-          onPress={() => navigation.navigate('ValuePicker', {
+          onPress={() => navigation.navigate('EnumPicker', {
             title: 'Fuel',
             kind: 'fuel',
             values: fuels,
@@ -96,7 +96,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           title={'Pilot'}
           position={['first']}
           value={'Andy'}
-          onPress={() => navigation.navigate('ValuePicker', {
+          onPress={() => navigation.navigate('EnumPicker', {
             title: 'Pilot',
             kind: 'pilots',
             values: pilots,
@@ -107,7 +107,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           title={'Style'}
           position={['last']}
           value={'Sport'}
-          onPress={() => navigation.navigate('ValuePicker', {
+          onPress={() => navigation.navigate('EnumPicker', {
             title: 'Style',
             kind: 'styles',
             values: modelStyles,

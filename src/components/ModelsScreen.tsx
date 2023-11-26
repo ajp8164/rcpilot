@@ -18,13 +18,15 @@ const ModelsScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Edit'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.editButton]}
-        />
-      ),
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Edit'}
+            titleStyle={theme.styles.buttonClearTitle}
+            buttonStyle={[theme.styles.buttonClear, s.editButton]}
+          />
+        )
+      },
       headerRight: ()  => {
         return (
           <>

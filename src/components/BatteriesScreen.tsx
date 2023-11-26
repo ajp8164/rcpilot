@@ -18,14 +18,16 @@ const BatteriesScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Edit'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.editButton]}
-          onPress={() => null}
-        />
-      ),
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Edit'}
+            titleStyle={theme.styles.buttonClearTitle}
+            buttonStyle={[theme.styles.buttonClear, s.editButton]}
+            onPress={() => null}
+          />
+        )
+      },
       headerRight: ()  => {
         return (
           <>

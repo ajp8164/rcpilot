@@ -10,7 +10,7 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
 import UserProfileScreen from 'components/UserProfileScreen';
-import ValuePickerScreen from 'components/ValuePickerScreen';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 import { appConfig } from 'config';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -69,8 +69,8 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="ValuePicker"
-        component={ValuePickerScreen}
+        name="EnumPicker"
+        component={EnumPickerScreen}
         options={{
           title: '',
           headerBackTitle: 'Flight',

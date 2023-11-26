@@ -1,6 +1,6 @@
 import { EventContext } from'./EventProvider';
-import React from 'react';
+import { useContext } from 'react';
 
 export const useEvent = () => {
-  return React.useContext(EventContext);
+  return useContext(EventContext);
 };

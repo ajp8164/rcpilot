@@ -1,7 +1,7 @@
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelViewMethods, ModelViewProps } from './types';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -11,6 +11,9 @@ import { ScrollView } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { modelTypeIcons } from 'lib/model';
 import { useNavigation } from '@react-navigation/core';
+import { enumIdsToValues } from 'lib/utils';
+import { useEvent } from 'lib/event';
+import { modelCategories, modelPropellers, modelStyles } from '../../../mocks/enums';
 
 type ModelView = ModelViewMethods;
 
@@ -22,6 +25,7 @@ const ModelView = (props: ModelViewProps) => {
   const { modelId } = props;
 
   const navigation = useNavigation<NavigationProps>();
+  const event = useEvent();
 
   const [batteryLoggingEnabled, setBatteryLoggingEnabled] = useState(false);
   const [fuelLoggingEnabled, setFuelLoggingEnabled] = useState(false);
@@ -30,20 +34,23 @@ const ModelView = (props: ModelViewProps) => {
   const [expandedLastFlight, setExpandedLastFlight] = useState(false);
   const [lastFlightDate, setLastFlightDate] = useState<string>();
 
-  const modelCategories = {
-    'id1': 'Mine',
-    'id2': 'None'
-  };
-  const modelStyles = {
-    'id0': '3D',
-    'id1': 'Sport',
-    'id2': 'None'
-  };
-  const modelPropellers = {
-    'id0': 'High Thrust',
-    'id2': 'None'
-  };
+  useEffect(() => {
+    // Event handlers for EnumPicker
+    event.on('category', onChangeCategory);
+    event.on('default-propeller', onChangeDefaultPropeller);
+    event.on('default-style', onChangeDefaultStyle);
 
+    return () => {
+      event.removeListener('category', onChangeCategory);
+      event.removeListener('default-propeller', onChangeDefaultPropeller);
+      event.removeListener('default-style', onChangeDefaultStyle);  
+    };
+  }, []);
+
+  const onChangeCategory = (v: string) => {};
+  const onChangeDefaultPropeller = (v: string) => {};
+  const onChangeDefaultStyle = (v: string) => {};
+  
   const toggleBatteryLogging = (value: boolean) => {
     setBatteryLoggingEnabled(value);
   };
@@ -87,6 +94,7 @@ const ModelView = (props: ModelViewProps) => {
           values: Object.values(ModelType),
           selected: 'Helicopter',
           icons: modelTypeIcons,
+          eventName: 'category',
         })}
       />
       }
@@ -96,9 +104,10 @@ const ModelView = (props: ModelViewProps) => {
         position={modelId ? ['first', 'last'] : ['last']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Model Category',
-          kind: 'model categories',
-          values: modelCategories,
-          selected: 'id1',
+          footer: 'You can manage categories through the Globals section in the Setup tab.',
+          values: Object.values(modelCategories),
+          selected: enumIdsToValues(['id1'], modelCategories),
+          eventName: 'category',
         })}
       />
       <Divider />
@@ -217,9 +226,10 @@ const ModelView = (props: ModelViewProps) => {
         position={['first']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Default Style',
-          kind: 'styles',
-          values: modelStyles,
-          selected: 'id1',
+          footer: 'You can manage styles through the Globals section in the Setup tab.',
+          values: Object.values(modelStyles),
+          selected: enumIdsToValues(['id1'], modelStyles),
+          eventName: 'default-style',
         })}
       />
       <ListItem
@@ -228,9 +238,10 @@ const ModelView = (props: ModelViewProps) => {
         position={['last']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Default Propeller',
-          kind: 'propellers',
-          values: modelPropellers,
-          selected: 'id0',
+          footer: 'You can manage propellers through the Globals section in the Setup tab.',
+          values: Object.values(modelPropellers),
+          selected: enumIdsToValues(['id0'], modelPropellers),
+          eventName: 'default-propeller',
         })}
       />
       <Divider />
@@ -242,6 +253,7 @@ const ModelView = (props: ModelViewProps) => {
           title: 'QR Code Size',
           values: Object.values(ScanCodeSize),
           selected: 'None',
+          eventName: '',
         })}
       />
       <Divider />

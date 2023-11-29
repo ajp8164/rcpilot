@@ -1,9 +1,10 @@
 import { ContentView } from 'types/content';
 import { FlightOutcome } from 'types/flight';
-import { IconProps } from 'types/common';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
+
+import { EnumPickerInterface } from 'components/EnumPickerScreen';
 
 export enum StartupScreen {
   None = 'None',
@@ -28,18 +29,11 @@ export type BatteriesNavigatorParamList = {
   };
   BatteryFiltersNavigator: undefined;
   BatteryPerformance: undefined;
+  EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
-  };
-  ScanCodeSize: undefined;
-  EnumPicker: {
-    title: string;
-    kind?: string;
-    values: string[] | {[key in string]: string};
-    selected: string;
-    icons?: {[key in string]: IconProps};
   };
 };
 
@@ -53,6 +47,7 @@ export type MainNavigatorParamList = {
 };
 
 export type ModelsNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
   Flights: {
     pilotId: string;
   };
@@ -75,22 +70,14 @@ export type ModelsNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
   };
-  ScanCodeSize: undefined;
-  EnumPicker: {
-    title: string;
-    kind?: string;
-    values: string[] | {[key in string]: string};
-    selected: string;
-    icons?: {[key in string]: IconProps};
-  };
 };
 
 export type ModelFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
   ModelFilters: undefined;
   ModelFilterEditor: {
     filterId: string;
   };
-  ModelFilterModelTypes: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -102,38 +89,24 @@ export type BatteryFiltersNavigatorParamList = {
   BatteryFilterEditor: {
     filterId: string;
   };
-  BatteryFilterChemistry: undefined;
+  EnumPicker: EnumPickerInterface;
 };
 
 export type NewBatteryNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
   NewBattery: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
   };
-  ScanCodeSize: undefined;
-  EnumPicker: {
-    title: string;
-    kind?: string;
-    values: string[] | {[key in string]: string};
-    selected: string;
-    icons?: {[key in string]: IconProps};
-  };
 };
 
 export type NewModelNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
   NewModel: undefined;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
-  };
-  ScanCodeSize: undefined;
-  EnumPicker: {
-    title: string;
-    kind?: string;
-    values: string[] | {[key in string]: string};
-    selected: string;
-    icons?: {[key in string]: IconProps};
   };
 };
 
@@ -163,6 +136,7 @@ export type SetupNavigatorParamList = {
   Content: {
     content: ContentView;
   };
+  EnumPicker: EnumPickerInterface;
   Flights: {
     pilotId: string;
   };
@@ -179,13 +153,6 @@ export type SetupNavigatorParamList = {
   UserAccount: undefined;
   UserProfile: {
     userProfile: UserProfile;
-  };
-  EnumPicker: {
-    title: string;
-    kind?: string;
-    values: string[] | {[key in string]: string};
-    selected: string;
-    icons?: {[key in string]: IconProps};
   };
 };
 

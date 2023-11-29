@@ -106,8 +106,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         title={'Chemistry'}
         value={filter[BatteryProperty.Chemistry].value}
         relation={EnumRelation.Any}
+        enumName={'Chemistry'}
         position={['first', 'last']}
-        pickerScreen={'BatteryFilterChemistry'}
         onValueChange={(relation, value) => {
           onFilterValueChange(BatteryProperty.Chemistry, {relation, value});
         } }

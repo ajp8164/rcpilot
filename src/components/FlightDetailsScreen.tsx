@@ -6,10 +6,12 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightOutcome } from 'types/flight';
 import { FlightRating } from 'components/molecules/FlightRating';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
+import { enumIdsToValues } from 'lib/utils';
+import { useEvent } from 'lib/event';
 
 export type Props = 
   NativeStackScreenProps<SetupNavigatorParamList, 'FlightDetails'> &
@@ -18,6 +20,8 @@ export type Props =
 const FlightDetailsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+
+  const event = useEvent();
 
   const fuels = {
     'id0': 'High Octane',
@@ -32,6 +36,23 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
     'id0': 'Andy',
     'id2': 'Unknown'
   };
+
+  useEffect(() => {
+    // Event handlers for EnumPicker
+    event.on('fuel', onChangeFuel);
+    event.on('model-style', onChangeModelStyle);
+    event.on('pilot', onChangePilot);
+
+    return () => {
+      event.removeListener('fuel', onChangeFuel);
+      event.removeListener('model-style', onChangeModelStyle);
+      event.removeListener('pilot', onChangePilot);
+    };
+  }, []);
+
+  const onChangeFuel = (v: string) => {};
+  const onChangeModelStyle = (v: string) => {};
+  const onChangePilot = (v: string) => {};
 
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
@@ -78,11 +99,12 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           value={'Unspecified'}
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Fuel',
-            kind: 'fuel',
-            values: fuels,
-            selected: 'id2',
+            footer: 'You can manage fuels through the Globals section in the Setup tab.',
+            values: Object.values(fuels),
+            selected: enumIdsToValues(['id2'], fuels),
+            eventName: 'fuel',
           })}
-          />
+        />
         <ListItemInput
           title={'Fuel Consumed'}
           label={'oz'}
@@ -98,9 +120,10 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           value={'Andy'}
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Pilot',
-            kind: 'pilots',
-            values: pilots,
-            selected: 'id0',
+            footer: 'You can manage pilots through the Globals section in the Setup tab.',
+            values: Object.values(pilots),
+            selected: enumIdsToValues(['id2'], pilots),
+            eventName: 'pilot',
           })}
         />
         <ListItem
@@ -109,9 +132,10 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           value={'Sport'}
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Style',
-            kind: 'styles',
-            values: modelStyles,
-            selected: 'id2',
+            footer: 'You can manage styles through the Globals section in the Setup tab.',
+            values: Object.values(modelStyles),
+            selected: enumIdsToValues(['id2'], modelStyles),
+            eventName: 'model-style',
           })}
         />
         <Divider text={'NOTES'} />

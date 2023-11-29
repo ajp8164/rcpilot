@@ -1,25 +1,59 @@
-import Icon, { FA6Style } from 'react-native-vector-icons/FontAwesome6';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import React, { useEffect } from 'react';
+import { IconProps } from 'types/common';
 
 import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItemCheckbox } from 'components/atoms/List';
+import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NewModelNavigatorParamList } from 'types/navigation';
+import { BatteriesNavigatorParamList, BatteryFiltersNavigatorParamList, ModelFiltersNavigatorParamList, ModelsNavigatorParamList, NewBatteryNavigatorParamList, NewModelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { isArray } from 'lodash';
 import { useSetState } from '@react-native-ajp-elements/core';
-import { useTheme } from 'theme';
+import { useTheme, AppTheme } from 'theme';
+import { Button } from '@rneui/base';
+import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
 
-export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'EnumPicker'>;
+export type EnumPickerInterface =  {
+  mode?: 'one' | 'many' | 'many-or-none';
+  title: string;
+  icons?: {[key in string]: IconProps}; // Key is a enum value
+  sectionName?: string;
+  footer?: string;
+  values: string[];
+  selected: string | string[]; // The literal value(s)
+  eventName: string;
+};
 
-const EnumPickerScreen = ({ route, navigation }: Props) => {
-  const { title, kind, values: inputObject, selected, icons } = route.params;
+export type Props =
+  NativeStackScreenProps<BatteriesNavigatorParamList, 'EnumPicker'> &
+  NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'EnumPicker'> &
+  NativeStackScreenProps<ModelFiltersNavigatorParamList, 'EnumPicker'> &
+  NativeStackScreenProps<ModelsNavigatorParamList, 'EnumPicker'> &
+  NativeStackScreenProps<NewBatteryNavigatorParamList, 'EnumPicker'> &
+  NativeStackScreenProps<NewModelNavigatorParamList, 'EnumPicker'> &
+  NativeStackScreenProps<SetupNavigatorParamList, 'EnumPicker'>;
+
+const EnumPickerScreen = ({ route,  navigation }: Props) => {
+  const {
+    mode = 'one',
+    title,
+    icons,
+    sectionName,
+    footer,
+    values,
+    selected,
+    eventName,
+  } = route.params;
 
   const theme = useTheme();
+  const s = useStyles(theme);
 
-  const [list, setList] = useSetState({
-    values: [] as string[],
-    selected: '',
+  const event = useEvent();
+
+  const [list, setList] = useSetState<{ values: string[]; selected: string[]; }>({
+    values,
+    selected: isArray(selected) ? selected : [selected],
   });
 
   useEffect(() => {
@@ -27,52 +61,138 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
       title,
     });
 
-    // The input may be an array of strings or a simple key-value object where the key
-    // is a unique id. When the input is an object the input 'selected' param is expected to be
-    // a key value (a unique id). The list.selected is always the actual value, never the unqiue id.
-    if (isArray(inputObject)) {
-      setList({
-        values: inputObject,
-        selected: selected,
-      });
-    } else { 
-      setList({
-        values: Object.values(inputObject),
-        selected: inputObject[selected],
+    if (mode === 'many' || mode === 'many-or-none') {
+      navigation.setOptions({
+        headerLeft: () => {
+          return (
+            <Button
+              title={'Cancel'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+              onPress={navigation.goBack}
+            />
+          )
+        },
+        headerRight: ()  => {
+          return (
+            <Button
+              title={'Done'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+              onPress={onDone}
+            />
+          )
+        },
       });
     }
   }, []);
+
+  const toggleSelect = (value: string) => {
+    if (mode === 'one') {
+      setList({ selected: [value] });
+    } else {
+      if (list.selected.includes(value)) {
+        setList({ selected: list.selected.filter(v => v !== value) });
+      } else {
+        setList({ selected: list.selected.concat(value) });
+      }
+    }
+
+    // For single selection mode we send the selected value immediately.
+    if (mode === 'one') {
+      event.emit(eventName, value);
+    }
+  };
+
+  const selectAll = () => {
+    setList({ selected: list.values }, { assign: true });
+  };
+
+  const selectNone = () => {
+    setList({ selected: [] }, { assign: true });
+  };
+
+  const selectUnspecified = () => {
+    setList({ selected: ['Unspecified'] }, { assign: true });
+  };
+
+  const onDone = () => {
+    // For multi-selection mode we send the selected values only when done.
+    if (mode === 'many' || mode === 'many-or-none') {
+      event.emit(eventName, list.selected);
+    }
+  };
 
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Divider />
-      {list.values.map((item, index) => {
+      {(mode === 'many' || mode === 'many-or-none') &&
+        <>
+          <Divider text={'ACTIONS'} />
+          <ListItem
+            title={'Select All'}
+            rightImage={false}
+            position={['first']}
+            onPress={selectAll}
+          />
+          <ListItem
+            title={'Select None'}
+            rightImage={false}
+            position={['last']}
+            onPress={selectNone}
+          />
+        </>
+      }
+      <Divider text={sectionName} />
+      {list.values.map((value, index) => {
         return (
           <ListItemCheckbox
-            key={index}
-            title={item}
+            key={`${value}${index}`}
+            title={value}
             leftImage={
               icons ?
                 <Icon
-                  name={icons[item].name}
-                  color={icons[item].color || theme.colors.midGray}
-                  size={icons[item].size}
-                  style={icons[item].style}
+                  name={icons[value].name}
+                  color={icons[value].color || theme.colors.midGray}
+                  size={icons[value].size}
+                  style={icons[value].style}
                 />
               : undefined
             }
             position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
-            checked={item === list.selected}
-            onPress={() => null}
-          />)
+            checked={list.selected?.includes(value)}
+            onPress={() => toggleSelect(value)}
+          />
+        )
       })}
-      {kind &&
-        <Divider type={'note'} text={`You can manage ${kind} through the Globals section in the Setup tab.`} />
+      {mode === 'many-or-none' &&
+        <>
+          <Divider />
+          <ListItemCheckbox
+            title={'Unspecified'}
+            position={['first', 'last']}
+            checked={list.selected[0] === 'Unspecified'}
+            onPress={selectUnspecified}
+          />
+        </>
       }
+      <Divider type={'note'} text={footer} />
     </SafeAreaView>
   );
 };
+
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+  cancelButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  doneButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+}));
 
 export default EnumPickerScreen;

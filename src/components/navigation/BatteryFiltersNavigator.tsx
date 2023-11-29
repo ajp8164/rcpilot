@@ -1,4 +1,3 @@
-import BatteryFilterChemistryScreen from 'components/BatteryFilterChemistryScreen';
 import BatteryFilterEditorScreen from 'components/BatteryFilterEditorScreen';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import BatteryFiltersScreen from 'components/BatteryFiltersScreen';
@@ -6,6 +5,7 @@ import NavContext from './NavContext';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 
 const BatteryFiltersStack = createNativeStackNavigator<BatteryFiltersNavigatorParamList>();
 
@@ -44,10 +44,10 @@ const BatteryFiltersNavigator = () => {
           }}
         />
         <BatteryFiltersStack.Screen
-          name='BatteryFilterChemistry'
-          component={BatteryFilterChemistryScreen}
+          name='EnumPicker'
+          component={EnumPickerScreen}
           options={{
-            title: 'Chemistries',
+            title: '',
           }}
         />
       </BatteryFiltersStack.Navigator>

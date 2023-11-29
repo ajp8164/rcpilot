@@ -1,5 +1,4 @@
 import ModelFilterEditorScreen from 'components/ModelFilterEditorScreen';
-import ModelFilterModelTypesScreen from 'components/ModelFilterModelTypesScreen';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import ModelFiltersScreen from 'components/ModelFiltersScreen';
 import NavContext from './NavContext';
@@ -7,6 +6,7 @@ import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 
 const ModelFiltersStack = createNativeStackNavigator<ModelFiltersNavigatorParamList>();
 
@@ -31,6 +31,13 @@ const ModelFiltersNavigator = () => {
         headerTintColor: theme.colors.screenHeaderBackButton,
       }}>
         <ModelFiltersStack.Screen
+          name='EnumPicker'
+          component={EnumPickerScreen}
+          options={{
+            title: '',
+          }}
+        />
+        <ModelFiltersStack.Screen
           name='ModelFilters'
           component={ModelFiltersScreen}
           options={{
@@ -42,13 +49,6 @@ const ModelFiltersNavigator = () => {
           component={ModelFilterEditorScreen}
           options={{
             title: 'Filter Editor',
-          }}
-        />
-        <ModelFiltersStack.Screen
-          name='ModelFilterModelTypes'
-          component={ModelFilterModelTypesScreen}
-          options={{
-            title: 'Model Types',
           }}
         />
         <ModelFiltersStack.Screen

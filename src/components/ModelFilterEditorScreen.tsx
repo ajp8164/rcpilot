@@ -13,6 +13,7 @@ import { useSetState } from '@react-native-ajp-elements/core';
 
 enum ModelProperty {
   ModelType = 'modelType',
+  Category = 'category',
   LastEvent ='lastEvent',
   TotalTime = 'totalTime',
   LogsBatteries = 'logsBatteries',
@@ -37,6 +38,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
 
   const [filter, setFilter] = useSetState<{[key in ModelProperty] : FilterState}>({
     [ModelProperty.ModelType]: {relation: EnumRelation.Any, value: ''},
+    [ModelProperty.Category]: {relation: EnumRelation.Any, value: ''},
     [ModelProperty.LastEvent]: {relation: DateRelation.Any, value: ''},
     [ModelProperty.TotalTime]: {relation: NumberRelation.Any, value: ''},
     [ModelProperty.LogsBatteries]: {relation: BooleanRelation.Any, value: ''},
@@ -110,8 +112,19 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         title={'Model Type'}
         value={filter[ModelProperty.ModelType].value}
         relation={EnumRelation.Any}
+        enumName={'ModelType'}
         position={['first', 'last']}
-        pickerScreen={'ModelFilterModelTypes'}
+        onValueChange={(relation, value) => {
+          onFilterValueChange(ModelProperty.ModelType, {relation, value});
+        } }
+      />
+      <Divider />
+      <ListItemFilterEnum
+        title={'Category'}
+        value={filter[ModelProperty.Category].value}
+        relation={EnumRelation.Any}
+        enumName={'Category'}
+        position={['first', 'last']}
         onValueChange={(relation, value) => {
           onFilterValueChange(ModelProperty.ModelType, {relation, value});
         } }

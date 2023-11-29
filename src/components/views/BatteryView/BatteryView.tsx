@@ -4,7 +4,7 @@ import { Battery, BatteryChemistry, BatteryTint } from 'types/battery';
 import { BatteryViewMethods, BatteryViewProps } from './types';
 import { Divider, ListItemSwitch } from '@react-native-ajp-elements/ui';
 import {ListItem, ListItemInput} from 'components/atoms/List';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { batteryCellConfigurationToString, getBatteryCellConfigurationItems } from 'lib/battery';
 
 import { ScanCodeSize } from 'types/common';
@@ -16,6 +16,7 @@ import { makeStyles } from '@rneui/themed';
 import { toArrayOrdinals } from 'lib/utils';
 import { useNavigation } from '@react-navigation/core';
 import { useSetState } from '@react-native-ajp-elements/core';
+import { useEvent } from 'lib/event';
 
 type BatteryView = BatteryViewMethods;
 
@@ -27,6 +28,7 @@ const BatteryView = (props: BatteryViewProps) => {
   const { batteryId } = props;
 
   const navigation = useNavigation<NavigationProps>();
+  const event = useEvent();
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -52,6 +54,23 @@ const BatteryView = (props: BatteryViewProps) => {
   const [isRetired, setIsRetired] = useState(false);
   const [cellConfiguration, setCellConfiguration] = useState<string[]>([]);
   const [expandedCellConfiguration, setExpandedCellConfiguration] = useState(false);
+
+  useEffect(() => {
+    // Event handlers for EnumPicker
+    event.on('chemistry', onChangeChemistry);
+    event.on('battery-tint', onChangeBatteryTint);
+    event.on('scan-code-size', onChangeScanCodeSize);
+
+    return () => {
+      event.removeListener('chemistry', onChangeChemistry);
+      event.removeListener('battery-tint', onChangeBatteryTint);
+      event.removeListener('scan-code-size', onChangeScanCodeSize);
+    };
+  }, []);
+
+  const onChangeChemistry = (v: string) => {};
+  const onChangeBatteryTint = (v: string) => {};
+  const onChangeScanCodeSize = (v: string) => {};
 
   const toggleIsRetired = (value: boolean) => {
     setIsRetired(value);
@@ -85,6 +104,7 @@ const BatteryView = (props: BatteryViewProps) => {
         title: 'Chemistry',
         values: Object.values(BatteryChemistry),
         selected: 'LiPo',
+        eventName: 'chemistry',
       })}
     />
     <ListItem
@@ -156,6 +176,7 @@ const BatteryView = (props: BatteryViewProps) => {
         values: Object.values(BatteryTint),
         selected: 'None',
         icons: batteryTintIcons,
+        eventName: 'battery-tint',
       })}
      />
     <ListItem
@@ -166,6 +187,7 @@ const BatteryView = (props: BatteryViewProps) => {
         title: 'QR Code Size',
         values: Object.values(ScanCodeSize),
         selected: 'None',
+        eventName: 'scan-code-size',
       })}
     />
     <Divider />

@@ -28,6 +28,7 @@ export type BatteriesNavigatorParamList = {
   };
   BatteryFiltersNavigator: undefined;
   BatteryPerformance: undefined;
+  BatteryPerformanceComparisonPicker: undefined;
   BatteryPerformanceNavigator: undefined;
   EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: undefined;

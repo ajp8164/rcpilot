@@ -13,4 +13,5 @@ export type IconProps = {
   size?: number;
   // @ts-ignore: should be typed StyleProp<TextStyle>
   style?: any;
-};
+  Component?: JSX.Element;
+} | null;

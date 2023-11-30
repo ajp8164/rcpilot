@@ -1,6 +1,6 @@
+import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
-import FlightOutcomeScreen from 'components/FlightOutcomeScreen';
 import FlightsScreen from 'components/FlightsScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import ModelScreen from 'components/ModelScreen';
@@ -9,7 +9,6 @@ import ModelsScreen from 'components/ModelsScreen';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
-import EnumPickerScreen from 'components/EnumPickerScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -78,14 +77,6 @@ const ModelsNavigator = () => {
         component={FlightDetailsScreen}
         options={{
           title: 'Flight Details',
-        }}
-      />
-      <ModelsStack.Screen
-        name="FlightOutcome"
-        component={FlightOutcomeScreen}
-        options={{
-          title: 'Flight Outcome',
-          headerBackTitle: 'Flight'
         }}
       />
       <ModelsStack.Screen

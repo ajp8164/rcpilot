@@ -1,10 +1,9 @@
 import { ContentView } from 'types/content';
+import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { FlightOutcome } from 'types/flight';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
-
-import { EnumPickerInterface } from 'components/EnumPickerScreen';
 
 export enum StartupScreen {
   None = 'None',
@@ -29,6 +28,7 @@ export type BatteriesNavigatorParamList = {
   };
   BatteryFiltersNavigator: undefined;
   BatteryPerformance: undefined;
+  BatteryPerformanceNavigator: undefined;
   EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: undefined;
   Notes: {
@@ -36,6 +36,11 @@ export type BatteriesNavigatorParamList = {
     headerButtonStyle?: TextStyle | TextStyle[];
   };
 };
+
+export type BatteryPerformanceNavigatorParamList = {
+  BatteryPerformanceFilters: undefined;
+};
+
 
 export type LogNavigatorParamList = {
   Log: undefined;

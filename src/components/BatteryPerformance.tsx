@@ -18,7 +18,7 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
         actions={[
           {
             ActionComponent: (<Icon name={'filter'} size={28} color={theme.colors.brandPrimary} />),
-            onPress: () => null
+            onPress: () => navigation.navigate('BatteryPerformanceNavigator')
           }, {
             ActionComponent: (<Icon name={'scale-unbalanced-flip'} size={28} color={theme.colors.brandPrimary} />),
             onPress: () => null

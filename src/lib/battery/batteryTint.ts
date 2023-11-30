@@ -1,13 +1,13 @@
 import { BatteryTint } from 'types/battery';
-import { IconProps } from 'types/common';
+import { EnumPickerIconProps } from 'components/EnumPickerScreen';
 
-const icon: IconProps = {
+const icon: EnumPickerIconProps = {
   name: 'battery-full',
   size: 28,
   style: { width: 35 },
 };
 
-export const batteryTintIcons: {[key in BatteryTint]: IconProps} = {
+export const batteryTintIcons: {[key in BatteryTint]: EnumPickerIconProps} = {
   [BatteryTint.Red]: {...icon, color: 'red'},
   [BatteryTint.Orange]: {...icon, color: 'orange'},
   [BatteryTint.Green]: {...icon, color: 'green'},

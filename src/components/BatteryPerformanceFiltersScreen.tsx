@@ -59,9 +59,9 @@ const BatteryPerformanceFiltersScreen = ({ navigation }: Props) => {
         position={['first', 'last']}
         checked={true}
         onPress={() => null}
-        // onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
-        //   filterId: '1',
-        // })}
+        onPressInfo={() => navigation.navigate('BatteryPerformanceFilterEditor', {
+          filterId: '1',
+        })}
       />
       <Divider
         type={'note'}

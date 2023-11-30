@@ -5,6 +5,7 @@ import BatteryCellVoltagesScreen from 'components/BatteryCellVoltagesScreen';
 import BatteryCycleScreen from 'components/BatteryCycleScreen';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
 import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
+import BatteryPerformanceComparisonPickerScreen from 'components/BatteryPerformanceComparisonPickerScreen';
 import BatteryPerformanceNavigator from 'components/navigation/BatteryPerformanceNavigator';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
 import BatteryScreen from 'components/BatteryScreen';
@@ -91,6 +92,14 @@ const BatteriesNavigator = () => {
         component={BatteryPerformanceScreen}
         options={{
           title: 'Battery Performance',
+          presentation: 'fullScreenModal',
+        }}
+      />
+      <BatteriesStack.Screen
+        name='BatteryPerformanceComparisonPicker'
+        component={BatteryPerformanceComparisonPickerScreen}
+        options={{
+          title: 'Batteries',
           presentation: 'fullScreenModal',
         }}
       />

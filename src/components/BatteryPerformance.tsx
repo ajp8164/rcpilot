@@ -21,7 +21,7 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
             onPress: () => navigation.navigate('BatteryPerformanceNavigator')
           }, {
             ActionComponent: (<Icon name={'scale-unbalanced-flip'} size={28} color={theme.colors.brandPrimary} />),
-            onPress: () => null
+            onPress: () => navigation.navigate('BatteryPerformanceComparisonPicker')
           }, {
             label: 'Done',
             onPress: navigation.goBack

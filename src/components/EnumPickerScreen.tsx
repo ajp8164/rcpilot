@@ -1,22 +1,23 @@
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import React, { useEffect } from 'react';
-import { IconProps } from 'types/common';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem, ListItemCheckbox } from 'components/atoms/List';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, BatteryFiltersNavigatorParamList, ModelFiltersNavigatorParamList, ModelsNavigatorParamList, NewBatteryNavigatorParamList, NewModelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { ListItem, ListItemCheckbox } from 'components/atoms/List';
+import React, { useEffect } from 'react';
+
+import { Button } from '@rneui/base';
+import { Divider } from '@react-native-ajp-elements/ui';
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import { IconProps } from 'types/common';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { isArray } from 'lodash';
-import { useSetState } from '@react-native-ajp-elements/core';
-import { useTheme, AppTheme } from 'theme';
-import { Button } from '@rneui/base';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useSetState } from '@react-native-ajp-elements/core';
 
 export type EnumPickerInterface =  {
   mode?: 'one' | 'many' | 'many-or-none';
   title: string;
+  headerBackTitle?: string;
   icons?: {[key in string]: IconProps}; // Key is a enum value
   sectionName?: string;
   footer?: string;
@@ -38,6 +39,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   const {
     mode = 'one',
     title,
+    headerBackTitle,
     icons,
     sectionName,
     footer,
@@ -59,6 +61,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   useEffect(() => {
     navigation.setOptions({
       title,
+      headerBackTitle,
     });
 
     if (mode === 'many' || mode === 'many-or-none') {
@@ -149,14 +152,18 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
         return (
           <ListItemCheckbox
             key={`${value}${index}`}
-            title={value}
+            title={icons && icons[value]?.Component ? '' : value}
             leftImage={
-              icons ?
+              icons && icons[value] !== null ?
+                icons[value]?.Component
+                ?
+                icons[value]?.Component
+                :
                 <Icon
-                  name={icons[value].name}
-                  color={icons[value].color || theme.colors.midGray}
-                  size={icons[value].size}
-                  style={icons[value].style}
+                  name={icons[value]!.name}
+                  color={icons[value]?.color || theme.colors.midGray}
+                  size={icons[value]?.size}
+                  style={icons[value]?.style}
                 />
               : undefined
             }

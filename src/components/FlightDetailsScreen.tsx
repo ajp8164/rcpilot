@@ -1,16 +1,17 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightOutcome } from 'types/flight';
 import { FlightRating } from 'components/molecules/FlightRating';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
-import { makeStyles } from '@rneui/themed';
 import { enumIdsToValues } from 'lib/utils';
+import { flightOutcomeIcons } from 'lib/flight';
+import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
 export type Props = 
@@ -41,17 +42,20 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
     // Event handlers for EnumPicker
     event.on('fuel', onChangeFuel);
     event.on('model-style', onChangeModelStyle);
+    event.on('outcome', onChangeOutcome);
     event.on('pilot', onChangePilot);
 
     return () => {
       event.removeListener('fuel', onChangeFuel);
       event.removeListener('model-style', onChangeModelStyle);
+      event.removeListener('outcome', onChangeOutcome);
       event.removeListener('pilot', onChangePilot);
     };
   }, []);
 
   const onChangeFuel = (v: string) => {};
   const onChangeModelStyle = (v: string) => {};
+  const onChangeOutcome = (v: string) => {};
   const onChangePilot = (v: string) => {};
 
   return (
@@ -86,10 +90,15 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
         />
         <ListItem
           title={'Outcome'}
-          value={<FlightRating value={FlightOutcome.Star4}/>}
           position={['last']}
-          onPress={() => navigation.navigate('FlightOutcome', {
-            flightOutcome: FlightOutcome.Star4,
+          value={<FlightRating value={FlightOutcome.Star3}/>}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'Flight Outcome',
+            headerBackTitle: 'Flight',
+            values: Object.values(FlightOutcome),
+            icons: flightOutcomeIcons,
+            selected: FlightOutcome.Star3,
+            eventName: 'outcome',
           })}
         />
         <Divider />

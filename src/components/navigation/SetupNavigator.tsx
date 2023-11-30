@@ -1,8 +1,8 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
-import FlightOutcomeScreen from 'components/FlightOutcomeScreen';
 import FlightsScreen from 'components/FlightsScreen';
 import PilotScreen from 'components/PilotScreen';
 import React from 'react';
@@ -10,7 +10,6 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
 import UserProfileScreen from 'components/UserProfileScreen';
-import EnumPickerScreen from 'components/EnumPickerScreen';
 import { appConfig } from 'config';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -58,14 +57,6 @@ const SetupNavigator = () => {
         component={FlightDetailsScreen}
         options={{
           title: 'Flight Details',
-        }}
-      />
-      <SetupStack.Screen
-        name="FlightOutcome"
-        component={FlightOutcomeScreen}
-        options={{
-          title: 'Flight Outcome',
-          headerBackTitle: 'Flight'
         }}
       />
       <SetupStack.Screen

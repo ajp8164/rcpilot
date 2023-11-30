@@ -39,6 +39,14 @@ export type BatteriesNavigatorParamList = {
 
 export type BatteryPerformanceNavigatorParamList = {
   BatteryPerformanceFilters: undefined;
+  BatteryPerformanceFilterEditor: {
+    filterId: string;
+  }
+  EnumPicker: EnumPickerInterface;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+  };
 };
 
 

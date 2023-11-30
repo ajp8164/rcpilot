@@ -1,10 +1,12 @@
-import { EnumPickerInterface } from 'components/EnumPickerScreen';
-import { ModelType } from 'types/model';
-import { BatteryChemistry } from 'types/battery';
-import { enumIdsToValues } from 'lib/utils';
 import { modelCategories, modelStyles } from '../../../mocks/enums';
+
+import { BatteryChemistry } from 'types/battery';
+import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EnumRelation } from './ListItemFilterEnum';
 import { FlightOutcome } from 'types/flight';
+import { ModelType } from 'types/model';
+import { enumIdsToValues } from 'lib/utils';
+import { flightOutcomeIcons } from 'lib/flight';
 
 export type EnumName = keyof typeof enumFilterConfigs;
 type EnumPickerProps = Omit<EnumPickerInterface, 'selected' | 'eventName'>;
@@ -19,13 +21,13 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     sectionName: 'BATTERIES TO {0} RESULTS',
     values: [],
   },
-  Category: {
+  Categories: {
     mode: 'many-or-none',
     title: 'Categories',
     sectionName: 'CATEGORIES TO {0} RESULTS',
     values: [],
   },
-  Chemistry: {
+  Chemistries: {
     mode: 'many',
     title: 'Chemistries',
     sectionName: 'CHEMISTRIES TO {0} RESULTS',
@@ -43,16 +45,17 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     sectionName: 'STYLES TO {0} RESULTS',
     values: [],
   },
-  ModelType: {
+  ModelTypes: {
     mode: 'many',
     title: 'Model Types',
     sectionName: 'MODEL TYPES TO {0} RESULTS',
     values: Object.values(ModelType),
   },
   Outcomes: {
-    mode: 'many-or-none',
+    mode: 'many',
     title: 'Outcomes',
     sectionName: 'OUTCOMES TO {0} RESULTS',
+    icons: flightOutcomeIcons,
     values: Object.values(FlightOutcome),
   },
   Pilots: {
@@ -72,7 +75,7 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
     case 'Batteries':
       // config.values = enumIdsToValues(['id0'], batteries);
       break;
-    case 'Category':
+    case 'Categories':
       config.values = enumIdsToValues(['id1'], modelCategories);
       break;
     case 'Locations':

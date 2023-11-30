@@ -6,19 +6,28 @@ import React, { useEffect } from 'react';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { IconProps } from 'types/common';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { View } from 'react-native';
 import { isArray } from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
 
+export type EnumPickerIconProps = {
+  name: string | string[];
+  color?: string;
+  size?: number;
+  // @ts-ignore: should be typed StyleProp<TextStyle>
+  style?: any;
+  hideTitle?: boolean;
+} | null;
+
 export type EnumPickerInterface =  {
   mode?: 'one' | 'many' | 'many-or-none';
   title: string;
   headerBackTitle?: string;
-  icons?: {[key in string]: IconProps}; // Key is a enum value
+  icons?: {[key in string]: EnumPickerIconProps}; // Key is a enum value
   sectionName?: string;
   footer?: string;
   values: string[];
@@ -126,6 +135,28 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     }
   };
 
+  const getIconEl = (value: string) => {
+    // If icons are specified then create an array of icon elements.
+    let iconArr: JSX.Element[] | undefined  = undefined;
+    if (icons && icons[value]) {
+      iconArr = [];
+      let name = icons[value]!.name;
+      name = isArray(name) ? name : [name]; // Icon names must be an array.
+      name.forEach((n, index) => {
+        iconArr!.push(
+          <Icon
+            key={index}
+            name={n}
+            color={icons[value]?.color || theme.colors.midGray}
+            size={icons[value]?.size || 20}
+            style={[{ width: 22 }, icons[value]?.style]}
+          />
+        );
+      });
+    }
+    return iconArr ? <View style={{flexDirection: 'row'}}>{iconArr}</View> : undefined;
+  };
+
   return (
     <SafeAreaView
       edges={['left', 'right']}
@@ -152,21 +183,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
         return (
           <ListItemCheckbox
             key={`${value}${index}`}
-            title={icons && icons[value]?.Component ? '' : value}
-            leftImage={
-              icons && icons[value] !== null ?
-                icons[value]?.Component
-                ?
-                icons[value]?.Component
-                :
-                <Icon
-                  name={icons[value]!.name}
-                  color={icons[value]?.color || theme.colors.midGray}
-                  size={icons[value]?.size}
-                  style={icons[value]?.style}
-                />
-              : undefined
-            }
+            title={icons && icons[value]?.hideTitle ? '' : value}
+            leftImage={getIconEl(value)}
             position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
             checked={list.selected?.includes(value)}
             onPress={() => toggleSelect(value)}

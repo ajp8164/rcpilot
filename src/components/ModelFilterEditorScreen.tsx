@@ -112,7 +112,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         title={'Model Type'}
         value={filter[ModelProperty.ModelType].value}
         relation={EnumRelation.Any}
-        enumName={'ModelType'}
+        enumName={'ModelTypes'}
         position={['first', 'last']}
         onValueChange={(relation, value) => {
           onFilterValueChange(ModelProperty.ModelType, {relation, value});
@@ -123,7 +123,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         title={'Category'}
         value={filter[ModelProperty.Category].value}
         relation={EnumRelation.Any}
-        enumName={'Category'}
+        enumName={'Categories'}
         position={['first', 'last']}
         onValueChange={(relation, value) => {
           onFilterValueChange(ModelProperty.ModelType, {relation, value});

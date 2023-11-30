@@ -6,12 +6,3 @@ export enum ScanCodeSize {
   Small = 'Small',
   None = 'None',
 };
-
-export type IconProps = {
-  name: string;
-  color?: string;
-  size?: number;
-  // @ts-ignore: should be typed StyleProp<TextStyle>
-  style?: any;
-  Component?: JSX.Element;
-} | null;

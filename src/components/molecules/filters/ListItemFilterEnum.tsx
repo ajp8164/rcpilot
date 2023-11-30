@@ -1,11 +1,11 @@
+import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import { useEffect, useState } from "react";
 
 import lodash from 'lodash';
-import { useNavigation } from '@react-navigation/core';
-import { useEffect, useState } from "react";
-import {useTheme} from "theme";
-import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
 import { useEvent } from 'lib/event';
+import { useNavigation } from '@react-navigation/core';
+import {useTheme} from "theme";
 
 export type EnumFilter = {
   relation: EnumRelation;
@@ -85,7 +85,7 @@ const ListItemFilterEnum = (props: Props) => {
             title={'Any of these values...'}
             titleStyle={!value ? {color: theme.colors.assertive}: {}}
             subtitle={!value ?  'None' : valueToString()}
-            position={position?.includes('last') ?  ['last'] : []}
+            position={position?.includes('last') ? ['last'] : []}
             onPress={() => navigation.navigate('EnumPicker', {
               ...enumFilterConfig,
               selected: value,

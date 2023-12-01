@@ -99,7 +99,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         />
       <Divider />
       <ListItem
-        title={'Reset Filter...'}
+        title={'Reset Filter'}
         titleStyle={s.reset}
         disabled={true}
         disabledStyle={s.resetDisabled}

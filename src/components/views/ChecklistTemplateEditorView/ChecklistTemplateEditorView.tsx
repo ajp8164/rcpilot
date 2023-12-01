@@ -1,3 +1,4 @@
+import { AppTheme, useTheme } from 'theme';
 import { ChecklistAction, ChecklistActionNonRepeatingScheduleTimeframe, ChecklistActionRepeatingScheduleFrequency, ChecklistTemplate, ChecklistTemplateType } from 'types/checklistTemplate';
 import { ChecklistTemplateEditorViewMethods, ChecklistTemplateEditorViewProps } from './types';
 import {ListItem, ListItemInput} from 'components/atoms/List';
@@ -5,6 +6,7 @@ import React, { useState } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { View } from 'react-native';
+import { makeStyles } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/core';
 
 type ChecklistTemplateEditor = ChecklistTemplateEditorViewMethods;
@@ -12,6 +14,8 @@ type ChecklistTemplateEditor = ChecklistTemplateEditorViewMethods;
 const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
   const { checklistTemplateId } = props;
 
+  const theme = useTheme();
+  const s = useStyles(theme);
   const navigation = useNavigation<any>();
 
   const mockChecklistTemplate: ChecklistTemplate = {
@@ -150,8 +154,24 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
           />
         );
       })}
+      <Divider />
+      <ListItem
+        title={'Add a New Action'}
+        titleStyle={s.add}
+        position={['first', 'last']}
+        rightImage={false}
+        onPress={() => null}
+      />
     </View>
   );
 };
+
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  add: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    color: theme.colors.screenHeaderBackButton,
+  },
+}));
 
 export default ChecklistTemplateEditor;

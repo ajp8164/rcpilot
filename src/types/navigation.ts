@@ -179,6 +179,13 @@ export type SetupNavigatorParamList = {
   };
   Pilot: undefined;
   Pilots: undefined;
+  PreferencesBasics: undefined;
+  PreferencesEvents: undefined;
+  PreferencesBatteries: undefined;
+  PreferencesAudio: undefined;
+  PreferencesChimeCues: undefined;
+  PreferencesVoiceCues: undefined;
+  PreferencesClickTrack: undefined;
   NewPilot: undefined;
   Setup: {
     subNav?: string;

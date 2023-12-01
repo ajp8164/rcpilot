@@ -6,6 +6,12 @@ export enum MeasurementUnits {
   Centimeters = 'Centimeters',
 };
 
+export enum UnitSystem {
+  Imperial = 'Imperial (UK)',
+  Metric = 'Metric',
+  USCustomary = 'US Customary',
+};
+
 export enum ScanCodeSize {
   Large = 'Large',
   Small = 'Small',

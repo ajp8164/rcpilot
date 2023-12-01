@@ -1,4 +1,4 @@
-import { DurationString, ISODateString } from "types/common";
+import { ISODateString, ISODurationString } from "types/common";
 
 export enum BatteryChemistry {
   LiPo = 'LiPo',
@@ -49,7 +49,7 @@ export type BatteryCycle = {
   ignoreInPlots: boolean;
   discharge: {
     date: ISODateString;
-    duration: DurationString;
+    duration: ISODurationString;
     packVoltage: number;
     packResistance: number;
     // “1P/1S ; 1P/2S ; 2P/1S ; 2P/2S”.

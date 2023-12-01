@@ -2,8 +2,21 @@ import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ContentScreen from 'components/ContentScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
+import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
+import EventStylesScreen from 'components/EventStylesScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightsScreen from 'components/FlightsScreen';
+import ModelCategoriesScreen from 'components/ModelCategoriesScreen';
+import ModelCategoryEditorScreen from 'components/ModelCategoryEditorScreen';
+import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
+import ModelFuelsScreen from 'components/ModelFuelsScreen';
+import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
+import ModelPropellersScreen from 'components/ModelPropellersScreen';
+import NewEventStyleScreen from 'components/NewEventStyleScreen';
+import NewModelCategoryScreen from 'components/NewModelCategoryScreen';
+import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
+import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
+import NotesScreen from 'components/NotesScreen';
 import PilotScreen from 'components/PilotScreen';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -57,6 +70,101 @@ const SetupNavigator = () => {
         component={FlightDetailsScreen}
         options={{
           title: 'Flight Details',
+        }}
+      />
+      <SetupStack.Screen
+        name="EventStyles"
+        component={EventStylesScreen}
+        options={{
+          title: 'Styles',
+        }}
+      />
+      <SetupStack.Screen
+        name="EventStyleEditor"
+        component={EventStyleEditorScreen}
+        options={{
+          title: 'Style Name',
+        }}
+      />
+      <SetupStack.Screen
+        name="NewEventStyle"
+        component={NewEventStyleScreen}
+        options={{
+          title: 'Style Name',
+          presentation: 'modal',
+        }}
+      />
+      <SetupStack.Screen
+        name="ModelCategories"
+        component={ModelCategoriesScreen}
+        options={{
+          title: 'Categories',
+        }}
+      />
+      <SetupStack.Screen
+        name="ModelCategoryEditor"
+        component={ModelCategoryEditorScreen}
+        options={{
+          title: 'Catgeory Name',
+        }}
+      />
+      <SetupStack.Screen
+        name="NewModelCategory"
+        component={NewModelCategoryScreen}
+        options={{
+          title: 'Category Name',
+          presentation: 'modal',
+        }}
+      />
+      <SetupStack.Screen
+        name="ModelFuels"
+        component={ModelFuelsScreen}
+        options={{
+          title: 'Fuels',
+        }}
+      />
+      <SetupStack.Screen
+        name="NewModelFuelNavigator"
+        component={NewModelFuelNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <SetupStack.Screen
+        name="ModelFuelEditor"
+        component={ModelFuelEditorScreen}
+        options={{
+          title: 'Fuel',
+        }}
+      />
+      <SetupStack.Screen
+        name="ModelPropellers"
+        component={ModelPropellersScreen}
+        options={{
+          title: 'Propellers',
+        }}
+      />
+      <SetupStack.Screen
+        name="ModelPropellerEditor"
+        component={ModelPropellerEditorScreen}
+        options={{
+          title: 'Propeller',
+        }}
+      />
+      <SetupStack.Screen
+        name="NewModelPropellerNavigator"
+        component={NewModelPropellerNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <SetupStack.Screen
+        name='Notes'
+        component={NotesScreen}
+        options={{
+          title: '',
         }}
       />
       <SetupStack.Screen

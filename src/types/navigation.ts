@@ -144,6 +144,23 @@ export type FlightNavigatorParamList = {
   }
 };
 
+export type NewModelFuelNavigatorParamList = {
+  NewModelFuel: undefined;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+  };
+};
+
+export type NewModelPropellerNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  NewModelPropeller: undefined;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+  };
+};
+
 export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
@@ -163,6 +180,30 @@ export type SetupNavigatorParamList = {
   Pilot: undefined;
   Setup: {
     subNav?: string;
+  };
+  EventStyles: undefined;
+  EventStyleEditor: {
+    eventStyleId: string;
+  };
+  ModelCategories: undefined;
+  ModelCategoryEditor: {
+    modelCategoryId: string;
+  };
+  ModelFuels: undefined;
+  ModelFuelEditor: {
+    modelFuelId: string;
+  };
+  ModelPropellers: undefined;
+  ModelPropellerEditor: {
+    modelPropellerId: string;
+  }
+  NewEventStyle: undefined;
+  NewModelCategory: undefined;
+  NewModelFuelNavigator: undefined;
+  NewModelPropellerNavigator: undefined;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
   };
   UserAccount: undefined;
   UserProfile: {

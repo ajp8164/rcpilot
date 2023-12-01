@@ -62,19 +62,19 @@ const SetupScreen = ({ navigation, route }: Props) => {
       />
       <ListItem
         title={'Event Styles'}
-        onPress={() => null}
+        onPress={() => navigation.navigate('EventStyles')}
       />
       <ListItem
         title={'Model Categories'}
-        onPress={() => null}
+        onPress={() => navigation.navigate('ModelCategories')}
       />
       <ListItem
         title={'Model Fuels'}
-        onPress={() => null}
+        onPress={() => navigation.navigate('ModelFuels')}
       />
       <ListItem
         title={'Model Propellers'}
-        onPress={() => null}
+        onPress={() => navigation.navigate('ModelPropellers')}
       />
       <ListItem
         title={'List Templates'}

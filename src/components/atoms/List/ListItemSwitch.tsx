@@ -20,8 +20,9 @@ const ListItemSwitch = (props: Props) => {
   return (
     <>
       <_ListItemSwitch
+        titleStyle={s.title}
         {...props}
-        containerStyle={{...props.containerStyle, ...s.containerStyle}}
+        containerStyle={{...props.containerStyle, ...s.container}}
       />
       <ExpandableSection expanded={expanded}>
         {ExpandableComponent}
@@ -31,9 +32,12 @@ const ListItemSwitch = (props: Props) => {
 }
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  containerStyle: {
-    minHeight: 48
+  container: {
+    minHeight: 48,
   },
+  title: {
+    width: '120%',
+  }
 }));
 
 export { ListItemSwitch };

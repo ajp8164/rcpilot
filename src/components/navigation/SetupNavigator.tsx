@@ -20,6 +20,13 @@ import NewPilotScreen from 'components/NewPilotScreen';
 import NotesScreen from 'components/NotesScreen';
 import PilotScreen from 'components/PilotScreen';
 import PilotsScreen from 'components/PilotsScreen';
+import PreferencesAudioScreen from 'components/PreferencesAudioScreen';
+import PreferencesBasicsScreen from 'components/PreferencesBasicsScreen';
+import PreferencesBatteriesScreen from 'components/PreferencesBatteriesScreen';
+import PreferencesChimeCuesScreen from 'components/PreferencesChimeCuesScreen';
+import PreferencesClickTrackScreen from 'components/PreferencesClickTrackScreen';
+import PreferencesEventsScreen from 'components/PreferencesEventsScreen';
+import PreferencesVoiceCuesScreen from 'components/PreferencesVoiceCuesScreen';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
@@ -187,6 +194,55 @@ const SetupNavigator = () => {
         options={{
           title: '',
           headerBackTitle: 'Flight',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesBasics"
+        component={PreferencesBasicsScreen}
+        options={{
+          title: 'Basics',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesEvents"
+        component={PreferencesEventsScreen}
+        options={{
+          title: 'Events',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesBatteries"
+        component={PreferencesBatteriesScreen}
+        options={{
+          title: 'Batteries',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesAudio"
+        component={PreferencesAudioScreen}
+        options={{
+          title: 'Audio',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesChimeCues"
+        component={PreferencesChimeCuesScreen}
+        options={{
+          title: 'Chime Cues',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesVoiceCues"
+        component={PreferencesVoiceCuesScreen}
+        options={{
+          title: 'Voice Cues',
+        }}
+      />
+      <SetupStack.Screen
+        name="PreferencesClickTrack"
+        component={PreferencesClickTrackScreen}
+        options={{
+          title: 'Click Track',
         }}
       />
       <SetupStack.Screen

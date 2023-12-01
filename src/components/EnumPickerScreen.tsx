@@ -2,13 +2,13 @@ import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, BatteryFiltersNavigatorParamList, ModelFiltersNavigatorParamList, ModelsNavigatorParamList, NewBatteryNavigatorParamList, NewModelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
 
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { View } from 'react-native';
 import { isArray } from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -161,48 +161,52 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      {(mode === 'many' || mode === 'many-or-none') &&
-        <>
-          <Divider text={'ACTIONS'} />
-          <ListItem
-            title={'Select All'}
-            rightImage={false}
-            position={['first']}
-            onPress={selectAll}
-          />
-          <ListItem
-            title={'Select None'}
-            rightImage={false}
-            position={['last']}
-            onPress={selectNone}
-          />
-        </>
-      }
-      <Divider text={sectionName} />
-      {list.values.map((value, index) => {
-        return (
-          <ListItemCheckbox
-            key={`${value}${index}`}
-            title={icons && icons[value]?.hideTitle ? '' : value}
-            leftImage={getIconEl(value)}
-            position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
-            checked={list.selected?.includes(value)}
-            onPress={() => toggleSelect(value)}
-          />
-        )
-      })}
-      {mode === 'many-or-none' &&
-        <>
-          <Divider />
-          <ListItemCheckbox
-            title={'Unspecified'}
-            position={['first', 'last']}
-            checked={list.selected[0] === 'Unspecified'}
-            onPress={selectUnspecified}
-          />
-        </>
-      }
-      <Divider type={'note'} text={footer} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        {(mode === 'many' || mode === 'many-or-none') &&
+          <>
+            <Divider text={'ACTIONS'} />
+            <ListItem
+              title={'Select All'}
+              rightImage={false}
+              position={['first']}
+              onPress={selectAll}
+            />
+            <ListItem
+              title={'Select None'}
+              rightImage={false}
+              position={['last']}
+              onPress={selectNone}
+            />
+          </>
+        }
+        <Divider text={sectionName} />
+        {list.values.map((value, index) => {
+          return (
+            <ListItemCheckbox
+              key={`${value}${index}`}
+              title={icons && icons[value]?.hideTitle ? '' : value}
+              leftImage={getIconEl(value)}
+              position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
+              checked={list.selected?.includes(value)}
+              onPress={() => toggleSelect(value)}
+            />
+          )
+        })}
+        {mode === 'many-or-none' &&
+          <>
+            <Divider />
+            <ListItemCheckbox
+              title={'Unspecified'}
+              position={['first', 'last']}
+              checked={list.selected[0] === 'Unspecified'}
+              onPress={selectUnspecified}
+            />
+          </>
+        }
+        <Divider type={'note'} text={footer} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

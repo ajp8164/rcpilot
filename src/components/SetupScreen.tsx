@@ -101,6 +101,29 @@ const SetupScreen = ({ navigation, route }: Props) => {
         position={['last']}
         onPress={() => null}
       />
+      <Divider text={'PREFERENCES'}/>
+      <ListItem
+        title={'Basics'}
+        subtitle={'Units, screen dimming, filter behavior'}
+        position={['first']}
+        onPress={() => navigation.navigate('PreferencesBasics')}
+      />
+      <ListItem
+        title={'Events'}
+        subtitle={'Timer, sensitivity settings'}
+        onPress={() => navigation.navigate('PreferencesEvents')}
+      />
+      <ListItem
+        title={'Batteries'}
+        subtitle={'Convenience options'}
+        onPress={() => navigation.navigate('PreferencesBatteries')}
+      />
+      <ListItem
+        title={'Audio'}
+        subtitle={'Sounds, vibration, scheduling'}
+        position={['last']}
+        onPress={() => navigation.navigate('PreferencesAudio')}
+      />
       <Divider text={'ACCOUNT'}/>
       {userProfile ? (
         <ListItem

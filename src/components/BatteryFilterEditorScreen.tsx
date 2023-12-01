@@ -4,6 +4,7 @@ import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
+import { BatteryChemistry } from 'types/battery';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -93,7 +94,7 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         />
       <Divider />
       <ListItem
-        title={'Reset Filter...'}
+        title={'Reset Filter'}
         titleStyle={s.reset}
         disabled={true}
         disabledStyle={s.resetDisabled}
@@ -106,7 +107,7 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         title={'Chemistry'}
         value={filter[BatteryProperty.Chemistry].value}
         relation={EnumRelation.Any}
-        enumName={'Chemistry'}
+        enumName={'Chemistries'}
         position={['first', 'last']}
         onValueChange={(relation, value) => {
           onFilterValueChange(BatteryProperty.Chemistry, {relation, value});

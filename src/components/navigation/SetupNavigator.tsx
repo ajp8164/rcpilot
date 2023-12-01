@@ -16,8 +16,10 @@ import NewEventStyleScreen from 'components/NewEventStyleScreen';
 import NewModelCategoryScreen from 'components/NewModelCategoryScreen';
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
+import NewPilotScreen from 'components/NewPilotScreen';
 import NotesScreen from 'components/NotesScreen';
 import PilotScreen from 'components/PilotScreen';
+import PilotsScreen from 'components/PilotsScreen';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
@@ -60,6 +62,18 @@ const SetupNavigator = () => {
       <SetupStack.Screen
         name="Pilot"
         component={PilotScreen}
+      />
+      <SetupStack.Screen
+        name="Pilots"
+        component={PilotsScreen}
+      />
+      <SetupStack.Screen
+        name="NewPilot"
+        component={NewPilotScreen}
+        options={{
+          title: "Pilot's Name",
+          presentation: 'modal',
+        }}
       />
       <SetupStack.Screen
         name="Flights"

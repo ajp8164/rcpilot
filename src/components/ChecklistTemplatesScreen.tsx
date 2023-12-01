@@ -32,13 +32,13 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
       actions: [],
     },
     {
-      id: '1',
+      id: '3',
       name: 'Post-Flight 1',
       type: ChecklistTemplateType.PostEvent,
       actions: [],
     },
     {
-      id: '1',
+      id: '4',
       name: 'Oil tail',
       type: ChecklistTemplateType.Maintenance,
       actions: [],
@@ -58,7 +58,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
           <Button
             type={'clear'}
             icon={ <Icon name={'plus'} style={s.addIcon} /> }
-            onPress={() => navigation.navigate('NewChecklistTemplate')}
+            onPress={() => navigation.navigate('NewChecklistTemplateNavigator')}
           />
         )
       },
@@ -91,7 +91,9 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
               title={item.name}
               subtitle={`Contains ${item.actions.length} actions`}
               position={allChecklistTemplates[ChecklistTemplateType.PreEvent].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.PreEvent].length - 1 ? ['last'] : []}
-              onPress={() => null}
+              onPress={() => navigation.navigate('ChecklistTemplateEditor', {
+                checklistTemplateId: item.id,
+              })}
             />
           )
         })}
@@ -103,7 +105,9 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
               title={item.name}
               subtitle={`Contains ${item.actions.length} actions`}
               position={allChecklistTemplates[ChecklistTemplateType.PostEvent].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.PostEvent].length - 1 ? ['last'] : []}
-              onPress={() => null}
+              onPress={() => navigation.navigate('ChecklistTemplateEditor', {
+                checklistTemplateId: item.id,
+              })}
             />
           )
         })}
@@ -115,7 +119,9 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
               title={item.name}
               subtitle={`Contains ${item.actions.length} actions`}
               position={allChecklistTemplates[ChecklistTemplateType.Maintenance].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.Maintenance].length - 1 ? ['last'] : []}
-              onPress={() => null}
+              onPress={() => navigation.navigate('ChecklistTemplateEditor', {
+                checklistTemplateId: item.id,
+              })}
             />
           )
         })}

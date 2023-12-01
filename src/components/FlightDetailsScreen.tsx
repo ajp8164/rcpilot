@@ -108,6 +108,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           value={'Unspecified'}
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Fuel',
+            headerBackTitle: 'Flight',
             footer: 'You can manage fuels through the Globals section in the Setup tab.',
             values: Object.values(fuels),
             selected: enumIdsToValues(['id2'], fuels),
@@ -129,6 +130,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           value={'Andy'}
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Pilot',
+            headerBackTitle: 'Flight',
             footer: 'You can manage pilots through the Globals section in the Setup tab.',
             values: Object.values(pilots),
             selected: enumIdsToValues(['id2'], pilots),
@@ -141,6 +143,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
           value={'Sport'}
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Style',
+            headerBackTitle: 'Flight',
             footer: 'You can manage styles through the Globals section in the Setup tab.',
             values: Object.values(modelStyles),
             selected: enumIdsToValues(['id2'], modelStyles),

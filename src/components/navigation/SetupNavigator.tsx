@@ -1,5 +1,6 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
+import ChecklistTemplateEditorScreen from 'components/ChecklistTemplateEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
@@ -13,6 +14,7 @@ import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
 import ModelFuelsScreen from 'components/ModelFuelsScreen';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
+import NewChecklistTemplateNavigator from 'components/navigation/NewChecklistTemplateNavigator';
 import NewEventStyleScreen from 'components/NewEventStyleScreen';
 import NewModelCategoryScreen from 'components/NewModelCategoryScreen';
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
@@ -194,7 +196,7 @@ const SetupNavigator = () => {
         component={EnumPickerScreen}
         options={{
           title: '',
-          headerBackTitle: 'Flight',
+          headerBackTitle: '',
         }}
       />
       <SetupStack.Screen
@@ -202,6 +204,22 @@ const SetupNavigator = () => {
         component={ChecklistTemplatesScreen}
         options={{
           title: 'List Templates',
+        }}
+      />
+      <SetupStack.Screen
+        name="ChecklistTemplateEditor"
+        component={ChecklistTemplateEditorScreen}
+        options={{
+          title: 'Template',
+          headerBackTitle: 'Templates',
+        }}
+      />
+      <SetupStack.Screen
+        name="NewChecklistTemplateNavigator"
+        component={NewChecklistTemplateNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
         }}
       />
       <SetupStack.Screen

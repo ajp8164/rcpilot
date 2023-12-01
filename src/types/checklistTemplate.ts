@@ -3,34 +3,27 @@ export enum ChecklistActionRepeatingScheduleFrequency {
   ModelMinutes = 'Model Minutes',
   Days = 'Days',
   Weeks = 'Weeks',
-  Months = 'Months'
+  Months = 'Months',
 };
-export enum ChecklistActionNonRepeatingScheduleFrequency {
+export enum ChecklistActionNonRepeatingScheduleTimeframe {
   Events = 'Events',
   ModelMinutes = 'Model Minutes',
   Days = 'Days',
   Weeks = 'Weeks',
   Months = 'Months',
-  Today = 'Today'
-};
-
-export enum ChecklistActionNonRepeatingScheduleFollowing {
-  ModelEventAtInstallation = 'Model Event at Installation',
-  ModelTimeAtInstallation = 'Model Time at Installation',
-  InstallationDate = 'Installation Date'
+  Today = 'Today',
 };
 
 export type ChecklistAction = {
   id: string;
   description: string;
-  repeating: boolean;
   repeatingSchedule?: {
       frequency: ChecklistActionRepeatingScheduleFrequency;
       value: number;
   }
   nonRepeatingSchedule?: {
-      frequency: ChecklistActionRepeatingScheduleFrequency;
-      following: ChecklistActionNonRepeatingScheduleFollowing;
+      timeframe: ChecklistActionNonRepeatingScheduleTimeframe;
+      value: number;
   }
   totalCost: number;
   notes: string;
@@ -39,7 +32,7 @@ export type ChecklistAction = {
 export enum ChecklistTemplateType {
   PreEvent = 'Pre-Event',
   PostEvent = 'Post-Event',
-  Maintenance = 'Maintenance'
+  Maintenance = 'Maintenance',
 };
 
 export type ChecklistTemplate = {

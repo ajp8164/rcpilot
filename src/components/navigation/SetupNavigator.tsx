@@ -1,5 +1,6 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
+import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
@@ -194,6 +195,13 @@ const SetupNavigator = () => {
         options={{
           title: '',
           headerBackTitle: 'Flight',
+        }}
+      />
+      <SetupStack.Screen
+        name="ChecklistTemplates"
+        component={ChecklistTemplatesScreen}
+        options={{
+          title: 'List Templates',
         }}
       />
       <SetupStack.Screen

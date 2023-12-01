@@ -79,7 +79,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'List Templates'}
         position={['last']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('ChecklistTemplates')}
       />
       <Divider text={'DATABASE'}/>
       <ListItem

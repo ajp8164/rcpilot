@@ -164,6 +164,7 @@ export type NewModelPropellerNavigatorParamList = {
 export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
+  ChecklistTemplates: undefined;
   Content: {
     content: ContentView;
   };

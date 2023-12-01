@@ -41,3 +41,30 @@ export type Checklist = {
   type: ChecklistType;
   actions: ChecklistAction[];
 };
+
+export type ModelCategory = {
+  id: string;
+  name: string;
+};
+
+export type ModelFuel = {
+  id: string;
+  name: string;
+  cost: number;
+  notes: string;
+};
+
+export enum ModelPropellerUnits {
+  Inches = 'Inches',
+  Centimeters = 'Centimeters',
+};
+
+export type ModelPropeller = {
+  id: string;
+  name: string;
+  vendor: string;
+  diameter: number;
+  pitch: number;
+  measuredUnits: ModelPropellerUnits;
+  notes: string;
+};

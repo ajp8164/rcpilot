@@ -178,6 +178,8 @@ export type SetupNavigatorParamList = {
     flightOutcome: FlightOutcome;
   };
   Pilot: undefined;
+  Pilots: undefined;
+  NewPilot: undefined;
   Setup: {
     subNav?: string;
   };

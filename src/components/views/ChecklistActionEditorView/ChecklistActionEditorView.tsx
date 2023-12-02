@@ -73,6 +73,7 @@ const ChecklistActionEditor = (props: ChecklistActionEditorViewProps) => {
       <ListItem
         title={'Following'}
         value={'Today'}
+        visible={!actionRepeatsEnabled}
       />
       <ListItemSwitch
         title={'Action Repeats'}

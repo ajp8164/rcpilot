@@ -4,11 +4,12 @@ import DateTimePicker, {
 } from '@react-native-community/datetimepicker';
 
 import { Appearance } from 'react-native';
+import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { DateTime } from 'luxon';
-import { ExpandableSection } from 'react-native-ui-lib';
 import { ISODateString } from 'types/common';
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
+import {useRef} from 'react';
 
 type IOSMode = 'date' | 'time' | 'datetime' | 'countdown';
 
@@ -29,6 +30,9 @@ const ListItemDate = (props: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+
+  const sectionInitiallyExpanded = useRef(expanded);
+
   return (
     <>
       <_ListItem
@@ -36,7 +40,12 @@ const ListItemDate = (props: Props) => {
         containerStyle={{...props.containerStyle, ...s.containerStyle}}
         valueStyle={s.valueStyle}
       />
-      <ExpandableSection expanded={expanded}>
+      <CollapsibleView
+        initExpanded={sectionInitiallyExpanded.current}
+        expanded={expanded}
+        noArrow
+        style={s.collapsible} 
+        titleStyle={s.collapsibleTitle}>
         <DateTimePicker
           mode={mode}
           maximumDate={new Date()}          
@@ -50,12 +59,21 @@ const ListItemDate = (props: Props) => {
           value={DateTime.fromISO(pickerValue || new Date().toISOString()).toJSDate()}
           onChange={(_event: DateTimePickerEvent, date?: Date) => onDateChange(date)}
         />
-      </ExpandableSection>
+      </CollapsibleView>
     </>
     );
   }
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  collapsible: {
+    padding: 0,
+    marginVertical: 0,
+    marginHorizontal: 0,
+    borderWidth: 0,
+  },
+  collapsibleTitle: {
+    height: 0,
+  },
   containerStyle: {
     minHeight: 48
   },

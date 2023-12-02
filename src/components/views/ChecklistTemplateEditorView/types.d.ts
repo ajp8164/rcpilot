@@ -10,7 +10,7 @@ declare const ChecklistTemplateEditorView: React.MemoExoticComponent<
 >;
 
 export interface ChecklistTemplateEditorViewProps {
-  checklistTemplateId?: string;
+  checklistTemplateId: string;
 };
 
 export interface ChecklistTemplateEditorViewMethods {};

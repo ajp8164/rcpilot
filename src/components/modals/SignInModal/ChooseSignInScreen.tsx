@@ -6,7 +6,6 @@ import {
   signInWithApple,
   signInWithFacebook,
   signInWithGoogle,
-  signInWithTwitter,
 } from 'lib/auth';
 
 import { Button } from '@rneui/base';
@@ -83,7 +82,7 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
           });
         }}
       />
-      <Button
+      {/* <Button
         title={'Continue with Twitter'}
         titleStyle={theme.styles.buttonOutlineTitle}
         buttonStyle={theme.styles.buttonOutline}
@@ -104,7 +103,7 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
             });
           });
         }}
-      />
+      /> */}
       {Platform.OS === 'ios' && (
         <Button
           title={'Continue with Apple'}

@@ -2,21 +2,27 @@ import { AppTheme, useTheme } from 'theme';
 import { ChecklistAction, ChecklistActionNonRepeatingScheduleTimeframe, ChecklistActionRepeatingScheduleFrequency, ChecklistTemplate, ChecklistTemplateType } from 'types/checklistTemplate';
 import { ChecklistTemplateEditorViewMethods, ChecklistTemplateEditorViewProps } from './types';
 import {ListItem, ListItemInput} from 'components/atoms/List';
+import { NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useState } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/core';
 
-type ChecklistTemplateEditor = ChecklistTemplateEditorViewMethods;
+type ChecklistTemplateEditorView = ChecklistTemplateEditorViewMethods;
 
-const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
+type NavigationProps = 
+  NativeStackNavigationProp<SetupNavigatorParamList, 'ChecklistTemplateEditor'> &
+  NativeStackNavigationProp<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>;
+
+const ChecklistTemplateEditorView = (props: ChecklistTemplateEditorViewProps) => {
   const { checklistTemplateId } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<NavigationProps>();
 
   const mockChecklistTemplate: ChecklistTemplate = {
     id: '1',
@@ -24,7 +30,6 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
     type: ChecklistTemplateType.PreEvent,
     actions: [
       {
-        id: '1',
         description: 'Set flight mode 1',
         repeatingSchedule: {
           frequency: ChecklistActionRepeatingScheduleFrequency.Events,
@@ -34,7 +39,6 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
         notes: '',
       },
       {
-        id: '2',
         description: 'Throttle hold on',
         repeatingSchedule: {
           frequency: ChecklistActionRepeatingScheduleFrequency.Events,
@@ -44,7 +48,6 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
         notes: '',
       },
       {
-        id: '3',
         description: 'Non repeating thing',
         nonRepeatingSchedule: {
           timeframe: ChecklistActionNonRepeatingScheduleTimeframe.Today,
@@ -54,7 +57,7 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
         notes: '',
       }
     ],
-};
+  };
 
   const [checklistTemplate, setChecklistTemplate] = useState<ChecklistTemplate>(mockChecklistTemplate);
 
@@ -147,10 +150,14 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
       {checklistTemplate.actions.map((action, index) => {
         return (
           <ListItem
+            key={index}
             title={action.description}
             subtitle={actionScheduleToString(action)}
             position={checklistTemplate.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklistTemplate.actions.length - 1 ? ['last'] : []}
-            onPress={() => null}
+            onPress={() => navigation.navigate('ChecklistActionEditor', {
+              checklistTemplateId: checklistTemplate.id,
+              actionIndex: index,
+            })}
           />
         );
       })}
@@ -159,8 +166,11 @@ const ChecklistTemplateEditor = (props: ChecklistTemplateEditorViewProps) => {
         title={'Add a New Action'}
         titleStyle={s.add}
         position={['first', 'last']}
-        rightImage={false}
-        onPress={() => null}
+        rightImage={false}        
+        onPress={() => navigation.navigate('NewChecklistActionNavigator', {
+          screen: 'NewChecklistAction',
+          params: { checklistTemplateId },
+        })}
       />
     </View>
   );
@@ -174,4 +184,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default ChecklistTemplateEditor;
+export default ChecklistTemplateEditorView;

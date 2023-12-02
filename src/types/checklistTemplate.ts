@@ -15,7 +15,6 @@ export enum ChecklistActionNonRepeatingScheduleTimeframe {
 };
 
 export type ChecklistAction = {
-  id: string;
   description: string;
   repeatingSchedule?: {
       frequency: ChecklistActionRepeatingScheduleFrequency;

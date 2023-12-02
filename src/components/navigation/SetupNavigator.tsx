@@ -1,5 +1,6 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
+import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistTemplateEditorScreen from 'components/ChecklistTemplateEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
@@ -14,6 +15,7 @@ import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
 import ModelFuelsScreen from 'components/ModelFuelsScreen';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
+import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewChecklistTemplateNavigator from 'components/navigation/NewChecklistTemplateNavigator';
 import NewEventStyleScreen from 'components/NewEventStyleScreen';
 import NewModelCategoryScreen from 'components/NewModelCategoryScreen';
@@ -200,6 +202,21 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
+        name="ChecklistActionEditor"
+        component={ChecklistActionEditorScreen}
+        options={{
+          title: 'Action',
+        }}
+      />
+      <SetupStack.Screen
+        name="NewChecklistActionNavigator"
+        component={NewChecklistActionNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
+        }}
+      />
+      <SetupStack.Screen
         name="ChecklistTemplates"
         component={ChecklistTemplatesScreen}
         options={{
@@ -219,7 +236,7 @@ const SetupNavigator = () => {
         component={NewChecklistTemplateNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal',
+          presentation: 'fullScreenModal',
         }}
       />
       <SetupStack.Screen

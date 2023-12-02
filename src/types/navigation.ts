@@ -162,8 +162,22 @@ export type NewModelPropellerNavigatorParamList = {
 };
 
 export type NewChecklistTemplateNavigatorParamList = {
+  ChecklistActionEditor: {
+    checklistTemplateId: string;
+    actionIndex: number;
+  };
   EnumPicker: EnumPickerInterface;
   NewChecklistTemplate: undefined;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+  };
+};
+
+export type NewChecklistActionNavigatorParamList = {
+  NewChecklistAction: {
+    checklistTemplateId: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -173,6 +187,10 @@ export type NewChecklistTemplateNavigatorParamList = {
 export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
+  ChecklistActionEditor: {
+    checklistTemplateId: string;
+    actionIndex: number;
+  };
   ChecklistTemplates: undefined;
   ChecklistTemplateEditor: {
     checklistTemplateId: string;
@@ -220,6 +238,7 @@ export type SetupNavigatorParamList = {
     modelPropellerId: string;
   }
   NewChecklistTemplateNavigator: undefined;
+  NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewEventStyle: undefined;
   NewModelCategory: undefined;
   NewModelFuelNavigator: undefined;

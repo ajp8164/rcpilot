@@ -23,6 +23,7 @@
     "firebase:process": "lsof -i tcp:4000"
   },
   "dependencies": {
+    "@eliav2/react-native-collapsible-view": "^1.5.1",
     "@expo/react-native-action-sheet": "^4.0.1",
     "@flyerhq/react-native-chat-ui": "github:ajp8164/react-native-chat-ui",
     "@flyerhq/react-native-keyboard-accessory-view": "github:ajp8164/react-native-keyboard-accessory-view",

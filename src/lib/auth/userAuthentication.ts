@@ -102,6 +102,14 @@ export const signInWithGoogle = async () => {
 
 export const signInWithTwitter = async () => {
   try {
+    // Twitter sign is disabled, the library is out of support/old.
+    // Need to call during app init.
+    // RNTwitterSignIn.init('KEY', 'SECRET').then(() => {
+    //   console.log('Twitter SDK initialized');
+    // }).catch((e: any) => {
+    //   console.log('err',e);
+    // });
+
     const { authToken, authTokenSecret } = await RNTwitterSignIn.logIn();
     const twitterCredential = auth.TwitterAuthProvider.credential(
       authToken,

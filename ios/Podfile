@@ -28,7 +28,7 @@ def __apply_Xcode_14_signing_post_install_workaround(installer)
   end
 end
 
-platform :ios, min_ios_version_supported
+platform :ios, 15.0
 prepare_react_native_project!
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -69,6 +69,11 @@ target 'RCPilot' do
   )
 
   pod 'RNBootSplash', :path => '../node_modules/react-native-bootsplash'
+
+  # React Native Maps dependencies
+  # The following line is only needed if building on an Apple silicon Mac without rosetta.
+  # pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
+  pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
 
   target 'RCPilotTests' do
     inherit! :complete

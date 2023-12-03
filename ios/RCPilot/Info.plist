@@ -82,7 +82,9 @@
 	<key>NSFaceIDUsageDescription</key>
 	<string>For using Face ID authentication.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>$(PRODUCT_NAME) may access your location.</string>
+	<string>$(PRODUCT_NAME) may access your location for model events.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>$(PRODUCT_NAME) may access your location for model events.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your Microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -659,6 +659,7 @@
 				INFOPLIST_FILE = RCPilot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "RC Pilot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -689,6 +690,7 @@
 				INFOPLIST_FILE = RCPilot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "RC Pilot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

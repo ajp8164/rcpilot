@@ -58,7 +58,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Event Locations'}
         position={['first']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('Locations')}
       />
       <ListItem
         title={'Event Styles'}

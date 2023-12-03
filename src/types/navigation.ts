@@ -225,6 +225,7 @@ export type SetupNavigatorParamList = {
   EventStyleEditor: {
     eventStyleId: string;
   };
+  Locations: undefined;
   ModelCategories: undefined;
   ModelCategoryEditor: {
     modelCategoryId: string;

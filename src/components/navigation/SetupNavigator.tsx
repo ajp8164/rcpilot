@@ -9,6 +9,7 @@ import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
 import EventStylesScreen from 'components/EventStylesScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightsScreen from 'components/FlightsScreen';
+import LocationsScreen from 'components/LocationsScreen';
 import ModelCategoriesScreen from 'components/ModelCategoriesScreen';
 import ModelCategoryEditorScreen from 'components/ModelCategoryEditorScreen';
 import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
@@ -96,6 +97,14 @@ const SetupNavigator = () => {
         component={FlightDetailsScreen}
         options={{
           title: 'Flight Details',
+        }}
+      />
+      <SetupStack.Screen
+        name="Locations"
+        component={LocationsScreen}
+        options={{
+          title: 'Locations',
+          presentation: 'fullScreenModal',
         }}
       />
       <SetupStack.Screen

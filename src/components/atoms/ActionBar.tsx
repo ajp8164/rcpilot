@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, Text, View } from 'react-native';
+import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
 import React, { ReactNode } from 'react';
 
 import { makeStyles } from '@rneui/themed';
@@ -12,16 +12,18 @@ export type ActionBarItem = {
 
 interface ActionBarInterface {
   actions?: ActionBarItem[];
+  onLayout?: (event: LayoutChangeEvent) => void;
 }
 
 const ActionBar = ({
   actions,
+  onLayout,
 }: ActionBarInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   return (
-    <View style={s.container}>
+    <View style={s.container} onLayout={onLayout}>
       <View style={s.contentContainer}>
         {actions?.map((action, index) => {
           return (

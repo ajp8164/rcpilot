@@ -68,7 +68,13 @@ const WheelPicker = ({
 
   const [pickerItems, setPickerItems] = useState<WheelPickerItem[][]>(
     (Array.isArray(items && items[0]) ? items : [items]) as WheelPickerItem[][],
-  );
+  );  
+
+  useEffect(() => {
+    // If caller changes the items then a re-render is needed to update wheel(s).
+    setPickerItems( (Array.isArray(items && items[0]) ? items : [items]) as WheelPickerItem[][]);
+  }, items);
+
   const [pickerValue, setPickerValue] = useState<PickerInternalValue[]>(
     (Array.isArray(value) ? value : [value]) as PickerInternalValue[],
   );

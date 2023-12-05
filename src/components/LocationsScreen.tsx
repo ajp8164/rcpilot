@@ -1,14 +1,15 @@
+import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { Location, SearchCriteria, SearchScope } from 'types/location';
-import MapView, { MapType, Marker } from 'react-native-maps';
-import React, { useLayoutEffect, useState } from 'react';
+import MapView, { Callout, CalloutSubview, MapMarker, MapType, Marker } from 'react-native-maps';
+import { Pressable, Text, View } from 'react-native';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createNewLocation, useLocation } from 'lib/location';
 
 import ActionBar from 'components/atoms/ActionBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
@@ -24,10 +25,21 @@ const LocationsScreen = ({ navigation }: Props) => {
 
   const [mapType, setMapType] = useState<MapType>('standard');
   const [locations, setLocations] = useState<Location[]>([]);
+  const markersRef = useRef<MapMarker[]>([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(
     initialSearchCriteria,
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      // Show the callout for only the last marker added.
+      markersRef.current.forEach(marker =>  {
+        marker.hideCallout();
+      });
+      markersRef.current[markersRef.current.length - 1]?.showCallout();
+    }, 500); // Slight delay for ux.
+  }, [locations]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -64,12 +76,64 @@ const LocationsScreen = ({ navigation }: Props) => {
     return locations.map((location, index) => {
       return (
         <Marker
+          ref={el => el ? markersRef.current[index] = el : null} 
           key={index}
           coordinate={location.position.coords}
           title={location.name}
           description={location.description}
-          isPreselected={true}
-        />
+          onCalloutPress={() => console.log('hello1')}
+          >
+          <Animated.View entering={SlideInUp.duration(400)}>
+            <Icon
+              name={'map-pin'}
+              color={'red'}
+              size={30}
+              style={{height: 30, top: -15}}
+            />
+          </Animated.View>
+          {/* <Callout tooltip={true} >
+              <CalloutSubview style={{
+                position: 'absolute',
+                flexDirection: 'row',
+                alignItems:  'center',
+                justifyContent: 'center',
+                alignSelf: 'center',
+                transform: [{ translateX: 18 }, {translateY: -61}],
+                paddingHorizontal: 12,
+                padding: 7,
+                borderRadius: 10,
+                backgroundColor: theme.colors.whiteTransparentDarker,
+                }}
+                // onPress={() => console.log('hello3')}
+                >
+                <View style={{
+                  width: 0,
+                  height: 0,
+                  position:'absolute',
+                  bottom: -12,
+                  borderLeftWidth: 12,
+                  borderRightWidth: 12,
+                  borderBottomWidth: 12,
+                  borderStyle: 'solid',
+                  borderLeftColor: theme.colors.transparent,
+                  borderRightColor: theme.colors.transparent,
+                  borderBottomColor: theme.colors.whiteTransparentDarker,
+                  backgroundColor: theme.colors.transparent,
+                  transform: [{ rotate: "180deg" }],
+                }} />
+                <View style={{}}>
+                  <Text style={{...theme.styles.textSmall, ...theme.styles.textBold}}>{location.name}</Text>
+                  <Text style={{...theme.styles.textTiny}}>{location.description}</Text>
+                </View>
+                <Icon
+                  name={'chevron-right'}
+                  color={theme.colors.textDim}
+                  size={16}
+                  style={{paddingLeft: 12}}
+                />
+              </CalloutSubview>
+          </Callout> */}
+        </Marker>
       );      
     });
   };

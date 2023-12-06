@@ -148,7 +148,7 @@ const LocationsScreen = ({ navigation }: Props) => {
                 </View>
                 <Icon
                   name={'chevron-right'}
-                  color={theme.colors.textDim}
+                  color={theme.colors.midGray}
                   size={16}
                 />
               </CalloutSubview>
@@ -207,7 +207,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: -15
   },
   callout: {
-    width: 150,
+    width: 180,
   },
   calloutSubview: {
     flexDirection: 'row',

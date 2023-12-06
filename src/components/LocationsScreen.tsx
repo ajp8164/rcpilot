@@ -13,6 +13,13 @@ import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
 
+// These are icon names.
+enum RecenterButtonState {
+  Initial = 'location-arrow',
+  CurrentLocation = 'compass',
+  CurrentLocationNorthUp = 'circle-up',
+};
+
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Locations'>;
@@ -24,13 +31,16 @@ const LocationsScreen = ({ navigation }: Props) => {
   const location = useLocation(/*locationId || location?.id*/);
   console.log('>>>>>>>', location);
 
+  const mapViewRef = useRef<MapView>(null);  
+  const markersRef = useRef<MapMarker[]>([]);
   const [mapType, setMapType] = useState<MapType>('standard');
   const [locations, setLocations] = useState<Location[]>([]);
-  const markersRef = useRef<MapMarker[]>([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(
     initialSearchCriteria,
   );
+
+  const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
 
   useEffect(() => {
     setTimeout(() => {
@@ -58,6 +68,36 @@ const LocationsScreen = ({ navigation }: Props) => {
       },
     });
   }, [navigation]);
+
+  const recenterMap = () => {
+    if (location) {
+      // Set button state and heading.
+      let heading = undefined;
+
+      switch (recenterButtonState) {
+        case RecenterButtonState.Initial:
+          setRecenterButtonState(RecenterButtonState.CurrentLocation);
+          break;
+        case RecenterButtonState.CurrentLocation:
+          setRecenterButtonState(RecenterButtonState.CurrentLocationNorthUp);
+          heading = 0;
+          break;
+        case RecenterButtonState.CurrentLocationNorthUp:
+          setRecenterButtonState(RecenterButtonState.Initial);
+          break;
+      }
+
+      const partialCamera = {
+        center: {
+          latitude: location.data.position.coords.latitude,
+          longitude: location.data.position.coords.longitude,
+        },
+        heading: undefined,
+        zoom: 100,
+      };
+      mapViewRef.current?.animateCamera(partialCamera);
+    }
+  };
 
   const toggleMapType = () => {
     setMapType(mapType === 'standard' ? 'satellite' : 'standard');
@@ -123,6 +163,7 @@ const LocationsScreen = ({ navigation }: Props) => {
     <View>
       {location && !location.loading &&
         <MapView
+          ref={mapViewRef}
           style={s.map}
           showsUserLocation={true}
           mapType={mapType}
@@ -138,8 +179,8 @@ const LocationsScreen = ({ navigation }: Props) => {
       <ActionBar
         actions={[
           {
-            ActionComponent: (<Icon name={'location-arrow'} size={28} color={theme.colors.brandPrimary} />),
-            onPress: () => null
+            ActionComponent: (<Icon name={recenterButtonState} size={28} color={theme.colors.brandPrimary} />),
+            onPress: recenterMap
           }, {
             ActionComponent: (<Icon name={'location-dot'} size={28} color={theme.colors.brandPrimary} />),
             onPress: addLocation

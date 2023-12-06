@@ -42,7 +42,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderStyle: 'solid',
     borderLeftColor: theme.colors.transparent,
     borderRightColor: theme.colors.transparent,
-    borderBottomColor: theme.colors.whiteTransparentDarker,
+    borderBottomColor: theme.colors.whiteTransparentDark,
     backgroundColor: theme.colors.transparent,
     transform: [{ rotate: "180deg" }],
   },

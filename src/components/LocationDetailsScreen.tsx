@@ -26,7 +26,8 @@ const LocationDetailsScreen = ({ navigation, route }: Props) => {
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'INFORMATION'}/>
         <ListItemInput
-          value={'Nickajack Elementrayr School'}
+          placeholder={'Location Name'}
+          value={'Nickajack Elementary School'}
           position={['first', 'last']}
           onChangeText={() => null}
         /> 

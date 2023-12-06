@@ -1,13 +1,14 @@
+import { Alert, Text, View } from 'react-native';
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { Location, SearchCriteria, SearchScope } from 'types/location';
 import MapView, { Callout, CalloutSubview, MapMarker, MapType, Marker } from 'react-native-maps';
-import { Pressable, Text, View } from 'react-native';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createNewLocation, useLocation } from 'lib/location';
 
 import ActionBar from 'components/atoms/ActionBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
@@ -81,58 +82,36 @@ const LocationsScreen = ({ navigation }: Props) => {
           coordinate={location.position.coords}
           title={location.name}
           description={location.description}
-          onCalloutPress={() => console.log('hello1')}
-          >
+          calloutOffset={{x: 0, y: -5}}
+          calloutAnchor={{x: 0, y: 0}}>
           <Animated.View entering={SlideInUp.duration(400)}>
             <Icon
               name={'map-pin'}
               color={'red'}
               size={30}
-              style={{height: 30, top: -15}}
+              style={s.pin}
             />
           </Animated.View>
-          {/* <Callout tooltip={true} >
-              <CalloutSubview style={{
-                position: 'absolute',
-                flexDirection: 'row',
-                alignItems:  'center',
-                justifyContent: 'center',
-                alignSelf: 'center',
-                transform: [{ translateX: 18 }, {translateY: -61}],
-                paddingHorizontal: 12,
-                padding: 7,
-                borderRadius: 10,
-                backgroundColor: theme.colors.whiteTransparentDarker,
-                }}
-                // onPress={() => console.log('hello3')}
-                >
-                <View style={{
-                  width: 0,
-                  height: 0,
-                  position:'absolute',
-                  bottom: -12,
-                  borderLeftWidth: 12,
-                  borderRightWidth: 12,
-                  borderBottomWidth: 12,
-                  borderStyle: 'solid',
-                  borderLeftColor: theme.colors.transparent,
-                  borderRightColor: theme.colors.transparent,
-                  borderBottomColor: theme.colors.whiteTransparentDarker,
-                  backgroundColor: theme.colors.transparent,
-                  transform: [{ rotate: "180deg" }],
-                }} />
-                <View style={{}}>
-                  <Text style={{...theme.styles.textSmall, ...theme.styles.textBold}}>{location.name}</Text>
-                  <Text style={{...theme.styles.textTiny}}>{location.description}</Text>
+          <Callout
+            alphaHitTest
+            tooltip
+            style={s.callout}>
+            <MapMarkerCallout>
+              <CalloutSubview
+                onPress={_ => {Alert.alert('callout pressed')}}
+                style={s.calloutSubview}>
+                <View style={s.calloutTextContainer}>
+                  <Text numberOfLines={1} style={s.calloutText1}>{location.name}</Text>
+                  <Text numberOfLines={1} style={s.calloutText2}>{location.description}</Text>
                 </View>
                 <Icon
                   name={'chevron-right'}
                   color={theme.colors.textDim}
                   size={16}
-                  style={{paddingLeft: 12}}
                 />
               </CalloutSubview>
-          </Callout> */}
+            </MapMarkerCallout>
+          </Callout>
         </Marker>
       );      
     });
@@ -175,11 +154,35 @@ const LocationsScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   map: {
     width: '100%',
     height: '100%',
   },
+  pin: {
+    height: 30,
+    top: -15
+  },
+  callout: {
+    width: 150,
+  },
+  calloutSubview: {
+    flexDirection: 'row',
+    alignSelf: 'center',
+    alignItems: 'center',
+    paddingVertical: 3,
+    paddingHorizontal: 5,    
+  },
+  calloutTextContainer: {
+    paddingRight: 10,
+  },
+  calloutText1: {
+    ...theme.styles.textSmall,
+    ...theme.styles.textBold,
+  },
+  calloutText2: {
+    ...theme.styles.textTiny,
+  }
 }));
 
 export default LocationsScreen;

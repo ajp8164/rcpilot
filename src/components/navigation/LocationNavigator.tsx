@@ -33,7 +33,7 @@ const LocationNavigator = () => {
           name="Locations"
           component={LocationsScreen}
           options={{
-            title: 'Locations',
+            title: 'Map',
             presentation: 'fullScreenModal',
           }}
         />

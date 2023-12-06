@@ -4,6 +4,8 @@ import React, { ReactNode } from 'react';
 
 import { makeStyles } from '@rneui/themed';
 
+const buttonSize = 60;
+
 export type ActionBarItem = {
   ActionComponent?: ReactNode;
   label?: string;
@@ -30,14 +32,16 @@ const ActionBar = ({
             <View
               key={index}
               style={s.actionContainer}>
-              <Pressable onPress={action.onPress}>
-                {action.ActionComponent}
-                {action.label &&
-                  <Text style={s.label}>
-                    {action.label}
-                  </Text>
-                }
-              </Pressable>
+              <View style={s.actionButton}>
+                <Pressable onPress={action.onPress}>
+                  {action.ActionComponent}
+                  {action.label &&
+                    <Text style={s.label}>
+                      {action.label}
+                    </Text>
+                  }
+                </Pressable>
+              </View>
             </View>
           );
         })}
@@ -52,7 +56,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    height: 60 + theme.insets.bottom,
+    height: buttonSize + theme.insets.bottom,
     backgroundColor: theme.colors.white
   },
   contentContainer: {
@@ -62,9 +66,18 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: '100%'
   },
   actionContainer: {
+    width: buttonSize,
+    height: buttonSize,
     justifyContent: 'center',
     marginTop: -theme.insets.bottom,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+  },
+  actionButton: {
+    position: 'absolute',
+    width: buttonSize,
+    height: buttonSize,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   label: {
     ...theme.styles.textNormal,

@@ -1,21 +1,21 @@
-import { Alert, Text, View } from 'react-native';
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { Location, SearchCriteria, SearchScope } from 'types/location';
 import MapView, { Callout, CalloutSubview, MapMarker, MapType, Marker } from 'react-native-maps';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Text, View } from 'react-native';
 import { createNewLocation, useLocation } from 'lib/location';
 
 import ActionBar from 'components/atoms/ActionBar';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { LocationNavigatorParamList } from 'types/navigation';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Locations'>;
+export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Locations'>;
 
 const LocationsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -98,7 +98,9 @@ const LocationsScreen = ({ navigation }: Props) => {
             style={s.callout}>
             <MapMarkerCallout>
               <CalloutSubview
-                onPress={_ => {Alert.alert('callout pressed')}}
+                onPress={() => navigation.navigate('LocationDetails', {
+                  locationId: '1',
+                })}
                 style={s.calloutSubview}>
                 <View style={s.calloutTextContainer}>
                   <Text numberOfLines={1} style={s.calloutText1}>{location.name}</Text>

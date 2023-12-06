@@ -74,6 +74,9 @@ export type ModelsNavigatorParamList = {
   FlightNavigator: {
     modelId: string;
   };
+  LocationDetails: {
+    locationId: string;
+  };
   NewModelNavigator: undefined;
   Models: undefined;
   Model: {
@@ -144,6 +147,17 @@ export type FlightNavigatorParamList = {
   }
 };
 
+export type LocationNavigatorParamList = {
+  Locations: undefined;
+  LocationDetails: {
+    locationId: string;
+  };
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+  };
+};
+
 export type NewModelFuelNavigatorParamList = {
   NewModelFuel: undefined;
   Notes: {
@@ -208,6 +222,7 @@ export type SetupNavigatorParamList = {
   FlightOutcome: {
     flightOutcome: FlightOutcome;
   };
+  LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
   Pilot: undefined;
   Pilots: undefined;
   PreferencesBasics: undefined;

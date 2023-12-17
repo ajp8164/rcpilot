@@ -2,6 +2,10 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/RCPilot.ttf",
+      "sha1": "db217c63cfe52d1db8ce125484a9f9c86448be42"
+    },
+    {
       "path": "assets/fonts/SFUIText/SFUIText-Bold.otf",
       "sha1": "83f8d8a7ab10a5a3ad50987bf3673eb629c67fa8"
     },

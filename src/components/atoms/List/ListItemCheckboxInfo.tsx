@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from "theme";
 
+import CustomIcon from "theme/icomoon/CustomIcon";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
@@ -38,9 +39,10 @@ const ListItemCheckboxInfo = (props: Props) => {
         />
       }
       rightImage={
-        <Icon
+        <CustomIcon
           name={'circle-info'}
           size={22}
+          color={theme.colors.screenHeaderBackButton}
           style={hideInfo ? {opacity: 0} : {opacity: 1}}
           onPress={onPressInfo}
         />

@@ -3,6 +3,7 @@ import { Divider, ListItem } from '@react-native-ajp-elements/ui';
 import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -60,9 +61,10 @@ const ModelsScreen = ({ navigation }: Props) => {
             modelId: '1'
           })}
           rightImage={
-            <Icon
+            <CustomIcon
               name={'circle-info'}
               size={22}
+              color={theme.colors.screenHeaderBackButton}
               onPress={() => navigation.navigate('Model', {
                 modelId: '1',
               })}

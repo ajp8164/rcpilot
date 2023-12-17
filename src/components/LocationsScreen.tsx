@@ -7,6 +7,7 @@ import { Text, View } from 'react-native';
 import { createNewLocation, useLocation } from 'lib/location';
 
 import ActionBar from 'components/atoms/ActionBar';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
@@ -16,8 +17,8 @@ import { makeStyles } from '@rneui/themed';
 // These are icon names.
 enum RecenterButtonState {
   Initial = 'location-arrow',
-  CurrentLocation = 'compass',
-  CurrentLocationNorthUp = 'circle-up',
+  CurrentLocation = 'location-arrow-box',
+  CurrentLocationNorthUp = 'location-arrow-track-up',
 };
 
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
@@ -179,7 +180,7 @@ const LocationsScreen = ({ navigation }: Props) => {
       <ActionBar
         actions={[
           {
-            ActionComponent: (<Icon name={recenterButtonState} size={28} color={theme.colors.brandPrimary} />),
+            ActionComponent: (<CustomIcon name={recenterButtonState} size={28} color={theme.colors.brandPrimary} />),
             onPress: recenterMap
           }, {
             ActionComponent: (<Icon name={'location-dot'} size={28} color={theme.colors.brandPrimary} />),

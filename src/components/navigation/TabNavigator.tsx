@@ -2,7 +2,6 @@ import { Platform, StatusBar } from 'react-native';
 import React, { useEffect } from 'react';
 
 import BatteriesNavigator from './BatteriesNavigator';
-// import { Icon } from '@rneui/base';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import LogNavigator from './LogNavigator';
 import ModelsNavigator from './ModelsNavigator';

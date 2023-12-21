@@ -8,7 +8,8 @@ import { createNewLocation, useLocation } from 'lib/location';
 
 import ActionBar from 'components/atoms/ActionBar';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import {default as Icon} from 'react-native-vector-icons/FontAwesome6';
+// import {default as Icon} from 'react-native-vector-icons/FontAwesome6';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';

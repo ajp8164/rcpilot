@@ -1,6 +1,3 @@
-import { GeolocationResponse } from '@react-native-community/geolocation';
-import { LatLng } from 'react-native-maps';
-
 export enum SearchScope {
   ActivityType,
   FullText,
@@ -11,7 +8,10 @@ export type SearchCriteria = {
   scope: SearchScope;
 };
 
-export type LocationPosition = GeolocationResponse;
+export type LocationPosition = {
+  latitude: number;
+  longitude: number;
+};
 
 export type LocationDetail = {
   notes: string;

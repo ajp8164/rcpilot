@@ -1,14 +1,14 @@
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { Location, SearchCriteria, SearchScope } from 'types/location';
-import MapView, { Callout, CalloutSubview, MapMarker, MapType, Marker } from 'react-native-maps';
+import { Location, LocationPosition, SearchCriteria, SearchScope } from 'types/location';
+import MapView, { Callout, CalloutSubview, Details, MapMarker, MapType, Marker, MarkerDragStartEndEvent, Region } from 'react-native-maps';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Text, View } from 'react-native';
 import { createNewLocation, useLocation } from 'lib/location';
 
 import ActionBar from 'components/atoms/ActionBar';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import {default as Icon} from 'react-native-vector-icons/FontAwesome6';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -21,6 +21,12 @@ enum RecenterButtonState {
   CurrentLocationNorthUp = 'location-arrow-track-up',
 };
 
+// These are icon names.
+enum MapTypeButtonState {
+  Map = 'satellite',
+  Satellite = 'map',
+};
+
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Locations'>;
@@ -29,12 +35,16 @@ const LocationsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const location = useLocation(/*locationId || location?.id*/);
-  console.log('>>>>>>>', location);
+  const currentLocation = useLocation(/*locationId || location?.id*/);
+  console.log('>>>>>>>', currentLocation);
 
   const mapViewRef = useRef<MapView>(null);  
   const markersRef = useRef<MapMarker[]>([]);
-  const [mapType, setMapType] = useState<MapType>('standard');
+  const mapLocation = useRef<LocationPosition>({latitude: 0, longitude: 0});
+  const [mapPresentation, setMapPresentation] = useState<{mapType: MapType, icon: string}>({
+    mapType: 'standard',
+    icon: MapTypeButtonState.Map,
+  });
   const [locations, setLocations] = useState<Location[]>([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(
@@ -42,6 +52,15 @@ const LocationsScreen = ({ navigation }: Props) => {
   );
 
   const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
+
+  useEffect(() => {
+    if (!currentLocation.loading) {
+      mapLocation.current = {
+        latitude: currentLocation.data.position.latitude,
+        longitude: currentLocation.data.position.longitude,
+      };
+    }
+  }, [currentLocation.loading]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -71,7 +90,7 @@ const LocationsScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const recenterMap = () => {
-    if (location) {
+    if (currentLocation) {
       // Set button state and heading.
       let heading = undefined;
 
@@ -90,22 +109,29 @@ const LocationsScreen = ({ navigation }: Props) => {
 
       const partialCamera = {
         center: {
-          latitude: location.data.position.coords.latitude,
-          longitude: location.data.position.coords.longitude,
+          latitude: currentLocation.data.position.latitude,
+          longitude: currentLocation.data.position.longitude,
         },
-        heading: undefined,
+        heading,
         zoom: 100,
       };
       mapViewRef.current?.animateCamera(partialCamera);
     }
   };
 
-  const toggleMapType = () => {
-    setMapType(mapType === 'standard' ? 'satellite' : 'standard');
+  const toggleMapPresenation = () => {
+    switch (mapPresentation.mapType) {
+      case 'standard':
+        setMapPresentation({ mapType: 'satellite', icon: MapTypeButtonState.Satellite });
+        break;
+      case 'satellite':
+        setMapPresentation({ mapType: 'standard', icon: MapTypeButtonState.Map });
+        break;
+      }
   };
 
   const addLocation = () => {
-    const newLocation = createNewLocation(location.data.position);
+    const newLocation = createNewLocation(mapLocation.current);
     setLocations(locations.concat(newLocation));
   };
 
@@ -114,17 +140,30 @@ const LocationsScreen = ({ navigation }: Props) => {
     setSearchCriteria(initialSearchCriteria);
   };
 
+  const onRegionChangeComplete = (region: Region, _details: Details) => {
+    mapLocation.current = {
+      latitude: region.latitude,
+      longitude:region.longitude,
+    };
+  };
+
+  const onMarkerDragEnd = (event: MarkerDragStartEndEvent, location: Location) => {
+    console.log(JSON.stringify(event.nativeEvent), JSON.stringify(location));
+  };
+
   const renderEventMarkers = (): JSX.Element[] => {
     return locations.map((location, index) => {
       return (
         <Marker
           ref={el => el ? markersRef.current[index] = el : null} 
           key={index}
-          coordinate={location.position.coords}
+          coordinate={location.position}
           title={location.name}
           description={location.description}
           calloutOffset={{x: 0, y: -5}}
-          calloutAnchor={{x: 0, y: 0}}>
+          calloutAnchor={{x: 0, y: 0}}
+          draggable
+          onDragEnd={(event: MarkerDragStartEndEvent) => onMarkerDragEnd(event, location)}>
           <Animated.View entering={SlideInUp.duration(400)}>
             <Icon
               name={'map-pin'}
@@ -162,18 +201,19 @@ const LocationsScreen = ({ navigation }: Props) => {
 
   return (
     <View>
-      {location && !location.loading &&
+      {currentLocation && !currentLocation.loading &&
         <MapView
           ref={mapViewRef}
           style={s.map}
           showsUserLocation={true}
-          mapType={mapType}
+          mapType={mapPresentation.mapType}
           initialRegion={{
-            latitude: location.data.position.coords.latitude,
-            longitude: location.data.position.coords.longitude,
+            latitude: currentLocation.data.position.latitude,
+            longitude: currentLocation.data.position.longitude,
             latitudeDelta: 0.005,
             longitudeDelta: 0.005,
-          }}>
+          }}
+          onRegionChangeComplete={onRegionChangeComplete}>
           {renderEventMarkers()}
         </MapView>
       }
@@ -186,8 +226,8 @@ const LocationsScreen = ({ navigation }: Props) => {
             ActionComponent: (<Icon name={'location-dot'} size={28} color={theme.colors.brandPrimary} />),
             onPress: addLocation
           }, {
-            ActionComponent: (<Icon name={'satellite'} size={28} color={theme.colors.brandPrimary} />),
-            onPress: toggleMapType
+            ActionComponent: (<Icon solid name={mapPresentation.icon} size={28} color={theme.colors.brandPrimary} />),
+            onPress: toggleMapPresenation
           }, {
             label: 'Done',
             onPress: navigation.goBack

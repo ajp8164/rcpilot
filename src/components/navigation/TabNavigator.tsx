@@ -56,6 +56,7 @@ const TabNavigator = () => {
           // eslint-disable-next-line react/no-unstable-nested-components
           tabBarIcon: ({ color }) => (
             <Icon
+              solid
               name={'file-lines'}
               color={color}
               size={28}

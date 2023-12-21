@@ -27,7 +27,12 @@ export const createNewLocation = (position: LocationPosition) => {
 
 const getCurrentPosition = (): Promise<LocationPosition> => {
   return new Promise(function (resolve, reject) {
-    Geolocation.getCurrentPosition(resolve, reject);
+    Geolocation.getCurrentPosition(response => {
+      resolve({
+        latitude: response.coords.latitude,
+        longitude: response.coords.longitude,
+      });
+    }, reject);
   });
 };
 
@@ -95,10 +100,10 @@ export const getDistanceBetween = (
   const c = Math.cos;
   const a =
     0.5 -
-    c((position2.coords.latitude - position1.coords.latitude) * p) / 2 +
-    (c(position1.coords.latitude * p) *
-      c(position2.coords.latitude * p) *
-      (1 - c((position2.coords.longitude - position1.coords.longitude) * p))) /
+    c((position2.latitude - position1.latitude) * p) / 2 +
+    (c(position1.latitude * p) *
+      c(position2.latitude * p) *
+      (1 - c((position2.longitude - position1.longitude) * p))) /
       2;
   const km = 2 * R * Math.asin(Math.sqrt(a));
   return {

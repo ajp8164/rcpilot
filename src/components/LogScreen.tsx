@@ -1,7 +1,7 @@
 import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import { AppTheme, useTheme } from 'theme';
 import { Event, EventOutcome } from 'types/event';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SectionListData, Text, View } from 'react-native';
 import {getTheme, themeColor} from '../mocks/calendarTheme';
 
@@ -282,7 +282,15 @@ const LogScreen = ({ navigation }: Props) => {
               subtitle={logEntry.locationId}
               position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
               containerStyle={{marginHorizontal: 15}}
-              // onPress={() => navigation.navigate('FlightDetails')}
+              onPress={() => {
+                logEntry.modelId
+                ? navigation.navigate('FlightDetails', {
+                  flightId: logEntry.flightId,
+                })
+                : navigation.navigate('BatteryCycle', {
+                  batteryCycleId: logEntry.batteryCycleId,
+                });
+              }}
            />
           )}
           // scrollToNextEvent

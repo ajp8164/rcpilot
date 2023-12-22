@@ -53,6 +53,12 @@ export type BatteryPerformanceNavigatorParamList = {
 
 export type LogNavigatorParamList = {
   Log: undefined;
+  FlightDetails: {
+    flightId: string;
+  };
+  BatteryCycle: {
+    batteryCycleId: string;
+  };
 };
 
 export type MainNavigatorParamList = {

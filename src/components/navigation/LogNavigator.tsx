@@ -1,3 +1,5 @@
+import BatteryCycleScreen from 'components/BatteryCycleScreen';
+import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import { LogNavigatorParamList } from 'types/navigation';
 import LogScreen from 'components/LogScreen';
 import React from 'react';
@@ -30,6 +32,20 @@ const LogNavigator = () => {
         component={LogScreen}
         options={{
           title: 'Log',
+        }}
+      />
+      <LogStack.Screen
+        name="FlightDetails"
+        component={FlightDetailsScreen}
+        options={{
+          title: 'Flight Details',
+        }}
+      />
+      <LogStack.Screen
+        name="BatteryCycle"
+        component={BatteryCycleScreen}
+        options={{
+          title: 'Battery Cycle',
         }}
       />
     </LogStack.Navigator>

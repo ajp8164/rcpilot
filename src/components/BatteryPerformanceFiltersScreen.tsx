@@ -1,3 +1,6 @@
+import { FlatList, ListRenderItem } from 'react-native';
+
+import { BatteryFilter } from 'types/filter';
 import { BatteryPerformanceNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
@@ -11,35 +14,51 @@ export type Props = NativeStackScreenProps<BatteryPerformanceNavigatorParamList,
 const BatteryPerformanceFiltersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
 
-  const filters = [
+  const filters: BatteryFilter[] = [
     {
       name: '3S',
       chemistry: {
         select: 'any', // any, is, is not
-        values: [],
+        value: '',
       },
       totalTime: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
+        value: '0',
       },
       capacity: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
+        value: '0',
       },
       cRating: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
+        value: '0',
       },
       sCells: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
+        value: '0',
       },
       pCells: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
+        value: '0',
       }
     }
   ];
+
+  const renderFilters: ListRenderItem<BatteryFilter> = ({ item: filter, index }) => {
+    return (
+      <ListItemCheckboxInfo
+        key={index}
+        title={filter.name}
+        subtitle={`Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.`}
+        position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
+        checked={true}
+        onPress={() => null}
+        // onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
+        //   filterId: '1',
+        // })}
+      />
+    )
+  };
 
   return (
     <View style={theme.styles.view}>
@@ -68,21 +87,12 @@ const BatteryPerformanceFiltersScreen = ({ navigation }: Props) => {
         text={'You can save the General Event Cycles Filter to remember a specific filter configuration for later use.'}
       />
       <Divider text={'SAVED EVENT CYCLE FILTERS'} />
-      {filters.map((filter, index) => {
-        return (
-          <ListItemCheckboxInfo
-            key={index}
-            title={filter.name}
-            subtitle={`Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.`}
-            position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
-            checked={true}
-            onPress={() => null}
-            // onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
-            //   filterId: '1',
-            // })}
-          />
-        )
-      })}
+      <FlatList
+        data={filters}
+        renderItem={renderFilters}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };

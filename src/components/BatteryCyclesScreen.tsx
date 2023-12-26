@@ -27,7 +27,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
       packResistance: 200,
       // 1S/1P 2S/1P 3S/1P (series then parallel)
       cellVoltage: [],
-      cellResisance: [],
+      cellResistance: [],
     },
     charge: {
       date: '2023-11-17T03:28:04.651Z',
@@ -36,7 +36,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
       packResistance: 200,
       // 1S/1P 2S/1P 3S/1P
       cellVoltage: [],
-      cellResisance: [],
+      cellResistance: [],
     },
     notes: '',
   }];

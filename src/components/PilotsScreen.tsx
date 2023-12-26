@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { FlatList, ListRenderItem } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@rneui/base';
@@ -42,23 +43,30 @@ const PilotsScreen = ({ navigation }: Props) => {
     });
   }, []);
 
+  const renderItems: ListRenderItem<Pilot> = ({ item, index }) => {
+    return (
+      <ListItemCheckboxInfo
+        key={item.id}
+        title={item.name}
+        position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
+        checked={true}
+        onPress={() => null}
+        onPressInfo={() => navigation.navigate('Pilot')}
+      />
+    )
+};
+
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
       <Divider />
-      {items.map((item, index) => {
-        return (
-          <ListItemCheckboxInfo
-            key={item.id}
-            title={item.name}
-            position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
-            checked={true}
-            onPress={() => null}
-            onPressInfo={() => navigation.navigate('Pilot')}
-          />
-        )
-      })}
+      <FlatList
+        data={items}
+        renderItem={renderItems}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
       <Divider />
       <ListItemCheckboxInfo
         title={'Unknown Pilot'}

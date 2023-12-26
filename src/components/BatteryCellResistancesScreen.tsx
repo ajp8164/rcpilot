@@ -1,10 +1,11 @@
+import { FlatList, ListRenderItem, View } from 'react-native';
+
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { BatteryCycle } from 'types/battery';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { View } from 'react-native';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCellResistances'>;
@@ -28,7 +29,7 @@ const BatteryCellResistancesScreen = ({ route }: Props) => {
       packResistance: 200,
       // 1S/1P 2S/1P 3S/1P (series then parallel)
       cellVoltage: [],
-      cellResisance: [],
+      cellResistance: [200, 250, 200],
     },
     charge: {
       date: '2023-11-17T03:28:04.651Z',
@@ -37,9 +38,22 @@ const BatteryCellResistancesScreen = ({ route }: Props) => {
       packResistance: 200,
       // 1S/1P 2S/1P 3S/1P
       cellVoltage: [],
-      cellResisance: [],
+      cellResistance: [200, 250, 200],
     },
     notes: '',
+  };
+
+  const renderResistance: ListRenderItem<number> = ({ item: resistance, index }) => {
+    const s = (index % series) + 1;
+    const p = index;
+    return (
+      <ListItemInput
+        title={`S Cell ${s} in P Leg ${p}`}
+        label={'mΩ'}
+        value={`${resistance}`}
+        keyboardType={'decimal-pad'}
+      /> 
+    );
   };
 
   return (
@@ -54,18 +68,12 @@ const BatteryCellResistancesScreen = ({ route }: Props) => {
       keyboardType={'decimal-pad'}
       />
     <Divider text={'PER-CELL RESISTENACES'}/>
-    {cycle.discharge.cellResisance.map((resistance, index) => {
-      const s = (index % series) + 1;
-      const p = index;
-      return (
-        <ListItemInput
-          title={`S Cell ${s} in P Leg ${p}`}
-          label={'mΩ'}
-          value={`${resistance}`}
-          keyboardType={'decimal-pad'}
-        /> 
-      );
-    })}
+    <FlatList
+      data={cycle.discharge.cellResistance}
+      renderItem={renderResistance}
+      keyExtractor={(_item, index) => `${index}`}
+      showsVerticalScrollIndicator={false}
+    />
   </View>
   );
 };

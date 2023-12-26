@@ -1,5 +1,8 @@
+import { FlatList, ListRenderItem } from 'react-native';
+
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
+import { ModelFilter } from 'types/filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -11,12 +14,12 @@ export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'Mode
 const ModelFiltersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
 
-  const filters = [
+  const filters: ModelFilter[] = [
     {
       name: 'Helicopters',
       type: {
         select: 'any', // any, is, is not
-        values: [],
+        value: '',
       },
       lastEvent: {
         select: 'any', // any, before, after, past
@@ -24,7 +27,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
       },
       totalTime: {
         select: 'any', // any, <, >, =, !=
-        value: 0,
+        value: '0',
       },
       logsBatteries: {
         select: 'any', // any, yes, no
@@ -45,6 +48,22 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
       }
     }
   ];
+
+  const renderFilters: ListRenderItem<ModelFilter> = ({ item: filter, index }) => {
+    return (
+      <ListItemCheckboxInfo
+        key={index}
+        title={filter.name}
+        subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
+        position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
+        checked={true}
+        onPress={() => null}
+        onPressInfo={() => navigation.navigate('ModelFilterEditor', {
+          filterId: '1',
+        })}
+      />
+    )
+};
 
   return (
     <View style={theme.styles.view}>
@@ -73,21 +92,12 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
         text={'You can save the General Models Filter to remember a specific filter configuration for later use.'}
       />
       <Divider text={'SAVED MODEL FILTERS'} />
-      {filters.map((filter, index) => {
-        return (
-          <ListItemCheckboxInfo
-            key={index}
-            title={filter.name}
-            subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
-            position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
-            checked={true}
-            onPress={() => null}
-            onPressInfo={() => navigation.navigate('ModelFilterEditor', {
-              filterId: '1',
-            })}
-          />
-        )
-      })}
+      <FlatList
+        data={filters}
+        renderItem={renderFilters}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };

@@ -54,7 +54,7 @@ export type BatteryCycle = {
     packResistance: number;
     // “1P/1S ; 1P/2S ; 2P/1S ; 2P/2S”.
     cellVoltage: number[];
-    cellResisance: number[];
+    cellResistance: number[];
   },
   charge: {
     date: ISODateString;
@@ -63,7 +63,7 @@ export type BatteryCycle = {
     packResistance: number;
     // “1P/1S ; 1P/2S ; 2P/1S ; 2P/2S”.
     cellVoltage: number[];
-    cellResisance: number[];
+    cellResistance: number[];
   },
   notes: string;
 };

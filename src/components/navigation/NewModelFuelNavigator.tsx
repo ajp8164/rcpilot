@@ -1,4 +1,3 @@
-import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
 import { NewModelFuelNavigatorParamList } from 'types/navigation';
 import NewModelFuelScreen from 'components/NewModelFuelScreen';

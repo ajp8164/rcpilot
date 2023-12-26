@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { LayoutChangeEvent, Pressable, Text, View } from 'react-native';
+import { FlatList, LayoutChangeEvent, ListRenderItem, Pressable, Text, View } from 'react-native';
 import React, { ReactNode } from 'react';
 
 import { makeStyles } from '@rneui/themed';
@@ -24,27 +24,34 @@ const ActionBar = ({
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const renderActions: ListRenderItem<ActionBarItem> = ({ item: action, index }) => {
+    return (
+      <View
+        key={index}
+        style={s.actionContainer}>
+        <View style={s.actionButton}>
+          <Pressable onPress={action.onPress}>
+            {action.ActionComponent}
+            {action.label &&
+              <Text style={s.label}>
+                {action.label}
+              </Text>
+            }
+          </Pressable>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={s.container} onLayout={onLayout}>
       <View style={s.contentContainer}>
-        {actions?.map((action, index) => {
-          return (
-            <View
-              key={index}
-              style={s.actionContainer}>
-              <View style={s.actionButton}>
-                <Pressable onPress={action.onPress}>
-                  {action.ActionComponent}
-                  {action.label &&
-                    <Text style={s.label}>
-                      {action.label}
-                    </Text>
-                  }
-                </Pressable>
-              </View>
-            </View>
-          );
-        })}
+        <FlatList
+          data={actions}
+          renderItem={renderActions}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+        />
       </View>
     </View>
   );

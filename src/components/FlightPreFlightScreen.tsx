@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistFrequencyUnit, ChecklistType } from 'types/model';
+import { Checklist, ChecklistAction, ChecklistFrequencyUnit, ChecklistType } from 'types/model';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import React, { useEffect } from 'react';
 
 import ActionBar from 'components/atoms/ActionBar';
@@ -8,7 +9,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightPreFlight'>;
@@ -54,28 +54,35 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
     });
   }, []);
 
+  const renderItems: ListRenderItem<ChecklistAction> = ({ item: action, index }) => {
+    return (
+      <ListItemCheckboxInfo
+        key={index}
+        title={action.description}
+        subtitle={'Performed before every flight'}
+        iconChecked={'square-check'}
+        iconUnchecked={'circle'}
+        iconSize={28}
+        checked={true}
+        position={checklist.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklist.actions.length - 1 ? ['last'] : []}
+        onPress={() => null}
+        onPressInfo={() => navigation.navigate('FlightChecklistItem', {
+          checklistId: '1',
+          actionIndex: 0,
+        })}
+       /> 
+    );
+  };
+
   return (
     <View style={theme.styles.view}>
       <Divider text={`${checklist.type.toUpperCase()}`}/>
-      {checklist.actions.map((action, index) => {
-        return (
-          <ListItemCheckboxInfo
-            key={index}
-            title={action.description}
-            subtitle={'Performed before every flight'}
-            iconChecked={'square-check'}
-            iconUnchecked={'circle'}
-            iconSize={28}
-            checked={true}
-            position={checklist.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklist.actions.length - 1 ? ['last'] : []}
-            onPress={() => null}
-            onPressInfo={() => navigation.navigate('FlightChecklistItem', {
-              checklistId: '1',
-              actionIndex: 0,
-            })}
-           /> 
-        );
-      })}
+      <FlatList
+        data={checklist.actions}
+        renderItem={renderItems}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
       <ActionBar
         actions={[
           {

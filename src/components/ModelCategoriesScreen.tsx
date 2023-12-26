@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { FlatList, ListRenderItem } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@rneui/base';
@@ -38,23 +39,30 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
     });
   }, []);
 
+  const renderItems: ListRenderItem<ModelCategory> = ({ item, index }) => {
+    return (
+      <ListItem
+        key={item.id}
+        title={item.name}
+        position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
+        onPress={() => navigation.navigate('ModelCategoryEditor', {
+          modelCategoryId: '1',
+        })}
+      />
+    )
+  };
+
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
       <Divider />
-      {items.map((item, index) => {
-        return (
-          <ListItem
-            key={item.id}
-            title={item.name}
-            position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
-            onPress={() => navigation.navigate('ModelCategoryEditor', {
-              modelCategoryId: '1',
-            })}
-          />
-        )
-      })}
+      <FlatList
+        data={items}
+        renderItem={renderItems}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
     </SafeAreaView>
   );
 };

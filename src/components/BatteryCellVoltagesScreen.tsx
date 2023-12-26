@@ -1,10 +1,11 @@
+import { FlatList, ListRenderItem, View } from 'react-native';
+
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { BatteryCycle } from 'types/battery';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { View } from 'react-native';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCellVoltages'>;
@@ -28,7 +29,7 @@ const BatteryCellVoltagesScreen = ({ route }: Props) => {
       packResistance: 200,
       // 1S/1P 2S/1P 3S/1P (series then parallel)
       cellVoltage: [],
-      cellResisance: [],
+      cellResistance: [],
     },
     charge: {
       date: '2023-11-17T03:28:04.651Z',
@@ -37,9 +38,22 @@ const BatteryCellVoltagesScreen = ({ route }: Props) => {
       packResistance: 200,
       // 1S/1P 2S/1P 3S/1P
       cellVoltage: [],
-      cellResisance: [],
+      cellResistance: [],
     },
     notes: '',
+  };
+
+  const renderVoltage: ListRenderItem<number> = ({ item: voltage, index }) => {
+    const s = (index % series) + 1;
+    const p = index;
+    return (
+      <ListItemInput
+        title={`S Cell ${s} in P Leg ${p}`}
+        label={'V'}
+        value={`${voltage}`}
+        keyboardType={'decimal-pad'}
+      /> 
+    );
   };
 
   return (
@@ -54,18 +68,12 @@ const BatteryCellVoltagesScreen = ({ route }: Props) => {
       position={['first', 'last']}
       />
     <Divider text={'PER-CELL VOLTAGES'}/>
-    {cycle.discharge.cellVoltage.map((voltage, index) => {
-      const s = (index % series) + 1;
-      const p = index;
-      return (
-        <ListItemInput
-          title={`S Cell ${s} in P Leg ${p}`}
-          label={'V'}
-          value={`${voltage}`}
-          keyboardType={'decimal-pad'}
-        /> 
-      );
-    })}
+    <FlatList
+      data={cycle.discharge.cellResistance}
+      renderItem={renderVoltage}
+      keyExtractor={(_item, index) => `${index}`}
+      showsVerticalScrollIndicator={false}
+    />
   </View>
   );
 };

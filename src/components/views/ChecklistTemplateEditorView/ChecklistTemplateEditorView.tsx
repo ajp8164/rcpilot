@@ -1,13 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
 import { ChecklistAction, ChecklistActionNonRepeatingScheduleTimeframe, ChecklistActionRepeatingScheduleFrequency, ChecklistTemplate, ChecklistTemplateType } from 'types/checklistTemplate';
 import { ChecklistTemplateEditorViewMethods, ChecklistTemplateEditorViewProps } from './types';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {ListItem, ListItemInput} from 'components/atoms/List';
 import { NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useState } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/core';
 
@@ -125,6 +125,22 @@ const ChecklistTemplateEditorView = (props: ChecklistTemplateEditorViewProps) =>
     return result;
   };
 
+  const renderActions: ListRenderItem<ChecklistAction> = ({ item: action, index }) => {
+    return (
+      <ListItem
+        key={index}
+        title={action.description}
+        subtitle={actionScheduleToString(action)}
+        position={checklistTemplate.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklistTemplate.actions.length - 1 ? ['last'] : []}
+        onPress={() => navigation.navigate('ChecklistActionEditor', {
+          checklistTemplateId: checklistTemplate.id,
+          actionIndex: index,
+        })}
+      />
+    );
+  };
+
+
   return (
     <View>
       <Divider text={'NAME & TYPE'} />
@@ -147,20 +163,12 @@ const ChecklistTemplateEditorView = (props: ChecklistTemplateEditorViewProps) =>
         })}
         /> 
       <Divider text={'ACTIONS'} />
-      {checklistTemplate.actions.map((action, index) => {
-        return (
-          <ListItem
-            key={index}
-            title={action.description}
-            subtitle={actionScheduleToString(action)}
-            position={checklistTemplate.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklistTemplate.actions.length - 1 ? ['last'] : []}
-            onPress={() => navigation.navigate('ChecklistActionEditor', {
-              checklistTemplateId: checklistTemplate.id,
-              actionIndex: index,
-            })}
-          />
-        );
-      })}
+      <FlatList
+        data={checklistTemplate.actions}
+        renderItem={renderActions}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
       <Divider />
       <ListItem
         title={'Add a New Action'}

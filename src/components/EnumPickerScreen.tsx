@@ -1,8 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, BatteryFiltersNavigatorParamList, ModelFiltersNavigatorParamList, ModelsNavigatorParamList, NewBatteryNavigatorParamList, NewModelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
 
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -157,6 +157,19 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     return iconArr ? <View style={{flexDirection: 'row'}}>{iconArr}</View> : undefined;
   };
 
+  const renderValues: ListRenderItem<string> = ({ item: value, index }) => {
+    return (
+      <ListItemCheckbox
+        key={`${value}${index}`}
+        title={icons && icons[value]?.hideTitle ? '' : value}
+        leftImage={getIconEl(value)}
+        position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
+        checked={list.selected?.includes(value)}
+        onPress={() => toggleSelect(value)}
+      />
+    )
+  };
+
   return (
     <SafeAreaView
       edges={['left', 'right']}
@@ -182,18 +195,12 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
           </>
         }
         <Divider text={sectionName} />
-        {list.values.map((value, index) => {
-          return (
-            <ListItemCheckbox
-              key={`${value}${index}`}
-              title={icons && icons[value]?.hideTitle ? '' : value}
-              leftImage={getIconEl(value)}
-              position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
-              checked={list.selected?.includes(value)}
-              onPress={() => toggleSelect(value)}
-            />
-          )
-        })}
+        <FlatList
+          data={list.values}
+          renderItem={renderValues}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+        />
         {mode === 'many-or-none' &&
           <>
             <Divider />

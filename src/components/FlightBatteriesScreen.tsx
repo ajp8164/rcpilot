@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Battery, BatteryChemistry } from 'types/battery';
+import { FlatList, ListRenderItem, SectionList, SectionListData, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { SectionList, SectionListData, Text, View } from 'react-native';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
@@ -86,21 +86,28 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
     return batteriesSectionData;
   };
 
+  const renderFavoriteBatteries: ListRenderItem<Battery> = ({ item: battery, index }) => {
+    return (
+      <ListItemCheckbox
+        key={index}
+        title={battery.name}
+        subtitle={`${battery.capacity}mAh, ${batteryCellConfigurationToString(battery)}, ${battery.cRating}C, ${battery.chemistry}, ${battery.totalCycles} cycles, ${DateTime.fromISO(battery.lastCycle).toFormat('MM/dd/yyyy')} last`}
+        checked={false}
+        position={favoriteBatteries.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === favoriteBatteries.length - 1 ? ['last'] : []}
+        onPress={() => null} 
+       /> 
+    );
+  };
+
   return (
     <View style={theme.styles.view}>
       <Divider text={'FAVORITES'}/>
-      {favoriteBatteries.map((battery, index) => {
-        return (
-          <ListItemCheckbox
-            key={index}
-            title={battery.name}
-            subtitle={`${battery.capacity}mAh, ${batteryCellConfigurationToString(battery)}, ${battery.cRating}C, ${battery.chemistry}, ${battery.totalCycles} cycles, ${DateTime.fromISO(battery.lastCycle).toFormat('MM/dd/yyyy')} last`}
-            checked={false}
-            position={favoriteBatteries.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === favoriteBatteries.length - 1 ? ['last'] : []}
-            onPress={() => null} 
-           /> 
-        );
-      })}
+      <FlatList
+        data={favoriteBatteries}
+        renderItem={renderFavoriteBatteries}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+      />
       <SectionList
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}

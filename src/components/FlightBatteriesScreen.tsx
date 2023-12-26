@@ -13,11 +13,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { batteryCellConfigurationToString } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 
-interface Section {
-  title: string;
-  data: Battery[];
-};
-
 export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightBatteries'>;
 
 const FlightBatteriesScreen = ({ navigation }: Props) => {
@@ -68,7 +63,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
     });
   }, []);
 
-  const groupBatteries = (batteries: Battery[]): SectionListData<Battery, Section>[] => {
+  const groupBatteries = (batteries: Battery[]): SectionListData<Battery>[] => {
     const groupedBatteries: {
       [key in string]: Battery[];
     } = {};
@@ -80,7 +75,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
       groupedBatteries[groupTitle].push(battery);
     });
 
-    const batteriesSectionData: SectionListData<Battery, Section>[] = [];
+    const batteriesSectionData: SectionListData<Battery>[] = [];
     Object.keys(groupedBatteries).forEach(group => {
       batteriesSectionData.push({
         title: group,

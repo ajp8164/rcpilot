@@ -12,11 +12,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { makeStyles } from '@rneui/themed';
 
-interface Section {
-  title: string;
-  data: Battery[];
-};
-
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryPerformanceComparisonPicker'>;
 
 const BatteryPerformanceComparisonPickerScreen = ({ navigation }: Props) => {
@@ -101,7 +96,7 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation }: Props) => {
 
   const onDone = () => {};
 
-  const groupBatteries = (batteries: Battery[]): SectionListData<Battery, Section>[] => {
+  const groupBatteries = (batteries: Battery[]): SectionListData<Battery>[] => {
     const groupedBatteries: {
       [key in string]: Battery[];
     } = {};
@@ -120,7 +115,7 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation }: Props) => {
       groupedBatteries[groupTitle].push(battery);
     });
 
-    const batteriesSectionData: SectionListData<Battery, Section>[] = [];
+    const batteriesSectionData: SectionListData<Battery>[] = [];
     Object.keys(groupedBatteries).forEach(group => {
       batteriesSectionData.push({
         title: group,

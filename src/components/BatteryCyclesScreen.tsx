@@ -9,11 +9,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { makeStyles } from '@rneui/themed';
 
-interface Section {
-  title: string;
-  data: BatteryCycle[];
-};
-
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCycles'>;
 
 const BatteryCyclesScreen = ({ navigation }: Props) => {
@@ -51,7 +46,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
     return true;
   };
 
-  const groupCycles = (cycles: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
+  const groupCycles = (cycles: BatteryCycle[]): SectionListData<BatteryCycle>[] => {
     const groupedCycles: {
       [key in string]: BatteryCycle[];
     } = {};
@@ -66,7 +61,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
       }
     });
 
-    const cyclesSectionData: SectionListData<BatteryCycle, Section>[] = [];
+    const cyclesSectionData: SectionListData<BatteryCycle>[] = [];
     Object.keys(groupedCycles).forEach(group => {
       cyclesSectionData.push({
         title: group,

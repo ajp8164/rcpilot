@@ -9,11 +9,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { makeStyles } from '@rneui/themed';
 
-interface Section {
-  title: string;
-  data: Flight[];
-};
-
 export type Props = 
   NativeStackScreenProps<SetupNavigatorParamList, 'Flights'> &
   NativeStackScreenProps<ModelsNavigatorParamList, 'Flights'>;
@@ -28,7 +23,7 @@ const FlightsScreen = ({ navigation }: Props) => {
     date: '2023-11-17T03:28:04.651Z',
   }];
 
-  const groupFlights = (flight: Flight[]): SectionListData<Flight, Section>[] => {
+  const groupFlights = (flight: Flight[]): SectionListData<Flight>[] => {
     const groupedFlights: {
       [key in string]: Flight[];
     } = {};
@@ -41,7 +36,7 @@ const FlightsScreen = ({ navigation }: Props) => {
       groupedFlights[groupTitle].push(flight);
     });
 
-    const flightsSectionData: SectionListData<Flight, Section>[] = [];
+    const flightsSectionData: SectionListData<Flight>[] = [];
     Object.keys(groupedFlights).forEach(group => {
       flightsSectionData.push({
         title: group,

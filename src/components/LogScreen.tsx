@@ -1,19 +1,34 @@
 import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import { AppTheme, useTheme } from 'theme';
+import { DateData, DayState, MarkedDates } from 'react-native-calendars/src/types';
 import { Event, EventOutcome } from 'types/event';
 import React, { useEffect, useRef } from 'react';
-import { SectionListData, Text, View } from 'react-native';
+import { SectionListData, Text, TouchableOpacity, View } from 'react-native';
 import {getTheme, themeColor} from '../mocks/calendarTheme';
 
 import { DateTime } from 'luxon';
+import { DayProps } from 'react-native-calendars/src/calendar/day';
 import { Divider } from '@react-native-ajp-elements/ui';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { LogNavigatorParamList } from 'types/navigation';
-import { MarkedDates } from 'react-native-calendars/src/types';
+import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import isEmpty from 'lodash/isEmpty';
 import { makeStyles } from '@rneui/themed';
+
+// Enable passing specific day mark data through the marked dates.
+// This allows the presentation of specific icons on the calendar day to show
+// flights or battery cycles.
+interface ExtendedMarkingProps extends MarkingProps {
+  hasFlight?: boolean;
+  hasBatteryCycle?: boolean;
+};
+
+type ExtendedMarkedDates =  {
+  [key: string]: ExtendedMarkingProps;
+};
 
 const leftArrowIcon = require('theme/img/calendar/previous.png');
 const rightArrowIcon = require('theme/img/calendar/next.png');
@@ -47,7 +62,7 @@ const LogScreen = ({ navigation }: Props) => {
       outcome: EventOutcome.FourStar,
       date: '2023-11-20T03:28:04.651Z',
       duration: '30:25',
-      modelId: '1',
+      modelId: '0',
       pilotId: '1',
       locationId: '1',
       fuelId: '1',
@@ -63,7 +78,7 @@ const LogScreen = ({ navigation }: Props) => {
       outcome: EventOutcome.FourStar,
       date: '2023-11-20T03:28:04.651Z',
       duration: '30:25',
-      modelId: '1',
+      modelId: '',
       pilotId: '1',
       locationId: '1',
       fuelId: '1',
@@ -95,14 +110,14 @@ const LogScreen = ({ navigation }: Props) => {
       outcome: EventOutcome.FourStar,
       date: '2023-12-19T03:28:04.651Z',
       duration: '30:25',
-      modelId: '1',
+      modelId: '',
       pilotId: '1',
       locationId: '1',
       fuelId: '1',
       propellerId: '1',
       styleId: '1',
       fuelConsumed: 0,
-      batteryCycleId: '1',
+      batteryCycleId: '',
       notes: '',
     },
     {
@@ -150,7 +165,7 @@ const LogScreen = ({ navigation }: Props) => {
       propellerId: '1',
       styleId: '1',
       fuelConsumed: 0,
-      batteryCycleId: '1',
+      batteryCycleId: '',
       notes: '',
     },
     {
@@ -159,14 +174,14 @@ const LogScreen = ({ navigation }: Props) => {
       outcome: EventOutcome.FourStar,
       date: '2023-12-23T03:28:04.651Z',
       duration: '30:25',
-      modelId: '1',
+      modelId: '',
       pilotId: '1',
       locationId: '1',
       fuelId: '1',
       propellerId: '1',
       styleId: '1',
       fuelConsumed: 0,
-      batteryCycleId: '1',
+      batteryCycleId: '',
       notes: '',
     },
     {
@@ -189,7 +204,7 @@ const LogScreen = ({ navigation }: Props) => {
 
   const groupedEvents = useRef<SectionListData<Event>[]>([]);
   const weekView = false;
-  const marked = useRef<MarkedDates>({});
+  const marked = useRef<ExtendedMarkedDates>({});
   const calendarTheme = useRef(getTheme());
   const todayBtnTheme = useRef({
     todayButtonTextColor: themeColor
@@ -223,14 +238,65 @@ const LogScreen = ({ navigation }: Props) => {
   };
 
   const getMarkedDates = (groupedEvents: SectionListData<Event>[]) => {
-    const marked: MarkedDates = {};
+    const marked: ExtendedMarkedDates = {};
     groupedEvents.forEach(event => {
       if (event.data && event.data.length > 0 && !isEmpty(event.data[0])) {
+        // Check for flights and/or battery cycles on this day. Return an indication
+        // fpr each in the marked data.
+        const hasFlight = event.data.findIndex(e => {
+          return e && e.modelId === '1'; // test is temp for testing
+        }) >= 0;
+        const hasBatteryCycle = event.data.findIndex(e => {
+          return e && e.batteryCycleId === '1'; // test is temp for testing
+        }) >= 0;
+
         const d = event.data[0].date.split('T')[0];
-        marked[d] = {marked: true};
+        marked[d] = { marked: true, hasFlight, hasBatteryCycle };
       }
     });
     return marked;
+  };
+
+  // Render a day on the calendar with flight/battery icons as required.
+  // For onPress see https://github.com/wix/react-native-calendars/issues/1147
+  const renderDay = ({date, state, marking: m, onPress}: DayProps & { date?: DateData; }) => {
+    const marking = m as ExtendedMarkingProps | undefined;
+    return (
+      <TouchableOpacity onPress={() => onPress && onPress(date)}>
+      <View style={s.eventDayContainer}>
+        <View style={[
+          s.eventDayNumberContainer,
+          {backgroundColor: state === 'selected' ? theme.colors.brandPrimary : theme.colors.transparent}]}>
+          <Text style={[
+            s.eventDayNumber,
+            {color: state === 'disabled' ? theme.colors.textDim : state === 'selected' ? theme.colors.stickyWhite : theme.colors.text,
+          }]}>
+            {date?.day}
+          </Text>
+        </View>
+        <View style={s.eventIcons}>
+          {marking?.hasFlight &&
+            <View style={s.eventFlightIcon}>
+              <Icon
+                name={'plane-up'}
+                size={8}
+                color={theme.colors.stickyWhite}
+              />
+            </View>
+          }
+          {marking?.hasBatteryCycle &&
+            <View style={s.eventBatteryIcon}>
+              <Icon
+                name={'battery-full'}
+                size={8}
+                color={theme.colors.stickyWhite}
+              />
+            </View>
+          }
+        </View>
+      </View>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -247,7 +313,7 @@ const LogScreen = ({ navigation }: Props) => {
         todayBottomMargin={30}
         theme={todayBtnTheme.current}>
         {weekView ? (
-          <WeekCalendar firstDay={1} markedDates={marked.current}/>
+          <WeekCalendar firstDay={1} markedDates={marked.current as MarkedDates}/>
         ) : (
           <ExpandableCalendar
             // horizontal={false}
@@ -261,11 +327,12 @@ const LogScreen = ({ navigation }: Props) => {
             theme={calendarTheme.current}
             // disableAllTouchEventsForDisabledDays
             firstDay={1}
-            markedDates={marked.current}
+            markedDates={marked.current as MarkedDates}
             leftArrowImageSource={leftArrowIcon}
             rightArrowImageSource={rightArrowIcon}
             // animateScroll
             // closeOnDayPress={false}
+            dayComponent={renderDay}
           />
         )}
         <AgendaList
@@ -274,7 +341,6 @@ const LogScreen = ({ navigation }: Props) => {
           stickySectionHeadersEnabled={true}
           keyExtractor={item => item.id}
           sections={groupEvents(events)}
-          // contentContainerStyle={{ paddingHorizontal: 15 }}
           renderItem={({ item: logEntry, index, section }) => (
             <ListItem
               key={index}
@@ -325,11 +391,41 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textSmall,
     ...theme.styles.textDim
   },
-  // section: {
-  //   backgroundColor: theme.colors.viewBackground,
-  //   color: 'grey',
-  //   textTransform: 'capitalize'
-  // }
+  eventDayContainer: {
+    alignItems: 'center',
+  },
+  eventDayNumberContainer: {
+    borderRadius: 22,
+    height: 22,
+    width: 22,
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+  eventDayNumber: {
+    ...theme.styles.textSmall,
+    textAlign: 'center',
+  },
+  eventIcons:  {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: 26,
+  },
+  eventFlightIcon: {
+    borderRadius: 12,
+    backgroundColor: theme.colors.success,
+    width: 12,
+    height: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  eventBatteryIcon: {
+    borderRadius: 12,
+    backgroundColor: theme.colors.warning,
+    width: 12,
+    height: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 }));
 
 export default LogScreen;

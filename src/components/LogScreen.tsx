@@ -1,6 +1,6 @@
 import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import { AppTheme, useTheme } from 'theme';
-import { DateData, DayState, MarkedDates } from 'react-native-calendars/src/types';
+import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { Event, EventOutcome } from 'types/event';
 import React, { useEffect, useRef } from 'react';
 import { SectionListData, Text, TouchableOpacity, View } from 'react-native';

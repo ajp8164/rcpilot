@@ -30,6 +30,10 @@
         "./lib/*",
         "./lib"
       ],
+      "realm": [
+        "./realmdb/*",
+        "./realmdb"
+      ],
       "store": [
         "./store/*",
         "./store"

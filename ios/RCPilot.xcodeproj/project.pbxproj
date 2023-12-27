@@ -22,6 +22,7 @@
 		714A9B9E683646B791DDAE96 /* SFUIText-RegularG3.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4EADF6543A1F4E39AC03FC34 /* SFUIText-RegularG3.otf */; };
 		80DD5391B6C84580A677596C /* SFUIText-ItalicG1.otf in Resources */ = {isa = PBXBuildFile; fileRef = FBC65C468E224747836C0732 /* SFUIText-ItalicG1.otf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		81F896DCA90A4F6DB0FE2F81 /* RCPilot.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 964EBB7787C74B538761A150 /* RCPilot.ttf */; };
 		97E5EF2D1DF840CABDF8B4A9 /* SFUIText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 750008C8717A4D0F9DCA5AD8 /* SFUIText-Regular.otf */; };
 		9E698EAE435244B683FCFF32 /* SFUIText-BoldItalicG1.otf in Resources */ = {isa = PBXBuildFile; fileRef = 777336D6D2634B96863177A1 /* SFUIText-BoldItalicG1.otf */; };
 		A10986D829A95C4900B3FBEC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A10986D729A95C4900B3FBEC /* GoogleService-Info.plist */; };
@@ -38,7 +39,6 @@
 		D852920D0F73453B93EDCFB1 /* SFUIText-BoldG3.otf in Resources */ = {isa = PBXBuildFile; fileRef = 8517157F3F1148EB891AD68E /* SFUIText-BoldG3.otf */; };
 		EDE4F6659C004240B297628D /* SFUIText-MediumItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4B8A9E6EE9954E64B9D48D65 /* SFUIText-MediumItalic.otf */; };
 		F5C373F6D1B642B5AC21FAF0 /* SFUIText-BoldItalicG2.otf in Resources */ = {isa = PBXBuildFile; fileRef = 57F72E6899D040C2828F94D8 /* SFUIText-BoldItalicG2.otf */; };
-		81F896DCA90A4F6DB0FE2F81 /* RCPilot.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 964EBB7787C74B538761A150 /* RCPilot.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +82,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RCPilot/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8517157F3F1148EB891AD68E /* SFUIText-BoldG3.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-BoldG3.otf"; path = "../assets/fonts/SFUIText/SFUIText-BoldG3.otf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RCPilot-RCPilotTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCPilot-RCPilotTests.release.xcconfig"; path = "Target Support Files/Pods-RCPilot-RCPilotTests/Pods-RCPilot-RCPilotTests.release.xcconfig"; sourceTree = "<group>"; };
+		964EBB7787C74B538761A150 /* RCPilot.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = RCPilot.ttf; path = ../assets/fonts/RCPilot.ttf; sourceTree = "<group>"; };
 		9D58B861FD37424CBDFE6EB2 /* SFUIText-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-LightItalic.otf"; path = "../assets/fonts/SFUIText/SFUIText-LightItalic.otf"; sourceTree = "<group>"; };
 		A10986D729A95C4900B3FBEC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "RCPilot/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A13A5BE5287C8137006FAF4A /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -113,7 +114,6 @@
 		F70A8DACC635440F96CE11E7 /* SFUIText-Italic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-Italic.otf"; path = "../assets/fonts/SFUIText/SFUIText-Italic.otf"; sourceTree = "<group>"; };
 		F860E10586AA4BFD85999C60 /* SFUIText-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-Bold.otf"; path = "../assets/fonts/SFUIText/SFUIText-Bold.otf"; sourceTree = "<group>"; };
 		FBC65C468E224747836C0732 /* SFUIText-ItalicG1.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-ItalicG1.otf"; path = "../assets/fonts/SFUIText/SFUIText-ItalicG1.otf"; sourceTree = "<group>"; };
-		964EBB7787C74B538761A150 /* RCPilot.ttf */ = {isa = PBXFileReference; name = "RCPilot.ttf"; path = "../assets/fonts/RCPilot.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

@@ -27,7 +27,7 @@ const App = () => {
         <SafeAreaProvider>
           <ReduxProvider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <RealmProvider schema={Schema}>
+              <RealmProvider schema={Schema} schemaVersion={1} deleteRealmIfMigrationNeeded={true}>
                 <AppMain />
               </RealmProvider>
             </PersistGate>

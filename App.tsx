@@ -7,8 +7,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { LogBox } from 'react-native';
 import { PersistGate } from 'redux-persist/integration/react';
 import React from 'react';
+import { RealmProvider } from '@realm/react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Schema from 'realmdb/Schema';
 import { ThemeProvider } from '@rneui/themed';
 import { theme } from 'theme';
 
@@ -25,7 +27,9 @@ const App = () => {
         <SafeAreaProvider>
           <ReduxProvider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <AppMain />
+              <RealmProvider schema={Schema}>
+                <AppMain />
+              </RealmProvider>
             </PersistGate>
           </ReduxProvider>
         </SafeAreaProvider>

@@ -33,6 +33,7 @@ module.exports = {
           firebase: './src/firebase/',
           img: './src/theme/img/',
           lib: './src/lib/',
+          realmdb: './src/realmdb/',
           store: './src/store/',
           theme: './src/theme/',
           types: './src/types/',

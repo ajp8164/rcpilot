@@ -71,7 +71,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   addIcon: {
     color: theme.colors.brandPrimary,
     fontSize: 22,
-    marginHorizontal: 10,
   },
 }));
 

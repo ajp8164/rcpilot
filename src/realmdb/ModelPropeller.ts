@@ -1,9 +1,9 @@
-import Realm, { BSON, ObjectSchema } from 'realm';
+import { BSON, Object, ObjectSchema } from 'realm';
 
 import { MeasurementUnits } from 'types/common';
 
-export class ModelPropeller extends Realm.Object<ModelPropeller> {
-  id!: BSON.ObjectId;
+export class ModelPropeller extends Object<ModelPropeller> {
+  _id!: BSON.ObjectId;
   name!: string;
   vendor?: string;
   numberOfBlades?: number;
@@ -15,7 +15,7 @@ export class ModelPropeller extends Realm.Object<ModelPropeller> {
   static schema: ObjectSchema = {
     name: 'ModelPropeller',
     properties: {
-      id: 'objectId',
+      _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
       numberOfBlades: 'int',
       vendor: 'string',
@@ -24,6 +24,6 @@ export class ModelPropeller extends Realm.Object<ModelPropeller> {
       measuredUnits: 'string',
       notes: 'string',
     },
-    primaryKey: 'id',
+    primaryKey: '_id',
   };
 };

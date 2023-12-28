@@ -1,14 +1,14 @@
+import { BSON, Object, ObjectSchema } from 'realm';
 import { ISODateString, ISODurationString } from 'types/common';
-import Realm, { BSON, ObjectSchema } from 'realm';
 
+import { EventStyle } from './EventStyle';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
-import { ModelStyle } from './ModelStyle';
 import { ModelType } from 'types/model';
 
-export class Model extends Realm.Object<Model> {
-  id!: BSON.ObjectId;
+export class Model extends Object<Model> {
+  _id!: BSON.ObjectId;
   name!: string;
   image!: string;
   type!: string;
@@ -26,13 +26,13 @@ export class Model extends Realm.Object<Model> {
   totalFuel?: number;
   defaultFuel?: ModelFuel;
   defaultPropeller?: ModelPropeller;
-  defaultStyle?: ModelStyle;
+  defaultStyle?: EventStyle;
   notes?: string;
 
   static schema: ObjectSchema = {
     name: 'Model',
     properties: {
-      id: 'objectId',
+      _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
       image: 'string',
       type: { type: 'string', default: ModelType.Airplane },
@@ -53,6 +53,6 @@ export class Model extends Realm.Object<Model> {
       defaultStyleId: 'string',
       notes: 'string',
     },
-    primaryKey: 'id',
+    primaryKey: '_id',
   };
 };

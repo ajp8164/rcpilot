@@ -1,10 +1,10 @@
-import Realm, { BSON, ObjectSchema } from 'realm';
+import { BSON, Object, ObjectSchema } from 'realm';
 
 import { BatteryChemistry } from 'types/battery';
 import { ISODateString } from 'types/common';
 
-export class Battery extends Realm.Object<Battery> {
-  id!: BSON.ObjectId;
+export class Battery extends Object<Battery> {
+  _id!: BSON.ObjectId;
   name!: string;
   chemistry!: BatteryChemistry;
   vendor?: string;
@@ -22,7 +22,7 @@ export class Battery extends Realm.Object<Battery> {
   static schema: ObjectSchema = {
     name: 'Battery',
     properties: {
-      id: 'objectId',
+      _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
       chemistry: { type: 'string', default: BatteryChemistry.LiPo },
       vendor: 'string',
@@ -37,6 +37,6 @@ export class Battery extends Realm.Object<Battery> {
       lastCycle: 'string',
       notes: 'string',
     },
-    primaryKey: 'id',
+    primaryKey: '_id',
   };
 };

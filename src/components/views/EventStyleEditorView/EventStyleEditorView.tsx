@@ -1,35 +1,56 @@
 import { EventStyleEditorViewMethods, EventStyleEditorViewProps } from './types';
+import React, { useImperativeHandle, useState } from 'react';
+import { useObject, useRealm } from '@realm/react';
 
+import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { EventStyle } from 'types/event';
+import { EventStyle } from 'realmdb/EventStyle';
 import {ListItemInput} from 'components/atoms/List';
-import React from 'react';
 import { View } from 'react-native';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { useEditorOnChange } from 'lib/useEditorOnChange';
 
 type EventStyleEditorView = EventStyleEditorViewMethods;
 
-const EventStyleEditorView = (props: EventStyleEditorViewProps) => {
-  const { eventStyleId } = props;
+const EventStyleEditorView = React.forwardRef<EventStyleEditorView, EventStyleEditorViewProps>(
+  (props, ref) => {
+  const { eventStyleId, onChange } = props;
 
-  const mockEventStyle: EventStyle = {
-    id: eventStyleId || '-1',
-    name: '3D',
+  const realm = useRealm();
+  const eventStyle = eventStyleId ? useObject(EventStyle, new BSON.ObjectId(eventStyleId)) : null;
+  const [name, setName] = useState(eventStyle?.name || '');
+
+  useImperativeHandle(ref, () => ({
+    //  These functions exposed to the parent component through the ref.
+    save,
+  }));
+
+  useEditorOnChange(onChange, name.length > 0 && name !== eventStyle?.name);
+
+  const save = () => {
+    if (eventStyle) {
+      realm.write(() => {
+        eventStyle.name = name;
+      });
+    } else {
+      realm.write(() => {
+        realm.create('EventStyle', {
+          name
+        });
+      });
+    }
   };
-
-  const [eventStyle, setEventStyle] = useSetState<EventStyle>(mockEventStyle);
 
   return (
     <View>
       <Divider />
       <ListItemInput
-        value={mockEventStyle.name}
+        value={name}
         placeholder={'Name for the style'}
         position={['first', 'last']}
-        onChangeText={() => null}
+        onChangeText={setName}
       /> 
     </View>
   );
-};
+});
 
 export default EventStyleEditorView;

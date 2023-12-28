@@ -1,3 +1,4 @@
+import { EditorState } from 'lib/useEditorOnChange';
 import React from 'react';
 import { ViewStyle } from 'react-native/types';
 
@@ -11,6 +12,9 @@ declare const EventStyleEditorView: React.MemoExoticComponent<
 
 export interface EventStyleEditorViewProps {
   eventStyleId?: string;
+  onChange: (editorState: EditorState) => void;
 };
 
-export interface EventStyleEditorViewMethods {};
+export interface EventStyleEditorViewMethods {
+  save: () => void;
+};

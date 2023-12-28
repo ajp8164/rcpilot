@@ -8,11 +8,6 @@ export enum EventOutcome {
     Crash = 'C',
 };
 
-export type EventStyle = {
-  id: string;
-  name: string;
-};
-
 export type Event = {
     id: string;
     number: number;

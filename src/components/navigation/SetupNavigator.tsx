@@ -19,7 +19,6 @@ import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewChecklistTemplateNavigator from 'components/navigation/NewChecklistTemplateNavigator';
-import NewEventStyleScreen from 'components/NewEventStyleScreen';
 import NewModelCategoryScreen from 'components/NewModelCategoryScreen';
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
@@ -132,7 +131,7 @@ const SetupNavigator = () => {
       />
       <SetupStack.Screen
         name="NewEventStyle"
-        component={NewEventStyleScreen}
+        component={EventStyleEditorScreen}
         options={{
           title: 'Style Name',
           presentation: 'modal',

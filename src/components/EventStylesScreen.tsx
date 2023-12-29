@@ -38,7 +38,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
   const renderItems: ListRenderItem<EventStyle> = ({ item, index }) => {
     return (
       <ListItem
-        key={`${item._id}`}
+        key={item._id.toString()}
         title={item.name}
         position={allEventStyles.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allEventStyles.length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('EventStyleEditor', {
@@ -56,7 +56,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
       <FlatList
         data={allEventStyles}
         renderItem={renderItems}
-        keyExtractor={(_item, index) => `${index}`}
+        keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>

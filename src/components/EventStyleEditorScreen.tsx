@@ -1,9 +1,12 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useObject, useRealm } from '@realm/react';
 
+import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { EditorState } from 'lib/useEditorOnChange';
-import EventStyleEditorView from 'components/views/EventStyleEditorView';
+import { Divider } from '@react-native-ajp-elements/ui';
+import { EventStyle } from 'realmdb/EventStyle';
+import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -18,11 +21,32 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  console.log('eventStyleId',  eventStyleId);
-  const editorView = useRef<EventStyleEditorView>(null);
-  const [editorState, setEditorState] = useState<EditorState>({});
+  const realm = useRealm();
+  const eventStyle = eventStyleId ? useObject(EventStyle, new BSON.ObjectId(eventStyleId)) : null;
+  const [name, setName] = useState(eventStyle?.name || '');
 
   useEffect(() => {
+    const canSave = name.length > 0 && name !== eventStyle?.name;
+
+    const save = () => {
+      if (eventStyle) {
+        realm.write(() => {
+          eventStyle.name = name;
+        });
+      } else {
+        realm.write(() => {
+          realm.create('EventStyle', {
+            name
+          });
+        });
+      }
+    };
+  
+    const onDone = () => {
+      save();
+      navigation.goBack();
+    };
+
     navigation.setOptions({
       headerLeft: () => {
         return (
@@ -35,7 +59,7 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
         )
       },
       headerRight: () => {
-        if (editorState?.canSave) {
+        if (canSave) {
           return (
             <Button
               title={'Done'}
@@ -47,18 +71,19 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [editorState.canSave]);
-
-  const onDone = () => {
-    editorView.current?.save();
-    navigation.goBack();
-  };
+  }, [name]);
 
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <EventStyleEditorView ref={editorView} eventStyleId={eventStyleId} onChange={ setEditorState } />
+      <Divider />
+      <ListItemInput
+        value={name}
+        placeholder={'Name for the style'}
+        position={['first', 'last']}
+        onChangeText={setName}
+      /> 
     </SafeAreaView>
   );
 };

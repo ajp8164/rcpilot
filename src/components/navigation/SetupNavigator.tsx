@@ -19,7 +19,6 @@ import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewChecklistTemplateNavigator from 'components/navigation/NewChecklistTemplateNavigator';
-import NewModelCategoryScreen from 'components/NewModelCategoryScreen';
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
 import NewPilotScreen from 'components/NewPilotScreen';
@@ -153,7 +152,7 @@ const SetupNavigator = () => {
       />
       <SetupStack.Screen
         name="NewModelCategory"
-        component={NewModelCategoryScreen}
+        component={ModelCategoryEditorScreen}
         options={{
           title: 'Category Name',
           presentation: 'modal',

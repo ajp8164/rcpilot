@@ -1,16 +1,17 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
-import { ModelCategory } from 'types/model';
+import { ModelCategory } from 'realmdb/ModelCategory';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelCategories'>;
 
@@ -18,12 +19,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const [items, setItems] = useState<ModelCategory[]>([
-    {
-      id: '1',
-      name: 'SABx',
-    },
-  ]);
+  const allModelCategories = useQuery(ModelCategory);
 
   useEffect(() => {
     navigation.setOptions({
@@ -42,11 +38,11 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   const renderItems: ListRenderItem<ModelCategory> = ({ item, index }) => {
     return (
       <ListItem
-        key={item.id}
+        key={item._id.toString()}
         title={item.name}
-        position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
+        position={allModelCategories.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allModelCategories.length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ModelCategoryEditor', {
-          modelCategoryId: '1',
+          modelCategoryId: item._id.toString(),
         })}
       />
     )
@@ -58,9 +54,9 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
       style={theme.styles.view}>
       <Divider />
       <FlatList
-        data={items}
+        data={allModelCategories}
         renderItem={renderItems}
-        keyExtractor={(_item, index) => `${index}`}
+        keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>

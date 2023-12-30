@@ -80,7 +80,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemInput
         value={name}
-        placeholder={'Name for the style'}
+        placeholder={'Name for the category'}
         position={['first', 'last']}
         onChangeText={setName}
       /> 

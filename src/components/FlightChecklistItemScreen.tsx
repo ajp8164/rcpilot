@@ -44,7 +44,8 @@ const FlightChecklistItemScreen = ({ navigation }: Props) => {
         title={'Notes'}
         position={['first', 'last']}
         onPress={() => navigation.navigate('Notes', {
-          headerButtonStyle: s.notesHeaderButtonStyle
+          headerButtonStyle: s.notesHeaderButtonStyle,
+          eventName: 'flight-checklist-item-notes',
         })}
       />
     </View>

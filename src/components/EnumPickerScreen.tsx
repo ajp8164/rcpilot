@@ -1,5 +1,4 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteriesNavigatorParamList, BatteryFiltersNavigatorParamList, ModelFiltersNavigatorParamList, ModelsNavigatorParamList, NewBatteryNavigatorParamList, NewModelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
@@ -7,6 +6,7 @@ import React, { useEffect } from 'react';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { isArray } from 'lodash';
@@ -35,14 +35,7 @@ export type EnumPickerInterface =  {
   eventName: string;
 };
 
-export type Props =
-  NativeStackScreenProps<BatteriesNavigatorParamList, 'EnumPicker'> &
-  NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'EnumPicker'> &
-  NativeStackScreenProps<ModelFiltersNavigatorParamList, 'EnumPicker'> &
-  NativeStackScreenProps<ModelsNavigatorParamList, 'EnumPicker'> &
-  NativeStackScreenProps<NewBatteryNavigatorParamList, 'EnumPicker'> &
-  NativeStackScreenProps<NewModelNavigatorParamList, 'EnumPicker'> &
-  NativeStackScreenProps<SetupNavigatorParamList, 'EnumPicker'>;
+export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'EnumPicker'>;
 
 const EnumPickerScreen = ({ route,  navigation }: Props) => {
   const {

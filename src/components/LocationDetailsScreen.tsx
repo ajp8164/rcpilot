@@ -1,17 +1,15 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import { LocationNavigatorParamList, ModelsNavigatorParamList } from 'types/navigation';
 
 import { Divider } from '@react-native-ajp-elements/ui';
+import { LocationNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = 
-  NativeStackScreenProps<LocationNavigatorParamList, 'LocationDetails'> &
-  NativeStackScreenProps<ModelsNavigatorParamList, 'LocationDetails'>;
+export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationDetails'>;
 
 const LocationDetailsScreen = ({ navigation, route }: Props) => {
   const { locationId } = route.params;
@@ -35,7 +33,11 @@ const LocationDetailsScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={'Notes'}
           position={['first', 'last']}
-          onPress={() => navigation.navigate('Notes', {})}
+          onPress={() => navigation.navigate('Notes', {
+            title: 'Fuel Notes',
+            text: 'notes', // mock
+            eventName: 'fuel-notes',  
+          })}
         />
         <Divider text={'COORDINATES'}/>
         <ListItem

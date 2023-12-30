@@ -1,24 +1,27 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@rneui/base';
+import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NewModelNavigatorParamList } from 'types/navigation';
 import TextView from 'components/views/TextView';
 import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
 
-export type Props = NativeStackScreenProps<NewModelNavigatorParamList, 'Notes'>;
+export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'Notes'>;
 
-const NotesScreen = ({ navigation, route }: Props) => {  
+const NotesScreen = ({ navigation, route }: Props) => {
+  const { title, text, eventName } = route.params;
+
   const theme = useTheme();
   const s = useStyles(theme);
+  const event = useEvent();
 
+  const [newText, setNewText] = useState<string | undefined>(text);
+  
   useEffect(() => {
-    route.params.title && navigation.setOptions({
-      title: route.params.title,
-    });
-    
     navigation.setOptions({
+      title,
       headerLeft: () => (
         <Button
           title={'Cancel'}
@@ -32,21 +35,25 @@ const NotesScreen = ({ navigation, route }: Props) => {
           title={'Save'}
           titleStyle={[theme.styles.buttonClearTitle, route.params.headerButtonStyle]}
           buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-          onPress={() => null}
+          onPress={save}
         />
       ),
     });
-  }, []);
 
-  const onTextChanged = (text: string) => {
-    console.log(`Notes: ${text}`);
-  };
+    const save = () => {
+      console.log(newText);
+      event.emit(eventName, newText);
+      navigation.goBack();
+    };
+  
+  }, [newText]);
 
   return (
     <TextView
       characterLimit={5000}
       placeholder={'Type your notes here.'}
-      onTextChanged={onTextChanged}
+      value={newText}
+      onTextChanged={setNewText}
     />
   );
 };
@@ -63,6 +70,5 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     minWidth: 0,
   },
 }));
-
 
 export default NotesScreen;

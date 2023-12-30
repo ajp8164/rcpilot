@@ -1,5 +1,4 @@
 import { AppTheme, useTheme } from 'theme';
-import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { SectionList, SectionListData, Text, View } from 'react-native';
 
 import { DateTime } from 'luxon';
@@ -7,11 +6,10 @@ import { Flight } from 'types/flight';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = 
-  NativeStackScreenProps<SetupNavigatorParamList, 'Flights'> &
-  NativeStackScreenProps<ModelsNavigatorParamList, 'Flights'>;
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Flights'>;
 
 const FlightsScreen = ({ navigation }: Props) => {
   const theme = useTheme();

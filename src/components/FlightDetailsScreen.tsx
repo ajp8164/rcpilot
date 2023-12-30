@@ -1,6 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -9,14 +8,13 @@ import { FlightRating } from 'components/molecules/FlightRating';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { enumIdsToValues } from 'lib/utils';
 import { flightOutcomeIcons } from 'lib/flight';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
-export type Props = 
-  NativeStackScreenProps<SetupNavigatorParamList, 'FlightDetails'> &
-  NativeStackScreenProps<ModelsNavigatorParamList, 'FlightDetails'>;
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'FlightDetails'>;
 
 const FlightDetailsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -154,7 +152,11 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
         <ListItem
           title={'Notes'}
           position={['first', 'last']}
-          onPress={() => navigation.navigate('Notes', {})}
+          onPress={() => navigation.navigate('Notes', {
+            title: 'Fuel Notes',
+            text: 'notes', // mock
+            eventName: 'fuel-notes',  
+          })}
         />
         <Divider text={'BATTERY USED'} />
         <ListItem

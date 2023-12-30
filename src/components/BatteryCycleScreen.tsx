@@ -110,8 +110,10 @@ const BatteryCycleScreen = ({ navigation }: Props) => {
       title={'Notes'}
       position={['first', 'last']}
       onPress={() => navigation.navigate('Notes', {
-        title: 'Cycle Notes'
-      })}
+        title: 'Cycle Notes',
+        text: 'notes', // mock
+        eventName: 'battery-cycle-notes',
+          })}
     />
   </View>
   );

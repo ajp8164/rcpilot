@@ -11,6 +11,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
+import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 
 export type Props =
@@ -24,15 +25,19 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const eventStyle = eventStyleId ? useObject(EventStyle, new BSON.ObjectId(eventStyleId)) : null;
-  const [name, setName] = useState(eventStyle?.name || '');
+
+  const [name, setName] = useState(eventStyle?.name || undefined);
 
   useEffect(() => {
-    const canSave = name.length > 0 && name !== eventStyle?.name;
+    const canSave = name && (
+      eqString(eventStyle?.name, name)
+    );
+
 
     const save = () => {
       if (eventStyle) {
         realm.write(() => {
-          eventStyle.name = name;
+          eventStyle.name = name!;
         });
       } else {
         realm.write(() => {

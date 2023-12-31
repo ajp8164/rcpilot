@@ -11,6 +11,19 @@ export enum StartupScreen {
   Welcome = 'Welcome',
 }
 
+// This type should be used when type checking a screen that appears in multiple navigators.
+// Using this type avoids screen components having to import all the ..NavigatorParamList types
+// instead of chosing one at random.
+export type MultipleNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
+  };
+};
+
 export type BatteriesNavigatorParamList = {
   Batteries: undefined;
   Battery: {
@@ -35,6 +48,8 @@ export type BatteriesNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -47,6 +62,8 @@ export type BatteryPerformanceNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -92,6 +109,8 @@ export type ModelsNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -104,6 +123,8 @@ export type ModelFiltersNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -121,6 +142,8 @@ export type NewBatteryNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -130,6 +153,8 @@ export type NewModelNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -150,6 +175,8 @@ export type FlightNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   }
 };
 
@@ -161,6 +188,8 @@ export type LocationNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -169,6 +198,8 @@ export type NewModelFuelNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -178,6 +209,8 @@ export type NewModelPropellerNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -191,6 +224,8 @@ export type NewChecklistTemplateNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -201,6 +236,8 @@ export type NewChecklistActionNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
 };
 
@@ -268,6 +305,8 @@ export type SetupNavigatorParamList = {
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
   };
   UserAccount: undefined;
   UserProfile: {

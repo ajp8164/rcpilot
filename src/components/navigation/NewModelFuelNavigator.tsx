@@ -1,6 +1,6 @@
+import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
 import NavContext from './NavContext';
 import { NewModelFuelNavigatorParamList } from 'types/navigation';
-import NewModelFuelScreen from 'components/NewModelFuelScreen';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -14,23 +14,23 @@ const NewModelFuelNavigator = () => {
   return (
     <NavContext.Provider value={{isModal: true}}>
       <NewModelFuelStack.Navigator
-      initialRouteName='NewModelFuel'
-      screenOptions={{
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
-        },
-        headerTintColor: theme.colors.screenHeaderBackButton,
-      }}>
+        initialRouteName='NewModelFuel'
+        screenOptions={{
+          headerLargeTitleShadowVisible: theme.mode === 'light',
+          headerLargeStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
+          headerTitleStyle: {
+            color: theme.colors.screenHeaderText,
+          },
+          headerTintColor: theme.colors.screenHeaderBackButton,
+        }}>
         <NewModelFuelStack.Screen
-          name="NewModelFuel"
-          component={NewModelFuelScreen}
+          name='NewModelFuel'
+          component={ModelFuelEditorScreen}
           options={{
             title: 'New Fuel',
             presentation: 'modal',

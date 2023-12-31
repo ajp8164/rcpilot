@@ -1,16 +1,17 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
-import { ModelFuel } from 'types/model';
+import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuels'>;
 
@@ -18,14 +19,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const [items, setItems] = useState<ModelFuel[]>([
-    {
-      id: '1',
-      name: 'High Octane',
-      cost: 0,
-      notes: '',
-    },
-  ]);
+  const allModelFuels = useQuery(ModelFuel);
 
   useEffect(() => {
     navigation.setOptions({
@@ -44,11 +38,11 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const renderItems: ListRenderItem<ModelFuel> = ({ item, index }) => {
     return (
       <ListItem
-        key={item.id}
-        title={item.name}
-        position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
+      key={item._id.toString()}
+      title={item.name}
+        position={allModelFuels.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allModelFuels.length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ModelFuelEditor', {
-          modelFuelId: '1',
+          modelFuelId: item._id.toString(),
         })}
       />
     )
@@ -58,12 +52,12 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Divider />
       <FlatList
-        data={items}
+        data={allModelFuels}
         renderItem={renderItems}
-        keyExtractor={(_item, index) => `${index}`}
+        keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={Divider}
       />
     </SafeAreaView>
   );

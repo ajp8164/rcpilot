@@ -38,7 +38,7 @@ const PilotsScreen = ({ navigation }: Props) => {
   const renderItems: ListRenderItem<Pilot> = ({ item, index }) => {
     return (
       <ListItemCheckboxInfo
-      key={item._id.toString()}
+        key={item._id.toString()}
         title={item.name}
         position={allPilots.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allPilots.length - 1 ? ['last'] : []}
         checked={true}
@@ -51,6 +51,7 @@ const PilotsScreen = ({ navigation }: Props) => {
   const renderFooter = () => {
     return (
       <>
+        {allPilots && <Divider />}
         <ListItemCheckboxInfo
           title={'Unknown Pilot'}
           subtitle={'Logged 0:04 over 1 event'}

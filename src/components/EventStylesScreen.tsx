@@ -52,12 +52,12 @@ const EventStylesScreen = ({ navigation }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Divider />
       <FlatList
         data={allEventStyles}
         renderItem={renderItems}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={Divider}
       />
     </SafeAreaView>
   );

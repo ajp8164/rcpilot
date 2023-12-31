@@ -9,6 +9,7 @@ import { ListItemInput } from 'components/atoms/List';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
@@ -77,13 +78,17 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Divider />
-      <ListItemInput
-        value={name}
-        placeholder={'Name for the category'}
-        position={['first', 'last']}
-        onChangeText={setName}
-      /> 
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        <Divider />
+        <ListItemInput
+          value={name}
+          placeholder={'Name for the category'}
+          position={['first', 'last']}
+          onChangeText={setName}
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };

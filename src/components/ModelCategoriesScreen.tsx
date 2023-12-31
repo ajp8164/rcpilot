@@ -52,12 +52,12 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Divider />
       <FlatList
         data={allModelCategories}
         renderItem={renderItems}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={Divider}
       />
     </SafeAreaView>
   );

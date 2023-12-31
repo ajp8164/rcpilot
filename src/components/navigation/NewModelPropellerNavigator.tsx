@@ -1,7 +1,7 @@
 import EnumPickerScreen from 'components/EnumPickerScreen';
+import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import NavContext from './NavContext';
 import { NewModelPropellerNavigatorParamList } from 'types/navigation';
-import NewModelPropellerScreen from 'components/NewModelPropellerScreen';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -15,23 +15,23 @@ const NewModelPropellerNavigator = () => {
   return (
     <NavContext.Provider value={{isModal: true}}>
       <NewModelPropellerStack.Navigator
-      initialRouteName='NewModelPropeller'
-      screenOptions={{
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
-        },
-        headerTintColor: theme.colors.screenHeaderBackButton,
-      }}>
+        initialRouteName='NewModelPropeller'
+        screenOptions={{
+          headerLargeTitleShadowVisible: theme.mode === 'light',
+          headerLargeStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
+          headerTitleStyle: {
+            color: theme.colors.screenHeaderText,
+          },
+          headerTintColor: theme.colors.screenHeaderBackButton,
+        }}>
         <NewModelPropellerStack.Screen
           name="NewModelPropeller"
-          component={NewModelPropellerScreen}
+          component={ModelPropellerEditorScreen}
           options={{
             title: 'New Propeller',
             presentation: 'modal',

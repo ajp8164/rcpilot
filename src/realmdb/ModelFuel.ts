@@ -11,8 +11,8 @@ export class ModelFuel extends Object<ModelFuel> {
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
-      cost: 'float',
-      notes: 'string',
+      cost: 'float?',
+      notes: 'string?',
     },
     primaryKey: '_id',
   };

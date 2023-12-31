@@ -1,16 +1,17 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ModelPropeller, ModelPropellerUnits } from 'types/model';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
+import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellers'>;
 
@@ -18,17 +19,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const [items, setItems] = useState<ModelPropeller[]>([
-    {
-      id: '1',
-      name: 'One',
-      vendor: '',
-      diameter: 0,
-      pitch: 0,
-      measuredUnits: ModelPropellerUnits.Inches,
-      notes: '',
-    },
-  ]);
+  const allModelPropellers = useQuery(ModelPropeller);
 
   useEffect(() => {
     navigation.setOptions({
@@ -47,26 +38,26 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   const renderItems: ListRenderItem<ModelPropeller> = ({ item, index }) => {
     return (
       <ListItem
-        key={item.id}
+        key={item._id.toString()}
         title={item.name}
-        position={items.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === items.length - 1 ? ['last'] : []}
+        position={allModelPropellers.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allModelPropellers.length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ModelPropellerEditor', {
-          modelPropellerId: '1',
+          modelPropellerId: item._id.toString(),
         })}
       />
     )
-};
+  };
 
   return (
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Divider />
       <FlatList
-        data={items}
+        data={allModelPropellers}
         renderItem={renderItems}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={Divider}
       />
     </SafeAreaView>
   );

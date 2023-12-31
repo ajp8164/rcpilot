@@ -9,7 +9,7 @@ export class ModelPropeller extends Object<ModelPropeller> {
   numberOfBlades?: number;
   diameter?: number;
   pitch?: number;
-  measuredUnits!: MeasurementUnits;
+  measurementUnits!: MeasurementUnits;
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -17,12 +17,12 @@ export class ModelPropeller extends Object<ModelPropeller> {
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
-      numberOfBlades: 'int',
-      vendor: 'string',
-      diameter: 'float',
-      pitch: 'float',
-      measuredUnits: 'string',
-      notes: 'string',
+      numberOfBlades: 'int?',
+      vendor: 'string?',
+      diameter: 'float?',
+      pitch: 'float?',
+      measurementUnits: 'string',
+      notes: 'string?',
     },
     primaryKey: '_id',
   };

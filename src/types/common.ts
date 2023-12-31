@@ -1,6 +1,11 @@
 export type ISODurationString = string;
 export type ISODateString = string;
 
+export enum MeasurementUnitsAbbr {
+  Inches = 'in',
+  Centimeters = 'cm',
+};
+
 export enum MeasurementUnits {
   Inches = 'Inches',
   Centimeters = 'Centimeters',

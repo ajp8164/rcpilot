@@ -74,6 +74,9 @@ const SetupNavigator = () => {
       <SetupStack.Screen
         name="Pilot"
         component={PilotScreen}
+        options={{
+          title: '',
+        }}
       />
       <SetupStack.Screen
         name="Pilots"

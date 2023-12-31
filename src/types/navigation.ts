@@ -266,7 +266,9 @@ export type SetupNavigatorParamList = {
     flightOutcome: FlightOutcome;
   };
   LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
-  Pilot: undefined;
+  Pilot: {
+    pilotId: string;
+  };
   Pilots: undefined;
   PreferencesBasics: undefined;
   PreferencesEvents: undefined;

@@ -11,6 +11,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
+import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 
 export type Props =
@@ -24,15 +25,18 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const modelCategory = modelCategoryId ? useObject(ModelCategory, new BSON.ObjectId(modelCategoryId)) : null;
-  const [name, setName] = useState(modelCategory?.name || '');
+
+  const [name, setName] = useState(modelCategory?.name || undefined);
 
   useEffect(() => {
-    const canSave = name.length > 0 && name !== modelCategory?.name;
+    const canSave = name && (
+      eqString(modelCategory?.name, name)
+    );
 
     const save = () => {
       if (modelCategory) {
         realm.write(() => {
-          modelCategory.name = name;
+          modelCategory.name = name!;
         });
       } else {
         realm.write(() => {

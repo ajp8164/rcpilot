@@ -181,7 +181,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
           /> 
         <Divider text={'NOTES'} />
         <ListItem
-          title={'Notes'}
+          title={notes || 'Notes'}
           position={['first', 'last']}
           // @ts-ignore
           onPress={() => navigation.navigate('Notes', {

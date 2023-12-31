@@ -33,7 +33,6 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
       eqString(eventStyle?.name, name)
     );
 
-
     const save = () => {
       if (eventStyle) {
         realm.write(() => {

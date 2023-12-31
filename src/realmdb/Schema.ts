@@ -4,6 +4,7 @@ import { Model } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
+import { Pilot } from './Pilot';
 
 const Schema = [
   Battery,
@@ -12,6 +13,7 @@ const Schema = [
   ModelFuel,
   ModelPropeller,
   Model,
+  Pilot,
 ];
 
 export default Schema;

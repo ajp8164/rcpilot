@@ -15,6 +15,7 @@ const ListItemInput = (props: Props) => {
     inputDisabled,
     label,
     placeholder,
+    title,
   } = props;
 
   const theme = useTheme();
@@ -34,7 +35,7 @@ const ListItemInput = (props: Props) => {
             size={18}
             style={[
               label ? s.inputIconWithLabel : s.inputIcon,
-              placeholder ? s.inputIconWithPlaceholder : s.inputIcon,
+              placeholder && !title ? s.inputIconWithPlaceholder : s.inputIcon,
               inputDisabled ? s.inputIconDisabled : {},
             ]}
           />
@@ -49,7 +50,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingRight: 0
   },
   inputIcon: {
-    top: -3.5,
+    top: 0,
     marginLeft: 5,
     color: theme.colors.subtleGray,
   },
@@ -61,12 +62,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.subtleGray,
   },
   inputIconWithPlaceholder: {
-    top: 2,
     marginRight: 18,
     color: theme.colors.subtleGray,
   },
   inputContent: {
-    minWidth: '50%'
+    minWidth: '50%',
+    justifyContent: 'flex-end',
   },
   inputLabel: {
     ...theme.styles.textNormal,

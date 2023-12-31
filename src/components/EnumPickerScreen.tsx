@@ -193,6 +193,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
           renderItem={renderValues}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
         />
         {mode === 'many-or-none' &&
           <>

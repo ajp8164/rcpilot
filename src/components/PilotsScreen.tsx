@@ -56,7 +56,9 @@ const PilotsScreen = ({ navigation }: Props) => {
         position={allPilots.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allPilots.length - 1 ? ['last'] : []}
         checked={item._id.toString() === selectedPilotId}
         onPress={() => setPilot(item)}
-        onPressInfo={() => navigation.navigate('Pilot')}
+        onPressInfo={() => navigation.navigate('Pilot', {
+          pilotId: item._id.toString(),
+        })}
       />
     )
   };

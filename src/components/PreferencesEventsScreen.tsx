@@ -1,7 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
 import React, { useState } from 'react';
 
+import { Divider } from '@react-native-ajp-elements/ui';
+import { ListItem } from 'components/atoms/List';
 import { ListItemSwitch } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';

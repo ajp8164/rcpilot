@@ -1,5 +1,5 @@
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
-
+import { Divider } from '@react-native-ajp-elements/ui';
+import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';

@@ -1,5 +1,4 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
 import React, { useContext, useEffect } from 'react';
 import {
   SetupNavigatorParamList,
@@ -10,6 +9,8 @@ import { AuthContext } from 'lib/auth';
 import { BSON } from 'realm';
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
 import { CompositeScreenProps } from '@react-navigation/core';
+import { Divider } from '@react-native-ajp-elements/ui';
+import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { ScrollView } from 'react-native';

@@ -1,6 +1,5 @@
 import { Alert, ScrollView, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
@@ -9,6 +8,8 @@ import React, { useEffect } from 'react';
 
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
 import { CompositeScreenProps } from '@react-navigation/core';
+import { Divider } from '@react-native-ajp-elements/ui';
+import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackActions } from '@react-navigation/native';
 import { biometricAuthentication } from 'lib/biometricAuthentication';

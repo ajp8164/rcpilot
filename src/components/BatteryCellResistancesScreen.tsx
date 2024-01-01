@@ -67,7 +67,7 @@ const BatteryCellResistancesScreen = ({ route }: Props) => {
       position={['first', 'last']}
       keyboardType={'decimal-pad'}
       />
-    <Divider text={'PER-CELL RESISTENACES'}/>
+    <Divider text={'PER-CELL RESISTANCES'}/>
     <FlatList
       data={cycle.discharge.cellResistance}
       renderItem={renderResistance}

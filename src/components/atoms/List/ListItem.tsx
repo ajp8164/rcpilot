@@ -1,6 +1,9 @@
 import { AppTheme, useTheme } from "theme";
 
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import { Icon } from "@rneui/base";
+import React from "react";
+import { View } from "react-native";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 import { useRef } from  'react';
@@ -39,7 +42,19 @@ const ListItem = (props: Props) => {
             props.rightImage === undefined && props.value ? {} : s.valuePosition
           ]}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
-          rightImage={props.disabled === undefined ? props.rightImage : !props.disabled}
+          rightImage={
+            props.disabled !== true ?
+              <View style={{flexDirection: 'row'}}>
+                {React.isValidElement(props.rightImage) ? props.rightImage : null}
+                <Icon
+                  name={'chevron-forward-outline'}
+                  type={'ionicon'}
+                  size={22}
+                  color={theme.colors.midGray}
+                />
+              </View>
+            : !props.disabled
+          }
         />
         <CollapsibleView
           initExpanded={sectionInitiallyExpanded.current}

@@ -1,13 +1,15 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
+import { Pressable, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Button } from '@rneui/base';
+import CustomIcon from 'theme/icomoon/CustomIcon';
+import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'Batteries'>;
@@ -57,9 +59,19 @@ const BatteriesScreen = ({ navigation }: Props) => {
           title={'150S #1'}
           subtitle={'450mah 3S/1P 30C LiPo\n20 cycles\nDischarged on Nov 4, 2023, 9 days ago'}
           position={['first', 'last']}
-          onPress={() => navigation.navigate('Battery', {
-            batteryId: '1'
-          })}
+          rightImage={
+            <Pressable
+              style={{flexDirection: 'row'}}
+              onPress={() => navigation.navigate('Battery', {
+                batteryId: '1'
+              })}>
+              <CustomIcon
+                name={'circle-info'}
+                size={22}
+                color={theme.colors.screenHeaderBackButton}
+              />
+            </Pressable>            
+          }
         />
       </ScrollView>
     </SafeAreaView>

@@ -1,6 +1,7 @@
 import { ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 
 import { useState } from "react";
+import { useTheme } from 'theme';
 
 export type BooleanFilter = {
   relation: BooleanRelation;
@@ -22,6 +23,8 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
 };
 
 const ListItemFilterBoolean = (props: Props) => {
+  const theme = useTheme();
+  
   const {
     onValueChange,
     relation: initialRelation = BooleanRelation.Any,
@@ -44,7 +47,11 @@ const ListItemFilterBoolean = (props: Props) => {
         {...props}
         title={title}
         value={''}
-        segments={[{ label: BooleanRelation.Any }, { label: BooleanRelation.Yes }, { label: BooleanRelation.No }]}
+        segments={[
+          { label: BooleanRelation.Any, labelStyle: theme.styles.textTiny },
+          { label: BooleanRelation.Yes, labelStyle: theme.styles.textTiny },
+          { label: BooleanRelation.No, labelStyle: theme.styles.textTiny }
+        ]}
         onChangeIndex={onRelationSelect}
       />
     </>

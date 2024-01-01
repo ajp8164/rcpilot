@@ -1,0 +1,233 @@
+diff --git a/node_modules/react-native-ui-lib/lib/package.json b/node_modules/react-native-ui-lib/lib/package.json
+index 5a9cebb..1d3d144 100644
+--- a/node_modules/react-native-ui-lib/lib/package.json
++++ b/node_modules/react-native-ui-lib/lib/package.json
+@@ -14,5 +14,35 @@
+   "peerDependencies": {
+     "react": "^16.0.0",
+     "react-native": "^0.51.0"
++  },
++  "react-native": {
++    "crypto": "react-native-crypto",
++    "http": "@tradle/react-native-http",
++    "https": "https-browserify",
++    "os": "react-native-os",
++    "path": "path-browserify",
++    "fs": "react-native-level-fs",
++    "_stream_transform": "readable-stream/transform",
++    "_stream_readable": "readable-stream/readable",
++    "_stream_writable": "readable-stream/writable",
++    "_stream_duplex": "readable-stream/duplex",
++    "_stream_passthrough": "readable-stream/passthrough",
++    "stream": "stream-browserify",
++    "vm": "vm-browserify"
++  },
++  "browser": {
++    "crypto": "react-native-crypto",
++    "http": "@tradle/react-native-http",
++    "https": "https-browserify",
++    "os": "react-native-os",
++    "path": "path-browserify",
++    "fs": "react-native-level-fs",
++    "_stream_transform": "readable-stream/transform",
++    "_stream_readable": "readable-stream/readable",
++    "_stream_writable": "readable-stream/writable",
++    "_stream_duplex": "readable-stream/duplex",
++    "_stream_passthrough": "readable-stream/passthrough",
++    "stream": "stream-browserify",
++    "vm": "vm-browserify"
+   }
+ }
+diff --git a/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.d.ts b/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.d.ts
+index 6f0597e..8ff4b2b 100644
+--- a/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.d.ts
++++ b/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.d.ts
+@@ -1,54 +1,59 @@
++import { ImageSourcePropType, ImageStyle, LayoutChangeEvent, StyleProp, TextStyle, ViewStyle } from 'react-native';
++
+ import React from 'react';
+-import { LayoutChangeEvent, ImageSourcePropType, ImageStyle, StyleProp, ViewStyle } from 'react-native';
+ import Reanimated from 'react-native-reanimated';
+ export type SegmentedControlItemProps = {
+-    /**
+-     * The label of the segment.
+-     */
+-    label?: string;
+-    /**
+-     * An icon for the segment.
+-     */
+-    iconSource?: ImageSourcePropType;
+-    /**
+-     * An icon for the segment.
+-     */
+-    iconStyle?: StyleProp<ImageStyle>;
+-    /**
+-     * Should the icon be on right of the label
+-     */
+-    iconOnRight?: boolean;
++  /**
++   * The label of the segment.
++   */
++  label?: string;
++  /**
++   * The label style of the segment.
++   */
++  labelStyle?: StyleProp<TextStyle>;
++  /**
++   * An icon for the segment.
++   */
++  iconSource?: ImageSourcePropType;
++  /**
++   * An icon for the segment.
++   */
++  iconStyle?: StyleProp<ImageStyle>;
++  /**
++   * Should the icon be on right of the label
++   */
++  iconOnRight?: boolean;
+ };
+ export type SegmentProps = SegmentedControlItemProps & {
+-    /**
+-     * Shared value of the current selected index.
+-     */
+-    selectedIndex?: Reanimated.SharedValue<number>;
+-    /**
+-     * The color of the active segment (label and outline).
+-     */
+-    activeColor?: string;
+-    /**
+-     * The color of the inactive segment (label).
+-     */
+-    inactiveColor?: string;
+-    /**
+-     * Callback for when segment has pressed.
+-     */
+-    onPress?: (index: number) => void;
+-    /**
+-     * The index of the segment.
+-     */
+-    index: number;
+-    /**
+-     * onLayout function.
+-     */
+-    onLayout?: (index: number, event: LayoutChangeEvent) => void;
+-    /**
+-     * Additional style for the segment.
+-     */
+-    style?: StyleProp<ViewStyle>;
+-    testID?: string;
++  /**
++   * Shared value of the current selected index.
++   */
++  selectedIndex?: Reanimated.SharedValue<number>;
++  /**
++   * The color of the active segment (label and outline).
++   */
++  activeColor?: string;
++  /**
++   * The color of the inactive segment (label).
++   */
++  inactiveColor?: string;
++  /**
++   * Callback for when segment has pressed.
++   */
++  onPress?: (index: number) => void;
++  /**
++   * The index of the segment.
++   */
++  index: number;
++  /**
++   * onLayout function.
++   */
++  onLayout?: (index: number, event: LayoutChangeEvent) => void;
++  /**
++   * Additional style for the segment.
++   */
++  style?: StyleProp<ViewStyle>;
++  testID?: string;
+ };
+ declare const _default: React.ComponentClass<SegmentProps, any>;
+ export default _default;
+diff --git a/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.js b/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.js
+index 6c14c26..f4d7e57 100644
+--- a/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.js
++++ b/node_modules/react-native-ui-lib/src/components/segmentedControl/segment.js
+@@ -1,8 +1,10 @@
+ import React, { useCallback, useMemo } from 'react';
+ import Reanimated, { useAnimatedStyle } from 'react-native-reanimated';
+ import { Spacings, Typography } from "../../style";
+-import { asBaseComponent } from "../../commons/new";
++
+ import TouchableOpacity from "../touchableOpacity";
++import { asBaseComponent } from "../../commons/new";
++
+ /**
+  * Segment sub-component for SegmentedControl component
+  */
+@@ -10,6 +12,7 @@ const Segment = React.memo(props => {
+   const {
+     activeColor,
+     label,
++    labelStyle,
+     iconSource,
+     iconStyle,
+     selectedIndex,
+@@ -51,11 +54,11 @@ const Segment = React.memo(props => {
+     onLayout?.(index, event);
+   }, [onLayout, index]);
+   return <TouchableOpacity onLayout={segmentOnLayout} style={segmentStyle} onPress={onSegmentPress} row flexG center testID={`${testID}.${index}`}>
+-      {!iconOnRight && renderIcon()}
+-      {label && <Reanimated.Text fsTagName={'unmasked'} numberOfLines={1} style={[animatedTextStyle, Typography.text90]}>
+-          {label}
+-        </Reanimated.Text>}
+-      {iconOnRight && renderIcon()}
+-    </TouchableOpacity>;
++    {!iconOnRight && renderIcon()}
++    {label && <Reanimated.Text fsTagName={'unmasked'} numberOfLines={1} style={[animatedTextStyle, Typography.text90, labelStyle]}>
++      {label}
++    </Reanimated.Text>}
++    {iconOnRight && renderIcon()}
++  </TouchableOpacity>;
+ });
+ export default asBaseComponent(Segment);
+\ No newline at end of file
+diff --git a/node_modules/react-native-ui-lib/testkit/package.json b/node_modules/react-native-ui-lib/testkit/package.json
+index ad63548..65caa08 100644
+--- a/node_modules/react-native-ui-lib/testkit/package.json
++++ b/node_modules/react-native-ui-lib/testkit/package.json
+@@ -1,4 +1,34 @@
+ {
+   "main": "../src/testkit",
+-  "types": "../src/testkit"
++  "types": "../src/testkit",
++  "react-native": {
++    "crypto": "react-native-crypto",
++    "http": "@tradle/react-native-http",
++    "https": "https-browserify",
++    "os": "react-native-os",
++    "path": "path-browserify",
++    "fs": "react-native-level-fs",
++    "_stream_transform": "readable-stream/transform",
++    "_stream_readable": "readable-stream/readable",
++    "_stream_writable": "readable-stream/writable",
++    "_stream_duplex": "readable-stream/duplex",
++    "_stream_passthrough": "readable-stream/passthrough",
++    "stream": "stream-browserify",
++    "vm": "vm-browserify"
++  },
++  "browser": {
++    "crypto": "react-native-crypto",
++    "http": "@tradle/react-native-http",
++    "https": "https-browserify",
++    "os": "react-native-os",
++    "path": "path-browserify",
++    "fs": "react-native-level-fs",
++    "_stream_transform": "readable-stream/transform",
++    "_stream_readable": "readable-stream/readable",
++    "_stream_writable": "readable-stream/writable",
++    "_stream_duplex": "readable-stream/duplex",
++    "_stream_passthrough": "readable-stream/passthrough",
++    "stream": "stream-browserify",
++    "vm": "vm-browserify"
++  }
+ }

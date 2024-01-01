@@ -1357,7 +1357,7 @@ PODS:
     - React-Core
   - ReactNativeCameraKit (13.0.0):
     - React-Core
-  - ReactNativeUiLib (3.0.9):
+  - ReactNativeUiLib (4.1.1):
     - React
   - RealmJS (12.5.0):
     - React
@@ -1922,7 +1922,7 @@ SPEC CHECKSUMS:
   ReactCommon: cfe086d2e2ec9f2907c66666c856082608fba822
   ReactNativeAvoidSoftinput: 6af0bca4e89fc6fa560ef26a486eaf30414f09f0
   ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
-  ReactNativeUiLib: 8d3804947431a465a69f09c5e785c988314612a9
+  ReactNativeUiLib: 18c6c7cae814e9fb4442b6d9a5fb6f50ae36da98
   RealmJS: 07d8eb900517a4faddb04d7a0062e67bf8daa066
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba

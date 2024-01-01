@@ -7,13 +7,17 @@ import {
 } from 'types/navigation';
 
 import { AuthContext } from 'lib/auth';
+import { BSON } from 'realm';
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Pilot } from 'realmdb/Pilot';
 import { ScrollView } from 'react-native';
 import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
+import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
+import { useObject } from '@realm/react';
 import { useSelector } from 'react-redux';
 
 export type Props = CompositeScreenProps<
@@ -27,6 +31,9 @@ const SetupScreen = ({ navigation, route }: Props) => {
 
   const auth = useContext(AuthContext);
   const userProfile = useSelector(selectUserProfile);
+  const selectedPilotId = useSelector(selectPilot).pilotId;
+
+  const selectedPilot = useObject(Pilot, new BSON.ObjectId(selectedPilotId));
 
   useEffect(() => {
     if (route.params?.subNav) {
@@ -43,12 +50,16 @@ const SetupScreen = ({ navigation, route }: Props) => {
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'PILOTS'}/>
-      <ListItem
-        title={'Andy Phillipson'}
-        subtitle={'Logged 12:35 over 7 events'}
-        position={['first']}
-        onPress={() => navigation.navigate('Pilot')}
-      />
+      {selectedPilot &&
+        <ListItem
+          title={selectedPilot.name}
+          subtitle={'Logged 12:35 over 7 events'}
+          position={['first']}
+          onPress={() => navigation.navigate('Pilot', {
+            pilotId: '',
+          })}
+        />
+      }
       <ListItem
         title={'Select or Create a Pilot...'}
         position={['last']}

@@ -1,14 +1,15 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
+import { Pressable, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
+import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { ListItem } from 'components/atoms/List';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'Models'>;
@@ -61,14 +62,17 @@ const ModelsScreen = ({ navigation }: Props) => {
             modelId: '1'
           })}
           rightImage={
-            <CustomIcon
-              name={'circle-info'}
-              size={22}
-              color={theme.colors.screenHeaderBackButton}
+            <Pressable
+              style={{flexDirection: 'row'}}
               onPress={() => navigation.navigate('Model', {
-                modelId: '1',
-              })}
-            />
+                modelId: '1'
+              })}>
+              <CustomIcon
+                name={'circle-info'}
+                size={22}
+                color={theme.colors.screenHeaderBackButton}
+              />
+            </Pressable>            
           }
         />
       </ScrollView>

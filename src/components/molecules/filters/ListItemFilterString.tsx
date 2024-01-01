@@ -76,7 +76,11 @@ const ListItemFilterString = (props: Props) => {
         {...props}
         title={title}
         value={''}
-        segments={[{ label: StringRelation.Any }, { label: StringRelation.Contains }, { label: StringRelation.Missing }]}
+        segments={[
+          { label: StringRelation.Any, labelStyle: theme.styles.textTiny },
+          { label: StringRelation.Contains, labelStyle: theme.styles.textTiny },
+          { label: StringRelation.Missing, labelStyle: theme.styles.textTiny }
+        ]}
         position={expanded && position ? lodash.without(position, 'last') : position}
         onChangeIndex={onRelationSelect}
         expanded={expanded}

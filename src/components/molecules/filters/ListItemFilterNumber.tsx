@@ -2,6 +2,7 @@ import { ListItemInput, ListItemSegmented, ListItemSegmentedInterface } from 'co
 
 import lodash from 'lodash';
 import { useState } from "react";
+import { useTheme } from 'theme';
 
 export type NumberFilter = {
   relation: NumberRelation;
@@ -25,6 +26,8 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
 };
 
 const ListItemFilterNumber = (props: Props) => {
+  const theme = useTheme();
+  
   const {
     label,
     onValueChange,
@@ -55,7 +58,13 @@ const ListItemFilterNumber = (props: Props) => {
         {...props}
         title={title}
         value={''}
-        segments={[{ label: NumberRelation.Any }, { label: `  ${NumberRelation.LT}  ` }, { label: `  ${NumberRelation.GT}  ` }, { label: `  ${NumberRelation.EQ}  ` }, { label: `  ${NumberRelation.NE}  ` }]}
+        segments={[
+          { label: NumberRelation.Any, labelStyle: theme.styles.textTiny },
+          { label: `  ${NumberRelation.LT}  `, labelStyle: theme.styles.textTiny },
+          { label: `  ${NumberRelation.GT}  `, labelStyle: theme.styles.textTiny },
+          { label: `  ${NumberRelation.EQ}  `, labelStyle: theme.styles.textTiny },
+          { label: `  ${NumberRelation.NE}  `, labelStyle: theme.styles.textTiny }
+        ]}
         position={expanded && position ? lodash.without(position, 'last') : position}
         onChangeIndex={onRelationSelect}
         expanded={expanded}

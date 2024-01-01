@@ -76,7 +76,11 @@ const ListItemFilterEnum = (props: Props) => {
         {...props}
         title={title}
         value={''}
-        segments={[{ label: EnumRelation.Any }, { label: EnumRelation.Is }, { label: EnumRelation.IsNot }]}
+        segments={[
+          { label: EnumRelation.Any, labelStyle: theme.styles.textTiny },
+          { label: EnumRelation.Is, labelStyle: theme.styles.textTiny },
+          { label: EnumRelation.IsNot, labelStyle: theme.styles.textTiny }
+        ]}
         position={expanded && position ? lodash.without(position, 'last') : position}
         onChangeIndex={onRelationSelect}
         expanded={expanded}

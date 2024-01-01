@@ -4,6 +4,7 @@ import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
 import lodash from 'lodash';
 import { useState } from "react";
+import { useTheme } from 'theme';
 
 export type DateFilter = {
   relation: DateRelation;
@@ -25,6 +26,8 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
 };
 
 const ListItemFilterDate = (props: Props) => {
+  const theme = useTheme();
+  
   const {
     onValueChange,
     position,
@@ -55,7 +58,12 @@ const ListItemFilterDate = (props: Props) => {
         {...props}
         title={title}
         value={''}
-        segments={[{ label: DateRelation.Any }, { label: DateRelation.Before }, { label: DateRelation.After }, { label: DateRelation.Past }]}
+        segments={[
+          { label: DateRelation.Any, labelStyle: theme.styles.textTiny  },
+          { label: DateRelation.Before, labelStyle: theme.styles.textTiny  },
+          { label: DateRelation.After, labelStyle: theme.styles.textTiny  },
+          { label: DateRelation.Past, labelStyle: theme.styles.textTiny  }
+        ]}
         position={expanded && position ? lodash.without(position, 'last') : position}
         onChangeIndex={onRelationSelect}
         expanded={expanded}

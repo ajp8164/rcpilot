@@ -24,7 +24,7 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
 
   const realm = useRealm();
-  const eventStyle = eventStyleId ? useObject(EventStyle, new BSON.ObjectId(eventStyleId)) : null;
+  const eventStyle = useObject(EventStyle, new BSON.ObjectId(eventStyleId));
 
   const [name, setName] = useState(eventStyle?.name || undefined);
 

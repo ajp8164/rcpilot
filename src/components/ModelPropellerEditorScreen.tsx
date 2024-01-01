@@ -27,7 +27,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
 
   const realm = useRealm();
-  const modelPropeller = modelPropellerId ? useObject(ModelPropeller, new BSON.ObjectId(modelPropellerId)) : null;
+  const modelPropeller = useObject(ModelPropeller, new BSON.ObjectId(modelPropellerId));
 
   const [name, setName] = useState(modelPropeller?.name || undefined);
   const [vendor, setVendor] = useState(modelPropeller?.vendor || undefined);

@@ -26,7 +26,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
 
   const realm = useRealm();
-  const modelFuel = modelFuelId ? useObject(ModelFuel, new BSON.ObjectId(modelFuelId)) : null;
+  const modelFuel = useObject(ModelFuel, new BSON.ObjectId(modelFuelId));
   
   const [name, setName] = useState(modelFuel?.name || undefined);
   const [cost, setCost] = useState(modelFuel?.cost?.toFixed(2) || undefined);

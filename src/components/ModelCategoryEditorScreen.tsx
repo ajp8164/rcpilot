@@ -24,7 +24,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
 
   const realm = useRealm();
-  const modelCategory = modelCategoryId ? useObject(ModelCategory, new BSON.ObjectId(modelCategoryId)) : null;
+  const modelCategory = useObject(ModelCategory, new BSON.ObjectId(modelCategoryId));
 
   const [name, setName] = useState(modelCategory?.name || undefined);
 

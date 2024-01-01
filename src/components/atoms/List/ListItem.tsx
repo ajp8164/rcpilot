@@ -43,6 +43,7 @@ const ListItem = (props: Props) => {
           ]}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
           rightImage={
+            props.rightImage === false ? false :
             props.disabled !== true ?
               <View style={{flexDirection: 'row'}}>
                 {React.isValidElement(props.rightImage) ? props.rightImage : null}

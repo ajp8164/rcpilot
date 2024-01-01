@@ -26,17 +26,21 @@ const ListItemCheckboxInfo = (props: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+
+  const checkIcon = checked ? iconChecked : iconUnchecked;
+  
   return (
-    <>
     <_ListItem
       {...props}
       containerStyle={{...props.containerStyle, ...s.container}}
       leftImage={
-        <Icon
-          name={checked ? iconChecked : iconUnchecked}
-          size={iconSize}
-          style={checked ? {opacity: 1} : {opacity: 0}}
-        />
+        checkIcon ?
+          <Icon
+            name={checkIcon}
+            size={iconSize}
+          />
+        :
+          <></>
       }
       rightImage={
         <CustomIcon
@@ -47,8 +51,8 @@ const ListItemCheckboxInfo = (props: Props) => {
           onPress={onPressInfo}
         />
       }
-  />
-  </>);
+    />
+  );
 }
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({

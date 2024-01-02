@@ -45,6 +45,9 @@ export type BatteriesNavigatorParamList = {
   BatteryPerformanceNavigator: undefined;
   EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: undefined;
+  NewBatteryCycleNavigator: {
+    batteryId: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -66,7 +69,6 @@ export type BatteryPerformanceNavigatorParamList = {
     eventName: string;
   };
 };
-
 
 export type LogNavigatorParamList = {
   Log: undefined;
@@ -139,6 +141,24 @@ export type BatteryFiltersNavigatorParamList = {
 export type NewBatteryNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   NewBattery: undefined;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
+  };
+};
+
+export type NewBatteryCycleNavigatorParamList = {
+  NewBatteryCycle: {
+    batteryId: string;
+  };
+  BatteryCellResistances: {
+    batteryCycleId: string;
+  };
+  BatteryCellVoltages: {
+    batteryCycleId: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];

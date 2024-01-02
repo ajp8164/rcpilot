@@ -10,6 +10,7 @@ import BatteryPerformanceNavigator from 'components/navigation/BatteryPerformanc
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
 import BatteryScreen from 'components/BatteryScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
+import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
 import NewBatteryNavigator from './NewBatteryNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
@@ -77,6 +78,14 @@ const BatteriesNavigator = () => {
         component={BatteryCycleScreen}
         options={{
           title: 'Edit Cycle',
+        }}
+      />
+      <BatteriesStack.Screen
+        name='NewBatteryCycleNavigator'
+        component={NewBatteryCycleNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal'
         }}
       />
       <BatteriesStack.Screen

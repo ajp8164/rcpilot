@@ -1,14 +1,18 @@
+import { BatteriesNavigatorParamList, NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { FlatList, ListRenderItem, View } from 'react-native';
 
-import { BatteriesNavigatorParamList } from 'types/navigation';
 import { BatteryCycle } from 'types/battery';
+import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCellResistances'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCellResistances'>,
+  NativeStackScreenProps<NewBatteryCycleNavigatorParamList>
+>;
 
 const BatteryCellResistancesScreen = ({ route }: Props) => {
   const theme = useTheme();
@@ -62,7 +66,7 @@ const BatteryCellResistancesScreen = ({ route }: Props) => {
     <Divider text={'OVERALL PACK RESISTANCE'} />
     <ListItemInput
       title={'Total Pack'}
-      label={'V'}
+      label={'mΩ'}
       value={'Unknown'}
       position={['first', 'last']}
       keyboardType={'decimal-pad'}

@@ -10,6 +10,7 @@ import { useRef } from 'react';
 export interface ListItemSegmentedInterface extends _ListItem {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
+  fullWidth?: boolean;
   initialIndex?: number;
   onChangeIndex: (index: number) => void;
   segments: SegmentedControlItemProps[];
@@ -19,6 +20,7 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
   const {
     expanded = false,
     ExpandableComponent,
+    fullWidth = false,
     initialIndex = 0,
     onChangeIndex,
     segments,
@@ -26,7 +28,7 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-
+  
   const sectionInitiallyExpanded = useRef(expanded);
 
   return (
@@ -37,18 +39,20 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
         titleStyle={s.title}
         rightImage={false}
         extraContentComponent={
-          <View style={s.segmentedView} >
+          <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]} >
             <SegmentedControl
               initialIndex={initialIndex}
               onChangeIndex={onChangeIndex}
               segments={segments}
-              borderRadius={8}
+              borderRadius={fullWidth ? 9 : 8}
               outlineColor={theme.colors.subtleGray}
-              backgroundColor={theme.colors.viewBackground}
+              backgroundColor={fullWidth ? theme.colors.subtleGray : theme.colors.viewBackground}
               activeBackgroundColor={theme.colors.white}
               activeColor={theme.colors.text}
               inactiveColor={theme.colors.text}
               style={s.segmented}
+              segmentsStyle={fullWidth ? s.segmentsStyle : {}}
+              containerStyle={props.disabled ? s.segmentedDisabled : {}}
             />
         </View>
         }
@@ -76,17 +80,29 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     height: 0,
   },
   container: {
-    minHeight: 48
+    minHeight: 48,
   },
   segmented: {
     borderWidth: 0,
-    paddingHorizontal: 1,
+    paddingLeft: 1,
+    marginRight: -1,
+    alignSelf: 'center',
+  },
+  segmentedDisabled: {
+    pointerEvents: 'none',
   },
   segmentedView: {
     position: 'absolute',
     right: 15,
     justifyContent: 'flex-start',
     zIndex: 1,
+  },
+  segmentedViewFullWidth: {
+    right: 0,
+    left: 0,
+  },
+  segmentsStyle: {
+    minHeight: 48,
   },
   title: {
     left: -16

@@ -45,14 +45,13 @@ const ActionBar = ({
 
   return (
     <View style={s.container} onLayout={onLayout}>
-      <View style={s.contentContainer}>
-        <FlatList
-          data={actions}
-          renderItem={renderActions}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-        />
-      </View>
+      <FlatList
+        data={actions}
+        renderItem={renderActions}
+        keyExtractor={(_item, index) => `${index}`}
+        contentContainerStyle={s.contentContainer}
+        showsVerticalScrollIndicator={false}
+      />
     </View>
   );
 };

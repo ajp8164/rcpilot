@@ -168,6 +168,7 @@ const ChecklistTemplateEditorView = (props: ChecklistTemplateEditorViewProps) =>
         renderItem={renderActions}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
       />
       <Divider />
       <ListItem

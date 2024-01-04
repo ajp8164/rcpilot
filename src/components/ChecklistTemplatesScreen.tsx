@@ -131,6 +131,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
           renderItem={renderPreEventChecklistTemplates}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
         />
         <Divider text={'POST EVENT LIST TEMPLATES'}/>
         <FlatList
@@ -138,6 +139,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
           renderItem={renderPostEventChecklistTemplates}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
         />
         <Divider text={'MAINTENANCE LIST TEMPLATES'}/>
         <FlatList
@@ -145,6 +147,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
           renderItem={renderMaintenanceChecklistTemplates}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
         />
         <Divider />
       </ScrollView>

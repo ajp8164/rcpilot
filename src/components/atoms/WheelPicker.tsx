@@ -38,6 +38,7 @@ export interface WheelPickerInterface {
   labelWidth?: WheelPickerWidth | WheelPickerWidth[];
   placeholder?: string | WheelPickerItem | WheelPickerItem[];
   value?: Date | string | string[];
+  wheelVisible?: boolean | boolean[];
   onValueChange: (
     wheelIndex: number,
     value: Date | string | string[],
@@ -59,6 +60,7 @@ const WheelPicker = ({
   labelWidth,
   placeholder = defaultPlaceholder,
   value,
+  wheelVisible = true,
   onValueChange,
 }: WheelPickerInterface) => {
   const theme = useTheme();
@@ -72,16 +74,31 @@ const WheelPicker = ({
 
   useEffect(() => {
     // If caller changes the items then a re-render is needed to update wheel(s).
-    setPickerItems( (Array.isArray(items && items[0]) ? items : [items]) as WheelPickerItem[][]);
-  }, items);
+    setPickerItems((Array.isArray(items && items[0]) ? items : [items]) as WheelPickerItem[][]);
+  }, [items]);
+
+  useEffect(() => {
+    // If caller changes wheel visibility then a re-render is needed to update wheel(s).
+    setPickerWheelVisible(Array.isArray(wheelVisible) ? wheelVisible : [wheelVisible]);
+  }, [wheelVisible]);
+
+  useEffect(() => {
+    // If caller changes wheel width then a re-render is needed to update wheel(s).
+    setPickerItemWidth((itemWidth && Array.isArray(itemWidth) ? itemWidth : [itemWidth]) as WheelPickerWidth[]);
+  }, [itemWidth]);
 
   const [pickerValue, setPickerValue] = useState<PickerInternalValue[]>(
     (Array.isArray(value) ? value : [value]) as PickerInternalValue[],
   );
-  const [pickerItemWidth, _setPickerItemWidth] = useState<WheelPickerWidth[]>(
+  const [pickerItemWidth, setPickerItemWidth] = useState<WheelPickerWidth[]>(
     (itemWidth && Array.isArray(itemWidth)
       ? itemWidth
       : [itemWidth]) as WheelPickerWidth[],
+  );
+  const [pickerWheelVisible, setPickerWheelVisible] = useState<boolean[]>(
+    (wheelVisible && Array.isArray(wheelVisible)
+      ? wheelVisible
+      : [wheelVisible]) as boolean[],
   );
   const [pickerLabels, _setPickerLabels] = useState<string[]>(
     (labels && Array.isArray(labels) ? labels : [labels]) as string[],
@@ -207,6 +224,9 @@ const WheelPicker = ({
       ) : (
         <View style={s.pickerContainer}>
           {pickerItems.map((wheel, wheelIndex) => {
+            if (!pickerWheelVisible[wheelIndex]) {
+              return null;
+            }
             let iWidth: string | number =
               (itemWidth && pickerItemWidth[wheelIndex]) || '100%';
             if (typeof iWidth === 'string') {

@@ -32,7 +32,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      eqString(pilot?.name, name)
+      !eqString(pilot?.name, name)
     );
 
     const save = () => {

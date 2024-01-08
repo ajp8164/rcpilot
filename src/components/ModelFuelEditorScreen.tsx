@@ -34,9 +34,9 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      eqString(modelFuel?.name, name) ||
-      eqNumber(modelFuel?.cost, cost) ||
-      eqString(modelFuel?.notes, notes)
+      !eqString(modelFuel?.name, name) ||
+      !eqNumber(modelFuel?.cost, cost) ||
+      !eqString(modelFuel?.notes, notes)
     );
 
     const save = () => {

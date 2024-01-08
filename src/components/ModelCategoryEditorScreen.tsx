@@ -30,7 +30,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      eqString(modelCategory?.name, name)
+      !eqString(modelCategory?.name, name)
     );
 
     const save = () => {

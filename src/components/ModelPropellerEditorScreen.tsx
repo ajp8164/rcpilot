@@ -39,13 +39,13 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      eqString(modelPropeller?.name, name) ||
-      eqString(modelPropeller?.vendor, vendor) ||
-      eqNumber(modelPropeller?.numberOfBlades, numberOfBlades) ||
-      eqNumber(modelPropeller?.diameter, diameter) ||
-      eqNumber(modelPropeller?.pitch, pitch) ||
-      eqString(modelPropeller?.measurementUnits, measurementUnits) ||
-      eqString(modelPropeller?.notes, notes)
+      !eqString(modelPropeller?.name, name) ||
+      !eqString(modelPropeller?.vendor, vendor) ||
+      !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades) ||
+      !eqNumber(modelPropeller?.diameter, diameter) ||
+      !eqNumber(modelPropeller?.pitch, pitch) ||
+      !eqString(modelPropeller?.measurementUnits, measurementUnits) ||
+      !eqString(modelPropeller?.notes, notes)
     );
 
     const save = () => {

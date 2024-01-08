@@ -30,7 +30,7 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      eqString(eventStyle?.name, name)
+      !eqString(eventStyle?.name, name)
     );
 
     const save = () => {

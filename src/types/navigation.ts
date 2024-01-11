@@ -1,3 +1,5 @@
+import { ChecklistActionInterface } from 'components/ChecklistActionEditorScreen';
+import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { FlightOutcome } from 'types/flight';
@@ -236,8 +238,9 @@ export type NewModelPropellerNavigatorParamList = {
 
 export type NewChecklistTemplateNavigatorParamList = {
   ChecklistActionEditor: {
-    checklistTemplateId: string;
-    actionIndex: number;
+    checklistAction?: ChecklistActionInterface;
+    checklistTemplateType: ChecklistTemplateType;
+    eventName: string;
   };
   EnumPicker: EnumPickerInterface;
   NewChecklistTemplate: undefined;
@@ -251,7 +254,9 @@ export type NewChecklistTemplateNavigatorParamList = {
 
 export type NewChecklistActionNavigatorParamList = {
   NewChecklistAction: {
-    checklistTemplateId: string;
+    checklistAction?: ChecklistActionInterface;
+    checklistTemplateType: ChecklistTemplateType;
+    eventName: string;
   };
   Notes: {
     title?: string;
@@ -265,8 +270,9 @@ export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
   ChecklistActionEditor: {
-    checklistTemplateId: string;
-    actionIndex: number;
+    checklistAction?: ChecklistActionInterface;
+    checklistTemplateType: ChecklistTemplateType;
+    eventName: string;
   };
   ChecklistTemplates: undefined;
   ChecklistTemplateEditor: {

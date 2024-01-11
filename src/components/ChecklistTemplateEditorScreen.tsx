@@ -30,19 +30,12 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
-console.log('CL action count',checklistTemplate?.actions.length);
+
   const [name, setName] = useState(checklistTemplate?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
   const [actions, setActions] = useState<Realm.List<ChecklistAction> | Omit<ChecklistAction, keyof Realm.Object>[]>(
     checklistTemplate?.actions || []
   );
-
-  // const [savedActions, setSavedActions] = useState(checklistTemplate?.actions);
-  // const [pendingActions, setPendingActions] = useState<Omit<ChecklistAction, keyof Realm.Object>[]>([]);
-
-  // useEffect(() => {
-  //   setActions(checklistTemplate ? savedActions : pendingActions);
-  // }, []);
 
   useEffect(() => {
     const canSave = !!name && (
@@ -134,6 +127,15 @@ console.log('CL action count',checklistTemplate?.actions.length);
       });
     }
   };
+
+  const deleteAction = (index: number) => {
+    console.log('delete', index);
+    if (checklistTemplate) {
+      realm.write(() => {
+        checklistTemplate.actions.splice(index, 1);
+      });
+    }
+  };
   
   const actionScheduleToString = (action: ChecklistAction) => {
     let result = '';
@@ -203,13 +205,19 @@ console.log('CL action count',checklistTemplate?.actions.length);
   };
 
   const renderActions: ListRenderItem<ChecklistAction | Omit<ChecklistAction, keyof Realm.Object>> = ({ item: action, index }) => {
-    console.log(index);
     return (
       <ListItem
         key={index}
         title={action.description}
         subtitle={actionScheduleToString(action as ChecklistAction)}
         position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
+        swipeRightItems={[{
+          icon: 'delete',
+          text: 'Delete',
+          color: theme.colors.assertive,
+          x: 64,
+          onPress: () => deleteAction(index)},
+        ]}
         // @ts-ignore
         onPress={() => navigation.navigate('ChecklistActionEditor', {
           checklistAction: {
@@ -250,7 +258,7 @@ console.log('CL action count',checklistTemplate?.actions.length);
             eventName: 'checklist-template-type',
           })}
           /> 
-        <Divider text={'ACTIONS'} />
+        {actions.length > 0 && <Divider text={'ACTIONS'} />}
         <FlatList
           data={actions}
           renderItem={renderActions}

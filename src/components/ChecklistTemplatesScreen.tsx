@@ -1,9 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { ChecklistTemplate, ChecklistTemplateType } from 'types/checklistTemplate';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@rneui/base';
+import {ChecklistTemplate} from 'realmdb/ChecklistTemplate';
+import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
@@ -11,6 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplates'>;
 
@@ -18,32 +20,34 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const [checklistTemplates, _setChecklistTemplates] = useState<ChecklistTemplate[]>([
-    {
-      id: '1',
-      name: 'PreFlight 1',
-      type: ChecklistTemplateType.PreEvent,
-      actions: [],
-    },
-    {
-      id: '2',
-      name: 'PreFlight 2',
-      type: ChecklistTemplateType.PreEvent,
-      actions: [],
-    },
-    {
-      id: '3',
-      name: 'Post-Flight 1',
-      type: ChecklistTemplateType.PostEvent,
-      actions: [],
-    },
-    {
-      id: '4',
-      name: 'Oil tail',
-      type: ChecklistTemplateType.Maintenance,
-      actions: [],
-    },
-  ]);
+  // const [checklistTemplates, _setChecklistTemplates] = useState<ChecklistTemplate[]>([
+  //   {
+  //     id: '1',
+  //     name: 'PreFlight 1',
+  //     type: ChecklistTemplateType.PreEvent,
+  //     actions: [],
+  //   },
+  //   {
+  //     id: '2',
+  //     name: 'PreFlight 2',
+  //     type: ChecklistTemplateType.PreEvent,
+  //     actions: [],
+  //   },
+  //   {
+  //     id: '3',
+  //     name: 'Post-Flight 1',
+  //     type: ChecklistTemplateType.PostEvent,
+  //     actions: [],
+  //   },
+  //   {
+  //     id: '4',
+  //     name: 'Oil tail',
+  //     type: ChecklistTemplateType.Maintenance,
+  //     actions: [],
+  //   },
+  // ]);
+
+  const checklistTemplates = useQuery(ChecklistTemplate);
 
   const [allChecklistTemplates, setAllChecklistTemplates] = useState<{[key in ChecklistTemplateType]: ChecklistTemplate[]}>({
     [ChecklistTemplateType.PreEvent]: [],
@@ -76,43 +80,43 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
     });
   }, [checklistTemplates]);
 
-  const renderPreEventChecklistTemplates: ListRenderItem<ChecklistTemplate> = ({ item: template, index }) => {
+  const renderPreEventChecklistTemplates: ListRenderItem<ChecklistTemplate> = ({ item, index }) => {
     return (
       <ListItem
-        key={template.id}
-        title={template.name}
-        subtitle={`Contains ${template.actions.length} actions`}
+        key={item._id.toString()}
+        title={item.name}
+        subtitle={`Contains ${item.actions.length} actions`}
         position={allChecklistTemplates[ChecklistTemplateType.PreEvent].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.PreEvent].length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ChecklistTemplateEditor', {
-          checklistTemplateId: template.id,
+          checklistTemplateId: item._id.toString(),
         })}
       />
     )
   };
 
-  const renderPostEventChecklistTemplates: ListRenderItem<ChecklistTemplate> = ({ item: template, index }) => {
+  const renderPostEventChecklistTemplates: ListRenderItem<ChecklistTemplate> = ({ item, index }) => {
     return (
       <ListItem
-        key={template.id}
-        title={template.name}
-        subtitle={`Contains ${template.actions.length} actions`}
+        key={item._id.toString()}
+        title={item.name}
+        subtitle={`Contains ${item.actions.length} actions`}
         position={allChecklistTemplates[ChecklistTemplateType.PostEvent].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.PostEvent].length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ChecklistTemplateEditor', {
-          checklistTemplateId: template.id,
+          checklistTemplateId: item._id.toString(),
         })}
       />
     )
   };
 
-  const renderMaintenanceChecklistTemplates: ListRenderItem<ChecklistTemplate> = ({ item: template, index }) => {
+  const renderMaintenanceChecklistTemplates: ListRenderItem<ChecklistTemplate> = ({ item, index }) => {
     return (
       <ListItem
-        key={template.id}
-        title={template.name}
-        subtitle={`Contains ${template.actions.length} actions`}
+        key={item._id.toString()}
+        title={item.name}
+        subtitle={`Contains ${item.actions.length} actions`}
         position={allChecklistTemplates[ChecklistTemplateType.Maintenance].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.Maintenance].length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ChecklistTemplateEditor', {
-          checklistTemplateId: template.id,
+          checklistTemplateId: item._id.toString(),
         })}
       />
     )
@@ -125,30 +129,39 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={'PRE-EVENT LIST TEMPLATES'}/>
-        <FlatList
-          data={allChecklistTemplates[ChecklistTemplateType.PreEvent]}
-          renderItem={renderPreEventChecklistTemplates}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-        />
-        <Divider text={'POST EVENT LIST TEMPLATES'}/>
-        <FlatList
-          data={allChecklistTemplates[ChecklistTemplateType.PostEvent]}
-          renderItem={renderPostEventChecklistTemplates}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-        />
-        <Divider text={'MAINTENANCE LIST TEMPLATES'}/>
-        <FlatList
-          data={allChecklistTemplates[ChecklistTemplateType.Maintenance]}
-          renderItem={renderMaintenanceChecklistTemplates}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-        />
+        {allChecklistTemplates[ChecklistTemplateType.PreEvent].length > 0 &&
+        <>
+          <Divider text={'PRE-EVENT LIST TEMPLATES'}/>
+          <FlatList
+            data={allChecklistTemplates[ChecklistTemplateType.PreEvent]}
+            renderItem={renderPreEventChecklistTemplates}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+          />
+        </>}
+        {allChecklistTemplates[ChecklistTemplateType.PostEvent].length > 0 &&
+        <>
+          <Divider text={'POST EVENT LIST TEMPLATES'}/>
+          <FlatList
+            data={allChecklistTemplates[ChecklistTemplateType.PostEvent]}
+            renderItem={renderPostEventChecklistTemplates}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+          />
+        </>}
+        {allChecklistTemplates[ChecklistTemplateType.Maintenance].length > 0 &&
+        <>
+          <Divider text={'MAINTENANCE LIST TEMPLATES'}/>
+          <FlatList
+            data={allChecklistTemplates[ChecklistTemplateType.Maintenance]}
+            renderItem={renderMaintenanceChecklistTemplates}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+          />
+        </>}
         <Divider />
       </ScrollView>
     </SafeAreaView>

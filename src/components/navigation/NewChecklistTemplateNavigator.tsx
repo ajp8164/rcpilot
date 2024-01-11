@@ -1,7 +1,8 @@
+import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
+import ChecklistTemplateEditorScreen from 'components/ChecklistTemplateEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
 import { NewChecklistTemplateNavigatorParamList } from 'types/navigation';
-import NewChecklistTemplateScreen from 'components/NewChecklistTemplateScreen';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -31,9 +32,16 @@ const NewChecklistTemplateNavigator = () => {
       }}>
         <NewChecklistTemplateStack.Screen
           name="NewChecklistTemplate"
-          component={NewChecklistTemplateScreen}
+          component={ChecklistTemplateEditorScreen}
           options={{
             title: 'New Template',
+          }}
+        />
+        <NewChecklistTemplateStack.Screen
+          name="ChecklistActionEditor"
+          component={ChecklistActionEditorScreen}
+          options={{
+            title: 'Action',
           }}
         />
         <NewChecklistTemplateStack.Screen

@@ -1,6 +1,6 @@
+import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import NavContext from './NavContext';
 import { NewChecklistActionNavigatorParamList } from 'types/navigation';
-import NewChecklistActionScreen from 'components/NewChecklistActionScreen';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -30,7 +30,7 @@ const NewChecklistActionNavigator = () => {
       }}>
         <NewChecklistActionStack.Screen
           name="NewChecklistAction"
-          component={NewChecklistActionScreen}
+          component={ChecklistActionEditorScreen}
           options={{
             title: 'New Action',
           }}

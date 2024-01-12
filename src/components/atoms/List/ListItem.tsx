@@ -2,20 +2,26 @@ import { AppTheme, useTheme } from "theme";
 
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { Icon } from "@rneui/base";
+import { Pressable } from "react-native";
 import React from "react";
-import { View } from "react-native";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 import { useRef } from  'react';
 
 interface Props extends _ListItem {
+  drag?: () => void;
+  dragEnabled?: boolean;
+  editEnabled?: boolean;
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
   visible?: boolean;
 };
 
 const ListItem = (props: Props) => {
-  const { 
+  const {
+    drag = () => { return },
+    dragEnabled = false,
+    editEnabled = false,
     expanded = false,
     ExpandableComponent,
     visible = true,
@@ -30,6 +36,10 @@ const ListItem = (props: Props) => {
   const itemInitiallyExpanded = useRef(visible);
   const sectionInitiallyExpanded = useRef(expanded);
 
+  const openEdit = () => {
+    // Open swipeable
+  };
+
   const renderListItem = () => {
     return (
       <>
@@ -41,20 +51,34 @@ const ListItem = (props: Props) => {
             props.disabled ? s.valuePosition : {},
             props.rightImage === undefined && props.value ? {} : s.valuePosition
           ]}
+          disabled={editEnabled || dragEnabled || props.disabled}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
-          rightImage={
-            props.rightImage === false ? false :
-            props.disabled !== true ?
-              <View style={{flexDirection: 'row'}}>
-                {React.isValidElement(props.rightImage) ? props.rightImage : null}
-                <Icon
-                  name={'chevron-forward-outline'}
-                  type={'ionicon'}
-                  size={22}
-                  color={theme.colors.midGray}
-                />
-              </View>
-            : !props.disabled
+          leftImage={editEnabled ? (
+            <Pressable
+              style={s.editTouchContainer}
+              onPress={openEdit}>
+              <Icon
+                name={'remove-circle'}
+                type={'ionicon'}
+                size={22}
+                color={theme.colors.assertive}
+                style={s.editIcon}
+              />
+            </Pressable>
+          ) : props.leftImage}
+          rightImage={dragEnabled ? (
+            <Pressable
+              style={s.dragTouchContainer}
+              onPressIn={drag}>
+              <Icon
+                name={'menu'}
+                type={'ionicon'}
+                size={22}
+                color={theme.colors.midGray}
+                style={s.dragIcon}
+              />
+            </Pressable>
+          ) : props.rightImage
           }
         />
         <CollapsibleView
@@ -100,6 +124,30 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   disabled: {
     backgroundColor: theme.colors.listItem
+  },
+  dragIcon: {
+    justifyContent: 'center',
+    height: '100%',
+    width: 50,
+    left: -12,
+  },
+  dragTouchContainer: {
+    width: 50,
+    height: '100%',
+    position: 'absolute',
+    right: -16,
+    paddingLeft: 10,
+  },
+  editIcon: {
+    justifyContent: 'center',
+    height: '100%',
+    width: 50,
+  },
+  editTouchContainer: {
+    width: 50,
+    height: '100%',
+    position: 'absolute',
+    left: -16,
   },
   value: {
     ...theme.styles.textDim

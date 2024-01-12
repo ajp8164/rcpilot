@@ -5,7 +5,6 @@ export class ChecklistTemplate extends Object<ChecklistTemplate> {
   _id!: BSON.ObjectId;
   name!: string;
   type!: ChecklistTemplateType;
-  // actions!: ChecklistAction[];
   actions!: Realm.List<ChecklistAction>;
 
   static schema: ObjectSchema = {
@@ -15,7 +14,6 @@ export class ChecklistTemplate extends Object<ChecklistTemplate> {
       name: 'string',
       type: 'string',
       actions: { type: 'list', objectType: 'ChecklistAction', default: [] },
-      // actions: 'ChecklistAction[]',
     },
     primaryKey: '_id',
   };
@@ -26,6 +24,7 @@ export class ChecklistAction extends Object<ChecklistAction> {
   schedule!: ChecklistActionSchedule;
   cost?: number;
   notes?: string;
+  ordinal!: number;
 
   static schema: ObjectSchema = {
     name: 'ChecklistAction',
@@ -35,6 +34,7 @@ export class ChecklistAction extends Object<ChecklistAction> {
       schedule: 'ChecklistActionSchedule',
       cost: 'float?',
       notes: 'string?',
+      ordinal: 'float',
     },
   };
 };

@@ -1,9 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
 import { ChecklistAction, ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistActionNonRepeatingScheduleTimeframe, ChecklistActionRepeatingScheduleFrequency, ChecklistTemplateActionScheduleType, ChecklistTemplateType } from 'types/checklistTemplate';
-import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { Platform, ScrollView, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
@@ -33,9 +34,11 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const [name, setName] = useState(checklistTemplate?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
-  const [actions, setActions] = useState<Realm.List<ChecklistAction> | Omit<ChecklistAction, keyof Realm.Object>[]>(
-    checklistTemplate?.actions || []
+  const [actions, setActions] = useState(
+    (checklistTemplate?.actions.toJSON() || []) as Omit<ChecklistAction, keyof Realm.Object>[]
   );
+
+  const [editModeEnabled, setEditModeEnabled] = useState(false);
 
   useEffect(() => {
     const canSave = !!name && (
@@ -48,7 +51,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         realm.write(() => {
           checklistTemplate.name = name!;
           checklistTemplate.type = type;
-          // checklistTemplate.actions = [];
+          // Existing actions are saved inline with edits/adds.
         });
       } else {
         realm.write(() => {
@@ -64,6 +67,10 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     const onDone = () => {
       save();
       navigation.goBack();
+    };
+
+    const onEdit = () => {
+      setEditModeEnabled(!editModeEnabled);
     };
 
     navigation.setOptions({
@@ -89,10 +96,19 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
               onPress={onDone}
             />
           )
+        } else {
+          return (
+            <Button
+              title={editModeEnabled ? 'Done' : 'Edit'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+              onPress={onEdit}
+            />
+          )
         }
       },
     });
-  }, [ name, type, actions ]);
+  }, [ name, type, actions, editModeEnabled ]);
 
   useEffect(() => {
     event.on('checklist-template-type', setType);
@@ -103,40 +119,47 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     };
   }, []);
 
-  const upsertAction = (editorResult: ChecklistActionInterface) => {
-    const newAction = editorResult.action as ChecklistAction;
-    const actionIndex = editorResult.actionIndex;
+  useEffect(() => {
+    if (checklistTemplate) {
+      realm.write(() => {
+        // @ts-expect-error Not recognizing the target as an embedded array.
+        checklistTemplate.actions = actions;
+      });
+    }
+  }, [ actions ]);
 
-    if (checklistTemplate && actionIndex) {
+  const upsertAction = (editorResult: ChecklistActionInterface) => {
+    const newOrChangedAction = editorResult as Omit<ChecklistAction, keyof Realm.Object>;
+    if (checklistTemplate && newOrChangedAction.ordinal ) {
       // Update existing action.
-      realm.write(() => {
-        console.log('index at save',actionIndex);
-        checklistTemplate.actions[actionIndex] = newAction;
-      });
-    } else if (checklistTemplate && !!!actionIndex) {
-      // Insert a new action.
-      console.log('pushing action at save',actionIndex);
-      realm.write(() => {
-        checklistTemplate.actions.push(newAction);
-      });
-    } else {
-      // No checklist template saved yet. Add action to state to save later.
-      console.log('caching action at save',actionIndex);
       setActions(prevState => {
-        return prevState.concat(newAction);
+        prevState[newOrChangedAction.ordinal] = newOrChangedAction;
+        return prevState;
+      });  
+    } else {
+      // Insert a new action.
+      newOrChangedAction.ordinal = actions.length;
+      setActions(prevState => {
+        return ([] as Omit<ChecklistAction, keyof Realm.Object>[]).concat(prevState, newOrChangedAction);
       });
     }
   };
 
   const deleteAction = (index: number) => {
-    console.log('delete', index);
     if (checklistTemplate) {
-      realm.write(() => {
-        checklistTemplate.actions.splice(index, 1);
-      });
+        const a = ([] as Omit<ChecklistAction, keyof Realm.Object>[]).concat(actions);
+        a.splice(index, 1);
+        reorderActions(a);
     }
   };
-  
+
+  const reorderActions = (data: Omit<ChecklistAction, keyof Realm.Object>[]) => {
+    for (let i = 0; i < data.length; i++) {
+      data[i].ordinal = i;
+    };
+    setActions(data);
+  };
+
   const actionScheduleToString = (action: ChecklistAction) => {
     let result = '';
 
@@ -204,30 +227,53 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     return result;
   };
 
-  const renderActions: ListRenderItem<ChecklistAction | Omit<ChecklistAction, keyof Realm.Object>> = ({ item: action, index }) => {
+  const renderAction = ({
+    item: action,
+    getIndex,
+    drag,
+    isActive,
+  }: RenderItemParams<ChecklistAction | Omit<ChecklistAction, keyof Realm.Object>>) => {
+    const index = getIndex();
+    if (index === undefined) return;
     return (
-      <ListItem
+      <View
         key={index}
-        title={action.description}
-        subtitle={actionScheduleToString(action as ChecklistAction)}
-        position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
-        swipeRightItems={[{
-          icon: 'delete',
-          text: 'Delete',
-          color: theme.colors.assertive,
-          x: 64,
-          onPress: () => deleteAction(index)},
-        ]}
-        // @ts-ignore
-        onPress={() => navigation.navigate('ChecklistActionEditor', {
-          checklistAction: {
-            action,
-            actionIndex: index,
-          },
-          checklistTemplateType: type,
-          eventName: 'checklist-action',
-        })}
-      />
+        style={[isActive ? s.shadow : {}]}>
+        <ListItem
+          title={action.description}
+          subtitle={actionScheduleToString(action as ChecklistAction)}
+          subtitleNumberOfLines={1}
+          position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
+          drag={drag}
+          dragEnabled={editModeEnabled}
+          editEnabled={editModeEnabled}
+          swipeRightItems={[{
+            icon: 'delete',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => deleteAction(index)},
+          ]}
+          // @ts-expect-error The union type for navigators is not recognized.
+          onPress={() => navigation.navigate('ChecklistActionEditor', {
+            checklistAction: action,
+            checklistTemplateType: type,
+            eventName: 'checklist-action',
+          })}
+        />
+        {/* <Pressable
+          key={index}
+          onPressIn={drag}
+          style={s.dragTouchContainer}>
+          <SvgXml
+            width={30}
+            height={30}
+            style={{ top: 14 }}
+            color={theme.colors.lightGray}
+            xml={getColoredSvg('iconDragHandle')}
+          />
+        </Pressable> */}
+      </View>
     );
   };
   
@@ -240,7 +286,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'NAME & TYPE'} />
         <ListItemInput
-          value={checklistTemplate?.name}
+          value={name}
           placeholder={'Checklist Template Name'}
           position={['first']}
           onChangeText={setName}
@@ -249,7 +295,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           title={'Template for List Type'}
           value={type}
           position={['last']}
-          // @ts-ignore
+          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Template Type',
             headerBackTitle: 'Back',
@@ -259,12 +305,22 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           })}
           /> 
         {actions.length > 0 && <Divider text={'ACTIONS'} />}
-        <FlatList
+        <DraggableFlatList
           data={actions}
-          renderItem={renderActions}
+          renderItem={renderAction}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
+          style={s.actionsList}
+          animationConfig={{
+            damping: 20,
+            mass: 0.01,
+            stiffness: 100,
+            overshootClamping: false,
+            restSpeedThreshold: 0.2,
+            restDisplacementThreshold: 2,
+          }}
+          onDragEnd={({ data }) => reorderActions(data)}
         />
         <Divider />
         <ListItem
@@ -272,7 +328,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           titleStyle={s.add}
           position={['first', 'last']}
           rightImage={false}
-          // @ts-ignore
+          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('NewChecklistActionNavigator', {
             screen: 'NewChecklistAction',
             params: { 
@@ -302,6 +358,17 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,
+  },
+  actionsList: {
+    overflow: 'visible'
+  },
+  shadow: {
+    ...theme.styles.shadowGlow,
+    ...Platform.select({
+      android: {
+        borderRadius: 20,
+      },
+    }),
   },
 }));
 

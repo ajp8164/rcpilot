@@ -26,13 +26,11 @@ import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 export interface ChecklistActionInterface {
-  action: {
-    description: string;
-    schedule: Omit<ChecklistActionSchedule, keyof Realm.Object>;
-    cost?: number;
-    notes?: string;
-  },
-  actionIndex?: number;
+  description: string;
+  schedule: Omit<ChecklistActionSchedule, keyof Realm.Object>;
+  cost?: number;
+  notes?: string;
+  ordinal?: number;
 };
 
 export type Props =
@@ -50,9 +48,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const event = useEvent();
   
-  const action = useRef(checklistAction?.action).current;
-  const actionIndex = useRef(checklistAction?.actionIndex).current;
-  // If actionIndex is undefined then we're creating a new action.
+  const action = useRef(checklistAction).current;
+  // If ordinal is undefined then we're creating a new action.
+  const isNewAction = useRef(checklistAction?.ordinal === undefined).current;
 
   const initialScheduleItems = useRef(getChecklistActionScheduleItems(action?.schedule.type ? ChecklistTemplateActionScheduleType.NonRepeating : ChecklistTemplateActionScheduleType.Repeating)).current;
 
@@ -99,17 +97,15 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
     const onDone = () => {
       const result: ChecklistActionInterface = {
-        action: {
-          description: description!,
-          schedule: selectedSchedule,
-          cost: Number(cost) || undefined,
-          notes,
-        },
-        actionIndex,
+        ...action,
+        description: description!,
+        schedule: selectedSchedule,
+        cost: Number(cost) || undefined,
+        notes,
       };
           
       if (checklistTemplateType === ChecklistTemplateType.Maintenance) {
-        result.action.cost = cost ? Number(cost) : undefined;
+        result.cost = cost ? Number(cost) : undefined;
       }
 
       event.emit(eventName, result);
@@ -119,7 +115,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     navigation.setOptions({
       headerBackVisible: !canSave,
       headerLeft: () => {
-        if (canSave || !actionIndex) {
+        if (canSave || isNewAction) {
           return (
             <Button
               title={'Cancel'}
@@ -297,7 +293,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={notes || 'Notes'}
           position={['first', 'last']}
-          // @ts-ignore
+          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('Notes', {
             title: 'Action Notes',
             text: notes,

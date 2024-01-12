@@ -20,33 +20,6 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  // const [checklistTemplates, _setChecklistTemplates] = useState<ChecklistTemplate[]>([
-  //   {
-  //     id: '1',
-  //     name: 'PreFlight 1',
-  //     type: ChecklistTemplateType.PreEvent,
-  //     actions: [],
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'PreFlight 2',
-  //     type: ChecklistTemplateType.PreEvent,
-  //     actions: [],
-  //   },
-  //   {
-  //     id: '3',
-  //     name: 'Post-Flight 1',
-  //     type: ChecklistTemplateType.PostEvent,
-  //     actions: [],
-  //   },
-  //   {
-  //     id: '4',
-  //     name: 'Oil tail',
-  //     type: ChecklistTemplateType.Maintenance,
-  //     actions: [],
-  //   },
-  // ]);
-
   const checklistTemplates = useQuery(ChecklistTemplate);
 
   const [allChecklistTemplates, setAllChecklistTemplates] = useState<{[key in ChecklistTemplateType]: ChecklistTemplate[]}>({

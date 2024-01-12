@@ -14,9 +14,9 @@ import WheelPicker from 'components/atoms/WheelPicker';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { toArrayOrdinals } from 'lib/utils';
+import { useEvent } from 'lib/event';
 import { useNavigation } from '@react-navigation/core';
 import { useSetState } from '@react-native-ajp-elements/core';
-import { useEvent } from 'lib/event';
 
 type BatteryView = BatteryViewMethods;
 
@@ -100,6 +100,7 @@ const BatteryView = (props: BatteryViewProps) => {
       title={'Chemistry'}
       value={battery.chemistry}
       disabled={batteryId !== undefined}
+      rightImage={batteryId === undefined}
       onPress={() => navigation.navigate('EnumPicker', {
         title: 'Chemistry',
         values: Object.values(BatteryChemistry),

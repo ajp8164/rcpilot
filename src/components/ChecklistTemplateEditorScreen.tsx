@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
 import { ChecklistAction, ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistActionNonRepeatingScheduleTimeframe, ChecklistActionRepeatingScheduleFrequency, ChecklistTemplateActionScheduleType, ChecklistTemplateType } from 'types/checklistTemplate';
-import DraggableFlatList, { RenderItemParams } from 'react-native-draggable-flatlist';
 import { ListItem, ListItemInput } from 'components/atoms/List';
+import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
 import { NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import { Platform, ScrollView, View } from 'react-native';
+import { Platform, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
@@ -244,6 +244,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           subtitle={actionScheduleToString(action as ChecklistAction)}
           subtitleNumberOfLines={1}
           position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
+          containerStyle={s.swipeableListItem}
           drag={drag}
           dragEnabled={editModeEnabled}
           editEnabled={editModeEnabled}
@@ -261,18 +262,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
             eventName: 'checklist-action',
           })}
         />
-        {/* <Pressable
-          key={index}
-          onPressIn={drag}
-          style={s.dragTouchContainer}>
-          <SvgXml
-            width={30}
-            height={30}
-            style={{ top: 14 }}
-            color={theme.colors.lightGray}
-            xml={getColoredSvg('iconDragHandle')}
-          />
-        </Pressable> */}
       </View>
     );
   };
@@ -281,8 +270,8 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
+      <NestableScrollContainer
+      showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'NAME & TYPE'} />
         <ListItemInput
@@ -303,15 +292,17 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
             selected: type,
             eventName: 'checklist-template-type',
           })}
-          /> 
+        />
         {actions.length > 0 && <Divider text={'ACTIONS'} />}
-        <DraggableFlatList
+        <View  style={{flex:1}}>
+        <NestableDraggableFlatList
           data={actions}
           renderItem={renderAction}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
           style={s.actionsList}
+          containerStyle={s.swipeableListMask}
           animationConfig={{
             damping: 20,
             mass: 0.01,
@@ -322,6 +313,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           }}
           onDragEnd={({ data }) => reorderActions(data)}
         />
+        </View>
         <Divider />
         <ListItem
           title={'Add a New Action'}
@@ -338,7 +330,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           })}
         />
         <Divider />
-      </ScrollView>
+      </NestableScrollContainer>
     </SafeAreaView>
   );
 };
@@ -360,7 +352,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     minWidth: 0,
   },
   actionsList: {
-    overflow: 'visible'
+    overflow: 'visible',
   },
   shadow: {
     ...theme.styles.shadowGlow,
@@ -369,6 +361,16 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
         borderRadius: 20,
       },
     }),
+  },
+  swipeableListItem: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+  },
+  swipeableListMask: {
+    borderRadius: 10,
+    overflow: 'hidden',
   },
 }));
 

@@ -4,6 +4,7 @@ import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import { Icon } from "@rneui/base";
 import { Pressable } from "react-native";
 import React from "react";
+import { Swipeable } from "react-native-gesture-handler";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 import { useRef } from  'react';
@@ -35,10 +36,11 @@ const ListItem = (props: Props) => {
   const isCollapsible = useRef(visible !== undefined);
   const itemInitiallyExpanded = useRef(visible);
   const sectionInitiallyExpanded = useRef(expanded);
+  const swipeable = useRef<Swipeable>(null);
 
   const openEdit = () => {
-    // Open swipeable
-  };
+    swipeable?.current?.openRight();
+  };  
 
   const renderListItem = () => {
     return (
@@ -53,6 +55,7 @@ const ListItem = (props: Props) => {
           ]}
           disabled={editEnabled || dragEnabled || props.disabled}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
+          swipeable={swipeable}
           leftImage={editEnabled ? (
             <Pressable
               style={s.editTouchContainer}
@@ -120,7 +123,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: 0,
   },
   container: {
-    minHeight: 48
+    minHeight: 48,
   },
   disabled: {
     backgroundColor: theme.colors.listItem

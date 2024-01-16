@@ -4,6 +4,9 @@ import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen'
 import ChecklistTemplateEditorScreen from 'components/ChecklistTemplateEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
+import DatabaseInfoScreen from 'components/DatabaseInfoScreen';
+import DatabaseReportingScreen from 'components/DatabaseReportingScreen';
+import DropboxAccessScreen from 'components/DropboxAccessScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
 import EventStylesScreen from 'components/EventStylesScreen';
@@ -37,6 +40,7 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
 import UserProfileScreen from 'components/UserProfileScreen';
+import WebServerAccessScreen from 'components/WebServerAccessScreen';
 import { appConfig } from 'config';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -256,6 +260,35 @@ const SetupNavigator = () => {
         options={{
           headerShown: false,
           presentation: 'fullScreenModal',
+        }}
+      />
+      <SetupStack.Screen
+        name="DatabaseInfo"
+        component={DatabaseInfoScreen}
+        options={{
+          title: 'Database',
+        }}
+      />
+      <SetupStack.Screen
+        name="DropboxAccess"
+        component={DropboxAccessScreen}
+        options={{
+          title: 'Dropbox Access',
+        }}
+      />
+      <SetupStack.Screen
+        name="WebServerAccess"
+        component={WebServerAccessScreen}
+        options={{
+          title: 'Web Server',
+          presentation: 'modal',
+        }}
+      />
+      <SetupStack.Screen
+        name="DatabaseReporting"
+        component={DatabaseReportingScreen}
+        options={{
+          title: 'Reporting',
         }}
       />
       <SetupStack.Screen

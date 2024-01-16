@@ -4,11 +4,13 @@ import {
   SetupNavigatorParamList,
   TabNavigatorParamList,
 } from 'types/navigation';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { AuthContext } from 'lib/auth';
 import { BSON } from 'realm';
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
 import { CompositeScreenProps } from '@react-navigation/core';
+import { DatabaseAccessWith } from 'types/database';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -16,10 +18,12 @@ import { Pilot } from 'realmdb/Pilot';
 import { ScrollView } from 'react-native';
 import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
+import { saveDatabaseAccessWith } from 'store/slices/appSettings';
+import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
+import { useEvent } from 'lib/event';
 import { useObject } from '@realm/react';
-import { useSelector } from 'react-redux';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'Setup'>,
@@ -29,12 +33,15 @@ export type Props = CompositeScreenProps<
 const SetupScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const dispatch = useDispatch();
+  const event = useEvent();
 
   const auth = useContext(AuthContext);
   const userProfile = useSelector(selectUserProfile);
   const selectedPilotId = useSelector(selectPilot).pilotId;
-
   const selectedPilot = useObject(Pilot, new BSON.ObjectId(selectedPilotId));
+
+  const databaseAccessWith = useSelector(selectDatabaseAccessWith);
 
   useEffect(() => {
     if (route.params?.subNav) {
@@ -44,6 +51,17 @@ const SetupScreen = ({ navigation, route }: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [route.params?.subNav]);
+
+  useEffect(() => {
+    event.on('database-access-with', setDatabaseAccessWith);
+    return () => {
+      event.removeListener('database-access-with', setDatabaseAccessWith);
+    };
+  }, []);
+
+  const setDatabaseAccessWith = (value: DatabaseAccessWith) => {
+    dispatch(saveDatabaseAccessWith({ value }));
+  };
 
   return (
     <ScrollView
@@ -97,24 +115,37 @@ const SetupScreen = ({ navigation, route }: Props) => {
       />
       <Divider text={'DATABASE'}/>
       <ListItem
-        title={'Vitals'}
+        title={'Information'}
         position={['first']}
-        onPress={() => null}
+        onPress={() => navigation.navigate('DatabaseInfo')}
       />
       <ListItem
         title={'Access With'}
-        value={'Dropbox'}
-        onPress={() => null}
+        value={databaseAccessWith}
+        onPress={() => navigation.navigate('EnumPicker', {
+          title: 'Access Database With',
+          footer: 'Specifies the method to use to access the database for backups, exports, imports, etc.',
+          values: Object.values(DatabaseAccessWith),
+          selected: databaseAccessWith,
+          eventName: 'database-access-with',
+        })}
       />
-      <ListItem
-        title={'Dropbox Access'}
-        onPress={() => null}
-      />
+      {databaseAccessWith === DatabaseAccessWith.Dropbox ?
+        <ListItem
+          title={'Dropbox Access'}
+          onPress={() => navigation.navigate('DropboxAccess')}
+        />
+      :
+        <ListItem
+          title={'Web Server Access'}
+          onPress={() => navigation.navigate('WebServerAccess')}
+        />
+      }
       <ListItem
         title={'Reporting'}
         position={['last']}
-        onPress={() => null}
-      />
+        onPress={() => navigation.navigate('DatabaseReporting')}
+        />
       <Divider text={'PREFERENCES'}/>
       <ListItem
         title={'Basics'}

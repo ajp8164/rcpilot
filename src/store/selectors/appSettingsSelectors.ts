@@ -11,6 +11,14 @@ export const selectBiometrics = createSelector(selectAppState, appState => {
   return appState.appSettings.biometrics;
 });
 
+export const selectDatabaseAccessWith = createSelector(selectAppState, appState => {
+  return appState.appSettings.databaseAccessWith;
+});
+
+export const selectOutputReportTo = createSelector(selectAppState, appState => {
+  return appState.appSettings.outputReportTo;
+});
+
 export const selectThemeSettings = createSelector(selectAppState, appState => {
   return appState.appSettings.themeSettings;
 });

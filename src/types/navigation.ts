@@ -281,6 +281,9 @@ export type SetupNavigatorParamList = {
   Content: {
     content: ContentView;
   };
+  DatabaseInfo: undefined;
+  DropboxAccess: undefined;
+  DatabaseReporting: undefined;
   EnumPicker: EnumPickerInterface;
   Flights: {
     pilotId: string;
@@ -340,6 +343,7 @@ export type SetupNavigatorParamList = {
   UserProfile: {
     userProfile: UserProfile;
   };
+  WebServerAccess: undefined;
 };
 
 export type ScanNavigatorParamList = {

@@ -1,4 +1,5 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
@@ -6,12 +7,16 @@ import { revertAll } from 'store/actions';
 
 export interface AppSettingsState {
   biometrics: boolean;
+  databaseAccessWith: DatabaseAccessWith;
+  outputReportTo: OutputReportTo;
   themeSettings: ThemeSettings;
   tou: Tou;
 }
 
 export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   biometrics: true,
+  databaseAccessWith: DatabaseAccessWith.WebServer,
+  outputReportTo: OutputReportTo.WebServer,
   themeSettings: {
     followDevice: true,
     app: 'light',
@@ -28,6 +33,26 @@ const handleSaveBiometrics: CaseReducer<
   return {
     ...state,
     biometrics: payload.value,
+  };
+};
+
+const handleSaveDatabaseAccessWith: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ value: DatabaseAccessWith }>
+> = (state, { payload }) => {
+  return {
+    ...state,
+    databaseAccessWith: payload.value,
+  };
+};
+
+const handleSaveOutputReportTo: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ value: OutputReportTo }>
+> = (state, { payload }) => {
+  return {
+    ...state,
+    outputReportTo: payload.value,
   };
 };
 
@@ -59,6 +84,8 @@ const appSettingsSlice = createSlice({
   reducers: {
     saveAcceptTou: handleSaveAcceptTou,
     saveBiometrics: handleSaveBiometrics,
+    saveDatabaseAccessWith: handleSaveDatabaseAccessWith,
+    saveOutputReportTo: handleSaveOutputReportTo,
     saveThemeSettings: handleSaveThemeSettings,
   },
 });
@@ -66,4 +93,6 @@ const appSettingsSlice = createSlice({
 export const appSettingsReducer = appSettingsSlice.reducer;
 export const saveAcceptTou = appSettingsSlice.actions.saveAcceptTou;
 export const saveBiometrics = appSettingsSlice.actions.saveBiometrics;
+export const saveDatabaseAccessWith = appSettingsSlice.actions.saveDatabaseAccessWith;
+export const saveOutputReportTo = appSettingsSlice.actions.saveOutputReportTo;
 export const saveThemeSettings = appSettingsSlice.actions.saveThemeSettings;

@@ -285,7 +285,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
       edges={['left', 'right']}
       style={theme.styles.view}>
       <NestableScrollContainer
-      showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'NAME & TYPE'} />
         <ListItemInput
@@ -308,7 +308,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           })}
         />
         {actions.length > 0 && <Divider text={'ACTIONS'} />}
-        <View  style={{flex:1}}>
         <NestableDraggableFlatList
           data={actions}
           renderItem={renderAction}
@@ -327,7 +326,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           }}
           onDragEnd={({ data }) => reorderActions(data)}
         />
-        </View>
         <Divider />
         <ListItem
           title={'Add a New Action'}

@@ -141,7 +141,10 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
             label: 'Do Not Log Flight',
             onPress: () => navigation.goBack(),
           },
-          { label: 'Cancel' },
+          {
+            label: 'Cancel' ,
+            onPress: () => setCancelFlightActionSheetVisible(false),
+        },
         ]}
         useNativeIOS={true}
         visible={cancelFlightActionSheetVisible}

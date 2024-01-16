@@ -1,8 +1,17 @@
 import { AppTheme, useTheme } from 'theme';
 import { ChecklistAction, ChecklistTemplate } from 'realmdb/ChecklistTemplate';
-import { ChecklistActionNonRepeatingScheduleTimeframe, ChecklistActionRepeatingScheduleFrequency, ChecklistTemplateActionScheduleType, ChecklistTemplateType } from 'types/checklistTemplate';
+import {
+  ChecklistActionNonRepeatingScheduleTimeframe,
+  ChecklistActionRepeatingScheduleFrequency,
+  ChecklistTemplateActionScheduleType,
+  ChecklistTemplateType
+} from 'types/checklistTemplate';
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
+import {
+  NestableDraggableFlatList,
+  NestableScrollContainer,
+  RenderItemParams
+} from 'react-native-draggable-flatlist';
 import { NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { Platform, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -31,14 +40,13 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
+  const [editModeEnabled, setEditModeEnabled] = useState(false);
 
   const [name, setName] = useState(checklistTemplate?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
   const [actions, setActions] = useState(
     (checklistTemplate?.actions.toJSON() || []) as Omit<ChecklistAction, keyof Realm.Object>[]
   );
-
-  const [editModeEnabled, setEditModeEnabled] = useState(false);
 
   useEffect(() => {
     const canSave = !!name && (
@@ -147,9 +155,9 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const deleteAction = (index: number) => {
     if (checklistTemplate) {
-        const a = ([] as Omit<ChecklistAction, keyof Realm.Object>[]).concat(actions);
-        a.splice(index, 1);
-        reorderActions(a);
+      const a = ([] as Omit<ChecklistAction, keyof Realm.Object>[]).concat(actions);
+      a.splice(index, 1);
+      reorderActions(a);
     }
   };
 
@@ -162,7 +170,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const actionScheduleToString = (action: ChecklistAction) => {
     let result = '';
-
     if (action.schedule.type === ChecklistTemplateActionScheduleType.Repeating) {
       let when = '';
       let times = '';
@@ -190,7 +197,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
       } else {
         when = 'after every';
       }
-
       result = `Perform ${when} ${times}${freq}`;
     } else {
       let after = '';
@@ -221,7 +227,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           after = ' after date at install';
         }
       }
-
       result = `Perform once ${value}${timeframe}${after}`;
     }
     return result;
@@ -261,8 +266,8 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
               text: 'Delete',
               color: theme.colors.assertive,
               x: 64,
-              onPress: () => deleteAction(index)},
-            ]
+              onPress: () => deleteAction(index),
+            }]
           }}
           // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('ChecklistActionEditor', {

@@ -9,7 +9,6 @@ import { useRef } from  'react';
 interface Props extends _ListItem {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
-  mode?: 'edit-closed' | 'edit-open' | 'show-drag';
   visible?: boolean;
 };
 

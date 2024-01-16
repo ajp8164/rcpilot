@@ -244,17 +244,26 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           subtitle={actionScheduleToString(action as ChecklistAction)}
           subtitleNumberOfLines={1}
           position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
-          containerStyle={s.swipeableListItem}
+          titleNumberOfLines={1}
           drag={drag}
-          dragEnabled={editModeEnabled}
-          editEnabled={editModeEnabled}
-          swipeRightItems={[{
-            icon: 'delete',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
-            onPress: () => deleteAction(index)},
-          ]}
+          editable={{
+            item: {
+              icon: 'remove-circle',
+              color: theme.colors.assertive,
+              action: 'open-swipeable',
+            },
+            reorder: true,
+          }}
+          showEditor={editModeEnabled}
+          swipeable={{
+            rightItems: [{
+              icon: 'delete',
+              text: 'Delete',
+              color: theme.colors.assertive,
+              x: 64,
+              onPress: () => deleteAction(index)},
+            ]
+          }}
           // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
@@ -361,12 +370,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
         borderRadius: 20,
       },
     }),
-  },
-  swipeableListItem: {
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
   },
   swipeableListMask: {
     borderRadius: 10,

@@ -36,7 +36,6 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
       <_ListItem
         {...props}
         containerStyle={{...props.containerStyle, ...s.container}}
-        titleStyle={s.title}
         rightImage={false}
         extraContentComponent={
           <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]} >
@@ -93,8 +92,8 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   },
   segmentedView: {
     position: 'absolute',
-    right: 15,
-    justifyContent: 'flex-start',
+    right: 0,
+    alignSelf: 'center',
     zIndex: 1,
   },
   segmentedViewFullWidth: {
@@ -104,9 +103,6 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   segmentsStyle: {
     minHeight: 48,
   },
-  title: {
-    left: -16
-  }
 }));
 
 export { ListItemSegmented };

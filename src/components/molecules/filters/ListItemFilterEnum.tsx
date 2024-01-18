@@ -34,7 +34,7 @@ const ListItemFilterEnum = (props: Props) => {
     relation: initialRelation = EnumRelation.Any,
     title,
     value: initialValue,
-    } = props;
+  } = props;
 
   const theme = useTheme();
   const navigation = useNavigation<any>();
@@ -75,7 +75,7 @@ const ListItemFilterEnum = (props: Props) => {
       <ListItemSegmented
         {...props}
         title={title}
-        value={''}
+        value={undefined} // Prevent propagation of this components props.value
         segments={[
           { label: EnumRelation.Any, labelStyle: theme.styles.textTiny },
           { label: EnumRelation.Is, labelStyle: theme.styles.textTiny },

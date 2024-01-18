@@ -30,7 +30,7 @@ const ListItemFilterBoolean = (props: Props) => {
     relation: initialRelation = BooleanRelation.Any,
     title,
     value: initialValue,
-    } = props;
+  } = props;
 
   const [relation, setRelation] = useState<BooleanRelation>(initialRelation);
   const [value, setValue] = useState(initialValue);
@@ -46,7 +46,7 @@ const ListItemFilterBoolean = (props: Props) => {
       <ListItemSegmented
         {...props}
         title={title}
-        value={''}
+        value={undefined} // Prevent propagation of this components props.value
         segments={[
           { label: BooleanRelation.Any, labelStyle: theme.styles.textTiny },
           { label: BooleanRelation.Yes, labelStyle: theme.styles.textTiny },

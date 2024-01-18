@@ -1,3 +1,5 @@
+import { ReportType } from 'types/database';
+
 export type FilterSelection = {
   select: string;
   value?: string;
@@ -23,4 +25,20 @@ export type ModelFilter = {
   damaged: FilterSelection;
   vendor: FilterSelection;
   notes: FilterSelection;
+};
+
+export type ReportFilter = {
+  name: string;
+  reportType: ReportType;
+  model: FilterSelection;
+  modelType: FilterSelection;
+  category: FilterSelection;
+  date: FilterSelection;
+  duration?: FilterSelection;
+  pilot?: FilterSelection;
+  location?: FilterSelection;
+  modelStyle?: FilterSelection;
+  outcome?: FilterSelection;
+  costs?: FilterSelection;
+  notes?: FilterSelection;
 };

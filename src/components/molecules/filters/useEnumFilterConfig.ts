@@ -39,6 +39,12 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     sectionName: 'LOCATIONS TO {0} RESULTS',
     values: [],
   },
+  Models: {
+    mode: 'many-or-none',
+    title: 'Models',
+    sectionName: 'MODELS TO {0} RESULTS',
+    values: [],
+  },
   ModelStyles: {
     mode: 'many-or-none',
     title: 'Styles',

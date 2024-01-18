@@ -34,7 +34,7 @@ const ListItemFilterDate = (props: Props) => {
     relation: initialRelation = DateRelation.Any,
     title,
     value: initialValue,
-    } = props;
+  } = props;
 
   const [expanded, setExpanded] = useState(false);
   const [relation, setRelation] = useState<DateRelation>(initialRelation);
@@ -57,7 +57,7 @@ const ListItemFilterDate = (props: Props) => {
       <ListItemSegmented
         {...props}
         title={title}
-        value={''}
+        value={undefined} // Prevent propagation of this components props.value
         segments={[
           { label: DateRelation.Any, labelStyle: theme.styles.textTiny  },
           { label: DateRelation.Before, labelStyle: theme.styles.textTiny  },

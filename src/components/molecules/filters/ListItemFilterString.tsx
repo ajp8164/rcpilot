@@ -48,7 +48,7 @@ const ListItemFilterString = (props: Props) => {
     relation: initialRelation = StringRelation.Any,
     title,
     value: initialValue,
-    } = props;
+  } = props;
 
   const theme = useTheme();
   const navigation = useNavigation<any>();
@@ -75,7 +75,7 @@ const ListItemFilterString = (props: Props) => {
       <ListItemSegmented
         {...props}
         title={title}
-        value={''}
+        value={undefined} // Prevent propagation of this components props.value
         segments={[
           { label: StringRelation.Any, labelStyle: theme.styles.textTiny },
           { label: StringRelation.Contains, labelStyle: theme.styles.textTiny },

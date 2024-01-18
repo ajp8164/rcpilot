@@ -35,7 +35,7 @@ const ListItemFilterNumber = (props: Props) => {
     relation: initialRelation = NumberRelation.Any,
     title,
     value: initialValue,
-    } = props;
+  } = props;
 
   const [expanded, setExpanded] = useState(false);
   const [relation, setRelation] = useState<NumberRelation>(initialRelation);
@@ -57,7 +57,7 @@ const ListItemFilterNumber = (props: Props) => {
       <ListItemSegmented
         {...props}
         title={title}
-        value={''}
+        value={undefined} // Prevent propagation of this components props.value
         segments={[
           { label: NumberRelation.Any, labelStyle: theme.styles.textTiny },
           { label: `  ${NumberRelation.LT}  `, labelStyle: theme.styles.textTiny },

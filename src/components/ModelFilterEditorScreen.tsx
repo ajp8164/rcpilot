@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { BooleanRelation, DateRelation, EnumRelation, ListItemFilterBoolean, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
+import { BooleanRelation, DateRelation, EnumRelation, FilterState, ListItemFilterBoolean, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -21,11 +21,6 @@ enum ModelProperty {
   Damaged = 'damaged',
   Vendor = 'vendor',
   Notes = 'notes',
-};
-
-type FilterState = {
-  relation: BooleanRelation | DateRelation | EnumRelation | NumberRelation | StringRelation;
-  value: string;
 };
 
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;

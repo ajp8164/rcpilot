@@ -4,25 +4,32 @@ import {
   NestableScrollContainer,
   RenderItemParams
 } from 'react-native-draggable-flatlist';
-import { OutputReportTo, OutputReportToDescription } from 'types/database';
+import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Report } from 'realmdb/Report';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { saveOutputReportTo } from 'store/slices/appSettings';
 import { selectOutputReportTo } from 'store/selectors/appSettingsSelectors';
 import { useEvent } from 'lib/event';
+
+// Destination report editor based on report type.
+const reportEditor: {[key in ReportType]: any} = {
+  [ReportType.Events]: 'ReportEventsMaintenanceEditor',
+  [ReportType.Maintenance]: 'ReportEventsMaintenanceEditor',
+  [ReportType.ModelScanCodes]: 'ReportScanCodesEditor',
+  [ReportType.BatteryScanCodes]: 'ReportScanCodesEditor',
+};
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>;
 
@@ -37,12 +44,11 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const realm = useRealm();
   const allReports = useQuery('Report');
   const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
 
   const [reports, setReports] = useState(
     (allReports.toJSON() || []) as Omit<Report, keyof Realm.Object>[]
   );
-
-  console.log(reports);
 
   useEffect(() => {
     const onEdit = () => {
@@ -138,9 +144,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           rightImage={
             <Pressable
               style={{flexDirection: 'row'}}
-              // onPress={() => navigation.navigate('Model', {
-              //   modelId: '1'
-              // })}
+              onPress={() => report.type && navigation.navigate(reportEditor[report.type])}
               >
               <CustomIcon
                 name={'circle-info'}
@@ -149,6 +153,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               />
             </Pressable>
           }
+          // TODO = press runs the report...
           // onPress={() => navigation.navigate('ReportEditor', {
           //   reportId: report._id,
           //   eventName: 'report',
@@ -186,52 +191,91 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         titleStyle={s.newReport}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => {return}}
+        onPress={() => setNewReportSheetVisible(true)}
       />
-      <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
-      <View style={{flex:1}}>
-        <NestableDraggableFlatList
-          data={reports}
-          renderItem={renderReport}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          style={s.reportsList}
-          containerStyle={s.swipeableListMask}
-          animationConfig={{
-            damping: 20,
-            mass: 0.01,
-            stiffness: 100,
-            overshootClamping: false,
-            restSpeedThreshold: 0.2,
-            restDisplacementThreshold: 2,
-          }}
-          onDragEnd={({ data }) => reorderReports(data)}
-        />
-      </View>
-      <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
-      <Divider text={'QR CODE REPORTS'}/>
-      <View style={{flex:1}}>
-        <NestableDraggableFlatList
-          data={reports}
-          renderItem={renderReport}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          style={s.reportsList}
-          containerStyle={s.swipeableListMask}
-          animationConfig={{
-            damping: 20,
-            mass: 0.01,
-            stiffness: 100,
-            overshootClamping: false,
-            restSpeedThreshold: 0.2,
-            restDisplacementThreshold: 2,
-          }}
-          onDragEnd={({ data }) => reorderReports(data)}
-        />
-      </View>
-      <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+      {reports.length ?
+        <>
+          <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
+          <View style={{flex:1}}>
+            <NestableDraggableFlatList
+              data={reports}
+              renderItem={renderReport}
+              keyExtractor={(_item, index) => `${index}`}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+              style={s.reportsList}
+              containerStyle={s.swipeableListMask}
+              animationConfig={{
+                damping: 20,
+                mass: 0.01,
+                stiffness: 100,
+                overshootClamping: false,
+                restSpeedThreshold: 0.2,
+                restDisplacementThreshold: 2,
+              }}
+              onDragEnd={({ data }) => reorderReports(data)}
+            />
+          </View>
+          <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+        </>
+        : null
+      }
+      {reports.length ?
+        <>
+          <Divider text={'QR CODE REPORTS'}/>
+          <View style={{flex:1}}>
+            <NestableDraggableFlatList
+              data={reports}
+              renderItem={renderReport}
+              keyExtractor={(_item, index) => `${index}`}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+              style={s.reportsList}
+              containerStyle={s.swipeableListMask}
+              animationConfig={{
+                damping: 20,
+                mass: 0.01,
+                stiffness: 100,
+                overshootClamping: false,
+                restSpeedThreshold: 0.2,
+                restDisplacementThreshold: 2,
+              }}
+              onDragEnd={({ data }) => reorderReports(data)}
+            />
+          </View>
+          <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+        </>
+        : null
+      }
+      <ActionSheet
+        cancelButtonIndex={2}
+        options={[
+          {
+            label: 'Event/Maintenance Log',
+            onPress: () => {
+              navigation.navigate('ReportEventsMaintenanceEditor', {
+                reportId: '1',
+              });
+              setNewReportSheetVisible(false);
+            }
+          },
+          {
+            label: 'QR Codes',
+            onPress: () => {
+              navigation.navigate('ReportScanCodesEditor', {
+                reportId: '1',
+              });
+              setNewReportSheetVisible(false);
+            }
+          },
+          {
+            label: 'Cancel',
+            onPress: () => setNewReportSheetVisible(false),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={newReportSheetVisible}
+      />
     </NestableScrollContainer>
   );
 };

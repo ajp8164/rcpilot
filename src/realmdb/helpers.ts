@@ -18,6 +18,14 @@ export const eqString = (modelAttr?: string, formAttr?: string) => {
   }
 };
 
+export const eqObject = (modelAttr?: object, formAttr?: object) => {
+  if (!!modelAttr && !!formAttr) {
+    return modelAttr === formAttr;
+  } else {
+    return !!modelAttr === !!formAttr;
+  }
+};
+
 // Used for setting number values on realm writes. Converts a string or undefined
 // value to a number or undefined. Avoids possible NaN.
 export const toNumber = (value?: string) => {

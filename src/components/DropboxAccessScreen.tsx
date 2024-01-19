@@ -8,6 +8,7 @@ import { ScrollView } from 'react-native';
 import {
   SetupNavigatorParamList,
 } from 'types/navigation';
+import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DropboxAccess'>;
@@ -16,7 +17,7 @@ const DropboxAccessScreen = () => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const note = 'All database backups are stored in the /Apps/RCPilot/Backups directory in your Dropbox.';
+  const note = `All database backups are stored in the ${appConfig.dropboxBackupPath} directory in your Dropbox.`;
 
   return (
     <ScrollView

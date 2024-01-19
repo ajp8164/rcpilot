@@ -2,6 +2,7 @@ import { ChecklistAction, ChecklistActionSchedule, ChecklistTemplate } from './C
 
 import { Battery } from './Battery';
 import { EventStyle } from './EventStyle';
+import { Filter } from './Filter';
 import { Model } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
@@ -13,6 +14,7 @@ const Schema = [
   Battery,
   ChecklistTemplate,
   EventStyle,
+  Filter,
   ModelCategory,
   ModelFuel,
   ModelPropeller,

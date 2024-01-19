@@ -59,9 +59,12 @@ const BatteriesScreen = ({ navigation }: Props) => {
           title={'150S #1'}
           subtitle={'450mah 3S/1P 30C LiPo\n20 cycles\nDischarged on Nov 4, 2023, 9 days ago'}
           position={['first', 'last']}
-          onPress={() => {navigation.navigate('NewBatteryCycleNavigator', {
-            batteryId: '1',
-          })}}
+          onPress={() => navigation.navigate('NewBatteryCycleNavigator', {
+            screen: 'NewBatteryCycle',
+            params: { 
+              batteryId: '1',
+            },
+          })}
           rightImage={
             <Pressable
               style={{flexDirection: 'row'}}

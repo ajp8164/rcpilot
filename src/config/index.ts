@@ -3,10 +3,13 @@ import Config from 'react-native-config';
 export interface AppConfig
   extends Record<string, string | string[] | boolean | number | undefined> {
   appName: string;
+  appNameNS: string;
   buildEnvironment: string;
   businessName: string;
   businessNameShort: string;
   deepLinkScheme: string;
+  dropboxBackupPath: string;
+  dropboxReportsPath: string;
   environment: string;
   firebaseOauthClientId: string;
   googleSignInWebClientId: string;
@@ -24,10 +27,13 @@ export interface AppConfig
 
 export const appConfig: AppConfig = {
   appName: Config.APP_NAME || '',
+  appNameNS: Config.APP_NAME_NS || '',
   buildEnvironment: Config.BUILD_ENVIRONMENT || '',
   businessName: Config.BUSINESS_NAME || '',
   businessNameShort: Config.BUSINESS_NAME_SHORT || '',
   deepLinkScheme: Config.DEEP_LINK_SCHEME || '',
+  dropboxBackupPath: Config.DROPBOX_BACKUP_PATH || '',
+  dropboxReportsPath: Config.DROPBOX_REPORTS_PATH || '',
   environment: Config.ENVIRONMENT || '',
   firebaseOauthClientId: Config.FIREBASE_OAUTH_CLIENT_ID || '',
   googleSignInWebClientId: Config.GOOGLE_SIGN_IN_WEB_CLIENT_ID || '',

@@ -2,6 +2,7 @@ import { ChecklistActionInterface } from 'components/ChecklistActionEditorScreen
 import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
+import { FilterType } from 'types/filter';
 import { FlightOutcome } from 'types/flight';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
@@ -47,9 +48,7 @@ export type BatteriesNavigatorParamList = {
   BatteryPerformanceNavigator: undefined;
   EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: undefined;
-  NewBatteryCycleNavigator: {
-    batteryId: string;
-  };
+  NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -138,6 +137,32 @@ export type BatteryFiltersNavigatorParamList = {
     filterId: string;
   };
   EnumPicker: EnumPickerInterface;
+};
+
+export type ReportFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  Notes: {
+    title?: string;
+    headerButtonStyle?: TextStyle | TextStyle[];
+    text?: string;
+    eventName: string;
+  };
+  ReportBatteryScanCodesFilterEditor: {
+    filterId?: string;
+  };
+  ReportEventsFilterEditor: {
+    filterId?: string;
+  };
+  ReportFilters: {
+    filterType?: FilterType;
+    eventName: string;
+  };
+  ReportMaintenanceFilterEditor: {
+    filterId?: string;
+  };
+  ReportModelScanCodesFilterEditor: {
+    filterId?: string;
+  };
 };
 
 export type NewBatteryNavigatorParamList = {
@@ -339,6 +364,13 @@ export type SetupNavigatorParamList = {
     text?: string;
     eventName: string;
   };
+  ReportEventsMaintenanceEditor: {
+    reportId?: string;
+  };
+  ReportScanCodesEditor: {
+    reportId?: string;
+  };
+  ReportFiltersNavigator: NavigatorScreenParams<ReportFiltersNavigatorParamList>;
   UserAccount: undefined;
   UserProfile: {
     userProfile: UserProfile;

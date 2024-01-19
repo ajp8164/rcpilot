@@ -8,6 +8,7 @@ import React from 'react';
 import {
   SetupNavigatorParamList,
 } from 'types/navigation';
+import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'WebServerAccess'>;
@@ -19,7 +20,7 @@ const WebServerAccessScreen = () => {
   return (
     <View style={[theme.styles.view, {marginTop: '40%'}]}>
       <Text style={s.heading}>{'Reaching the Web Server'}</Text>
-      <Text style={s.text}>{'RCPilot information can be accessed from a web browser on your Mac or PC using the following URL.'}</Text>
+      <Text style={s.text}>{`${appConfig.appName} information can be accessed from a web browser on your Mac or PC using the following URL.`}</Text>
       <ListItem
         title={'http://192.168.1.114:8080'}
         titleStyle={s.item}

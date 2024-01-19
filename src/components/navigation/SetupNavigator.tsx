@@ -36,6 +36,9 @@ import PreferencesClickTrackScreen from 'components/PreferencesClickTrackScreen'
 import PreferencesEventsScreen from 'components/PreferencesEventsScreen';
 import PreferencesVoiceCuesScreen from 'components/PreferencesVoiceCuesScreen';
 import React from 'react';
+import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
+import ReportFiltersNavigator from 'components/navigation/ReportFiltersNavigator';
+import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
@@ -289,6 +292,30 @@ const SetupNavigator = () => {
         component={DatabaseReportingScreen}
         options={{
           title: 'Reporting',
+        }}
+      />
+      <SetupStack.Screen
+        name="ReportEventsMaintenanceEditor"
+        component={ReportEventsMaintenaceEditorScreen}
+        options={{
+          title: 'Log Report',
+          presentation: 'fullScreenModal',
+        }}
+      />
+      <SetupStack.Screen
+        name="ReportScanCodesEditor"
+        component={ReportScanCodesEditorScreen}
+        options={{
+          title: 'QR Code Report',
+          presentation: 'fullScreenModal',
+        }}
+      />
+      <SetupStack.Screen
+        name="ReportFiltersNavigator"
+        component={ReportFiltersNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
         }}
       />
       <SetupStack.Screen

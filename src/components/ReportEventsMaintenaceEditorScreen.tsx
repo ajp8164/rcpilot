@@ -2,16 +2,20 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { useObject, useRealm } from '@realm/react';
 
+import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
-import { useEvent } from 'lib/event';
-import { useRealm } from '@realm/react';
+
+// import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ReportEventsMaintenanceEditor'>,
@@ -23,41 +27,52 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
-  const event = useEvent();
+  // const event = useEvent();
 
   const realm = useRealm();
 
-  const [name, setName] = useState<string | undefined>(undefined);
-  const [includesSummary, setIncludesSummary] = useState(true);
-  const [includesEvents, setIncludesEvents] = useState(true);
-  const [includesMaintenance, setIncludesMaintenance] = useState(true);
-  const [eventsFilterId, setEventsFilterId] = useState();
-  const [maintenanceFilterId, setMaintenaceFilterId] = useState();
+  const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
+
+  const [name, setName] = useState<string | undefined>(report?.name);
+  const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
+  const [includesSummary, setIncludesSummary] = useState(report ? report.includesSummary : true);
+  const [includesEvents, setIncludesEvents] = useState(report ? report.includesEvents : true);
+  const [includesMaintenance, setIncludesMaintenance] = useState(report ? report.includesMaintenance : true);
+  const [eventsFilter, _setEventsFilter] = useState(report?.eventsFilter);
+  const [maintenanceFilter, _setMaintenaceFilter] = useState(report?.maintenenaceFilter);
+
+  // useEffect(() => {
+  //   event.on('events-report-filter', setEventsFilterId);
+  //   event.on('maintenance-report-filter', setMaintenaceFilterId);
+  //   return () => {
+  //     event.removeListener('events-report-filter', setEventsFilterId);
+  //     event.removeListener('maintenance-report-filter', setMaintenaceFilterId);
+  //   };
+  // }, []);
+
+  // useState(() => {
+  //   // Fetch filter from realm to update view
+  // }), [ eventsFilter ];
+
+  // useState(() => {
+  //   // Fetch filter from realm to update view
+  // }), [ maintenanceFilter ];
 
   useEffect(() => {
-    event.on('events-report-filter', setEventsFilterId);
-    event.on('maintenance-report-filter', setMaintenaceFilterId);
-    return () => {
-      event.removeListener('events-report-filter', setEventsFilterId);
-      event.removeListener('maintenance-report-filter', setMaintenaceFilterId);
-    };
-  }, []);
-
-  useState(() => {
-    // Fetch filter from realm to update view
-  }), [ eventsFilterId ];
-
-  useState(() => {
-    // Fetch filter from realm to update view
-  }), [ maintenanceFilterId ];
-
-  useEffect(() => {
-    const canSave = name !== undefined;
+    const canSave = name && (
+      !eqString(report?.name, name)
+    );
 
     const save = () => {
       realm.write(() => {
-        realm.create('Report', {
-          name
+        realm.create('EventsMaintenanceReport', {
+          name,
+          ordinal,
+          includesSummary,
+          includesEvents,
+          includesMaintenance,
+          eventsFilter,
+          maintenanceFilter,
         });
       });
     };
@@ -91,7 +106,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [name]);
+  }, [ name ]);
 
   return (
     <SafeAreaView

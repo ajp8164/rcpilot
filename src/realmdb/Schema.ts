@@ -2,17 +2,19 @@ import { ChecklistAction, ChecklistActionSchedule, ChecklistTemplate } from './C
 
 import { Battery } from './Battery';
 import { EventStyle } from './EventStyle';
+import { EventsMaintenanceReport } from './EventsMaintenanceReport';
 import { Filter } from './Filter';
 import { Model } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
 import { Pilot } from './Pilot';
-import { Report } from './Report';
+import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [
   Battery,
   ChecklistTemplate,
+  EventsMaintenanceReport,
   EventStyle,
   Filter,
   ModelCategory,
@@ -20,7 +22,7 @@ const Schema = [
   ModelPropeller,
   Model,
   Pilot,
-  Report,
+  ScanCodesReport,
   
   // Embedded objects
   ChecklistAction,

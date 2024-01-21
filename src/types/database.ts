@@ -19,8 +19,6 @@ export const OutputReportToDescription = {
 };
 
 export enum ReportType {
-  Events = 'Events',
-  Maintenance = 'Maintenance',
-  ModelScanCodes = 'ModelScanCodes',
-  BatteryScanCodes = 'BatteryScanCodes',
+  EventsMaintenance = 'EventsMaintenance',
+  ScanCodes = 'ScanCodes',
 };

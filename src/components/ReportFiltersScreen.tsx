@@ -9,7 +9,6 @@ import { ListItem } from 'components/atoms/List';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
-import { ReportType } from 'types/database';
 import { StringRelation } from 'components/molecules/filters';
 import { View } from 'react-native-ui-lib';
 import { makeStyles } from '@rneui/themed';
@@ -39,7 +38,6 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
   const filters: ReportFilter[] = [
     {
       name: 'Test',
-      reportType: ReportType.Events,
       values: {
         model: {
           relation: StringRelation.Any, // any, before, after, past

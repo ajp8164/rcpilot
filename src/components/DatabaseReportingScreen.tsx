@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import {
+  DragEndParams,
   NestableDraggableFlatList,
   NestableScrollContainer,
   RenderItemParams
@@ -14,21 +15,23 @@ import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Report } from 'realmdb/Report';
+import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { saveOutputReportTo } from 'store/slices/appSettings';
 import { selectOutputReportTo } from 'store/selectors/appSettingsSelectors';
 import { useEvent } from 'lib/event';
+import { useSetState } from '@react-native-ajp-elements/core';
+
+type Report = EventsMaintenanceReport | ScanCodesReport;
 
 // Destination report editor based on report type.
 const reportEditor: {[key in ReportType]: any} = {
-  [ReportType.Events]: 'ReportEventsMaintenanceEditor',
-  [ReportType.Maintenance]: 'ReportEventsMaintenanceEditor',
-  [ReportType.ModelScanCodes]: 'ReportScanCodesEditor',
-  [ReportType.BatteryScanCodes]: 'ReportScanCodesEditor',
+  [ReportType.EventsMaintenance]: 'ReportEventsMaintenanceEditor',
+  [ReportType.ScanCodes]: 'ReportScanCodesEditor',
 };
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>;
@@ -42,13 +45,16 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const outputReportTo = useSelector(selectOutputReportTo);
 
   const realm = useRealm();
-  const allReports = useQuery('Report');
+  const emReports = useQuery<EventsMaintenanceReport>('EventsMaintenanceReport');
+  const scReports = useQuery<ScanCodesReport>('ScanCodesReport');
+
   const [editModeEnabled, setEditModeEnabled] = useState(false);
   const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
 
-  const [reports, setReports] = useState(
-    (allReports.toJSON() || []) as Omit<Report, keyof Realm.Object>[]
-  );
+  const [reports, _setReports] = useSetState({
+    [ReportType.EventsMaintenance]: emReports,
+    [ReportType.ScanCodes]: scReports,
+  });
 
   useEffect(() => {
     const onEdit = () => {
@@ -57,7 +63,10 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 
     navigation.setOptions({
       headerRight: () => {
-        if (!reports.length) return null;
+        if (!reports[ReportType.EventsMaintenance].length &&
+          !reports[ReportType.ScanCodes].length) {
+          return null;
+        }
         return (
           <Button
             title={editModeEnabled ? 'Done' : 'Edit'}
@@ -68,50 +77,51 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         )
       },
     });
-  }, [ editModeEnabled, reports ]);
+  }, [ editModeEnabled, reports[ReportType.EventsMaintenance], reports[ReportType.ScanCodes] ]);
 
   useEffect(() => {
     event.on('output-report-to', setOutputReportTo);
+    // event.on('events-maintenace-report', );
+    // event.on('scan-codes-report', );
     return () => {
       event.removeListener('ouput-report-to', setOutputReportTo);
+      // event.removeListener('events-maintenace-report', );
+      // event.removeListener('scan-codes-report', );
     };
   }, []);
-
-  useEffect(() => {
-    realm.write(() => {
-      // checklistTemplate.actions = reports;
-    });
-  }, [ reports ]);
 
   const setOutputReportTo = (value: OutputReportTo) => {
     dispatch(saveOutputReportTo({ value }));
   };
 
-  const deleteReport = (index: number) => {
-    const a = ([] as Omit<Report, keyof Realm.Object>[]).concat(reports);
-    a.splice(index, 1);
-    reorderReports(a);
+  const deleteReport = (report: Report) => {
+    realm.write(() => {
+      realm.delete(report);
+    });
   };
 
-  const reorderReports = (data: Omit<Report, keyof Realm.Object>[]) => {
-    for (let i = 0; i < data.length; i++) {
-      data[i].ordinal = i;
-    };
-    setReports(data);
+  const reorderReports = (params: DragEndParams<Report>) => {
+    const { data } = params;
+    realm.write(() => {
+      for (let i = 0; i < data.length; i++) {
+        data[i].ordinal = i;
+      };
+    });
   };
 
   const reportToString = (report: Report) => {
     return report._id.toString();
   };
 
-  const renderReport = ({
-    item: report,
-    getIndex,
-    drag,
-    isActive,
-  }: RenderItemParams<Report | Omit<Report, keyof Realm.Object>>) => {
-    const index = getIndex();
-    if (index === undefined) return;
+  const renderReport = (props: {
+    report: Report,
+    reportType: ReportType,
+    reportCount: number,
+    index: number,
+    drag: () => void,
+    isActive: boolean,
+  }) => {
+    const { report, reportType, reportCount, index, drag, isActive } = props;
     return (
       <View
         key={index}
@@ -120,7 +130,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           title={report.name}
           subtitle={reportToString(report as Report)}
           subtitleNumberOfLines={1}
-          position={reports!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === reports!.length - 1 ? ['last'] : []}
+          position={reportCount === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === reportCount - 1 ? ['last'] : []}
           titleNumberOfLines={1}
           drag={drag}
           editable={{
@@ -138,13 +148,13 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               text: 'Delete',
               color: theme.colors.assertive,
               x: 64,
-              onPress: () => deleteReport(index),
+              onPress: () => deleteReport(report),
             }]
           }}
           rightImage={
             <Pressable
               style={{flexDirection: 'row'}}
-              onPress={() => report.type && navigation.navigate(reportEditor[report.type])}
+              onPress={() => navigation.navigate(reportEditor[reportType])}
               >
               <CustomIcon
                 name={'circle-info'}
@@ -160,7 +170,43 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           // })}
         />
       </View>
-    );
+    );    
+  };
+
+  const renderEMReport = ({
+    item: report,
+    getIndex,
+    drag,
+    isActive,
+  }: RenderItemParams<EventsMaintenanceReport>) => {
+    const index = getIndex();
+    if (index === undefined) return null;
+    return renderReport({
+      report,
+      reportType: ReportType.EventsMaintenance,
+      reportCount: reports[ReportType.EventsMaintenance].length,
+      index,
+      drag,
+      isActive
+    });
+  };
+
+  const renderSCReport = ({
+    item: report,
+    getIndex,
+    drag,
+    isActive,
+  }: RenderItemParams<ScanCodesReport>) => {
+    const index = getIndex();
+    if (index === undefined) return null;
+    return renderReport({
+      report,
+      reportType: ReportType.ScanCodes,
+      reportCount: reports[ReportType.ScanCodes].length,
+      index,
+      drag,
+      isActive
+    });
   };
 
   return (
@@ -193,14 +239,15 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         rightImage={false}
         onPress={() => setNewReportSheetVisible(true)}
       />
-      {reports.length ?
+      {reports[ReportType.EventsMaintenance].length ?
         <>
           <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
           <View style={{flex:1}}>
             <NestableDraggableFlatList
-              data={reports}
-              renderItem={renderReport}
-              keyExtractor={(_item, index) => `${index}`}
+              // @ts-expect-error Typing is incorrect on renderItem
+              data={reports[ReportType.EventsMaintenance].sorted('ordinal')}
+              renderItem={renderEMReport}
+              keyExtractor={(item) => `${item._id}`}
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
@@ -213,21 +260,22 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
                 restSpeedThreshold: 0.2,
                 restDisplacementThreshold: 2,
               }}
-              onDragEnd={({ data }) => reorderReports(data)}
+              onDragEnd={reorderReports}
             />
           </View>
           <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
         </>
         : null
       }
-      {reports.length ?
+      {reports[ReportType.ScanCodes].length ?
         <>
           <Divider text={'QR CODE REPORTS'}/>
           <View style={{flex:1}}>
             <NestableDraggableFlatList
-              data={reports}
-              renderItem={renderReport}
-              keyExtractor={(_item, index) => `${index}`}
+              // @ts-expect-error Typing is incorrect on renderItem
+              data={reports[ReportType.ScanCodes].sorted('ordinal')}
+              renderItem={renderSCReport}
+              keyExtractor={(item) => `${item._id}`}
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
@@ -240,7 +288,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
                 restSpeedThreshold: 0.2,
                 restDisplacementThreshold: 2,
               }}
-              onDragEnd={({ data }) => reorderReports(data)}
+              onDragEnd={reorderReports}
             />
           </View>
           <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
@@ -253,18 +301,14 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           {
             label: 'Event/Maintenance Log',
             onPress: () => {
-              navigation.navigate('ReportEventsMaintenanceEditor', {
-                reportId: '1',
-              });
+              navigation.navigate('ReportEventsMaintenanceEditor', {});
               setNewReportSheetVisible(false);
             }
           },
           {
             label: 'QR Codes',
             onPress: () => {
-              navigation.navigate('ReportScanCodesEditor', {
-                reportId: '1',
-              });
+              navigation.navigate('ReportScanCodesEditor', {});
               setNewReportSheetVisible(false);
             }
           },

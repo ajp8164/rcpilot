@@ -8,11 +8,15 @@ import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
+// import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScanCodesReport } from 'realmdb/ScanCodesReport';
+import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
-import { useEvent } from 'lib/event';
+
+// import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ReportScanCodesEditor'>,
@@ -24,45 +28,50 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
-  const event = useEvent();
+  // const event = useEvent();
 
   const realm = useRealm();
 
-  // const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
+  const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
 
   const [name, setName] = useState<string | undefined>(undefined);
-  // const batteryScanCodesFilter = report.batteryScanCodesFilter;
-  // const modelScanCodesFilter = report.modelScanCodesFilter;
+  const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
+  const [includesModels, setIncludesModels] = useState(report ? report.includesModels : true);
+  const [includesBatteries, setIncludesBatteries] = useState(report ? report.includesBatteries : true);
+  const [modelScanCodesFilter, _setModelsScanCodesFilter] = useState(report?.modelScanCodesFilter);
+  const [batteryScanCodesFilter, _setBatteryScanCodesFilter] = useState(report?.batteryScanCodesFilter);
 
-  const [includesBatteries, setIncludesBatteries] = useState(true);
-  const [includesModels, setIncludesModels] = useState(true);
-  const [batteryScanCodesFilterId, setBatteryScanCodesFilterId] = useState();
-  const [modelScanCodesFilterId, setModelScanCodesFilterId] = useState();
+  // useEffect(() => {
+  //   event.on('battery-scan-codes-report-filter', setBatteryScanCodesFilterId);
+  //   event.on('model-scan-codes-report-filter', setModelScanCodesFilterId);
+  //   return () => {
+  //     event.removeListener('battery-scan-codes-report-filter', setBatteryScanCodesFilterId);
+  //     event.removeListener('model-scan-codes-report-filter', setModelScanCodesFilterId);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    event.on('battery-scan-codes-report-filter', setBatteryScanCodesFilterId);
-    event.on('model-scan-codes-report-filter', setModelScanCodesFilterId);
-    return () => {
-      event.removeListener('battery-scan-codes-report-filter', setBatteryScanCodesFilterId);
-      event.removeListener('model-scan-codes-report-filter', setModelScanCodesFilterId);
-    };
-  }, []);
+  // useState(() => {
+  //   // Fetch filter from realm to update view
+  // }), [ batteryScanCodesFilterId ];
 
-  useState(() => {
-    // Fetch filter from realm to update view
-  }), [ batteryScanCodesFilterId ];
-
-  useState(() => {
-    // Fetch filter from realm to update view
-  }), [ modelScanCodesFilterId ];
+  // useState(() => {
+  //   // Fetch filter from realm to update view
+  // }), [ modelScanCodesFilterId ];
 
   useEffect(() => {
-    const canSave = name !== undefined;
+    const canSave = name && (
+      !eqString(report?.name, name)
+    );
 
     const save = () => {
       realm.write(() => {
-        realm.create('Report', {
-          name
+        realm.create('ScanCodesReport', {
+          name,
+          ordinal,
+          includesModels,
+          includesBatteries,
+          modelScanCodesFilter,
+          batteryScanCodesFilter,
         });
       });
     };
@@ -96,7 +105,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [name]);
+  }, [ name ]);
 
   return (
     <SafeAreaView
@@ -117,7 +126,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         onValueChange={setIncludesModels}
       />
       <ListItem
-        title={'modelScanCodesFilter.name' || 'No Filter Selected'}
+        title={modelScanCodesFilter?.name || 'No Filter Selected'}
         subtitle={'Report will include all models'}
         position={['last']}
         onPress={() => navigation.navigate('ReportFiltersNavigator', {
@@ -136,7 +145,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         onValueChange={setIncludesBatteries}
       />
       <ListItem
-        title={'batteryScanCodesFilter.name' || 'No Filter Selected'}
+        title={batteryScanCodesFilter?.name || 'No Filter Selected'}
         subtitle={'Report will include all batteries'}
         position={['last']}
         onPress={() => navigation.navigate('ReportFiltersNavigator', {

@@ -1,5 +1,4 @@
 import { FilterState } from 'components/molecules/filters';
-import { ReportType } from 'types/database';
 
 export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
@@ -62,7 +61,6 @@ export type ReportFilter =
 //
 export type EventReportFilter = {
   name: string;
-  reportType: ReportType;
   values: EventReportFilterValues;
 };
 
@@ -84,7 +82,6 @@ export enum EventReportFilterValue {
 //
 export type MaintenanceReportFilter = {
   name: string;
-  reportType: ReportType;
   values: MaintenanceReportFilterValues;
 };
 
@@ -103,7 +100,6 @@ export enum MaintenanceReportFilterValue {
 //
 export type ModelScanCodeReportFilter = {
   name: string;
-  reportType: ReportType;
   values: ModelScanCodeReportFilterValues;
 };
 
@@ -119,7 +115,6 @@ export enum ModelScanCodeReportFilterValue {
 //
 export type BatteryScanCodeReportFilter = {
   name: string;
-  reportType: ReportType;
   values: BatteryScanCodeReportFilterValues;
 };
 

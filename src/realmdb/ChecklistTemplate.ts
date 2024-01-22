@@ -19,6 +19,14 @@ export class ChecklistTemplate extends Object<ChecklistTemplate> {
   };
 };
 
+export type JChecklistAction =  {
+  description: string;
+  schedule: JChecklistActionSchedule;
+  cost?: number;
+  notes?: string;
+  ordinal?: number;
+};
+
 export class ChecklistAction extends Object<ChecklistAction> {
   description!: string;
   schedule!: ChecklistActionSchedule;
@@ -37,6 +45,13 @@ export class ChecklistAction extends Object<ChecklistAction> {
       ordinal: 'float',
     },
   };
+};
+
+// Plain JS object type.
+export interface JChecklistActionSchedule  {
+  period: keyof typeof ChecklistActionSchedulePeriod;
+  type: ChecklistTemplateActionScheduleType;
+  value: number;
 };
 
 export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {

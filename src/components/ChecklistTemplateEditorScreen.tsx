@@ -1,11 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
-import { ChecklistAction, ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
   ChecklistTemplateActionScheduleType,
   ChecklistTemplateType
 } from 'types/checklistTemplate';
+import { ChecklistTemplate, JChecklistAction } from 'realmdb/ChecklistTemplate';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import {
   NestableDraggableFlatList,
@@ -19,7 +19,6 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { ChecklistActionInterface } from 'components/ChecklistActionEditorScreen';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,8 +29,6 @@ import { useEvent } from 'lib/event';
 export type Props =
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplateEditor'> |
   NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>;
-
-type JChecklistAction = Omit<ChecklistAction, keyof Realm.Object>;
 
 const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   const { checklistTemplateId } = route.params || {};
@@ -107,14 +104,16 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
             />
           )
         } else {
-          return (
-            <Button
-              title={editModeEnabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
-              onPress={onEdit}
-            />
-          )
+          if (actions.length > 0) {
+            return (
+              <Button
+                title={editModeEnabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonClearTitle}
+                buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+                onPress={onEdit}
+              />
+            )
+          }
         }
       },
     });
@@ -138,26 +137,26 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     }
   }, [ actions ]);
 
-  const upsertAction = (editorResult: ChecklistActionInterface) => {
-    const newOrChangedAction = editorResult as JChecklistAction;
-    if (checklistTemplate && newOrChangedAction.ordinal ) {
+  const upsertAction = (newOrChangedAction: JChecklistAction) => {
+    if (checklistTemplate && newOrChangedAction.ordinal !== undefined) {
       // Update existing action.
       setActions(prevState => {
-        prevState[newOrChangedAction.ordinal] = newOrChangedAction;
-        return prevState;
+        const a = [...prevState];
+        a[newOrChangedAction.ordinal!] = newOrChangedAction;
+        return a;
       });  
     } else {
       // Insert a new action.
       newOrChangedAction.ordinal = actions.length;
       setActions(prevState => {
-        return ([] as JChecklistAction[]).concat(prevState, newOrChangedAction);
+        return [...prevState].concat(newOrChangedAction);
       });
     }
   };
 
   const deleteAction = (index: number) => {
     if (checklistTemplate) {
-      const a = ([] as JChecklistAction[]).concat(actions);
+      const a = [...actions];
       a.splice(index, 1);
       reorderActions(a);
     }

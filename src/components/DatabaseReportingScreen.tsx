@@ -24,7 +24,8 @@ import { makeStyles } from '@rneui/themed';
 import { saveOutputReportTo } from 'store/slices/appSettings';
 import { selectOutputReportTo } from 'store/selectors/appSettingsSelectors';
 import { useEvent } from 'lib/event';
-import { useSetState } from '@react-native-ajp-elements/core';
+
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>;
 
 type Report = EventsMaintenanceReport | ScanCodesReport;
 
@@ -33,8 +34,6 @@ const reportEditor: {[key in ReportType]: any} = {
   [ReportType.EventsMaintenance]: 'ReportEventsMaintenanceEditor',
   [ReportType.ScanCodes]: 'ReportScanCodesEditor',
 };
-
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>;
 
 const DatabaseReportingScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -51,11 +50,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const [editModeEnabled, setEditModeEnabled] = useState(false);
   const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
 
-  const [reports, _setReports] = useSetState({
-    [ReportType.EventsMaintenance]: emReports,
-    [ReportType.ScanCodes]: scReports,
-  });
-
   useEffect(() => {
     const onEdit = () => {
       setEditModeEnabled(!editModeEnabled);
@@ -63,8 +57,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 
     navigation.setOptions({
       headerRight: () => {
-        if (!reports[ReportType.EventsMaintenance].length &&
-          !reports[ReportType.ScanCodes].length) {
+        if (!emReports.length && !scReports.length) {
           return null;
         }
         return (
@@ -77,7 +70,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         )
       },
     });
-  }, [ editModeEnabled, reports[ReportType.EventsMaintenance], reports[ReportType.ScanCodes] ]);
+  }, [ editModeEnabled, emReports, scReports ]);
 
   useEffect(() => {
     event.on('output-report-to', setOutputReportTo);
@@ -103,9 +96,9 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const reorderReports = (params: DragEndParams<Report>) => {
     const { data } = params;
     realm.write(() => {
-      for (let i = 0; i < data.length; i++) {
-        data[i].ordinal = i;
-      };
+      data.forEach((report, index) => {
+        report.ordinal  = index;
+      });
     });
   };
 
@@ -184,7 +177,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     return renderReport({
       report,
       reportType: ReportType.EventsMaintenance,
-      reportCount: reports[ReportType.EventsMaintenance].length,
+      reportCount: emReports.length,
       index,
       drag,
       isActive
@@ -202,7 +195,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     return renderReport({
       report,
       reportType: ReportType.ScanCodes,
-      reportCount: reports[ReportType.ScanCodes].length,
+      reportCount: scReports.length,
       index,
       drag,
       isActive
@@ -239,15 +232,15 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         rightImage={false}
         onPress={() => setNewReportSheetVisible(true)}
       />
-      {reports[ReportType.EventsMaintenance].length ?
+      {emReports.length ?
         <>
           <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
           <View style={{flex:1}}>
             <NestableDraggableFlatList
               // @ts-expect-error Typing is incorrect on renderItem
-              data={reports[ReportType.EventsMaintenance].sorted('ordinal')}
+              data={emReports.sorted('ordinal')}
               renderItem={renderEMReport}
-              keyExtractor={(item) => `${item._id}`}
+              keyExtractor={(_item, index) => `${index}`}
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
@@ -267,15 +260,15 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         </>
         : null
       }
-      {reports[ReportType.ScanCodes].length ?
+      {scReports.length ?
         <>
           <Divider text={'QR CODE REPORTS'}/>
           <View style={{flex:1}}>
             <NestableDraggableFlatList
               // @ts-expect-error Typing is incorrect on renderItem
-              data={reports[ReportType.ScanCodes].sorted('ordinal')}
+              data={scReports.sorted('ordinal')}
               renderItem={renderSCReport}
-              keyExtractor={(item) => `${item._id}`}
+              keyExtractor={(_item, index) => `${index}`}
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}

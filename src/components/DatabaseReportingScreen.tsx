@@ -97,7 +97,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     const { data } = params;
     realm.write(() => {
       data.forEach((report, index) => {
-        report.ordinal  = index;
+        report.ordinal = index;
       });
     });
   };

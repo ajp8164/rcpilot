@@ -31,6 +31,8 @@ export type Props =
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplateEditor'> |
   NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>;
 
+type JChecklistAction = Omit<ChecklistAction, keyof Realm.Object>;
+
 const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   const { checklistTemplateId } = route.params || {};
 
@@ -45,7 +47,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   const [name, setName] = useState(checklistTemplate?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
   const [actions, setActions] = useState(
-    (checklistTemplate?.actions.toJSON() || []) as Omit<ChecklistAction, keyof Realm.Object>[]
+    (checklistTemplate?.actions.toJSON() || []) as JChecklistAction[]
   );
 
   useEffect(() => {
@@ -137,7 +139,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   }, [ actions ]);
 
   const upsertAction = (editorResult: ChecklistActionInterface) => {
-    const newOrChangedAction = editorResult as Omit<ChecklistAction, keyof Realm.Object>;
+    const newOrChangedAction = editorResult as JChecklistAction;
     if (checklistTemplate && newOrChangedAction.ordinal ) {
       // Update existing action.
       setActions(prevState => {
@@ -148,27 +150,27 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
       // Insert a new action.
       newOrChangedAction.ordinal = actions.length;
       setActions(prevState => {
-        return ([] as Omit<ChecklistAction, keyof Realm.Object>[]).concat(prevState, newOrChangedAction);
+        return ([] as JChecklistAction[]).concat(prevState, newOrChangedAction);
       });
     }
   };
 
   const deleteAction = (index: number) => {
     if (checklistTemplate) {
-      const a = ([] as Omit<ChecklistAction, keyof Realm.Object>[]).concat(actions);
+      const a = ([] as JChecklistAction[]).concat(actions);
       a.splice(index, 1);
       reorderActions(a);
     }
   };
 
-  const reorderActions = (data: Omit<ChecklistAction, keyof Realm.Object>[]) => {
+  const reorderActions = (data: JChecklistAction[]) => {
     for (let i = 0; i < data.length; i++) {
       data[i].ordinal = i;
     };
     setActions(data);
   };
 
-  const actionScheduleToString = (action: ChecklistAction) => {
+  const actionScheduleToString = (action: JChecklistAction) => {
     let result = '';
     if (action.schedule.type === ChecklistTemplateActionScheduleType.Repeating) {
       let when = '';
@@ -237,16 +239,16 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     getIndex,
     drag,
     isActive,
-  }: RenderItemParams<ChecklistAction | Omit<ChecklistAction, keyof Realm.Object>>) => {
+  }: RenderItemParams<JChecklistAction>) => {
     const index = getIndex();
-    if (index === undefined) return;
+    if (index === undefined) return null;
     return (
       <View
         key={index}
         style={[isActive ? s.shadow : {}]}>
         <ListItem
           title={action.description}
-          subtitle={actionScheduleToString(action as ChecklistAction)}
+          subtitle={actionScheduleToString(action)}
           subtitleNumberOfLines={1}
           position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
           titleNumberOfLines={1}

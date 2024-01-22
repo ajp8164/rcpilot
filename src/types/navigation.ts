@@ -1,9 +1,9 @@
-import { ChecklistActionInterface } from 'components/ChecklistActionEditorScreen';
 import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { FilterType } from 'types/filter';
 import { FlightOutcome } from 'types/flight';
+import { JChecklistAction } from 'realmdb/ChecklistTemplate';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
@@ -263,7 +263,7 @@ export type NewModelPropellerNavigatorParamList = {
 
 export type NewChecklistTemplateNavigatorParamList = {
   ChecklistActionEditor: {
-    checklistAction?: ChecklistActionInterface;
+    checklistAction?: JChecklistAction;
     checklistTemplateType: ChecklistTemplateType;
     eventName: string;
   };
@@ -279,7 +279,7 @@ export type NewChecklistTemplateNavigatorParamList = {
 
 export type NewChecklistActionNavigatorParamList = {
   NewChecklistAction: {
-    checklistAction?: ChecklistActionInterface;
+    checklistAction?: JChecklistAction;
     checklistTemplateType: ChecklistTemplateType;
     eventName: string;
   };
@@ -295,7 +295,7 @@ export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
   ChecklistActionEditor: {
-    checklistAction?: ChecklistActionInterface;
+    checklistAction?: JChecklistAction;
     checklistTemplateType: ChecklistTemplateType;
     eventName: string;
   };

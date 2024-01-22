@@ -7,13 +7,13 @@ import {
   ChecklistTemplateActionScheduleType,
   ChecklistTemplateType
 } from 'types/checklistTemplate';
+import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/ChecklistTemplate';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { NewChecklistActionNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString } from 'realmdb/helpers';
 
 import { Button } from '@rneui/base';
-import { ChecklistActionSchedule } from 'realmdb/ChecklistTemplate';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Realm from 'realm';
@@ -24,14 +24,6 @@ import { getChecklistActionScheduleItems } from 'lib/checklistTemplate';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
-
-export interface ChecklistActionInterface {
-  description: string;
-  schedule: Omit<ChecklistActionSchedule, keyof Realm.Object>;
-  cost?: number;
-  notes?: string;
-  ordinal?: number;
-};
 
 export type Props =
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'> |
@@ -96,7 +88,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     );
 
     const onDone = () => {
-      const result: ChecklistActionInterface = {
+      const result: JChecklistAction = {
         ...action,
         description: description!,
         schedule: selectedSchedule,

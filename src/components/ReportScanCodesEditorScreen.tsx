@@ -2,6 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { eqBoolean, eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -13,7 +14,6 @@ import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
-import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 
 // import { useEvent } from 'lib/event';
@@ -34,7 +34,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
 
   const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
 
-  const [name, setName] = useState<string | undefined>(undefined);
+  const [name, setName] = useState<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
   const [includesModels, setIncludesModels] = useState(report ? report.includesModels : true);
   const [includesBatteries, setIncludesBatteries] = useState(report ? report.includesBatteries : true);
@@ -60,20 +60,36 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      !eqString(report?.name, name)
+      !eqString(report?.name, name) ||
+      !eqBoolean(report?.includesModels, includesModels) ||
+      !eqBoolean(report?.includesBatteries, includesBatteries) ||
+      !eqObject(report?.modelScanCodesFilter, modelScanCodesFilter) ||
+      !eqObject(report?.batteryScanCodesFilter, batteryScanCodesFilter)
     );
 
     const save = () => {
-      realm.write(() => {
-        realm.create('ScanCodesReport', {
-          name,
-          ordinal,
-          includesModels,
-          includesBatteries,
-          modelScanCodesFilter,
-          batteryScanCodesFilter,
+      if (reportId) {
+        // Update existing report.
+        realm.write(() => {
+          report!.name = name!;
+          report!.includesModels = includesModels;
+          report!.includesBatteries = includesBatteries;
+          report!.modelScanCodesFilter = modelScanCodesFilter;
+          report!.batteryScanCodesFilter = batteryScanCodesFilter;
         });
-      });
+      } else {
+        // Insert new report.
+        realm.write(() => {
+          realm.create('ScanCodesReport', {
+            name,
+            ordinal,
+            includesModels,
+            includesBatteries,
+            modelScanCodesFilter,
+            batteryScanCodesFilter,
+          });
+        });
+      }
     };
   
     const onDone = () => {
@@ -105,7 +121,13 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [ name ]);
+  }, [
+    name,
+    includesModels,
+    includesBatteries,
+    modelScanCodesFilter,
+    batteryScanCodesFilter,
+  ]);
 
   return (
     <SafeAreaView

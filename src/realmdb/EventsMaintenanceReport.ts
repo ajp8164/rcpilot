@@ -10,7 +10,7 @@ export class EventsMaintenanceReport extends Object<EventsMaintenanceReport> {
   includesEvents!: boolean;
   includesMaintenance!: boolean;
   eventsFilter?: Filter;
-  maintenenaceFilter?: Filter;
+  maintenanceFilter?: Filter;
 
   static schema: ObjectSchema = {
     name: 'EventsMaintenanceReport',
@@ -22,7 +22,7 @@ export class EventsMaintenanceReport extends Object<EventsMaintenanceReport> {
       includesEvents: 'bool',
       includesMaintenance: 'bool',
       eventsFilter: 'Filter?',
-      maintenenaceFilter: 'Filter?',
+      maintenanceFilter: 'Filter?',
     },
     primaryKey: '_id',
   };

@@ -169,7 +169,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     setActions(data);
   };
 
-  const actionScheduleToString = (action: JChecklistAction) => {
+  const actionScheduleSummary = (action: JChecklistAction) => {
     let result = '';
     if (action.schedule.type === ChecklistTemplateActionScheduleType.Repeating) {
       let when = '';
@@ -247,7 +247,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         style={[isActive ? s.shadow : {}]}>
         <ListItem
           title={action.description}
-          subtitle={actionScheduleToString(action)}
+          subtitle={actionScheduleSummary(action)}
           subtitleNumberOfLines={1}
           position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
           titleNumberOfLines={1}

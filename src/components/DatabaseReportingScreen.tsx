@@ -147,7 +147,9 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           rightImage={
             <Pressable
               style={{flexDirection: 'row'}}
-              onPress={() => navigation.navigate(reportEditor[reportType])}
+              onPress={() => navigation.navigate(reportEditor[reportType], {
+                reportId: report._id.toString(),
+              })}
               >
               <CustomIcon
                 name={'circle-info'}
@@ -157,10 +159,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
             </Pressable>
           }
           // TODO = press runs the report...
-          // onPress={() => navigation.navigate('ReportEditor', {
-          //   reportId: report._id,
-          //   eventName: 'report',
-          // })}
+          onPress={() => {return}}
         />
       </View>
     );    

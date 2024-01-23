@@ -2,6 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { eqBoolean, eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -12,7 +13,6 @@ import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 
 // import { useEvent } from 'lib/event';
@@ -39,7 +39,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [includesEvents, setIncludesEvents] = useState(report ? report.includesEvents : true);
   const [includesMaintenance, setIncludesMaintenance] = useState(report ? report.includesMaintenance : true);
   const [eventsFilter, _setEventsFilter] = useState(report?.eventsFilter);
-  const [maintenanceFilter, _setMaintenaceFilter] = useState(report?.maintenenaceFilter);
+  const [maintenanceFilter, _setMaintenaceFilter] = useState(report?.maintenanceFilter);
 
   // useEffect(() => {
   //   event.on('events-report-filter', setEventsFilterId);
@@ -60,21 +60,39 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave = name && (
-      !eqString(report?.name, name)
+      !eqString(report?.name, name) ||
+      !eqBoolean(report?.includesSummary, includesSummary) ||
+      !eqBoolean(report?.includesEvents, includesEvents) ||
+      !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
+      !eqObject(report?.eventsFilter, eventsFilter) ||
+      !eqObject(report?.maintenanceFilter, maintenanceFilter)
     );
 
     const save = () => {
-      realm.write(() => {
-        realm.create('EventsMaintenanceReport', {
-          name,
-          ordinal,
-          includesSummary,
-          includesEvents,
-          includesMaintenance,
-          eventsFilter,
-          maintenanceFilter,
+      if (reportId) {
+        // Update existing report.
+        realm.write(() => {
+          report!.name = name!;
+          report!.includesSummary = includesSummary;
+          report!.includesEvents = includesEvents;
+          report!.includesMaintenance = includesMaintenance;
+          report!.eventsFilter = eventsFilter;
+          report!.maintenanceFilter = maintenanceFilter;
         });
-      });
+      } else {
+        // Insert new report.
+        realm.write(() => {
+          realm.create('EventsMaintenanceReport', {
+            name,
+            ordinal,
+            includesSummary,
+            includesEvents,
+            includesMaintenance,
+            eventsFilter,
+            maintenanceFilter,
+          });
+        });
+      }
     };
   
     const onDone = () => {
@@ -106,7 +124,14 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [ name ]);
+  }, [
+    name,
+    includesSummary,
+    includesEvents,
+    includesMaintenance,
+    eventsFilter,
+    maintenanceFilter,
+  ]);
 
   return (
     <SafeAreaView

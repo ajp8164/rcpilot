@@ -1,11 +1,12 @@
 import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
 import { useNavigation } from '@react-navigation/core';
 import {useTheme} from "theme";
+import { uuidv4 } from 'lib/utils';
 
 export type EnumFilter = {
   relation: EnumRelation;
@@ -40,6 +41,7 @@ const ListItemFilterEnum = (props: Props) => {
   const navigation = useNavigation<any>();
   const event = useEvent();
 
+  const eventName = useRef(`list-item-filter-enum-${uuidv4()}`).current;
   const [expanded, setExpanded] = useState(false);
   const [relation, setRelation] = useState<EnumRelation>(initialRelation);
   const [value, setValue] = useState(initialValue);
@@ -48,10 +50,10 @@ const ListItemFilterEnum = (props: Props) => {
 
   useEffect(() => {
     // Event handler for EnumPicker
-    event.on('list-item-filter-enum', onChangeFilter);
+    event.on(eventName, onChangeFilter);
 
     return () => {
-      event.removeListener('list-item-filter-enum', onChangeFilter);
+      event.removeListener(eventName, onChangeFilter);
     };
   }, []);
 
@@ -93,7 +95,7 @@ const ListItemFilterEnum = (props: Props) => {
             onPress={() => navigation.navigate('EnumPicker', {
               ...enumFilterConfig,
               selected: value,
-              eventName: 'list-item-filter-enum',
+              eventName: eventName,
             })}
           />
         }

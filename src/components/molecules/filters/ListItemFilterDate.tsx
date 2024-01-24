@@ -1,3 +1,4 @@
+import { DateFilterState, DateRelation } from 'components/molecules/filters';
 import { ListItemDate, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 
 import { DateTime } from 'luxon';
@@ -6,23 +7,11 @@ import lodash from 'lodash';
 import { useState } from "react";
 import { useTheme } from 'theme';
 
-export type DateFilter = {
-  relation: DateRelation;
-  value: string;
-};
-
-export enum DateRelation {
-  Any = 'Any',
-  Before = 'Before',
-  After = 'After',
-  Past = 'Past',
-};
-
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
-  onValueChange: (relation: DateRelation, value: ISODateString) => void;
+  onValueChange: (filterState: DateFilterState) => void;
   relation?: DateRelation;
   title: string;
-  value: ISODateString;
+  value?: ISODateString;
 };
 
 const ListItemFilterDate = (props: Props) => {
@@ -41,7 +30,9 @@ const ListItemFilterDate = (props: Props) => {
   const [value, setValue] = useState(initialValue);
 
   const onRelationSelect = (index: number) => {
-    setRelation(Object.keys(DateRelation)[index] as DateRelation);
+    const newRelation = Object.keys(DateRelation)[index] as DateRelation;
+    setRelation(newRelation);
+    onValueChange({relation: newRelation, value});
     setExpanded(index > 0);
   };
 
@@ -49,7 +40,7 @@ const ListItemFilterDate = (props: Props) => {
     // Set our local state and pass the entire state back to the caller.
     const value = date && DateTime.fromJSDate(date).toISO() || '';
     setValue(value);
-    onValueChange(relation, value);
+    onValueChange({relation, value});
   };    
 
   return (

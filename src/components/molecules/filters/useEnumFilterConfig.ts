@@ -2,7 +2,7 @@ import { modelCategories, modelStyles } from '../../../mocks/enums';
 
 import { BatteryChemistry } from 'types/battery';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
-import { EnumRelation } from './ListItemFilterEnum';
+import { EnumRelation } from 'components/molecules/filters';
 import { FlightOutcome } from 'types/flight';
 import { ModelType } from 'types/model';
 import { enumIdsToValues } from 'lib/utils';
@@ -76,6 +76,7 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
   let config = Object.assign({}, enumFilterConfigs[enumName]);
   config.sectionName = config.sectionName?.replace('{0}', relation === EnumRelation.Is ? 'INCLUDE IN' : 'EXCLUDE FROM');
 
+  // Dynamic list of values. These enum names capture a user entered list of values.
   // Use a database selector to fill values dynamically; use enumName
   switch (enumName) {
     case 'Batteries':

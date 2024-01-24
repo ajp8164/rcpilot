@@ -1,44 +1,16 @@
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import { StringFilterState, StringRelation } from 'components/molecules/filters';
 
 import lodash from 'lodash';
 import { useNavigation } from '@react-navigation/core';
 import { useState } from "react";
 import {useTheme} from "theme";
 
-export type StringFilter = {
-  relation: StringRelation;
-  value: string;
-};
-
-export enum StringRelation {
-  Any = 'Any',
-  Contains = 'Contains',
-  Missing = 'Missing',
-};
-
-/**
- * const [filter, setFilter] = useState<StringFilter>({
- *   relation: filterRelation,
- *   value: notes
- * });
- * 
- * <ListItemFilterString
- *   title={'Notes'}
- *   value={notes}
- *   relation={filter.relation}
- *   onValueChange={(relation, value) => {
- *     setFilter({relation, value});
- *   });
- * />
- * 
- * 
- */
-
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
-  onValueChange: (relation: StringRelation, value: string) => void;
+  onValueChange: (filterState: StringFilterState) => void;
   relation?: StringRelation;
   title: string;
-  value: string;
+  value?: string;
 };
 
 const ListItemFilterString = (props: Props) => {
@@ -53,21 +25,21 @@ const ListItemFilterString = (props: Props) => {
   const theme = useTheme();
   const navigation = useNavigation<any>();
 
-  // const notesRef = useRef<TextModal>(null);
   const [expanded, setExpanded] = useState(false);
   const [relation, setRelation] = useState<StringRelation>(initialRelation);
   const [value, setValue] = useState(initialValue);
 
   const onRelationSelect = (index: number) => {
-    setRelation(Object.keys(StringRelation)[index] as StringRelation);
+    const newRelation = Object.keys(StringRelation)[index] as StringRelation;
+    setRelation(newRelation);
+    onValueChange({relation: newRelation, value});
     setExpanded(index > 0);
   };
 
-  // const onDismiss = (text: string) => {
-  const onChangedFilter = (text: string) => {
+  const onChangedFilter = (value: string) => {
     // Set our local state and pass the entire state back to the caller.
-    setValue(text);
-    onValueChange(relation, text);
+    setValue(value);
+    onValueChange({relation, value});
   };    
 
   return (
@@ -91,16 +63,9 @@ const ListItemFilterString = (props: Props) => {
             subtitle={!value ?  'Matching text not specified' : value}
             position={position?.includes('last') ?  ['last'] : []}
             onPress={() => navigation.navigate('Notes', {title: 'String Value', onDone: onChangedFilter})}
-            // onPress={notesRef.current.present}
           />
         }
       />
-      {/* Try passing a function to the notes screen so it can call it to pass us the text before it closes
-      <TextModal
-        ref={textModalRef}
-        placeholder={'Type your notes here'}
-        onDismiss={onDismiss}
-      /> */}
     </>
   );
 }

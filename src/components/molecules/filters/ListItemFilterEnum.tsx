@@ -37,7 +37,6 @@ const ListItemFilterEnum = (props: Props) => {
   const [value, setValue] = useState(initialValue);
 
   const enumFilterConfig = useEnumFilterConfig(enumName, relation);
-  console.log(enumName, enumFilterConfig);
 
   useEffect(() => {
     const onChangeFilter = (value: string) => {

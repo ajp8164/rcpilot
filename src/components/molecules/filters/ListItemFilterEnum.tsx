@@ -1,3 +1,4 @@
+import { EnumFilterState, EnumRelation } from 'components/molecules/filters';
 import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { useEffect, useRef, useState } from "react";
@@ -8,23 +9,12 @@ import { useNavigation } from '@react-navigation/core';
 import {useTheme} from "theme";
 import { uuidv4 } from 'lib/utils';
 
-export type EnumFilter = {
-  relation: EnumRelation;
-  value: string;
-};
-
-export enum EnumRelation {
-  Any = 'Any',
-  Is = 'Is',
-  IsNot = 'Is Not',
-};
-
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
-  onValueChange: (relation: EnumRelation, value: string) => void;
+  onValueChange: (filterState: EnumFilterState) => void;
   enumName: EnumName;
   relation?: EnumRelation;
   title: string;
-  value: string | string[];
+  value?: string | string[];
 };
 
 const ListItemFilterEnum = (props: Props) => {
@@ -47,29 +37,32 @@ const ListItemFilterEnum = (props: Props) => {
   const [value, setValue] = useState(initialValue);
 
   const enumFilterConfig = useEnumFilterConfig(enumName, relation);
+  console.log(enumName, enumFilterConfig);
 
   useEffect(() => {
+    const onChangeFilter = (value: string) => {
+      // Set our local state and pass the entire state back to the caller.
+      setValue(value);
+      onValueChange({relation, value});
+    };
+  
     // Event handler for EnumPicker
     event.on(eventName, onChangeFilter);
 
     return () => {
       event.removeListener(eventName, onChangeFilter);
     };
-  }, []);
+  }, [ relation ]);
 
   const valueToString = () => {
-    return value.toString().replaceAll(',', ', ').replace(/(, )(?!.*\1)/, ', or ')
+    return value?.toString().replaceAll(',', ', ').replace(/(, )(?!.*\1)/, ', or ');
   };
 
   const onRelationSelect = (index: number) => {
-    setRelation(Object.keys(EnumRelation)[index] as EnumRelation);
+    const newRelation = Object.keys(EnumRelation)[index] as EnumRelation;
+    setRelation(newRelation);
+    onValueChange({relation: newRelation, value});
     setExpanded(index > 0);
-  };
-
-  const onChangeFilter = (value: string) => {
-    // Set our local state and pass the entire state back to the caller.
-    setValue(value);
-    onValueChange(relation, value);
   };
 
   return (

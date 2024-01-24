@@ -1,25 +1,15 @@
+import { BooleanFilterState, BooleanRelation } from 'components/molecules/filters';
 import { ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 
 import { useState } from "react";
 import { useTheme } from 'theme';
 
-export type BooleanFilter = {
-  relation: BooleanRelation;
-  value: string;
-};
-
-export enum BooleanRelation {
-  Any = 'Any',
-  Yes = 'Yes',
-  No = 'No',
-};
-
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
-  onValueChange: (relation: BooleanRelation, value: string) => void;
+  onValueChange: (filterState: BooleanFilterState) => void;
   relation?: BooleanRelation;
   title: string;
-  value: string;
+  value?: string;
 };
 
 const ListItemFilterBoolean = (props: Props) => {
@@ -38,7 +28,7 @@ const ListItemFilterBoolean = (props: Props) => {
   const onRelationSelect = (index: number) => {
     setRelation(Object.keys(BooleanRelation)[index] as BooleanRelation);
     setValue(index === 1 ? 'true' : 'false');
-    onValueChange(relation, value);
+    onValueChange({relation, value});
   };
 
   return (

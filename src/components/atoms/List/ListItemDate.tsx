@@ -37,7 +37,10 @@ const ListItemDate = (props: Props) => {
     <>
       <_ListItem
         {...props} 
-        containerStyle={{...props.containerStyle, ...s.containerStyle}}
+        containerStyle={[
+          {...props.containerStyle, ...s.containerStyle},
+          props.swipeable ? theme.styles.swipeableListItemContainer : {}
+        ]}
         valueStyle={s.valueStyle}
       />
       <CollapsibleView

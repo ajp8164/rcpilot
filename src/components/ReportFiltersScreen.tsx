@@ -72,6 +72,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
   };
 
   const renderFilter: ListRenderItem<Filter> = ({ item: filter, index }) => {
+    console.log(filters.length);
     return (
       <ListItemCheckboxInfo
         key={index}
@@ -128,6 +129,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         renderItem={renderFilter}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={theme.styles.swipeableListMask}
       />
     </View>
   );

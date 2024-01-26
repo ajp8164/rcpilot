@@ -35,7 +35,10 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
     <>
       <_ListItem
         {...props}
-        containerStyle={{...props.containerStyle, ...s.container}}
+        containerStyle={[
+          {...props.containerStyle, ...s.container},
+          props.swipeable ? theme.styles.swipeableListItemContainer : {}
+        ]}
         rightImage={false}
         extraContentComponent={
           <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]} >

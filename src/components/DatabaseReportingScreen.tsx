@@ -243,7 +243,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
-              containerStyle={s.swipeableListMask}
+              containerStyle={theme.styles.swipeableListMask}
               animationConfig={{
                 damping: 20,
                 mass: 0.01,
@@ -271,7 +271,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
-              containerStyle={s.swipeableListMask}
+              containerStyle={theme.styles.swipeableListMask}
               animationConfig={{
                 damping: 20,
                 mass: 0.01,
@@ -337,10 +337,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
         borderRadius: 20,
       },
     }),
-  },
-  swipeableListMask: {
-    borderRadius: 10,
-    overflow: 'hidden',
   },
 }));
 

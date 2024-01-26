@@ -75,10 +75,7 @@ const NewBatteryCycleScreen = ({ navigation }: Props) => {
     />
     <Divider text={'ACTION'} />
     <ListItemSegmented
-      segments={[
-        { label: '  Charge Action  ', labelStyle: theme.styles.textSmall },
-        { label: 'Discharge Action', labelStyle: theme.styles.textSmall }
-      ]}
+      segments={['Charge Action', 'Discharge Action']}
       fullWidth={true}
       disabled={false}
       position={['first', 'last']}

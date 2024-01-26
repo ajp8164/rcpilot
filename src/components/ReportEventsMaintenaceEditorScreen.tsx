@@ -42,8 +42,6 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [eventsFilter, setEventsFilter] = useState(report?.eventsFilter);
   const [maintenanceFilter, setMaintenanceFilter] = useState(report?.maintenanceFilter);
 
-  const [rerender, setRerender] = useState(false);
-
   useEffect(() => {
     event.on('events-report-filter-selection', onChangeEventsFilterSelection);
     event.on('maintenance-report-filter-selection', onChangeMaintenanceFilterSelection);
@@ -76,14 +74,25 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     // Update the exiting report immediately.
     if (report)  {
       realm.write(() => {
-        report.eventsFilter = filter;
+        report.maintenanceFilter = filter;
       });
     }
   };
 
-  const onChangeFilter = (_filterId: string) => {
-    // Force re-render to refresh filter summaries as needed.
-    setRerender(!rerender);
+  const onChangeFilter = (filterId: string) => {
+    // A filter change was made. Retrive the filter and if it's the selected
+    // filter for this report then update our local state to force a render of
+    // the filter summary.
+    const changedFilter = realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter;
+    if (changedFilter.type === FilterType.ReportEventsFilter) {
+      if (filterId === report?.eventsFilter?._id.toString()) {
+        setEventsFilter(changedFilter);
+      }
+    } else {
+      if (filterId === report?.maintenanceFilter?._id.toString()) {
+        setMaintenanceFilter(changedFilter);
+      }
+    }
   };
 
   useEffect(() => {

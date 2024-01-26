@@ -102,7 +102,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     });
   };
 
-  const reportToString = (report: Report) => {
+  const reportSummary = (report: Report) => {
     return report._id.toString();
   };
 
@@ -121,7 +121,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         style={[isActive ? s.shadow : {}]}>
         <ListItem
           title={report.name}
-          subtitle={reportToString(report as Report)}
+          subtitle={reportSummary(report as Report)}
           subtitleNumberOfLines={1}
           position={reportCount === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === reportCount - 1 ? ['last'] : []}
           titleNumberOfLines={1}

@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
-import { FilterType, MaintenanceReportFilterValue } from 'types/filter';
+import { FilterType, MaintenanceReportFilterValues } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -13,7 +13,18 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
+import {Text} from 'react-native';
 import { makeStyles } from '@rneui/themed';
+import { useSetState } from '@react-native-ajp-elements/core';
+
+const defaultFilter: MaintenanceReportFilterValues = {
+  model: {relation: EnumRelation.Any, value: []},
+  modelType: {relation: EnumRelation.Any, value: []},
+  category: {relation: EnumRelation.Any, value: []},
+  date: {relation: DateRelation.Any, value: []},
+  costs: {relation: NumberRelation.Any, value: []},
+  notes: {relation: StringRelation.Any, value: []},
+};
 
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportMaintenanceFilterEditor'>;
 
@@ -27,21 +38,10 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
   const reportFilter = useObject(Filter, new BSON.ObjectId(filterId));
 
   const [name, setName] = useState(reportFilter?.name || undefined);
-  const [values, setValues] = useState(reportFilter?.values || {});
+  const [values, setValues] = useSetState(reportFilter?.toJSON().values as MaintenanceReportFilterValues || defaultFilter);
 
-  // const [values, setValues] = useSetState<MaintenanceReportFilterValues>({
-  //   [MaintenanceReportFilterValue.Model]: {relation: EnumRelation.Any, value: ''},
-  //   [MaintenanceReportFilterValue.ModelType]: {relation: EnumRelation.Any, value: ''},
-  //   [MaintenanceReportFilterValue.Category]: {relation: EnumRelation.Any, value: ''},
-  //   [MaintenanceReportFilterValue.Date]: {relation: DateRelation.Any, value: ''},
-  //   [MaintenanceReportFilterValue.Costs]: {relation: NumberRelation.Any, value: ''},
-  //   [MaintenanceReportFilterValue.Notes]: {relation: StringRelation.Any, value: ''},
-  // });
-
-  const onFilterValueChange = (property: MaintenanceReportFilterValue, value: FilterState) => {
-    setValues({
-      [property]: value,
-    });
+  const onFilterValueChange = (property: keyof MaintenanceReportFilterValues, value: FilterState) => {
+    setValues({ [property]: value }, {assign: true});
   };
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
         if (canSave) {
           return (
             <Button
-              title={'Update'}
+              title={'Done'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.updateButton]}
               onPress={onDone}
@@ -95,10 +95,11 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, []);  
+  }, [ name, values ]);  
 
   return (
     <ScrollView style={theme.styles.view}>
+      <Text>{reportFilter?._id.toString()}</Text>
       <Divider text={'FILTER NAME'}/>
       <ListItemInput
         value={name}
@@ -119,65 +120,65 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider text={'This filter shows all the events that match all of these criteria.'}/>
       <ListItemFilterEnum
         title={'Model'}
-        value={values[MaintenanceReportFilterValue.Model]?.value}
+        value={values.model.value}
         relation={EnumRelation.Any}
         enumName={'Models'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(MaintenanceReportFilterValue.Model, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('model', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Model Type'}
-        value={values[MaintenanceReportFilterValue.ModelType]?.value}
+        value={values.modelType.value}
         relation={EnumRelation.Any}
         enumName={'ModelTypes'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(MaintenanceReportFilterValue.ModelType, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('modelType', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Category'}
-        value={values[MaintenanceReportFilterValue.Category]?.value}
+        value={values.category.value}
         relation={EnumRelation.Any}
         enumName={'Categories'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(MaintenanceReportFilterValue.Category, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('category', filterState);
         }}
       />
       <Divider />
       <ListItemFilterDate
         title={'Date'}
-        value={values[MaintenanceReportFilterValue.Date]?.value}
+        value={values.date.value}
         relation={DateRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(MaintenanceReportFilterValue.Date, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('date', filterState);
         }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'Costs'}
         label={''}
-        value={values[MaintenanceReportFilterValue.Costs]?.value}
+        value={values.costs.value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(MaintenanceReportFilterValue.Costs, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('costs', filterState);
         }}
       />
       <Divider />
       <ListItemFilterString
         title={'Notes'}
-        value={values[MaintenanceReportFilterValue.Notes]?.value}
+        value={values.notes.value}
         relation={StringRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(MaintenanceReportFilterValue.Costs, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('notes', filterState);
         }}
       />
       <Divider />

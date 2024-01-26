@@ -13,23 +13,27 @@ export type FilterState =
 
 export type BooleanFilterState = {
   relation: BooleanRelation;
-  value?: string;
+  value: string[];
 };
+
 export type DateFilterState = {
   relation: DateRelation;
-  value?: string;
+  value: string[];
 };
+
 export type EnumFilterState = {
   relation: EnumRelation;
-  value?: string | string[];
+  value: string[];
 };
+
 export type NumberFilterState = {
   relation: NumberRelation;
-  value?: string;
+  value: string[];
 };
+
 export type StringFilterState = {
   relation: StringRelation;
-  value?: string;
+  value: string[];
 };
 
 export enum BooleanRelation {
@@ -63,4 +67,13 @@ export enum StringRelation {
   Any = 'Any',
   Contains = 'Contains',
   Missing = 'Missing',
+};
+
+// Union of all relations.
+export const FilterRelation = {
+  ...BooleanRelation,
+  ...DateRelation,
+  ...EnumRelation,
+  ...NumberRelation,
+  ...StringRelation
 };

@@ -154,7 +154,8 @@ export type ReportFiltersNavigatorParamList = {
     filterId?: string;
   };
   ReportFilters: {
-    filterType?: FilterType;
+    filterId?: string;
+    filterType: FilterType;
     eventName: string;
   };
   ReportMaintenanceFilterEditor: {

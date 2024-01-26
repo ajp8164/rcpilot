@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFilterEnum } from 'components/molecules/filters';
-import { FilterType, ModelScanCodeReportFilterValue } from 'types/filter';
+import { FilterType, ModelScanCodesReportFilterValues } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -14,6 +14,13 @@ import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useSetState } from '@react-native-ajp-elements/core';
+
+const defaultFilter: ModelScanCodesReportFilterValues = {
+  modelType: {relation: EnumRelation.Any, value: []},
+  category: {relation: EnumRelation.Any, value: []},
+  lastEvent: {relation: DateRelation.Any, value: []},
+};
 
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportModelScanCodesFilterEditor'>;
 
@@ -27,18 +34,10 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
   const reportFilter = useObject(Filter, new BSON.ObjectId(filterId));
 
   const [name, setName] = useState(reportFilter?.name || undefined);
-  const [values, setValues] = useState(reportFilter?.values || {});
+  const [values, setValues] = useSetState(reportFilter?.toJSON().values as ModelScanCodesReportFilterValues || defaultFilter);
 
-  // const [values, setValues] = useSetState<ModelScanCodeReportFilterValues>({
-  //   [ModelScanCodeReportFilterValue.ModelType]: {relation: EnumRelation.Any, value: ''},
-  //   [ModelScanCodeReportFilterValue.Category]: {relation: EnumRelation.Any, value: ''},
-  //   [ModelScanCodeReportFilterValue.LastEvent]: {relation: DateRelation.Any, value: ''},
-  // });
-
-  const onFilterValueChange = (property: ModelScanCodeReportFilterValue, value: FilterState) => {
-    setValues({
-      [property]: value,
-    });
+  const onFilterValueChange = (property: keyof ModelScanCodesReportFilterValues, value: FilterState) => {
+    setValues({ [property]: value }, {assign: true});
   };
 
   useEffect(() => {
@@ -83,7 +82,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
         if (canSave) {
           return (
             <Button
-              title={'Update'}
+              title={'Done'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.updateButton]}
               onPress={onDone}
@@ -92,7 +91,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
         }
       },
     });
-  }, []);  
+  }, [ name, values ]);  
 
   return (
     <ScrollView style={theme.styles.view}>
@@ -116,33 +115,33 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
       <Divider text={'This filter shows all the maintenance items that match all of these criteria.'}/>
       <ListItemFilterEnum
         title={'Model Type'}
-        value={values[ModelScanCodeReportFilterValue.ModelType]?.value}
+        value={values.modelType.value}
         relation={EnumRelation.Any}
         enumName={'ModelTypes'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelScanCodeReportFilterValue.ModelType, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('modelType', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Category'}
-        value={values[ModelScanCodeReportFilterValue.Category]?.value}
+        value={values.category.value}
         relation={EnumRelation.Any}
         enumName={'Categories'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelScanCodeReportFilterValue.Category, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('category', filterState);
         }}
       />
       <Divider />
       <ListItemFilterDate
         title={'Last Event'}
-        value={values[ModelScanCodeReportFilterValue.LastEvent]?.value}
+        value={values.lastEvent.value}
         relation={DateRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelScanCodeReportFilterValue.LastEvent, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('lastEvent', filterState);
         }}
       />
       <Divider />

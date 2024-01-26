@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteryScanCodeReportFilterValue, FilterType } from 'types/filter';
+import { BatteryScanCodesReportFilterValues, FilterType } from 'types/filter';
 import { EnumRelation, FilterState, ListItemFilterEnum, ListItemFilterNumber, NumberRelation } from 'components/molecules/filters';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -16,6 +16,11 @@ import { ReportFiltersNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';
 
+const defaultFilter: BatteryScanCodesReportFilterValues = {
+  chemistry: {relation: EnumRelation.Any, value: []},
+  capacity: {relation: NumberRelation.Any, value: []},
+};
+
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportBatteryScanCodesFilterEditor'>;
 
 const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) => {
@@ -28,19 +33,11 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
   const reportFilter = useObject(Filter, new BSON.ObjectId(filterId));
 
   const [name, setName] = useState(reportFilter?.name || undefined);
-  const [values, setValues] = useSetState(reportFilter?.values || {});
+  const [values, setValues] = useSetState(reportFilter?.toJSON().values as BatteryScanCodesReportFilterValues || defaultFilter);
 
-  // const [values, setValues] = useSetState<BatteryScanCodeReportFilterValues>({
-  //   [BatteryScanCodeReportFilterValue.Capacity]: {relation: NumberRelation.Any, value: ''},
-  //   [BatteryScanCodeReportFilterValue.Chemistry]: {relation: EnumRelation.Any, value: ''},
-  // });
-
-  const onFilterValueChange = (
-    property: BatteryScanCodeReportFilterValue,
-    value: FilterState) => {
-    setValues({[property]: value});
+  const onFilterValueChange = (property: keyof BatteryScanCodesReportFilterValues, value: FilterState) => {
+    setValues({ [property]: value }, {assign: true});
   };
-
 
   useEffect(() => {
     const canSave = !!name && (
@@ -84,7 +81,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
         if (canSave) {
           return (
             <Button
-              title={'Update'}
+              title={'Done'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.updateButton]}
               onPress={onDone}
@@ -93,7 +90,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
         }
       },
     });
-  }, []);  
+  }, [ name, values ]);  
 
   return (
     <ScrollView style={theme.styles.view}>
@@ -117,23 +114,23 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
       <Divider text={'This filter shows all the maintenance items that match all of these criteria.'}/>
       <ListItemFilterEnum
         title={'Chemistry'}
-        value={values[BatteryScanCodeReportFilterValue.Chemistry]?.value}
+        value={values.chemistry.value}
         relation={EnumRelation.Any}
         enumName={'Chemistries'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryScanCodeReportFilterValue.Chemistry, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('chemistry', filterState);
         }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'Capacity'}
         label={'mAh'}
-        value={values[BatteryScanCodeReportFilterValue.Capacity]?.value}
+        value={values.capacity.value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryScanCodeReportFilterValue.Capacity, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('capacity', filterState);
         }}
       />
       <Divider />

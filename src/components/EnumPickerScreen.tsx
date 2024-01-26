@@ -121,7 +121,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
 
     // For single selection mode we send the selected value immediately.
     if (mode === 'one') {
-      event.emit(eventName, value);
+      event.emit(eventName, [value]);
     }
   };
 

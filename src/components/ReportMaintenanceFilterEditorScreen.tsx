@@ -41,10 +41,6 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
   const [name, setName] = useState(reportFilter?.name || undefined);
   const [values, setValues] = useSetState(reportFilter?.toJSON().values as MaintenanceReportFilterValues || defaultFilter);
 
-  const onFilterValueChange = (property: keyof MaintenanceReportFilterValues, value: FilterState) => {
-    setValues({ [property]: value }, {assign: true});
-  };
-
   useEffect(() => {
     const canSave = !!name && (
       !eqString(reportFilter?.name, name) ||
@@ -98,7 +94,26 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [ name, values ]);  
+  }, [ name, values ]);
+
+  const onFilterValueChange = (property: keyof MaintenanceReportFilterValues, value: FilterState) => {
+    setValues({ [property]: value }, {assign: true});
+  };
+
+  const resetFilter = () => {
+    setValues(defaultFilter, {assign: true});
+  };
+
+  const relationsAreDefault = () => {
+    // Whether or not the set value relations are all set to the default value relations.
+    let result = false;
+    Object.keys(values).forEach(k => {
+      result = result || 
+        (values[k as keyof MaintenanceReportFilterValues].relation !==
+          defaultFilter[k as keyof MaintenanceReportFilterValues].relation);
+    });
+    return !result;
+  };
 
   return (
     <ScrollView style={theme.styles.view}>
@@ -113,11 +128,11 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Reset Filter'}
         titleStyle={s.reset}
-        disabled={true}
+        disabled={relationsAreDefault()}
         disabledStyle={s.resetDisabled}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => null}
+        onPress={resetFilter}
       />
       <Divider text={'This filter shows all the events that match all of these criteria.'}/>
       <ListItemFilterEnum

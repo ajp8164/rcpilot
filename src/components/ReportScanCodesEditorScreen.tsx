@@ -40,8 +40,6 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const [modelScanCodesFilter, setModelScanCodesFilter] = useState(report?.modelScanCodesFilter);
   const [batteryScanCodesFilter, setBatteryScanCodesFilter] = useState(report?.batteryScanCodesFilter);
 
-  const [rerender, setRerender] = useState(false);
-
   useEffect(() => {
     event.on('battery-scan-codes-report-filter-selection', onChangeBatteryScanCodesFilterSelection);
     event.on('model-scan-codes-report-filter-selection', onChangeModelScanCodesFilterSelection);
@@ -79,9 +77,20 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const onChangeFilter = (_filterId: string) => {
-    // Force re-render to refresh filter summaries as needed.
-    setRerender(!rerender);
+  const onChangeFilter = (filterId: string) => {
+    // A filter change was made. Retrive the filter and if it's the selected
+    // filter for this report then update our local state to force a render of
+    // the filter summary.
+    const changedFilter = realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter;
+    if (changedFilter.type === FilterType.ReportBatteryScanCodesFilter) {
+      if (filterId === report?.batteryScanCodesFilter?._id.toString()) {
+        setBatteryScanCodesFilter(changedFilter);
+      }
+    } else if (changedFilter.type === FilterType.ReportModelScanCodesFilter)  {
+      if (filterId === report?.modelScanCodesFilter?._id.toString()) {
+        setModelScanCodesFilter(changedFilter);
+      }
+    }
   };
 
   useEffect(() => {

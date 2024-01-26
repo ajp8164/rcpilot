@@ -41,6 +41,21 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
     setValues({ [property]: value }, {assign: true});
   };
 
+  const resetFilter = () => {
+    setValues(defaultFilter, {assign: true});
+  };
+
+  const relationsAreDefault = () => {
+    // Whether or not the set value relations are all set to the default value relations.
+    let result = false;
+    Object.keys(values).forEach(k => {
+      result = result || 
+        (values[k as keyof BatteryScanCodesReportFilterValues].relation !==
+          defaultFilter[k as keyof BatteryScanCodesReportFilterValues].relation);
+    });
+    return !result;
+  };
+
   useEffect(() => {
     const canSave = !!name && (
       !eqString(reportFilter?.name, name) ||
@@ -109,11 +124,11 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
       <ListItem
         title={'Reset Filter'}
         titleStyle={s.reset}
-        disabled={true}
+        disabled={relationsAreDefault()}
         disabledStyle={s.resetDisabled}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => null}
+        onPress={resetFilter}
       />
       <Divider text={'This filter shows all the maintenance items that match all of these criteria.'}/>
       <ListItemFilterEnum

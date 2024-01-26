@@ -1,12 +1,12 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 import {
   BatteryFilterValues,
-  BatteryScanCodeReportFilterValues,
+  BatteryScanCodesReportFilterValues,
   EventReportFilterValues,
   FilterType,
   MaintenanceReportFilterValues,
   ModelFilterValues,
-  ModelScanCodeReportFilterValues,
+  ModelScanCodesReportFilterValues,
 } from 'types/filter';
 
 export class Filter extends Object<Filter> {
@@ -18,8 +18,8 @@ export class Filter extends Object<Filter> {
     BatteryFilterValues |
     EventReportFilterValues |
     MaintenanceReportFilterValues |
-    ModelScanCodeReportFilterValues |
-    BatteryScanCodeReportFilterValues;
+    ModelScanCodesReportFilterValues |
+    BatteryScanCodesReportFilterValues;
 
   static schema: ObjectSchema = {
     name: 'Filter',

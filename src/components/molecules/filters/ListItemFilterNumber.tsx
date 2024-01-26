@@ -1,10 +1,9 @@
 import { ListItemInput, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { NumberFilterState, NumberRelation } from 'components/molecules/filters';
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
-import { useTheme } from 'theme';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -15,34 +14,38 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   value: string[];
 };
 
-const ListItemFilterNumber = (props: Props) => {
-  const theme = useTheme();
-  
+const ListItemFilterNumber = (props: Props) => {  
   const {
     label,
     numericProps,
     onValueChange,
     position,
-    relation: initialRelation,
     title,
-    value: initialValue,
   } = props;
 
-  const [expanded, setExpanded] = useState(initialValue.length > 0);
-  const [relation, setRelation] = useState<NumberRelation>(initialRelation);
-  const [value, setValue] = useState(initialValue);
-
   const segments = [
-    { label: NumberRelation.Any, labelStyle: theme.styles.textTiny },
-    { label: `  ${NumberRelation.LT}  `, labelStyle: theme.styles.textTiny },
-    { label: `  ${NumberRelation.GT}  `, labelStyle: theme.styles.textTiny },
-    { label: `  ${NumberRelation.EQ}  `, labelStyle: theme.styles.textTiny },
-    { label: `  ${NumberRelation.NE}  `, labelStyle: theme.styles.textTiny }
+    NumberRelation.Any,
+    NumberRelation.LT,
+    NumberRelation.GT,
+    NumberRelation.EQ,
+    NumberRelation.NE
   ];
+  
+  const [expanded, setExpanded] = useState(props.value.length > 0);
+  const [relation, setRelation] = useState<NumberRelation>(props.relation);
+  const [value, setValue] = useState(props.value);
+  const [index, setIndex] = useState(() =>
+    segments.findIndex(seg => { return seg === props.relation })
+  );
 
-  const initiaIndex = useRef(segments.findIndex(seg => {
-    return seg.label === initialRelation
-  })).current;
+  // Controlled component state changes.
+  useEffect(() => {
+    const newIndex = segments.findIndex(seg => { return seg === props.relation });
+    setIndex(newIndex);
+    setRelation(props.relation);
+    setValue(props.value);
+    setExpanded(newIndex > 0);
+  }, [ props.relation, props.value ]);
 
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(NumberRelation)[index] as NumberRelation;
@@ -58,31 +61,29 @@ const ListItemFilterNumber = (props: Props) => {
   };    
 
   return (
-    <>
-      <ListItemSegmented
-        {...props}
-        title={title}
-        value={undefined} // Prevent propagation of this components props.value
-        initialIndex={initiaIndex}
-        segments={segments}
-        position={expanded && position ? lodash.without(position, 'last') : position}
-        onChangeIndex={onRelationSelect}
-        expanded={expanded}
-        ExpandableComponent={
-          <ListItemInput
-            title={'Value'}
-            label={label}
-            position={position?.includes('last') ? ['last'] : []}
-            keyboardType={'number-pad'}
-            numeric
-            numericProps={numericProps}
-            value={value[0]}
-            placeholder={'0'}
-            onChangeText={onChangedFilter}
-          />
-        }
-      />
-    </>
+    <ListItemSegmented
+      {...props}
+      title={title}
+      value={undefined} // Prevent propagation of this components props.value
+      index={index}
+      segments={segments}
+      position={expanded && position ? lodash.without(position, 'last') : position}
+      onChangeIndex={onRelationSelect}
+      expanded={expanded}
+      ExpandableComponent={
+        <ListItemInput
+          title={'Value'}
+          label={label}
+          position={position?.includes('last') ? ['last'] : []}
+          keyboardType={'number-pad'}
+          numeric
+          numericProps={numericProps}
+          value={value[0]}
+          placeholder={'0'}
+          onChangeText={onChangedFilter}
+        />
+      }
+    />
   );
 }
 

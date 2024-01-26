@@ -1,8 +1,6 @@
 import { BooleanFilterState, BooleanRelation } from 'components/molecules/filters';
 import { ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
-import { useRef, useState } from "react";
-
-import { useTheme } from 'theme';
+import { useEffect, useState } from "react";
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -12,29 +10,32 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   value: string;
 };
 
-const ListItemFilterBoolean = (props: Props) => {
-  const theme = useTheme();
-  
+const ListItemFilterBoolean = (props: Props) => {  
   const {
     onValueChange,
-    relation: initialRelation,
     title,
-    value: initialValue,
   } = props;
 
-  const [relation, setRelation] = useState<BooleanRelation>(initialRelation);
-  const [value, setValue] = useState(initialValue);
-
   const segments = [
-    { label: BooleanRelation.Any, labelStyle: theme.styles.textTiny },
-    { label: BooleanRelation.Yes, labelStyle: theme.styles.textTiny },
-    { label: BooleanRelation.No, labelStyle: theme.styles.textTiny }
+    BooleanRelation.Any,
+    BooleanRelation.Yes,
+    BooleanRelation.No
   ];
+  
+  const [relation, setRelation] = useState<BooleanRelation>(props.relation);
+  const [value, setValue] = useState(props.value);
+  const [index, setIndex] = useState(() =>
+    segments.findIndex(seg => { return seg === props.relation })
+  );
 
-  const initiaIndex = useRef(segments.findIndex(seg => {
-    return seg.label === initialRelation
-  })).current;
-
+  // Controlled component state changes.
+  useEffect(() => {
+    const newIndex = segments.findIndex(seg => { return seg === props.relation });
+    setIndex(newIndex);
+    setRelation(props.relation);
+    setValue(props.value);
+  }, [ props.relation, props.value ]);
+  
   const onRelationSelect = (index: number) => {
     setRelation(Object.values(BooleanRelation)[index] as BooleanRelation);
     setValue(index === 1 ? 'true' : 'false');
@@ -42,16 +43,14 @@ const ListItemFilterBoolean = (props: Props) => {
   };
 
   return (
-    <>
-      <ListItemSegmented
-        {...props}
-        title={title}
-        value={undefined} // Prevent propagation of this components props.value
-        initialIndex={initiaIndex}
-        segments={segments}
-        onChangeIndex={onRelationSelect}
-      />
-    </>
+    <ListItemSegmented
+      {...props}
+      title={title}
+      value={undefined} // Prevent propagation of this components props.value
+      index={index}
+      segments={segments}
+      onChangeIndex={onRelationSelect}
+    />
   );
 }
 

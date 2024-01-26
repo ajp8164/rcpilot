@@ -1223,6 +1223,8 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.7.4):
     - React-Core
+  - react-native-segmented-control (2.5.0):
+    - React-Core
   - react-native-tcp-socket (6.0.6):
     - CocoaAsyncSocket
     - React-Core
@@ -1357,7 +1359,7 @@ PODS:
     - React-Core
   - ReactNativeCameraKit (13.0.0):
     - React-Core
-  - ReactNativeUiLib (4.1.1):
+  - ReactNativeUiLib (4.1.2):
     - React
   - RealmJS (12.5.0):
     - React
@@ -1516,6 +1518,7 @@ DEPENDENCIES:
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - "react-native-segmented-control (from `../node_modules/@react-native-segmented-control/segmented-control`)"
   - react-native-tcp-socket (from `../node_modules/react-native-tcp-socket`)
   - "react-native-twitter-signin (from `../node_modules/@react-native-twitter-signin/twitter-signin`)"
   - react-native-udp (from `../node_modules/react-native-udp`)
@@ -1702,6 +1705,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-randombytes"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-segmented-control:
+    :path: "../node_modules/@react-native-segmented-control/segmented-control"
   react-native-tcp-socket:
     :path: "../node_modules/react-native-tcp-socket"
   react-native-twitter-signin:
@@ -1896,6 +1901,7 @@ SPEC CHECKSUMS:
   react-native-pager-view: 02a5c4962530f7efc10dd51ee9cdabeff5e6c631
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 2cd91d532de12acdb0a9cbc8d43ac72a8e4c897c
+  react-native-segmented-control: 712749e75728a736a2b8a7d7dbc8c2a3344b73e8
   react-native-tcp-socket: e724380c910c2e704816ec817ed28f1342246ff7
   react-native-twitter-signin: 423e8d20eb26fddc14852d3f1435a8b39358f49d
   react-native-udp: df79c3cb72c4e71240cd3ce4687bfb8a137140d5
@@ -1922,7 +1928,7 @@ SPEC CHECKSUMS:
   ReactCommon: cfe086d2e2ec9f2907c66666c856082608fba822
   ReactNativeAvoidSoftinput: 6af0bca4e89fc6fa560ef26a486eaf30414f09f0
   ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
-  ReactNativeUiLib: 18c6c7cae814e9fb4442b6d9a5fb6f50ae36da98
+  ReactNativeUiLib: dcb4c9faedde24142aad7032ae96469c6a84bd70
   RealmJS: 07d8eb900517a4faddb04d7a0062e67bf8daa066
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   rn-fetch-blob: f065bb7ab7fb48dd002629f8bdcb0336602d3cba

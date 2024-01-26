@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from "theme";
-import { SegmentedControl, SegmentedControlItemProps } from "react-native-ui-lib";
 
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { View } from "react-native";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
@@ -11,9 +11,9 @@ export interface ListItemSegmentedInterface extends _ListItem {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
   fullWidth?: boolean;
-  initialIndex?: number;
+  index?: number;
   onChangeIndex: (index: number) => void;
-  segments: SegmentedControlItemProps[];
+  segments: string[];
 };
 
 const ListItemSegmented = (props: ListItemSegmentedInterface) => {
@@ -21,7 +21,7 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
     expanded = false,
     ExpandableComponent,
     fullWidth = false,
-    initialIndex = 0,
+    index = 0,
     onChangeIndex,
     segments,
     } = props;
@@ -41,20 +41,18 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
         ]}
         rightImage={false}
         extraContentComponent={
-          <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]} >
+          <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]}>
             <SegmentedControl
-              initialIndex={initialIndex}
-              onChangeIndex={onChangeIndex}
-              segments={segments}
-              borderRadius={fullWidth ? 9 : 8}
-              outlineColor={theme.colors.subtleGray}
-              backgroundColor={fullWidth ? theme.colors.subtleGray : theme.colors.viewBackground}
-              activeBackgroundColor={theme.colors.white}
-              activeColor={theme.colors.text}
-              inactiveColor={theme.colors.text}
-              style={s.segmented}
-              segmentsStyle={fullWidth ? s.segmentsStyle : {}}
-              containerStyle={props.disabled ? s.segmentedDisabled : {}}
+              values={segments}
+              style={{width: segments.length * 50, backgroundColor: theme.colors.viewAltBackground}}
+              tintColor={theme.colors.viewAltBackground}
+              fontStyle={{fontSize: 12, color: theme.colors.text}}
+              activeFontStyle={{fontSize: 12, fontWeight: 'bold', color: theme.colors.text}}
+              enabled={props.disabled !== true}
+              selectedIndex={index}
+              onChange={(event) => {
+                onChangeIndex(event.nativeEvent.selectedSegmentIndex);
+              }}
             />
         </View>
         }
@@ -84,15 +82,6 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   container: {
     minHeight: 48,
   },
-  segmented: {
-    borderWidth: 0,
-    paddingLeft: 1,
-    marginRight: -1,
-    alignSelf: 'center',
-  },
-  segmentedDisabled: {
-    pointerEvents: 'none',
-  },
   segmentedView: {
     position: 'absolute',
     right: 0,
@@ -102,9 +91,6 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   segmentedViewFullWidth: {
     right: 0,
     left: 0,
-  },
-  segmentsStyle: {
-    minHeight: 48,
   },
 }));
 

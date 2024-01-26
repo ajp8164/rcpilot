@@ -6,14 +6,24 @@ import { FilterType } from 'types/filter';
 import { ellipsis } from '@react-native-ajp-elements/core';
 import lodash from 'lodash';
 
-export const filterSummary = (filter?: Filter) => {
+export const filterSummary = (filterOrFilterType: Filter | string) => {
+  let filterType: string;
+  let filter: Filter | undefined = undefined;
+
+  if (typeof filterOrFilterType === 'string') {
+    filterType = filterOrFilterType;
+  } else {
+    filter = filterOrFilterType;
+    filterType = filter?.type;
+  }
+
   const kind =
-    filter?.type === FilterType.ModelsFilter ? 'models' :
-    filter?.type === FilterType.BatteriesFilter ? 'batteries' :
-    filter?.type === FilterType.ReportEventsFilter ? 'events' :
-    filter?.type === FilterType.ReportMaintenanceFilter ? 'maintenance items' :
-    filter?.type === FilterType.ReportModelScanCodesFilter ? 'models' :
-    filter?.type === FilterType.ReportBatteryScanCodesFilter ? 'batteries' : '';
+    filterType === FilterType.ModelsFilter ? 'models' :
+    filterType === FilterType.BatteriesFilter ? 'batteries' :
+    filterType === FilterType.ReportEventsFilter ? 'events' :
+    filterType === FilterType.ReportMaintenanceFilter ? 'maintenance items' :
+    filterType === FilterType.ReportModelScanCodesFilter ? 'models' :
+    filterType === FilterType.ReportBatteryScanCodesFilter ? 'batteries' : '';
 
   if (!filter) {
     return `Matches all ${kind}`;
@@ -26,7 +36,8 @@ export const filterSummary = (filter?: Filter) => {
         s += ', and ' :
         s += ', ' :
         null;
-      s += `${filterStateSummary(property, filter.values[property as keyof typeof filter.values])}`;
+        // Checking filter here to satisfy the 'keyof typeof' type cast.
+      s += filter ? `${filterStateSummary(property, filter!.values[property as keyof typeof filter.values])}` : '';
     });
     return `Matches ${kind} where ${s}.`;
   }

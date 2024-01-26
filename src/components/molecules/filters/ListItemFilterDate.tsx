@@ -1,11 +1,10 @@
 import { DateFilterState, DateRelation } from 'components/molecules/filters';
 import { ListItemDate, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
 import lodash from 'lodash';
-import { useTheme } from 'theme';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: DateFilterState) => void;
@@ -14,34 +13,38 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   value: ISODateString[];
 };
 
-const ListItemFilterDate = (props: Props) => {
-  const theme = useTheme();
-  
+const ListItemFilterDate = (props: Props) => {  
   const {
     onValueChange,
     position,
-    relation: initialRelation,
     title,
-    value: initialValue,
   } = props;
 
-  const [expanded, setExpanded] = useState(initialValue.length > 0);
-  const [relation, setRelation] = useState<DateRelation>(initialRelation);
-  const [value, setValue] = useState(() => {
-    return initialValue.length ? initialValue : [DateTime.now().toISO()!]
-  });
-
   const segments = [
-    { label: DateRelation.Any, labelStyle: theme.styles.textTiny },
-    { label: DateRelation.Before, labelStyle: theme.styles.textTiny },
-    { label: DateRelation.After, labelStyle: theme.styles.textTiny },
-    { label: DateRelation.Past, labelStyle: theme.styles.textTiny }
+    DateRelation.Any,
+    DateRelation.Before,
+    DateRelation.After,
+    DateRelation.Past,
   ];
+  
+  const [expanded, setExpanded] = useState(props.value.length > 0);
+  const [relation, setRelation] = useState<DateRelation>(props.relation);
+  const [value, setValue] = useState(() => {
+    return props.value.length ? props.value : [DateTime.now().toISO()!]
+  });
+  const [index, setIndex] = useState(() =>
+    segments.findIndex(seg => { return seg === props.relation })
+  );
 
-  const initiaIndex = useRef(segments.findIndex(seg => {
-    return seg.label === initialRelation
-  })).current;
-
+  // Controlled component state changes.
+  useEffect(() => {
+    const newIndex = segments.findIndex(seg => { return seg === props.relation });
+    setIndex(newIndex);
+    setRelation(props.relation);
+    setValue(props.value);
+    setExpanded(newIndex > 0);
+  }, [ props.relation, props.value ]);
+  
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(DateRelation)[index] as DateRelation;
     setRelation(newRelation);
@@ -57,29 +60,27 @@ const ListItemFilterDate = (props: Props) => {
   };    
 
   return (
-    <>
-      <ListItemSegmented
-        {...props}
-        title={title}
-        value={undefined} // Prevent propagation of this components props.value
-        initialIndex={initiaIndex}
-        segments={segments}
-        position={expanded && position ? lodash.without(position, 'last') : position}
-        onChangeIndex={onRelationSelect}
-        expanded={expanded}
-        ExpandableComponent={
-          <ListItemDate
-            title={'Date'}
-            value={DateTime.fromISO(value[0]).toFormat("MMM d, yyyy 'at' hh:mm a")}
-            rightImage={false}
-            expanded={true}
-            position={position?.includes('last') ? ['last'] : []}
-            onDateChange={onChangedFilter}
-            pickerValue={value[0]}
-          />
-        }
-      />
-    </>
+    <ListItemSegmented
+      {...props}
+      title={title}
+      value={undefined} // Prevent propagation of this components props.value
+      index={index}
+      segments={segments}
+      position={expanded && position ? lodash.without(position, 'last') : position}
+      onChangeIndex={onRelationSelect}
+      expanded={expanded}
+      ExpandableComponent={
+        <ListItemDate
+          title={'Date'}
+          value={DateTime.fromISO(value[0]).toFormat("MMM d, yyyy 'at' hh:mm a")}
+          rightImage={false}
+          expanded={true}
+          position={position?.includes('last') ? ['last'] : []}
+          onDateChange={onChangedFilter}
+          pickerValue={value[0]}
+        />
+      }
+    />
   );
 }
 

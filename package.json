@@ -50,6 +50,7 @@
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-native-menu/menu": "^0.7.3",
     "@react-native-picker/picker": "^2.4.8",
+    "@react-native-segmented-control/segmented-control": "^2.5.0",
     "@react-native-twitter-signin/twitter-signin": "^1.2.0",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native-stack": "^6.9.1",

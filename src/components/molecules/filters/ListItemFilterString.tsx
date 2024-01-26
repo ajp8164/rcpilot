@@ -1,6 +1,6 @@
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { StringFilterState, StringRelation } from 'components/molecules/filters';
-import { useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import lodash from 'lodash';
 import { useNavigation } from '@react-navigation/core';
@@ -17,27 +17,33 @@ const ListItemFilterString = (props: Props) => {
   const {
     onValueChange,
     position,
-    relation: initialRelation,
     title,
-    value: initialValue,
   } = props;
 
   const theme = useTheme();
   const navigation = useNavigation<any>();
 
-  const [expanded, setExpanded] = useState(initialValue.length > 0);
-  const [relation, setRelation] = useState<StringRelation>(initialRelation);
-  const [value, setValue] = useState(initialValue);
-
   const segments = [
-    { label: StringRelation.Any, labelStyle: theme.styles.textTiny },
-    { label: StringRelation.Contains, labelStyle: theme.styles.textTiny },
-    { label: StringRelation.Missing, labelStyle: theme.styles.textTiny }
+    StringRelation.Any,
+    StringRelation.Contains,
+    StringRelation.Missing,
   ];
+  
+  const [expanded, setExpanded] = useState(props.value.length > 0);
+  const [relation, setRelation] = useState<StringRelation>(props.relation);
+  const [value, setValue] = useState(props.value);
+  const [index, setIndex] = useState(() =>
+    segments.findIndex(seg => { return seg === props.relation })
+  );
 
-  const initiaIndex = useRef(segments.findIndex(seg => {
-    return seg.label === initialRelation
-  })).current;
+  // Controlled component state changes.
+  useEffect(() => {
+    const newIndex = segments.findIndex(seg => { return seg === props.relation });
+    setIndex(newIndex);
+    setRelation(props.relation);
+    setValue(props.value);
+    setExpanded(newIndex > 0);
+  }, [ props.relation, props.value ]);
   
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(StringRelation)[index] as StringRelation;
@@ -53,27 +59,25 @@ const ListItemFilterString = (props: Props) => {
   };    
 
   return (
-    <>
-      <ListItemSegmented
-        {...props}
-        title={title}
-        value={undefined} // Prevent propagation of this components props.value
-        initialIndex={initiaIndex}
-        segments={segments}
-        position={expanded && position ? lodash.without(position, 'last') : position}
-        onChangeIndex={onRelationSelect}
-        expanded={expanded}
-        ExpandableComponent={
-          <ListItem
-            title={'The Text'}
-            titleStyle={!value ? {color: theme.colors.assertive}: {}}
-            subtitle={!value.length ?  'Matching text not specified' : value[0]}
-            position={position?.includes('last') ?  ['last'] : []}
-            onPress={() => navigation.navigate('Notes', {title: 'String Value', onDone: onChangedFilter})}
-          />
-        }
-      />
-    </>
+    <ListItemSegmented
+      {...props}
+      title={title}
+      value={undefined} // Prevent propagation of this components props.value
+      index={index}
+      segments={segments}
+      position={expanded && position ? lodash.without(position, 'last') : position}
+      onChangeIndex={onRelationSelect}
+      expanded={expanded}
+      ExpandableComponent={
+        <ListItem
+          title={'The Text'}
+          titleStyle={!value ? {color: theme.colors.assertive}: {}}
+          subtitle={!value.length ?  'Matching text not specified' : value[0]}
+          position={position?.includes('last') ?  ['last'] : []}
+          onPress={() => navigation.navigate('Notes', {title: 'String Value', onDone: onChangedFilter})}
+        />
+      }
+    />
   );
 }
 

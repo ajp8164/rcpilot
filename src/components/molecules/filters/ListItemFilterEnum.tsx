@@ -22,31 +22,37 @@ const ListItemFilterEnum = (props: Props) => {
     onValueChange,
     enumName,
     position,
-    relation: initialRelation,
     title,
-    value: initialValue,
   } = props;
 
   const theme = useTheme();
   const navigation = useNavigation<any>();
   const event = useEvent();
 
+  const segments = [
+    EnumRelation.Any,
+    EnumRelation.Is,
+    EnumRelation.IsNot
+  ];
+  
   const eventName = useRef(`list-item-filter-enum-${uuidv4()}`).current;
-  const [expanded, setExpanded] = useState(initialValue.length > 0);
-  const [relation, setRelation] = useState<EnumRelation>(initialRelation);
-  const [value, setValue] = useState(initialValue);
+  const [expanded, setExpanded] = useState(props.value.length > 0);
+  const [relation, setRelation] = useState<EnumRelation>(props.relation);
+  const [value, setValue] = useState(props.value);
+  const [index, setIndex] = useState(() =>
+    segments.findIndex(seg => { return seg === props.relation })
+  );
 
   const enumFilterConfig = useEnumFilterConfig(enumName, relation);
 
-  const segments = [
-    { label: EnumRelation.Any, labelStyle: theme.styles.textTiny },
-    { label: EnumRelation.Is, labelStyle: theme.styles.textTiny },
-    { label: EnumRelation.IsNot, labelStyle: theme.styles.textTiny }
-  ];
-
-  const initiaIndex = useRef(segments.findIndex(seg => {
-    return seg.label === initialRelation
-  })).current;
+  // Controlled component state changes.
+  useEffect(() => {
+    const newIndex = segments.findIndex(seg => { return seg === props.relation });
+    setIndex(newIndex);
+    setRelation(props.relation);
+    setValue(props.value);
+    setExpanded(newIndex > 0);
+  }, [ props.relation, props.value ]);
 
   useEffect(() => {
     const onChangeFilter = (value: string[]) => {
@@ -83,31 +89,29 @@ const ListItemFilterEnum = (props: Props) => {
   };
 
   return (
-    <>
-      <ListItemSegmented
-        {...props}
-        title={title}
-        value={undefined} // Prevent propagation of this components props.value
-        initialIndex={initiaIndex}
-        segments={segments}
-        position={expanded && position ? lodash.without(position, 'last') : position}
-        onChangeIndex={onRelationSelect}
-        expanded={expanded}
-        ExpandableComponent={
-          <ListItem
-            title={'Any of these values...'}
-            titleStyle={value?.length === 0 ? {color: theme.colors.assertive}: {}}
-            subtitle={value?.length === 0 ?  'None' : valueToString()}
-            position={position?.includes('last') ? ['last'] : []}
-            onPress={() => navigation.navigate('EnumPicker', {
-              ...enumFilterConfig,
-              selected: value,
-              eventName: eventName,
-            })}
-          />
-        }
-      />
-    </>
+    <ListItemSegmented
+      {...props}
+      title={title}
+      value={undefined} // Prevent propagation of this components props.value
+      index={index}
+      segments={segments}
+      position={expanded && position ? lodash.without(position, 'last') : position}
+      onChangeIndex={onRelationSelect}
+      expanded={expanded}
+      ExpandableComponent={
+        <ListItem
+          title={'Any of these values...'}
+          titleStyle={value?.length === 0 ? {color: theme.colors.assertive}: {}}
+          subtitle={value?.length === 0 ?  'None' : valueToString()}
+          position={position?.includes('last') ? ['last'] : []}
+          onPress={() => navigation.navigate('EnumPicker', {
+            ...enumFilterConfig,
+            selected: value,
+            eventName: eventName,
+          })}
+        />
+      }
+    />
   );
 }
 

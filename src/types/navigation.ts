@@ -149,9 +149,11 @@ export type ReportFiltersNavigatorParamList = {
   };
   ReportBatteryScanCodesFilterEditor: {
     filterId?: string;
+    eventName: string;
   };
   ReportEventsFilterEditor: {
     filterId?: string;
+    eventName: string;
   };
   ReportFilters: {
     filterId?: string;
@@ -160,9 +162,11 @@ export type ReportFiltersNavigatorParamList = {
   };
   ReportMaintenanceFilterEditor: {
     filterId?: string;
+    eventName: string;
   };
   ReportModelScanCodesFilterEditor: {
     filterId?: string;
+    eventName: string;
   };
 };
 

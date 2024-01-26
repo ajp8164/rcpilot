@@ -72,7 +72,6 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
   };
 
   const renderFilter: ListRenderItem<Filter> = ({ item: filter, index }) => {
-    console.log(filters.length);
     return (
       <ListItemCheckboxInfo
         key={index}
@@ -92,6 +91,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         onPress={() => setSelectedFilter(filter._id.toString())}
         onPressInfo={() => filterType && navigation.navigate(reportFilterEditor[filterType], {
           filterId: filter._id.toString(),
+          eventName: 'report-filter',
         })}
       />
     )

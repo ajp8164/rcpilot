@@ -42,16 +42,20 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [eventsFilter, setEventsFilter] = useState(report?.eventsFilter);
   const [maintenanceFilter, setMaintenanceFilter] = useState(report?.maintenanceFilter);
 
+  const [rerender, setRerender] = useState(false);
+
   useEffect(() => {
-    event.on('events-report-filter', onChangeEventsFilter);
-    event.on('maintenance-report-filter', onChangeMaintenanceFilter);
+    event.on('events-report-filter-selection', onChangeEventsFilterSelection);
+    event.on('maintenance-report-filter-selection', onChangeMaintenanceFilterSelection);
+    event.on('report-filter', onChangeFilter);
     return () => {
-      event.removeListener('events-report-filter', onChangeEventsFilter);
-      event.removeListener('maintenance-report-filter', onChangeMaintenanceFilter);
+      event.removeListener('events-report-filter-selection', onChangeEventsFilterSelection);
+      event.removeListener('maintenance-report-filter-selection', onChangeMaintenanceFilterSelection);
+      event.removeListener('report-filter', onChangeFilter);
     };
   }, []);
 
-  const onChangeEventsFilter = (filterId?: string) => {
+  const onChangeEventsFilterSelection = (filterId?: string) => {
     const filter = 
       (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
     setEventsFilter(filter);
@@ -64,7 +68,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const onChangeMaintenanceFilter = (filterId?: string) => {
+  const onChangeMaintenanceFilterSelection = (filterId?: string) => {
     const filter = 
       (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
     setMaintenanceFilter(filter);
@@ -75,6 +79,11 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         report.eventsFilter = filter;
       });
     }
+  };
+
+  const onChangeFilter = (_filterId: string) => {
+    // Force re-render to refresh filter summaries as needed.
+    setRerender(!rerender);
   };
 
   useEffect(() => {
@@ -187,7 +196,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
               params: { 
                 filterType: FilterType.ReportEventsFilter,
                 filterId: eventsFilter?._id.toString(),
-                eventName: 'events-report-filter',
+                eventName: 'events-report-filter-selection',
               },
             })}
           />
@@ -210,7 +219,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
               params: { 
                 filterType: FilterType.ReportMaintenanceFilter,
                 filterId: maintenanceFilter?._id.toString(),
-                eventName: 'maintenance-report-filter',
+                eventName: 'maintenance-report-filter-selection',
               },
             })}
           />

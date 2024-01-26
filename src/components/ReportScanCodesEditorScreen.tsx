@@ -40,16 +40,20 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const [modelScanCodesFilter, setModelScanCodesFilter] = useState(report?.modelScanCodesFilter);
   const [batteryScanCodesFilter, setBatteryScanCodesFilter] = useState(report?.batteryScanCodesFilter);
 
+  const [rerender, setRerender] = useState(false);
+
   useEffect(() => {
-    event.on('battery-scan-codes-report-filter', onChangeBatteryScanCodesFilter);
-    event.on('model-scan-codes-report-filter', onChangeModelScanCodesFilter);
+    event.on('battery-scan-codes-report-filter-selection', onChangeBatteryScanCodesFilterSelection);
+    event.on('model-scan-codes-report-filter-selection', onChangeModelScanCodesFilterSelection);
+    event.on('report-filter', onChangeFilter);
     return () => {
-      event.removeListener('battery-scan-codes-report-filter', onChangeBatteryScanCodesFilter);
-      event.removeListener('model-scan-codes-report-filter', onChangeModelScanCodesFilter);
+      event.removeListener('battery-scan-codes-report-filter-selection', onChangeBatteryScanCodesFilterSelection);
+      event.removeListener('model-scan-codes-report-filter-selection', onChangeModelScanCodesFilterSelection);
+      event.removeListener('report-filter', onChangeFilter);
     };
   }, []);
 
-  const onChangeBatteryScanCodesFilter = (filterId?: string) => {
+  const onChangeBatteryScanCodesFilterSelection = (filterId?: string) => {
     const filter = 
       (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
     setBatteryScanCodesFilter(filter);
@@ -62,7 +66,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const onChangeModelScanCodesFilter = (filterId?: string) => {
+  const onChangeModelScanCodesFilterSelection = (filterId?: string) => {
     const filter = 
       (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
     setModelScanCodesFilter(filter);
@@ -73,6 +77,11 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         report.modelScanCodesFilter = filter;
       });
     }
+  };
+
+  const onChangeFilter = (_filterId: string) => {
+    // Force re-render to refresh filter summaries as needed.
+    setRerender(!rerender);
   };
 
   useEffect(() => {
@@ -174,7 +183,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
               params: { 
                 filterType: FilterType.ReportModelScanCodesFilter,
                 filterId: modelScanCodesFilter?._id.toString(),
-                eventName: 'model-scan-codes-report-filter',
+                eventName: 'model-scan-codes-report-filter-selection',
               },
             })}
           />
@@ -197,7 +206,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
               params: { 
                 filterType: FilterType.ReportBatteryScanCodesFilter,
                 filterId: batteryScanCodesFilter?._id.toString(),
-                eventName: 'battery-scan-codes-report-filter',
+                eventName: 'battery-scan-codes-report-filter-selection',
               },
             })}
           />

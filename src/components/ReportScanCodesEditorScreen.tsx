@@ -161,41 +161,47 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
       <ListItemSwitch
         title={'Includes Models'}
         value={includesModels}
-        position={['first']}
+        position={includesModels ? ['first'] : ['first', 'last']}
         onValueChange={setIncludesModels}
-      />
-      <ListItem
-        title={modelScanCodesFilter?.name || 'No Filter Selected'}
-        subtitle={'Report will include all models'}
-        position={['last']}
-        onPress={() => navigation.navigate('ReportFiltersNavigator', {
-          screen: 'ReportFilters',
-          params: { 
-            filterType: FilterType.ReportModelScanCodesFilter,
-            filterId: modelScanCodesFilter?._id.toString(),
-            eventName: 'model-scan-codes-report-filter',
-          },
-        })}
+        expanded={includesModels}
+        ExpandableComponent={
+          <ListItem
+            title={modelScanCodesFilter?.name || 'No Filter Selected'}
+            subtitle={'Report will include all models'}
+            position={['last']}
+            onPress={() => navigation.navigate('ReportFiltersNavigator', {
+              screen: 'ReportFilters',
+              params: { 
+                filterType: FilterType.ReportModelScanCodesFilter,
+                filterId: modelScanCodesFilter?._id.toString(),
+                eventName: 'model-scan-codes-report-filter',
+              },
+            })}
+          />
+        }
       />
       <Divider />
       <ListItemSwitch
         title={'Includes Batteries'}
         value={includesBatteries}
-        position={['first']}
+        position={includesBatteries ? ['first'] : ['first', 'last']}
         onValueChange={setIncludesBatteries}
-      />
-      <ListItem
-        title={batteryScanCodesFilter?.name || 'No Filter Selected'}
-        subtitle={'Report will include all batteries'}
-        position={['last']}
-        onPress={() => navigation.navigate('ReportFiltersNavigator', {
-          screen: 'ReportFilters',
-          params: { 
-            filterType: FilterType.ReportBatteryScanCodesFilter,
-            filterId: batteryScanCodesFilter?._id.toString(),
-            eventName: 'battery-scan-codes-report-filter',
-          },
-        })}
+        expanded={includesBatteries}
+        ExpandableComponent={
+          <ListItem
+            title={batteryScanCodesFilter?.name || 'No Filter Selected'}
+            subtitle={'Report will include all batteries'}
+            position={['last']}
+            onPress={() => navigation.navigate('ReportFiltersNavigator', {
+              screen: 'ReportFilters',
+              params: { 
+                filterType: FilterType.ReportBatteryScanCodesFilter,
+                filterId: batteryScanCodesFilter?._id.toString(),
+                eventName: 'battery-scan-codes-report-filter',
+              },
+            })}
+          />
+        }
       />
     </SafeAreaView>
   );

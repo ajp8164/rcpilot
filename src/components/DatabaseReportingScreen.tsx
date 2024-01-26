@@ -108,15 +108,15 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     const summary = report.includesSummary ? 'Summary, ' : '';
     const events = report.includesEvents ? `Events: ${whichEvents}, ` : '';
     const maintenance = report.includesMaintenance ? `Maintenance: ${whichMaintenance}` : '';
-    return `${summary}${events}${maintenance}`;
+    return `${summary}${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
   };
 
   const scReportSummary = (report: ScanCodesReport) => {
     const whichEvents = report.batteryScanCodesFilter ? `"${report.batteryScanCodesFilter.name}" filter` : 'All';
     const whichMaintenance = report.modelScanCodesFilter ? `"${report.modelScanCodesFilter.name}" filter` : 'All';
-    const events = report.includesBatteries ? `Models: ${whichEvents}, ` : '';
-    const maintenance = report.includesModels ? `Batteries: ${whichMaintenance}` : '';
-    return `${events}${maintenance}`;
+    const events = report.includesBatteries ? `Batteries: ${whichEvents}, ` : '';
+    const maintenance = report.includesModels ? `Models: ${whichMaintenance}` : '';
+    return `${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
   };
 
   const renderReport = (props: {

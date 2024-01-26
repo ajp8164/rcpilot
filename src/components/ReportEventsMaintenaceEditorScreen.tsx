@@ -174,41 +174,47 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
       <ListItemSwitch
         title={'Includes Events'}
         value={includesEvents}
-        position={['first']}
+        position={includesEvents ? ['first'] : ['first', 'last']}
         onValueChange={setIncludesEvents}
-      />
-      <ListItem
-        title={eventsFilter ? eventsFilter.name: 'No Filter Selected'}
-        subtitle={eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'}
-        position={['last']}
-        onPress={() => navigation.navigate('ReportFiltersNavigator', {
-          screen: 'ReportFilters',
-          params: { 
-            filterType: FilterType.ReportEventsFilter,
-            filterId: eventsFilter?._id.toString(),
-            eventName: 'events-report-filter',
-          },
-        })}
+        expanded={includesEvents}
+        ExpandableComponent={
+          <ListItem
+            title={eventsFilter ? eventsFilter.name: 'No Filter Selected'}
+            subtitle={eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'}
+            position={['last']}
+            onPress={() => navigation.navigate('ReportFiltersNavigator', {
+              screen: 'ReportFilters',
+              params: { 
+                filterType: FilterType.ReportEventsFilter,
+                filterId: eventsFilter?._id.toString(),
+                eventName: 'events-report-filter',
+              },
+            })}
+          />
+        }
       />
       <Divider />
       <ListItemSwitch
         title={'Includes Maintenance'}
         value={includesMaintenance}
-        position={['first']}
+        position={includesMaintenance ? ['first'] : ['first', 'last']}
         onValueChange={setIncludesMaintenance}
-      />
-      <ListItem
-        title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
-        subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
-        position={['last']}
-        onPress={() => navigation.navigate('ReportFiltersNavigator', {
-          screen: 'ReportFilters',
-          params: { 
-            filterType: FilterType.ReportMaintenanceFilter,
-            filterId: maintenanceFilter?._id.toString(),
-            eventName: 'maintenance-report-filter',
-          },
-        })}
+        expanded={includesMaintenance}
+        ExpandableComponent={
+          <ListItem
+            title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
+            subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
+            position={['last']}
+            onPress={() => navigation.navigate('ReportFiltersNavigator', {
+              screen: 'ReportFilters',
+              params: { 
+                filterType: FilterType.ReportMaintenanceFilter,
+                filterId: maintenanceFilter?._id.toString(),
+                eventName: 'maintenance-report-filter',
+              },
+            })}
+          />
+        }
       />
     </SafeAreaView>
   );

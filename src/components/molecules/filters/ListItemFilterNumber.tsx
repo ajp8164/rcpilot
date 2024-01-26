@@ -1,16 +1,18 @@
 import { ListItemInput, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { NumberFilterState, NumberRelation } from 'components/molecules/filters';
+import { useRef, useState } from "react";
 
+import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
-import { useState } from "react";
 import { useTheme } from 'theme';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
+  numericProps?: Omit<FakeCurrencyInputProps, 'value'>;
   onValueChange: (filterState: NumberFilterState) => void;
-  relation?: NumberRelation;
+  relation: NumberRelation;
   title: string;
-  value?: string;
+  value: string[];
 };
 
 const ListItemFilterNumber = (props: Props) => {
@@ -18,19 +20,32 @@ const ListItemFilterNumber = (props: Props) => {
   
   const {
     label,
+    numericProps,
     onValueChange,
     position,
-    relation: initialRelation = NumberRelation.Any,
+    relation: initialRelation,
     title,
     value: initialValue,
   } = props;
 
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(initialValue.length > 0);
   const [relation, setRelation] = useState<NumberRelation>(initialRelation);
   const [value, setValue] = useState(initialValue);
 
+  const segments = [
+    { label: NumberRelation.Any, labelStyle: theme.styles.textTiny },
+    { label: `  ${NumberRelation.LT}  `, labelStyle: theme.styles.textTiny },
+    { label: `  ${NumberRelation.GT}  `, labelStyle: theme.styles.textTiny },
+    { label: `  ${NumberRelation.EQ}  `, labelStyle: theme.styles.textTiny },
+    { label: `  ${NumberRelation.NE}  `, labelStyle: theme.styles.textTiny }
+  ];
+
+  const initiaIndex = useRef(segments.findIndex(seg => {
+    return seg.label === initialRelation
+  })).current;
+
   const onRelationSelect = (index: number) => {
-    const newRelation = Object.keys(NumberRelation)[index] as NumberRelation;
+    const newRelation = Object.values(NumberRelation)[index] as NumberRelation;
     setRelation(newRelation);
     onValueChange({relation: newRelation, value});
     setExpanded(index > 0);
@@ -38,8 +53,8 @@ const ListItemFilterNumber = (props: Props) => {
 
   const onChangedFilter = (value: string) => {
     // Set our local state and pass the entire state back to the caller.
-    setValue(value);
-    onValueChange({relation, value});
+    setValue([value]);
+    onValueChange({relation, value: [value]});
   };    
 
   return (
@@ -48,13 +63,8 @@ const ListItemFilterNumber = (props: Props) => {
         {...props}
         title={title}
         value={undefined} // Prevent propagation of this components props.value
-        segments={[
-          { label: NumberRelation.Any, labelStyle: theme.styles.textTiny },
-          { label: `  ${NumberRelation.LT}  `, labelStyle: theme.styles.textTiny },
-          { label: `  ${NumberRelation.GT}  `, labelStyle: theme.styles.textTiny },
-          { label: `  ${NumberRelation.EQ}  `, labelStyle: theme.styles.textTiny },
-          { label: `  ${NumberRelation.NE}  `, labelStyle: theme.styles.textTiny }
-        ]}
+        initialIndex={initiaIndex}
+        segments={segments}
         position={expanded && position ? lodash.without(position, 'last') : position}
         onChangeIndex={onRelationSelect}
         expanded={expanded}
@@ -62,9 +72,12 @@ const ListItemFilterNumber = (props: Props) => {
           <ListItemInput
             title={'Value'}
             label={label}
-            position={position?.includes('last') ?  ['last'] : []}
+            position={position?.includes('last') ? ['last'] : []}
             keyboardType={'number-pad'}
-            value={value + ''}
+            numeric
+            numericProps={numericProps}
+            value={value[0]}
+            placeholder={'0'}
             onChangeText={onChangedFilter}
           />
         }

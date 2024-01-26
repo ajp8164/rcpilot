@@ -1,15 +1,25 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-
-import { FilterState } from 'components/molecules/filters';
-import { FilterType } from 'types/filter';
-
-export type FilterValues = {[key in string] : FilterState};
+import {
+  BatteryFilterValues,
+  BatteryScanCodeReportFilterValues,
+  EventReportFilterValues,
+  FilterType,
+  MaintenanceReportFilterValues,
+  ModelFilterValues,
+  ModelScanCodeReportFilterValues,
+} from 'types/filter';
 
 export class Filter extends Object<Filter> {
   _id!: BSON.ObjectId;
   name!: string;
   type!: FilterType;
-  values!: FilterValues;
+  values!:
+    ModelFilterValues |
+    BatteryFilterValues |
+    EventReportFilterValues |
+    MaintenanceReportFilterValues |
+    ModelScanCodeReportFilterValues |
+    BatteryScanCodeReportFilterValues;
 
   static schema: ObjectSchema = {
     name: 'Filter',
@@ -17,28 +27,22 @@ export class Filter extends Object<Filter> {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
       type: 'string',
-      values: 'string{}',
+      values: 'FilterState{}',
     },
     primaryKey: '_id',
   };
 };
 
-// export class FilterValues extends Object<FilterValues> {
-//   description!: string;
-//   schedule!: ChecklistActionSchedule;
-//   cost?: number;
-//   notes?: string;
-//   ordinal!: number;
+export class FilterState extends Object<FilterState> {
+  relation!: string;
+  value?: string[];
 
-//   static schema: ObjectSchema = {
-//     name: 'FilterValues',
-//     embedded: true,
-//     properties: {
-//       description: 'string',
-//       schedule: 'ChecklistActionSchedule',
-//       cost: 'float?',
-//       notes: 'string?',
-//       ordinal: 'float',
-//     },
-//   };
-// };
+  static schema: ObjectSchema = {
+    name: 'FilterState',
+    embedded: true,
+    properties: {
+      relation: 'string',
+      value: 'string?[]',
+    },
+  };
+};

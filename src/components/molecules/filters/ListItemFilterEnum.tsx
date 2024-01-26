@@ -12,9 +12,9 @@ import { uuidv4 } from 'lib/utils';
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: EnumFilterState) => void;
   enumName: EnumName;
-  relation?: EnumRelation;
+  relation: EnumRelation;
   title: string;
-  value?: string | string[];
+  value: string[];
 };
 
 const ListItemFilterEnum = (props: Props) => {
@@ -22,7 +22,7 @@ const ListItemFilterEnum = (props: Props) => {
     onValueChange,
     enumName,
     position,
-    relation: initialRelation = EnumRelation.Any,
+    relation: initialRelation,
     title,
     value: initialValue,
   } = props;
@@ -32,19 +32,29 @@ const ListItemFilterEnum = (props: Props) => {
   const event = useEvent();
 
   const eventName = useRef(`list-item-filter-enum-${uuidv4()}`).current;
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(initialValue.length > 0);
   const [relation, setRelation] = useState<EnumRelation>(initialRelation);
   const [value, setValue] = useState(initialValue);
 
   const enumFilterConfig = useEnumFilterConfig(enumName, relation);
 
+  const segments = [
+    { label: EnumRelation.Any, labelStyle: theme.styles.textTiny },
+    { label: EnumRelation.Is, labelStyle: theme.styles.textTiny },
+    { label: EnumRelation.IsNot, labelStyle: theme.styles.textTiny }
+  ];
+
+  const initiaIndex = useRef(segments.findIndex(seg => {
+    return seg.label === initialRelation
+  })).current;
+
   useEffect(() => {
-    const onChangeFilter = (value: string) => {
+    const onChangeFilter = (value: string[]) => {
       // Set our local state and pass the entire state back to the caller.
       setValue(value);
       onValueChange({relation, value});
     };
-  
+
     // Event handler for EnumPicker
     event.on(eventName, onChangeFilter);
 
@@ -58,9 +68,17 @@ const ListItemFilterEnum = (props: Props) => {
   };
 
   const onRelationSelect = (index: number) => {
-    const newRelation = Object.keys(EnumRelation)[index] as EnumRelation;
+    const newRelation = Object.values(EnumRelation)[index] as EnumRelation;
     setRelation(newRelation);
-    onValueChange({relation: newRelation, value});
+
+    // Reset the value of the filter if choosing Any.
+    let newValue = value;
+    if (newRelation === EnumRelation.Any) {
+      newValue = [];
+      setValue(newValue);
+    }
+    
+    onValueChange({relation: newRelation, value: newValue});
     setExpanded(index > 0);
   };
 
@@ -70,19 +88,16 @@ const ListItemFilterEnum = (props: Props) => {
         {...props}
         title={title}
         value={undefined} // Prevent propagation of this components props.value
-        segments={[
-          { label: EnumRelation.Any, labelStyle: theme.styles.textTiny },
-          { label: EnumRelation.Is, labelStyle: theme.styles.textTiny },
-          { label: EnumRelation.IsNot, labelStyle: theme.styles.textTiny }
-        ]}
+        initialIndex={initiaIndex}
+        segments={segments}
         position={expanded && position ? lodash.without(position, 'last') : position}
         onChangeIndex={onRelationSelect}
         expanded={expanded}
         ExpandableComponent={
           <ListItem
             title={'Any of these values...'}
-            titleStyle={!value ? {color: theme.colors.assertive}: {}}
-            subtitle={!value ?  'None' : valueToString()}
+            titleStyle={value?.length === 0 ? {color: theme.colors.assertive}: {}}
+            subtitle={value?.length === 0 ?  'None' : valueToString()}
             position={position?.includes('last') ? ['last'] : []}
             onPress={() => navigation.navigate('EnumPicker', {
               ...enumFilterConfig,

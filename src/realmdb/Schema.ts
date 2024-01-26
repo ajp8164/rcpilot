@@ -1,9 +1,9 @@
 import { ChecklistAction, ChecklistActionSchedule, ChecklistTemplate } from './ChecklistTemplate';
+import { Filter, FilterState } from './Filter';
 
 import { Battery } from './Battery';
 import { EventStyle } from './EventStyle';
 import { EventsMaintenanceReport } from './EventsMaintenanceReport';
-import { Filter } from './Filter';
 import { Model } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
@@ -27,6 +27,7 @@ const Schema = [
   // Embedded objects
   ChecklistAction,
   ChecklistActionSchedule,
+  FilterState,
 ];
 
 export default Schema;

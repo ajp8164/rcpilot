@@ -1,15 +1,15 @@
 import { BooleanFilterState, BooleanRelation } from 'components/molecules/filters';
 import { ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import { useRef, useState } from "react";
 
-import { useState } from "react";
 import { useTheme } from 'theme';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
   onValueChange: (filterState: BooleanFilterState) => void;
-  relation?: BooleanRelation;
+  relation: BooleanRelation;
   title: string;
-  value?: string;
+  value: string;
 };
 
 const ListItemFilterBoolean = (props: Props) => {
@@ -17,7 +17,7 @@ const ListItemFilterBoolean = (props: Props) => {
   
   const {
     onValueChange,
-    relation: initialRelation = BooleanRelation.Any,
+    relation: initialRelation,
     title,
     value: initialValue,
   } = props;
@@ -25,10 +25,20 @@ const ListItemFilterBoolean = (props: Props) => {
   const [relation, setRelation] = useState<BooleanRelation>(initialRelation);
   const [value, setValue] = useState(initialValue);
 
+  const segments = [
+    { label: BooleanRelation.Any, labelStyle: theme.styles.textTiny },
+    { label: BooleanRelation.Yes, labelStyle: theme.styles.textTiny },
+    { label: BooleanRelation.No, labelStyle: theme.styles.textTiny }
+  ];
+
+  const initiaIndex = useRef(segments.findIndex(seg => {
+    return seg.label === initialRelation
+  })).current;
+
   const onRelationSelect = (index: number) => {
-    setRelation(Object.keys(BooleanRelation)[index] as BooleanRelation);
+    setRelation(Object.values(BooleanRelation)[index] as BooleanRelation);
     setValue(index === 1 ? 'true' : 'false');
-    onValueChange({relation, value});
+    onValueChange({relation, value: [value]});
   };
 
   return (
@@ -37,11 +47,8 @@ const ListItemFilterBoolean = (props: Props) => {
         {...props}
         title={title}
         value={undefined} // Prevent propagation of this components props.value
-        segments={[
-          { label: BooleanRelation.Any, labelStyle: theme.styles.textTiny },
-          { label: BooleanRelation.Yes, labelStyle: theme.styles.textTiny },
-          { label: BooleanRelation.No, labelStyle: theme.styles.textTiny }
-        ]}
+        initialIndex={initiaIndex}
+        segments={segments}
         onChangeIndex={onRelationSelect}
       />
     </>

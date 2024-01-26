@@ -1,17 +1,19 @@
 import { AppTheme, useTheme } from 'theme';
-import { FilterType, ReportFilter } from 'types/filter';
 import { FlatList, ListRenderItem } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQuery, useRealm } from '@realm/react';
 
-// import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { Filter } from 'realmdb/Filter';
+import { FilterType } from 'types/filter';
 import { ListItem } from 'components/atoms/List';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
-import { StringRelation } from 'components/molecules/filters';
 import { View } from 'react-native-ui-lib';
+import { filterSummary } from 'lib/filter';
 import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
 
 // Destination report editor based on report type.
 const reportFilterEditor: {[key in FilterType]: any} = {
@@ -24,60 +26,20 @@ const reportFilterEditor: {[key in FilterType]: any} = {
 };
 
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportFilters'>;
-// export type Props = CompositeScreenProps<
-//   NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportFilters'>,
-//   NativeStackScreenProps<ReportFiltersNavigatorParamList>
-// >;
 
 const ReportFiltersScreen = ({ navigation, route }: Props) => {
-  const  { filterType } = route.params;
+  const { eventName, filterType, filterId } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
+  const event = useEvent();
 
-  const filters: ReportFilter[] = [
-    {
-      name: 'Test',
-      values: {
-        model: {
-          relation: StringRelation.Any, // any, before, after, past
-          value: '2023-11-17T03:28:04.651Z',
-        },
-        modelType: {
-          relation: StringRelation.Any, // any, <, >, =, !=
-          value: '0',
-        },
-        category: {
-          relation: StringRelation.Any, // any, yes, no
-          value: '',
-        },
-        date: {
-          relation: StringRelation.Any, // any, before, after, past
-          value: '2023-11-17T03:28:04.651Z',
-        },
-        duration: {
-          relation: StringRelation.Any, // any, <, >, =, !=
-          value: '',
-        },
-        pilot: {
-          relation: StringRelation.Any, // any, contains, missing
-          value: '',
-        },
-        location: {
-          relation: StringRelation.Any, // any, contains, missing
-          value: '',
-        },
-        modelStyle: {
-          relation: StringRelation.Any, // any, contains, missing
-          value: '',
-        },
-        outcome: {
-          relation: StringRelation.Any, // any, contains, missing
-          value: '',
-        }
-      }
-    }
-  ];
+  const realm = useRealm();
+  const filters = useQuery<Filter>('Filter', filters => {
+    return filters.filtered('type == $0', filterType);
+  });
+
+  const [selectedFilter, setSelectedFilter] = useState(filterId);
 
   useEffect(() => {
     navigation.setOptions({
@@ -94,17 +56,41 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
     });
   });
 
-  const renderFilters: ListRenderItem<ReportFilter> = ({ item: filter, index }) => {
+  useEffect(() => {
+    event.emit(eventName, selectedFilter);
+  }, [ selectedFilter ]);
+
+  const deleteFilter = (filter: Filter) => {
+    // if removing the selected filter then set the current selection to no-filter.
+    if (selectedFilter === filter._id.toString())  {
+      setSelectedFilter(undefined);
+    }
+
+    realm.write(() => {
+      realm.delete(filter);
+    });
+  };
+
+  const renderFilter: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
         key={index}
         title={filter.name}
-        subtitle={'Matches events where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
+        subtitle={filterSummary(filter)}
         position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
-        checked={true}
-        onPress={() => null}
+        checked={selectedFilter === filter._id.toString()}
+        swipeable={{
+          rightItems: [{
+            icon: 'delete',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => deleteFilter(filter),
+          }]
+        }}
+        onPress={() => setSelectedFilter(filter._id.toString())}
         onPressInfo={() => filterType && navigation.navigate(reportFilterEditor[filterType], {
-          filterId: '123456789012',
+          filterId: filter._id.toString(),
         })}
       />
     )
@@ -115,21 +101,11 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemCheckboxInfo
         title={'No Filter'}
-        subtitle={
-          filterType === FilterType.ReportEventsFilter ?
-          'Matches all events' :
-          filterType === FilterType.ReportMaintenanceFilter ?
-          'Matches all maintenance items' :
-          filterType === FilterType.ReportModelScanCodesFilter ?
-          'Matches all models' :
-          filterType === FilterType.ReportBatteryScanCodesFilter ?
-          'Matches all batteries' :
-          ''
-        }
+        subtitle={filterSummary()}
         position={['first', 'last']}
         hideInfo={true}
-        checked={true}
-        onPress={() => null}
+        checked={!selectedFilter}
+        onPress={() => setSelectedFilter(undefined)}
       />
       <Divider />
       <ListItem
@@ -137,9 +113,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         titleStyle={s.newFilter}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => filterType && navigation.navigate(reportFilterEditor[filterType], {
-          filterId: '123456789012',
-        })}
+        onPress={() => filterType && navigation.navigate(reportFilterEditor[filterType], {})}
       />
       <Divider />
       {filters.length ?
@@ -151,7 +125,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
       }
       <FlatList
         data={filters}
-        renderItem={renderFilters}
+        renderItem={renderFilter}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
       />

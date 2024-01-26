@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, NumberRelation } from 'components/molecules/filters';
-import { EventReportFilterValue, FilterType } from 'types/filter';
+import { EventReportFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -13,8 +13,21 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
+import { Text } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';
+
+const defaultFilter: EventReportFilterValues = {
+  model: {relation: EnumRelation.Any, value: []},
+  modelType: {relation: EnumRelation.Any, value: []},
+  category: {relation: EnumRelation.Any, value: []},
+  date: {relation: DateRelation.Any, value: []},
+  duration: {relation: NumberRelation.Any, value: []},
+  pilot: {relation: EnumRelation.Any, value: []},
+  location: {relation: EnumRelation.Any, value: []},
+  modelStyle: {relation: EnumRelation.Any, value: []},
+  outcome: {relation: EnumRelation.Any, value: []},
+};
 
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportEventsFilterEditor'>;
 
@@ -28,24 +41,10 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
   const reportFilter = useObject(Filter, new BSON.ObjectId(filterId));
 
   const [name, setName] = useState(reportFilter?.name || undefined);
-  const [values, setValues] = useSetState(reportFilter?.values || {});
+  const [values, setValues] = useSetState(reportFilter?.toJSON().values as EventReportFilterValues || defaultFilter);
 
-  // const [values, setValues] = useSetState<EventReportFilterValues>({
-  //   [EventReportFilterValue.Model]: {relation: EnumRelation.Any, value: ''},
-  //   [EventReportFilterValue.ModelType]: {relation: EnumRelation.Any, value: ''},
-  //   [EventReportFilterValue.Category]: {relation: EnumRelation.Any, value: ''},
-  //   [EventReportFilterValue.Date]: {relation: DateRelation.Any, value: ''},
-  //   [EventReportFilterValue.Duration]: {relation: NumberRelation.Any, value: ''},
-  //   [EventReportFilterValue.Pilot]: {relation: EnumRelation.Any, value: ''},
-  //   [EventReportFilterValue.Location]: {relation: EnumRelation.Any, value: ''},
-  //   [EventReportFilterValue.ModelStyle]: {relation: EnumRelation.Any, value: ''},
-  //   [EventReportFilterValue.Outcome]: {relation: EnumRelation.Any, value: ''},
-  // });
-
-  const onFilterValueChange = (property: EventReportFilterValue, value: FilterState) => {
-    setValues({
-      [property]: value,
-    });
+  const onFilterValueChange = (property: keyof EventReportFilterValues, value: FilterState) => {
+    setValues({ [property]: value }, {assign: true});
   };
 
   useEffect(() => {
@@ -58,7 +57,7 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       if (reportFilter) {
         realm.write(() => {
           reportFilter.name = name!;
-          reportFilter.type = FilterType.ReportEventsFilter
+          reportFilter.type = FilterType.ReportEventsFilter;
           reportFilter.values = values;
         });
       } else {
@@ -90,7 +89,7 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
         if (canSave) {
           return (
             <Button
-              title={'Update'}
+              title={'Done'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.updateButton]}
               onPress={onDone}
@@ -99,10 +98,13 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, []);  
+  }, [ name, values ]);
+
+  console.log(JSON.stringify(values));
 
   return (
     <ScrollView style={theme.styles.view}>
+      <Text>{reportFilter?._id.toString()}</Text>
       <Divider text={'FILTER NAME'}/>
       <ListItemInput
         value={name}
@@ -123,88 +125,89 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider text={'This filter shows all the events that match all of these criteria.'}/>
       <ListItemFilterEnum
         title={'Model'}
-        value={values[EventReportFilterValue.Model]?.value}
-        relation={EnumRelation.Any}
+        value={values.model.value}
+        relation={values.model.relation}
         enumName={'Models'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.Model, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('model', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Model Type'}
-        value={values[EventReportFilterValue.ModelType]?.value}
-        relation={EnumRelation.Any}
+        value={values.modelType.value}
+        relation={values.modelType.relation}
         enumName={'ModelTypes'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.ModelType, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('modelType', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Category'}
-        value={values[EventReportFilterValue.Category]?.value}
-        relation={EnumRelation.Any}
+        value={values.category.value}
+        relation={values.category.relation}
         enumName={'Categories'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.Category, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('category', filterState);
         }}
       />
       <Divider />
       <ListItemFilterDate
         title={'Date'}
-        value={values[EventReportFilterValue.Date]?.value}
-        relation={DateRelation.Any}
+        value={values.date.value}
+        relation={values.date.relation}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.Date, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('date', filterState);
         }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'Duration'}
         label={'m:ss'}
-        value={values[EventReportFilterValue.Duration]?.value}
-        relation={NumberRelation.Any}
+        numericProps={{separator: ':', prefix: '', maxValue: 999}}
+        value={values.duration.value}
+        relation={values.duration?.relation}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.Duration, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('duration', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Pilot'}
-        value={values[EventReportFilterValue.Pilot]?.value}
-        relation={EnumRelation.Any}
+        value={values.pilot?.value}
+        relation={values.pilot?.relation}
         enumName={'Pilots'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.Pilot, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('pilot', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Location'}
-        value={values[EventReportFilterValue.Location]?.value}
-        relation={EnumRelation.Any}
+        value={values.location?.value}
+        relation={values.location?.relation}
         enumName={'Locations'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.Location, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('location', filterState);
         }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Style'}
-        value={values[EventReportFilterValue.ModelStyle]?.value}
-        relation={EnumRelation.Any}
+        value={values.modelStyle?.value}
+        relation={values.modelStyle?.relation}
         enumName={'ModelStyles'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(EventReportFilterValue.ModelStyle, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange('modelStyle', filterState);
         }}
       />
       <Divider />

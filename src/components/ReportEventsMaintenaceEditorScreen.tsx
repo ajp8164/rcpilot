@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import { eqBoolean, eqObject, eqString } from 'realmdb/helpers';
+import { eqBoolean, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -10,12 +10,14 @@ import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
+import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Text } from 'react-native';
+import { filterSummary } from 'lib/filter';
 import { makeStyles } from '@rneui/themed';
-
-// import { useEvent } from 'lib/event';
+import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ReportEventsMaintenanceEditor'>,
@@ -27,7 +29,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
-  // const event = useEvent();
+  const event = useEvent();
 
   const realm = useRealm();
 
@@ -38,34 +40,52 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [includesSummary, setIncludesSummary] = useState(report ? report.includesSummary : true);
   const [includesEvents, setIncludesEvents] = useState(report ? report.includesEvents : true);
   const [includesMaintenance, setIncludesMaintenance] = useState(report ? report.includesMaintenance : true);
-  const [eventsFilter, _setEventsFilter] = useState(report?.eventsFilter);
-  const [maintenanceFilter, _setMaintenaceFilter] = useState(report?.maintenanceFilter);
-
-  // useEffect(() => {
-  //   event.on('events-report-filter', setEventsFilterId);
-  //   event.on('maintenance-report-filter', setMaintenaceFilterId);
-  //   return () => {
-  //     event.removeListener('events-report-filter', setEventsFilterId);
-  //     event.removeListener('maintenance-report-filter', setMaintenaceFilterId);
-  //   };
-  // }, []);
-
-  // useState(() => {
-  //   // Fetch filter from realm to update view
-  // }), [ eventsFilter ];
-
-  // useState(() => {
-  //   // Fetch filter from realm to update view
-  // }), [ maintenanceFilter ];
+  const [eventsFilter, setEventsFilter] = useState(report?.eventsFilter);
+  const [maintenanceFilter, setMaintenanceFilter] = useState(report?.maintenanceFilter);
 
   useEffect(() => {
-    const canSave = name && (
+    event.on('events-report-filter', onChangeEventsFilter);
+    event.on('maintenance-report-filter', onChangeMaintenanceFilter);
+    return () => {
+      event.removeListener('events-report-filter', onChangeEventsFilter);
+      event.removeListener('maintenance-report-filter', onChangeMaintenanceFilter);
+    };
+  }, []);
+
+  const onChangeEventsFilter = (filterId?: string) => {
+    const filter = 
+      (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
+    setEventsFilter(filter);
+
+    // Update the exiting report immediately.
+    if (report)  {
+      realm.write(() => {
+        report.eventsFilter = filter;
+      });
+    }
+  };
+
+  const onChangeMaintenanceFilter = (filterId?: string) => {
+    const filter = 
+      (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
+    setMaintenanceFilter(filter);
+
+    // Update the exiting report immediately.
+    if (report)  {
+      realm.write(() => {
+        report.eventsFilter = filter;
+      });
+    }
+  };
+
+  useEffect(() => {
+    const canSave = !!name && (
       !eqString(report?.name, name) ||
       !eqBoolean(report?.includesSummary, includesSummary) ||
       !eqBoolean(report?.includesEvents, includesEvents) ||
       !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
-      !eqObject(report?.eventsFilter, eventsFilter) ||
-      !eqObject(report?.maintenanceFilter, maintenanceFilter)
+      !eqString(report?.eventsFilter?._id.toString(), eventsFilter?._id.toString()) ||
+      !eqString(report?.maintenanceFilter?._id.toString(), maintenanceFilter?._id.toString())
     );
 
     const save = () => {
@@ -137,6 +157,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
+      <Text>{report?._id.toString()}</Text>
       <Divider text={'REPORT NAME'}/>
       <ListItemInput
         value={name}
@@ -159,13 +180,14 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         onValueChange={setIncludesEvents}
       />
       <ListItem
-        title={'No Filter Selected'}
-        subtitle={'Report will include all events'}
+        title={eventsFilter ? eventsFilter.name: 'No Filter Selected'}
+        subtitle={eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'}
         position={['last']}
         onPress={() => navigation.navigate('ReportFiltersNavigator', {
           screen: 'ReportFilters',
           params: { 
             filterType: FilterType.ReportEventsFilter,
+            filterId: eventsFilter?._id.toString(),
             eventName: 'events-report-filter',
           },
         })}
@@ -178,13 +200,14 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         onValueChange={setIncludesMaintenance}
       />
       <ListItem
-        title={'No Filter Selected'}
-        subtitle={'Report will include all maintenace items'}
+        title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
+        subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
         position={['last']}
         onPress={() => navigation.navigate('ReportFiltersNavigator', {
           screen: 'ReportFilters',
           params: { 
             filterType: FilterType.ReportMaintenanceFilter,
+            filterId: maintenanceFilter?._id.toString(),
             eventName: 'maintenance-report-filter',
           },
         })}

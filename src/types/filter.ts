@@ -1,4 +1,10 @@
-import { FilterState } from 'components/molecules/filters';
+import {
+  BooleanFilterState,
+  DateFilterState,
+  EnumFilterState,
+  NumberFilterState,
+  StringFilterState
+} from 'components/molecules/filters';
 
 export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
@@ -11,116 +17,74 @@ export enum FilterType {
 
 // Battery filter
 //
-export type BatteryFilter = {
-  name: string;
-  values: ModelFilterValues;
-};
-
-export type BatteryFilterValues = {[key in BatteryFilterValue]: FilterState};
-
-export enum BatteryFilterValue {
-  Name = 'name',
-  Chemistry = 'chemistry',
-  TotalTime = 'totalTime',
-  Capacity = 'capacity',
-  CRating = 'cRating',
-  SCells = 'sCells',
-  PCells = 'pCells',
+export type BatteryFilterValues = {
+  name: StringFilterState;
+  chemistry: EnumFilterState;
+  totalTime: NumberFilterState;
+  capacity: NumberFilterState;
+  cRating: NumberFilterState;
+  sCells: NumberFilterState;
+  pCells: NumberFilterState;
 };
 
 // Model filter
 //
-export type ModelFilter = {
-  name: string;
-  values: ModelFilterValues;
-};
-
-export type ModelFilterValues = {[key in ModelFilterValue]: FilterState};
-
-export enum ModelFilterValue {
-  Name = 'name',
-  Type = 'type',
-  LastEvent = 'lastEvent',
-  TotalTime = 'totalTime',
-  LogsBatteries = 'logsBatteries',
-  LogsFuel = 'logsFuel',
-  Damaged = 'damaged',
-  Vendor = 'vendor',
-  Notes = 'notes',
+export type ModelFilterValues = {
+  name: StringFilterState;
+  modelType: EnumFilterState;
+  lastEvent: DateFilterState;
+  totalTime: NumberFilterState;
+  logsBatteries: BooleanFilterState;
+  logsFuel: BooleanFilterState;
+  damaged: BooleanFilterState;
+  vendor: StringFilterState;
+  notes: StringFilterState;
 };
 
 // Any report filter
 //
-export type ReportFilter = 
-  EventReportFilter |
-  MaintenanceReportFilter |
-  ModelScanCodeReportFilter |
-  BatteryScanCodeReportFilter;
+export type ReportFilterValues = 
+  EventReportFilterValues |
+  MaintenanceReportFilterValues |
+  ModelScanCodesReportFilterValues |
+  BatteryScanCodesReportFilterValues;
 
 // Event report filter
 //
-export type EventReportFilter = {
-  name: string;
-  values: EventReportFilterValues;
-};
-
-export type EventReportFilterValues = {[key in EventReportFilterValue]: FilterState};
-
-export enum EventReportFilterValue {
-  Model = 'model',
-  ModelType = 'modelType',
-  Category = 'category',
-  Date = 'date',
-  Duration = 'duration',
-  Pilot = 'pilot',
-  Location = 'location',
-  ModelStyle = 'modelStyle',
-  Outcome = 'outcome',
+export type EventReportFilterValues = {
+  model: EnumFilterState;
+  modelType: EnumFilterState;
+  category: EnumFilterState;
+  date: DateFilterState;
+  duration: NumberFilterState;
+  pilot: EnumFilterState;
+  location: EnumFilterState;
+  modelStyle: EnumFilterState;
+  outcome: EnumFilterState;
 };
 
 // Maintenance report filter
 //
-export type MaintenanceReportFilter = {
-  name: string;
-  values: MaintenanceReportFilterValues;
-};
-
-export type MaintenanceReportFilterValues = {[key in MaintenanceReportFilterValue]: FilterState};
-
-export enum MaintenanceReportFilterValue {
-  Model = 'model',
-  ModelType = 'modelType',
-  Category = 'category',
-  Date = 'date',
-  Costs = 'costs',
-  Notes = 'notes',
+export type MaintenanceReportFilterValues = {
+  model: EnumFilterState;
+  modelType: EnumFilterState;
+  category: EnumFilterState;
+  date: DateFilterState;
+  costs: NumberFilterState;
+  notes: StringFilterState;
 };
 
 // Model scan code report filter
 //
-export type ModelScanCodeReportFilter = {
-  name: string;
-  values: ModelScanCodeReportFilterValues;
-};
-
-export type ModelScanCodeReportFilterValues = {[key in ModelScanCodeReportFilterValue]: FilterState};
-
-export enum ModelScanCodeReportFilterValue {
-  ModelType = 'modelType',
-  Category = 'category',
-  LastEvent = 'lastEvent',
+export type ModelScanCodesReportFilterValues = {
+  modelType: EnumFilterState;
+  category: EnumFilterState;
+  lastEvent: DateFilterState;
 };
 
 // Battery scan code report filter
 //
-export type BatteryScanCodeReportFilter = {
-  name: string;
-  values: BatteryScanCodeReportFilterValues;
-};
-
-export type BatteryScanCodeReportFilterValues = {[key in BatteryScanCodeReportFilterValue]: FilterState};
-
-export enum BatteryScanCodeReportFilterValue {
-  Chemistry = 'chemistry',
-  Capacity = 'capacity',
+export type BatteryScanCodesReportFilterValues = {
+  chemistry: EnumFilterState;
+  capacity: NumberFilterState;
 };

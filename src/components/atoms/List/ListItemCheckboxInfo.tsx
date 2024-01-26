@@ -21,7 +21,7 @@ const ListItemCheckboxInfo = (props: Props) => {
     onPressInfo,
     hideInfo,
     iconChecked = 'check',
-    iconUnchecked = '',
+    iconUnchecked = 'check',
     iconSize = 18,
     } = props;
 
@@ -38,13 +38,14 @@ const ListItemCheckboxInfo = (props: Props) => {
         props.swipeable ? theme.styles.swipeableListItemContainer : {}
       ]}
       leftImage={
-        checkIcon ?
-          <Icon
-            name={checkIcon}
-            size={iconSize}
-          />
-        :
-          <></>
+        <Icon
+          name={checkIcon}
+          size={iconSize}
+          style={(checked && (iconChecked === iconUnchecked)) || (iconChecked !== iconUnchecked) ?
+             {} :
+             s.uncheckedIcon
+          }
+        />
       }
       rightImage={
         <Pressable onPress={onPressInfo}>
@@ -63,6 +64,9 @@ const ListItemCheckboxInfo = (props: Props) => {
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   container: {
     minHeight: 48
+  },
+  uncheckedIcon: {
+    opacity: 0,
   },
 }));
 

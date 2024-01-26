@@ -5,6 +5,7 @@ import {
   NestableScrollContainer,
   RenderItemParams
 } from 'react-native-draggable-flatlist';
+import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -13,19 +14,22 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { saveOutputReportTo } from 'store/slices/appSettings';
 import { selectOutputReportTo } from 'store/selectors/appSettingsSelectors';
 import { useEvent } from 'lib/event';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>,
+  NativeStackScreenProps<NewReportNavigatorParamList, 'ReportEventsMaintenanceEditor'>
+>;
 
 type Report = EventsMaintenanceReport | ScanCodesReport;
 
@@ -171,8 +175,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               style={{flexDirection: 'row'}}
               onPress={() => navigation.navigate(reportEditor[reportType], {
                 reportId: report._id.toString(),
-              })}
-              >
+              })}>
               <CustomIcon
                 name={'circle-info'}
                 size={22}
@@ -317,14 +320,20 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           {
             label: 'Event/Maintenance Log',
             onPress: () => {
-              navigation.navigate('ReportEventsMaintenanceEditor', {});
+              navigation.navigate('NewReportNavigator', {
+                screen: 'ReportEventsMaintenanceEditor',
+                params: {},
+              });
               setNewReportSheetVisible(false);
             }
           },
           {
             label: 'QR Codes',
             onPress: () => {
-              navigation.navigate('ReportScanCodesEditor', {});
+              navigation.navigate('NewReportNavigator', {
+                screen: 'ReportScanCodesEditor',
+                params: {},
+              });
               setNewReportSheetVisible(false);
             }
           },

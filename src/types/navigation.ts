@@ -363,6 +363,7 @@ export type SetupNavigatorParamList = {
   NewModelCategory: undefined;
   NewModelFuelNavigator: undefined;
   NewModelPropellerNavigator: undefined;
+  NewReportNavigator: NavigatorScreenParams<NewReportNavigatorParamList>;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -381,6 +382,16 @@ export type SetupNavigatorParamList = {
     userProfile: UserProfile;
   };
   WebServerAccess: undefined;
+};
+
+export type NewReportNavigatorParamList = {
+  ReportEventsMaintenanceEditor: {
+    reportId?: string;
+  };
+  ReportScanCodesEditor: {
+    reportId?: string;
+  };
+  ReportFiltersNavigator: NavigatorScreenParams<ReportFiltersNavigatorParamList>;
 };
 
 export type ScanNavigatorParamList = {

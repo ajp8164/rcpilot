@@ -25,6 +25,10 @@ export const useStyles = makeStyles(
      * Styles
      */
 
+    swipeableListMask: {
+      borderRadius: 10,
+      overflow: 'hidden',
+    },  
     textGiant: {
       color: theme.colors.text,
       fontSize: fontSizes.giant,

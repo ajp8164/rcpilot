@@ -102,26 +102,48 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     });
   };
 
-  const reportSummary = (report: Report) => {
-    return report._id.toString();
+  const emReportSummary = (report: EventsMaintenanceReport) => {
+    const whichEvents = report.eventsFilter ? `"${report.eventsFilter.name}" filter` : 'All';
+    const whichMaintenance = report.maintenanceFilter ? `"${report.maintenanceFilter.name}" filter` : 'All';
+    const summary = report.includesSummary ? 'Summary, ' : '';
+    const events = report.includesEvents ? `Events: ${whichEvents}, ` : '';
+    const maintenance = report.includesMaintenance ? `Maintenance: ${whichMaintenance}` : '';
+    return `${summary}${events}${maintenance}`;
+  };
+
+  const scReportSummary = (report: ScanCodesReport) => {
+    const whichEvents = report.batteryScanCodesFilter ? `"${report.batteryScanCodesFilter.name}" filter` : 'All';
+    const whichMaintenance = report.modelScanCodesFilter ? `"${report.modelScanCodesFilter.name}" filter` : 'All';
+    const events = report.includesBatteries ? `Models: ${whichEvents}, ` : '';
+    const maintenance = report.includesModels ? `Batteries: ${whichMaintenance}` : '';
+    return `${events}${maintenance}`;
   };
 
   const renderReport = (props: {
     report: Report,
     reportType: ReportType,
     reportCount: number,
+    reportSummary: string;
     index: number,
     drag: () => void,
     isActive: boolean,
   }) => {
-    const { report, reportType, reportCount, index, drag, isActive } = props;
+    const {
+      report,
+      reportType,
+      reportCount,
+      reportSummary,
+      index,
+      drag,
+      isActive
+    } = props;
     return (
       <View
         key={index}
         style={[isActive ? s.shadow : {}]}>
         <ListItem
           title={report.name}
-          subtitle={reportSummary(report as Report)}
+          subtitle={reportSummary}
           subtitleNumberOfLines={1}
           position={reportCount === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === reportCount - 1 ? ['last'] : []}
           titleNumberOfLines={1}
@@ -177,6 +199,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
       report,
       reportType: ReportType.EventsMaintenance,
       reportCount: emReports.length,
+      reportSummary: emReportSummary(report),
       index,
       drag,
       isActive
@@ -195,6 +218,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
       report,
       reportType: ReportType.ScanCodes,
       reportCount: scReports.length,
+      reportSummary: scReportSummary(report),
       index,
       drag,
       isActive

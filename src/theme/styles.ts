@@ -25,10 +25,16 @@ export const useStyles = makeStyles(
      * Styles
      */
 
+    swipeableListItemContainer: {
+      borderBottomLeftRadius: 0,
+      borderBottomRightRadius: 0,
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+    },  
     swipeableListMask: {
       borderRadius: 10,
       overflow: 'hidden',
-    },  
+    },
     textGiant: {
       color: theme.colors.text,
       fontSize: fontSizes.giant,

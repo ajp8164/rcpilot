@@ -33,7 +33,10 @@ const ListItem = (props: Props) => {
       <>
         <_ListItem
           {...props}
-          containerStyle={{...props.containerStyle, ...s.container}}
+          containerStyle={[
+            {...props.containerStyle, ...s.container},
+            props.swipeable ? theme.styles.swipeableListItemContainer : {}
+          ]}
           valueStyle={[
             {...props.valueStyle, ...s.value},
             props.disabled ? s.valuePosition : {},

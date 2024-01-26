@@ -33,7 +33,10 @@ const ListItemCheckboxInfo = (props: Props) => {
   return (
     <_ListItem
       {...props}
-      containerStyle={{...props.containerStyle, ...s.container}}
+      containerStyle={[
+        {...props.containerStyle, ...s.container},
+        props.swipeable ? theme.styles.swipeableListItemContainer : {}
+      ]}
       leftImage={
         checkIcon ?
           <Icon

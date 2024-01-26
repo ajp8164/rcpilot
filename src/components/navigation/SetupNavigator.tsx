@@ -25,6 +25,7 @@ import NewChecklistTemplateNavigator from 'components/navigation/NewChecklistTem
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
 import NewPilotScreen from 'components/NewPilotScreen';
+import NewReportNavigator from 'components/navigation/NewReportNavigator';
 import NotesScreen from 'components/NotesScreen';
 import PilotScreen from 'components/PilotScreen';
 import PilotsScreen from 'components/PilotsScreen';
@@ -213,6 +214,14 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
+        name="NewReportNavigator"
+        component={NewReportNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
+        }}
+      />
+      <SetupStack.Screen
         name='Notes'
         component={NotesScreen}
         options={{
@@ -299,7 +308,6 @@ const SetupNavigator = () => {
         component={ReportEventsMaintenaceEditorScreen}
         options={{
           title: 'Log Report',
-          presentation: 'fullScreenModal',
         }}
       />
       <SetupStack.Screen
@@ -307,7 +315,6 @@ const SetupNavigator = () => {
         component={ReportScanCodesEditorScreen}
         options={{
           title: 'QR Code Report',
-          presentation: 'fullScreenModal',
         }}
       />
       <SetupStack.Screen

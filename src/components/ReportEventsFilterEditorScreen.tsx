@@ -13,7 +13,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
-import { Text } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';
 
@@ -100,11 +99,8 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
     });
   }, [ name, values ]);
 
-  console.log(JSON.stringify(values));
-
   return (
     <ScrollView style={theme.styles.view}>
-      <Text>{reportFilter?._id.toString()}</Text>
       <Divider text={'FILTER NAME'}/>
       <ListItemInput
         value={name}

@@ -14,7 +14,6 @@ import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text } from 'react-native';
 import { filterSummary } from 'lib/filter';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -157,7 +156,6 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     <SafeAreaView
       edges={['left', 'right']}
       style={theme.styles.view}>
-      <Text>{report?._id.toString()}</Text>
       <Divider text={'REPORT NAME'}/>
       <ListItemInput
         value={name}

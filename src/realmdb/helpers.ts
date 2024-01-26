@@ -22,7 +22,8 @@ export const eqString = (schemaAttr?: string, formAttr?: string) => {
 };
 
 export const eqObject = (schemaAttr?: object, formAttr?: object) => {
-  return lodash.isEqual(schemaAttr, formAttr);
+  // Remove any realm properties from the schema attribute.
+  return lodash.isEqual(JSON.parse(JSON.stringify(schemaAttr)), formAttr);
 };
 
 export const eqBoolean = (schemaAttr?: boolean, formAttr?: boolean) => {

@@ -95,14 +95,14 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         })}
       />
     )
-};
+  };
 
   return (
     <View style={theme.styles.view}>
       <Divider />
       <ListItemCheckboxInfo
         title={'No Filter'}
-        subtitle={filterSummary()}
+        subtitle={filterSummary(filterType)}
         position={['first', 'last']}
         hideInfo={true}
         checked={!selectedFilter}

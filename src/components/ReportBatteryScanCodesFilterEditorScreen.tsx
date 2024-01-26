@@ -14,6 +14,7 @@ import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 const defaultFilter: BatteryScanCodesReportFilterValues = {
@@ -24,10 +25,11 @@ const defaultFilter: BatteryScanCodesReportFilterValues = {
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportBatteryScanCodesFilterEditor'>;
 
 const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) => {
-  const { filterId } = route.params;
+  const { filterId, eventName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
+  const event = useEvent();
 
   const realm = useRealm();
   const reportFilter = useObject(Filter, new BSON.ObjectId(filterId));
@@ -46,6 +48,8 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
     );
 
     const save = () => {
+      event.emit(eventName, reportFilter?._id.toString());
+
       if (reportFilter) {
         realm.write(() => {
           reportFilter.name = name!;

@@ -1,9 +1,11 @@
 import { DateFilterState, DateRelation } from 'components/molecules/filters';
-import { ListItemDate, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import { ListItem, ListItemDate, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { useEffect, useRef, useState } from "react";
 
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
+import WheelPicker from 'components/atoms/WheelPicker';
+import { getTimeSpanItems } from 'lib/relativeDate';
 import lodash from 'lodash';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
@@ -37,6 +39,13 @@ const ListItemFilterDate = (props: Props) => {
   const [index, setIndex] = useState(() =>
     segments.findIndex(seg => { return seg === props.relation })
   );
+
+  const initialInThePastItems = useRef(getTimeSpanItems()).current;
+  const inThePastPickerItems = useRef(initialInThePastItems.items);
+  const [inThePastPickerValue, setInThePastPickerValue] = useState<string[]>(initialInThePastItems.default.items);
+  const [inThePastPickerExpanded, setInThePastPickerExpanded] = useState(false);
+
+
 
   // Controlled component state changes.
   useEffect(() => {
@@ -85,15 +94,39 @@ const ListItemFilterDate = (props: Props) => {
       onChangeIndex={onRelationSelect}
       expanded={expanded}
       ExpandableComponent={
-        <ListItemDate
-          title={'Date'}
-          value={DateTime.fromISO(value[0]).toFormat("MMM d, yyyy 'at' hh:mm a")}
-          rightImage={false}
-          expanded={true}
-          position={position?.includes('last') ? ['last'] : []}
-          onDateChange={onChangedFilter}
-          pickerValue={value[0]}
-        />
+        relation !== DateRelation.Past
+        ?
+          <ListItemDate
+            title={'Date'}
+            value={DateTime.fromISO(value[0]).toFormat("MMM d, yyyy 'at' hh:mm a")}
+            rightImage={false}
+            expanded={true}
+            position={position?.includes('last') ? ['last'] : []}
+            onDateChange={onChangedFilter}
+            pickerValue={value[0]}
+          />
+        : 
+          <ListItem
+            title={'In Past'}
+            value={inThePastPickerValue.join(' ')}
+            position={inThePastPickerExpanded ? [] : ['last']}
+            rightImage={false}
+            onPress={() => setInThePastPickerExpanded(!inThePastPickerExpanded)}
+            expanded={inThePastPickerExpanded}
+            ExpandableComponent={
+              // Wheel index 0 is value, wheel index 1 is time span.
+              <WheelPicker
+                placeholder={'none'}
+                itemWidth={['40%', '60%']}
+                wheelVisible={[true, true]}
+                items={inThePastPickerItems.current}
+                // value={inThePastPickerValue}
+                onValueChange={(_wheelIndex, value, _index) => {
+                  setInThePastPickerValue(value as string[]);
+                }}
+              />
+            }
+          />
       }
     />
   );

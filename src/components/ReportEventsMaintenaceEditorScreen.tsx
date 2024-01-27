@@ -139,14 +139,16 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
 
     navigation.setOptions({
       headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonClearTitle}
-            buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-            onPress={navigation.goBack}
-          />
-        )
+        if (!reportId)  {
+          return (
+            <Button
+              title={'Cancel'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+              onPress={navigation.goBack}
+            />
+          )
+        }
       },
       headerRight: () => {
         if (canSave) {

@@ -1,6 +1,6 @@
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { StringFilterState, StringRelation } from 'components/molecules/filters';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import lodash from 'lodash';
 import { useNavigation } from '@react-navigation/core';
@@ -29,6 +29,8 @@ const ListItemFilterString = (props: Props) => {
     StringRelation.Missing,
   ];
   
+  const initializing = useRef(true);
+
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [relation, setRelation] = useState<StringRelation>(props.relation);
   const [value, setValue] = useState(props.value);
@@ -38,6 +40,10 @@ const ListItemFilterString = (props: Props) => {
 
   // Controlled component state changes.
   useEffect(() => {
+    if (initializing.current) {
+      initializing.current = false;
+      return;
+    }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
     setRelation(props.relation);

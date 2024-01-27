@@ -1,6 +1,6 @@
 import { BooleanFilterState, BooleanRelation } from 'components/molecules/filters';
 import { ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -21,6 +21,8 @@ const ListItemFilterBoolean = (props: Props) => {
     BooleanRelation.Yes,
     BooleanRelation.No
   ];
+
+  const initializing = useRef(true);
   
   const [relation, setRelation] = useState<BooleanRelation>(props.relation);
   const [value, setValue] = useState(props.value);
@@ -30,6 +32,10 @@ const ListItemFilterBoolean = (props: Props) => {
 
   // Controlled component state changes.
   useEffect(() => {
+    if (initializing.current) {
+      initializing.current = false;
+      return;
+    }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
     setRelation(props.relation);

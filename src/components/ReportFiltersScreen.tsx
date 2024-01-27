@@ -35,8 +35,8 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
 
   const realm = useRealm();
-  const filters = useQuery<Filter>('Filter', filters => {
-    return filters.filtered('type == $0', filterType);
+  const filters = useQuery<Filter>('Filter', filter => {
+    return filter.filtered('type == $0', filterType);
   });
 
   const [selectedFilter, setSelectedFilter] = useState(filterId);

@@ -377,6 +377,7 @@ export type SetupNavigatorParamList = {
     reportId?: string;
   };
   ReportFiltersNavigator: NavigatorScreenParams<ReportFiltersNavigatorParamList>;
+  ReportViewerNavigator: NavigatorScreenParams<ReportViewerNavigatorParamList>;
   UserAccount: undefined;
   UserProfile: {
     userProfile: UserProfile;
@@ -392,6 +393,15 @@ export type NewReportNavigatorParamList = {
     reportId?: string;
   };
   ReportFiltersNavigator: NavigatorScreenParams<ReportFiltersNavigatorParamList>;
+};
+
+export type ReportViewerNavigatorParamList = {
+  ReportEventsMaintenanceViewer: {
+    reportId: string;
+  }
+  ReportScanCodesViewer: {
+    reportId: string;
+  }
 };
 
 export type ScanNavigatorParamList = {

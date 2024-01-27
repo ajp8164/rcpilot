@@ -39,6 +39,11 @@ const reportEditor: {[key in ReportType]: any} = {
   [ReportType.ScanCodes]: 'ReportScanCodesEditor',
 };
 
+const reportViewer: {[key in ReportType]: any} = {
+  [ReportType.EventsMaintenance]: 'ReportEventsMaintenanceViewer',
+  [ReportType.ScanCodes]: 'ReportScanCodesViewer',
+};
+
 const DatabaseReportingScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
@@ -183,8 +188,12 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               />
             </Pressable>
           }
-          // TODO = press runs the report...
-          onPress={() => {return}}
+          onPress={() => navigation.navigate('ReportViewerNavigator', {
+            screen: reportViewer[reportType],
+            params: {
+              reportId: report._id.toString(),
+            }
+          })}
         />
       </View>
     );    

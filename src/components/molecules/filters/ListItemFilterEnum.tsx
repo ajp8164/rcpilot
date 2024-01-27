@@ -35,6 +35,8 @@ const ListItemFilterEnum = (props: Props) => {
     EnumRelation.IsNot
   ];
   
+  const initializing = useRef(true);
+
   const eventName = useRef(`list-item-filter-enum-${uuidv4()}`).current;
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [relation, setRelation] = useState<EnumRelation>(props.relation);
@@ -47,6 +49,10 @@ const ListItemFilterEnum = (props: Props) => {
 
   // Controlled component state changes.
   useEffect(() => {
+    if (initializing.current) {
+      initializing.current = false;
+      return;
+    }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
     setRelation(props.relation);

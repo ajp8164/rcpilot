@@ -1,6 +1,6 @@
 import { ListItemInput, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
 import { NumberFilterState, NumberRelation } from 'components/molecules/filters';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
@@ -31,6 +31,8 @@ const ListItemFilterNumber = (props: Props) => {
     NumberRelation.NE
   ];
   
+  const initializing = useRef(true);
+
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [relation, setRelation] = useState<NumberRelation>(props.relation);
   const [value, setValue] = useState(props.value);
@@ -40,6 +42,10 @@ const ListItemFilterNumber = (props: Props) => {
 
   // Controlled component state changes.
   useEffect(() => {
+    if (initializing.current) {
+      initializing.current = false;
+      return;
+    }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
     setRelation(props.relation);

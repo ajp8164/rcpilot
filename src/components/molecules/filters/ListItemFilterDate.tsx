@@ -1,6 +1,6 @@
 import { DateFilterState, DateRelation } from 'components/molecules/filters';
 import { ListItemDate, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
@@ -26,7 +26,9 @@ const ListItemFilterDate = (props: Props) => {
     DateRelation.After,
     DateRelation.Past,
   ];
-  
+
+  const initializing = useRef(true);
+
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [relation, setRelation] = useState<DateRelation>(props.relation);
   const [value, setValue] = useState(() => {
@@ -38,6 +40,10 @@ const ListItemFilterDate = (props: Props) => {
 
   // Controlled component state changes.
   useEffect(() => {
+    if (initializing.current) {
+      initializing.current = false;
+      return;
+    }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
     setRelation(props.relation);

@@ -47,14 +47,23 @@ const ListItemFilterDate = (props: Props) => {
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
     setRelation(props.relation);
-    setValue(props.value);
+    setTimeout(() => {
+      setValue(props.value);
+    }, 500); // Allows expanded animation to complete before possibly setting value to [].
     setExpanded(newIndex > 0);
   }, [ props.relation, props.value ]);
   
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(DateRelation)[index] as DateRelation;
     setRelation(newRelation);
-    onValueChange({relation: newRelation, value});
+
+    let v = value;
+    if (index > 0 && v.length === 0) {
+      v = [DateTime.now().toISO()!];
+    }
+    
+    onValueChange({relation: newRelation, value: v});
+    setValue(v);
     setExpanded(index > 0);
   };
 

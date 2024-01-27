@@ -22,3 +22,10 @@ export enum ScanCodeSize {
   Small = 'Small',
   None = 'None',
 };
+
+export enum TimeSpan {
+  Days = 'Days',
+  Weeks = 'Weeks',
+  Months = 'Months',
+  Years = 'Years',
+};

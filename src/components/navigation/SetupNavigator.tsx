@@ -40,6 +40,7 @@ import React from 'react';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
 import ReportFiltersNavigator from 'components/navigation/ReportFiltersNavigator';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
+import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
 import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
@@ -219,6 +220,14 @@ const SetupNavigator = () => {
         options={{
           headerShown: false,
           presentation: 'fullScreenModal',
+        }}
+      />
+      <SetupStack.Screen
+        name="ReportViewerNavigator"
+        component={ReportViewerNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
         }}
       />
       <SetupStack.Screen

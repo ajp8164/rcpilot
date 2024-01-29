@@ -7,6 +7,7 @@ import { ScrollView, View } from 'react-native';
 import { eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -122,6 +123,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
   };
 
   return (
+    <AvoidSoftInputView style={{ flex: 1 }}>
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
       <ListItemInput
@@ -206,6 +208,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <View style={{height: theme.insets.bottom}}/>
     </ScrollView>
+    </AvoidSoftInputView>
   );
 };
 

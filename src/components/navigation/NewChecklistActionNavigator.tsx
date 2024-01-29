@@ -30,6 +30,7 @@ const NewChecklistActionNavigator = () => {
       }}>
         <NewChecklistActionStack.Screen
           name="NewChecklistAction"
+          // @ts-expect-error
           component={ChecklistActionEditorScreen}
           options={{
             title: 'New Action',

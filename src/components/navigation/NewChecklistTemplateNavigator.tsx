@@ -32,6 +32,7 @@ const NewChecklistTemplateNavigator = () => {
       }}>
         <NewChecklistTemplateStack.Screen
           name="NewChecklistTemplate"
+          // @ts-expect-error
           component={ChecklistTemplateEditorScreen}
           options={{
             title: 'New Template',

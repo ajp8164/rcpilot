@@ -14,6 +14,8 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 
+// CompositeScreenProps not working here since NewEventStyle is also in the SetupNavigator
+// just using a different presentation (didn't create a new navigator for a single screen).
 export type Props =
   NativeStackScreenProps<SetupNavigatorParamList, 'EventStyleEditor'> |
   NativeStackScreenProps<SetupNavigatorParamList, 'NewEventStyle'>;

@@ -8,6 +8,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -16,9 +17,10 @@ import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
-export type Props =
-  NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellerEditor'> |
-  NativeStackScreenProps<NewModelPropellerNavigatorParamList, 'NewModelPropeller'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellerEditor'>,
+  NativeStackScreenProps<NewModelPropellerNavigatorParamList, 'NewModelPropeller'>
+>;
 
 const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const { modelPropellerId } = route.params || {};
@@ -170,7 +172,6 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
           title={'Measurement Units'}
           value={measurementUnits}
           position={['first', 'last']}
-          // @ts-ignore
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Measurement Units',
             headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
@@ -183,7 +184,6 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={notes || 'Notes'}
           position={['first', 'last']}
-          // @ts-ignore
           onPress={() => navigation.navigate('Notes', {
             title: 'Propeller Notes',
             text: notes,

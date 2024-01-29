@@ -7,6 +7,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,9 +16,10 @@ import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
-export type Props =
-  NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuelEditor'> |
-  NativeStackScreenProps<NewModelFuelNavigatorParamList, 'NewModelFuel'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuelEditor'>,
+  NativeStackScreenProps<NewModelFuelNavigatorParamList, 'NewModelFuel'>
+>;
 
 const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   const { modelFuelId } = route.params || {};
@@ -124,7 +126,6 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={notes || 'Notes'}
           position={['first', 'last']}
-          // @ts-ignore
           onPress={() => navigation.navigate('Notes', {
             title: 'Fuel Notes',
             text: notes,

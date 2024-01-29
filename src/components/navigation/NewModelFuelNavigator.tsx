@@ -30,6 +30,7 @@ const NewModelFuelNavigator = () => {
         }}>
         <NewModelFuelStack.Screen
           name='NewModelFuel'
+          // @ts-expect-error
           component={ModelFuelEditorScreen}
           options={{
             title: 'New Fuel',

@@ -37,25 +37,6 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
   const [name, setName] = useState(reportFilter?.name || undefined);
   const [values, setValues] = useSetState(reportFilter?.toJSON().values as BatteryScanCodesReportFilterValues || defaultFilter);
 
-  const onFilterValueChange = (property: keyof BatteryScanCodesReportFilterValues, value: FilterState) => {
-    setValues({ [property]: value }, {assign: true});
-  };
-
-  const resetFilter = () => {
-    setValues(defaultFilter, {assign: true});
-  };
-
-  const relationsAreDefault = () => {
-    // Whether or not the set value relations are all set to the default value relations.
-    let result = false;
-    Object.keys(values).forEach(k => {
-      result = result || 
-        (values[k as keyof BatteryScanCodesReportFilterValues].relation !==
-          defaultFilter[k as keyof BatteryScanCodesReportFilterValues].relation);
-    });
-    return !result;
-  };
-
   useEffect(() => {
     const canSave = !!name && (
       !eqString(reportFilter?.name, name) ||
@@ -111,6 +92,25 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
     });
   }, [ name, values ]);  
 
+  const onFilterValueChange = (property: keyof BatteryScanCodesReportFilterValues, value: FilterState) => {
+    setValues({ [property]: value }, {assign: true});
+  };
+
+  const resetFilter = () => {
+    setValues(defaultFilter, {assign: true});
+  };
+
+  const relationsAreDefault = () => {
+    // Whether or not the set value relations are all set to the default value relations.
+    let result = false;
+    Object.keys(values).forEach(k => {
+      result = result || 
+        (values[k as keyof BatteryScanCodesReportFilterValues].relation !==
+          defaultFilter[k as keyof BatteryScanCodesReportFilterValues].relation);
+    });
+    return !result;
+  };
+
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
@@ -134,7 +134,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
       <ListItemFilterEnum
         title={'Chemistry'}
         value={values.chemistry.value}
-        relation={EnumRelation.Any}
+        relation={values.chemistry.relation}
         enumName={'Chemistries'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -146,7 +146,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
         title={'Capacity'}
         label={'mAh'}
         value={values.capacity.value}
-        relation={NumberRelation.Any}
+        relation={values.capacity.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange('capacity', filterState);

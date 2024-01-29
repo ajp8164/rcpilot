@@ -195,8 +195,8 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemFilterEnum
         title={'Pilot'}
-        value={values.pilot?.value}
-        relation={values.pilot?.relation}
+        value={values.pilot.value}
+        relation={values.pilot.relation}
         enumName={'Pilots'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -206,8 +206,8 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemFilterEnum
         title={'Location'}
-        value={values.location?.value}
-        relation={values.location?.relation}
+        value={values.location.value}
+        relation={values.location.relation}
         enumName={'Locations'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -217,8 +217,8 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemFilterEnum
         title={'Style'}
-        value={values.modelStyle?.value}
-        relation={values.modelStyle?.relation}
+        value={values.modelStyle.value}
+        relation={values.modelStyle.relation}
         enumName={'ModelStyles'}
         position={['first', 'last']}
         onValueChange={filterState => {

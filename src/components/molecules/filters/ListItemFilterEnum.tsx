@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
 import { useNavigation } from '@react-navigation/core';
+import { useSetState } from '@react-native-ajp-elements/core';
 import {useTheme} from "theme";
 import { uuidv4 } from 'lib/utils';
 
@@ -39,13 +40,15 @@ const ListItemFilterEnum = (props: Props) => {
 
   const eventName = useRef(`list-item-filter-enum-${uuidv4()}`).current;
   const [expanded, setExpanded] = useState(props.value.length > 0);
-  const [relation, setRelation] = useState<EnumRelation>(props.relation);
-  const [value, setValue] = useState(props.value);
+  const [filterState, setFilterState] = useSetState<EnumFilterState>({
+    relation: props.relation,
+    value: props.value.length ? props.value : [],
+  });
   const [index, setIndex] = useState(() =>
     segments.findIndex(seg => { return seg === props.relation })
   );
 
-  const enumFilterConfig = useEnumFilterConfig(enumName, relation);
+  const enumFilterConfig = useEnumFilterConfig(enumName, filterState.relation);
 
   // Controlled component state changes.
   useEffect(() => {
@@ -55,18 +58,29 @@ const ListItemFilterEnum = (props: Props) => {
     }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
-    setRelation(props.relation);
-    setTimeout(() => {
-      setValue(props.value);
-    }, 500); // Allows expanded animation to complete before possibly setting value to [].
-    setExpanded(newIndex > 0);
+
+    if (props.relation !== filterState.relation && props.relation === EnumRelation.Any) {
+      // Closing
+      setExpanded(false);
+      setTimeout(() => {
+        setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      }, 300);
+    } else if (props.relation !== filterState.relation && props.relation !== EnumRelation.Any) {
+      // Opening
+      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      setTimeout(() => {
+        setExpanded(true);
+      }, 300);
+    } else {
+      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+    }
   }, [ props.relation, props.value ]);
 
   useEffect(() => {
     const onChangeFilter = (value: string[]) => {
       // Set our local state and pass the entire state back to the caller.
-      setValue(value);
-      onValueChange({relation, value});
+      setFilterState({value}, {assign: true});
+      onValueChange({relation: filterState.relation, value});
     };
 
     // Event handler for EnumPicker
@@ -75,25 +89,36 @@ const ListItemFilterEnum = (props: Props) => {
     return () => {
       event.removeListener(eventName, onChangeFilter);
     };
-  }, [ relation ]);
+  }, [ filterState.relation ]);
 
   const valueToString = () => {
-    return value?.toString().replaceAll(',', ', ').replace(/(, )(?!.*\1)/, ', or ');
+    return filterState.value?.toString().replaceAll(',', ', ').replace(/(, )(?!.*\1)/, ', or ');
   };
 
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(EnumRelation)[index] as EnumRelation;
-    setRelation(newRelation);
 
     // Reset the value of the filter if choosing Any.
-    let newValue = value;
+    let newValue = filterState.value;
     if (newRelation === EnumRelation.Any) {
       newValue = [];
-      setValue(newValue);
     }
-    
-    onValueChange({relation: newRelation, value: newValue});
-    setExpanded(index > 0);
+
+    if (newRelation !== EnumRelation.Any) {
+      // Opening
+      setFilterState({relation: newRelation, value: newValue}, {assign: true});
+      onValueChange({relation: newRelation, value: newValue});
+      setTimeout(() => {
+        setExpanded(true);
+      });
+    } else {
+      // Closing
+      setExpanded(false);
+      setTimeout(() => {
+        setFilterState({relation: newRelation, value: newValue}, {assign: true});
+        onValueChange({relation: newRelation, value: newValue});
+      }, 300);
+    }
   };
 
   return (
@@ -109,13 +134,13 @@ const ListItemFilterEnum = (props: Props) => {
       ExpandableComponent={
         <ListItem
           title={'Any of these values...'}
-          titleStyle={value?.length === 0 ? {color: theme.colors.assertive}: {}}
-          subtitle={value?.length === 0 ?  'None' : valueToString()}
+          titleStyle={filterState.value?.length === 0 ? {color: theme.colors.assertive}: {}}
+          subtitle={filterState.value?.length === 0 ?  'None' : valueToString()}
           position={position?.includes('last') ? ['last'] : []}
           onPress={() => navigation.navigate('EnumPicker', {
             ...enumFilterConfig,
-            selected: value,
-            eventName: eventName,
+            selected: filterState.value,
+            eventName,
           })}
         />
       }

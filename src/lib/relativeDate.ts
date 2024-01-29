@@ -20,7 +20,7 @@ export const getRelativeDate = (dateStr: ISODateString) => {
 };
 
 const timeSpanItems: WheelPickerItem[][] = [
-  new Array(10).fill(null).map((_, index)=> ({label: `${index+1}`, value: `${index+1}`})),
+  new Array(90).fill(null).map((_, index)=> ({label: `${index+1}`, value: `${index+1}`})),
   new Array(Object.values(TimeSpan).length).fill(null).map((_, index) => (
     {
       label: Object.values(TimeSpan)[index],
@@ -36,7 +36,7 @@ export const getTimeSpanItems = () => {
     default: {
       // Arrays index as [wheel][item index in wheel]
       value: items[0][0].value as string,
-      items: [ items[0][0].value as string, items[1][1].value as string ],
+      items: [ items[0][0].value as string, items[1][0].value as string ],
     }
   };
 };

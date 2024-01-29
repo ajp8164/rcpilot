@@ -135,7 +135,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
       <ListItemFilterEnum
         title={'Model Type'}
         value={values.modelType.value}
-        relation={EnumRelation.Any}
+        relation={values.modelType.relation}
         enumName={'ModelTypes'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -146,7 +146,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
       <ListItemFilterEnum
         title={'Category'}
         value={values.category.value}
-        relation={EnumRelation.Any}
+        relation={values.category.relation}
         enumName={'Categories'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -157,7 +157,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
       <ListItemFilterDate
         title={'Last Event'}
         value={values.lastEvent.value}
-        relation={DateRelation.Any}
+        relation={values.lastEvent.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange('lastEvent', filterState);

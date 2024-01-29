@@ -1,10 +1,10 @@
-import { Battery, BatteryCellArchitecture, BatteryChemistry } from "types/battery";
+import { BatteryCellArchitecture, BatteryChemistry } from "types/battery";
 import { batterySCellConfigurationItems, batterySPCellConfigurationItems } from "lib/battery";
 
-const getBatteryCellArchitecture = (battery: Battery): BatteryCellArchitecture => {
+const getBatteryCellArchitecture = (chemistry: BatteryChemistry): BatteryCellArchitecture => {
   if (
-    battery.chemistry.includes(BatteryChemistry.NiCd) ||
-    battery.chemistry.includes(BatteryChemistry.NiMH)
+    chemistry.includes(BatteryChemistry.NiCd) ||
+    chemistry.includes(BatteryChemistry.NiMH)
   ) {
     return BatteryCellArchitecture.SeriesCells;
   } else {
@@ -12,28 +12,30 @@ const getBatteryCellArchitecture = (battery: Battery): BatteryCellArchitecture =
   }
 };
 
-export const batteryCellConfigurationToString = (battery: Battery) => {
-  if (getBatteryCellArchitecture(battery) === BatteryCellArchitecture.SeriesParallelCells) {
-    const s = battery.sCells;
-    const p = battery.pCells;
+export const batteryCellConfigurationToString = (
+  chemistry: BatteryChemistry,
+  cellConfiguration: string[],
+) => {
+  const sCells = parseInt(cellConfiguration[0]);
+  const pCells = parseInt(cellConfiguration[1]);
+  if (getBatteryCellArchitecture(chemistry) === BatteryCellArchitecture.SeriesParallelCells) {
     const series =
-      s > 0
-        ? batterySPCellConfigurationItems[0][Number(s) - 1].labelShort || ''
+      sCells > 0
+        ? batterySPCellConfigurationItems[0][Number(sCells) - 1].labelShort || ''
         : '';
     const parallel =
-      p > 0
-        ? batterySPCellConfigurationItems[1][Number(p) - 1].labelShort || ''
+      pCells > 0
+        ? batterySPCellConfigurationItems[1][Number(pCells) - 1].labelShort || ''
         : '';
 
     return `${series}${parallel.length > 0 ? ' / ' : ''}${parallel}`;
   } else {
-    const s = battery.sCells;
-    return batterySCellConfigurationItems[Number(s) - 1].label;
+    return batterySCellConfigurationItems[Number(sCells) - 1].label;
   }
 };
 
-export const getBatteryCellConfigurationItems = (battery: Battery) => {
-  if (getBatteryCellArchitecture(battery) === BatteryCellArchitecture.SeriesParallelCells) {
+export const getBatteryCellConfigurationItems = (chemistry: BatteryChemistry) => {
+  if (getBatteryCellArchitecture(chemistry) === BatteryCellArchitecture.SeriesParallelCells) {
     return batterySPCellConfigurationItems;
   } else {
     return batterySCellConfigurationItems;

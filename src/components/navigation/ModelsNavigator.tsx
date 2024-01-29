@@ -2,8 +2,8 @@ import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
 import FlightsScreen from 'components/FlightsScreen';
+import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
-import ModelScreen from 'components/ModelScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
@@ -42,9 +42,12 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='Model'
-        component={ModelScreen}
-        />
+        name='ModelEditor'
+        component={ModelEditorScreen}
+        options={{
+          title: '',
+        }}
+      />
       <ModelsStack.Screen
         name='ModelFiltersNavigator'
         component={ModelFiltersNavigator}

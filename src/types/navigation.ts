@@ -42,12 +42,15 @@ export type BatteriesNavigatorParamList = {
   BatteryCycle: {
     batteryCycleId: string;
   };
+  BatteryEditor: {
+    batteryId: string;
+  };
   BatteryFiltersNavigator: undefined;
   BatteryPerformance: undefined;
   BatteryPerformanceComparisonPicker: undefined;
   BatteryPerformanceNavigator: undefined;
   EnumPicker: EnumPickerInterface;
-  NewBatteryNavigator: undefined;
+  NewBatteryNavigator: NavigatorScreenParams<NewBatteryNavigatorParamList>;
   NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
   Notes: {
     title?: string;
@@ -103,11 +106,11 @@ export type ModelsNavigatorParamList = {
   LocationDetails: {
     locationId: string;
   };
-  NewModelNavigator: undefined;
-  Models: undefined;
-  Model: {
+  NewModelNavigator: NavigatorScreenParams<NewModelNavigatorParamList>;
+  ModelEditor: {
     modelId: string;
   };
+  Models: undefined;
   ModelFiltersNavigator: undefined;
   Notes: {
     title?: string;
@@ -172,7 +175,9 @@ export type ReportFiltersNavigatorParamList = {
 
 export type NewBatteryNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
-  NewBattery: undefined;
+  NewBattery: {
+    batteryId?: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -201,7 +206,9 @@ export type NewBatteryCycleNavigatorParamList = {
 
 export type NewModelNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
-  NewModel: undefined;
+  NewModel: {
+    modelId?: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -359,7 +366,9 @@ export type SetupNavigatorParamList = {
   }
   NewChecklistTemplateNavigator: undefined;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
-  NewEventStyle: undefined;
+  NewEventStyle: {
+    eventStyleId: string;
+  };
   NewModelCategory: undefined;
   NewModelFuelNavigator: undefined;
   NewModelPropellerNavigator: undefined;

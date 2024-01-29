@@ -19,6 +19,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -26,9 +27,10 @@ import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
-export type Props =
-  NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplateEditor'> |
-  NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplateEditor'>,
+  NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>
+>;
 
 const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   const { checklistTemplateId } = route.params || {};
@@ -131,7 +133,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     if (checklistTemplate) {
       realm.write(() => {
-        // @ts-expect-error Not recognizing the target as an embedded array.
+        // @ts-expect-error: not recognizing the target as a (realm) embedded array
         checklistTemplate.actions = actions;
       });
     }
@@ -270,7 +272,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
               onPress: () => deleteAction(index),
             }]
           }}
-          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
             checklistTemplateType: type,
@@ -299,7 +300,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           title={'Template for List Type'}
           value={type}
           position={['last']}
-          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('EnumPicker', {
             title: 'Template Type',
             headerBackTitle: 'Back',
@@ -333,7 +333,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           titleStyle={s.add}
           position={['first', 'last']}
           rightImage={false}
-          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('NewChecklistActionNavigator', {
             screen: 'NewChecklistAction',
             params: { 

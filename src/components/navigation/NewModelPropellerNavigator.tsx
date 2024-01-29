@@ -31,6 +31,7 @@ const NewModelPropellerNavigator = () => {
         }}>
         <NewModelPropellerStack.Screen
           name="NewModelPropeller"
+          // @ts-expect-error
           component={ModelPropellerEditorScreen}
           options={{
             title: 'New Propeller',

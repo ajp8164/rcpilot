@@ -14,6 +14,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString } from 'realmdb/helpers';
 
 import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Realm from 'realm';
@@ -25,9 +26,10 @@ import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
 
-export type Props =
-  NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'> |
-  NativeStackScreenProps<NewChecklistActionNavigatorParamList, 'NewChecklistAction'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'>,
+  NativeStackScreenProps<NewChecklistActionNavigatorParamList, 'NewChecklistAction'>
+>;
 
 const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const {
@@ -285,7 +287,6 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={notes || 'Notes'}
           position={['first', 'last']}
-          // @ts-expect-error The union type for navigators is not recognized.
           onPress={() => navigation.navigate('Notes', {
             title: 'Action Notes',
             text: notes,

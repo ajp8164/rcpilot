@@ -18,7 +18,7 @@ export type EnumPickerIconProps = {
   name: string | string[];
   color?: string;
   size?: number;
-  // @ts-ignore: should be typed StyleProp<TextStyle>
+  // @ts-ignore: should be typed StyleProp<TextStyle>, not working
   style?: any;
   hideTitle?: boolean;
 } | null;

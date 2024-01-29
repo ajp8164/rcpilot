@@ -272,7 +272,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
           <View style={{flex:1}}>
             <NestableDraggableFlatList
-              // @ts-expect-error Typing is incorrect on renderItem
+              // @ts-expect-error: typing seems incorrect on renderItem
               data={emReports.sorted('ordinal')}
               renderItem={renderEMReport}
               keyExtractor={(_item, index) => `${index}`}
@@ -300,7 +300,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           <Divider text={'QR CODE REPORTS'}/>
           <View style={{flex:1}}>
             <NestableDraggableFlatList
-              // @ts-expect-error Typing is incorrect on renderItem
+              // @ts-expect-error: typing seems incorrect on renderItem
               data={scReports.sorted('ordinal')}
               renderItem={renderSCReport}
               keyExtractor={(_item, index) => `${index}`}

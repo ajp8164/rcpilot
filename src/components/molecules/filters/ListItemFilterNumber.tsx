@@ -117,7 +117,7 @@ const ListItemFilterNumber = (props: Props) => {
           label={label}
           position={position?.includes('last') ? ['last'] : []}
           keyboardType={'number-pad'}
-          numeric
+          numeric={true}
           numericProps={numericProps}
           value={filterState.value[0]}
           placeholder={'0'}

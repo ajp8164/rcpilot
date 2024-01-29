@@ -22,6 +22,10 @@ const defaultFilter: BatteryScanCodesReportFilterValues = {
   capacity: {relation: NumberRelation.Any, value: []},
 };
 
+const filterValueLabels: Record<string, string> = {
+  capacity: 'mAh',
+};
+
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportBatteryScanCodesFilterEditor'>;
 
 const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) => {
@@ -92,8 +96,10 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
     });
   }, [ name, values ]);  
 
-  const onFilterValueChange = (property: keyof BatteryScanCodesReportFilterValues, value: FilterState) => {
-    setValues({ [property]: value }, {assign: true});
+  const onFilterValueChange = (property: keyof BatteryScanCodesReportFilterValues, filterState: FilterState) => {
+    // If there is a value label then add it to the filter state value as position [1].
+    filterValueLabels[property] ? filterState.value[1] = filterValueLabels[property] : null;
+    setValues({ [property]: filterState }, {assign: true});
   };
 
   const resetFilter = () => {
@@ -144,7 +150,8 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
       <Divider />
       <ListItemFilterNumber
         title={'Capacity'}
-        label={'mAh'}
+        label={filterValueLabels['capacity']}
+        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99999}}
         value={values.capacity.value}
         relation={values.capacity.relation}
         position={['first', 'last']}

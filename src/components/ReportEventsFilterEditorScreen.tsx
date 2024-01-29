@@ -29,6 +29,10 @@ const defaultFilter: EventReportFilterValues = {
   outcome: {relation: EnumRelation.Any, value: []},
 };
 
+const filterValueLabels: Record<string, string> = {
+  duration: 'm:ss',
+};
+
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportEventsFilterEditor'>;
 
 const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
@@ -99,8 +103,10 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
     });
   }, [ name, values ]);
 
-  const onFilterValueChange = (property: keyof EventReportFilterValues, value: FilterState) => {
-    setValues({ [property]: value }, {assign: true});
+  const onFilterValueChange = (property: keyof EventReportFilterValues, filterState: FilterState) => {
+    // If there is a value label then add it to the filter state value as position [1].
+    filterValueLabels[property] ? filterState.value[1] = filterValueLabels[property] : null;
+    setValues({ [property]: filterState }, {assign: true});
   };
 
   const resetFilter = () => {
@@ -183,7 +189,7 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemFilterNumber
         title={'Duration'}
-        label={'m:ss'}
+        label={filterValueLabels['duration']}
         numericProps={{separator: ':', prefix: '', maxValue: 999}}
         value={values.duration.value}
         relation={values.duration?.relation}

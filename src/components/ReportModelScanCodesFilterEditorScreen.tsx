@@ -93,8 +93,8 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
     });
   }, [ name, values ]);  
 
-  const onFilterValueChange = (property: keyof ModelScanCodesReportFilterValues, value: FilterState) => {
-    setValues({ [property]: value }, {assign: true});
+  const onFilterValueChange = (property: keyof ModelScanCodesReportFilterValues, filterState: FilterState) => {
+    setValues({ [property]: filterState }, {assign: true});
   };
 
   const resetFilter = () => {

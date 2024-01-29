@@ -123,6 +123,7 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
       <ListItemFilterNumber
         title={'Capacity'}
         label={'mAh'}
+        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99999}}
         value={filter[BatteryProperty.Capacity].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}

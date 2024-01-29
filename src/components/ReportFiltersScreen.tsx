@@ -116,7 +116,6 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         onPress={() => filterType && navigation.navigate(reportFilterEditor[filterType], {})}
       />
-      <Divider />
       {filters.length ?
         filterType === FilterType.ReportEventsFilter && <Divider text={'SAVED EVENT FILTERS'} /> ||
         filterType === FilterType.ReportMaintenanceFilter && <Divider text={'SAVED MAINTENANCE FILTERS'} /> ||

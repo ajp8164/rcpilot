@@ -26,6 +26,10 @@ const defaultFilter: MaintenanceReportFilterValues = {
   notes: {relation: StringRelation.Any, value: []},
 };
 
+const filterValueLabels: Record<string, string> = {
+  costs: '$',
+};
+
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportMaintenanceFilterEditor'>;
 
 const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
@@ -96,8 +100,10 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
     });
   }, [ name, values ]);
 
-  const onFilterValueChange = (property: keyof MaintenanceReportFilterValues, value: FilterState) => {
-    setValues({ [property]: value }, {assign: true});
+  const onFilterValueChange = (property: keyof MaintenanceReportFilterValues, filterState: FilterState) => {
+    // If there is a value label then add it to the filter state value as position [1].
+    filterValueLabels[property] ? filterState.value[1] = filterValueLabels[property] : null;
+    setValues({ [property]: filterState }, {assign: true});
   };
 
   const resetFilter = () => {
@@ -180,7 +186,6 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemFilterNumber
         title={'Costs'}
-        label={''}
         value={values.costs.value}
         relation={values.costs.relation}
         position={['first', 'last']}

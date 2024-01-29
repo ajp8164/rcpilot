@@ -90,7 +90,7 @@ const NewBatteryCycleScreen = ({ navigation }: Props) => {
           placeholder={'Value'}
           label={'mAh'}
           numeric={true}
-          numericProps={{prefix: '', precision: 0}}
+          numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99999}}
           position={['first']}
           onChangeText={() => null}
         />

@@ -40,7 +40,10 @@ const ModelsScreen = ({ navigation }: Props) => {
             <Icon
               name={'plus'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('NewModelNavigator')}
+              onPress={() => navigation.navigate('NewModelNavigator', {
+                screen: 'NewModel',
+                params: {}
+              })}
             />
           </>
         );
@@ -59,13 +62,13 @@ const ModelsScreen = ({ navigation }: Props) => {
           subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
           position={['first', 'last']}
           onPress={() => navigation.navigate('FlightNavigator', {
-            modelId: '1'
+            modelId: '123456789012'
           })}
           rightImage={
             <Pressable
               style={{flexDirection: 'row'}}
-              onPress={() => navigation.navigate('Model', {
-                modelId: '1'
+              onPress={() => navigation.navigate('ModelEditor', {
+                modelId: '123456789012'
               })}>
               <CustomIcon
                 name={'circle-info'}

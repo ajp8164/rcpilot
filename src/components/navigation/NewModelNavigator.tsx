@@ -1,9 +1,9 @@
+import EnumPickerScreen from 'components/EnumPickerScreen';
+import ModelEditorScreen from 'components/ModelEditorScreen';
 import NavContext from './NavContext';
 import { NewModelNavigatorParamList } from 'types/navigation';
-import NewModelScreen from 'components/NewModelScreen';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
-import EnumPickerScreen from 'components/EnumPickerScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
@@ -32,9 +32,10 @@ const NewModelNavigator = () => {
       }}>
         <NewModelStack.Screen
           name='NewModel'
-          component={NewModelScreen}
+          // @ts-expect-error
+          component={ModelEditorScreen}
           options={{
-            title: 'New Model',
+            title: '',
           }}
         />
         <NewModelStack.Screen
@@ -44,13 +45,13 @@ const NewModelNavigator = () => {
             title: 'Model Notes',
           }}
         />
-      <NewModelStack.Screen
-        name="EnumPicker"
-        component={EnumPickerScreen}
-        options={{
-          title: '',
-        }}
-      />
+        <NewModelStack.Screen
+          name="EnumPicker"
+          component={EnumPickerScreen}
+          options={{
+            title: '',
+          }}
+        />
       </NewModelStack.Navigator>
     </NavContext.Provider>
   );

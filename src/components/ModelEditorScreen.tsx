@@ -1,31 +1,40 @@
+import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import { ModelViewMethods, ModelViewProps } from './types';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
+import { modelCategories, modelPropellers, modelStyles } from '../mocks/enums';
+import { useObject, useRealm } from '@realm/react';
 
+import { BSON } from 'realm';
+import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { Model } from 'realmdb/Model';
 import { ModelType } from 'types/model';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScanCodeSize } from 'types/common';
 import { ScrollView } from 'react-native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { modelTypeIcons } from 'lib/model';
-import { useNavigation } from '@react-navigation/core';
 import { enumIdsToValues } from 'lib/utils';
+import { makeStyles } from '@rneui/themed';
+import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
-import { modelCategories, modelPropellers, modelStyles } from '../../../mocks/enums';
 
-type ModelView = ModelViewMethods;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<ModelsNavigatorParamList, 'ModelEditor'>,
+  NativeStackScreenProps<NewModelNavigatorParamList, 'NewModel'>
+>;
 
-type NavigationProps =
-  StackNavigationProp<ModelsNavigatorParamList, 'Model'> &
-  StackNavigationProp<NewModelNavigatorParamList, 'NewModel'>;
+const ModelEditorScreen = ({ navigation, route }: Props) => {
+  const { modelId } = route.params;
 
-const ModelView = (props: ModelViewProps) => {
-  const { modelId } = props;
-
-  const navigation = useNavigation<NavigationProps>();
+  const theme = useTheme();
+  const s = useStyles(theme);
   const event = useEvent();
+
+  const realm = useRealm();
+  const model = useObject(Model, new BSON.ObjectId(modelId));
 
   const [batteryLoggingEnabled, setBatteryLoggingEnabled] = useState(false);
   const [fuelLoggingEnabled, setFuelLoggingEnabled] = useState(false);
@@ -33,6 +42,48 @@ const ModelView = (props: ModelViewProps) => {
   const [isRetired, setIsRetired] = useState(false);
   const [expandedLastFlight, setExpandedLastFlight] = useState(false);
   const [lastFlightDate, setLastFlightDate] = useState<string>();
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: model ? model.type : 'New Model',
+      headerLeft: () => (
+        <Button
+          title={'Cancel'}
+          titleStyle={theme.styles.buttonClearTitle}
+          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+          onPress={navigation.goBack}
+        />
+      ),
+      headerRight: () => (
+        <Button
+          title={'Save'}
+          titleStyle={theme.styles.buttonClearTitle}
+          buttonStyle={[theme.styles.buttonClear, s.saveButton]}
+          onPress={() => null}
+        />
+      ),
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: ()  => {
+  //       return (
+  //         <>
+  //           <Icon
+  //             name={'chevron-up'}
+  //             style={s.headerIcon}
+  //             onPress={() => null}/>
+  //           <Icon
+  //             name={'chevron-down'}
+  //             style={s.headerIcon}
+  //             onPress={() => null}/>
+  //         </>
+  //       );
+  //     },
+  //   });
+  // }, []);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -72,6 +123,9 @@ const ModelView = (props: ModelViewProps) => {
   };
 
   return (
+    <SafeAreaView
+      edges={['left', 'right']}
+      style={theme.styles.view}>
     <ScrollView
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
@@ -279,11 +333,29 @@ const ModelView = (props: ModelViewProps) => {
       <ListItem
         title={'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {})}
+        onPress={() => navigation.navigate('Notes', {
+          title: 'String Value Notes',
+          text: notes,
+          eventName: 'model-notes',
+        })}
       />
       <Divider />
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
-export default ModelView;
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+  cancelButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  saveButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+}));
+
+export default ModelEditorScreen;

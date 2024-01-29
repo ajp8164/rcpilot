@@ -41,7 +41,10 @@ const BatteriesScreen = ({ navigation }: Props) => {
             <Icon
               name={'plus'}
               style={s.headerIcon}
-              onPress={() => navigation.navigate('NewBatteryNavigator')}
+              onPress={() => navigation.navigate('NewBatteryNavigator', {
+                screen: 'NewBattery',
+                params: {}
+              })}
             />
           </>
         );
@@ -68,8 +71,8 @@ const BatteriesScreen = ({ navigation }: Props) => {
           rightImage={
             <Pressable
               style={{flexDirection: 'row'}}
-              onPress={() => navigation.navigate('Battery', {
-                batteryId: '1'
+              onPress={() => navigation.navigate('BatteryEditor', {
+                batteryId: '123456789012'
               })}>
               <CustomIcon
                 name={'circle-info'}

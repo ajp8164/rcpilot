@@ -4,11 +4,11 @@ import BatteryCellResistancesScreen from 'components/BatteryCellResistancesScree
 import BatteryCellVoltagesScreen from 'components/BatteryCellVoltagesScreen';
 import BatteryCycleScreen from 'components/BatteryCycleScreen';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
+import BatteryEditorScreen from 'components/BatteryEditorScreen';
 import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import BatteryPerformanceComparisonPickerScreen from 'components/BatteryPerformanceComparisonPickerScreen';
 import BatteryPerformanceNavigator from 'components/navigation/BatteryPerformanceNavigator';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
-import BatteryScreen from 'components/BatteryScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
 import NewBatteryNavigator from './NewBatteryNavigator';
@@ -48,8 +48,11 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='Battery'
-        component={BatteryScreen}
+        name='BatteryEditor'
+        component={BatteryEditorScreen}
+        options={{
+          title: '',
+        }}
       />
       <BatteriesStack.Screen
         name='BatteryCellResistances'

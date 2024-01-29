@@ -138,7 +138,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <ListItemFilterEnum
         title={'Model'}
         value={values.model.value}
-        relation={EnumRelation.Any}
+        relation={values.model.relation}
         enumName={'Models'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -149,7 +149,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <ListItemFilterEnum
         title={'Model Type'}
         value={values.modelType.value}
-        relation={EnumRelation.Any}
+        relation={values.modelType.relation}
         enumName={'ModelTypes'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -160,7 +160,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <ListItemFilterEnum
         title={'Category'}
         value={values.category.value}
-        relation={EnumRelation.Any}
+        relation={values.category.relation}
         enumName={'Categories'}
         position={['first', 'last']}
         onValueChange={filterState => {
@@ -171,7 +171,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <ListItemFilterDate
         title={'Date'}
         value={values.date.value}
-        relation={DateRelation.Any}
+        relation={values.date.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange('date', filterState);
@@ -182,7 +182,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
         title={'Costs'}
         label={''}
         value={values.costs.value}
-        relation={NumberRelation.Any}
+        relation={values.costs.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange('costs', filterState);
@@ -192,7 +192,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       <ListItemFilterString
         title={'Notes'}
         value={values.notes.value}
-        relation={StringRelation.Any}
+        relation={values.notes.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange('notes', filterState);
@@ -200,7 +200,8 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       />
       <Divider />
       <View style={{height: theme.insets.bottom}}/>
-    </ScrollView>  );
+    </ScrollView>
+  );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({

@@ -3,8 +3,11 @@ import { StringFilterState, StringRelation } from 'components/molecules/filters'
 import { useEffect, useRef, useState } from "react";
 
 import lodash from 'lodash';
+import { useEvent } from 'lib/event';
 import { useNavigation } from '@react-navigation/core';
+import { useSetState } from '@react-native-ajp-elements/core';
 import {useTheme} from "theme";
+import { uuidv4 } from 'lib/utils';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: StringFilterState) => void;
@@ -22,6 +25,7 @@ const ListItemFilterString = (props: Props) => {
 
   const theme = useTheme();
   const navigation = useNavigation<any>();
+  const event = useEvent();
 
   const segments = [
     StringRelation.Any,
@@ -31,9 +35,12 @@ const ListItemFilterString = (props: Props) => {
   
   const initializing = useRef(true);
 
+  const eventName = useRef(`list-item-filter-string-${uuidv4()}`).current;
   const [expanded, setExpanded] = useState(props.value.length > 0);
-  const [relation, setRelation] = useState<StringRelation>(props.relation);
-  const [value, setValue] = useState(props.value);
+  const [filterState, setFilterState] = useSetState<StringFilterState>({
+    relation: props.relation,
+    value: props.value.length ? props.value : [],
+  });
   const [index, setIndex] = useState(() =>
     segments.findIndex(seg => { return seg === props.relation })
   );
@@ -46,25 +53,64 @@ const ListItemFilterString = (props: Props) => {
     }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
-    setRelation(props.relation);
-    setTimeout(() => {
-      setValue(props.value);
-    }, 500); // Allows expanded animation to complete before possibly setting value to [].
-    setExpanded(newIndex > 0);
+
+    if (props.relation !== filterState.relation && props.relation === StringRelation.Any) {
+      // Closing
+      setExpanded(false);
+      setTimeout(() => {
+        setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      }, 300);
+    } else if (props.relation !== filterState.relation && props.relation !== StringRelation.Any) {
+      // Opening
+      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      setTimeout(() => {
+        setExpanded(true);
+      }, 300);
+    } else {
+      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+    }
   }, [ props.relation, props.value ]);
+
+  useEffect(() => {
+    const onChangeFilter = (value: string) => {
+      // Set our local state and pass the entire state back to the caller.
+      setFilterState({value: [value]}, {assign: true});
+      onValueChange({relation: filterState.relation, value: [value]});
+    };
+
+    // Event handler for Notes
+    event.on(eventName, onChangeFilter);
+
+    return () => {
+      event.removeListener(eventName, onChangeFilter);
+    };
+  }, [ filterState.relation ]);
   
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(StringRelation)[index] as StringRelation;
-    setRelation(newRelation);
-    onValueChange({relation: newRelation, value});
-    setExpanded(index > 0);
-  };
 
-  const onChangedFilter = (value: string) => {
-    // Set our local state and pass the entire state back to the caller.
-    setValue([value]);
-    onValueChange({relation, value: [value]});
-  };    
+    // Reset the value of the filter if choosing Any.
+    let newValue = filterState.value;
+    if (newRelation === StringRelation.Any) {
+      newValue = [];
+    }
+
+    if (newRelation !== StringRelation.Any) {
+      // Opening
+      setFilterState({relation: newRelation, value: newValue}, {assign: true});
+      onValueChange({relation: newRelation, value: newValue});
+      setTimeout(() => {
+        setExpanded(true);
+      });
+    } else {
+      // Closing
+      setExpanded(false);
+      setTimeout(() => {
+        setFilterState({relation: newRelation, value: newValue}, {assign: true});
+        onValueChange({relation: newRelation, value: newValue});
+      }, 300);
+    }
+  };
 
   return (
     <ListItemSegmented
@@ -79,10 +125,14 @@ const ListItemFilterString = (props: Props) => {
       ExpandableComponent={
         <ListItem
           title={'The Text'}
-          titleStyle={!value ? {color: theme.colors.assertive}: {}}
-          subtitle={!value.length ?  'Matching text not specified' : value[0]}
-          position={position?.includes('last') ?  ['last'] : []}
-          onPress={() => navigation.navigate('Notes', {title: 'String Value', onDone: onChangedFilter})}
+          titleStyle={!filterState.value ? {color: theme.colors.assertive}: {}}
+          subtitle={!filterState.value.length ?  'Matching text not specified' : filterState.value[0]}
+          position={position?.includes('last') ? ['last'] : []}
+          onPress={() => navigation.navigate('Notes', {
+            title: 'String Value Notes',
+            text: filterState.value[0],
+            eventName,
+          })}
         />
       }
     />

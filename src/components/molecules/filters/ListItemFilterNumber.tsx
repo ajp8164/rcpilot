@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
+import { useSetState } from '@react-native-ajp-elements/core';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -34,8 +35,10 @@ const ListItemFilterNumber = (props: Props) => {
   const initializing = useRef(true);
 
   const [expanded, setExpanded] = useState(props.value.length > 0);
-  const [relation, setRelation] = useState<NumberRelation>(props.relation);
-  const [value, setValue] = useState(props.value);
+  const [filterState, setFilterState] = useSetState<NumberFilterState>({
+    relation: props.relation,
+    value: props.value.length ? props.value : [],
+  });
   const [index, setIndex] = useState(() =>
     segments.findIndex(seg => { return seg === props.relation })
   );
@@ -48,24 +51,54 @@ const ListItemFilterNumber = (props: Props) => {
     }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
-    setRelation(props.relation);
-    setTimeout(() => {
-      setValue(props.value);
-    }, 500); // Allows expanded animation to complete before possibly setting value to [].
-    setExpanded(newIndex > 0);
+
+    if (props.relation !== filterState.relation && props.relation === NumberRelation.Any) {
+      // Closing
+      setExpanded(false);
+      setTimeout(() => {
+        setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      }, 300);
+    } else if (props.relation !== filterState.relation && props.relation !== NumberRelation.Any) {
+      // Opening
+      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      setTimeout(() => {
+        setExpanded(true);
+      }, 300);
+    } else {
+      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+    }
   }, [ props.relation, props.value ]);
 
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(NumberRelation)[index] as NumberRelation;
-    setRelation(newRelation);
-    onValueChange({relation: newRelation, value});
-    setExpanded(index > 0);
+
+    // Reset the value of the filter if choosing Any.
+    let newValue = filterState.value;
+    if (newRelation === NumberRelation.Any) {
+      newValue = [];
+    }
+
+    if (newRelation !== NumberRelation.Any) {
+      // Opening
+      setFilterState({relation: newRelation, value: newValue}, {assign: true});
+      onValueChange({relation: newRelation, value: newValue});
+      setTimeout(() => {
+        setExpanded(true);
+      });
+    } else {
+      // Closing
+      setExpanded(false);
+      setTimeout(() => {
+        setFilterState({relation: newRelation, value: newValue}, {assign: true});
+        onValueChange({relation: newRelation, value: newValue});
+      }, 300);
+    }
   };
 
   const onChangedFilter = (value: string) => {
     // Set our local state and pass the entire state back to the caller.
-    setValue([value]);
-    onValueChange({relation, value: [value]});
+    setFilterState({value: [value]}, {assign: true});
+    onValueChange({relation: filterState.relation, value: [value]});
   };    
 
   return (
@@ -86,7 +119,7 @@ const ListItemFilterNumber = (props: Props) => {
           keyboardType={'number-pad'}
           numeric
           numericProps={numericProps}
-          value={value[0]}
+          value={filterState.value[0]}
           placeholder={'0'}
           onChangeText={onChangedFilter}
         />

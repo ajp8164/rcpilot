@@ -1,0 +1,308 @@
+diff --git a/node_modules/react-native-currency-input/lib/typescript/src/props.d.ts b/node_modules/react-native-currency-input/lib/typescript/src/props.d.ts
+index 9fcef7a..d6c46b4 100644
+--- a/node_modules/react-native-currency-input/lib/typescript/src/props.d.ts
++++ b/node_modules/react-native-currency-input/lib/typescript/src/props.d.ts
+@@ -1,118 +1,125 @@
+ /// <reference types="react" />
+-import type { TextInputProps, StyleProp, ViewStyle, TextProps, TextStyle } from 'react-native';
++
++import type { StyleProp, TextInputProps, TextProps, TextStyle, ViewStyle } from 'react-native';
++
+ export interface FormatNumberOptions {
+-    /**
+-     * Character for thousands delimiter.
+-     */
+-    delimiter?: string;
+-    /**
+-     * Set this to `true` to disable negative values.
+-     */
+-    ignoreNegative?: boolean;
+-    /**
+-     * Decimal precision. Defaults to 2.
+-     */
+-    precision?: number;
+-    /**
+-     * Decimal separator character.
+-     */
+-    separator?: string;
+-    /**
+-     * Character to be prefixed on the value.
+-     */
+-    prefix?: string;
+-    /**
+-     * Character to be suffixed on the value.
+-     */
+-    suffix?: string;
+-    /**
+-     * Set this to `true` to show the `+` character on positive values.
+-     */
+-    showPositiveSign?: boolean;
+-    /**
+-     * Where the negative/positive sign (+/-) should be placed. Defaults to "afterPrefix".
+-     * Use `showPositiveSign` if you want to show the `+` sign.
+-     */
+-    signPosition?: 'beforePrefix' | 'afterPrefix';
++  /**
++   * Character for thousands delimiter.
++   */
++  delimiter?: string;
++  /**
++   * Set this to `true` to disable negative values.
++   */
++  ignoreNegative?: boolean;
++  /**
++   * Decimal precision. Defaults to 2.
++   */
++  precision?: number;
++  /**
++   * Decimal separator character.
++   */
++  separator?: string;
++  /**
++   * Character to be prefixed on the value.
++   */
++  prefix?: string;
++  /**
++   * Character to be suffixed on the value.
++   */
++  suffix?: string;
++  /**
++   * Set this to `true` to show the `+` character on positive values.
++   */
++  showPositiveSign?: boolean;
++  /**
++   * Where the negative/positive sign (+/-) should be placed. Defaults to "afterPrefix".
++   * Use `showPositiveSign` if you want to show the `+` sign.
++   */
++  signPosition?: 'beforePrefix' | 'afterPrefix';
+ }
+ export interface CurrencyInputProps extends Omit<TextInputProps, 'value'> {
+-    renderTextInput?: (props: TextInputProps) => JSX.Element;
+-    /**
+-     * Character for thousands delimiter.
+-     */
+-    delimiter?: string;
+-    /**
+-     * Max value allowed on input.
+-     * Notice that this might cause unexpected behavior if you pass a value higher than this on input `value`. In that case, consider do your own validation instead of using this property
+-     */
+-    maxValue?: number;
+-    /**
+-     * Min value allowed on input.
+-     * Notice that this might cause unexpected behavior if you pass a value lower than this on input `value`. In that case, consider do your own validation instead of using this property
+-     */
+-    minValue?: number;
+-    /**
+-     * Callback that is called when the input's value changes.
+-     * @param value The number value.
+-     */
+-    onChangeValue?(value: number | null): void;
+-    /**
+-     * Decimal precision. Defaults to 2.
+-     */
+-    precision?: number;
+-    /**
+-     * Decimal separator character.
+-     */
+-    separator?: string;
+-    /**
+-     * Character to be prefixed on the value.
+-     */
+-    prefix?: string;
+-    /**
+-     * Character to be suffixed on the value.
+-     */
+-    suffix?: string;
+-    /**
+-     * @deprecated. Use `prefix` instead.
+-     */
+-    unit?: string;
+-    /**
+-     * The number value of the input.
+-     * IMPORTANT: This is used to control the component, but keep in mind that this is not the final `value` property of the `TextInput`
+-     */
+-    value: number | null;
+-    /**
+-     * Set this to `true` to show the `+` character on positive values.
+-     */
+-    showPositiveSign?: boolean;
+-    /**
+-     * Where the negative/positive sign (+/-) should be placed. Defaults to "afterPrefix".
+-     * Use `showPositiveSign` if you want to show the `+` sign.
+-     */
+-    signPosition?: 'beforePrefix' | 'afterPrefix';
++  renderTextInput?: (props: TextInputProps) => JSX.Element;
++  /**
++   * Replaces the built-in formatter. This callback is called after input changes and before onChangeValue().
++   * @param value The number value.
++   */
++  customFormatter?(value: number): string;
++  /**
++   * Character for thousands delimiter.
++   */
++  delimiter?: string;
++  /**
++   * Max value allowed on input.
++   * Notice that this might cause unexpected behavior if you pass a value higher than this on input `value`. In that case, consider do your own validation instead of using this property
++   */
++  maxValue?: number;
++  /**
++   * Min value allowed on input.
++   * Notice that this might cause unexpected behavior if you pass a value lower than this on input `value`. In that case, consider do your own validation instead of using this property
++   */
++  minValue?: number;
++  /**
++   * Callback that is called when the input's value changes.
++   * @param value The number value.
++   */
++  onChangeValue?(value: number | null): void;
++  /**
++   * Decimal precision. Defaults to 2.
++   */
++  precision?: number;
++  /**
++   * Decimal separator character.
++   */
++  separator?: string;
++  /**
++   * Character to be prefixed on the value.
++   */
++  prefix?: string;
++  /**
++   * Character to be suffixed on the value.
++   */
++  suffix?: string;
++  /**
++   * @deprecated. Use `prefix` instead.
++   */
++  unit?: string;
++  /**
++   * The number value of the input.
++   * IMPORTANT: This is used to control the component, but keep in mind that this is not the final `value` property of the `TextInput`
++   */
++  value: number | null;
++  /**
++   * Set this to `true` to show the `+` character on positive values.
++   */
++  showPositiveSign?: boolean;
++  /**
++   * Where the negative/positive sign (+/-) should be placed. Defaults to "afterPrefix".
++   * Use `showPositiveSign` if you want to show the `+` sign.
++   */
++  signPosition?: 'beforePrefix' | 'afterPrefix';
+ }
+ export interface FakeCurrencyInputProps extends CurrencyInputProps {
+-    /**
+-     * Style for the container View that wraps the Text
+-     */
+-    containerStyle?: StyleProp<ViewStyle>;
+-    /**
+-     * Color of the caret. Defaults to #6495ed
+-     */
+-    caretColor?: string;
+-    /**
+-     * Style for the caret text component
+-     */
+-    caretStyle?: StyleProp<TextStyle>;
++  /**
++   * Style for the container View that wraps the Text
++   */
++  containerStyle?: StyleProp<ViewStyle>;
++  /**
++   * Color of the caret. Defaults to #6495ed
++   */
++  caretColor?: string;
++  /**
++   * Style for the caret text component
++   */
++  caretStyle?: StyleProp<TextStyle>;
+ }
+ export interface TextWithCursorProps extends TextProps {
+-    children?: React.ReactNode;
+-    /**
+-     * Show or hides the cursor. Defaults to false
+-     */
+-    cursorVisible?: boolean;
+-    /**
+-     * Props for the cursor. Use this to set a custom `style` prop.
+-     */
+-    cursorProps?: TextProps;
++  children?: React.ReactNode;
++  /**
++   * Show or hides the cursor. Defaults to false
++   */
++  cursorVisible?: boolean;
++  /**
++   * Props for the cursor. Use this to set a custom `style` prop.
++   */
++  cursorProps?: TextProps;
+ }
+diff --git a/node_modules/react-native-currency-input/src/CurrencyInput.tsx b/node_modules/react-native-currency-input/src/CurrencyInput.tsx
+index 6c7e844..39e8c4f 100644
+--- a/node_modules/react-native-currency-input/src/CurrencyInput.tsx
++++ b/node_modules/react-native-currency-input/src/CurrencyInput.tsx
+@@ -15,6 +16,7 @@ export const CurrencyInput = React.forwardRef<TextInput, CurrencyInputProps>(fun
+     value,
+     onChangeText,
+     onChangeValue,
++    customFormatter,
+     separator,
+     delimiter,
+     prefix = '',
+@@ -34,16 +35,20 @@ export const CurrencyInput = React.forwardRef<TextInput, CurrencyInputProps>(fun
+ 
+   const formattedValue = React.useMemo(() => {
+     if (!!value || value === 0 || value === -0) {
+-      return formatNumber(value, {
+-        separator,
+-        prefix,
+-        suffix,
+-        precision,
+-        delimiter,
+-        ignoreNegative: noNegativeValues,
+-        signPosition,
+-        showPositiveSign,
+-      });
++      if (customFormatter) {
++        return customFormatter(value);
++      } else {
++        return formatNumber(value, {
++          separator,
++          prefix,
++          suffix,
++          precision,
++          delimiter,
++          ignoreNegative: noNegativeValues,
++          signPosition,
++          showPositiveSign,
++        });
++      }
+     } else {
+       return '';
+     }
+@@ -120,7 +125,7 @@ export const CurrencyInput = React.forwardRef<TextInput, CurrencyInputProps>(fun
+ 
+       const zerosOnValue = textNumericValue.replace(/[^0]/g, '').length;
+ 
+-      let newValue: number | null;
++      let newValue: number | null = numberValue;
+ 
+       if (!textNumericValue || (!numberValue && zerosOnValue === precision)) {
+         // Allow to clean the value instead of beign 0
+diff --git a/node_modules/react-native-currency-input/src/props.ts b/node_modules/react-native-currency-input/src/props.ts
+index 0c2f069..ece33fe 100644
+--- a/node_modules/react-native-currency-input/src/props.ts
++++ b/node_modules/react-native-currency-input/src/props.ts
+@@ -51,6 +51,12 @@ export interface FormatNumberOptions {
+ 
+ export interface CurrencyInputProps extends Omit<TextInputProps, 'value'> {
+   renderTextInput?: (props: TextInputProps) => JSX.Element;
++  /**
++   * Replaces the built-in formatter. This callback is called after input changes and before onChangeValue().
++   * @param value The number value.
++   */
++  customFormatter?(value: number): string;
++
+   /**
+    * Character for thousands delimiter.
+    */

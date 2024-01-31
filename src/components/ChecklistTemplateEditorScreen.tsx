@@ -21,6 +21,7 @@ import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { eqString } from 'realmdb/helpers';
@@ -122,13 +123,17 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   }, [ name, type, actions, editModeEnabled ]);
 
   useEffect(() => {
-    event.on('checklist-template-type', setType);
+    event.on('checklist-template-type', onChangeTemplateType);
     event.on('checklist-action', upsertAction);
     return () => {
-      event.removeListener('checklist-template-type', setType);
+      event.removeListener('checklist-template-type', onChangeTemplateType);
       event.removeListener('checklist-action', upsertAction);
     };
   }, []);
+
+  const onChangeTemplateType = (result: EnumPickerResult) => {
+    setType(result.value[0] as ChecklistTemplateType);
+  };
 
   useEffect(() => {
     if (checklistTemplate) {

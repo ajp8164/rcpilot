@@ -23,17 +23,21 @@ export type EnumPickerIconProps = {
   hideTitle?: boolean;
 } | null;
 
-export type EnumPickerInterface =  {
-  mode?: 'one' | 'many' | 'many-or-none';
+export type EnumPickerInterface = {
+  mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none';
   title: string;
   headerBackTitle?: string;
   icons?: {[key in string]: EnumPickerIconProps}; // Key is a enum value
   sectionName?: string;
   footer?: string;
   values: string[];
-  selected: string | string[]; // The literal value(s)
+  selected?: string | string[]; // The literal value(s)
   eventName: string;
 };
+
+export type EnumPickerResult = {
+  value: string[];
+}
 
 export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'EnumPicker'>;
 
@@ -70,7 +74,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     const onDone = () => {
       // For multi-selection mode we send the selected values only when done.
       if (mode === 'many' || mode === 'many-or-none') {
-        event.emit(eventName, list.selected);
+        event.emit(eventName, {value: list.selected} as EnumPickerResult);
         navigation.goBack();
       }
     };
@@ -108,10 +112,10 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     }
   }, [ list ]);
 
-  const toggleSelect = (value: string) => {
+  const toggleSelect = (value?: string) => {
     if (mode === 'one') {
-      setList({ selected: [value] });
-    } else {
+      value ? setList({ selected: [value] }) : setList({ selected: [] }, {assign: true});
+    } else if (value) {
       if (list.selected.includes(value)) {
         setList({ selected: list.selected.filter(v => v !== value) }, {assign: true});
       } else {
@@ -121,7 +125,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
 
     // For single selection mode we send the selected value immediately.
     if (mode === 'one') {
-      event.emit(eventName, [value]);
+      event.emit(eventName, {value: [value]} as EnumPickerResult);
     }
   };
 
@@ -165,7 +169,17 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
         key={`${value}${index}`}
         title={icons && icons[value]?.hideTitle ? '' : value}
         leftImage={getIconEl(value)}
-        position={list.values.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === list.values.length - 1 ? ['last'] : []}
+        position={
+          mode === 'one-or-none'
+            ? index === 0 ? ['first'] : []
+              : list.values.length === 1
+              ? ['first', 'last']
+                : index === 0
+              ? ['first']
+                : index === list.values.length - 1
+              ? ['last']
+                : []        
+        }
         checked={list.selected?.includes(value)}
         onPress={() => toggleSelect(value)}
       />
@@ -204,6 +218,14 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
         />
+        {mode === 'one-or-none' &&
+          <ListItemCheckbox
+            title={'None'}
+            position={list.values.length === 0 ? ['first', 'last'] : ['last']}
+            checked={!list.selected.length}
+            onPress={() => toggleSelect()}
+          />
+        }
         {mode === 'many-or-none' &&
           <>
             <Divider />

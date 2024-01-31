@@ -17,6 +17,7 @@ import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -92,8 +93,8 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     };
   }, []);
 
-  const setOutputReportTo = (value: OutputReportTo) => {
-    dispatch(saveOutputReportTo({ value }));
+  const setOutputReportTo = (result: EnumPickerResult) => {
+    dispatch(saveOutputReportTo({ value: result.value[0] as OutputReportTo}));
   };
 
   const deleteReport = (report: Report) => {

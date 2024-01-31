@@ -12,6 +12,7 @@ import { ChatAvatar } from 'components/molecules/ChatAvatar';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { DatabaseAccessWith } from 'types/database';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
@@ -53,14 +54,14 @@ const SetupScreen = ({ navigation, route }: Props) => {
   }, [route.params?.subNav]);
 
   useEffect(() => {
-    event.on('database-access-with', setDatabaseAccessWith);
+    event.on('database-access-with', onChangeDatabaseAccessWith);
     return () => {
-      event.removeListener('database-access-with', setDatabaseAccessWith);
+      event.removeListener('database-access-with', onChangeDatabaseAccessWith);
     };
   }, []);
 
-  const setDatabaseAccessWith = (value: DatabaseAccessWith) => {
-    dispatch(saveDatabaseAccessWith({ value }));
+  const onChangeDatabaseAccessWith = (result: EnumPickerResult) => {
+    dispatch(saveDatabaseAccessWith({ value: result.value[0] as DatabaseAccessWith }));
   };
 
   return (

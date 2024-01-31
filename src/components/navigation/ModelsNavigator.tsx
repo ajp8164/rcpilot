@@ -4,6 +4,7 @@ import FlightNavigator from 'components/navigation/FlightNavigator';
 import FlightsScreen from 'components/FlightsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
+import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
@@ -46,6 +47,13 @@ const ModelsNavigator = () => {
         component={ModelEditorScreen}
         options={{
           title: '',
+        }}
+      />
+      <ModelsStack.Screen
+        name='ModelStatistics'
+        component={ModelStatisticsScreen}
+        options={{
+          title: 'Model Statistics',
         }}
       />
       <ModelsStack.Screen

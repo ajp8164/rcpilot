@@ -10,6 +10,7 @@ import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -109,12 +110,16 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     event.on('propeller-notes', setNotes);
-    event.on('propeller-measurement-units', setMeasurementUnits);
+    event.on('propeller-measurement-units', onChangeMeasurementUnits);
     return () => {
       event.removeListener('propeller-notes', setNotes);
-      event.removeListener('propeller-measurement-units', setMeasurementUnits);
+      event.removeListener('propeller-measurement-units', onChangeMeasurementUnits);
     };
   }, []);
+
+  const onChangeMeasurementUnits = (result: EnumPickerResult) => {
+    setMeasurementUnits(result.value[0] as MeasurementUnits);
+  };
 
   return (
     <SafeAreaView

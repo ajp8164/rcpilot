@@ -110,6 +110,9 @@ export type ModelsNavigatorParamList = {
   ModelEditor: {
     modelId: string;
   };
+  ModelStatistics: {
+    modelId: string;
+  };
   Models: undefined;
   ModelFiltersNavigator: undefined;
   Notes: {

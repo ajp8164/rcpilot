@@ -27,6 +27,7 @@ const ListItem = (props: Props) => {
   const isCollapsible = useRef(visible !== undefined);
   const itemInitiallyExpanded = useRef(visible);
   const sectionInitiallyExpanded = useRef(expanded);
+  const first = props.position?.includes('first') ?  'first' : undefined;
 
   const renderListItem = () => {
     return (
@@ -42,6 +43,7 @@ const ListItem = (props: Props) => {
             props.disabled ? s.valuePosition : {},
             props.rightImage === undefined && props.value ? {} : s.valuePosition
           ]}
+          position={expanded ? [first] : props.position}
           disabled={props.disabled}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
         />

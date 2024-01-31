@@ -20,6 +20,7 @@ const ListItemSwitch = (props: Props) => {
   const s = useStyles(theme);
 
   const sectionInitiallyExpanded = useRef(expanded);
+  const first = props.position?.includes('first') ?  'first' : undefined;
 
   return (
     <>
@@ -27,6 +28,7 @@ const ListItemSwitch = (props: Props) => {
         titleStyle={s.title}
         {...props}
         containerStyle={{...props.containerStyle, ...s.container}}
+        position={expanded ? [first] : props.position}
       />
       <CollapsibleView
         initExpanded={sectionInitiallyExpanded.current}

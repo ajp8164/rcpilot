@@ -37,6 +37,7 @@ const ListItemDate = (props: Props) => {
   const s = useStyles(theme);
 
   const sectionInitiallyExpanded = useRef(expanded);
+  const first = props.position?.includes('first') ?  'first' : undefined;
 
   return (
     <>
@@ -46,7 +47,7 @@ const ListItemDate = (props: Props) => {
           {...props.containerStyle, ...s.containerStyle},
           props.swipeable ? theme.styles.swipeableListItemContainer : {}
         ]}
-        position={expanded ? [] :  ['last']}
+        position={expanded ? [first] : props.position}
         valueStyle={s.valueStyle}
       />
       <CollapsibleView
@@ -90,7 +91,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: 0,
   },
   containerStyle: {
-    minHeight: 48
+    minHeight: 48,
   },
   datePickerContainer: {
     paddingTop: 15,

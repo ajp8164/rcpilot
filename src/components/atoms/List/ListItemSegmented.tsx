@@ -30,6 +30,7 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
   const s = useStyles(theme);
   
   const sectionInitiallyExpanded = useRef(expanded);
+  const first = props.position?.includes('first') ?  'first' : undefined;
 
   return (
     <>
@@ -39,6 +40,7 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
           {...props.containerStyle, ...s.container},
           props.swipeable ? theme.styles.swipeableListItemContainer : {}
         ]}
+        position={expanded ? [first] : props.position}
         rightImage={false}
         extraContentComponent={
           <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]}>

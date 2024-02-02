@@ -31,7 +31,7 @@ const ScanNavigator = () => {
         options={{
           title: 'Scan',
           headerLeft: () => null,
-          headerLargeTitle: true,
+          headerShown: false,
         }}
       />
     </ScanStack.Navigator>

@@ -128,7 +128,6 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         renderItem={renderFilter}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={theme.styles.swipeableListMask}
       />
     </View>
   );

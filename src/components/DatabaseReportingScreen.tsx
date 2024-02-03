@@ -280,7 +280,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
-              containerStyle={theme.styles.swipeableListMask}
               animationConfig={{
                 damping: 20,
                 mass: 0.01,
@@ -308,7 +307,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}
               style={s.reportsList}
-              containerStyle={theme.styles.swipeableListMask}
               animationConfig={{
                 damping: 20,
                 mass: 0.01,

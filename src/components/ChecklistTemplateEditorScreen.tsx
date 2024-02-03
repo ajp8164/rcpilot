@@ -321,7 +321,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
           style={s.actionsList}
-          containerStyle={theme.styles.swipeableListMask}
           animationConfig={{
             damping: 20,
             mass: 0.01,

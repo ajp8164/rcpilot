@@ -1,6 +1,9 @@
 import { AppTheme, useTheme } from "theme";
 
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import CustomIcon from 'theme/icomoon/CustomIcon';
+import { Icon } from "@rneui/base";
+import { Pressable } from "react-native";
 import React from "react";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
@@ -9,6 +12,7 @@ import { useRef } from  'react';
 interface Props extends _ListItem {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
+  onPressInfo?: () => void;
   visible?: boolean;
 };
 
@@ -16,6 +20,7 @@ const ListItem = (props: Props) => {
   const {
     expanded = false,
     ExpandableComponent,
+    onPressInfo,
     visible = true,
   } = props;
 
@@ -46,6 +51,27 @@ const ListItem = (props: Props) => {
           position={expanded ? [first] : props.position}
           disabled={props.disabled}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
+          rightImage={
+            onPressInfo ?
+              <Pressable
+                style={s.infoPressable}
+                onPress={onPressInfo}>
+                <CustomIcon
+                  name={'circle-info'}
+                  size={20}
+                  color={theme.colors.screenHeaderBackButton}
+                  style={{right: 5}}
+                />
+                <Icon
+                  name={'chevron-forward'}
+                  type={'ionicon'}
+                  size={20}
+                  color={theme.colors.midGray}
+                />
+              </Pressable>            
+            : 
+              props.rightImage
+          }
         />
         <CollapsibleView
           initExpanded={sectionInitiallyExpanded.current}
@@ -89,10 +115,15 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     minHeight: 48,
   },
   disabled: {
-    backgroundColor: theme.colors.listItem
+    backgroundColor: theme.colors.listItem,
+  },
+  infoPressable: {
+    flexDirection: 'row',
+    height: '100%',
+    alignItems: 'center',
   },
   value: {
-    ...theme.styles.textDim
+    ...theme.styles.textDim,
   },
   valuePosition: {
     paddingRight: 18,

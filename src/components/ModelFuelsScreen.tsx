@@ -46,7 +46,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         })}
       />
     )
-};
+  };
 
   return (
     <SafeAreaView

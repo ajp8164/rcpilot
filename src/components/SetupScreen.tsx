@@ -82,7 +82,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
       }
       <ListItem
         title={'Select or Create a Pilot...'}
-        position={['last']}
+        position={selectedPilot ? ['last'] : ['first', 'last']}
         onPress={() => navigation.navigate('Pilots')}
       />
       <Divider text={'GLOBALS'}/>

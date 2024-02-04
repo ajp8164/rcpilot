@@ -372,7 +372,7 @@ export type SetupNavigatorParamList = {
   NewChecklistTemplateNavigator: undefined;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewEventStyle: {
-    eventStyleId: string;
+    eventStyleId?: string;
   };
   NewModelCategory: undefined;
   NewModelFuelNavigator: undefined;

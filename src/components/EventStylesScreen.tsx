@@ -28,7 +28,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
           <Button
             type={'clear'}
             icon={ <Icon name={'plus'} style={s.addIcon} /> }
-            onPress={() => navigation.navigate('NewEventStyle')}
+            onPress={() => navigation.navigate('NewEventStyle', {})}
           />
         )
       },

@@ -1,7 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQuery, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -11,7 +13,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
-import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelCategories'>;
 
@@ -19,7 +20,10 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const realm = useRealm();
+
   const allModelCategories = useQuery(ModelCategory);
+  const [deleteCategoryActionSheetVisible, setDeleteCategoryActionSheetVisible] = useState<ModelCategory>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,15 +39,34 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
     });
   }, []);
 
-  const renderItems: ListRenderItem<ModelCategory> = ({ item, index }) => {
+  const confirmDeleteCategory = (category: ModelCategory) => {
+    setDeleteCategoryActionSheetVisible(category);
+  };
+
+  const deleteCategory = (category: ModelCategory) => {
+    realm.write(() => {
+      realm.delete(category);
+    });
+  };
+
+  const renderItems: ListRenderItem<ModelCategory> = ({ item: category, index }) => {
     return (
       <ListItem
-        key={item._id.toString()}
-        title={item.name}
+        key={category._id.toString()}
+        title={category.name}
         position={allModelCategories.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allModelCategories.length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ModelCategoryEditor', {
-          modelCategoryId: item._id.toString(),
+          modelCategoryId: category._id.toString(),
         })}
+        swipeable={{
+          rightItems: [{
+            icon: 'delete',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => confirmDeleteCategory(category),
+          }]
+        }}
       />
     )
   };
@@ -58,6 +81,25 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: 'Delete Category',
+            onPress: () => {
+              deleteCategory(deleteCategoryActionSheetVisible!);
+              setDeleteCategoryActionSheetVisible(undefined);
+            },
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeleteCategoryActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deleteCategoryActionSheetVisible}
       />
     </SafeAreaView>
   );

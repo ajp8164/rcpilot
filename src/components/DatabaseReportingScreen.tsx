@@ -59,6 +59,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 
   const [editModeEnabled, setEditModeEnabled] = useState(false);
   const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
+  const [deleteReportActionSheetVisible, setDeleteReportActionSheetVisible] = useState<Report>();
 
   useEffect(() => {
     const onEdit = () => {
@@ -97,12 +98,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     dispatch(saveOutputReportTo({ value: result.value[0] as OutputReportTo}));
   };
 
-  const deleteReport = (report: Report) => {
-    realm.write(() => {
-      realm.delete(report);
-    });
-  };
-
   const reorderReports = (params: DragEndParams<Report>) => {
     const { data } = params;
     realm.write(() => {
@@ -127,6 +122,16 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     const events = report.includesBatteries ? `Batteries: ${whichEvents}, ` : '';
     const maintenance = report.includesModels ? `Models: ${whichMaintenance}` : '';
     return `${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
+  };
+
+  const confirmDeleteReport = (report: Report) => {
+    setDeleteReportActionSheetVisible(report);
+  };
+
+  const deleteReport = (report: Report) => {
+    realm.write(() => {
+      realm.delete(report);
+    });
   };
 
   const renderReport = (props: {
@@ -173,7 +178,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               text: 'Delete',
               color: theme.colors.assertive,
               x: 64,
-              onPress: () => deleteReport(report),
+              onPress: () => confirmDeleteReport(report),
             }]
           }}
           rightImage={
@@ -352,6 +357,25 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         ]}
         useNativeIOS={true}
         visible={newReportSheetVisible}
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: 'Delete Report',
+            onPress: () => {
+              deleteReport(deleteReportActionSheetVisible!);
+              setDeleteReportActionSheetVisible(undefined);
+            },
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeleteReportActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deleteReportActionSheetVisible}
       />
     </NestableScrollContainer>
   );

@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
-import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -34,7 +33,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const inactiveModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
 
   const [editModeEnabled, setEditModeEnabled] = useState(false);
-  const [deleteModelIdActionSheetVisible, setDeleteModelIdActionSheetVisible] = useState<string>();
+  const [deleteModelActionSheetVisible, setDeleteModelActionSheetVisible] = useState<Model>();
 
   useEffect(() => {
     if (listModels) {
@@ -104,12 +103,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     });
   }, [ editModeEnabled ]);
 
-  const confirmDeleteModel = (modelId: string) => {
-    setDeleteModelIdActionSheetVisible(modelId);
+  const confirmDeleteModel = (model: Model) => {
+    setDeleteModelActionSheetVisible(model);
   };
 
-  const deleteModel = (modelId: string) => {
-    const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId));
+  const deleteModel = (model: Model) => {
     realm.write(() => {
       realm.delete(model);
     });
@@ -169,7 +167,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteModel(model._id.toString()),
+            onPress: () => confirmDeleteModel(model),
           }]
         }}
      />
@@ -223,17 +221,17 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           {
             label: listModels === 'inactive' ? 'Delete Retired Model' : 'Delete Model',
             onPress: () => {
-              deleteModel(deleteModelIdActionSheetVisible!);
-              setDeleteModelIdActionSheetVisible(undefined);
+              deleteModel(deleteModelActionSheetVisible!);
+              setDeleteModelActionSheetVisible(undefined);
             },
           },
           {
             label: 'Cancel' ,
-            onPress: () => setDeleteModelIdActionSheetVisible(undefined),
+            onPress: () => setDeleteModelActionSheetVisible(undefined),
           },
         ]}
         useNativeIOS={true}
-        visible={!!deleteModelIdActionSheetVisible}
+        visible={!!deleteModelActionSheetVisible}
       />
     </SafeAreaView>
   );

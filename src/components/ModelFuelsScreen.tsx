@@ -1,7 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useQuery, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -11,7 +13,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
-import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuels'>;
 
@@ -19,7 +20,10 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const realm = useRealm();
+
   const allModelFuels = useQuery(ModelFuel);
+  const [deleteFuelActionSheetVisible, setDeleteFuelActionSheetVisible] = useState<ModelFuel>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,15 +39,34 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
     });
   }, []);
 
-  const renderItems: ListRenderItem<ModelFuel> = ({ item, index }) => {
+  const confirmDeleteFuel = (fuel: ModelFuel) => {
+    setDeleteFuelActionSheetVisible(fuel);
+  };
+
+  const deleteFuel = (fuel: ModelFuel) => {
+    realm.write(() => {
+      realm.delete(fuel);
+    });
+  };
+
+  const renderItems: ListRenderItem<ModelFuel> = ({ item: fuel, index }) => {
     return (
       <ListItem
-      key={item._id.toString()}
-      title={item.name}
+      key={fuel._id.toString()}
+      title={fuel.name}
         position={allModelFuels.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allModelFuels.length - 1 ? ['last'] : []}
         onPress={() => navigation.navigate('ModelFuelEditor', {
-          modelFuelId: item._id.toString(),
+          modelFuelId: fuel._id.toString(),
         })}
+        swipeable={{
+          rightItems: [{
+            icon: 'delete',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => confirmDeleteFuel(fuel),
+          }]
+        }}
       />
     )
   };
@@ -58,6 +81,25 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: 'Delete Fuel',
+            onPress: () => {
+              deleteFuel(deleteFuelActionSheetVisible!);
+              setDeleteFuelActionSheetVisible(undefined);
+            },
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeleteFuelActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deleteFuelActionSheetVisible}
       />
     </SafeAreaView>
   );

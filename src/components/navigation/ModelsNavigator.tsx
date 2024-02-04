@@ -23,8 +23,6 @@ const ModelsNavigator = () => {
     <ModelsStack.Navigator
     initialRouteName='Models'
     screenOptions={{
-      headerLargeTitleShadowVisible: false,
-      headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
       headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
       headerTitleStyle: { color: theme.colors.screenHeaderText },
       headerTintColor: theme.colors.screenHeaderBackButton,
@@ -36,6 +34,8 @@ const ModelsNavigator = () => {
         options={({ route }) => ({
           title: route.params.listModels === 'inactive' ? 'Retired' : 'Models',
           headerLargeTitle: route.params.listModels ? false : true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         })}
       />
       <ModelsStack.Screen

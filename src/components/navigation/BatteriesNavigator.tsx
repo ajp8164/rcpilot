@@ -26,8 +26,6 @@ const BatteriesNavigator = () => {
     <BatteriesStack.Navigator
       initialRouteName="Batteries"
       screenOptions={{
-        headerLargeTitleShadowVisible: false,
-        headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
         headerTitleStyle: { color: theme.colors.screenHeaderText },
         headerTintColor: theme.colors.screenHeaderBackButton,
@@ -39,6 +37,8 @@ const BatteriesNavigator = () => {
           title: 'Batteries',
           headerLeft: () => null,
           headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         }}
       />
       <BatteriesStack.Screen
@@ -66,7 +66,6 @@ const BatteriesNavigator = () => {
         name='BatteryCycles'
         component={BatteryCyclesScreen}
         options={{
-          // headerLargeTitle: true,
           title: 'Cycles',
         }}
       />

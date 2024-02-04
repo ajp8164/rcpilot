@@ -13,8 +13,6 @@ const ScanNavigator = () => {
     <ScanStack.Navigator
       initialRouteName="Scan"
       screenOptions={{
-        headerLargeTitleShadowVisible: false,
-        headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
         headerTitleStyle: { color: theme.colors.screenHeaderText },
         headerTintColor: theme.colors.screenHeaderBackButton,

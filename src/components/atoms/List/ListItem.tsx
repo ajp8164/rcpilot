@@ -13,6 +13,7 @@ interface Props extends _ListItem {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
   onPressInfo?: () => void;
+  showInfo?: boolean;
   visible?: boolean;
 };
 
@@ -21,6 +22,7 @@ const ListItem = (props: Props) => {
     expanded = false,
     ExpandableComponent,
     onPressInfo,
+    showInfo,
     visible = true,
   } = props;
 
@@ -52,7 +54,7 @@ const ListItem = (props: Props) => {
           disabled={props.disabled}
           disabledStyle={{...s.disabled, ...props.disabledStyle}}
           rightImage={
-            onPressInfo ?
+            showInfo && onPressInfo ?
               <Pressable
                 style={s.infoPressable}
                 onPress={onPressInfo}>

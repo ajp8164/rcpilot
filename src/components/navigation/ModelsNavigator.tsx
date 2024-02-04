@@ -23,16 +23,10 @@ const ModelsNavigator = () => {
     <ModelsStack.Navigator
     initialRouteName='Models'
     screenOptions={{
-      headerLargeTitleShadowVisible: theme.mode === 'light',
-      headerLargeStyle: {
-        backgroundColor: theme.colors.screenHeaderBackground,
-      },
-      headerStyle: {
-        backgroundColor: theme.colors.screenHeaderBackground,
-      },
-      headerTitleStyle: {
-        color: theme.colors.screenHeaderText,
-      },
+      headerLargeTitleShadowVisible: false,
+      headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+      headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+      headerTitleStyle: { color: theme.colors.screenHeaderText },
       headerTintColor: theme.colors.screenHeaderBackButton,
     }}>
       <ModelsStack.Screen

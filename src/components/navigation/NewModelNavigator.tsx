@@ -15,21 +15,15 @@ const NewModelNavigator = () => {
   return (
     <NavContext.Provider value={{isModal: true}}>
       <NewModelStack.Navigator
-      initialRouteName='NewModel'
-      screenOptions={{
-        headerBackTitle: 'Model',
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
-        },
-        headerTintColor: theme.colors.screenHeaderBackButton,
-      }}>
+        initialRouteName='NewModel'
+        screenOptions={{
+          headerBackTitle: 'Model',
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerTitleStyle: { color: theme.colors.screenHeaderText },
+          headerTintColor: theme.colors.screenHeaderBackButton,
+        }}>
         <NewModelStack.Screen
           name='NewModel'
           // @ts-expect-error

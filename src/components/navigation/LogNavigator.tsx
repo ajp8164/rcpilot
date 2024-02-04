@@ -13,20 +13,14 @@ const LogNavigator = () => {
 
   return (
     <LogStack.Navigator
-    initialRouteName="Log"
-    screenOptions={{
-      headerLargeTitleShadowVisible: theme.mode === 'light',
-      headerLargeStyle: {
-        backgroundColor: theme.colors.screenHeaderBackground,
-      },
-      headerStyle: {
-        backgroundColor: theme.colors.screenHeaderBackground,
-      },
-      headerTitleStyle: {
-        color: theme.colors.screenHeaderText,
-      },
-      headerTintColor: theme.colors.screenHeaderBackButton,
-    }}>
+      initialRouteName="Log"
+      screenOptions={{
+        headerLargeTitleShadowVisible: false,
+        headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerTitleStyle: { color: theme.colors.screenHeaderText },
+        headerTintColor: theme.colors.screenHeaderBackButton,
+      }}>
       <LogStack.Screen
         name="Log"
         component={LogScreen}

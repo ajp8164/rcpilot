@@ -15,20 +15,14 @@ const NewBatteryNavigator = () => {
   return (
     <NavContext.Provider value={{isModal: true}}>
       <NewBatteryStack.Navigator
-      initialRouteName='NewBattery'
-      screenOptions={{
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
-        },
-        headerTintColor: theme.colors.screenHeaderBackButton,
-      }}>
+        initialRouteName='NewBattery'
+        screenOptions={{
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerTitleStyle: { color: theme.colors.screenHeaderText },
+          headerTintColor: theme.colors.screenHeaderBackButton,
+        }}>
         <NewBatteryStack.Screen
           name='NewBattery'
           // @ts-expect-error

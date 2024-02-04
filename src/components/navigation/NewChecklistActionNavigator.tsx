@@ -14,20 +14,14 @@ const NewChecklistActionNavigator = () => {
   return (
     <NavContext.Provider value={{isModal: true}}>
       <NewChecklistActionStack.Navigator
-      initialRouteName='NewChecklistAction'
-      screenOptions={{
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
-        },
-        headerTintColor: theme.colors.screenHeaderBackButton,
-      }}>
+        initialRouteName='NewChecklistAction'
+        screenOptions={{
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerTitleStyle: { color: theme.colors.screenHeaderText },
+          headerTintColor: theme.colors.screenHeaderBackButton,
+        }}>
         <NewChecklistActionStack.Screen
           name="NewChecklistAction"
           // @ts-expect-error

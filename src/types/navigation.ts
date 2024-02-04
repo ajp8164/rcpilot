@@ -114,7 +114,7 @@ export type ModelsNavigatorParamList = {
     modelId: string;
   };
   Models: {
-    inactiveOnly?: boolean;
+    listModels?: 'inactive';
   };
   ModelFiltersNavigator: undefined;
   Notes: {

@@ -40,8 +40,8 @@ const ModelsNavigator = () => {
         component={ModelsScreen}
         initialParams={{}}
         options={({ route }) => ({
-          title: route.params.inactiveOnly ? 'Retired' : 'Models',
-          headerLargeTitle: route.params.inactiveOnly ? false : true,
+          title: route.params.listModels === 'inactive' ? 'Retired' : 'Models',
+          headerLargeTitle: route.params.listModels ? false : true,
         })}
       />
       <ModelsStack.Screen

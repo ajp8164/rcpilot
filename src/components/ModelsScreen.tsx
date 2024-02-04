@@ -163,7 +163,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           reorder: true,
         }}
         showEditor={editModeEnabled}
-        onSwipeableWillClose={() => setEditModeEnabled(false)}
         swipeable={{
           rightItems: [{
             icon: 'delete',

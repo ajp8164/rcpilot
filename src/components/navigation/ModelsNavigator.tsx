@@ -40,7 +40,7 @@ const ModelsNavigator = () => {
         component={ModelsScreen}
         initialParams={{}}
         options={({ route }) => ({
-          title: 'Models',
+          title: route.params.inactiveOnly ? 'Retired' : 'Models',
           headerLargeTitle: route.params.inactiveOnly ? false : true,
         })}
       />

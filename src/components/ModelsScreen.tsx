@@ -85,20 +85,29 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 ]}
               />
             </Pressable>
-            <Pressable
-              disabled={editModeEnabled}
-              onPress={() => navigation.navigate('NewModelNavigator', {
-                screen: 'NewModel',
-                params: {}
-              })}>
-              <Icon
-                name={'plus'}
-                style={[
-                  s.headerIcon,
-                  editModeEnabled ? s.headerIconDisabled : {}
-                ]}
+            {inactiveOnly ?
+              <Button
+                title={editModeEnabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonClearTitle}
+                buttonStyle={[theme.styles.buttonClear, s.editButton]}
+                onPress={onEdit}
               />
-            </Pressable>
+            :
+              <Pressable
+                disabled={editModeEnabled}
+                onPress={() => navigation.navigate('NewModelNavigator', {
+                  screen: 'NewModel',
+                  params: {}
+                })}>
+                <Icon
+                  name={'plus'}
+                  style={[
+                    s.headerIcon,
+                    editModeEnabled ? s.headerIconDisabled : {}
+                  ]}
+                />
+              </Pressable>
+            }
           </>
         );
       },

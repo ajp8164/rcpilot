@@ -24,20 +24,14 @@ const BatteriesNavigator = () => {
 
   return (
     <BatteriesStack.Navigator
-    initialRouteName="Batteries"
-    screenOptions={{
-      headerLargeTitleShadowVisible: theme.mode === 'light',
-      headerLargeStyle: {
-        backgroundColor: theme.colors.screenHeaderBackground,
-      },
-      headerStyle: {
-        backgroundColor: theme.colors.screenHeaderBackground,
-      },
-      headerTitleStyle: {
-        color: theme.colors.screenHeaderText,
-      },
-      headerTintColor: theme.colors.screenHeaderBackButton,
-    }}>
+      initialRouteName="Batteries"
+      screenOptions={{
+        headerLargeTitleShadowVisible: false,
+        headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerTitleStyle: { color: theme.colors.screenHeaderText },
+        headerTintColor: theme.colors.screenHeaderBackButton,
+      }}>
       <BatteriesStack.Screen
         name="Batteries"
         component={BatteriesScreen}

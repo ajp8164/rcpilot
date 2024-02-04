@@ -16,21 +16,15 @@ const NewBatteryCycleNavigator = () => {
   return (
     <NavContext.Provider value={{isModal: true}}>
       <NewBatteryCycleStack.Navigator
-      initialRouteName='NewBatteryCycle'
-      screenOptions={{
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.screenHeaderText,
-        },
-        headerTintColor: theme.colors.screenHeaderBackButton,
-      }}>
-       <NewBatteryCycleStack.Screen
+        initialRouteName='NewBatteryCycle'
+        screenOptions={{
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerTitleStyle: { color: theme.colors.screenHeaderText },
+          headerTintColor: theme.colors.screenHeaderBackButton,
+        }}>
+        <NewBatteryCycleStack.Screen
           name='NewBatteryCycle'
           component={NewBatteryCycleScreen}
           options={{

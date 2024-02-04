@@ -19,16 +19,10 @@ const FlightNavigator = () => {
       <FlightStack.Navigator
       initialRouteName='FlightBatteries'
       screenOptions={{
-        headerLargeTitleShadowVisible: theme.mode === 'light',
-        headerLargeStyle: {
-          backgroundColor: theme.colors.brandPrimary,
-        },
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: {
-          color: theme.colors.stickyWhite,
-        },
+        headerLargeTitleShadowVisible: false,
+        headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerTitleStyle: { color: theme.colors.stickyWhite },
         headerTintColor: theme.colors.stickyWhite,
       }}>
         <FlightStack.Screen

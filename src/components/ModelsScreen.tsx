@@ -247,6 +247,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     textAlign: 'center',
     marginTop: 180,
     ...theme.styles.textNormal,
+    ...theme.styles.textDim,
   },
   headerIcon: {
     color: theme.colors.brandPrimary,

@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, Text } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -81,6 +81,9 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
+        ListEmptyComponent={
+          <Text style={s.emptyList}>{'No Model Fuels'}</Text>
+        }
       />
       <ActionSheet
         cancelButtonIndex={1}
@@ -109,6 +112,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   addIcon: {
     color: theme.colors.brandPrimary,
     fontSize: 22,
+  },
+  emptyList: {
+    textAlign: 'center',
+    marginTop: 180,
+    ...theme.styles.textNormal,
+    ...theme.styles.textDim,
   },
 }));
 

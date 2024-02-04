@@ -17,8 +17,6 @@ const NewModelPropellerNavigator = () => {
       <NewModelPropellerStack.Navigator
         initialRouteName='NewModelPropeller'
         screenOptions={{
-          headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderText },
           headerTintColor: theme.colors.screenHeaderBackButton,

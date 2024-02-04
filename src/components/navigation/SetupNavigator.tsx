@@ -59,8 +59,6 @@ const SetupNavigator = () => {
     <SetupStack.Navigator
       initialRouteName="Setup"
       screenOptions={{
-        headerLargeTitleShadowVisible: false,
-        headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
         headerTitleStyle: { color: theme.colors.screenHeaderText },
         headerTintColor: theme.colors.screenHeaderBackButton,
@@ -72,7 +70,9 @@ const SetupNavigator = () => {
           title: 'Setup',
           headerLeft: () => null,
           headerLargeTitle: true,
-        }}
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          }}
       />
       <SetupStack.Screen
         name="Pilot"
@@ -382,6 +382,8 @@ const SetupNavigator = () => {
         component={UserAccountScreen}
         options={{
           headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         }}
       />
       <SetupStack.Screen
@@ -397,6 +399,8 @@ const SetupNavigator = () => {
         options={{
           title: 'App Settings',
           headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         }}
       />
       <SetupStack.Screen
@@ -405,6 +409,8 @@ const SetupNavigator = () => {
         options={{
           title: '',
           headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         }}
       />
       <SetupStack.Screen
@@ -413,6 +419,8 @@ const SetupNavigator = () => {
         options={{
           title: `About ${appConfig.appName}`,
           headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         }}
       />
     </SetupStack.Navigator>

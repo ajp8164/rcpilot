@@ -176,6 +176,67 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   ]);
 
   useEffect(() => {
+    if (!modelId || !model) return;
+
+    const canSave = !!name && (
+      !eqString(model?.name, name) ||
+      !eqString(model?.image, image) ||
+      !eqString(model?.vendor, type) ||
+      !eqObjectId(model?.category, category) ||
+      !eqNumber(model?.purchasePrice, purchasePrice) ||
+      !eqBoolean(model?.damaged, damaged) ||
+      !eqBoolean(model?.retired, retired) ||
+      !eqBoolean(model?.logsBatteries, logsBatteries) ||
+      !eqBoolean(model?.logsFuel, logsFuel) ||
+      !eqNumber(model?.fuelCapacity, fuelCapacity) ||
+      !eqNumber(model?.totalFuel, totalFuel) ||
+      !eqObjectId(model?.defaultFuel, defaultFuel) ||
+      !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
+      !eqObjectId(model?.defaultStyle, defaultStyle) ||
+      !eqString(model?.scanCodeSize, scanCodeSize) ||
+      !eqString(model?.notes, notes)
+    );
+
+    if (canSave) {
+      realm.write(() => {
+        model.name = name!;
+        model.image = image;
+        model.vendor = vendor;
+        model.category = category;
+        model.purchasePrice = toNumber(purchasePrice),
+        model.retired = retired;
+        model.damaged = damaged;
+        model.logsBatteries = logsBatteries;
+        model.logsFuel = logsFuel
+        model.fuelCapacity = toNumber(fuelCapacity);
+        model.totalFuel = toNumber(totalFuel);
+        model.defaultFuel = defaultFuel;
+        model.defaultPropeller = defaultPropeller;
+        model.defaultStyle = defaultStyle;
+        model.scanCodeSize = scanCodeSize;
+        model.notes = notes;
+      });
+    }
+    }, [ 
+    name,
+    image,
+    vendor,
+    category,
+    purchasePrice,
+    retired,
+    damaged,
+    logsBatteries,
+    logsFuel,
+    fuelCapacity,
+    totalFuel,
+    defaultFuel,
+    defaultPropeller,
+    defaultStyle,
+    scanCodeSize,
+    notes,
+  ]);
+
+  useEffect(() => {
     if (!modelId) return;
     navigation.setOptions({
       header: () => (

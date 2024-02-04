@@ -39,10 +39,10 @@ const ModelsNavigator = () => {
         name='Models'
         component={ModelsScreen}
         initialParams={{}}
-        options={{
+        options={({ route }) => ({
           title: 'Models',
-          headerLargeTitle: true,
-        }}
+          headerLargeTitle: route.params.inactiveOnly ? false : true,
+        })}
       />
       <ModelsStack.Screen
         name='ModelEditor'

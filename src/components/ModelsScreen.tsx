@@ -1,9 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { FlatList, ListRenderItem, Pressable, ScrollView, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
 import { Button } from '@rneui/base';
-import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
@@ -48,37 +47,58 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   }, [ activeModels, inactiveModels ]);
 
   useEffect(() => {
+    if (inactiveOnly) {
+      // Clear param for next navigation to this screen.
+      navigation.setParams({});
+    }
+  
     const onEdit = () => {
       setEditModeEnabled(!editModeEnabled);
     };
 
     navigation.setOptions({
       headerLeft: () => {
-        return (
-          <Button
-            title={editModeEnabled ? 'Done' : 'Edit'}
-            titleStyle={theme.styles.buttonClearTitle}
-            buttonStyle={[theme.styles.buttonClear, s.editButton]}
-            onPress={onEdit}
-          />
-        )
+        if (inactiveOnly) {
+          return null;
+        } else {
+          return (
+            <Button
+              title={editModeEnabled ? 'Done' : 'Edit'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.editButton]}
+              onPress={onEdit}
+            />
+          )
+        }
       },
       headerRight: ()  => {
         return (
           <>
-            <Icon
-              name={'filter'}
-              style={s.headerIcon}
-              onPress={() => navigation.navigate('ModelFiltersNavigator')}
+            <Pressable
+              disabled={editModeEnabled}
+              onPress={() => navigation.navigate('ModelFiltersNavigator')}>
+              <Icon
+                name={'filter'}
+                style={[
+                  s.headerIcon,
+                  editModeEnabled ? s.headerIconDisabled : {}
+                ]}
               />
-            <Icon
-              name={'plus'}
-              style={s.headerIcon}
+            </Pressable>
+            <Pressable
+              disabled={editModeEnabled}
               onPress={() => navigation.navigate('NewModelNavigator', {
                 screen: 'NewModel',
                 params: {}
-              })}
-            />
+              })}>
+              <Icon
+                name={'plus'}
+                style={[
+                  s.headerIcon,
+                  editModeEnabled ? s.headerIconDisabled : {}
+                ]}
+              />
+            </Pressable>
           </>
         );
       },
@@ -157,6 +177,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}
+        ListEmptyComponent={
+          <Text style={s.emptyList}>{'No Models'}</Text>
+        }
         ListFooterComponent={
           <>
           {!inactiveOnly && inactiveModels.length
@@ -167,7 +190,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                   title={'Retired'}
                   value={`${inactiveModels.length}`}
                   position={['first', 'last']}
-                  onPress={() => navigation.navigate('Models', {
+                  onPress={() => navigation.push('Models', {
                     inactiveOnly: true,
                   })}
                 />
@@ -189,10 +212,18 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingHorizontal: 0,
     minWidth: 0,
   },
+  emptyList: {
+    textAlign: 'center',
+    marginTop: 180,
+    ...theme.styles.textNormal,
+  },
   headerIcon: {
     color: theme.colors.brandPrimary,
     fontSize: 22,
     marginHorizontal: 10,
+  },
+  headerIconDisabled: {
+    color: theme.colors.disabled,
   },
   sectionList: {
     flex: 1,

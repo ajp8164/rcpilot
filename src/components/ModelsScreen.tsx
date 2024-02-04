@@ -145,9 +145,18 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         title={model.name}
         subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
-        onPress={() => navigation.navigate('FlightNavigator', {
-          modelId: model._id.toString(),
-        })}
+        onPress={() => {
+          if (inactiveOnly) {
+            navigation.navigate('ModelEditor', {
+              modelId: model._id.toString(),
+            });
+          } else {
+            navigation.navigate('FlightNavigator', {
+              modelId: model._id.toString(),
+            });
+          }
+        }}
+        showInfo={!inactiveOnly}
         onPressInfo={() => navigation.navigate('ModelEditor', {
           modelId: model._id.toString(),
         })}

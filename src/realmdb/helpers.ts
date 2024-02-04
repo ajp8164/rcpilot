@@ -2,6 +2,7 @@
 // with a possibly changed form value 'formAttr' where the value is expected to be a
 // specific type. The 'formAttr' is always a string; by convention UI components interact
 
+import { Object } from 'realm';
 import lodash from "lodash";
 
 // with strings so we don't require a conversion prior to calling these functions.
@@ -21,9 +22,14 @@ export const eqString = (schemaAttr?: string, formAttr?: string) => {
   }
 };
 
-export const eqObject = (schemaAttr?: object, formAttr?: object) => {
+export const eqObject = (schemaObj?: object, otherFormObj?: object) => {
   // Remove any realm properties from the schema attribute.
-  return lodash.isEqual(JSON.parse(JSON.stringify(schemaAttr)), formAttr);
+  return lodash.isEqual(JSON.parse(JSON.stringify(schemaObj)), otherFormObj);
+};
+
+export const eqObjectId = <T>(schemaObj?: Object<T>, otherObj?: Object<T>) => {
+  // Test for the exact same Realm object.
+  return schemaObj?._objectKey() === otherObj?._objectKey();
 };
 
 export const eqBoolean = (schemaAttr?: boolean, formAttr?: boolean) => {

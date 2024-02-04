@@ -1,5 +1,5 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-import { ISODateString, ISODurationString } from 'types/common';
+import { ISODateString, ScanCodeSize } from 'types/common';
 
 import { EventStyle } from './EventStyle';
 import { ModelCategory } from './ModelCategory';
@@ -10,15 +10,15 @@ import { ModelType } from 'types/model';
 export class Model extends Object<Model> {
   _id!: BSON.ObjectId;
   name!: string;
-  image!: string;
-  type!: string;
+  image?: string;
+  type!: ModelType;
   vendor?: string;
   category?: ModelCategory;
   purchasePrice?: number;
   retired!: boolean;
   damaged!: boolean;
   totalEvents?: number;
-  totalTime?: ISODurationString;
+  totalTime?: number;
   lastEvent?: ISODateString;
   logsBatteries!: boolean;
   logsFuel!: boolean;
@@ -27,6 +27,7 @@ export class Model extends Object<Model> {
   defaultFuel?: ModelFuel;
   defaultPropeller?: ModelPropeller;
   defaultStyle?: EventStyle;
+  scanCodeSize?: ScanCodeSize;
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -34,7 +35,7 @@ export class Model extends Object<Model> {
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       name: 'string',
-      image: 'string',
+      image: 'string?',
       type: { type: 'string', default: ModelType.Airplane },
       vendor: 'string?',
       category: 'ModelCategory?',
@@ -42,7 +43,7 @@ export class Model extends Object<Model> {
       retired: { type: 'bool', default: false },
       damaged: { type: 'bool', default: false },
       totalEvents: 'int?',
-      totalTime: 'string?',
+      totalTime: 'int?',
       lastEvent: 'string?',
       logsBatteries: { type: 'bool', default: false },
       logsFuel: { type: 'bool', default: false },
@@ -51,6 +52,7 @@ export class Model extends Object<Model> {
       defaultFuel: 'ModelFuel?',
       defaultPropeller: 'ModelPropeller?',
       defaultStyle: 'EventStyle?',
+      scanCodeSize: 'string?',
       notes: 'string?',
     },
     primaryKey: '_id',

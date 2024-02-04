@@ -113,7 +113,9 @@ export type ModelsNavigatorParamList = {
   ModelStatistics: {
     modelId: string;
   };
-  Models: undefined;
+  Models: {
+    inactiveOnly?: boolean;
+  };
   ModelFiltersNavigator: undefined;
   Notes: {
     title?: string;

@@ -4,6 +4,7 @@ import FlightNavigator from 'components/navigation/FlightNavigator';
 import FlightsScreen from 'components/FlightsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
+import { ModelHeader } from 'components/molecules/ModelHeader';
 import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
@@ -37,6 +38,7 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name='Models'
         component={ModelsScreen}
+        initialParams={{}}
         options={{
           title: 'Models',
           headerLargeTitle: true,
@@ -45,9 +47,9 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name='ModelEditor'
         component={ModelEditorScreen}
-        options={{
-          title: '',
-        }}
+        options={({ route }) => ({
+          header: () => <ModelHeader modelId={route.params.modelId}/>,
+        })}
       />
       <ModelsStack.Screen
         name='ModelStatistics'

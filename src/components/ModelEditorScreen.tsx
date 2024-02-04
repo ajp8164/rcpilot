@@ -2,21 +2,28 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
-import { modelCategories, modelPropellers, modelStyles } from '../mocks/enums';
-import { useObject, useRealm } from '@realm/react';
+import { ScrollView, View } from 'react-native';
+import { eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
+import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
+import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { EventStyle } from 'realmdb/EventStyle';
 import { Model } from 'realmdb/Model';
+import { ModelCategory } from 'realmdb/ModelCategory';
+import { ModelFuel } from 'realmdb/ModelFuel';
+import { ModelHeader } from 'components/molecules/ModelHeader';
+import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScanCodeSize } from 'types/common';
-import { ScrollView } from 'react-native';
-import { enumIdsToValues } from 'lib/utils';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
@@ -35,18 +42,95 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const model = useObject(Model, new BSON.ObjectId(modelId));
+  const modelCategories = useQuery(ModelCategory);
+  const modelPropellers = useQuery(ModelPropeller);
+  const eventStyles = useQuery(EventStyle);
+  const modelFuels = useQuery(ModelFuel);
 
-  const [batteryLoggingEnabled, setBatteryLoggingEnabled] = useState(false);
-  const [fuelLoggingEnabled, setFuelLoggingEnabled] = useState(false);
-  const [isDamaged, setIsDamaged] = useState(false);
-  const [isRetired, setIsRetired] = useState(false);
+  const [name, setName] = useState(model?.name || undefined);
+  const [image, setImage] = useState(model?.image || undefined);
+  const [type, setType] = useState(model?.type || ModelType.Airplane);
+  const [vendor, setVendor] = useState(model?.vendor || undefined);
+  const [category, setCategory] = useState(model?.category || undefined);
+  const [purchasePrice, setPurchasePrice] = useState(model?.purchasePrice?.toString() || undefined);
+  const [damaged, setDamaged] = useState(model?.damaged || false);
+  const [retired, setRetired] = useState(model?.retired || false);
+  const [totalEvents, setTotalEvents] = useState(model?.totalEvents?.toString() || undefined);
+  const [totalTime, setTotalTime] = useState(model?.totalTime?.toString() || undefined);
+  const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
+  const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
+  const [logsFuel, setLogsFuel] = useState(model?.logsFuel || false);
+  const [fuelCapacity, setFuelCapacity] = useState(model?.fuelCapacity?.toString() || undefined);
+  const [totalFuel, setTotalFuel] = useState(model?.totalFuel?.toString() || undefined);
+  const [defaultFuel, setDefaultFuel] = useState(model?.defaultFuel || undefined);
+  const [defaultPropeller, setDefaultPropeller] = useState(model?.defaultPropeller || undefined);
+  const [defaultStyle, setDefaultStyle] = useState(model?.defaultStyle || undefined);
+  const [scanCodeSize, setScanCodeSize] = useState(model?.scanCodeSize || ScanCodeSize.None);
+  const [notes, setNotes] = useState(model?.notes || undefined);
+
   const [expandedLastFlight, setExpandedLastFlight] = useState(false);
-  const [lastFlightDate, setLastFlightDate] = useState<string>();
-  const [notes, setNotes] = useState('');
 
   useEffect(() => {
+    if (modelId) return;
+
+    const canSave = !!name && (
+      !eqString(model?.name, name) ||
+      !eqString(model?.image, image) ||
+      !eqString(model?.type, type) ||
+      !eqString(model?.vendor, type) ||
+      !eqObjectId(model?.category, category) ||
+      !eqNumber(model?.purchasePrice, purchasePrice) ||
+      !eqBoolean(model?.damaged, damaged) ||
+      !eqBoolean(model?.retired, retired) ||
+      !eqNumber(model?.totalEvents, totalEvents) ||
+      !eqNumber(model?.totalTime, totalTime) ||
+      !eqString(model?.lastEvent, lastEvent) ||
+      !eqBoolean(model?.logsBatteries, logsBatteries) ||
+      !eqBoolean(model?.logsFuel, logsFuel) ||
+      !eqNumber(model?.fuelCapacity, fuelCapacity) ||
+      !eqNumber(model?.totalFuel, totalFuel) ||
+      !eqObjectId(model?.defaultFuel, defaultFuel) ||
+      !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
+      !eqObjectId(model?.defaultStyle, defaultStyle) ||
+      !eqString(model?.scanCodeSize, scanCodeSize) ||
+      !eqString(model?.notes, notes)
+    );
+
+    const save = () => {
+      realm.write(() => {
+        realm.create('Model', {
+        // console.log('Model', {
+          name,
+          image,
+          type,
+          vendor,
+          category,
+          purchasePrice: toNumber(purchasePrice),
+          retired,
+          damaged,
+          totalEvents: toNumber(totalEvents),
+          totalTime: hmsMaskToSeconds(totalTime),
+          lastEvent,
+          logsBatteries,
+          logsFuel,
+          fuelCapacity: toNumber(fuelCapacity),
+          totalFuel: toNumber(totalFuel),
+          defaultFuel,
+          defaultPropeller,
+          defaultStyle,
+          scanCodeSize,
+          notes,
+        });
+      });
+    };
+  
+    const onDone = () => {
+      save();
+      navigation.goBack();
+    };
+    
     navigation.setOptions({
-      title: model ? model.type : 'New Model',
+      title: 'New Model',
       headerLeft: () => (
         <Button
           title={'Cancel'}
@@ -55,204 +139,280 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           onPress={navigation.goBack}
         />
       ),
-      headerRight: () => (
-        <Button
-          title={'Save'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-          onPress={() => null}
+      headerRight: () => {
+        if (canSave) {
+          return (
+            <Button
+              title={'Save'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.saveButton]}
+              onPress={onDone}
+            />
+          )
+        }
+      },
+    });
+  }, [ 
+    name,
+    image,
+    type,
+    vendor,
+    category,
+    purchasePrice,
+    retired,
+    damaged,
+    totalEvents,
+    totalTime,
+    lastEvent,
+    logsBatteries,
+    logsFuel,
+    fuelCapacity,
+    totalFuel,
+    defaultFuel,
+    defaultPropeller,
+    defaultStyle,
+    scanCodeSize,
+    notes,
+  ]);
+
+  useEffect(() => {
+    if (!modelId) return;
+    navigation.setOptions({
+      header: () => (
+        <ModelHeader
+          modelId={route.params.modelId}
+          onChangeImage={setImage}
+          onGoBack={navigation.goBack}
         />
       ),
     });
   }, []);
 
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: ()  => {
-  //       return (
-  //         <>
-  //           <Icon
-  //             name={'chevron-up'}
-  //             style={s.headerIcon}
-  //             onPress={() => null}/>
-  //           <Icon
-  //             name={'chevron-down'}
-  //             style={s.headerIcon}
-  //             onPress={() => null}/>
-  //         </>
-  //       );
-  //     },
-  //   });
-  // }, []);
-
   useEffect(() => {
     // Event handlers for EnumPicker
-    event.on('category', onChangeCategory);
+    event.on('model-type', onChangeType);
+    event.on('model-category', onChangeCategory);
     event.on('default-propeller', onChangeDefaultPropeller);
     event.on('default-style', onChangeDefaultStyle);
+    event.on('default-fuel', onChangeDefaultFuel);
+    event.on('model-scan-code-size', onChangeScanCodeSize);
+    event.on('model-notes', setNotes);
 
     return () => {
-      event.removeListener('category', onChangeCategory);
+      event.removeListener('model-type', onChangeType);
+      event.removeListener('model-category', onChangeCategory);
       event.removeListener('default-propeller', onChangeDefaultPropeller);
-      event.removeListener('default-style', onChangeDefaultStyle);  
+      event.removeListener('default-style', onChangeDefaultStyle);
+      event.removeListener('default-fuel', onChangeDefaultFuel);
+      event.removeListener('model-scan-code-size', onChangeScanCodeSize);
+      event.removeListener('model-notes', setNotes);
     };
   }, []);
 
-  const onChangeCategory = (v: string) => {};
-  const onChangeDefaultPropeller = (v: string) => {};
-  const onChangeDefaultStyle = (v: string) => {};
+  const hasPropeller = [
+    ModelType.Airplane,
+    ModelType.Sailplane,
+    ModelType.Multicopter,
+  ].includes(type as ModelType);
+
+  const onChangeType = (result: EnumPickerResult) => {
+    setType(result.value[0] as ModelType);
+  };
+
+  const onChangeCategory = (result: EnumPickerResult) => {
+    const c = modelCategories.find(c => {return c.name === result.value[0]});
+    setCategory(c);
+  };
+
+  const onChangeDefaultPropeller = (result: EnumPickerResult) => {
+    const p = modelPropellers.find(p => {return p.name === result.value[0]});
+    setDefaultPropeller(p);
+  };
+
+  const onChangeDefaultStyle = (result: EnumPickerResult) => {
+    const s = eventStyles.find(s => {return s.name === result.value[0]});
+    setDefaultStyle(s);
+  };
+
+  const onChangeDefaultFuel = (result: EnumPickerResult) => {
+    const f = modelFuels.find(f => {return f.name === result.value[0]});
+    setDefaultFuel(f);
+  };
+
+  const onLastEventChange = (date?: Date) => {
+    date && setLastEvent(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
+  };
+
+  const onChangeScanCodeSize = (result: EnumPickerResult) => {
+    setScanCodeSize(result.value[0] as ScanCodeSize);
+  };
   
-  const toggleBatteryLogging = (value: boolean) => {
-    setBatteryLoggingEnabled(value);
-  };
-
-  const toggleFuelLogging = (value: boolean) => {
-    setFuelLoggingEnabled(value);
-  };
-
-  const toggleIsDamaged = (value: boolean) => {
-    setIsDamaged(value);
-  };
-
-  const toggleIsRetired = (value: boolean) => {
-    setIsRetired(value);
-  };
-
-  const onLastFlightDateChange = (date?: Date) => {
-    date && setLastFlightDate(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
-  };
-
   return (
     <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider />
-      <ListItem
-        title={'Blade 150S'}
-        subtitle={'Blade'}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={() => null}
-      />
-      <Divider />
-      {!modelId &&
-      <ListItem
-        title={'Model Type'}
-        value={'Airplane'}
-        position={['first']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Model Type',
-          values: Object.values(ModelType),
-          selected: 'Helicopter',
-          icons: modelTypeIcons,
-          eventName: 'category',
-        })}
-      />
-      }
-      <ListItem
-        title={'Category'}
-        value={'None'}
-        position={modelId ? ['first', 'last'] : ['last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Model Category',
-          footer: 'You can manage categories through the Globals section in the Setup tab.',
-          values: Object.values(modelCategories),
-          selected: enumIdsToValues(['id1'], modelCategories),
-          eventName: 'category',
-        })}
-      />
-      <Divider />
-      {!modelId &&
-        <>
+      edges={['left', 'right']}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        {!modelId &&
+          <ModelHeader
+            modelId={route.params.modelId}
+            onChangeImage={setImage}
+          />
+        }
+        <View style={theme.styles.view}>
+        <Divider />
+        <ListItemInput
+          placeholder={'New Model'}
+          position={['first']}
+          value={name}
+          onChangeText={setName}
+        />
+        <ListItemInput
+          placeholder={'Vendor'}
+          position={['last']}
+          value={vendor}
+          onChangeText={setVendor}
+        />
+        <Divider />
+        <CollapsibleView expanded={!modelId}>
+          <ListItem
+            title={'Model Type'}
+            value={type}
+            position={['first']}
+            onPress={() => navigation.navigate('EnumPicker', {
+              title: 'Model Type',
+              headerBackTitle: 'Model',
+              values: Object.values(ModelType),
+              selected: type,
+              icons: modelTypeIcons,
+              eventName: 'model-type',
+            })}
+          />
+        </CollapsibleView>
+        <ListItem
+          title={'Category'}
+          value={category?.name || 'None'}
+          position={modelId ? ['first', 'last'] : ['last']}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'Model Category',
+            headerBackTitle: 'Model',
+            footer: 'You can manage categories through the Globals section in the Setup tab.',
+            values: modelCategories.map(c => { return c.name }),
+            selected: category?.name,
+            mode: 'one-or-none',
+            eventName: 'model-category',
+          })}
+        />
+        <Divider />
+        <CollapsibleView expanded={!modelId}>
           <ListItemInput
             title={'Total Time'}
-            value={'10'}
+            value={totalTime}
             label='h:mm:ss'
+            placeholder={'Unknown'}
             keyboardType={'number-pad'}
+            numeric={true}
+            numericProps={{
+              precision: 0,
+              maxValue: 999999,
+              customFormatter: maskToHMS,
+            }}
             position={['first']}
+            onChangeText={value =>
+              setTotalTime(hmsMaskToSeconds(value) > 0 ? value : undefined)
+            }
           />
           <ListItemInput
             title={'Total Flights'}
-            value={'No'}
+            value={totalEvents}
             label='Flights'
+            placeholder={'No'}
             keyboardType={'number-pad'}
+            numeric={true}
+            numericProps={{precision: 0, prefix: ''}}
+            onChangeText={setTotalEvents}
           />
-        </>
-      }
-      {modelId &&
-        <ListItem
+        </CollapsibleView>
+        <CollapsibleView expanded={!!modelId}>
+          <ListItem
             title={'Statistics'}
             value={'4:00 in a flight'}
             position={['first']}
-            onPress={() => null}
+            onPress={() => navigation.navigate('ModelStatistics', {
+              modelId,
+            })}
           />
-      }
-      <ListItemDate
-        title={'Last Flight'}
-        value={lastFlightDate
-          ? DateTime.fromISO(lastFlightDate).toFormat(
-            "MMM d, yyyy 'at' hh:mm a"
-          )
-          : 'Tap to Set...'}
-        pickerValue={lastFlightDate}
-        rightImage={false}
-        expanded={expandedLastFlight}
-        position={modelId ? [] : ['last']}
-        onPress={() => setExpandedLastFlight(!expandedLastFlight)}
-        onDateChange={onLastFlightDateChange}
-      />
-      {modelId &&
-        <ListItem
-          title={'Logged Flight Details'}
-          value={'0'}
-          position={['last']}
-          onPress={() => navigation.navigate('Flights', {
-            pilotId: '1'
-          })}
+        </CollapsibleView>
+        <ListItemDate
+          title={'Last Flight'}
+          value={lastEvent
+            ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
+            : 'Tap to Set...'}
+          pickerValue={lastEvent}
+          rightImage={false}
+          expanded={expandedLastFlight}
+          position={modelId ? [] : ['last']}
+          onPress={() => setExpandedLastFlight(!expandedLastFlight)}
+          onDateChange={onLastEventChange}
         />
-      }
-      <Divider />
-      <ListItemSwitch
-        title={'Battery Logging'}
-        value={batteryLoggingEnabled}
-        position={['first']}
-        onValueChange={toggleBatteryLogging}
-      />
-      {batteryLoggingEnabled &&
-        <ListItem
-          title={'Favorite Batteries'}
-          value={'1'}
-          onPress={() => null}
-        />
-      }
-      <ListItemSwitch
-        title={'Fuel Logging'}
-        position={fuelLoggingEnabled ? [] : ['last']}
-        value={fuelLoggingEnabled}
-        onValueChange={toggleFuelLogging}
-      />
-      {fuelLoggingEnabled &&
-        <>
-          <ListItemInput
-            title={'Fuel Capacity'}
-            value={'Value'}
-            label='oz'
-            keyboardType={'number-pad'}
-          />
-          <ListItemInput
-            title={'Total Fuel Consumed'}
-            value={'0.00'}
-            label='gal'
-            inputDisabled={true}
+        <CollapsibleView expanded={!!modelId}>
+          <ListItem
+            title={'Logged Flight Details'}
+            value={'0'}
             position={['last']}
+            onPress={() => navigation.navigate('Flights', {
+              pilotId: '123456789012'
+            })}
           />
-        </>
-      }
-      {modelId &&
-        <>
+        </CollapsibleView>
+        <Divider />
+        <ListItemSwitch
+          title={'Battery Logging'}
+          value={logsBatteries}
+          position={['first']}
+          onValueChange={setLogsBatteries}
+          expanded={logsBatteries}
+          ExpandableComponent={
+            <ListItem
+              title={'Favorite Batteries'}
+              value={'1'}
+              onPress={() => null}
+            />
+          }
+        />
+        <ListItemSwitch
+          title={'Fuel Logging'}
+          position={logsFuel ? [] : ['last']}
+          value={logsFuel}
+          onValueChange={setLogsFuel}
+          expanded={logsFuel}
+          ExpandableComponent={
+            <>
+              <ListItemInput
+                title={'Fuel Capacity'}
+                value={fuelCapacity}
+                label='oz'
+                placeholder={'Value'}
+                numeric={true}
+                numericProps={{precision: 2, prefix: ''}}
+                keyboardType={'number-pad'}
+                onChangeText={setFuelCapacity}
+                />
+              <ListItemInput
+                title={'Total Fuel Consumed'}
+                value={totalFuel}
+                label='gal'
+                placeholder={'Amount'}
+                numeric={true}
+                numericProps={{precision: 2, prefix: ''}}
+                position={['last']}
+                keyboardType={'number-pad'}
+                onChangeText={setTotalFuel}
+              />
+            </>
+          }
+        />
+        <CollapsibleView expanded={!!modelId}>
           <Divider />
           <ListItem
             title={'Checklists'}
@@ -271,76 +431,103 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             position={['last']}
             onPress={() => null}
           />
-        </>
-      }
-      <Divider />
-      <ListItem
-        title={'Default Style'}
-        value={'None'}
-        position={['first']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Default Style',
-          footer: 'You can manage styles through the Globals section in the Setup tab.',
-          values: Object.values(modelStyles),
-          selected: enumIdsToValues(['id1'], modelStyles),
-          eventName: 'default-style',
-        })}
-      />
-      <ListItem
-        title={'Default Propeller'}
-        value={'None'}
-        position={['last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Default Propeller',
-          footer: 'You can manage propellers through the Globals section in the Setup tab.',
-          values: Object.values(modelPropellers),
-          selected: enumIdsToValues(['id0'], modelPropellers),
-          eventName: 'default-propeller',
-        })}
-      />
-      <Divider />
-      <ListItem
-        title={'QR Code Size'}
-        value={'None'}
-        position={['first', 'last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'QR Code Size',
-          values: Object.values(ScanCodeSize),
-          selected: 'None',
-          eventName: '',
-        })}
-      />
-      <Divider />
-      <ListItemInput
-        title={'Purchase Price'}
-        value={'Unknown'}
-        position={['first']}
-      />
-      {modelId &&
-        <ListItemSwitch
-          title={'Airplane is Retired'}
-          value={isRetired}
-          onValueChange={toggleIsRetired}
+        </CollapsibleView>
+        <Divider />
+        <ListItem
+          title={'Default Style'}
+          value={defaultStyle?.name || 'None'}
+          position={!hasPropeller && !logsFuel ? ['first', 'last'] : ['first']}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'Default Style',
+            headerBackTitle: 'Model',
+            footer: 'You can manage styles through the Globals section in the Setup tab.',
+            values: eventStyles.map(s => { return s.name }),
+            selected: defaultStyle?.name,
+            mode: 'one-or-none',
+            eventName: 'default-style',
+          })}
         />
-      }
-      <ListItemSwitch
-        title={'Airplane is Damaged'}
-        position={['last']}
-        value={isDamaged}
-        onValueChange={toggleIsDamaged}
-      />
-      <Divider />
-      <ListItem
-        title={'Notes'}
-        position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
-          title: 'String Value Notes',
-          text: notes,
-          eventName: 'model-notes',
-        })}
-      />
-      <Divider />
-    </ScrollView>
+        <CollapsibleView expanded={hasPropeller}>
+          <ListItem
+            title={'Default Propeller'}
+            value={defaultPropeller?.name || 'None'}
+            position={!logsFuel ? ['last']: []}
+            onPress={() => navigation.navigate('EnumPicker', {
+              title: 'Default Propeller',
+              headerBackTitle: 'Model',
+              footer: 'You can manage propellers through the Globals section in the Setup tab.',
+              values: modelPropellers.map(p => { return p.name}),
+              selected: defaultPropeller?.name,
+              mode: 'one-or-none',
+              eventName: 'default-propeller',
+            })}
+          />
+        </CollapsibleView>
+        <CollapsibleView expanded={logsFuel}>
+          <ListItem
+            title={'Default Fuel'}
+            value={defaultFuel?.name || 'None'}
+            position={['last']}
+            onPress={() => navigation.navigate('EnumPicker', {
+              title: 'Default Fuel',
+              headerBackTitle: 'Model',
+              footer: 'You can manage fuel through the Globals section in the Setup tab.',
+              values: modelFuels.map(f => { return f.name}),
+              selected: defaultFuel?.name,
+              mode: 'one-or-none',
+              eventName: 'default-fuel',
+            })}
+          />
+        </CollapsibleView>
+        <Divider />
+        <ListItem
+          title={'QR Code Size'}
+          value={scanCodeSize || 'None'}
+          position={['first', 'last']}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'QR Code Size',
+            headerBackTitle: 'Model',
+            values: Object.values(ScanCodeSize),
+            selected: scanCodeSize,
+            eventName: 'model-scan-code-size',
+          })}
+        />
+        <Divider />
+        <ListItemInput
+          title={'Purchase Price'}
+          value={purchasePrice}
+          numeric={true}
+          keyboardType={'number-pad'}
+          placeholder={'Unknown'}
+          position={['first']}
+          onChangeText={setPurchasePrice}
+        /> 
+        <CollapsibleView expanded={!!modelId}>
+          <ListItemSwitch
+            title={`${type} is Retired`}
+            value={retired}
+            onValueChange={setRetired}
+          />
+        </CollapsibleView>
+        <ListItemSwitch
+          title={`${type} is Damaged`}
+          position={['last']}
+          value={damaged}
+          onValueChange={setDamaged}
+        />
+        <Divider />
+        <ListItem
+          title={notes || 'Notes'}
+          position={['first', 'last']}
+          onPress={() => navigation.navigate('Notes', {
+            title: 'Model Notes',
+            text: notes,
+            eventName: 'model-notes',
+          })}
+        />
+        <Divider />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };

@@ -41,7 +41,7 @@ const BatteriesNavigator = () => {
             'In Storage'
             : 'Batteries',
           headerLeft: () => null,
-          headerLargeTitle: true,
+          headerLargeTitle: route.params.listBatteries === 'all' ? true : false,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         })}

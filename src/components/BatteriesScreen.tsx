@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text } from 'react-native';
+import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -134,12 +134,25 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       <ListItem
         key={battery._id.toString()}
         title={battery.name}
-        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
+        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
         containerStyle={{
           ...s.batteryTint,
-          borderLeftColor: battery.tint !== BatteryTint.None ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent
+          borderLeftColor: battery.tint !== BatteryTint.None ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent,
         }}
+        titleStyle={s.batteryText}
+        subtitleStyle={s.batteryText}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+        leftImage={
+          <View>
+            <Icon
+              name={'battery-full'}
+              solid={true}
+              size={45}
+              color={theme.colors.brandPrimary}
+              style={s.batteryIcon}
+            />
+          </View>
+        }
         onPress={() => {
           if (listBatteries !== 'all') {
             navigation.navigate('BatteryEditor', {
@@ -180,7 +193,6 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     )
   };
 
-
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
       <SectionList
@@ -210,7 +222,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             ?
               <>
                 <Divider text={'INACTIVE BATTERIES'} />
-                {retiredBatteries.length &&
+                {retiredBatteries.length ?
                   <ListItem
                     title={'Retired'}
                     value={`${retiredBatteries.length}`}
@@ -219,17 +231,17 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                       listBatteries: 'retired',
                     })}
                   />
-                }
-                {retiredBatteries.length &&
+                : null}
+                {inStorageBatteries.length ?
                   <ListItem
                     title={'In Storage'}
                     value={`${inStorageBatteries.length}`}
-                    position={retiredBatteries.length ? ['last'] : ['first', 'last']}
+                    position={inStorageBatteries.length ? ['last'] : ['first', 'last']}
                     onPress={() => navigation.push('Batteries', {
                       listBatteries: 'in-storage',
                     })}
                   />
-                }
+                : null}
                 <Divider />
               </>
             :
@@ -266,6 +278,15 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  batteryIcon: {
+    transform: [{rotate: '-90deg'}],
+    width: '100%',
+    left: -15,
+  },
+  batteryText: {
+    left: 10,
+    maxWidth: '95%',
+  },
   batteryTint: {
     borderLeftWidth: 8,
   },

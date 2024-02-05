@@ -1,88 +1,260 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, ScrollView } from 'react-native';
-import React, { useEffect } from 'react';
+import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { useQuery, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { BatteriesNavigatorParamList } from 'types/navigation';
+import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
-import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+
+type Section = {
+  title?: string;
+  data: Battery[];
+};
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'Batteries'>;
 
-const BatteriesScreen = ({ navigation }: Props) => {
+const BatteriesScreen = ({ navigation, route }: Props) => {
+  const { listBatteries } = route.params;
+
   const theme = useTheme();
   const s = useStyles(theme);
+  const realm = useRealm();
+
+  const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
+  const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
+  const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
+
+  const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const [deleteBatteryActionSheetVisible, setDeleteBatteryActionSheetVisible] = useState<Battery>();
 
   useEffect(() => {
+    const onEdit = () => {
+      setEditModeEnabled(!editModeEnabled);
+    };
+
     navigation.setOptions({
       headerLeft: () => {
-        return (
-          <Button
-            title={'Edit'}
-            titleStyle={theme.styles.buttonClearTitle}
-            buttonStyle={[theme.styles.buttonClear, s.editButton]}
-            onPress={() => null}
-          />
-        )
+        if (listBatteries === 'all') {
+          return (
+            <Button
+              title={editModeEnabled ? 'Done' : 'Edit'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.editButton]}
+              disabled={!activeBatteries.length}
+              disabledStyle={theme.styles.buttonClearDisabled}
+              onPress={onEdit}
+            />
+          );
+        } else {
+          return null;
+        }
       },
       headerRight: ()  => {
         return (
           <>
-            <Icon
-              name={'filter'}
-              style={s.headerIcon}
-              onPress={() => navigation.navigate('BatteryFiltersNavigator')}
-            />
-            <Icon
-              name={'plus'}
-              style={s.headerIcon}
-              onPress={() => navigation.navigate('NewBatteryNavigator', {
-                screen: 'NewBattery',
-                params: {}
-              })}
-            />
+            <Pressable
+              disabled={editModeEnabled}
+              onPress={() => navigation.navigate('BatteryFiltersNavigator')}>
+              <Icon
+                name={'filter'}
+                style={[
+                  s.headerIcon,
+                  editModeEnabled ? s.headerIconDisabled : {}
+                ]}
+              />
+            </Pressable>
+            {listBatteries !== 'all' ?
+              <Button
+                title={editModeEnabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonClearTitle}
+                buttonStyle={[theme.styles.buttonClear, s.editButton]}
+                onPress={onEdit}
+              />
+            :
+              <Pressable
+                disabled={editModeEnabled}
+                onPress={() => navigation.navigate('NewBatteryNavigator', {
+                  screen: 'NewBattery',
+                  params: {}
+                })}>
+                <Icon
+                  name={'plus'}
+                  style={[
+                    s.headerIcon,
+                    editModeEnabled ? s.headerIconDisabled : {}
+                  ]}
+                />
+              </Pressable>
+            }
           </>
         );
       },
     });
-  }, []);
+  }, [ editModeEnabled ]);
+
+  const confirmDeleteBattery = (battery: Battery) => {
+    setDeleteBatteryActionSheetVisible(battery);
+  };
+
+  const deleteBattery = (battery: Battery) => {
+    realm.write(() => {
+      realm.delete(battery);
+    });
+  };
+
+  const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
+    return groupItems<Battery, Section>(batteries, (battery) => {
+      const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
+      const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
+      return `${c}${battery.sCells}S${p} PACKS`;
+    }).sort();
+  };
+
+  const renderItem: SectionListRenderItem<Battery, Section> = ({
+    item: battery,
+    section,
+    index,
+  }: {
+    item: Battery;
+    section: Section;
+    index: number;
+  }) => {
+    return (
+      <ListItem
+        key={battery._id.toString()}
+        title={battery.name}
+        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
+        position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+        onPress={() => {
+          if (listBatteries !== 'all') {
+            navigation.navigate('BatteryEditor', {
+              batteryId: battery._id.toString(),
+            });
+          } else {
+            navigation.navigate('NewBatteryCycleNavigator', {
+              screen: 'NewBatteryCycle',
+              params: {
+                batteryId: battery._id.toString(),
+              }
+            });
+          }
+        }}
+        showInfo={listBatteries === 'all'}
+        onPressInfo={() => navigation.navigate('BatteryEditor', {
+          batteryId: battery._id.toString(),
+        })}
+        editable={{
+          item: {
+            icon: 'remove-circle',
+            color: theme.colors.assertive,
+            action: 'open-swipeable',
+          },
+          reorder: true,
+        }}
+        showEditor={editModeEnabled}
+        swipeable={{
+          rightItems: [{
+            icon: 'delete',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => confirmDeleteBattery(battery),
+          }]
+        }}
+     />
+    )
+  };
+
 
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
-      <ScrollView
+      <SectionList
         showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={'READY TO CHARGE'}/>
-        <ListItem
-          title={'150S #1'}
-          subtitle={'450mah 3S/1P 30C LiPo\n20 cycles\nDischarged on Nov 4, 2023, 9 days ago'}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('NewBatteryCycleNavigator', {
-            screen: 'NewBatteryCycle',
-            params: { 
-              batteryId: '1',
-            },
-          })}
-          rightImage={
-            <Pressable
-              style={{flexDirection: 'row'}}
-              onPress={() => navigation.navigate('BatteryEditor', {
-                batteryId: '123456789012'
-              })}>
-              <CustomIcon
-                name={'circle-info'}
-                size={22}
-                color={theme.colors.screenHeaderBackButton}
-              />
-            </Pressable>            
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        style={s.sectionList}
+        sections={groupBatteries(
+          listBatteries === 'retired' ?
+            retiredBatteries
+            : listBatteries === 'in-storage' ?
+            inStorageBatteries
+            : activeBatteries)}
+        keyExtractor={item => item._id.toString()}
+        renderItem={renderItem}
+        renderSectionHeader={({section: {title}}) => (
+          <Divider text={title} />
+        )}
+        ListEmptyComponent={
+          !retiredBatteries.length && !inStorageBatteries.length ?
+            <Text style={s.emptyList}>{'No Batteries'}</Text>
+            : null
+        }
+        ListFooterComponent={
+          <>
+          {listBatteries === 'all' && (retiredBatteries.length || inStorageBatteries.length)
+            ?
+              <>
+                <Divider text={'INACTIVE BATTERIES'} />
+                {retiredBatteries.length &&
+                  <ListItem
+                    title={'Retired'}
+                    value={`${retiredBatteries.length}`}
+                    position={inStorageBatteries.length ? ['first'] : ['first', 'last']}
+                    onPress={() => navigation.push('Batteries', {
+                      listBatteries: 'retired',
+                    })}
+                  />
+                }
+                {retiredBatteries.length &&
+                  <ListItem
+                    title={'In Storage'}
+                    value={`${inStorageBatteries.length}`}
+                    position={retiredBatteries.length ? ['last'] : ['first', 'last']}
+                    onPress={() => navigation.push('Batteries', {
+                      listBatteries: 'in-storage',
+                    })}
+                  />
+                }
+                <Divider />
+              </>
+            :
+              <Divider />
           }
-        />
-      </ScrollView>
+          </>
+        }
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: listBatteries === 'retired' ?
+              'Delete Retired Battery'
+              : listBatteries === 'in-storage' ?
+              'Delete In Storage Battery'
+              : 'Delete Battery',
+            onPress: () => {
+              deleteBattery(deleteBatteryActionSheetVisible!);
+              setDeleteBatteryActionSheetVisible(undefined);
+            },
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeleteBatteryActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deleteBatteryActionSheetVisible}
+      />
     </SafeAreaView>
   );
 };
@@ -93,10 +265,29 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingHorizontal: 0,
     minWidth: 0,
   },
+  emptyList: {
+    textAlign: 'center',
+    marginTop: 180,
+    ...theme.styles.textNormal,
+    ...theme.styles.textDim,
+  },
   headerIcon: {
     color: theme.colors.brandPrimary,
     fontSize: 22,
     marginHorizontal: 10,
+  },
+  headerIconDisabled: {
+    color: theme.colors.disabled,
+  },
+  sectionList: {
+    flex: 1,
+    flexGrow: 1,
+  },
+  sectionHeaderContainer: {
+    height: 35,
+    paddingTop: 12,
+    paddingHorizontal: 25,
+    backgroundColor: theme.colors.listHeaderBackground,
   },
 }));
 

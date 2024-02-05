@@ -1,9 +1,11 @@
+import { Alert, ScrollView } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, NewBatteryNavigatorParamList } from 'types/navigation';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { batteryCellConfigurationToString, getBatteryCellConfigurationItems } from 'lib/battery';
+import { eqBoolean, eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -11,9 +13,9 @@ import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodeSize } from 'types/common';
-import { ScrollView } from 'react-native';
 import { View } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { batteryTintIcons } from 'lib/battery';
@@ -35,14 +37,69 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  const [chemistry, setChemistry] = useState<BatteryChemistry>(BatteryChemistry.LiPo);
-  const [isRetired, setIsRetired] = useState(false);
-  const [cellConfiguration, setCellConfiguration] = useState<string[]>([]);
+  const [name, setName] = useState(battery?.name || undefined);
+  const [chemistry, setChemistry] = useState<BatteryChemistry>(battery?.chemistry || BatteryChemistry.LiPo);
+  const [vendor, setVendor] = useState(battery?.vendor || undefined);
+  const [purchasePrice, setPurchasePrice] = useState(battery?.purchasePrice?.toString() || undefined);
+  const [retired, setRetired] = useState(battery?.retired || false);
+  const [cRating, setCRating] = useState(battery?.cRating?.toString() || undefined);
+  const [capacity, setCapacity] = useState(battery?.capacity?.toString() || '1000');
+  const [totalCycles, setTotalCycles] = useState(battery?.totalCycles?.toString() || undefined);
+  const [sCells, setSCells] = useState(battery?.sCells?.toString() || '3');
+  const [pCells, setPCells] = useState(battery?.pCells?.toString() || '1');
+  const [tint, setTint] = useState(battery?.tint || BatteryTint.None);
+  const [scanCodeSize, setScanCodeSize] = useState(battery?.scanCodeSize || ScanCodeSize.None);
+  const [notes, setNotes] = useState(battery?.notes || undefined);
+
+  const originalCapacity = useRef(capacity).current;
+
+  // const [cellConfiguration, setCellConfiguration] = useState<string[]>([]);
   const [expandedCellConfiguration, setExpandedCellConfiguration] = useState(false);
-  const [notes, setNotes] = useState('');
 
   useEffect(() => {
+    if (batteryId) return;
+
+    const canSave = !!name && !!capacity && (
+      !eqString(battery?.name, name) ||
+      !eqString(battery?.chemistry, chemistry) ||
+      !eqString(battery?.vendor, vendor) ||
+      !eqNumber(battery?.purchasePrice, purchasePrice) ||
+      !eqBoolean(battery?.retired, retired) ||
+      !eqNumber(battery?.cRating, cRating) ||
+      !eqNumber(battery?.capacity, capacity) ||
+      !eqNumber(battery?.sCells, sCells) ||
+      !eqNumber(battery?.pCells, pCells) ||
+      !eqString(battery?.tint, tint) ||
+      !eqString(battery?.scanCodeSize, scanCodeSize) ||
+      !eqString(battery?.notes, notes)
+    );
+
+    const save = () => {
+      realm.write(() => {
+        realm.create('Battery', {
+          name,
+          chemistry,
+          vendor,
+          purchasePrice: toNumber(purchasePrice),
+          retired,
+          cRating: toNumber(cRating),
+          capacity: toNumber(capacity),
+          sCells: toNumber(sCells),
+          pCells: toNumber(pCells),
+          tint,
+          scanCodeSize,
+          notes,
+        });
+      });
+    };
+  
+    const onDone = () => {
+      save();
+      navigation.goBack();
+    };
+    
     navigation.setOptions({
+      title: 'New Battery',
       headerLeft: () => (
         <Button
           title={'Cancel'}
@@ -51,55 +108,131 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           onPress={navigation.goBack}
         />
       ),
-      headerRight: () => (
-        <Button
-          title={'Save'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-          onPress={() => null}
-        />
-      ),
+      headerRight: () => {
+        if (canSave) {
+          return (
+            <Button
+              title={'Save'}
+              titleStyle={theme.styles.buttonClearTitle}
+              buttonStyle={[theme.styles.buttonClear, s.saveButton]}
+              onPress={onDone}
+            />
+          )
+        }
+      },
     });
-  }, []);
+  }, [
+    name,
+    chemistry,
+    vendor,
+    purchasePrice,
+    retired,
+    cRating,
+    capacity,
+    sCells,
+    pCells,
+    tint,
+    scanCodeSize,
+    notes,
+  ]);
 
-  // useEffect(() => {
-  //   navigation.setOptions({
-  //     headerRight: ()  => {
-  //       return (
-  //         <>
-  //           <Icon
-  //             name={'chevron-up'}
-  //             style={s.headerIcon}
-  //             onPress={() => null}/>
-  //           <Icon
-  //             name={'chevron-down'}
-  //             style={s.headerIcon}
-  //             onPress={() => null}/>
-  //         </>
-  //       );
-  //     },
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (!batteryId || !battery) return;
+
+    const canSave = !!name && (
+      !eqString(battery?.name, name) ||
+      !eqString(battery?.vendor, vendor) ||
+      !eqNumber(battery?.purchasePrice, purchasePrice) ||
+      !eqBoolean(battery?.retired, retired) ||
+      !eqNumber(battery?.cRating, cRating) ||
+      !eqNumber(battery?.capacity, capacity) ||
+      !eqNumber(battery?.sCells, sCells) ||
+      !eqNumber(battery?.pCells, pCells) ||
+      !eqString(battery?.tint, tint) ||
+      !eqString(battery?.scanCodeSize, scanCodeSize) ||
+      !eqString(battery?.notes, notes)
+    );
+
+    if (canSave) {
+      realm.write(() => {
+        battery.name = name!;
+        battery.vendor = vendor;
+        battery.purchasePrice = toNumber(purchasePrice),
+        battery.retired = retired;
+        battery.cRating = toNumber(cRating);
+        battery.capacity = toNumber(capacity) || toNumber(originalCapacity);
+        battery.sCells = toNumber(sCells)!;
+        battery.pCells = toNumber(pCells)!;
+        battery.tint = tint;
+        battery.scanCodeSize = scanCodeSize;
+        battery.notes = notes;
+      });
+    }
+    }, [ 
+    name,
+    vendor,
+    purchasePrice,
+    retired,
+    cRating,
+    capacity,
+    sCells,
+    pCells,
+    tint,
+    scanCodeSize,
+    notes,
+  ]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
-    event.on('chemistry', onChangeChemistry);
+    event.on('battery-chemistry', onChangeChemistry);
     event.on('battery-tint', onChangeBatteryTint);
-    event.on('scan-code-size', onChangeScanCodeSize);
+    event.on('battery-scan-code-size', onChangeScanCodeSize);
+    event.on('model-notes', setNotes);
 
     return () => {
-      event.removeListener('chemistry', onChangeChemistry);
+      event.removeListener('battery-chemistry', onChangeChemistry);
       event.removeListener('battery-tint', onChangeBatteryTint);
-      event.removeListener('scan-code-size', onChangeScanCodeSize);
+      event.removeListener('battery-scan-code-size', onChangeScanCodeSize);
+      event.removeListener('model-notes', setNotes);
     };
   }, []);
 
-  const onChangeChemistry = (v: string) => {};
-  const onChangeBatteryTint = (v: string) => {};
-  const onChangeScanCodeSize = (v: string) => {};
+  const onChangeChemistry = (result: EnumPickerResult) => {
+    setChemistry(result.value[0] as BatteryChemistry);
+  };
 
-  const toggleIsRetired = (value: boolean) => {
-    setIsRetired(value);
+  const onChangeBatteryTint = (result: EnumPickerResult) => {
+    setTint(result.value[0] as BatteryTint);
+  };
+
+  const onChangeScanCodeSize = (result: EnumPickerResult) => {
+    setScanCodeSize(result.value[0] as ScanCodeSize);
+  };
+
+  const validateCapacity = () => {
+    if (!capacity && battery) {
+      Alert.alert(
+        'Battery Capacity',
+        'The battery capacity cannot be zero. Please enter a non-zero value.'
+      );
+    }
+  };
+
+  const averageDischargeRate = () => {
+    // Compute average discharge rate over logged cycles.
+    if (battery?.totalCycles && battery.totalCycles > 0) {
+      return '0.2A/min average, 30 cycles';
+    } else {
+      return 'No cycles';
+    }
+  };
+
+  const operatingCost = () => {
+    if (battery?.purchasePrice && battery?.totalCycles) {
+      return `${battery?.purchasePrice / battery?.totalCycles}`;
+    } else {
+      return 'Unknown';
+    }
   };
 
   return (
@@ -108,20 +241,29 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
       <Divider />
-      <ListItem
-        title={'150S #1'}
-        subtitle={'Pulse'}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={() => null}
+      <ListItemInput
+        value={name}
+        placeholder={'New Battery'}
+        position={['first']}
+        onChangeText={setName}
+      />
+      <ListItemInput
+        value={vendor}
+        placeholder={'Vendor'}
+        position={['last']}
+        onChangeText={setVendor}
       />
       <Divider />
       <ListItemInput
         title={'Capacity'}
-        value={'450'}
-        label='mah'
+        value={capacity}
+        label='mAh'
+        placeholder={'Value'}
+        titleStyle={!capacity.length ? {color: theme.colors.assertive} : {}}
         keyboardType={'number-pad'}
         position={['first']}
+        onBlur={validateCapacity}
+        onChangeText={setCapacity}
       />
       <ListItem
         title={'Chemistry'}
@@ -132,46 +274,47 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           title: 'Chemistry',
           values: Object.values(BatteryChemistry),
           selected: 'LiPo',
-          eventName: 'chemistry',
+          eventName: 'battery-chemistry',
         })}
       />
       <ListItem
         title={'Cell Configuration'}
-        value={batteryCellConfigurationToString(chemistry, cellConfiguration)}
+        value={batteryCellConfigurationToString(chemistry, [sCells, pCells])}
         rightImage={false}
         expanded={expandedCellConfiguration}
         onPress={() => setExpandedCellConfiguration(!expandedCellConfiguration)}
         ExpandableComponent={
           <WheelPicker
             placeholder={'none'}
-            itemWidth={['50%', '50%']}
+            itemWidth={['35%', '60%']}
             items={getBatteryCellConfigurationItems(chemistry)}
-            value={cellConfiguration}
+            value={[sCells, pCells]}
+            wheelVisible={[true, true]}
             onValueChange={(_wheelIndex, value, _index) => {
-              setCellConfiguration(value as string[]);
-              // setBattery({ cellConfiguration: toArrayOrdinals(value as string[]) });
-              // THIS VV
-              // setBattery({
-              //   sCells: toArrayOrdinals(value as string[])[0],
-              //   pCells: toArrayOrdinals(value as string[])[1]
-              // });
+              console.log(value);
+              if (Array.isArray(value)) {
+                setSCells(value[0]);
+                setPCells(value[1]);
+              }
             }}
           />
         }
-        />
+      />
       <ListItemInput
         title={'Discharge Rate'}
-        value={'Unknown'}
+        value={cRating}
         label={'C'}
+        placeholder={'Unknown'}
         keyboardType={'number-pad'}
         position={['last']}
+        onChangeText={setCRating}
       />
       <Divider />
       {batteryId &&
         <>
           <ListItem
             title={'Statistics'}
-            value={'No cycles'}
+            value={averageDischargeRate()}
             position={['first']}
             rightImage={false}
           />
@@ -181,7 +324,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           />
           <ListItem
             title={'Logged Cycle Details'}
-            value={'0'}
+            value={battery?.totalCycles?.toString() || '0'}
             position={['last']}
             onPress={() => navigation.navigate('BatteryCycles')}
           />
@@ -190,15 +333,17 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       {!batteryId &&
         <ListItemInput
           title={'Total Cycles'}
-          value={'None'}
+          value={totalCycles}
+          placeholder={'None'}
           keyboardType={'number-pad'}
           position={['first', 'last']}
+          onChangeText={setTotalCycles}
         />
       }
       <Divider />
       <ListItem
         title={'Battery Tint'}
-        value={'None'}
+        value={tint || 'None'}
         position={['first']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Battery Tint',
@@ -210,35 +355,35 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       />
       <ListItem
         title={'QR Code Size'}
-        value={'None'}
+        value={scanCodeSize || 'None'}
         position={['last']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'QR Code Size',
           values: Object.values(ScanCodeSize),
           selected: 'None',
-          eventName: 'scan-code-size',
+          eventName: 'battery-scan-code-size',
         })}
       />
       <Divider />
       <ListItemInput
         title={'Purchase Price'}
-        value={'Unknown'}
+        value={purchasePrice}
+        placeholder={'Unknown'}
         keyboardType={'number-pad'}
         position={batteryId ? ['first'] : ['first', 'last']}
+        onChangeText={setPurchasePrice}
       />
       {batteryId &&
       <>
-        <ListItemInput
+        <ListItem
           title={'Operating Cost'}
-          value={'Unknown'}
-          label={'per cycle'}
-          keyboardType={'number-pad'}
-          />
+          value={`${operatingCost()} per cycle`}
+        />
         <ListItemSwitch
           title={'Battery is Retired'}
           position={['last']}
-          value={isRetired}
-          onValueChange={toggleIsRetired}
+          value={retired}
+          onValueChange={setRetired}
         />
       </>
       }

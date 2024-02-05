@@ -6,12 +6,14 @@ import { useQuery, useRealm } from '@realm/react';
 import { ActionSheet } from 'react-native-ui-lib';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
+import { BatteryTint } from 'types/battery';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { batteryTintIcons } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 
@@ -133,6 +135,10 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         key={battery._id.toString()}
         title={battery.name}
         subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
+        containerStyle={{
+          ...s.batteryTint,
+          borderLeftColor: battery.tint !== BatteryTint.None ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent
+        }}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
         onPress={() => {
           if (listBatteries !== 'all') {
@@ -260,6 +266,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  batteryTint: {
+    borderLeftWidth: 8,
+  },
   editButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

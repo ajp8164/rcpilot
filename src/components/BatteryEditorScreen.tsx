@@ -280,7 +280,6 @@ console.log(chemistry,'<',);
       <ListItem
         title={'Cell Configuration'}
         value={batteryCellConfigurationToString(chemistry, [sCells, pCells])}
-        rightImage={false}
         expanded={expandedCellConfiguration}
         onPress={() => setExpandedCellConfiguration(!expandedCellConfiguration)}
         ExpandableComponent={

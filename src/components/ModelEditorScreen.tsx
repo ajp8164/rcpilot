@@ -77,7 +77,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       !eqString(model?.name, name) ||
       !eqString(model?.image, image) ||
       !eqString(model?.type, type) ||
-      !eqString(model?.vendor, type) ||
+      !eqString(model?.vendor, vendor) ||
       !eqObjectId(model?.category, category) ||
       !eqNumber(model?.purchasePrice, purchasePrice) ||
       !eqBoolean(model?.damaged, damaged) ||
@@ -99,7 +99,6 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     const save = () => {
       realm.write(() => {
         realm.create('Model', {
-        // console.log('Model', {
           name,
           image,
           type,

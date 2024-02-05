@@ -8,6 +8,7 @@ import { batteryCellConfigurationToString, getBatteryCellConfigurationItems } fr
 import { eqBoolean, eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
@@ -236,188 +237,188 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <View style={[theme.styles.view]}>
+    <AvoidSoftInputView style={[theme.styles.view]}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider />
-      <ListItemInput
-        value={name}
-        placeholder={'New Battery'}
-        position={['first']}
-        onChangeText={setName}
-      />
-      <ListItemInput
-        value={vendor}
-        placeholder={'Vendor'}
-        position={['last']}
-        onChangeText={setVendor}
-      />
-      <Divider />
-      <ListItemInput
-        title={'Capacity'}
-        value={capacity}
-        label='mAh'
-        placeholder={'Value'}
-        titleStyle={!capacity.length ? {color: theme.colors.assertive} : {}}
-        keyboardType={'number-pad'}
-        position={['first']}
-        onBlur={validateCapacity}
-        onChangeText={setCapacity}
-      />
-      <ListItem
-        title={'Chemistry'}
-        value={chemistry}
-        disabled={!!batteryId}
-        rightImage={!batteryId}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Chemistry',
-          values: Object.values(BatteryChemistry),
-          selected: chemistry,
-          eventName: 'battery-chemistry',
-        })}
-      />
-      <ListItem
-        title={'Cell Configuration'}
-        value={batteryCellConfigurationToString(chemistry, [sCells, pCells])}
-        expanded={expandedCellConfiguration}
-        onPress={() => setExpandedCellConfiguration(!expandedCellConfiguration)}
-        ExpandableComponent={
-          <WheelPicker
-            placeholder={'none'}
-            itemWidth={['35%', '60%']}
-            items={getBatteryCellConfigurationItems(chemistry)}
-            value={[sCells, pCells]}
-            wheelVisible={[true, true]}
-            onValueChange={(_wheelIndex, value, _index) => {
-              console.log(value);
-              if (Array.isArray(value)) {
-                setSCells(value[0]);
-                setPCells(value[1]);
-              }
-            }}
+        <Divider />
+        <ListItemInput
+          value={name}
+          placeholder={'New Battery'}
+          position={['first']}
+          onChangeText={setName}
+        />
+        <ListItemInput
+          value={vendor}
+          placeholder={'Vendor'}
+          position={['last']}
+          onChangeText={setVendor}
+        />
+        <Divider />
+        <ListItemInput
+          title={'Capacity'}
+          value={capacity}
+          label='mAh'
+          placeholder={'Value'}
+          titleStyle={!capacity.length ? {color: theme.colors.assertive} : {}}
+          keyboardType={'number-pad'}
+          position={['first']}
+          onBlur={validateCapacity}
+          onChangeText={setCapacity}
+        />
+        <ListItem
+          title={'Chemistry'}
+          value={chemistry}
+          disabled={!!batteryId}
+          rightImage={!batteryId}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'Chemistry',
+            values: Object.values(BatteryChemistry),
+            selected: chemistry,
+            eventName: 'battery-chemistry',
+          })}
+        />
+        <ListItem
+          title={'Cell Configuration'}
+          value={batteryCellConfigurationToString(chemistry, [sCells, pCells])}
+          expanded={expandedCellConfiguration}
+          onPress={() => setExpandedCellConfiguration(!expandedCellConfiguration)}
+          ExpandableComponent={
+            <WheelPicker
+              placeholder={'none'}
+              itemWidth={['35%', '60%']}
+              items={getBatteryCellConfigurationItems(chemistry)}
+              value={[sCells, pCells]}
+              wheelVisible={[true, true]}
+              onValueChange={(_wheelIndex, value, _index) => {
+                console.log(value);
+                if (Array.isArray(value)) {
+                  setSCells(value[0]);
+                  setPCells(value[1]);
+                }
+              }}
+            />
+          }
+        />
+        <ListItemInput
+          title={'Discharge Rate'}
+          value={cRating}
+          label={'C'}
+          placeholder={'Unknown'}
+          keyboardType={'number-pad'}
+          position={['last']}
+          onChangeText={setCRating}
+        />
+        <Divider />
+        {batteryId &&
+          <>
+            <ListItem
+              title={'Statistics'}
+              value={averageDischargeRate()}
+              position={['first']}
+              rightImage={false}
+            />
+            <ListItem
+              title={'Battery Performance'}
+              onPress={() => navigation.navigate('BatteryPerformance')}
+            />
+            <ListItem
+              title={'Logged Cycle Details'}
+              value={battery?.totalCycles?.toString() || '0'}
+              position={['last']}
+              onPress={() => navigation.navigate('BatteryCycles')}
+            />
+          </>
+        }
+        {!batteryId &&
+          <ListItemInput
+            title={'Total Cycles'}
+            value={totalCycles}
+            placeholder={'None'}
+            keyboardType={'number-pad'}
+            position={['first', 'last']}
+            onChangeText={setTotalCycles}
           />
         }
-      />
-      <ListItemInput
-        title={'Discharge Rate'}
-        value={cRating}
-        label={'C'}
-        placeholder={'Unknown'}
-        keyboardType={'number-pad'}
-        position={['last']}
-        onChangeText={setCRating}
-      />
-      <Divider />
-      {batteryId &&
+        <Divider />
+        <ListItem
+          title={'Battery Tint'}
+          rightImage={(
+            <View style={s.tintValueContainer}>
+              {tint !== BatteryTint.None && 
+                <Icon
+                  name={'circle'}
+                  solid={true}
+                  size={10}
+                  style={[{color: batteryTintIcons[tint]?.color}, s.tintValueDot]}
+                />
+              }
+              <Text style={s.tintValueText}>{tint}</Text>
+              <RNEIcon
+                name={'chevron-forward'}
+                type={'ionicon'}
+                size={20}
+                color={theme.colors.midGray}
+              />
+            </View>
+          )}
+          position={['first']}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'Battery Tint',
+            values: Object.values(BatteryTint),
+            selected: tint,
+            icons: batteryTintIcons,
+            eventName: 'battery-tint',
+          })}
+        />
+        <ListItem
+          title={'QR Code Size'}
+          value={scanCodeSize || 'None'}
+          position={['last']}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'QR Code Size',
+            values: Object.values(ScanCodeSize),
+            selected: scanCodeSize,
+            eventName: 'battery-scan-code-size',
+          })}
+        />
+        <Divider />
+        <ListItemInput
+          title={'Purchase Price'}
+          value={purchasePrice}
+          placeholder={'Unknown'}
+          keyboardType={'number-pad'}
+          position={batteryId ? ['first'] : ['first', 'last']}
+          onChangeText={setPurchasePrice}
+        />
+        {batteryId &&
         <>
           <ListItem
-            title={'Statistics'}
-            value={averageDischargeRate()}
-            position={['first']}
+            title={'Operating Cost'}
+            value={`${operatingCost()} per cycle`}
             rightImage={false}
           />
-          <ListItem
-            title={'Battery Performance'}
-            onPress={() => navigation.navigate('BatteryPerformance')}
-          />
-          <ListItem
-            title={'Logged Cycle Details'}
-            value={battery?.totalCycles?.toString() || '0'}
+          <ListItemSwitch
+            title={'Battery is Retired'}
             position={['last']}
-            onPress={() => navigation.navigate('BatteryCycles')}
+            value={retired}
+            onValueChange={setRetired}
           />
         </>
-      }
-      {!batteryId &&
-        <ListItemInput
-          title={'Total Cycles'}
-          value={totalCycles}
-          placeholder={'None'}
-          keyboardType={'number-pad'}
-          position={['first', 'last']}
-          onChangeText={setTotalCycles}
-        />
-      }
-      <Divider />
-      <ListItem
-        title={'Battery Tint'}
-        rightImage={(
-          <View style={s.tintValueContainer}>
-            {tint !== BatteryTint.None && 
-              <Icon
-                name={'circle'}
-                solid={true}
-                size={10}
-                style={[{color: batteryTintIcons[tint]?.color}, s.tintValueDot]}
-              />
-            }
-            <Text style={s.tintValueText}>{tint}</Text>
-            <RNEIcon
-              name={'chevron-forward'}
-              type={'ionicon'}
-              size={20}
-              color={theme.colors.midGray}
-            />
-          </View>
-        )}
-        position={['first']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Battery Tint',
-          values: Object.values(BatteryTint),
-          selected: tint,
-          icons: batteryTintIcons,
-          eventName: 'battery-tint',
-        })}
-      />
-      <ListItem
-        title={'QR Code Size'}
-        value={scanCodeSize || 'None'}
-        position={['last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'QR Code Size',
-          values: Object.values(ScanCodeSize),
-          selected: scanCodeSize,
-          eventName: 'battery-scan-code-size',
-        })}
-      />
-      <Divider />
-      <ListItemInput
-        title={'Purchase Price'}
-        value={purchasePrice}
-        placeholder={'Unknown'}
-        keyboardType={'number-pad'}
-        position={batteryId ? ['first'] : ['first', 'last']}
-        onChangeText={setPurchasePrice}
-      />
-      {batteryId &&
-      <>
+        }
+        <Divider />
         <ListItem
-          title={'Operating Cost'}
-          value={`${operatingCost()} per cycle`}
-          rightImage={false}
+          title={'Notes'}
+          position={['first', 'last']}
+          onPress={() => navigation.navigate('Notes', {
+            title: 'String Value Notes',
+            text: notes,
+            eventName: 'battery-notes',
+          })}
         />
-        <ListItemSwitch
-          title={'Battery is Retired'}
-          position={['last']}
-          value={retired}
-          onValueChange={setRetired}
-        />
-      </>
-      }
-      <Divider />
-      <ListItem
-        title={'Notes'}
-        position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
-          title: 'String Value Notes',
-          text: notes,
-          eventName: 'battery-notes',
-        })}
-      />
-      <Divider />
+        <Divider />
       </ScrollView>
-    </View>
+    </AvoidSoftInputView>
   );
 };
 

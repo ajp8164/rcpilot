@@ -33,7 +33,7 @@ const ModelsNavigator = () => {
         initialParams={{listModels: 'all'}}
         options={({ route }) => ({
           title: route.params.listModels === 'retired' ? 'Retired' : 'Models',
-          headerLargeTitle: route.params.listModels ? false : true,
+          headerLargeTitle: route.params.listModels === 'all' ? true : false,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         })}

@@ -1,3 +1,5 @@
+export type ListModels = 'all' | 'retired';
+
 export type ModelUIAttributes = {
   icon: string;
   iconColor: string;

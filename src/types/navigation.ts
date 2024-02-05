@@ -4,6 +4,8 @@ import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { FilterType } from 'types/filter';
 import { FlightOutcome } from 'types/flight';
 import { JChecklistAction } from 'realmdb/ChecklistTemplate';
+import { ListBatteries } from 'types/battery';
+import { ListModels } from 'types/model';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
@@ -28,7 +30,9 @@ export type MultipleNavigatorParamList = {
 };
 
 export type BatteriesNavigatorParamList = {
-  Batteries: undefined;
+  Batteries: {
+    listBatteries?: ListBatteries;
+  },
   Battery: {
     batteryId: string;
   };
@@ -114,7 +118,7 @@ export type ModelsNavigatorParamList = {
     modelId: string;
   };
   Models: {
-    listModels?: 'inactive';
+    listModels?: ListModels;
   };
   ModelFiltersNavigator: undefined;
   Notes: {

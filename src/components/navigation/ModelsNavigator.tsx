@@ -30,9 +30,9 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name='Models'
         component={ModelsScreen}
-        initialParams={{}}
+        initialParams={{listModels: 'all'}}
         options={({ route }) => ({
-          title: route.params.listModels === 'inactive' ? 'Retired' : 'Models',
+          title: route.params.listModels === 'retired' ? 'Retired' : 'Models',
           headerLargeTitle: route.params.listModels ? false : true,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },

@@ -30,34 +30,31 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
-  const inactiveModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
+  const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
 
   const [editModeEnabled, setEditModeEnabled] = useState(false);
   const [deleteModelActionSheetVisible, setDeleteModelActionSheetVisible] = useState<Model>();
 
-  useEffect(() => {
-    if (listModels) {
-      // Clear param for next navigation to this screen.
-      navigation.setParams({});
-    }
-  
+  useEffect(() => {  
     const onEdit = () => {
       setEditModeEnabled(!editModeEnabled);
     };
 
     navigation.setOptions({
       headerLeft: () => {
-        if (listModels) {
-          return null;
-        } else {
+        if (listModels === 'all') {
           return (
             <Button
               title={editModeEnabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.editButton]}
+              disabled={!activeModels.length}
+              disabledStyle={theme.styles.buttonClearDisabled}
               onPress={onEdit}
             />
-          )
+          );
+        } else {
+          return null;
         }
       },
       headerRight: ()  => {
@@ -74,7 +71,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 ]}
               />
             </Pressable>
-            {listModels ?
+            {listModels !== 'all' ?
               <Button
                 title={editModeEnabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonClearTitle}
@@ -138,7 +135,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
         onPress={() => {
-          if (listModels) {
+          if (listModels !== 'all') {
             navigation.navigate('ModelEditor', {
               modelId: model._id.toString(),
             });
@@ -148,7 +145,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             });
           }
         }}
-        showInfo={!listModels}
+        showInfo={listModels === 'all'}
         onPressInfo={() => navigation.navigate('ModelEditor', {
           modelId: model._id.toString(),
         })}
@@ -181,29 +178,29 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         contentInsetAdjustmentBehavior={'automatic'}
         stickySectionHeadersEnabled={true}
         style={s.sectionList}
-        sections={groupModels(listModels === 'inactive' ? inactiveModels : activeModels)}
+        sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
         keyExtractor={item => item._id.toString()}
         renderItem={renderItem}
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}
         ListEmptyComponent={
-          !inactiveModels.length ?
+          !retiredModels.length ?
             <Text style={s.emptyList}>{'No Models'}</Text>
             : null
         }
         ListFooterComponent={
           <>
-          {!listModels && inactiveModels.length
+          {listModels === 'all' && retiredModels.length
             ?
               <>
                 <Divider text={'INACTIVE MODELS'} />
                 <ListItem
                   title={'Retired'}
-                  value={`${inactiveModels.length}`}
+                  value={`${retiredModels.length}`}
                   position={['first', 'last']}
                   onPress={() => navigation.push('Models', {
-                    listModels: 'inactive',
+                    listModels: 'retired',
                   })}
                 />
                 <Divider />
@@ -219,7 +216,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         destructiveButtonIndex={0}
         options={[
           {
-            label: listModels === 'inactive' ? 'Delete Retired Model' : 'Delete Model',
+            label: listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model',
             onPress: () => {
               deleteModel(deleteModelActionSheetVisible!);
               setDeleteModelActionSheetVisible(undefined);

@@ -1,3 +1,5 @@
+export type ListBatteries = 'all' | 'retired' | 'in-storage';
+
 export enum BatteryChemistry {
   LiPo = 'LiPo',
   LiIon = 'LiIon',

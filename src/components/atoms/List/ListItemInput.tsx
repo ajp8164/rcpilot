@@ -21,13 +21,19 @@ const ListItemInput = (props: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const ts = Array.isArray(props.titleStyle) ?
+    props.titleStyle.concat([s.title])
+    : props.titleStyle ?
+    [s.title, props.titleStyle]
+    : [s.title];
+
   return (
     <_ListItemInput
       {...props}
       containerStyle={{...props.containerStyle, ...s.containerStyle}}
       contentStyle={s.inputContent}
       inputTextStyle={s.inputText}
-      titleStyle={s.title}
+      titleStyle={ts}
       extraContentComponentRight={
         <View style={{flexDirection: 'row'}}>
           {label && <Text style={s.inputLabel}>{label}</Text>}

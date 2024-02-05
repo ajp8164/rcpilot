@@ -90,6 +90,7 @@ const TabNavigator = () => {
               name={'battery-full'}
               color={color}
               size={28}
+              style={{transform: [{rotate: '-90deg'}]}}
             />
           ),
         }}

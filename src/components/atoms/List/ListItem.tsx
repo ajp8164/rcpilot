@@ -48,7 +48,7 @@ const ListItem = (props: Props) => {
           valueStyle={[
             {...props.valueStyle, ...s.value},
             props.disabled ? s.valuePosition : {},
-            props.rightImage === undefined && props.value ? {} : s.valuePosition
+            (props.rightImage === undefined || props.rightImage === true) && props.value ? {} : s.valuePosition
           ]}
           position={expanded ? [first] : props.position}
           disabled={props.disabled}

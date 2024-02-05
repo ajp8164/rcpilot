@@ -1,4 +1,4 @@
-import { Alert, ScrollView } from 'react-native';
+import { Alert, ScrollView, Text } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, NewBatteryNavigatorParamList } from 'types/navigation';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
@@ -14,7 +14,9 @@ import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Icon as RNEIcon } from "@rneui/base";
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
@@ -52,8 +54,6 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const [notes, setNotes] = useState(battery?.notes || undefined);
 
   const originalCapacity = useRef(capacity).current;
-
-  // const [cellConfiguration, setCellConfiguration] = useState<string[]>([]);
   const [expandedCellConfiguration, setExpandedCellConfiguration] = useState(false);
 
   useEffect(() => {
@@ -234,7 +234,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       return 'Unknown';
     }
   };
-
+console.log(chemistry,'<',);
   return (
     <View style={[theme.styles.view]}>
       <ScrollView
@@ -273,7 +273,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Chemistry',
           values: Object.values(BatteryChemistry),
-          selected: 'LiPo',
+          selected: chemistry,
           eventName: 'battery-chemistry',
         })}
       />
@@ -343,12 +343,30 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItem
         title={'Battery Tint'}
-        value={tint || 'None'}
+        rightImage={(
+          <View style={s.tintValueContainer}>
+            {tint !== BatteryTint.None && 
+              <Icon
+                name={'circle'}
+                solid={true}
+                size={10}
+                style={[{color: batteryTintIcons[tint]?.color}, s.tintValueDot]}
+              />
+            }
+            <Text style={s.tintValueText}>{tint}</Text>
+            <RNEIcon
+              name={'chevron-forward'}
+              type={'ionicon'}
+              size={20}
+              color={theme.colors.midGray}
+            />
+          </View>
+        )}
         position={['first']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Battery Tint',
           values: Object.values(BatteryTint),
-          selected: 'None',
+          selected: tint,
           icons: batteryTintIcons,
           eventName: 'battery-tint',
         })}
@@ -360,7 +378,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'QR Code Size',
           values: Object.values(ScanCodeSize),
-          selected: 'None',
+          selected: scanCodeSize,
           eventName: 'battery-scan-code-size',
         })}
       />
@@ -378,6 +396,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={'Operating Cost'}
           value={`${operatingCost()} per cycle`}
+          rightImage={false}
         />
         <ListItemSwitch
           title={'Battery is Retired'}
@@ -403,7 +422,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   cancelButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
@@ -414,6 +433,20 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     paddingHorizontal: 0,
     minWidth: 0,
   },
+  tintValueContainer: {
+    flexDirection: 'row',
+    width: 100,
+    justifyContent: 'flex-end',
+  },
+  tintValueDot: {
+    alignSelf: 'center',
+    marginRight: 5
+  },
+  tintValueText: {
+    ...theme.styles.textNormal,
+    ...theme.styles.textDim,
+    marginRight: 5,
+  }
 }));
 
 export default BatteryEditorScreen;

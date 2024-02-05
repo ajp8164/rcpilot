@@ -16,8 +16,8 @@ export class Battery extends Object<Battery> {
   pCells!: number;
   totalCycles?: number;
   lastCycle?: ISODateString;
-  tint?: BatteryTint;
-  scanCodeSize?: ScanCodeSize;
+  tint!: BatteryTint;
+  scanCodeSize!: ScanCodeSize;
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -36,8 +36,8 @@ export class Battery extends Object<Battery> {
       pCells: 'int',
       totalCycles: 'int?',
       lastCycle: 'string?',
-      tint: 'string?',
-      scanCodeSize: 'string?',
+      tint: 'string',
+      scanCodeSize: 'string',
       notes: 'string?',
     },
     primaryKey: '_id',

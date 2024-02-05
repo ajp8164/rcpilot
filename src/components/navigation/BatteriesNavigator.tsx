@@ -33,13 +33,18 @@ const BatteriesNavigator = () => {
       <BatteriesStack.Screen
         name="Batteries"
         component={BatteriesScreen}
-        options={{
-          title: 'Batteries',
+        initialParams={{listBatteries: 'all'}}
+        options={({ route }) => ({
+          title: route.params.listBatteries === 'retired' ?
+            'Retired'
+            : route.params.listBatteries === 'in-storage' ?
+            'In Storage'
+            : 'Batteries',
           headerLeft: () => null,
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
-        }}
+        })}
       />
       <BatteriesStack.Screen
         name='BatteryEditor'

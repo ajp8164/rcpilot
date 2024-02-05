@@ -1,7 +1,6 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-
-import { BatteryChemistry } from 'types/battery';
-import { ISODateString } from 'types/common';
+import { BatteryChemistry, BatteryTint } from 'types/battery';
+import { ISODateString, ScanCodeSize } from 'types/common';
 
 export class Battery extends Object<Battery> {
   _id!: BSON.ObjectId;
@@ -13,10 +12,12 @@ export class Battery extends Object<Battery> {
   inStorage?: boolean;
   cRating?: number;
   capacity?: number;
-  sCells?: number;
-  pCells?: number;
+  sCells!: number;
+  pCells!: number;
   totalCycles?: number;
   lastCycle?: ISODateString;
+  tint?: BatteryTint;
+  scanCodeSize?: ScanCodeSize;
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -31,10 +32,12 @@ export class Battery extends Object<Battery> {
       inStorage: { type: 'bool', default: false },
       cRating: 'int?',
       capacity: 'int?',
-      sCells: 'int?',
-      pCells: 'int?',
+      sCells: 'int',
+      pCells: 'int',
       totalCycles: 'int?',
       lastCycle: 'string?',
+      tint: 'string?',
+      scanCodeSize: 'string?',
       notes: 'string?',
     },
     primaryKey: '_id',

@@ -234,7 +234,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       return 'Unknown';
     }
   };
-console.log(chemistry,'<',);
+
   return (
     <View style={[theme.styles.view]}>
       <ScrollView
@@ -268,8 +268,8 @@ console.log(chemistry,'<',);
       <ListItem
         title={'Chemistry'}
         value={chemistry}
-        disabled={batteryId !== undefined}
-        rightImage={batteryId === undefined}
+        disabled={!!batteryId}
+        rightImage={!batteryId}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Chemistry',
           values: Object.values(BatteryChemistry),

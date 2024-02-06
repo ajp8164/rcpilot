@@ -2,7 +2,6 @@ import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import lodash, { isArray } from 'lodash';
 
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -10,6 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
@@ -61,8 +61,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   const [list, setList] = useSetState<{ values: string[]; selected: string[]; initial: string[]; }>({
     values,
      // Use an empty array if empty string is set.
-    selected: isArray(selected) ? selected : selected ? [selected] : [],
-    initial: isArray(selected) ? selected : selected ? [selected] : [],
+    selected: lodash.isArray(selected) ? selected : selected ? [selected] : [],
+    initial: lodash.isArray(selected) ? selected : selected ? [selected] : [],
   });
 
   useEffect(() => {
@@ -147,7 +147,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     if (icons && icons[value]) {
       iconArr = [];
       let name = icons[value]!.name;
-      name = isArray(name) ? name : [name]; // Icon names must be an array.
+      name = lodash.isArray(name) ? name : [name]; // Icon names must be an array.
       name.forEach((n, index) => {
         iconArr!.push(
           <Icon

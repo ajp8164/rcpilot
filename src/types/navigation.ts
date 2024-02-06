@@ -6,6 +6,7 @@ import { FlightOutcome } from 'types/flight';
 import { JChecklistAction } from 'realmdb/ChecklistTemplate';
 import { ListBatteries } from 'types/battery';
 import { ListModels } from 'types/model';
+import { ModelPickerInterface } from 'components/ModelPickerScreen';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
 import { UserProfile } from 'types/user';
@@ -21,6 +22,7 @@ export enum StartupScreen {
 // instead of chosing one at random.
 export type MultipleNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
+  ModelPicker: ModelPickerInterface;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -345,6 +347,7 @@ export type SetupNavigatorParamList = {
     pilotId: string;
   };
   Pilots: undefined;
+  PilotNavigator: NavigatorScreenParams<PilotNavigatorParamList>;
   PreferencesBasics: undefined;
   PreferencesEvents: undefined;
   PreferencesBatteries: undefined;
@@ -401,6 +404,10 @@ export type SetupNavigatorParamList = {
     userProfile: UserProfile;
   };
   WebServerAccess: undefined;
+};
+
+export type PilotNavigatorParamList = {
+  ModelPicker: ModelPickerInterface;
 };
 
 export type NewReportNavigatorParamList = {

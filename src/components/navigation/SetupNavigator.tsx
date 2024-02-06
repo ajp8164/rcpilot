@@ -27,6 +27,7 @@ import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerN
 import NewPilotScreen from 'components/NewPilotScreen';
 import NewReportNavigator from 'components/navigation/NewReportNavigator';
 import NotesScreen from 'components/NotesScreen';
+import PilotNavigator from 'components/navigation/PilotNavigator';
 import PilotScreen from 'components/PilotScreen';
 import PilotsScreen from 'components/PilotsScreen';
 import PreferencesAudioScreen from 'components/PreferencesAudioScreen';
@@ -90,6 +91,14 @@ const SetupNavigator = () => {
         component={NewPilotScreen}
         options={{
           title: "Pilot's Name",
+          presentation: 'modal',
+        }}
+      />
+      <SetupStack.Screen
+        name="PilotNavigator"
+        component={PilotNavigator}
+        options={{
+          headerShown: false,
           presentation: 'modal',
         }}
       />

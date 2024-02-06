@@ -278,12 +278,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flex: 1,
     flexGrow: 1,
   },
-  sectionHeaderContainer: {
-    height: 35,
-    paddingTop: 12,
-    paddingHorizontal: 25,
-    backgroundColor: theme.colors.listHeaderBackground,
-  },
 }));
 
 export default ModelsScreen;

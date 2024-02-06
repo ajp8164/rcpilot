@@ -68,6 +68,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     overflow: 'visible',
     width: '100%',
     height: 150,
+    backgroundColor: theme.colors.lightGray,
   },
   headerImage: {
     flex: 1,

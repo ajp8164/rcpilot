@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useQuery, useRealm } from '@realm/react';
+import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
@@ -15,6 +15,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
+import { useSelector } from 'react-redux';
+import { selectPilot } from 'store/selectors/pilotSelectors';
+import { Pilot } from 'realmdb/Pilot';
+import { BSON } from 'realm';
 
 type Section = {
   title?: string;
@@ -30,8 +34,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const realm = useRealm();
 
+  const _pilot = useSelector(selectPilot);
+
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
+  const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
   const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [deleteModelActionSheetVisible, setDeleteModelActionSheetVisible] = useState<Model>();
@@ -112,15 +119,23 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   };
 
   const groupModels = (models: Realm.Results<Model>): SectionListData<Model, Section>[] => {
-    return groupItems<Model, Section>(models, (model) => {
+    const groups = groupItems<Model, Section>(models, (model) => {
       if (model.category) {
         return `${model.type.toUpperCase()} - ${model.category.name.toUpperCase()}`;
       }
       return model.type.toUpperCase();
     }).sort();
+
+    if (pilot && pilot.favoriteModels.length > 0) {
+      groups.splice(0, 0, {
+        title: `FAVORITES MODELS FOR ${pilot.name.toUpperCase()}`,
+        data: pilot.favoriteModels,
+      });
+    }
+    return groups;
   };
 
-  const renderItem: SectionListRenderItem<Model, Section> = ({
+  const renderModel: SectionListRenderItem<Model, Section> = ({
     item: model,
     section,
     index,
@@ -193,7 +208,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         style={s.sectionList}
         sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
         keyExtractor={item => item._id.toString()}
-        renderItem={renderItem}
+        renderItem={renderModel}
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}
@@ -203,25 +218,21 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             : null
         }
         ListFooterComponent={
-          <>
-          {listModels === 'all' && retiredModels.length
-            ?
-              <>
-                <Divider text={'INACTIVE MODELS'} />
-                <ListItem
-                  title={'Retired'}
-                  value={`${retiredModels.length}`}
-                  position={['first', 'last']}
-                  onPress={() => navigation.push('Models', {
-                    listModels: 'retired',
-                  })}
-                />
-                <Divider />
-              </>
-            :
+          listModels === 'all' && retiredModels.length ?
+            <>
+              <Divider text={'INACTIVE MODELS'} />
+              <ListItem
+                title={'Retired'}
+                value={`${retiredModels.length}`}
+                position={['first', 'last']}
+                onPress={() => navigation.push('Models', {
+                  listModels: 'retired',
+                })}
+              />
               <Divider />
-          }
-          </>
+            </>
+          :
+            <Divider />
         }
       />
       <ActionSheet

@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text } from 'react-native';
+import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -14,6 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { modelTypeIcons } from 'lib/model';
 
 type Section = {
   title?: string;
@@ -132,8 +133,20 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <ListItem
         key={model._id.toString()}
         title={model.name}
-        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 average time'}
+        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
+        titleStyle={s.modelText}
+        subtitleStyle={s.modelText}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+        leftImage={
+          <View>
+            <Icon
+              name={modelTypeIcons[model.type]?.name as string}
+              size={45}
+              color={modelTypeIcons[model.type]?.color}
+              style={s.modelIcon}
+            />
+          </View>
+        }
         onPress={() => {
           if (listModels !== 'all') {
             navigation.navigate('ModelEditor', {
@@ -253,6 +266,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   headerIconDisabled: {
     color: theme.colors.disabled,
+  },
+  modelIcon: {
+    width: '100%',
+  },
+  modelText: {
+    left: 23,
+    maxWidth: '90%',
   },
   sectionList: {
     flex: 1,

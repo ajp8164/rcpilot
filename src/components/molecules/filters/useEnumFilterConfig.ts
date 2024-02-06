@@ -28,7 +28,7 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     values: [],
   },
   Chemistries: {
-    mode: 'many',
+    mode: 'many-with-actions',
     title: 'Chemistries',
     sectionName: 'CHEMISTRIES TO {0} RESULTS',
     values: Object.values(BatteryChemistry),
@@ -52,13 +52,13 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     values: [],
   },
   ModelTypes: {
-    mode: 'many',
+    mode: 'many-with-actions',
     title: 'Model Types',
     sectionName: 'MODEL TYPES TO {0} RESULTS',
     values: Object.values(ModelType),
   },
   Outcomes: {
-    mode: 'many',
+    mode: 'many-with-actions',
     title: 'Outcomes',
     sectionName: 'OUTCOMES TO {0} RESULTS',
     icons: flightOutcomeIcons,

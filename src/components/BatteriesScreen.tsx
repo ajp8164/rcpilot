@@ -284,8 +284,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: -15,
   },
   batteryText: {
-    left: 10,
-    maxWidth: '95%',
+    left: 15,
+    maxWidth: '90%',
   },
   batteryTint: {
     borderLeftWidth: 8,

@@ -24,7 +24,7 @@ export type EnumPickerIconProps = {
 } | null;
 
 export type EnumPickerInterface = {
-  mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none';
+  mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none' | 'many-with-actions';
   title: string;
   headerBackTitle?: string;
   icons?: {[key in string]: EnumPickerIconProps}; // Key is a enum value
@@ -73,7 +73,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
 
     const onDone = () => {
       // For multi-selection mode we send the selected values only when done.
-      if (mode === 'many' || mode === 'many-or-none') {
+      if (mode.includes('many')) {
         event.emit(eventName, {value: list.selected} as EnumPickerResult);
         navigation.goBack();
       }
@@ -84,7 +84,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
       headerBackTitle,
     });
 
-    if (mode === 'many' || mode === 'many-or-none') {
+    if (mode === 'many-or-none' || mode === 'many-with-actions') {
       navigation.setOptions({
         headerLeft: () => {
           return (
@@ -193,7 +193,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
-        {(mode === 'many' || mode === 'many-or-none') &&
+        {(mode === 'many-with-actions' || mode === 'many-or-none') &&
           <>
             <Divider text={'ACTIONS'} />
             <ListItem

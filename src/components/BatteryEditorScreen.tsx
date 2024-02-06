@@ -188,13 +188,13 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     event.on('battery-chemistry', onChangeChemistry);
     event.on('battery-tint', onChangeBatteryTint);
     event.on('battery-scan-code-size', onChangeScanCodeSize);
-    event.on('model-notes', setNotes);
+    event.on('battery-notes', setNotes);
 
     return () => {
       event.removeListener('battery-chemistry', onChangeChemistry);
       event.removeListener('battery-tint', onChangeBatteryTint);
       event.removeListener('battery-scan-code-size', onChangeScanCodeSize);
-      event.removeListener('model-notes', setNotes);
+      event.removeListener('battery-notes', setNotes);
     };
   }, []);
 

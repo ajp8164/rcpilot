@@ -42,7 +42,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
-  const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
 
   const [name, setName] = useState(checklistTemplate?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
@@ -80,7 +80,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     };
 
     const onEdit = () => {
-      setEditModeEnabled(!editModeEnabled);
+      setListEditModeEnabled(!listEditModeEnabled);
     };
 
     navigation.setOptions({
@@ -110,7 +110,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           if (actions.length > 0) {
             return (
               <Button
-                title={editModeEnabled ? 'Done' : 'Edit'}
+                title={listEditModeEnabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonClearTitle}
                 buttonStyle={[theme.styles.buttonClear, s.doneButton]}
                 onPress={onEdit}
@@ -120,7 +120,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [ name, type, actions, editModeEnabled ]);
+  }, [ name, type, actions, listEditModeEnabled ]);
 
   useEffect(() => {
     event.on('checklist-template-type', onChangeTemplateType);
@@ -267,7 +267,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
             },
             reorder: true,
           }}
-          showEditor={editModeEnabled}
+          showEditor={listEditModeEnabled}
           swipeable={{
             rightItems: [{
               icon: 'delete',

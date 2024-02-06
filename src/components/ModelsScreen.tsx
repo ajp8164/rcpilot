@@ -33,12 +33,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
 
-  const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [deleteModelActionSheetVisible, setDeleteModelActionSheetVisible] = useState<Model>();
 
   useEffect(() => {  
     const onEdit = () => {
-      setEditModeEnabled(!editModeEnabled);
+      setListEditModeEnabled(!listEditModeEnabled);
     };
 
     navigation.setOptions({
@@ -46,7 +46,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         if (listModels === 'all') {
           return (
             <Button
-              title={editModeEnabled ? 'Done' : 'Edit'}
+              title={listEditModeEnabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.editButton]}
               disabled={!activeModels.length}
@@ -62,26 +62,26 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         return (
           <>
             <Pressable
-              disabled={editModeEnabled}
+              disabled={listEditModeEnabled}
               onPress={() => navigation.navigate('ModelFiltersNavigator')}>
               <Icon
                 name={'filter'}
                 style={[
                   s.headerIcon,
-                  editModeEnabled ? s.headerIconDisabled : {}
+                  listEditModeEnabled ? s.headerIconDisabled : {}
                 ]}
               />
             </Pressable>
             {listModels !== 'all' ?
               <Button
-                title={editModeEnabled ? 'Done' : 'Edit'}
+                title={listEditModeEnabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonClearTitle}
                 buttonStyle={[theme.styles.buttonClear, s.editButton]}
                 onPress={onEdit}
               />
             :
               <Pressable
-                disabled={editModeEnabled}
+                disabled={listEditModeEnabled}
                 onPress={() => navigation.navigate('NewModelNavigator', {
                   screen: 'NewModel',
                   params: {}
@@ -90,7 +90,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                   name={'plus'}
                   style={[
                     s.headerIcon,
-                    editModeEnabled ? s.headerIconDisabled : {}
+                    listEditModeEnabled ? s.headerIconDisabled : {}
                   ]}
                 />
               </Pressable>
@@ -99,7 +99,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ editModeEnabled ]);
+  }, [ listEditModeEnabled ]);
 
   const confirmDeleteModel = (model: Model) => {
     setDeleteModelActionSheetVisible(model);
@@ -170,7 +170,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           },
           reorder: true,
         }}
-        showEditor={editModeEnabled}
+        showEditor={listEditModeEnabled}
         swipeable={{
           rightItems: [{
             icon: 'delete',

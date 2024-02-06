@@ -35,12 +35,12 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
   const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
 
-  const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [deleteBatteryActionSheetVisible, setDeleteBatteryActionSheetVisible] = useState<Battery>();
 
   useEffect(() => {
     const onEdit = () => {
-      setEditModeEnabled(!editModeEnabled);
+      setListEditModeEnabled(!listEditModeEnabled);
     };
 
     navigation.setOptions({
@@ -48,7 +48,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         if (listBatteries === 'all') {
           return (
             <Button
-              title={editModeEnabled ? 'Done' : 'Edit'}
+              title={listEditModeEnabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonClearTitle}
               buttonStyle={[theme.styles.buttonClear, s.editButton]}
               disabled={!activeBatteries.length}
@@ -64,26 +64,26 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         return (
           <>
             <Pressable
-              disabled={editModeEnabled}
+              disabled={listEditModeEnabled}
               onPress={() => navigation.navigate('BatteryFiltersNavigator')}>
               <Icon
                 name={'filter'}
                 style={[
                   s.headerIcon,
-                  editModeEnabled ? s.headerIconDisabled : {}
+                  listEditModeEnabled ? s.headerIconDisabled : {}
                 ]}
               />
             </Pressable>
             {listBatteries !== 'all' ?
               <Button
-                title={editModeEnabled ? 'Done' : 'Edit'}
+                title={listEditModeEnabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonClearTitle}
                 buttonStyle={[theme.styles.buttonClear, s.editButton]}
                 onPress={onEdit}
               />
             :
               <Pressable
-                disabled={editModeEnabled}
+                disabled={listEditModeEnabled}
                 onPress={() => navigation.navigate('NewBatteryNavigator', {
                   screen: 'NewBattery',
                   params: {}
@@ -92,7 +92,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                   name={'plus'}
                   style={[
                     s.headerIcon,
-                    editModeEnabled ? s.headerIconDisabled : {}
+                    listEditModeEnabled ? s.headerIconDisabled : {}
                   ]}
                 />
               </Pressable>
@@ -101,7 +101,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ editModeEnabled ]);
+  }, [ listEditModeEnabled ]);
 
   const confirmDeleteBattery = (battery: Battery) => {
     setDeleteBatteryActionSheetVisible(battery);
@@ -179,7 +179,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
           },
           reorder: true,
         }}
-        showEditor={editModeEnabled}
+        showEditor={listEditModeEnabled}
         swipeable={{
           rightItems: [{
             icon: 'delete',

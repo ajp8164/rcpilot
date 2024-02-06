@@ -57,13 +57,13 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const emReports = useQuery<EventsMaintenanceReport>('EventsMaintenanceReport');
   const scReports = useQuery<ScanCodesReport>('ScanCodesReport');
 
-  const [editModeEnabled, setEditModeEnabled] = useState(false);
+  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
   const [deleteReportActionSheetVisible, setDeleteReportActionSheetVisible] = useState<Report>();
 
   useEffect(() => {
     const onEdit = () => {
-      setEditModeEnabled(!editModeEnabled);
+      setListEditModeEnabled(!listEditModeEnabled);
     };
 
     navigation.setOptions({
@@ -73,7 +73,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         }
         return (
           <Button
-            title={editModeEnabled ? 'Done' : 'Edit'}
+            title={listEditModeEnabled ? 'Done' : 'Edit'}
             titleStyle={theme.styles.buttonClearTitle}
             buttonStyle={[theme.styles.buttonClear, s.doneButton]}
             onPress={onEdit}
@@ -81,7 +81,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         )
       },
     });
-  }, [ editModeEnabled, emReports, scReports ]);
+  }, [ listEditModeEnabled, emReports, scReports ]);
 
   useEffect(() => {
     event.on('output-report-to', setOutputReportTo);
@@ -171,7 +171,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
             },
             reorder: true,
           }}
-          showEditor={editModeEnabled}
+          showEditor={listEditModeEnabled}
           swipeable={{
             rightItems: [{
               icon: 'delete',

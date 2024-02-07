@@ -92,8 +92,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
           return (
             <Button
               title={'Cancel'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={navigation.goBack}
             />
           )
@@ -103,8 +103,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
             return (
               <Button
                 title={'Done'}
-                titleStyle={theme.styles.buttonClearTitle}
-                buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 onPress={onDone}
               />
             )
@@ -261,12 +261,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  doneButton: {
+  headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,

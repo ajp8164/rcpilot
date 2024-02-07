@@ -88,11 +88,11 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         if (!checklistTemplateId) {
           return (
             <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-              onPress={navigation.goBack}
-            />
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            onPress={navigation.goBack}
+          />
           )
         }
       },
@@ -101,8 +101,8 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           return (
             <Button
               title={'Done'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={onDone}
             />
           )
@@ -110,9 +110,9 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           if (actions.length > 0) {
             return (
               <Button
-                title={listEditModeEnabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonClearTitle}
-                buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+              title={listEditModeEnabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 onPress={onEdit}
               />
             )
@@ -334,7 +334,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         <Divider />
         <ListItem
           title={'Add a New Action'}
-          titleStyle={s.add}
+          titleStyle={s.actionTitle}
           position={['first', 'last']}
           rightImage={false}
           onPress={() => navigation.navigate('NewChecklistActionNavigator', {
@@ -352,23 +352,18 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  add: {
+  actionTitle: {
     alignSelf: 'center',
     textAlign: 'center',
     color: theme.colors.screenHeaderButtonText,
   },
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  doneButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   actionsList: {
     overflow: 'visible',
+  },
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
   },
   shadow: {
     ...theme.styles.shadowGlow,

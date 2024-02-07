@@ -30,8 +30,8 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
       headerRight: ()  => {
         return (
           <Button
-            type={'clear'}
-            icon={ <Icon name={'plus'} style={s.addIcon} /> }
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            icon={<Icon name={'plus'} style={s.headerIcon}/>}
             onPress={() => navigation.navigate('NewModelCategory')}
           />
         )
@@ -109,15 +109,20 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  addIcon: {
-    color: theme.colors.brandPrimary,
-    fontSize: 22,
-  },
   emptyList: {
     textAlign: 'center',
     marginTop: 180,
     ...theme.styles.textNormal,
     ...theme.styles.textDim,
+  },
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  headerIcon: {
+    color: theme.colors.screenHeaderButtonText,
+    fontSize: 22,
   },
 }));
 

@@ -221,13 +221,32 @@ const LocationsScreen = ({ navigation }: Props) => {
       <ActionBar
         actions={[
           {
-            ActionComponent: (<CustomIcon name={recenterButtonState} size={28} color={theme.colors.brandPrimary} />),
+            ActionComponent: (
+              <CustomIcon
+                name={recenterButtonState}
+                size={28}
+                color={theme.colors.screenHeaderButtonText}
+              />
+            ),
             onPress: recenterMap
           }, {
-            ActionComponent: (<Icon name={'location-dot'} size={28} color={theme.colors.brandPrimary} />),
+            ActionComponent: (
+              <Icon
+                name={'location-dot'}
+                size={28}
+                color={theme.colors.screenHeaderButtonText}
+              />
+            ),
             onPress: addLocation
           }, {
-            ActionComponent: (<Icon solid name={mapPresentation.icon} size={28} color={theme.colors.brandPrimary} />),
+            ActionComponent: (
+              <Icon
+                solid
+                name={mapPresentation.icon}
+                size={28}
+                color={theme.colors.screenHeaderButtonText}
+              />
+            ),
             onPress: toggleMapPresenation
           }, {
             label: 'Done',

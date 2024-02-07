@@ -75,19 +75,19 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
     navigation.setOptions({
       headerLeft: () => (
         <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={navigation.goBack}
-        />
-      ),
+        title={'Cancel'}
+        titleStyle={theme.styles.buttonScreenHeaderTitle}
+        buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+        onPress={navigation.goBack}
+      />
+  ),
       headerRight: () => {
         if (canSave) {
           return (
             <Button
               title={'Done'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.updateButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={onDone}
             />
           )
@@ -165,12 +165,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  updateButton: {
+  headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,

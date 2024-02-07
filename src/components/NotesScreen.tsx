@@ -5,6 +5,7 @@ import { Button } from '@rneui/base';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import TextView from 'components/views/TextView';
+import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
@@ -20,32 +21,36 @@ const NotesScreen = ({ navigation, route }: Props) => {
   const [newText, setNewText] = useState<string | undefined>(text);
   
   useEffect(() => {
+    const canSave = !eqString(text, newText);
+
+    const onDone = () => {
+      event.emit(eventName, newText);
+      navigation.goBack();
+    };
+
     navigation.setOptions({
       title,
       headerLeft: () => (
         <Button
           title={'Cancel'}
-          titleStyle={[theme.styles.buttonClearTitle, route.params.headerButtonStyle]}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+          titleStyle={theme.styles.buttonScreenHeaderTitle}
+          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
           onPress={navigation.goBack}
         />
       ),
-      headerRight: () => (
-        <Button
-          title={'Save'}
-          titleStyle={[theme.styles.buttonClearTitle, route.params.headerButtonStyle]}
-          buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-          onPress={save}
-        />
-      ),
-    });
-
-    const save = () => {
-      console.log(newText);
-      event.emit(eventName, newText);
-      navigation.goBack();
-    };
-  
+      headerRight: () => {
+        if (canSave) {
+          return (
+            <Button
+              title={'Done'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              onPress={onDone}
+            />
+          )
+        }
+      },
+    });  
   }, [newText]);
 
   return (
@@ -59,12 +64,7 @@ const NotesScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  saveButton: {
+  headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,

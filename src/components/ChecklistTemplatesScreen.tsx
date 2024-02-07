@@ -33,8 +33,8 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
       headerRight: ()  => {
         return (
           <Button
-            type={'clear'}
-            icon={ <Icon name={'plus'} style={s.addIcon} /> }
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            icon={<Icon name={'plus'} style={s.headerIcon}/>}
             onPress={() => navigation.navigate('NewChecklistTemplateNavigator')}
           />
         )
@@ -142,8 +142,13 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  addIcon: {
-    color: theme.colors.brandPrimary,
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  headerIcon: {
+    color: theme.colors.screenHeaderButtonText,
     fontSize: 22,
   },
 }));

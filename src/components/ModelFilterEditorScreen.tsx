@@ -32,15 +32,15 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
 
   const [filter, setFilter] = useSetState<{[key in ModelProperty] : FilterState}>({
-    [ModelProperty.ModelType]: {relation: EnumRelation.Any, value: ''},
-    [ModelProperty.Category]: {relation: EnumRelation.Any, value: ''},
-    [ModelProperty.LastEvent]: {relation: DateRelation.Any, value: ''},
-    [ModelProperty.TotalTime]: {relation: NumberRelation.Any, value: ''},
-    [ModelProperty.LogsBatteries]: {relation: BooleanRelation.Any, value: ''},
-    [ModelProperty.LogsFuel]: {relation: BooleanRelation.Any, value: ''},
-    [ModelProperty.Damaged]: {relation: BooleanRelation.Any, value: ''},
-    [ModelProperty.Vendor]: {relation: StringRelation.Any, value: ''},
-    [ModelProperty.Notes]: {relation: StringRelation.Any, value: ''},
+    [ModelProperty.ModelType]: {relation: EnumRelation.Any, value: []},
+    [ModelProperty.Category]: {relation: EnumRelation.Any, value: []},
+    [ModelProperty.LastEvent]: {relation: DateRelation.Any, value: []},
+    [ModelProperty.TotalTime]: {relation: NumberRelation.Any, value: []},
+    [ModelProperty.LogsBatteries]: {relation: BooleanRelation.Any, value: []},
+    [ModelProperty.LogsFuel]: {relation: BooleanRelation.Any, value: []},
+    [ModelProperty.Damaged]: {relation: BooleanRelation.Any, value: []},
+    [ModelProperty.Vendor]: {relation: StringRelation.Any, value: []},
+    [ModelProperty.Notes]: {relation: StringRelation.Any, value: []},
   });
 
   useEffect(() => {
@@ -48,19 +48,19 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
       headerLeft: () => (
         <Button
           title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={() => navigation.goBack()}
+          titleStyle={theme.styles.buttonScreenHeaderTitle}
+          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+          onPress={navigation.goBack}
         />
       ),
       headerRight: () => (
         <Button
-          title={'Update'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.updateButton]}
-          onPress={() => null}
-        />
-      ),
+        title={'Done'}
+        titleStyle={theme.styles.buttonScreenHeaderTitle}
+        buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+        // onPress={onDone}
+      />
+),
     });
   }, []);
 
@@ -109,8 +109,8 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         relation={EnumRelation.Any}
         enumName={'ModelTypes'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.ModelType, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.ModelType, filterState);
         } }
       />
       <Divider />
@@ -120,8 +120,8 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         relation={EnumRelation.Any}
         enumName={'Categories'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.ModelType, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.Category, filterState);
         } }
       />
       <Divider />
@@ -130,8 +130,8 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[ModelProperty.LastEvent].value}
         relation={DateRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.LastEvent, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.LastEvent, filterState);
         } }
       />
       <Divider />
@@ -141,38 +141,38 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[ModelProperty.TotalTime].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.TotalTime, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.TotalTime, filterState);
         } }
       />
       <Divider />
       <ListItemFilterBoolean
         title={'Logs Batteries'}
-        value={filter[ModelProperty.LogsBatteries].value}
+        value={filter[ModelProperty.LogsBatteries].value[0]}
         relation={BooleanRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.LogsBatteries, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.LogsBatteries, filterState);
         } }
       />
       <Divider />
       <ListItemFilterBoolean
         title={'Logs Fuel'}
-        value={filter[ModelProperty.LogsFuel].value}
+        value={filter[ModelProperty.LogsFuel].value[0]}
         relation={BooleanRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.LogsFuel, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.LogsFuel, filterState);
         } }
       />
       <Divider />
       <ListItemFilterBoolean
         title={'Damaged'}
-        value={filter[ModelProperty.Damaged].value}
+        value={filter[ModelProperty.Damaged].value[0]}
         relation={BooleanRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.Damaged, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.Damaged, filterState);
         } }
       />
       <Divider />
@@ -181,8 +181,8 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[ModelProperty.Vendor].value}
         relation={StringRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.Vendor, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.Vendor, filterState);
         } }
       />
       <Divider />
@@ -191,8 +191,8 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[ModelProperty.Notes].value}
         relation={StringRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(ModelProperty.Notes, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(ModelProperty.Notes, filterState);
         } }
       />
       <View style={{height: theme.insets.bottom}}/>
@@ -201,12 +201,7 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  updateButton: {
+  headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,

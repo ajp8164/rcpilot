@@ -4,7 +4,6 @@ import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { BatteryChemistry } from 'types/battery';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -30,12 +29,12 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
 
   const [filter, setFilter] = useSetState<{[key in BatteryProperty] : FilterState}>({
-    [BatteryProperty.Chemistry]: {relation: EnumRelation.Any, value: ''},
-    [BatteryProperty.TotalTime]: {relation: NumberRelation.Any, value: ''},
-    [BatteryProperty.Capacity]: {relation: NumberRelation.Any, value: ''},
-    [BatteryProperty.CRating]: {relation: NumberRelation.Any, value: ''},
-    [BatteryProperty.SCells]: {relation: NumberRelation.Any, value: ''},
-    [BatteryProperty.PCells]: {relation: NumberRelation.Any, value: ''},
+    [BatteryProperty.Chemistry]: {relation: EnumRelation.Any, value: []},
+    [BatteryProperty.TotalTime]: {relation: NumberRelation.Any, value: []},
+    [BatteryProperty.Capacity]: {relation: NumberRelation.Any, value: []},
+    [BatteryProperty.CRating]: {relation: NumberRelation.Any, value: []},
+    [BatteryProperty.SCells]: {relation: NumberRelation.Any, value: []},
+    [BatteryProperty.PCells]: {relation: NumberRelation.Any, value: []},
   });
 
   useEffect(() => {
@@ -104,8 +103,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         relation={EnumRelation.Any}
         enumName={'Chemistries'}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryProperty.Chemistry, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(BatteryProperty.Chemistry, filterState);
         } }
       />
       <Divider />
@@ -115,8 +114,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[BatteryProperty.TotalTime].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryProperty.TotalTime, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(BatteryProperty.TotalTime, filterState);
         } }
       />
       <Divider />
@@ -127,8 +126,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[BatteryProperty.Capacity].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryProperty.Capacity, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(BatteryProperty.Capacity, filterState);
         } }
       />
       <Divider />
@@ -138,8 +137,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[BatteryProperty.Capacity].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryProperty.Capacity, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(BatteryProperty.Capacity, filterState);
         } }
       />
       <Divider />
@@ -148,8 +147,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[BatteryProperty.SCells].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryProperty.SCells, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(BatteryProperty.SCells, filterState);
         } }
       />
       <Divider />
@@ -158,8 +157,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
         value={filter[BatteryProperty.PCells].value}
         relation={NumberRelation.Any}
         position={['first', 'last']}
-        onValueChange={(relation, value) => {
-          onFilterValueChange(BatteryProperty.PCells, {relation, value});
+        onValueChange={filterState => {
+          onFilterValueChange(BatteryProperty.PCells, filterState);
         } }
       />
       <View style={{height: theme.insets.bottom}}/>

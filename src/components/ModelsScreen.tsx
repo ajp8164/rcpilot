@@ -2,7 +2,6 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import {
   Image,
-  Pressable,
   SectionList,
   SectionListData,
   SectionListRenderItem,
@@ -63,10 +62,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           return (
             <Button
               title={listEditModeEnabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.editButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabled={!activeModels.length}
-              disabledStyle={theme.styles.buttonClearDisabled}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               onPress={onEdit}
             />
           );
@@ -77,39 +76,39 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       headerRight: ()  => {
         return (
           <>
-            <Pressable
+            <Button
               disabled={listEditModeEnabled}
-              onPress={() => navigation.navigate('ModelFiltersNavigator')}>
-              <Icon
-                name={'filter'}
-                style={[
-                  s.headerIcon,
-                  listEditModeEnabled ? s.headerIconDisabled : {}
-                ]}
-              />
-            </Pressable>
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              icon={
+                <Icon
+                  name={'filter'}
+                  style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                />
+              }
+              onPress={() => navigation.navigate('ModelFiltersNavigator')}
+            />
             {listModels !== 'all' ?
               <Button
                 title={listEditModeEnabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonClearTitle}
-                buttonStyle={[theme.styles.buttonClear, s.editButton]}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 onPress={onEdit}
               />
             :
-              <Pressable
+              <Button
                 disabled={listEditModeEnabled}
+                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                icon={
+                  <Icon
+                    name={'plus'}
+                    style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                  />
+                }
                 onPress={() => navigation.navigate('NewModelNavigator', {
                   screen: 'NewModel',
                   params: {}
-                })}>
-                <Icon
-                  name={'plus'}
-                  style={[
-                    s.headerIcon,
-                    listEditModeEnabled ? s.headerIconDisabled : {}
-                  ]}
-                />
-              </Pressable>
+                })}
+              />
             }
           </>
         );
@@ -280,19 +279,19 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  editButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   emptyList: {
     textAlign: 'center',
     marginTop: 180,
     ...theme.styles.textNormal,
     ...theme.styles.textDim,
   },
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
   headerIcon: {
-    color: theme.colors.brandPrimary,
+    color: theme.colors.screenHeaderButtonText,
     fontSize: 22,
     marginHorizontal: 10,
   },

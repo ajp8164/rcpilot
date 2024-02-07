@@ -67,8 +67,8 @@ const PilotScreen = ({ navigation, route }: Props) => {
           return (
             <Button
               title={'Cancel'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={() => {
                 Keyboard.dismiss();
                 setIsEditing(false);
@@ -82,17 +82,17 @@ const PilotScreen = ({ navigation, route }: Props) => {
           return (
             <Button
               title={'Done'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={onDone}
             />
           )
         } else if (pilot?.favoriteModels && pilot.favoriteModels.length > 1) {
           return (
             <Button
-            title={listEditModeEnabled ? 'Done' : 'Edit'}
-            titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
+              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={onEdit}
             />
           )
@@ -277,18 +277,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     textAlign: 'center',
     color: theme.colors.screenHeaderButtonText,
   },
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  doneButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   favoriteModelsList: {
     overflow: 'visible',      
+  },
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
   },
   modelIcon: {
     transform: [{rotate: '-45deg'}],

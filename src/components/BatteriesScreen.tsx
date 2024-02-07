@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
@@ -49,10 +49,10 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
           return (
             <Button
               title={listEditModeEnabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.editButton]}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabled={!activeBatteries.length}
-              disabledStyle={theme.styles.buttonClearDisabled}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               onPress={onEdit}
             />
           );
@@ -63,39 +63,42 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       headerRight: ()  => {
         return (
           <>
-            <Pressable
+            <Button
               disabled={listEditModeEnabled}
-              onPress={() => navigation.navigate('BatteryFiltersNavigator')}>
-              <Icon
-                name={'filter'}
-                style={[
-                  s.headerIcon,
-                  listEditModeEnabled ? s.headerIconDisabled : {}
-                ]}
-              />
-            </Pressable>
-            {listBatteries !== 'all' ?
-              <Button
-                title={listEditModeEnabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonClearTitle}
-                buttonStyle={[theme.styles.buttonClear, s.editButton]}
-                onPress={onEdit}
-              />
-            :
-              <Pressable
-                disabled={listEditModeEnabled}
-                onPress={() => navigation.navigate('NewBatteryNavigator', {
-                  screen: 'NewBattery',
-                  params: {}
-                })}>
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              icon={
                 <Icon
-                  name={'plus'}
+                  name={'filter'}
                   style={[
                     s.headerIcon,
                     listEditModeEnabled ? s.headerIconDisabled : {}
                   ]}
                 />
-              </Pressable>
+              }
+              onPress={() => navigation.navigate('BatteryFiltersNavigator')}
+            />
+            {listBatteries !== 'all' ?
+              <Button
+                title={listEditModeEnabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                onPress={onEdit}
+              />
+            :
+              <Button
+                disabled={listEditModeEnabled}
+                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                icon={
+                  <Icon
+                    name={'plus'}
+                    style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                  />
+                }
+                onPress={() => navigation.navigate('NewBatteryNavigator', {
+                  screen: 'NewBattery',
+                  params: {}
+                })}
+              />
             }
           </>
         );
@@ -290,7 +293,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   batteryTint: {
     borderLeftWidth: 8,
   },
-  editButton: {
+  headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,
@@ -302,7 +305,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textDim,
   },
   headerIcon: {
-    color: theme.colors.brandPrimary,
+    color: theme.colors.screenHeaderButtonText,
     fontSize: 22,
     marginHorizontal: 10,
   },

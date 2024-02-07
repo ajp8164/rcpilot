@@ -86,7 +86,8 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         checked={selectedFilter === filter._id.toString()}
         swipeable={{
           rightItems: [{
-            icon: 'delete',
+            icon: 'trash',
+            iconType: 'font-awesome',
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,

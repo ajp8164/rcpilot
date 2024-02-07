@@ -270,7 +270,8 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           showEditor={listEditModeEnabled}
           swipeable={{
             rightItems: [{
-              icon: 'delete',
+              icon: 'trash',
+              iconType: 'font-awesome',
               text: 'Delete',
               color: theme.colors.assertive,
               x: 64,

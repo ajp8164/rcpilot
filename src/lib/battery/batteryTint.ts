@@ -4,7 +4,7 @@ import { EnumPickerIconProps } from 'components/EnumPickerScreen';
 const icon: EnumPickerIconProps = {
   name: 'battery-full',
   size: 28,
-  style: { width: 35 },
+  style: { width: 35, transform: [{rotate: '-90deg'}] },
 };
 
 export const batteryTintIcons: {[key in BatteryTint]: EnumPickerIconProps} = {

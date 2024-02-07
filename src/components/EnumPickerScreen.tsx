@@ -4,7 +4,7 @@ import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,8 +13,10 @@ import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
+import { SvgXml } from 'react-native-svg';
 
 export type EnumPickerIconProps = {
+  type?: 'icon' | 'svg';
   name: string | string[];
   color?: string;
   size?: number;
@@ -147,17 +149,32 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     if (icons && icons[value]) {
       iconArr = [];
       let name = icons[value]!.name;
+      let el;
       name = lodash.isArray(name) ? name : [name]; // Icon names must be an array.
       name.forEach((n, index) => {
-        iconArr!.push(
-          <Icon
-            key={index}
-            name={n}
-            color={icons[value]?.color || theme.colors.midGray}
-            size={icons[value]?.size || 20}
-            style={[{ width: 22 }, icons[value]?.style]}
-          />
-        );
+        if (icons[value]?.type === 'svg') {
+          el = (
+            <SvgXml
+              key={index}
+              xml={getColoredSvg(n)}
+              color={icons[value]?.color || theme.colors.midGray}
+              width={icons[value]?.size || 20}
+              height={icons[value]?.size || 20}
+              style={icons[value]?.style}
+            />
+          );
+        } else {
+          el = (
+            <Icon
+              key={index}
+              name={n}
+              color={icons[value]?.color || theme.colors.midGray}
+              size={icons[value]?.size || 20}
+              style={icons[value]?.style}
+            />
+          );
+        }
+        iconArr!.push(el);
       });
     }
     return iconArr ? <View style={{flexDirection: 'row'}}>{iconArr}</View> : undefined;

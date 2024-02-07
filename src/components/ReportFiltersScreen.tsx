@@ -166,7 +166,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   newFilter: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderBackButton,
+    color: theme.colors.screenHeaderButtonText,
   },
 }));
 

@@ -27,7 +27,7 @@ export const theme = createTheme(
 
       ...Platform.select({
         ios: {
-          screenHeaderBackButton: '#007bff',
+          screenHeaderButtonText: '#007bff',
           switchOffThumb: '#ffffff',
           switchOnThumb: '#ffffff',
           switchOffTrack: '#e5e5e5',
@@ -63,7 +63,7 @@ export const theme = createTheme(
 
       ...Platform.select({
         ios: {
-          screenHeaderBackButton: '#007bff',
+          screenHeaderButtonText: '#007bff',
           switchOffThumb: '#ffffff',
           switchOnThumb: '#ffffff',
           switchOffTrack: '#787878',
@@ -74,7 +74,7 @@ export const theme = createTheme(
           switchOnThumb: '#007bff',
           switchOffTrack: '#787878',
           switchOnTrack: '#007bff40',
-          screenHeaderBackButton: '#000000',
+          screenHeaderButtonText: '#000000',
           screenHeaderInvBackButton: '#ffffff',
         },
       }),

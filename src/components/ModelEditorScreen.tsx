@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { View } from 'react-native';
 import { eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -27,6 +27,7 @@ import { ScanCodeSize } from 'types/common';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'ModelEditor'>,
@@ -69,6 +70,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [notes, setNotes] = useState(model?.notes || undefined);
 
   const [expandedLastFlight, setExpandedLastFlight] = useState(false);
+  const scrollY = useSharedValue(0);
 
   useEffect(() => {
     if (modelId) return;
@@ -243,6 +245,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           modelId={route.params.modelId}
           onChangeImage={setImage}
           onGoBack={navigation.goBack}
+          scrollY={scrollY}
         />
       ),
     });
@@ -306,10 +309,15 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const onChangeScanCodeSize = (result: EnumPickerResult) => {
     setScanCodeSize(result.value[0] as ScanCodeSize);
   };
-  
+
+  const scrollHandler = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+  console.log(scrollY);
   return (
     <AvoidSoftInputView>
-      <ScrollView
+      <Animated.ScrollView
+        onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         {!modelId &&
@@ -319,6 +327,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           />
         }
         <View style={theme.styles.view}>
+          {model && <Divider />}
           <Divider />
           <ListItemInput
             placeholder={'New Model'}
@@ -586,7 +595,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           />
           <Divider />
         </View>
-      </ScrollView>
+      </Animated.ScrollView>
     </AvoidSoftInputView>
   );
 };

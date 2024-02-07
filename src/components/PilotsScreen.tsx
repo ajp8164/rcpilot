@@ -1,8 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useQuery, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -14,7 +16,6 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { saveSelectedPilot } from 'store/slices/pilot';
 import { selectPilot } from 'store/selectors/pilotSelectors';
-import { useQuery } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilots'>;
 
@@ -22,9 +23,13 @@ const PilotsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const realm = useRealm();
+
   const allPilots = useQuery(Pilot);
   const selectedPilotId = useSelector(selectPilot).pilotId;
   const dispatch = useDispatch();
+
+  const [deletePilotActionSheetVisible, setDeletePilotActionSheetVisible] = useState<Pilot>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -48,6 +53,16 @@ const PilotsScreen = ({ navigation }: Props) => {
     );
   };
 
+  const confirmDeletePilot = (pilot: Pilot) => {
+    setDeletePilotActionSheetVisible(pilot);
+  };
+
+  const deletePilot = (pilot: Pilot) => {
+    realm.write(() => {
+      realm.delete(pilot);
+    });
+  };
+
   const renderItems: ListRenderItem<Pilot> = ({ item: pilot, index }) => {
     return (
       <ListItemCheckboxInfo
@@ -59,6 +74,16 @@ const PilotsScreen = ({ navigation }: Props) => {
         onPressInfo={() => navigation.navigate('Pilot', {
           pilotId: pilot._id.toString(),
         })}
+        swipeable={{
+          rightItems: [{
+            icon: 'trash',
+            iconType: 'font-awesome',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => confirmDeletePilot(pilot),
+          }]
+        }}
       />
     )
   };
@@ -91,6 +116,25 @@ const PilotsScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
         ListFooterComponent={renderFooter}
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: 'Delete Pilot',
+            onPress: () => {
+              deletePilot(deletePilotActionSheetVisible!);
+              setDeletePilotActionSheetVisible(undefined);
+            },
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeletePilotActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deletePilotActionSheetVisible}
       />
     </SafeAreaView>
   );

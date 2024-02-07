@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
-import { Keyboard, Platform, View } from 'react-native';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import { Image, Keyboard, Platform, View } from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
 import React, { useEffect, useState } from 'react';
@@ -7,18 +8,18 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
+import { SvgXml } from 'react-native-svg';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
+import { modelShortSummary } from 'lib/model';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
-import { SvgXml } from 'react-native-svg';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilot'>;
 
@@ -142,21 +143,31 @@ const PilotScreen = ({ navigation, route }: Props) => {
         style={[isActive ? s.shadow : {}]}>
       <ListItem
         title={model.name}
-        subtitle={`${model.type} with ${model.totalEvents} flights, ${model.totalTime} total time`}
+        subtitle={modelShortSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
-        subtitleNumberOfLines={1}
+        subtitleNumberOfLines={2}
         position={pilot!.favoriteModels.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === pilot!.favoriteModels.length - 1 ? ['last'] : []}
         rightImage={false}
         leftImage={
           <View style={s.modelIconContainer}>
-            <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
-              width={60}
-              height={60}
-              color={theme.colors.brandPrimary}
-              style={s.modelIcon}
-            />
+            {model.image ?
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
+            :
+              <View style={{backgroundColor: theme.colors.subtleGray, width: 150, height: 85, overflow: 'hidden'}}>
+                <SvgXml
+                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                  width={s.modelImage.width}
+                  height={s.modelImage.height}
+                  color={theme.colors.brandSecondary}
+                  style={s.modelIcon}
+                />
+              </View>
+            }
           </View>
         }
         drag={drag}
@@ -264,7 +275,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   actionButtonTitle: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderBackButton
+    color: theme.colors.screenHeaderButtonText,
   },
   cancelButton: {
     justifyContent: 'flex-start',
@@ -285,6 +296,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelIconContainer: {
     position: 'absolute',
     left: -15,
+  },
+  modelImage: {
+    width: 150,
+    height: 85,
   },
   modelText: {
     left: 35,

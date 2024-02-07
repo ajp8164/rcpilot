@@ -1,21 +1,21 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useEffect } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
-
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import { Image, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
+import React, { useEffect } from 'react';
+import { modelShortSummary, modelTypeIcons } from 'lib/model';
+
 import { ListItemCheckbox } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
-import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
 import { useSetState } from '@react-native-ajp-elements/core';
-import { SvgXml } from 'react-native-svg';
 
 export type ModelPickerInterface = {
   mode?: 'one' | 'many';
@@ -98,20 +98,30 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       <ListItemCheckbox
         key={model._id.toString()}
         title={model.name}
-        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
+        subtitle={modelShortSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
         leftImage={
           <View style={s.modelIconContainer}>
-            <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
-              width={75}
-              height={75}
-              color={theme.colors.brandPrimary}
-              style={s.modelIcon}
-            />
+            {model.image ?
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
+            :
+              <View style={{backgroundColor: theme.colors.subtleGray, width: 150, height: 85, overflow: 'hidden'}}>
+                <SvgXml
+                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                  width={s.modelImage.width}
+                  height={s.modelImage.height}
+                  color={theme.colors.brandSecondary}
+                  style={s.modelIcon}
+                />
+              </View>
+            }
           </View>
         }
         checked={list.selected.findIndex(s => s._id.toString() === model._id.toString()) > -1}
@@ -155,8 +165,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     position: 'absolute',
     left: -15,
   },
+  modelImage: {
+    width: 150,
+    height: 85
+  },
   modelText: {
-    left: 15,
+    left: 108,
+    maxWidth: '60%',
   },
   sectionList: {
     flex: 1,

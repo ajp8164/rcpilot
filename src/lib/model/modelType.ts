@@ -1,13 +1,12 @@
 import { EnumPickerIconProps } from 'components/EnumPickerScreen';
 import { ModelType } from 'types/model';
-
 import {theme} from 'theme';
 
 const icon: EnumPickerIconProps = {
   name: '',
   type: 'svg',
   size: 50,
-  color: theme.lightColors?.brandPrimary,
+  color: theme.lightColors?.brandSecondary,
   style: { left: -10, transform: [{rotate: '-45deg'}] },
 };
 

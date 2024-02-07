@@ -197,6 +197,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         onPressInfo={() => navigation.navigate('ModelEditor', {
           modelId: model._id.toString(),
         })}
+        zeroEdgeContent={true}
         editable={{
           item: {
             icon: 'remove-circle',

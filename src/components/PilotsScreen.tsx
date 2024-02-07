@@ -48,16 +48,16 @@ const PilotsScreen = ({ navigation }: Props) => {
     );
   };
 
-  const renderItems: ListRenderItem<Pilot> = ({ item, index }) => {
+  const renderItems: ListRenderItem<Pilot> = ({ item: pilot, index }) => {
     return (
       <ListItemCheckboxInfo
-        key={item._id.toString()}
-        title={item.name}
+        key={pilot._id.toString()}
+        title={pilot.name}
         position={allPilots.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allPilots.length - 1 ? ['last'] : []}
-        checked={item._id.toString() === selectedPilotId}
-        onPress={() => setPilot(item)}
+        checked={pilot._id.toString() === selectedPilotId}
+        onPress={() => setPilot(pilot)}
         onPressInfo={() => navigation.navigate('Pilot', {
-          pilotId: item._id.toString(),
+          pilotId: pilot._id.toString(),
         })}
       />
     )

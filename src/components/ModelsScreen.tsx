@@ -170,7 +170,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 style={s.modelImage}
               />
             :
-              <View style={{backgroundColor: theme.colors.subtleGray, width: 150, height: 85, overflow: 'hidden'}}>
+              <View style={s.modelSvgContainer}>
                 <SvgXml
                   xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
                   width={s.modelImage.width}
@@ -309,6 +309,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelImage: {
     width: 150,
     height: 85
+  },
+  modelSvgContainer: {
+    backgroundColor: theme.colors.subtleGray,
   },
   modelText: {
     left: 140,

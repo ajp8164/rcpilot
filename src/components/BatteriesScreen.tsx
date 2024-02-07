@@ -64,8 +64,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         return (
           <>
             <Button
-              disabled={listEditModeEnabled}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={listEditModeEnabled}
               icon={
                 <Icon
                   name={'filter'}
@@ -86,9 +87,10 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
               />
             :
               <Button
-                disabled={listEditModeEnabled}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-                icon={
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+                disabled={listEditModeEnabled}
+                  icon={
                   <Icon
                     name={'plus'}
                     style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
@@ -138,6 +140,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         key={battery._id.toString()}
         title={battery.name}
         subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
+        subtitleNumberOfLines={2}
         containerStyle={{
           ...s.batteryTint,
           borderLeftColor: battery.tint !== BatteryTint.None ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent,
@@ -285,7 +288,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   batteryIcon: {
     transform: [{rotate: '-90deg'}],
     width: '100%',
-    left: -15,
+    left: -8,
   },
   batteryText: {
     left: 15,

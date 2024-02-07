@@ -77,8 +77,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         return (
           <>
             <Button
-              disabled={listEditModeEnabled}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={listEditModeEnabled}
               icon={
                 <Icon
                   name={'filter'}
@@ -96,8 +97,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               />
             :
               <Button
-                disabled={listEditModeEnabled}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+                disabled={listEditModeEnabled}
                 icon={
                   <Icon
                     name={'plus'}

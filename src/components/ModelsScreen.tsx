@@ -5,7 +5,7 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
@@ -19,6 +19,7 @@ import { useSelector } from 'react-redux';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { Pilot } from 'realmdb/Pilot';
 import { BSON } from 'realm';
+import { SvgXml } from 'react-native-svg';
 
 type Section = {
   title?: string;
@@ -153,11 +154,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         subtitleStyle={s.modelText}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
         leftImage={
-          <View>
-            <Icon
-              name={modelTypeIcons[model.type]?.name as string}
-              size={45}
-              color={modelTypeIcons[model.type]?.color}
+          <View style={s.modelIconContainer}>
+            <SvgXml
+              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              width={75}
+              height={75}
+              color={theme.colors.brandPrimary}
               style={s.modelIcon}
             />
           </View>
@@ -279,10 +281,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.disabled,
   },
   modelIcon: {
-    width: '100%',
+    transform: [{rotate: '-45deg'}],
+  },
+  modelIconContainer: {
+    position: 'absolute',
+    left: -15,
   },
   modelText: {
-    left: 23,
+    left: 48,
     maxWidth: '90%',
   },
   sectionList: {

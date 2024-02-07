@@ -7,8 +7,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -19,6 +18,7 @@ import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
+import { SvgXml } from 'react-native-svg';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilot'>;
 
@@ -149,11 +149,12 @@ const PilotScreen = ({ navigation, route }: Props) => {
         position={pilot!.favoriteModels.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === pilot!.favoriteModels.length - 1 ? ['last'] : []}
         rightImage={false}
         leftImage={
-          <View>
-            <Icon
-              name={modelTypeIcons[model.type]?.name as string}
-              size={45}
-              color={modelTypeIcons[model.type]?.color}
+          <View style={s.modelIconContainer}>
+            <SvgXml
+              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              width={60}
+              height={60}
+              color={theme.colors.brandPrimary}
               style={s.modelIcon}
             />
           </View>
@@ -279,11 +280,15 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     overflow: 'visible',      
   },
   modelIcon: {
-    width: '100%',
+    transform: [{rotate: '-45deg'}],
+  },
+  modelIconContainer: {
+    position: 'absolute',
+    left: -15,
   },
   modelText: {
-    left: 23,
-    maxWidth: '90%',
+    left: 35,
+    maxWidth: '92%',
   },
   shadow: {
     ...theme.styles.shadowGlow,

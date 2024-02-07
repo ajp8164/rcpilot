@@ -2,8 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 
-import { Divider } from '@react-native-ajp-elements/ui';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { ListItemCheckbox } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { MultipleNavigatorParamList } from 'types/navigation';
@@ -16,6 +15,7 @@ import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
 import { useSetState } from '@react-native-ajp-elements/core';
+import { SvgXml } from 'react-native-svg';
 
 export type ModelPickerInterface = {
   mode?: 'one' | 'many';
@@ -101,13 +101,15 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
         subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
+        subtitleNumberOfLines={2}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
         leftImage={
-          <View>
-            <Icon
-              name={modelTypeIcons[model.type]?.name as string}
-              size={45}
-              color={modelTypeIcons[model.type]?.color}
+          <View style={s.modelIconContainer}>
+            <SvgXml
+              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              width={75}
+              height={75}
+              color={theme.colors.brandPrimary}
               style={s.modelIcon}
             />
           </View>
@@ -147,11 +149,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textDim,
   },
   modelIcon: {
-    width: '100%',
+    transform: [{rotate: '-45deg'}],
+  },
+  modelIconContainer: {
+    position: 'absolute',
+    left: -15,
   },
   modelText: {
-    left: 23,
-    maxWidth: '90%',
+    left: 15,
   },
   sectionList: {
     flex: 1,

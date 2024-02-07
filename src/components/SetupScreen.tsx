@@ -20,6 +20,7 @@ import { ScrollView } from 'react-native';
 import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
 import { saveDatabaseAccessWith } from 'store/slices/appSettings';
+import { saveSelectedPilot } from 'store/slices/pilot';
 import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
@@ -64,6 +65,14 @@ const SetupScreen = ({ navigation, route }: Props) => {
     dispatch(saveDatabaseAccessWith({ value: result.value[0] as DatabaseAccessWith }));
   };
 
+  const clearPilot = () => {
+    dispatch(
+      saveSelectedPilot({
+        pilotId: undefined,
+      }),
+    );
+  };
+
   return (
     <ScrollView
       style={theme.styles.view}
@@ -78,6 +87,16 @@ const SetupScreen = ({ navigation, route }: Props) => {
           onPress={() => navigation.navigate('Pilot', {
             pilotId: '123456789012',
           })}
+          swipeable={{
+            rightItems: [{
+              icon: 'eye-slash',
+              iconType: 'font-awesome',
+              text: 'Clear',
+              color: theme.colors.brandPrimary,
+              x: 64,
+              onPress: clearPilot,
+            }]
+          }}
         />
       }
       <ListItem

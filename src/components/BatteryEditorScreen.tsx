@@ -291,7 +291,6 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
               value={[sCells, pCells]}
               wheelVisible={[true, true]}
               onValueChange={(_wheelIndex, value, _index) => {
-                console.log(value);
                 if (Array.isArray(value)) {
                   setSCells(value[0]);
                   setPCells(value[1]);

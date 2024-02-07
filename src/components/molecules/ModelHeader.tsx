@@ -1,17 +1,17 @@
+import Animated, { Extrapolation, SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { Image, Platform, Pressable, Text, View } from 'react-native';
 import React, { useState } from 'react';
+import { getColoredSvg, selectImage } from '@react-native-ajp-elements/ui';
 
 import { BSON } from 'realm';
 import CircleButton from 'components/atoms/CircleButton';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
-import { makeStyles } from '@rneui/themed';
-import { getColoredSvg, selectImage } from '@react-native-ajp-elements/ui';
-import { useObject } from '@realm/react';
 import { SvgXml } from 'react-native-svg';
+import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
-import Animated, { Extrapolation, SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated';
+import { useObject } from '@realm/react';
 
 interface ModelHeaderInterface {
   modelId: string;
@@ -126,7 +126,7 @@ export const ModelHeader = ({
               xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
               width={75}
               height={75}
-              color={theme.colors.stickyWhite}
+              color={theme.colors.hintGray}
               style={[s.insetImage]}
             />
           </View>
@@ -159,7 +159,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   buttonLeftCollapsed: {
     top: 0,
-    color: theme.colors.screenHeaderBackButton,
+    color: theme.colors.screenHeaderButtonText,
   },
   collapsedHeader: {
     backgroundColor: theme.colors.white,
@@ -185,8 +185,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   title: {
     position: 'absolute',
     bottom: 12,
-    fontSize: 17,
-    fontWeight: '600'
+    ...theme.styles.textScreenTitle,
   },
   headerImage: {
     flex: 1,
@@ -206,7 +205,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: 35,
     top: 110,
     borderWidth: 3,
-    borderRadius: 10,
+    borderRadius: 15,
     borderColor: theme.colors.viewBackground,
     backgroundColor: theme.colors.darkGray,
   },

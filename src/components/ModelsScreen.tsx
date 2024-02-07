@@ -1,25 +1,33 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import {
+  Image,
+  Pressable,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  Text,
+  View,
+} from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
+import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Pilot } from 'realmdb/Pilot';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
-import { modelTypeIcons } from 'lib/model';
-import { useSelector } from 'react-redux';
 import { selectPilot } from 'store/selectors/pilotSelectors';
-import { Pilot } from 'realmdb/Pilot';
-import { BSON } from 'realm';
-import { SvgXml } from 'react-native-svg';
+import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
@@ -149,19 +157,30 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <ListItem
         key={model._id.toString()}
         title={model.name}
-        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
+        subtitle={modelShortSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
+        subtitleNumberOfLines={2}
         position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
         leftImage={
           <View style={s.modelIconContainer}>
-            <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
-              width={75}
-              height={75}
-              color={theme.colors.brandPrimary}
-              style={s.modelIcon}
-            />
+            {model.image ?
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
+            :
+              <View style={{backgroundColor: theme.colors.subtleGray, width: 150, height: 85, overflow: 'hidden'}}>
+                <SvgXml
+                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                  width={s.modelImage.width}
+                  height={s.modelImage.height}
+                  color={theme.colors.brandSecondary}
+                  style={s.modelIcon}
+                />
+              </View>
+            }
           </View>
         }
         onPress={() => {
@@ -287,9 +306,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     position: 'absolute',
     left: -15,
   },
+  modelImage: {
+    width: 150,
+    height: 85
+  },
   modelText: {
-    left: 48,
-    maxWidth: '90%',
+    left: 140,
+    maxWidth: '48%',
   },
   sectionList: {
     flex: 1,

@@ -1,19 +1,19 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
 import { Button } from '@rneui/base';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
-import { SvgXml } from 'react-native-svg';
 
 export type EnumPickerIconProps = {
   type?: 'icon' | 'svg';
@@ -156,8 +156,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
           el = (
             <SvgXml
               key={index}
-              xml={getColoredSvg(n)}
-              color={icons[value]?.color || theme.colors.midGray}
+              xml={icons[value]?.color ? getColoredSvg(n) : getSvg(n)}
+              color={icons[value]?.color}
               width={icons[value]?.size || 20}
               height={icons[value]?.size || 20}
               style={icons[value]?.style}

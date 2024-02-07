@@ -83,7 +83,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   delete: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderBackButton,
+    color: theme.colors.screenHeaderButtonText,
   },
 }));
 

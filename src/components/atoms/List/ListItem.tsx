@@ -61,7 +61,7 @@ const ListItem = (props: Props) => {
                 <CustomIcon
                   name={'circle-info'}
                   size={20}
-                  color={theme.colors.screenHeaderBackButton}
+                  color={theme.colors.screenHeaderButtonText}
                   style={{right: 5}}
                 />
                 <Icon

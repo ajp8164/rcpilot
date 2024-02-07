@@ -52,7 +52,7 @@ const ListItemCheckboxInfo = (props: Props) => {
           <CustomIcon
             name={'circle-info'}
             size={22}
-            color={theme.colors.screenHeaderBackButton}
+            color={theme.colors.screenHeaderButtonText}
             style={hideInfo ? {opacity: 0} : {opacity: 1}}
           />
         </Pressable>

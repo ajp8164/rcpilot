@@ -182,7 +182,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   reset: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderBackButton,
+    color: theme.colors.screenHeaderButtonText,
   },
   resetDisabled: {
     opacity: 0.3,

@@ -355,7 +355,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   add: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderBackButton,
+    color: theme.colors.screenHeaderButtonText,
   },
   cancelButton: {
     justifyContent: 'flex-start',

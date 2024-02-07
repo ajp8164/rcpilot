@@ -60,7 +60,8 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         })}
         swipeable={{
           rightItems: [{
-            icon: 'delete',
+            icon: 'trash',
+            iconType: 'font-awesome',
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,

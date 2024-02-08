@@ -34,7 +34,7 @@ const NewBatteryCycleScreen = ({ navigation }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader(canSave, onDone);
+    setScreenEditHeader({condition: canSave, action: onDone});
   }, []);
   
   return (

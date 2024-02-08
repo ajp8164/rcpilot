@@ -25,7 +25,7 @@ const NotesScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader(canSave, onDone, undefined, {title});
+    setScreenEditHeader({condition: canSave, action: onDone}, undefined, {title});
   }, [newText]);
 
   return (

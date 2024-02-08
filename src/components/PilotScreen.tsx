@@ -8,6 +8,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { ErrorView } from 'components/molecules/ErrorView';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -33,7 +34,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
   const pilot = useObject(Pilot, new BSON.ObjectId(pilotId));
 
-  const [name, setName] = useState(pilot?.name || undefined);
+  const [name, setName] = useState(pilot?.name);
   const [isEditing, setIsEditing] = useState(false);
   const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
 
@@ -194,6 +195,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
       </View>
     );
   };
+
+  if (!pilot) {
+    return (<ErrorView message={'Pilot not found!'} />);
+  }
 
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>

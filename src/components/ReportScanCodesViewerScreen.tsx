@@ -2,6 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
+import { ErrorView } from 'components/molecules/ErrorView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ReportViewerNavigatorParamList } from 'types/navigation';
@@ -19,6 +20,10 @@ const ReportScanCodesViewerScreen = ({ route, navigation }: Props) => {
 
   const realm = useRealm();
   const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
+
+  if (!report) {
+    return (<ErrorView message={'Report not found!'} />);
+  }
 
   return (
     <ViewShot style={{}}>

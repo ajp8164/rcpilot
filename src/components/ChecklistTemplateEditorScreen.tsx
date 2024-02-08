@@ -88,11 +88,11 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         if (!checklistTemplateId) {
           return (
             <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={navigation.goBack}
-          />
+              title={'Cancel'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              onPress={navigation.goBack}
+            />
           )
         }
       },

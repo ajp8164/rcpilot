@@ -30,7 +30,10 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
 
   useEffect(() => {
     const onDone = () => {};
-    setScreenEditHeader(true, onDone);
+    setScreenEditHeader(
+      {condition: true, action: onDone},
+      undefined,
+    );
   }, []);
 
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {

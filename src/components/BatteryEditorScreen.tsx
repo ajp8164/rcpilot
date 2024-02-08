@@ -100,7 +100,11 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader(canSave, onDone, undefined, {title: 'New Battery'});
+    setScreenEditHeader(
+      {condition: canSave, action: onDone},
+      undefined,
+      {title: 'New Battery'}
+    );
   }, [
     name,
     chemistry,

@@ -84,8 +84,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     });
 
     if (mode === 'many-or-none' || mode === 'many-with-actions') {
-      setScreenEditHeader(canSave, onDone);
-    }
+      setScreenEditHeader({condition: canSave, action: onDone});
+      }
   }, [ list ]);
 
   const toggleSelect = (value?: string) => {

@@ -50,7 +50,10 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
       flightId: '123456789012',
     });
 
-    setScreenEditHeader(true, onDone, onCancel);
+    setScreenEditHeader(
+      {condition: true, action: onDone},
+      {action: onCancel},
+    );
   }, []);
 
   const groupBatteries = (batteries: Battery[]): SectionListData<Battery>[] => {

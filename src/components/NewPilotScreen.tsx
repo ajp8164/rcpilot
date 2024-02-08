@@ -35,7 +35,7 @@ const NewPilotScreen = ({ navigation }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader(canSave, onDone);
+    setScreenEditHeader({condition: canSave, action: onDone});
   }, [name]);
 
   return (

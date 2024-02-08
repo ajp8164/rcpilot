@@ -6,9 +6,18 @@ import { MultipleNavigatorParamList } from 'types/navigation';
 import type { StackNavigationOptions } from '@react-navigation/stack';
 import { makeStyles } from '@rneui/themed';
 
+export type ScreenEditHeaderAction = {
+  action: () => void;
+  condition?: boolean | (() => boolean);
+  label?: string;
+};
+
 /**
  * Provides a common screen edit header for the "cancel of done" pattern.
  * Accepts an additional navigation screen options for convenience.
+ * 
+ * Left button is typically 'Cancel' and defaults to shown.
+ * Right button is typically 'Done' and defaults to hidden.
  */
 export const useScreenEditHeader = () => {
   const theme = useTheme();
@@ -16,32 +25,33 @@ export const useScreenEditHeader = () => {
   const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
 
   const setScreenEditHeader = (
-    canSave: boolean,
-    onDone: () => void,
-    onCancel?: () => void,
+    rightButton?: ScreenEditHeaderAction,
+    leftButton?: ScreenEditHeaderAction,
     navigationOpts?: StackNavigationOptions) => {
       
     let options = navigationOpts || {};
 
     options.headerLeft = () => {
-      return (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonScreenHeaderTitle}
-          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-          onPress={onCancel && onCancel() || navigation.goBack}
-        />
-      )
+      if (leftButton?.condition ? leftButton.condition : true) {
+        return (
+          <Button
+            title={leftButton?.label || 'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            onPress={() => leftButton ? leftButton.action() : navigation.goBack()}
+          />
+        )
+      }
     };
 
     options.headerRight = () => {
-      if (canSave) {
+      if (rightButton?.condition ? rightButton.condition : false) {
         return (
           <Button
-            title={'Done'}
+            title={rightButton?.label || 'Done'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={onDone}
+            onPress={() => rightButton ? rightButton.action() : () => { return }}
           />
         )
       }

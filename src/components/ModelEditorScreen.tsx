@@ -128,8 +128,12 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       save();
       navigation.goBack();
     };
-    
-    setScreenEditHeader(canSave, onDone, undefined, {title: 'New Model'});
+
+    setScreenEditHeader(
+      {condition: canSave, action: onDone},
+      undefined,
+      {title: 'New Model'},
+    );
   }, [ 
     name,
     image,

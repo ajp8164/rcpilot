@@ -63,7 +63,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader(canSave, onDone);
+    setScreenEditHeader({condition: canSave, action: onDone});
   }, [name, cost, notes]);
 
   useEffect(() => {

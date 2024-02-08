@@ -40,7 +40,10 @@ const BatteryFilterEditorScreen = ({ navigation: _navigation }: Props) => {
 
   useEffect(() => {
     const onDone = () => {};
-    setScreenEditHeader(true, onDone);
+    setScreenEditHeader(
+      {condition: true, action: onDone},
+      undefined,
+    );
   }, []);  
 
   const toggleCreateSavedFilter = (value: boolean) => {

@@ -14,6 +14,8 @@ export interface ListItemSegmentedInterface extends _ListItem {
   index?: number;
   onChangeIndex: (index: number) => void;
   segments: string[];
+  segmentBackgroundColor?: string;
+  segmentTintColor?: string;
 };
 
 const ListItemSegmented = (props: ListItemSegmentedInterface) => {
@@ -24,7 +26,9 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
     index = 0,
     onChangeIndex,
     segments,
-    } = props;
+    segmentBackgroundColor,
+    segmentTintColor,
+  } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -37,17 +41,20 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
       <_ListItem
         {...props}
         containerStyle={[
+          fullWidth ? {paddingLeft: 0} : {},
           {...props.containerStyle, ...s.container},
           props.swipeable ? theme.styles.swipeableListItemContainer : {}
         ]}
+        leftContainerStyle={{flex: 0}}
         position={expanded ? [first] : props.position}
         rightImage={false}
         extraContentComponent={
-          <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : {}]}>
+          <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : s.segmentedViewRight]}>
             <SegmentedControl
               values={segments}
-              style={{width: segments.length * 50, backgroundColor: theme.colors.viewAltBackground}}
-              tintColor={theme.colors.viewAltBackground}
+              style={[{width: fullWidth ? '100%' : segments.length * 50}]}
+              tintColor={segmentTintColor || theme.colors.viewAltBackground}
+              backgroundColor={segmentBackgroundColor || theme.colors.wispGray}
               fontStyle={{fontSize: 12, color: theme.colors.text}}
               activeFontStyle={{fontSize: 12, fontWeight: 'bold', color: theme.colors.text}}
               enabled={props.disabled !== true}
@@ -93,6 +100,9 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   segmentedViewFullWidth: {
     right: 0,
     left: 0,
+  },
+  segmentedViewRight: {
+    paddingRight: 10,
   },
 }));
 

@@ -52,12 +52,13 @@ const NewBatteryCycleScreen = ({ navigation }: Props) => {
     <Divider text={'ACTION'} />
     <ListItemSegmented
       segments={['Charge Action', 'Discharge Action']}
+      containerStyle={{backgroundColor: theme.colors.transparent}}
+      segmentBackgroundColor={theme.colors.hintGray}
       fullWidth={true}
       disabled={false}
       position={['first', 'last']}
       onChangeIndex={index => setTimeout(() => setAction(index), 200)}
     />
-    <Divider />
     {action === Action.Charge &&
       <>
         <ListItemInput

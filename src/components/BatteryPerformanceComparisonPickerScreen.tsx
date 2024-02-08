@@ -86,16 +86,6 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  doneButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   sectionList: {
     flex: 1,
     flexGrow: 1,

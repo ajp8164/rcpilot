@@ -19,8 +19,8 @@ const NewModelNavigator = () => {
         screenOptions={{
           headerBackTitle: 'Model',
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
-          headerTitleStyle: { color: theme.colors.screenHeaderText },
-          headerTintColor: theme.colors.screenHeaderBackButton,
+          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+          headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewModelStack.Screen
           name='NewModel'

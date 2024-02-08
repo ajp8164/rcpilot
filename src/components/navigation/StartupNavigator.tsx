@@ -16,8 +16,8 @@ const StartupNavigator = () => {
         title: undefined,
         headerBackTitle: 'Back',
         headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
-        headerTitleStyle: { color: theme.colors.screenHeaderText },
-        headerTintColor: theme.colors.screenHeaderBackButton,
+        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+        headerTintColor: theme.colors.screenHeaderButtonText,
       }}>
       <StartupStack.Screen
         name="Welcome"

@@ -78,7 +78,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({condition: canSave, action: onDone});
+    setScreenEditHeader({visible: canSave, action: onDone});
   }, [ name, values ]);
 
   const onFilterValueChange = (property: keyof MaintenanceReportFilterValues, filterState: FilterState) => {

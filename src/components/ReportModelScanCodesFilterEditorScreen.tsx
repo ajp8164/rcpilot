@@ -70,7 +70,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
       navigation.goBack();
     };
 
-    setScreenEditHeader({condition: canSave, action: onDone});
+    setScreenEditHeader({visible: canSave, action: onDone});
   }, [ name, values ]);  
 
   const onFilterValueChange = (property: keyof ModelScanCodesReportFilterValues, filterState: FilterState) => {

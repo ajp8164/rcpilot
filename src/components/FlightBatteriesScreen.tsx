@@ -51,7 +51,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
     });
 
     setScreenEditHeader(
-      {condition: true, action: onDone},
+      {visible: true, action: onDone},
       {action: onCancel},
     );
   }, []);

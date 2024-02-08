@@ -137,8 +137,8 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {condition: canSave, action: onDone},
-      {condition: !reportId},
+      {visible: canSave, action: onDone},
+      {visible: !reportId},
     );
   }, [
     name,

@@ -1,9 +1,7 @@
-import { AppTheme, useTheme } from 'theme';
 import React, { useEffect, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { ModelCategory } from 'realmdb/ModelCategory';
@@ -12,7 +10,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { eqString } from 'realmdb/helpers';
-import { makeStyles } from '@rneui/themed';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useTheme } from 'theme';
 
 // CompositeScreenProps not working here since NewModelCategory is also in the SetupNavigator
 // just using a different presentation (didn't create a new navigator for a single screen).
@@ -23,7 +22,7 @@ export type Props =
 const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const { modelCategoryId } = route.params || {};
   const theme = useTheme();
-  const s = useStyles(theme);
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const modelCategory = useObject(ModelCategory, new BSON.ObjectId(modelCategoryId));
@@ -31,7 +30,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const [name, setName] = useState(modelCategory?.name || undefined);
 
   useEffect(() => {
-    const canSave = name && (
+    const canSave = !!name && (
       !eqString(modelCategory?.name, name)
     );
 
@@ -54,30 +53,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={navigation.goBack}
-          />
-        )
-      },
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(canSave, onDone);
   }, [name]);
 
   return (
@@ -98,13 +74,5 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
     </SafeAreaView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default ModelCategoryEditorScreen;

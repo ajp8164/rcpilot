@@ -1,20 +1,19 @@
-import { AppTheme, useTheme } from 'theme';
 import React, { useEffect, useState } from 'react';
 
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rneui/themed';
 import { useRealm } from '@realm/react';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'NewPilot'>;
 
 const NewPilotScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
 
@@ -36,30 +35,7 @@ const NewPilotScreen = ({ navigation }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={navigation.goBack}
-          />
-        )
-      },
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(canSave, onDone);
   }, [name]);
 
   return (
@@ -76,13 +52,5 @@ const NewPilotScreen = ({ navigation }: Props) => {
     </SafeAreaView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default NewPilotScreen;

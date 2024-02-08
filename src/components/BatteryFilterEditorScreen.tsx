@@ -5,10 +5,10 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 enum BatteryProperty {
@@ -22,9 +22,10 @@ enum BatteryProperty {
 
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilterEditor'>;
 
-const BatteryFilterEditorScreen = ({ navigation }: Props) => {
+const BatteryFilterEditorScreen = ({ navigation: _navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const setScreenEditHeader = useScreenEditHeader();
 
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
 
@@ -38,24 +39,8 @@ const BatteryFilterEditorScreen = ({ navigation }: Props) => {
   });
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={() => navigation.goBack()}
-        />
-      ),
-      headerRight: () => (
-        <Button
-          title={'Update'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.updateButton]}
-          onPress={() => null}
-        />
-      ),
-    });
+    const onDone = () => {};
+    setScreenEditHeader(true, onDone);
   }, []);  
 
   const toggleCreateSavedFilter = (value: boolean) => {

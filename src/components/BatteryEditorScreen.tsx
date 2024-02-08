@@ -11,7 +11,6 @@ import { useObject, useRealm } from '@realm/react';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
-import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
@@ -24,6 +23,7 @@ import WheelPicker from 'components/atoms/WheelPicker';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryEditor'>,
@@ -36,6 +36,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
@@ -98,30 +99,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       save();
       navigation.goBack();
     };
-    
-    navigation.setOptions({
-      title: 'New Battery',
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={navigation.goBack}
-        />
-      ),
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Save'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+
+    setScreenEditHeader(canSave, onDone, undefined, {title: 'New Battery'});
   }, [
     name,
     chemistry,

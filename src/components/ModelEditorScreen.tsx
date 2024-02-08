@@ -1,5 +1,4 @@
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +8,6 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
 import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { DateTime } from 'luxon';
@@ -25,9 +23,10 @@ import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
-import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'ModelEditor'>,
@@ -38,8 +37,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const model = useObject(Model, new BSON.ObjectId(modelId));
@@ -130,29 +129,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
     
-    navigation.setOptions({
-      title: 'New Model',
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonClearTitle}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={navigation.goBack}
-        />
-      ),
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Save'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.saveButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(canSave, onDone, undefined, {title: 'New Model'});
   }, [ 
     name,
     image,
@@ -597,18 +574,5 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     </AvoidSoftInputView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  saveButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default ModelEditorScreen;

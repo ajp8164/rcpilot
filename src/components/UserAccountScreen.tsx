@@ -30,12 +30,6 @@ const UserAccountScreen = ({ navigation }: Props) => {
   const userProfile = useSelector(selectUserProfile);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerTitle: 'My Account',
-    });
-  });
-
-  useEffect(() => {
     // Wait for sign out to complete before navigating away.
     if (!userProfile) {
       navigation.dispatch(StackActions.popToTop());

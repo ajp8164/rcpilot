@@ -1,4 +1,3 @@
-import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MeasurementUnits, MeasurementUnitsAbbr } from 'types/common';
 import { NewModelPropellerNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
@@ -7,7 +6,6 @@ import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
@@ -15,8 +13,9 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
-import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellerEditor'>,
@@ -26,8 +25,8 @@ export type Props = CompositeScreenProps<
 const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const { modelPropellerId } = route.params || {};
   const theme = useTheme();
-  const s = useStyles(theme);
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const modelPropeller = useObject(ModelPropeller, new BSON.ObjectId(modelPropellerId));
@@ -41,7 +40,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const [notes, setNotes] = useState(modelPropeller?.notes || undefined);
 
   useEffect(() => {
-    const canSave = name && (
+    const canSave = !!name && (
       !eqString(modelPropeller?.name, name) ||
       !eqString(modelPropeller?.vendor, vendor) ||
       !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades) ||
@@ -82,30 +81,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={navigation.goBack}
-          />
-        )
-      },
-      headerRight: ()  => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(canSave, onDone);
   }, [name, vendor, diameter, pitch, measurementUnits, numberOfBlades, notes]);
 
   useEffect(() => {
@@ -199,13 +175,5 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
     </SafeAreaView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default ModelPropellerEditorScreen;

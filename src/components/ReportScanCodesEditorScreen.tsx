@@ -1,4 +1,3 @@
-import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
@@ -6,7 +5,6 @@ import { eqBoolean, eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
@@ -14,8 +12,9 @@ import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
-import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ReportScanCodesEditor'>,
@@ -26,8 +25,8 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
   
   const theme = useTheme();
-  const s = useStyles(theme);
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
 
@@ -132,32 +131,10 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        if (!reportId) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={navigation.goBack}
-            />
-          )
-        }
-      },
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(
+      {condition: canSave, action: onDone},
+      {condition: !reportId},
+    );
   }, [
     name,
     includesModels,
@@ -226,13 +203,5 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
     </SafeAreaView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default ReportScanCodesEditorScreen;

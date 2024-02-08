@@ -1,4 +1,3 @@
-import { AppTheme, useTheme } from 'theme';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionScheduleFollowing,
@@ -13,7 +12,6 @@ import { NewChecklistActionNavigatorParamList, SetupNavigatorParamList } from 't
 import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString } from 'realmdb/helpers';
 
-import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -22,9 +20,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { getChecklistActionScheduleItems } from 'lib/checklistTemplate';
-import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
+import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'>,
@@ -39,8 +38,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
   
   const action = useRef(checklistAction).current;
   // If ordinal is undefined then we're creating a new action.
@@ -106,33 +105,11 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerBackVisible: !canSave,
-      headerLeft: () => {
-        if (canSave || isNewAction) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={navigation.goBack}
-            />
-          )
-        }
-      },
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(
+      {condition: canSave, action: onDone},
+      {condition: canSave || isNewAction},
+      {headerBackVisible: !canSave},
+    );
   }, [ description, selectedSchedule, cost, notes ]);
 
   useEffect(() => {
@@ -297,13 +274,5 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     </SafeAreaView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default ChecklistActionEditorScreen;

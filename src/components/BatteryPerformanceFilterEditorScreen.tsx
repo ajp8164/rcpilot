@@ -203,16 +203,6 @@ const BatteryPerformanceFilterEditorScreen = ({ navigation: _navigation }: Props
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  updateButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   reset: {
     alignSelf: 'center',
     textAlign: 'center',

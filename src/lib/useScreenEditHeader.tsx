@@ -3,11 +3,11 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { Button } from '@rneui/base';
 import { MultipleNavigatorParamList } from 'types/navigation';
-import type { StackNavigationOptions } from '@react-navigation/stack';
+import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
 
 export type ScreenEditHeaderAction = {
-  action: () => void;
+  action?: () => void;
   condition?: boolean | (() => boolean);
   label?: string;
 };
@@ -27,7 +27,7 @@ export const useScreenEditHeader = () => {
   const setScreenEditHeader = (
     rightButton?: ScreenEditHeaderAction,
     leftButton?: ScreenEditHeaderAction,
-    navigationOpts?: StackNavigationOptions) => {
+    navigationOpts?: NativeStackNavigationOptions) => {
       
     let options = navigationOpts || {};
 
@@ -38,7 +38,7 @@ export const useScreenEditHeader = () => {
             title={leftButton?.label || 'Cancel'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={() => leftButton ? leftButton.action() : navigation.goBack()}
+            onPress={() => leftButton && leftButton.action ? leftButton.action() : navigation.goBack()}
           />
         )
       }
@@ -51,7 +51,7 @@ export const useScreenEditHeader = () => {
             title={rightButton?.label || 'Done'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            onPress={() => rightButton ? rightButton.action() : () => { return }}
+            onPress={() => rightButton && rightButton.action ? rightButton.action() : () => { return }}
           />
         )
       }

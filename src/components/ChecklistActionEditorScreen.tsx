@@ -106,8 +106,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {condition: canSave, action: onDone},
-      {condition: canSave || isNewAction},
+      {visible: canSave, action: onDone},
+      {visible: canSave || isNewAction},
       {headerBackVisible: !canSave},
     );
   }, [ description, selectedSchedule, cost, notes ]);

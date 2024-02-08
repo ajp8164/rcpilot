@@ -80,7 +80,7 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({condition: canSave, action: onDone});
+    setScreenEditHeader({visible: canSave, action: onDone});
   }, [ name, values ]);
 
   const onFilterValueChange = (property: keyof EventReportFilterValues, filterState: FilterState) => {

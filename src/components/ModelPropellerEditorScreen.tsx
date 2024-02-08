@@ -81,7 +81,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({condition: canSave, action: onDone});
+    setScreenEditHeader({visible: canSave, action: onDone});
   }, [name, vendor, diameter, pitch, measurementUnits, numberOfBlades, notes]);
 
   useEffect(() => {

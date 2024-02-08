@@ -8,7 +8,7 @@ import { makeStyles } from '@rneui/themed';
 
 export type ScreenEditHeaderAction = {
   action?: () => void;
-  condition?: boolean | (() => boolean);
+  visible?: boolean | (() => boolean);
   label?: string;
 };
 
@@ -32,7 +32,7 @@ export const useScreenEditHeader = () => {
     let options = navigationOpts || {};
 
     options.headerLeft = () => {
-      if (leftButton?.condition ? leftButton.condition : true) {
+      if (leftButton?.visible ? leftButton.visible : true) {
         return (
           <Button
             title={leftButton?.label || 'Cancel'}
@@ -45,7 +45,7 @@ export const useScreenEditHeader = () => {
     };
 
     options.headerRight = () => {
-      if (rightButton?.condition ? rightButton.condition : false) {
+      if (rightButton?.visible ? rightButton.visible : false) {
         return (
           <Button
             title={rightButton?.label || 'Done'}

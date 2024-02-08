@@ -46,7 +46,7 @@ const ModelFilterEditorScreen = ({ navigation: _navigation }: Props) => {
 
   useEffect(() => {
     const onDone = () => {};
-    setScreenEditHeader({condition: true, action: onDone});
+    setScreenEditHeader({visible: true, action: onDone});
   }, []);
 
   const toggleCreateSavedFilter = (value: boolean) => {

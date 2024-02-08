@@ -130,7 +130,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {condition: canSave, action: onDone},
+      {visible: canSave, action: onDone},
       undefined,
       {title: 'New Model'},
     );

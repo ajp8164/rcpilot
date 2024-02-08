@@ -1,13 +1,12 @@
-import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { makeStyles } from '@rneui/themed';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useTheme } from 'theme';
 
 enum Action {
   Charge = 0,
@@ -18,7 +17,7 @@ export type Props = NativeStackScreenProps<NewBatteryCycleNavigatorParamList, 'N
 
 const NewBatteryCycleScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const setScreenEditHeader = useScreenEditHeader();
 
   const [excludeFromPlotsEnabled, setExcludeFromPlotsEnabled] = useState(false);
   const [chargeForStorageEnabled, setChargeForStorageEnabled] = useState(false);
@@ -35,30 +34,7 @@ const NewBatteryCycleScreen = ({ navigation }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonClearTitle}
-            buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-            onPress={navigation.goBack}
-          />
-        )
-      },
-      headerRight: ()  => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonClearTitle}
-              buttonStyle={[theme.styles.buttonClear, s.doneButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(canSave, onDone);
   }, []);
   
   return (
@@ -171,18 +147,5 @@ const NewBatteryCycleScreen = ({ navigation }: Props) => {
   </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  doneButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default NewBatteryCycleScreen;

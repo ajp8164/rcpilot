@@ -1,19 +1,18 @@
-import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
-import { Button } from '@rneui/base';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
+import { useTheme } from 'theme';
 
 export type EnumPickerIconProps = {
   type?: 'icon' | 'svg';
@@ -56,9 +55,9 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     eventName,
   } = route.params;
   const theme = useTheme();
-  const s = useStyles(theme);
 
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
   const [list, setList] = useSetState<{ values: string[]; selected: string[]; initial: string[]; }>({
     values,
@@ -68,10 +67,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   });
 
   useEffect(() => {
-    const canSave = () => {
       // Check if arrays contain the same elements.
-      return (!lodash.isEmpty(lodash.xor(list.selected, list.initial)));
-    };
+      const canSave = !lodash.isEmpty(lodash.xor(list.selected, list.initial));
 
     const onDone = () => {
       // For multi-selection mode we send the selected values only when done.
@@ -87,30 +84,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     });
 
     if (mode === 'many-or-none' || mode === 'many-with-actions') {
-      navigation.setOptions({
-        headerLeft: () => {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={navigation.goBack}
-            />
-          )
-        },
-        headerRight: ()  => {
-          if (canSave()) {
-            return (
-              <Button
-                title={'Done'}
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-                onPress={onDone}
-              />
-            )
-          };
-        },
-      });
+      setScreenEditHeader(canSave, onDone);
     }
   }, [ list ]);
 
@@ -259,13 +233,5 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     </SafeAreaView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-}));
 
 export default EnumPickerScreen;

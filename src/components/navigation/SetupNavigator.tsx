@@ -390,6 +390,7 @@ const SetupNavigator = () => {
         name="UserAccount"
         component={UserAccountScreen}
         options={{
+          title: 'My Account',
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },

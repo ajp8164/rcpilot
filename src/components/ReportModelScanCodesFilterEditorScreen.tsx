@@ -8,13 +8,13 @@ import { eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 const defaultFilter: ModelScanCodesReportFilterValues = {
@@ -31,6 +31,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const reportFilter = useObject(Filter, new BSON.ObjectId(filterId));
@@ -69,28 +70,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonScreenHeaderTitle}
-          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-          onPress={navigation.goBack}
-        />
-      ),
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onDone}
-            />
-          )
-        }
-      },
-    });
+    setScreenEditHeader(canSave, onDone);
   }, [ name, values ]);  
 
   const onFilterValueChange = (property: keyof ModelScanCodesReportFilterValues, filterState: FilterState) => {
@@ -169,11 +149,6 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   reset: {
     alignSelf: 'center',
     textAlign: 'center',

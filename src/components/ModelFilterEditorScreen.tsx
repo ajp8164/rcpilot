@@ -4,11 +4,11 @@ import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
-import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 enum ModelProperty {
@@ -25,9 +25,10 @@ enum ModelProperty {
 
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;
 
-const ModelFilterEditorScreen = ({ navigation }: Props) => {
+const ModelFilterEditorScreen = ({ navigation: _navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const setScreenEditHeader = useScreenEditHeader();
 
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
 
@@ -44,24 +45,8 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
   });
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={theme.styles.buttonScreenHeaderTitle}
-          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-          onPress={navigation.goBack}
-        />
-      ),
-      headerRight: () => (
-        <Button
-        title={'Done'}
-        titleStyle={theme.styles.buttonScreenHeaderTitle}
-        buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-        // onPress={onDone}
-      />
-),
-    });
+    const onDone = () => {};
+    setScreenEditHeader(true, onDone);
   }, []);
 
   const toggleCreateSavedFilter = (value: boolean) => {
@@ -201,11 +186,6 @@ const ModelFilterEditorScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   reset: {
     alignSelf: 'center',
     textAlign: 'center',

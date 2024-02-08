@@ -4,7 +4,6 @@ import { FlatList, ListRenderItem, SectionList, SectionListData, Text, View } fr
 import React, { useEffect, useState } from 'react';
 
 import { ActionSheet } from 'react-native-ui-lib';
-import { Button } from '@rneui/base';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
@@ -12,12 +11,14 @@ import { ListItemCheckbox } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { batteryCellConfigurationToString } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightBatteries'>;
 
 const FlightBatteriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const setScreenEditHeader = useScreenEditHeader();
 
   const batteries = [{
       id: '1',
@@ -41,26 +42,15 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
   const [cancelFlightActionSheetVisible, setCancelFlightActionSheetVisible] = useState(false);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Button
-          title={'Cancel'}
-          titleStyle={[theme.styles.buttonClearTitle, s.headerButton]}
-          buttonStyle={[theme.styles.buttonClear, s.cancelButton]}
-          onPress={() => setCancelFlightActionSheetVisible(true)}
-        />
-      ),
-      headerRight: () => (
-        <Button
-          title={'Done'}
-          titleStyle={[theme.styles.buttonClearTitle, s.headerButton]}
-          buttonStyle={[theme.styles.buttonClear, s.doneButton]}
-          onPress={() => navigation.navigate('FlightPreFlight', {
-            flightId: '1',
-          })}
-        />
-      ),
+    const onCancel = () => {
+      setCancelFlightActionSheetVisible(true);
+    };
+
+    const onDone = () => navigation.navigate('FlightPreFlight', {
+      flightId: '123456789012',
     });
+
+    setScreenEditHeader(true, onDone, onCancel);
   }, []);
 
   const groupBatteries = (batteries: Battery[]): SectionListData<Battery>[] => {
@@ -154,19 +144,6 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    color: theme.colors.stickyWhite,
-  },
-  cancelButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
-  doneButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   sectionList: {
     flex: 1,
     flexGrow: 1,

@@ -1,11 +1,12 @@
 import { EnumFilterState, EnumRelation } from 'components/molecules/filters';
 import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
 import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from "react";
 
+import { MultipleNavigatorParamList } from 'types/navigation';
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
-import { useNavigation } from '@react-navigation/core';
 import { useSetState } from '@react-native-ajp-elements/core';
 import {useTheme} from "theme";
 import { uuidv4 } from 'lib/utils';
@@ -27,7 +28,7 @@ const ListItemFilterEnum = (props: Props) => {
   } = props;
 
   const theme = useTheme();
-  const navigation = useNavigation<any>();
+  const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
   const event = useEvent();
 
   const segments = [

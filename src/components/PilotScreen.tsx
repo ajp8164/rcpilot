@@ -215,7 +215,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
           value={'0:04, 1 event'}
           position={['first', 'last']}
           onPress={() => navigation.navigate('Flights', {
-            pilotId: '123456789012',
+            pilotId: pilot!._id.toString(),
           })}
         />
         <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>

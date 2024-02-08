@@ -1,8 +1,8 @@
+import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
 import { eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -24,10 +24,10 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodeSize } from 'types/common';
+import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
-import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'ModelEditor'>,
@@ -428,9 +428,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               title={'Logged Flight Details'}
               value={'0'}
               position={['last']}
-              onPress={() => navigation.navigate('Flights', {
-                pilotId: '123456789012'
-              })}
+              onPress={() => navigation.navigate('Flights', {})}
             />
           </CollapsibleView>
           <Divider />

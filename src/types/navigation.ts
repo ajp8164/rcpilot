@@ -98,7 +98,7 @@ export type MainNavigatorParamList = {
 export type ModelsNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   Flights: {
-    pilotId: string;
+    pilotId?: string;
   };
   FlightDetails: {
     flightId: string;
@@ -334,7 +334,7 @@ export type SetupNavigatorParamList = {
   DatabaseReporting: undefined;
   EnumPicker: EnumPickerInterface;
   Flights: {
-    pilotId: string;
+    pilotId?: string;
   };
   FlightDetails: {
     flightId: string;

@@ -85,7 +85,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
           subtitle={'Logged 12:35 over 7 events'}
           position={['first']}
           onPress={() => navigation.navigate('Pilot', {
-            pilotId: '123456789012',
+            pilotId: selectedPilot._id.toString(),
           })}
           swipeable={{
             rightItems: [{

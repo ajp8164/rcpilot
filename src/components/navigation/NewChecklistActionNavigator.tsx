@@ -17,8 +17,8 @@ const NewChecklistActionNavigator = () => {
         initialRouteName='NewChecklistAction'
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
-          headerTitleStyle: { color: theme.colors.screenHeaderText },
-          headerTintColor: theme.colors.screenHeaderBackButton,
+          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+          headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewChecklistActionStack.Screen
           name="NewChecklistAction"

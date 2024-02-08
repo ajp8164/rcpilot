@@ -19,8 +19,8 @@ const NewBatteryCycleNavigator = () => {
         initialRouteName='NewBatteryCycle'
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
-          headerTitleStyle: { color: theme.colors.screenHeaderText },
-          headerTintColor: theme.colors.screenHeaderBackButton,
+          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+          headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewBatteryCycleStack.Screen
           name='NewBatteryCycle'

@@ -19,8 +19,8 @@ const ModelFiltersNavigator = () => {
         initialRouteName='ModelFilters'
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
-          headerTitleStyle: { color: theme.colors.screenHeaderText },
-          headerTintColor: theme.colors.screenHeaderBackButton,
+          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+          headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <ModelFiltersStack.Screen
           name='EnumPicker'

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { ErrorView } from 'components/molecules/ErrorView';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
 import { EventReportFilterValues } from 'types/filter';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
@@ -70,7 +70,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
   });
 
   if (!report) {
-    return (<ErrorView message={'Report not found!'} />);
+    return (<EmptyView error message={'Report not found!'} />);
   }
 
   return (

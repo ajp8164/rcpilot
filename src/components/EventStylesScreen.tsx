@@ -1,11 +1,12 @@
 import { AppTheme, useTheme } from 'theme';
-import { FlatList, ListRenderItem, Text } from 'react-native';
+import { FlatList, ListRenderItem } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { EventStyle } from 'realmdb/EventStyle';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
@@ -83,7 +84,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
         ListEmptyComponent={
-          <Text style={s.emptyList}>{'No Event Styles'}</Text>
+          <EmptyView info message={'No Event Styles'} details={"Tap the + button to add your first event style."} />
         }
       />
       <ActionSheet
@@ -110,12 +111,6 @@ const EventStylesScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  emptyList: {
-    textAlign: 'center',
-    marginTop: 180,
-    ...theme.styles.textNormal,
-    ...theme.styles.textDim,
-  },
   headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

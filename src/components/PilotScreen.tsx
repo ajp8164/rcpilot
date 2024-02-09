@@ -8,7 +8,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { ErrorView } from 'components/molecules/ErrorView';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -197,7 +197,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   };
 
   if (!pilot) {
-    return (<ErrorView message={'Pilot not found!'} />);
+    return (<EmptyView error message={'Pilot not found!'} />);
   }
 
   return (

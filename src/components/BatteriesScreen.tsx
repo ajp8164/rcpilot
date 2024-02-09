@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import React, { useEffect, useState } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
+import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
@@ -9,6 +9,7 @@ import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -220,7 +221,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         )}
         ListEmptyComponent={
           !retiredBatteries.length && !inStorageBatteries.length ?
-            <Text style={s.emptyList}>{'No Batteries'}</Text>
+            <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />
             : null
         }
         ListFooterComponent={
@@ -301,12 +302,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'flex-start',
     paddingHorizontal: 0,
     minWidth: 0,
-  },
-  emptyList: {
-    textAlign: 'center',
-    marginTop: 180,
-    ...theme.styles.textNormal,
-    ...theme.styles.textDim,
   },
   headerIcon: {
     color: theme.colors.screenHeaderButtonText,

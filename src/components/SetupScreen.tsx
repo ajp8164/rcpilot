@@ -233,7 +233,6 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     left: -3,
     top: 1,
   },
-  emptyListContainer: {},
 }));
 
 export default SetupScreen;

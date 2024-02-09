@@ -5,7 +5,6 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItem,
-  Text,
   View,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
@@ -15,6 +14,7 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { ActionSheet } from 'react-native-ui-lib';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
@@ -238,7 +238,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         )}
         ListEmptyComponent={
           !retiredModels.length ?
-            <Text style={s.emptyList}>{'No Models'}</Text>
+            <EmptyView info message={'No Models'} details={"Tap the + button to add your first model."} />
             : null
         }
         ListFooterComponent={
@@ -283,12 +283,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  emptyList: {
-    textAlign: 'center',
-    marginTop: 180,
-    ...theme.styles.textNormal,
-    ...theme.styles.textDim,
-  },
   headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

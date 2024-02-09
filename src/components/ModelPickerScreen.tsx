@@ -1,9 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
-import { Image, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
+import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 
+import { EmptyView } from 'components/molecules/EmptyView';
 import { ListItemCheckbox } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { MultipleNavigatorParamList } from 'types/navigation';
@@ -144,7 +145,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
           <Divider text={title} />
         )}
         ListEmptyComponent={
-          <Text style={s.emptyList}>{'No Models'}</Text>
+          <EmptyView info message={'No Models'} details={"Add your first model on the Models tab."} />
         }
       />
     </SafeAreaView>
@@ -152,12 +153,6 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  emptyList: {
-    textAlign: 'center',
-    marginTop: 180,
-    ...theme.styles.textNormal,
-    ...theme.styles.textDim,
-  },
   modelIcon: {
     transform: [{rotate: '-45deg'}],
   },

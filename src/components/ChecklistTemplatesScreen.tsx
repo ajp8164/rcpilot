@@ -6,6 +6,7 @@ import { Button } from '@rneui/base';
 import {ChecklistTemplate} from 'realmdb/ChecklistTemplate';
 import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -94,6 +95,10 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
       />
     )
   };
+
+  if (!checklistTemplates.length) {
+    return (<EmptyView info message={'No List Templates'} details={"Tap the + button to add your first list template."} />);
+  }
 
   return (
     <SafeAreaView

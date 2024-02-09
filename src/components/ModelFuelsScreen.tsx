@@ -1,11 +1,12 @@
 import { AppTheme, useTheme } from 'theme';
-import { FlatList, ListRenderItem, Text } from 'react-native';
+import { FlatList, ListRenderItem } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem } from 'components/atoms/List';
 import { ModelFuel } from 'realmdb/ModelFuel';
@@ -83,7 +84,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
         ListEmptyComponent={
-          <Text style={s.emptyList}>{'No Model Fuels'}</Text>
+          <EmptyView info message={'No Model Fuels'} details={"Tap the + button to add your first model fuel."} />
         }
       />
       <ActionSheet
@@ -110,12 +111,6 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  emptyList: {
-    textAlign: 'center',
-    marginTop: 180,
-    ...theme.styles.textNormal,
-    ...theme.styles.textDim,
-  },
   headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

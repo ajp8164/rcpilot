@@ -1,16 +1,20 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { BSON } from 'realm';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
+import { Button } from '@rneui/base';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
@@ -32,25 +36,71 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
+  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
+  const [deleteCycleActionSheetVisible, setDeleteCycleActionSheetVisible] = useState<number>();
+
+  useEffect(() => {  
+    const onEdit = () => {
+      setListEditModeEnabled(!listEditModeEnabled);
+    };
+
+    navigation.setOptions({
+      headerRight: ()  => {
+        return (
+          <>
+            <Button
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={listEditModeEnabled}
+              icon={
+                <Icon
+                  name={'filter'}
+                  style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                />
+              }
+              // onPress={() => navigation.navigate('BatteryCycleFiltersNavigator')}
+            />
+            <Button
+              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              onPress={onEdit}
+            />
+          </>
+        );
+      },
+    });
+  }, [ listEditModeEnabled ]);
+
   const groupCycles = (cycles?: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
     return groupItems<BatteryCycle, Section>(cycles || [], (cycle) => {
       const date = cycle.charge?.date || cycle.discharge?.date;
       return date ? DateTime.fromISO(date).toFormat('MMMM yyyy').toUpperCase() : '';
-    }).sort();
+    });
   };
 
   const cycleTitle = (cycle: BatteryCycle) => {
-    const kind = cycle.charge && cycle.discharge ? 'Full Cycle' : 'Partial Cycle';
+    const kind = (cycle.charge && cycle.discharge) ? 'Full Cycle' : 'Partial Cycle (Discharge Only)';
     const averageCurrent = 'Average Current ?A';
     const cRating = (battery?.cRating && battery.cRating > 0) ? `(${battery.cRating}C)` : '';
     // return `#${cycle.cycleNumber} ${kind}, ${averageCurrent} ${cRating}`;
-    return `#${cycle.cycleNumber} ${kind}`;
+    return `#${cycle.cycleNumber}: ${kind}`;
   };
 
   const cycleSubtitle = (cycle: BatteryCycle) => {
     const averageCurrent = 'Average Current ?A';
     const cRating = (battery?.cRating && battery.cRating > 0) ? `(${battery.cRating}C)` : '';
-    return `${averageCurrent} ${cRating}\nD:\nC:\nS:`;
+    const notes = cycle.notes ? `\n\n${cycle.notes}` : '';
+    return `${averageCurrent} ${cRating}\nD:\nC:\nS:${notes}`;
+  };
+
+  const confirmDeleteCycle = (cycleNumber: number) => {
+    setDeleteCycleActionSheetVisible(cycleNumber);
+  };
+
+  const deleteCycle = (index: number) => {
+    // const a = [...cycles];
+    // a.splice(index, 1);
   };
 
   const renderCycle: SectionListRenderItem<BatteryCycle, Section> = ({
@@ -68,14 +118,37 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         title={cycleTitle(cycle)}
         subtitle={cycleSubtitle(cycle)}
         position={listItemPosition(index, section.data.length)}
-        onPress={() => navigation.navigate('BatteryCycle', {
+        onPress={() => navigation.navigate('BatteryCycleEditor', {
           batteryId,
           cycleNumber: cycle.cycleNumber,
         })}
+        editable={{
+          item: {
+            icon: 'remove-circle',
+            color: theme.colors.assertive,
+            action: 'open-swipeable',
+          },
+          reorder: true,
+        }}
+        showEditor={listEditModeEnabled}
+        swipeable={{
+          rightItems: [{
+            icon: 'trash',
+            iconType: 'font-awesome',
+            text: 'Delete',
+            color: theme.colors.assertive,
+            x: 64,
+            onPress: () => confirmDeleteCycle(cycle.cycleNumber),
+          }]
+        }}
       />
     )
   };
-  
+
+  if (!battery) {
+    return (<EmptyView error message={'Battery not found!'} />);
+  }
+
   return (
     <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
       <SectionList
@@ -83,18 +156,54 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         contentInsetAdjustmentBehavior={'automatic'}
         stickySectionHeadersEnabled={true}
         style={s.sectionList}
-        sections={groupCycles(battery?.cycles)}
+        sections={groupCycles([...battery?.cycles].reverse())} // Latest cycles at the top
         keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
         renderItem={renderCycle}
         renderSectionHeader={({section: {title}}) => (
-          <Divider text={title} />
+          <SectionListHeader title={title} />
         )}
+        ListFooterComponent={<Divider />}
+        ListEmptyComponent={
+          <EmptyView info message={'No battery cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
+        }
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: 'Delete Cycle',
+            onPress: () => {
+              deleteCycle(deleteCycleActionSheetVisible!);
+              setDeleteCycleActionSheetVisible(undefined);
+            },
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeleteCycleActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deleteCycleActionSheetVisible}
       />
     </SafeAreaView>
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  headerIcon: {
+    color: theme.colors.screenHeaderButtonText,
+    fontSize: 22,
+    marginHorizontal: 10,
+  },
+  headerIconDisabled: {
+    color: theme.colors.disabled,
+  },
   sectionList: {
     flex: 1,
     flexGrow: 1,

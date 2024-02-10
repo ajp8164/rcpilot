@@ -46,7 +46,7 @@ export class BatteryCharge extends Object<BatteryCharge> {
 };
 
 export class BatteryDischarge extends Object<BatteryDischarge> {
-  date!: 'ISODateString;'
+  date!: ISODateString;
   duration!: number;
   packVoltage?: number;
   packResistance?: number;

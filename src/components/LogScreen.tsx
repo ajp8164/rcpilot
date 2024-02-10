@@ -353,8 +353,9 @@ const LogScreen = ({ navigation }: Props) => {
                 ? navigation.navigate('FlightDetails', {
                   flightId: logEntry.flightId,
                 })
-                : navigation.navigate('BatteryCycle', {
-                  batteryCycleId: logEntry.batteryCycleId,
+                : navigation.navigate('BatteryCycleEditor', {
+                  batteryId: logEntry.batteryId,
+                  cycleNumber: logEntry.batteryCycleNumber,
                 });
               }}
            />

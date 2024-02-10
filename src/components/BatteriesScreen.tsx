@@ -131,7 +131,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       : lastCycle.discharge
       ? `Discharged on ${DateTime.fromISO(lastCycle.discharge.date).toFormat('M/d/yyyy')}`
       : 'No cycles are logged';
-    return `${capacity} ${cells} ${chemistry}\n${cycles}\n${lastCycleInfo}`;
+    return `${capacity} ${cells} ${chemistry}\n${cycles}\n${lastCycleInfo}}`;
   };
 
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {

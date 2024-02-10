@@ -45,6 +45,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   container: {
     height: '100%',
     alignItems: 'center',
+    marginHorizontal: 15,
   },
   message: {
     ...theme.styles.textNormal,

@@ -1,11 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 
 import { EmptyView } from 'components/molecules/EmptyView';
-import { ListItemCheckbox } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -103,7 +103,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}
-        position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, section.data.length)}
         leftImage={
           <View style={s.modelIconContainer}>
             {model.image ?

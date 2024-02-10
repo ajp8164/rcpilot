@@ -1,9 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import { SectionList, SectionListData, Text, View } from 'react-native';
 
 import { DateTime } from 'luxon';
 import { Flight } from 'types/flight';
-import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -59,7 +59,7 @@ const FlightsScreen = ({ navigation }: Props) => {
           title={`#${flight.flightNumber}, 4*: 4:00 at 11:49PM, Nickajack Elementary School`}
           subtitle={`Fuel: 0.0oz; Batt: 150S #1`}
           containerStyle={{marginHorizontal: 15}}
-          position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+          position={listItemPosition(index, section.data.length)}
           onPress={() => navigation.navigate('FlightDetails', {
             flightId: '1'
           })}

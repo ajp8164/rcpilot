@@ -1,13 +1,13 @@
 import { ActionSheet, View } from 'react-native-ui-lib';
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
-import { ListItem } from 'components/atoms/List';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
@@ -82,7 +82,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
-        position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, filters.length)}
         checked={selectedFilter === filter._id.toString()}
         swipeable={{
           rightItems: [{

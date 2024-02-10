@@ -1,13 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
 import { Battery, BatteryChemistry } from 'types/battery';
 import { FlatList, ListRenderItem, SectionList, SectionListData, Text, View } from 'react-native';
+import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
-import { ListItemCheckbox } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { batteryCellConfigurationToString } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
@@ -86,7 +86,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
         title={battery.name}
         subtitle={`${battery.capacity}mAh, ${batteryCellConfigurationToString(battery)}, ${battery.cRating}C, ${battery.chemistry}, ${battery.totalCycles} cycles, ${DateTime.fromISO(battery.lastCycle).toFormat('MM/dd/yyyy')} last`}
         checked={false}
-        position={favoriteBatteries.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === favoriteBatteries.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, favoriteBatteries.length)}
         onPress={() => null} 
        /> 
     );
@@ -113,7 +113,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
             key={index}
             title={battery.name}
             subtitle={`${battery.capacity}mAh, ${batteryCellConfigurationToString(battery)}, ${battery.cRating}C, ${battery.chemistry}, ${battery.totalCycles} cycles, ${DateTime.fromISO(battery.lastCycle).toFormat('MM/dd/yyyy')} last`}
-            position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+            position={listItemPosition(index, section.data.length)}
             checked={true}
             onPress={() => null}
           />

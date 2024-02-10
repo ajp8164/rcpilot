@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { useQuery, useRealm } from '@realm/react';
@@ -11,7 +12,6 @@ import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { batteryTintIcons } from 'lib/battery';
@@ -148,7 +148,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         }}
         titleStyle={s.batteryText}
         subtitleStyle={s.batteryText}
-        position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, section.data.length)}
         leftImage={
           <View>
             <Icon

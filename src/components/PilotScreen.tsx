@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Image, Keyboard, Platform, View } from 'react-native';
-import { ListItem, ListItemInput } from 'components/atoms/List';
+import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
 import React, { useEffect, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
@@ -148,7 +148,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}
-        position={pilot!.favoriteModels.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === pilot!.favoriteModels.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, pilot!.favoriteModels.length)}
         rightImage={false}
         leftImage={
           <View style={s.modelIconContainer}>

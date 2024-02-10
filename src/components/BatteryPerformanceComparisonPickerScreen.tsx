@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, Text } from 'react-native';
 
@@ -6,7 +7,6 @@ import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItemCheckbox } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { groupItems } from 'lib/sectionList';
@@ -64,7 +64,7 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
           title={battery.name}
           subtitle={`${battery.capacity}mAh ${battery.sCells}S/${battery.pCells}P ${battery.chemistry}, ${battery.totalCycles} cycles, ${battery.lastCycle ? DateTime.fromISO(battery.lastCycle).toFormat("MM/d/yy"): 'No'} last`}
           containerStyle={{marginHorizontal: 15}}
-          position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+          position={listItemPosition(index, section.data.length)}
           checked={true}
           onPress={() => null}
         />

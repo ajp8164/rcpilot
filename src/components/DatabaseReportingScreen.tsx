@@ -5,6 +5,7 @@ import {
   NestableScrollContainer,
   RenderItemParams
 } from 'react-native-draggable-flatlist';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
@@ -19,7 +20,6 @@ import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
-import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import { makeStyles } from '@rneui/themed';
@@ -160,7 +160,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           title={report.name}
           subtitle={reportSummary}
           subtitleNumberOfLines={1}
-          position={reportCount === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === reportCount - 1 ? ['last'] : []}
+          position={listItemPosition(index, reportCount)}
           titleNumberOfLines={1}
           drag={drag}
           editable={{

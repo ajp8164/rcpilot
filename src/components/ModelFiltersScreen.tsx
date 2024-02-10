@@ -1,7 +1,7 @@
 import { FlatList, ListRenderItem } from 'react-native';
+import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
 
 import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { ModelFilter } from 'types/filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -55,7 +55,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
         key={index}
         title={filter.name}
         subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
-        position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, filters.length)}
         checked={true}
         onPress={() => null}
         onPressInfo={() => navigation.navigate('ModelFilterEditor', {

@@ -6,7 +6,7 @@ import {
   ChecklistTemplateType
 } from 'types/checklistTemplate';
 import { ChecklistTemplate, JChecklistAction } from 'realmdb/ChecklistTemplate';
-import { ListItem, ListItemInput } from 'components/atoms/List';
+import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import {
   NestableDraggableFlatList,
   NestableScrollContainer,
@@ -256,7 +256,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           title={action.description}
           subtitle={actionScheduleSummary(action)}
           subtitleNumberOfLines={1}
-          position={actions!.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === actions!.length - 1 ? ['last'] : []}
+          position={listItemPosition(index, actions!.length)}
           titleNumberOfLines={1}
           drag={drag}
           editable={{

@@ -1,13 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, ChecklistFrequencyUnit, ChecklistType } from 'types/model';
 import { FlatList, ListRenderItem, View } from 'react-native';
+import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
 import ActionBar from 'components/atoms/ActionBar';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
-import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
 
@@ -64,7 +64,7 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
         iconUnchecked={'circle'}
         iconSize={28}
         checked={true}
-        position={checklist.actions.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === checklist.actions.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, checklist.actions.length)}
         onPress={() => null}
         onPressInfo={() => navigation.navigate('FlightChecklistItem', {
           checklistId: '1',

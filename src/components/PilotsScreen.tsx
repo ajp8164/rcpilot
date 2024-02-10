@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
+import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -8,7 +9,6 @@ import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -68,7 +68,7 @@ const PilotsScreen = ({ navigation }: Props) => {
       <ListItemCheckboxInfo
         key={pilot._id.toString()}
         title={pilot.name}
-        position={allPilots.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allPilots.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, allPilots.length)}
         checked={pilot._id.toString() === selectedPilotId}
         onPress={() => setPilot(pilot)}
         onPressInfo={() => navigation.navigate('Pilot', {

@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 
 import { Button } from '@rneui/base';
@@ -8,7 +9,6 @@ import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -60,7 +60,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         key={item._id.toString()}
         title={item.name}
         subtitle={`Contains ${item.actions.length} actions`}
-        position={allChecklistTemplates[ChecklistTemplateType.PreEvent].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.PreEvent].length - 1 ? ['last'] : []}
+        position={listItemPosition(index, allChecklistTemplates[ChecklistTemplateType.PreEvent].length)}
         onPress={() => navigation.navigate('ChecklistTemplateEditor', {
           checklistTemplateId: item._id.toString(),
         })}
@@ -74,7 +74,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         key={item._id.toString()}
         title={item.name}
         subtitle={`Contains ${item.actions.length} actions`}
-        position={allChecklistTemplates[ChecklistTemplateType.PostEvent].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.PostEvent].length - 1 ? ['last'] : []}
+        position={listItemPosition(index, allChecklistTemplates[ChecklistTemplateType.PostEvent].length)}
         onPress={() => navigation.navigate('ChecklistTemplateEditor', {
           checklistTemplateId: item._id.toString(),
         })}
@@ -88,7 +88,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         key={item._id.toString()}
         title={item.name}
         subtitle={`Contains ${item.actions.length} actions`}
-        position={allChecklistTemplates[ChecklistTemplateType.Maintenance].length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allChecklistTemplates[ChecklistTemplateType.Maintenance].length - 1 ? ['last'] : []}
+        position={listItemPosition(index, allChecklistTemplates[ChecklistTemplateType.Maintenance].length)}
         onPress={() => navigation.navigate('ChecklistTemplateEditor', {
           checklistTemplateId: item._id.toString(),
         })}

@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -8,7 +9,6 @@ import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem } from 'components/atoms/List';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -55,7 +55,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
       <ListItem
         key={propeller._id.toString()}
         title={propeller.name}
-        position={allModelPropellers.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allModelPropellers.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, allModelPropellers.length)}
         onPress={() => navigation.navigate('ModelPropellerEditor', {
           modelPropellerId: propeller._id.toString(),
         })}

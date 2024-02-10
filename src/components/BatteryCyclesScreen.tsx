@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import { SectionList, SectionListData, Text, View } from 'react-native';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { BatteryCycle } from 'types/battery';
 import { DateTime } from 'luxon';
-import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { makeStyles } from '@rneui/themed';
@@ -85,7 +85,7 @@ const BatteryCyclesScreen = ({ navigation }: Props) => {
           key={index}
           title={`#${batteryCycle.cycleNumber}`}
           containerStyle={{marginHorizontal: 15}}
-          position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+          position={listItemPosition(index, section.data.length)}
           onPress={() => navigation.navigate('BatteryCycle', {
             batteryCycleId: '1',
           })}

@@ -1,9 +1,9 @@
 import { FlatList, ListRenderItem } from 'react-native';
+import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
 
 import { BatteryFilter } from 'types/filter';
 import { BatteryPerformanceNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native-ui-lib';
@@ -50,7 +50,7 @@ const BatteryPerformanceFiltersScreen = ({ navigation }: Props) => {
         key={index}
         title={filter.name}
         subtitle={`Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.`}
-        position={filters.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === filters.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, filters.length)}
         checked={true}
         onPress={() => null}
         // onPressInfo={() => navigation.navigate('BatteryFilterEditor', {

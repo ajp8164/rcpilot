@@ -7,6 +7,7 @@ import {
   SectionListRenderItem,
   View,
 } from 'react-native';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -16,7 +17,6 @@ import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -162,7 +162,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}
-        position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, section.data.length)}
         leftImage={
           <View style={s.modelIconContainer}>
             {model.image ?

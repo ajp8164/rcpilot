@@ -2,6 +2,7 @@ import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 're
 import { AppTheme, useTheme } from 'theme';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { Event, EventOutcome } from 'types/event';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
 import { SectionListData, Text, TouchableOpacity, View } from 'react-native';
 import {getTheme, themeColor} from '../mocks/calendarTheme';
@@ -10,7 +11,6 @@ import { DateTime } from 'luxon';
 import { DayProps } from 'react-native-calendars/src/calendar/day';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem } from 'components/atoms/List';
 import { LogNavigatorParamList } from 'types/navigation';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -346,7 +346,7 @@ const LogScreen = ({ navigation }: Props) => {
               key={index}
               title={logEntry.modelId}
               subtitle={logEntry.locationId}
-              position={section.data.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === section.data.length - 1 ? ['last'] : []}
+              position={listItemPosition(index, section.data.length)}
               containerStyle={{marginHorizontal: 15}}
               onPress={() => {
                 logEntry.modelId

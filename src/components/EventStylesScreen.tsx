@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
+import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -9,7 +10,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventStyle } from 'realmdb/EventStyle';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -55,7 +55,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
       <ListItem
         key={style._id.toString()}
         title={style.name}
-        position={allEventStyles.length === 1 ? ['first', 'last'] : index === 0 ? ['first'] : index === allEventStyles.length - 1 ? ['last'] : []}
+        position={listItemPosition(index, allEventStyles.length)}
         onPress={() => navigation.navigate('EventStyleEditor', {
           eventStyleId: style._id.toString(),
         })}

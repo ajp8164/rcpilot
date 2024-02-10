@@ -128,7 +128,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textDim,
   },
   valuePosition: {
-    paddingRight: 18,
+    paddingRight: 25,
   }
 }));
 

@@ -1,6 +1,8 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
-import { ISODateString, ScanCodeSize } from 'types/common';
+
+import { BatteryCycle } from 'realmdb/BatteryCycle';
+import { ScanCodeSize } from 'types/common';
 
 export class Battery extends Object<Battery> {
   _id!: BSON.ObjectId;
@@ -15,7 +17,7 @@ export class Battery extends Object<Battery> {
   sCells!: number;
   pCells!: number;
   totalCycles?: number;
-  lastCycle?: ISODateString;
+  lastCycle?: BatteryCycle;
   tint!: BatteryTint;
   scanCodeSize!: ScanCodeSize;
   notes?: string;
@@ -35,7 +37,7 @@ export class Battery extends Object<Battery> {
       sCells: 'int',
       pCells: 'int',
       totalCycles: 'int?',
-      lastCycle: 'string?',
+      lastCycle: 'BatteryCycle?',
       tint: 'string',
       scanCodeSize: 'string',
       notes: 'string?',

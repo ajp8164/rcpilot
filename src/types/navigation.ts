@@ -38,11 +38,18 @@ export type BatteriesNavigatorParamList = {
   Battery: {
     batteryId: string;
   };
-  BatteryCellResistances: {
-    batteryCycleId: string;
-  };
-  BatteryCellVoltages: {
-    batteryCycleId: string;
+  BatteryCellValuesEditor: {
+    config: {
+      name: string;
+      namePlural: string;
+      label: string;
+      precision: number;
+    };
+    packValue: number;
+    cellValues: number[];
+    sCells: number;
+    pCells: number;
+    eventName: string;
   };
   BatteryCycles: undefined;
   BatteryCycle: {
@@ -201,11 +208,18 @@ export type NewBatteryCycleNavigatorParamList = {
   NewBatteryCycle: {
     batteryId: string;
   };
-  BatteryCellResistances: {
-    batteryCycleId: string;
-  };
-  BatteryCellVoltages: {
-    batteryCycleId: string;
+  BatteryCellValuesEditor: {
+    config: {
+      name: string;
+      namePlural: string;
+      label: string;
+      precision: number;
+    };
+    packValue: number;
+    cellValues: number[];
+    sCells: number;
+    pCells: number;
+    eventName: string;
   };
   Notes: {
     title?: string;

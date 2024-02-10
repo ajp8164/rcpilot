@@ -294,7 +294,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
   });
-  console.log(scrollY);
+
   return (
     <AvoidSoftInputView>
       <Animated.ScrollView

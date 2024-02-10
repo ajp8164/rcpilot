@@ -1,3 +1,4 @@
+import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
 import { ChecklistAction, ChecklistActionSchedule, ChecklistTemplate } from './ChecklistTemplate';
 import { Filter, FilterState } from './Filter';
 
@@ -13,6 +14,7 @@ import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [
   Battery,
+  BatteryCycle,
   ChecklistTemplate,
   EventsMaintenanceReport,
   EventStyle,
@@ -25,6 +27,8 @@ const Schema = [
   ScanCodesReport,
   
   // Embedded objects
+  BatteryCharge,
+  BatteryDischarge,
   ChecklistAction,
   ChecklistActionSchedule,
   FilterState,

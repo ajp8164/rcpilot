@@ -1,12 +1,9 @@
-import { BSON, Object, ObjectSchema } from 'realm';
+import { Object, ObjectSchema } from 'realm';
 
-import { Battery } from 'realmdb/Battery';
 import { ISODateString } from 'types/common';
 
 export class BatteryCycle extends Object<BatteryCycle> {
-  _id!: BSON.ObjectId;
   cycleNumber!: number;
-  battery!: Battery;
   excludeFromPlots?: boolean;
   discharge?: BatteryDischarge;
   charge?: BatteryCharge;
@@ -14,16 +11,14 @@ export class BatteryCycle extends Object<BatteryCycle> {
   
   static schema: ObjectSchema = {
     name: 'BatteryCycle',
+    embedded: true,
     properties: {
-      _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       cycleNumber: 'int',
-      battery: 'Battery',
       excludeFromPlots: 'bool?',
       discharge: 'BatteryDischarge?',
       charge: 'BatteryCharge?',
       notes: 'string?',
     },
-    primaryKey: '_id',
   };
 };
 

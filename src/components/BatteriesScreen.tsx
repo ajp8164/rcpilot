@@ -9,6 +9,7 @@ import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
 import { Button } from '@rneui/base';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -119,6 +120,20 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     });
   };
 
+  const batterySummary = (battery: Battery) => {
+    const capacity = `${battery.capacity}mAh`;
+    const cells = `${battery.sCells}S/${battery.pCells}P`;
+    const chemistry = battery.chemistry;
+    const cycles = `${battery.totalCycles} cycles`;
+    const lastCycle = battery.cycles[battery.cycles.length - 1];
+    const lastCycleInfo = lastCycle.charge
+      ? `Charged on ${DateTime.fromISO(lastCycle.charge.date).toFormat('M/d/yyyy')}`
+      : lastCycle.discharge
+      ? `Discharged on ${DateTime.fromISO(lastCycle.discharge.date).toFormat('M/d/yyyy')}`
+      : 'No cycles are logged';
+    return `${capacity} ${cells} ${chemistry}\n${cycles}\n${lastCycleInfo}`;
+  };
+
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
     return groupItems<Battery, Section>(batteries, (battery) => {
       const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
@@ -140,8 +155,8 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       <ListItem
         key={battery._id.toString()}
         title={battery.name}
-        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
-        subtitleNumberOfLines={2}
+        subtitle={batterySummary(battery)}
+        subtitleNumberOfLines={3}
         containerStyle={{
           ...s.batteryTint,
           borderLeftColor: battery.tint !== BatteryTint.None ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent,

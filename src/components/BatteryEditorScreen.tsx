@@ -22,6 +22,7 @@ import { View } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
+import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
@@ -37,6 +38,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
+  const formatCurrency = useCurrencyFormatter();
 
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
@@ -71,6 +73,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       !eqNumber(battery?.capacity, capacity) ||
       !eqNumber(battery?.sCells, sCells) ||
       !eqNumber(battery?.pCells, pCells) ||
+      !eqNumber(battery?.totalCycles, totalCycles) ||
       !eqString(battery?.tint, tint) ||
       !eqString(battery?.scanCodeSize, scanCodeSize) ||
       !eqString(battery?.notes, notes)
@@ -88,6 +91,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           capacity: toNumber(capacity),
           sCells: toNumber(sCells),
           pCells: toNumber(pCells),
+          totalCycles: toNumber(totalCycles),
           tint,
           scanCodeSize,
           notes,
@@ -115,6 +119,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     capacity,
     sCells,
     pCells,
+    totalCycles,
     tint,
     scanCodeSize,
     notes,
@@ -204,7 +209,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
   const averageDischargeRate = () => {
     // Compute average discharge rate over logged cycles.
-    if (battery?.totalCycles && battery.totalCycles > 0) {
+    if (battery?.cycles && battery.cycles.length > 0) {
       return '0.2A/min average, 30 cycles';
     } else {
       return 'No cycles';
@@ -212,8 +217,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const operatingCost = () => {
-    if (battery?.purchasePrice && battery?.totalCycles) {
-      return `${battery?.purchasePrice / battery?.totalCycles}`;
+    if (battery?.purchasePrice && battery.totalCycles && battery.totalCycles > 0) {
+      return formatCurrency(battery.purchasePrice / battery.totalCycles);
     } else {
       return 'Unknown';
     }
@@ -306,9 +311,11 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
             />
             <ListItem
               title={'Logged Cycle Details'}
-              value={battery?.totalCycles?.toString() || '0'}
+              value={battery?.cycles.length.toString() || '0'}
               position={['last']}
-              onPress={() => navigation.navigate('BatteryCycles')}
+              onPress={() => navigation.navigate('BatteryCycles', {
+                batteryId,
+              })}
             />
           </>
         }
@@ -370,6 +377,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           value={purchasePrice}
           placeholder={'Unknown'}
           keyboardType={'number-pad'}
+          numeric={true}
           position={batteryId ? ['first'] : ['first', 'last']}
           onChangeText={setPurchasePrice}
         />

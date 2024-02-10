@@ -51,9 +51,12 @@ export type BatteriesNavigatorParamList = {
     pCells: number;
     eventName: string;
   };
-  BatteryCycles: undefined;
+  BatteryCycles: {
+    batteryId: string;
+  };
   BatteryCycle: {
-    batteryCycleId: string;
+    batteryId: string;
+    cycleNumber: number;
   };
   BatteryEditor: {
     batteryId: string;
@@ -93,7 +96,8 @@ export type LogNavigatorParamList = {
     flightId: string;
   };
   BatteryCycle: {
-    batteryCycleId: string;
+    batteryId: string;
+    cycleNumber: number;
   };
 };
 

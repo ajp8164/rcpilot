@@ -16,8 +16,8 @@ export class Battery extends Object<Battery> {
   capacity?: number;
   sCells!: number;
   pCells!: number;
+  cycles!: BatteryCycle[];
   totalCycles?: number;
-  lastCycle?: BatteryCycle;
   tint!: BatteryTint;
   scanCodeSize!: ScanCodeSize;
   notes?: string;
@@ -36,8 +36,8 @@ export class Battery extends Object<Battery> {
       capacity: 'int?',
       sCells: 'int',
       pCells: 'int',
+      cycles: { type: 'list', objectType: 'BatteryCycle', default: [] },
       totalCycles: 'int?',
-      lastCycle: 'BatteryCycle?',
       tint: 'string',
       scanCodeSize: 'string',
       notes: 'string?',

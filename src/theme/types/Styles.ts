@@ -5,5 +5,7 @@ export type Styles = {
   swipeableListItemContainer: ViewStyle;
   textGiant: TextStyle;
   textMicro: TextStyle;
-  viewHorizontalInset: ViewStyle;
+  view: ViewStyle;
+  viewAlt: ViewStyle;
+  viewInv: ViewStyle;
 };

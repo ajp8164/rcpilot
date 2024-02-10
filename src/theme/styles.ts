@@ -43,10 +43,20 @@ export const useStyles = makeStyles(
       fontFamily,
       fontWeight: 'normal',
     },
-
-    // Aligns items in viewport.width without using view padding (which clips shadows).
-    viewHorizontalInset: {
-      paddingHorizontal: 15,
+    view: {
+      height: '100%',
+      paddingHorizontal: 7,
+      backgroundColor: theme.colors.viewBackground,
+    },
+    viewAlt: {
+      height: '100%',
+      paddingHorizontal: 7,
+      backgroundColor: theme.colors.viewAltBackground,
+    },
+    viewInv: {
+      height: '100%',
+      paddingHorizontal: 7,
+      backgroundColor: theme.colors.viewInvBackground,
     },
   }),
 );

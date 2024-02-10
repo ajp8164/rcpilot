@@ -12,3 +12,10 @@ export const hmsMaskToSeconds = (mask?: string) => {
   const parts = maskToHMS(parseInt(mask)).split(':');
   return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
 };
+
+// Converts minutes and seconds to seconds where the places after the decimal are seconds.
+export const mssToSeconds = (value: number) => {
+  const m = Math.trunc(value);
+  const s = (value - m) * 100;
+  return (m * 60) + s;
+};

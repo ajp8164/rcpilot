@@ -1,13 +1,13 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-import { ISODateString, ISODurationString } from 'types/common';
 
 import { Battery } from 'realmdb/Battery';
+import { ISODateString } from 'types/common';
 
 export class BatteryCycle extends Object<BatteryCycle> {
   _id!: BSON.ObjectId;
   cycleNumber!: number;
   battery!: Battery;
-  ignoreInPlots?: boolean;
+  excludeFromPlots?: boolean;
   discharge?: BatteryDischarge;
   charge?: BatteryCharge;
   notes?: string;
@@ -18,7 +18,7 @@ export class BatteryCycle extends Object<BatteryCycle> {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       cycleNumber: 'int',
       battery: 'Battery',
-      ignoreInPlots: 'bool?',
+      excludeFromPlots: 'bool?',
       discharge: 'BatteryDischarge?',
       charge: 'BatteryCharge?',
       notes: 'string?',
@@ -32,9 +32,9 @@ export class BatteryCharge extends Object<BatteryCharge> {
   amount?: number; 
   packVoltage?: number;
   packResistance?: number;
-  // “1P/1S ; 1P/2S ; 2P/1S ; 2P/2S”.
-  cellVoltage?: number[];
-  cellResistance?: number[];
+  // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
+  cellVoltage!: number[];
+  cellResistance!: number[];
 
   static schema: ObjectSchema = {
     name: 'BatteryCharge',
@@ -43,7 +43,7 @@ export class BatteryCharge extends Object<BatteryCharge> {
       date: 'string',
       amount: 'int?',
       packVoltage: 'float?',
-      packResistance: 'flaot?',
+      packResistance: 'float?',
       cellVoltage: 'float[]',
       cellResistance: 'float[]',
     },
@@ -52,21 +52,21 @@ export class BatteryCharge extends Object<BatteryCharge> {
 
 export class BatteryDischarge extends Object<BatteryDischarge> {
   date!: 'ISODateString;'
-  duration!: ISODurationString;
+  duration!: number;
   packVoltage?: number;
   packResistance?: number;
-  // “1P/1S ; 1P/2S ; 2P/1S ; 2P/2S”.
-  cellVoltage?: number[];
-  cellResistance?: number[];
+  // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
+  cellVoltage!: number[];
+  cellResistance!: number[];
 
   static schema: ObjectSchema = {
     name: 'BatteryDischarge',
     embedded: true,
     properties: {
       date: 'string',
-      duration: 'string',
-      packVoltage: 'float',
-      packResistance: 'float',
+      duration: 'int',
+      packVoltage: 'float?',
+      packResistance: 'float?',
       cellVoltage: 'float[]',
       cellResistance: 'float[]',
     },

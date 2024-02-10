@@ -1,7 +1,6 @@
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import BatteriesScreen from 'components/BatteriesScreen';
-import BatteryCellResistancesScreen from 'components/BatteryCellResistancesScreen';
-import BatteryCellVoltagesScreen from 'components/BatteryCellVoltagesScreen';
+import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import BatteryCycleScreen from 'components/BatteryCycleScreen';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
 import BatteryEditorScreen from 'components/BatteryEditorScreen';
@@ -15,6 +14,7 @@ import NewBatteryNavigator from './NewBatteryNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import lodash from 'lodash';
 import { useTheme } from 'theme';
 
 const BatteriesStack = createNativeStackNavigator<BatteriesNavigatorParamList>();
@@ -54,18 +54,11 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryCellResistances'
-        component={BatteryCellResistancesScreen}
-        options={{
-          title: 'Cell Resistances',
-        }}
-      />
-      <BatteriesStack.Screen
-        name='BatteryCellVoltages'
-        component={BatteryCellVoltagesScreen}
-        options={{
-          title: 'Cell Voltages',
-        }}
+        name='BatteryCellValuesEditor'
+        component={BatteryCellValuesEditorScreen}
+        options={({ route }) => ({
+          title: `Cell ${lodash.startCase(route.params.config.namePlural)}`,
+        })}
       />
       <BatteriesStack.Screen
         name='BatteryCycles'

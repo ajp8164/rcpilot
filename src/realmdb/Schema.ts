@@ -14,7 +14,6 @@ import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [
   Battery,
-  BatteryCycle,
   ChecklistTemplate,
   EventsMaintenanceReport,
   EventStyle,
@@ -28,6 +27,7 @@ const Schema = [
   
   // Embedded objects
   BatteryCharge,
+  BatteryCycle,
   BatteryDischarge,
   ChecklistAction,
   ChecklistActionSchedule,

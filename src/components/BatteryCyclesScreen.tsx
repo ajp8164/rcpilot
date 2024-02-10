@@ -1,121 +1,103 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import { SectionList, SectionListData, Text, View } from 'react-native';
+import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import { useObject, useRealm } from '@realm/react';
 
+import { BSON } from 'realm';
 import { BatteriesNavigatorParamList } from 'types/navigation';
-import { BatteryCycle } from 'types/battery';
+import { Battery } from 'realmdb/Battery';
+import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { DateTime } from 'luxon';
+import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+
+type Section = {
+  title?: string;
+  data: BatteryCycle[];
+};
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCycles'>;
 
-const BatteryCyclesScreen = ({ navigation }: Props) => {
+const BatteryCyclesScreen = ({ navigation, route }: Props) => {
+  const { batteryId } = route.params;
+  
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const cycles: BatteryCycle[] = [{
-    id: '1',
-    cycleNumber: 1,
-    batteryId: '1',
-    ignoreInPlots: false,
-    discharge: {
-      date: '2023-11-17T03:28:04.651Z',
-      duration: '30:25', 
-      packVoltage: 11.1,
-      packResistance: 200,
-      // 1S/1P 2S/1P 3S/1P (series then parallel)
-      cellVoltage: [],
-      cellResistance: [],
-    },
-    charge: {
-      date: '2023-11-17T03:28:04.651Z',
-      amount: 450,
-      packVoltage: 11.1,
-      packResistance: 200,
-      // 1S/1P 2S/1P 3S/1P
-      cellVoltage: [],
-      cellResistance: [],
-    },
-    notes: '',
-  }];
+  const realm = useRealm();
+  
+  const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  const filterCycle = (cycle: BatteryCycle) => {
-    // Return true to include in visible result set.
-    return true;
+  const groupCycles = (cycles?: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
+    return groupItems<BatteryCycle, Section>(cycles || [], (cycle) => {
+      const date = cycle.charge?.date || cycle.discharge?.date;
+      return date ? DateTime.fromISO(date).toFormat('MMMM yyyy').toUpperCase() : '';
+    }).sort();
   };
 
-  const groupCycles = (cycles: BatteryCycle[]): SectionListData<BatteryCycle>[] => {
-    const groupedCycles: {
-      [key in string]: BatteryCycle[];
-    } = {};
-
-    cycles.forEach(cycle => {
-      if (filterCycle(cycle)) {
-        const groupTitle = DateTime.fromISO(cycle.discharge.date).toFormat(
-          'MMMM yyyy',
-        );
-        groupedCycles[groupTitle] = groupedCycles[groupTitle] || [];
-        groupedCycles[groupTitle].push(cycle);
-      }
-    });
-
-    const cyclesSectionData: SectionListData<BatteryCycle>[] = [];
-    Object.keys(groupedCycles).forEach(group => {
-      cyclesSectionData.push({
-        title: group,
-        data: groupedCycles[group],
-      });
-    });
-
-    return cyclesSectionData;
+  const cycleTitle = (cycle: BatteryCycle) => {
+    const kind = cycle.charge && cycle.discharge ? 'Full Cycle' : 'Partial Cycle';
+    const averageCurrent = 'Average Current ?A';
+    const cRating = (battery?.cRating && battery.cRating > 0) ? `(${battery.cRating}C)` : '';
+    // return `#${cycle.cycleNumber} ${kind}, ${averageCurrent} ${cRating}`;
+    return `#${cycle.cycleNumber} ${kind}`;
   };
 
+  const cycleSubtitle = (cycle: BatteryCycle) => {
+    const averageCurrent = 'Average Current ?A';
+    const cRating = (battery?.cRating && battery.cRating > 0) ? `(${battery.cRating}C)` : '';
+    return `${averageCurrent} ${cRating}\nD:\nC:\nS:`;
+  };
+
+  const renderCycle: SectionListRenderItem<BatteryCycle, Section> = ({
+    item: cycle,
+    section,
+    index,
+  }: {
+    item: BatteryCycle;
+    section: Section;
+    index: number;
+  }) => {
+    return (
+      <ListItem
+        key={index}
+        title={cycleTitle(cycle)}
+        subtitle={cycleSubtitle(cycle)}
+        position={listItemPosition(index, section.data.length)}
+        onPress={() => navigation.navigate('BatteryCycle', {
+          batteryId,
+          cycleNumber: cycle.cycleNumber,
+        })}
+      />
+    )
+  };
+  
   return (
-    <SectionList
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}
-      stickySectionHeadersEnabled={true}
-      style={s.sectionList}
-      sections={groupCycles(cycles)}
-      keyExtractor={item => item.id}
-      renderItem={({item: batteryCycle, index, section}) => (
-        <ListItem
-          key={index}
-          title={`#${batteryCycle.cycleNumber}`}
-          containerStyle={{marginHorizontal: 15}}
-          position={listItemPosition(index, section.data.length)}
-          onPress={() => navigation.navigate('BatteryCycle', {
-            batteryCycleId: '1',
-          })}
-        />
-      )}
-      renderSectionHeader={({section: {title}}) => (
-        <View style={s.sectionHeaderContainer}>
-          <Text style={s.sectionHeader}>
-            {title}
-          </Text>
-        </View>
-      )}
-    />
+    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        style={s.sectionList}
+        sections={groupCycles(battery?.cycles)}
+        keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
+        renderItem={renderCycle}
+        renderSectionHeader={({section: {title}}) => (
+          <Divider text={title} />
+        )}
+      />
+    </SafeAreaView>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,
-  },
-  sectionHeaderContainer: {
-    height: 35,
-    paddingTop: 12,
-    paddingHorizontal: 25,
-    backgroundColor: theme.colors.listHeaderBackground,
-  },
-  sectionHeader: {
-    ...theme.styles.textSmall,
-    ...theme.styles.textDim
   },
 }));
 

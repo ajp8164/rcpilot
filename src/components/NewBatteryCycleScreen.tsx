@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { BSON, UpdateMode } from 'realm';
 import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
+import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
@@ -41,7 +41,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  const mustDischarge = !battery?.lastCycle;
+  const mustDischarge = battery?.cycles.length === 0;
   const initialAction = mustDischarge ? Action.Discharge : Action.Charge;
 
   const [date, _setDate] = useState(DateTime.now().toISO()!);
@@ -70,56 +70,69 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
     const save = () => {
       realm.write(() => {
-        // A discharge action results in creating a new battery cycle.
+        const lastCycle = battery.cycles[battery.cycles.length - 1];
+
+        // A discharge action results in creating or updating an existing cycle with the discharge phase.
         if (action === Action.Discharge) {
-          const cycleNumber = battery.totalCycles ? battery.totalCycles + 1 : 1;
 
           // If the battery last cycle has a discharge phase but no charge phase then the current
           // discharge phase updates the existing discharge phase using the following rules.
           //  - New duration in this discharge phase is added to the last cycle discharge phase duration.
+          //  - The date of the first discharge phase is retained.
           //  - All other values in this discharge phase overwrite last cycle discharge phase values.
+          let cycleNumber =  battery.totalCycles ? battery.totalCycles + 1 : 1;
 
           let newDuration = mssToSeconds(toNumber(duration)!);
-          if (battery.lastCycle?.discharge && !battery.lastCycle?.charge) {
-            newDuration = newDuration + battery.lastCycle.discharge.duration;
+          let newDate = date;
+          let updateLastDischargePhase = false;
+
+          if (lastCycle && lastCycle.discharge && !lastCycle.charge) {
+            newDuration = newDuration + lastCycle.discharge.duration;
+            newDate = lastCycle.discharge.date;
+            cycleNumber = lastCycle.cycleNumber;
+            updateLastDischargePhase = true;
           }
 
-          const newCycle = realm.create('BatteryCycle', {
+          const newCycle = {
             cycleNumber,
-            battery,
-            excludeFromPlots,
             discharge: {
-              date,
+              date: newDate,
               duration: newDuration,
               packVoltage: toNumber(packVoltage),
               packResistance: toNumber(packResistance),
               cellVoltage: cellVoltages?.map(v => {return parseFloat(v)}),
               cellResistance: cellResistances?.map(r => {return parseFloat(r)}),
             },
+            excludeFromPlots,
             notes,
-          } as BatteryCycle);
+          } as BatteryCycle;
 
-          // Update the battery total cycle count.
+          // Update the battery with cycle data.
+          if (updateLastDischargePhase) {
+            battery.cycles[battery.cycles.length - 1] = newCycle;
+          } else {
+            battery.cycles.push(newCycle);
+          }
+          // Total cycles is tracked on the battery to enable a new battery to be created
+          // with some number of unlogged cycles.
           battery.totalCycles = cycleNumber;
-          battery.lastCycle = newCycle;
         }
 
-        // A charge action results in updating an existing charge cycle with the charge.
+        // A charge action results in updating an existing cycle with the charge phase.
         if (action === Action.Charge) {
 
           // If the battery last cycle has a charge phase then that charge phase is updated using
           // the following rules.
           //  - New amount in this charge phase is added to the last cycle charge phase amount.
           //  - All other values in this charge phase overwrite last cycle charge phase values.
-          if (battery.lastCycle) {
+          if (lastCycle) {
 
             let newAmount = toNumber(amount)!;
-            if (battery.lastCycle.charge) {
-              newAmount = newAmount + battery.lastCycle.charge.amount!;
+            if (lastCycle.charge) {
+              newAmount = newAmount + lastCycle.charge.amount!;
             }
 
-            realm.create('BatteryCycle', {
-              ...battery,
+            const newCycle = {
               charge: {
                 date,
                 amount: newAmount,
@@ -128,7 +141,15 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
                 cellVoltage: cellVoltages?.map(v => {return toNumber(v) || 0}),
                 cellResistance: cellResistances?.map(r => {return toNumber(r) || 0}),
               },
-            }, UpdateMode.Modified);
+              excludeFromPlots,
+              notes,
+            } as BatteryCycle;
+  
+            // Update the battery with cycle data.
+            battery.cycles[battery.cycles.length - 1] = {
+              ...battery.cycles[battery.cycles.length - 1],
+              ...newCycle,
+            } as BatteryCycle;
           } else {
             //error there should be a last cycle with a discharge phase
           }
@@ -150,6 +171,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     duration,
     packResistance,
     packVoltage,
+    notes,
    ]);
   
   useEffect(() => {

@@ -9,3 +9,4 @@ export * from './ListItemInput';
 // export * from './ListItemSwipable';
 export * from './ListItemSegmented';
 export * from './ListItemSwitch';
+export * from './SectionListHeader';

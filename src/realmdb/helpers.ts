@@ -7,19 +7,23 @@ import lodash from "lodash";
 
 // with strings so we don't require a conversion prior to calling these functions.
 export const eqNumber = (schemaAttr?: number, formAttr?: string) => {
-  if (!!schemaAttr && !!formAttr) {
-    return schemaAttr.toString() === formAttr;
+  if (lodash.isNumber(schemaAttr) && lodash.isString(formAttr)) {
+    return schemaAttr === Number(formAttr);
   } else {
     return !!schemaAttr === !!formAttr;
   }
 };
 
 export const eqString = (schemaAttr?: string, formAttr?: string) => {
-  if (!!schemaAttr && !!formAttr) {
+  if (lodash.isString(schemaAttr) && lodash.isString(formAttr)) {
     return schemaAttr === formAttr;
   } else {
     return !!schemaAttr === !!formAttr;
   }
+};
+
+export const eqArray = (schemaArr?: ArrayLike<any>, otherFormArr?: ArrayLike<any>) => {
+  return lodash.isEqual(schemaArr, otherFormArr);
 };
 
 export const eqObject = (schemaObj?: object, otherFormObj?: object) => {
@@ -33,7 +37,7 @@ export const eqObjectId = <T>(schemaObj?: Object<T>, otherObj?: Object<T>) => {
 };
 
 export const eqBoolean = (schemaAttr?: boolean, formAttr?: boolean) => {
-  if (!!schemaAttr && !!formAttr) {
+  if (lodash.isBoolean(schemaAttr) && lodash.isBoolean(formAttr)) {
     return schemaAttr === formAttr;
   } else {
     return !!schemaAttr === !!formAttr;

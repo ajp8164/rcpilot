@@ -1,4 +1,4 @@
-import BatteryCycleScreen from 'components/BatteryCycleScreen';
+import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import { LogNavigatorParamList } from 'types/navigation';
 import LogScreen from 'components/LogScreen';
@@ -34,8 +34,8 @@ const LogNavigator = () => {
         }}
       />
       <LogStack.Screen
-        name="BatteryCycle"
-        component={BatteryCycleScreen}
+        name="BatteryCycleEditor"
+        component={BatteryCycleEditorScreen}
         options={{
           title: 'Battery Cycle',
         }}

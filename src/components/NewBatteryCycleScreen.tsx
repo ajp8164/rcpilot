@@ -1,8 +1,8 @@
-import { Alert, ScrollView, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -107,16 +107,12 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
             notes,
           } as BatteryCycle;
 
-          console.log('AT DISCHARGE SAVE',newCycle);
-
           // Update the battery with cycle data.
           if (updateLastDischargePhase) {
             battery.cycles[battery.cycles.length - 1] = newCycle;
           } else {
             battery.cycles.push(newCycle);
           }
-
-          console.log('BATTERY',JSON.stringify(battery, null, 2));
 
           // Total cycles is tracked on the battery to enable a new battery to be created
           // with some number of unlogged cycles.
@@ -149,8 +145,6 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
             battery.cycles[battery.cycles.length - 1].charge = charge;
             battery.cycles[battery.cycles.length - 1].excludeFromPlots = excludeFromPlots;
             battery.cycles[battery.cycles.length - 1].notes = notes;
-
-            console.log('BATTERY',JSON.stringify(battery, null, 2));
           } else {
             // This is an error (database or logic problem).
             // There should always be a last cycle with a discharge phase.

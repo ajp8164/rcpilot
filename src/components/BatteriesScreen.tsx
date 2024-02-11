@@ -68,13 +68,17 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditModeEnabled}
+              disabled={listEditModeEnabled || 
+                (listBatteries === 'all' && !activeBatteries.length) ||
+                (listBatteries !== 'all' && !retiredBatteries.length)}
               icon={
                 <Icon
                   name={'filter'}
-                  style={[
-                    s.headerIcon,
-                    listEditModeEnabled ? s.headerIconDisabled : {}
+                  style={[s.headerIcon,
+                    listEditModeEnabled ||
+                    (listBatteries === 'all' && !activeBatteries.length) ||
+                    (listBatteries !== 'all' && !retiredBatteries.length)
+                    ? s.headerIconDisabled : {}
                   ]}
                 />
               }
@@ -85,6 +89,8 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 title={listEditModeEnabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                disabled={!retiredBatteries.length}
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 onPress={onEdit}
               />
             :
@@ -92,7 +98,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 disabled={listEditModeEnabled}
-                  icon={
+                icon={
                   <Icon
                     name={'plus'}
                     style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
@@ -108,7 +114,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditModeEnabled ]);
+  }, [ listEditModeEnabled, activeBatteries, retiredBatteries ]);
 
   const confirmDeleteBattery = (battery: Battery) => {
     setDeleteBatteryActionSheetVisible(battery);
@@ -126,12 +132,15 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     const chemistry = battery.chemistry;
     const cycles = `${battery.totalCycles} cycles`;
     const lastCycle = battery.cycles[battery.cycles.length - 1];
-    const lastCycleInfo = lastCycle.charge
-      ? `Charged on ${DateTime.fromISO(lastCycle.charge.date).toFormat('M/d/yyyy')}`
-      : lastCycle.discharge
-      ? `Discharged on ${DateTime.fromISO(lastCycle.discharge.date).toFormat('M/d/yyyy')}`
-      : 'No cycles are logged';
-    return `${capacity} ${cells} ${chemistry}\n${cycles}\n${lastCycleInfo}}`;
+    const lastCycleInfo = lastCycle ? (
+      lastCycle.charge
+        ? `Charged on ${DateTime.fromISO(lastCycle.charge.date).toFormat('M/d/yyyy')}`
+        : lastCycle.discharge
+        ? `Discharged on ${DateTime.fromISO(lastCycle.discharge.date).toFormat('M/d/yyyy')}`
+        : 'No cycles are logged'
+    ) : 'No cycles are logged';
+    
+    return `${capacity} ${cells} ${chemistry}\n${cycles}\n${lastCycleInfo}`;
   };
 
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {

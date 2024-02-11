@@ -79,11 +79,18 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditModeEnabled}
+              disabled={listEditModeEnabled || 
+                (listModels === 'all' && !activeModels.length) ||
+                (listModels !== 'all' && !retiredModels.length)}
               icon={
                 <Icon
                   name={'filter'}
-                  style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                  style={[s.headerIcon,
+                    listEditModeEnabled ||
+                    (listModels === 'all' && !activeModels.length) ||
+                    (listModels !== 'all' && !retiredModels.length)
+                    ? s.headerIconDisabled : {}
+                  ]}
                 />
               }
               onPress={() => navigation.navigate('ModelFiltersNavigator')}
@@ -93,6 +100,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 title={listEditModeEnabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                disabled={!retiredModels.length}
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 onPress={onEdit}
               />
             :

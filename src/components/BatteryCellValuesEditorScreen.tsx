@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { FlatList, ListRenderItem, Text, View } from 'react-native';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -36,9 +36,10 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
-  const [packValue, setPackValue] = useState<string>(_packValue.toString());
+  const [packValue, setPackValue] = useState(_packValue.toString());
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
-  const [cellValues, setCellValues] = useState<string[]>(_cellValues.map(v => {return v.toString()}));
+  const [cellValues, setCellValues] = useState(_cellValues.map(v => {return v.toString()}));
+  const initializing = useRef(true);
 
   useEffect(() => {
     const onDone = () => {
@@ -54,7 +55,19 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   }, [ cellValues, packValue ]);
 
   useEffect(() => {
-    computePack();
+    if (initializing.current) {
+      initializing.current = false;
+      return;
+    }
+
+    // Compute new total pack value.
+    const newPackValue = cellValues.reduce((previousValue, currentValue) => {
+      const pv = previousValue || '0';
+      const cv = currentValue || '0';
+      // return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
+      return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
+    });
+    setPackValue(newPackValue);
   }, [ cellValues ]);
 
   const autoFill = (index: number, value: string) => {
@@ -70,16 +83,6 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       r[index] = value;
     }
     setCellValues(r);
-  };
-
-  const computePack = () => {
-    // Compute new total pack value.
-    const newPackValue = cellValues.reduce((previousValue, currentValue) => {
-      const pv = previousValue || '0';
-      const cv = currentValue || '0';
-      return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
-    });
-    setPackValue(newPackValue);
   };
 
   const renderValue: ListRenderItem<string> = ({ item: value, index }) => {

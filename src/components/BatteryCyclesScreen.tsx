@@ -51,11 +51,11 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditModeEnabled}
+              disabled={listEditModeEnabled || !battery?.cycles.length}
               icon={
                 <Icon
                   name={'filter'}
-                  style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                  style={[s.headerIcon, listEditModeEnabled || !battery?.cycles.length ? s.headerIconDisabled : {}]}
                 />
               }
               // onPress={() => navigation.navigate('BatteryCycleFiltersNavigator')}
@@ -64,6 +64,8 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               title={listEditModeEnabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={!battery?.cycles.length}
               onPress={onEdit}
             />
           </>
@@ -98,9 +100,15 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     setDeleteCycleActionSheetVisible(cycleNumber);
   };
 
-  const deleteCycle = (index: number) => {
-    // const a = [...cycles];
-    // a.splice(index, 1);
+  const deleteCycle = (cycleNumber: number) => {
+    realm.write(() => {
+      const index = battery?.cycles.findIndex(c => c.cycleNumber === cycleNumber);
+      if (index !== undefined && index >= 0) {
+        // Make sure to decrement the battery's total cycle count.
+        battery?.cycles.splice(index, 1);
+        battery!.totalCycles = battery!.totalCycles! - 1;
+      }
+    });
   };
 
   const renderCycle: SectionListRenderItem<BatteryCycle, Section> = ({

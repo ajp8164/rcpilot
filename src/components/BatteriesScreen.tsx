@@ -82,7 +82,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                   ]}
                 />
               }
-              onPress={() => navigation.navigate('BatteryFiltersNavigator')}
+              onPress={() => navigation.navigate('BatteryFiltersNavigator', {
+                screen: 'BatteryFilters'
+              })}
             />
             {listBatteries !== 'all' ?
               <Button

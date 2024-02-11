@@ -33,7 +33,9 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
           <Button
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
             icon={<Icon name={'plus'} style={s.headerIcon}/>}
-            onPress={() => navigation.navigate('NewModelFuelNavigator')}
+            onPress={() => navigation.navigate('NewModelFuelNavigator', {
+              screen: 'NewModelFuel',
+            })}
           />
         )
       },

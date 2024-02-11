@@ -33,7 +33,9 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
           <Button
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
             icon={<Icon name={'plus'} style={s.headerIcon}/>}
-            onPress={() => navigation.navigate('NewModelPropellerNavigator')}
+            onPress={() => navigation.navigate('NewModelPropellerNavigator', {
+              screen: 'NewModelPropeller',
+            })}
           />
         )
       },

@@ -93,7 +93,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                   ]}
                 />
               }
-              onPress={() => navigation.navigate('ModelFiltersNavigator')}
+              onPress={() => navigation.navigate('ModelFiltersNavigator', {
+                screen: 'ModelFilters',
+              })}
             />
             {listModels !== 'all' ?
               <Button

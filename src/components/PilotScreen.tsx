@@ -260,7 +260,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
           titleStyle={s.actionButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('PilotNavigator',{
+          onPress={() => navigation.navigate('PilotNavigator', {
             screen:'ModelPicker',
             params: {
               title: 'Models',

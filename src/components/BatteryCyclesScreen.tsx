@@ -58,7 +58,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
                   style={[s.headerIcon, listEditModeEnabled || !battery?.cycles.length ? s.headerIconDisabled : {}]}
                 />
               }
-              // onPress={() => navigation.navigate('BatteryCycleFiltersNavigator')}
+              onPress={() => navigation.navigate('BatteryCycleFiltersNavigator', {
+                screen: 'BatteryCycleFilters',
+              })}
             />
             <Button
               title={listEditModeEnabled ? 'Done' : 'Edit'}

@@ -1,5 +1,6 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 import {
+  BatteryCycleFilterValues,
   BatteryFilterValues,
   BatteryScanCodesReportFilterValues,
   EventReportFilterValues,
@@ -16,6 +17,7 @@ export class Filter extends Object<Filter> {
   values!:
     ModelFilterValues |
     BatteryFilterValues |
+    BatteryCycleFilterValues |
     EventReportFilterValues |
     MaintenanceReportFilterValues |
     ModelScanCodesReportFilterValues |

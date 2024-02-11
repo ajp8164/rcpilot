@@ -61,10 +61,11 @@ export type BatteriesNavigatorParamList = {
   BatteryEditor: {
     batteryId: string;
   };
-  BatteryFiltersNavigator: undefined;
+  BatteryFiltersNavigator: NavigatorScreenParams<BatteryFiltersNavigatorParamList>;
+  BatteryCycleFiltersNavigator: NavigatorScreenParams<BatteryCycleFiltersNavigatorParamList>;
   BatteryPerformance: undefined;
   BatteryPerformanceComparisonPicker: undefined;
-  BatteryPerformanceNavigator: undefined;
+  BatteryPerformanceNavigator: NavigatorScreenParams<BatteryPerformanceNavigatorParamList>;
   EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: NavigatorScreenParams<NewBatteryNavigatorParamList>;
   NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
@@ -133,7 +134,7 @@ export type ModelsNavigatorParamList = {
   Models: {
     listModels?: ListModels;
   };
-  ModelFiltersNavigator: undefined;
+  ModelFiltersNavigator: NavigatorScreenParams<ModelFiltersNavigatorParamList>;
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -159,6 +160,14 @@ export type ModelFiltersNavigatorParamList = {
 export type BatteryFiltersNavigatorParamList = {
   BatteryFilters: undefined;
   BatteryFilterEditor: {
+    filterId: string;
+  };
+  EnumPicker: EnumPickerInterface;
+};
+
+export type BatteryCycleFiltersNavigatorParamList = {
+  BatteryCycleFilters: undefined;
+  BatteryCycleFilterEditor: {
     filterId: string;
   };
   EnumPicker: EnumPickerInterface;
@@ -394,14 +403,14 @@ export type SetupNavigatorParamList = {
   ModelPropellerEditor: {
     modelPropellerId: string;
   }
-  NewChecklistTemplateNavigator: undefined;
+  NewChecklistTemplateNavigator: NavigatorScreenParams<NewChecklistTemplateNavigatorParamList>;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewEventStyle: {
     eventStyleId?: string;
   };
   NewModelCategory: undefined;
-  NewModelFuelNavigator: undefined;
-  NewModelPropellerNavigator: undefined;
+  NewModelFuelNavigator: NavigatorScreenParams<NewModelFuelNavigatorParamList>;
+  NewModelPropellerNavigator: NavigatorScreenParams<NewModelPropellerNavigatorParamList>;
   NewReportNavigator: NavigatorScreenParams<NewReportNavigatorParamList>;
   Notes: {
     title?: string;

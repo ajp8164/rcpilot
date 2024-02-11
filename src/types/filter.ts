@@ -8,6 +8,7 @@ import {
 
 export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
+  BatteryCycleFilter = 'BatteryCycleFilter',
   ModelsFilter = 'ModelFilter',
   ReportEventsFilter = 'ReportEventsFilter',
   ReportMaintenanceFilter = 'ReportMaintenanceFilter',
@@ -25,6 +26,16 @@ export type BatteryFilterValues = {
   cRating: NumberFilterState;
   sCells: NumberFilterState;
   pCells: NumberFilterState;
+};
+
+// Battery cycle filter
+//
+export type BatteryCycleFilterValues = {
+  dischargeDate: DateFilterState;
+  dischargeDuration: NumberFilterState;
+  chargeDate: DateFilterState;
+  chargeAmount: NumberFilterState;
+  notes: StringFilterState;
 };
 
 // Model filter

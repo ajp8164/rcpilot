@@ -1,11 +1,11 @@
 import { AppTheme, useTheme } from "theme";
+import React, { useImperativeHandle } from "react";
+import { ListItem as _ListItem, ListItemMethods as _ListItemMethods } from "@react-native-ajp-elements/ui";
 
 import CollapsibleView from "@eliav2/react-native-collapsible-view";
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { Icon } from "@rneui/base";
 import { Pressable } from "react-native";
-import React from "react";
-import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 import { useRef } from  'react';
 
@@ -17,7 +17,11 @@ interface Props extends _ListItem {
   visible?: boolean;
 };
 
-const ListItem = (props: Props) => {
+export interface ListItemMethods {
+  resetEditor: () => void;
+}
+
+const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
   const {
     expanded = false,
     ExpandableComponent,
@@ -36,10 +40,22 @@ const ListItem = (props: Props) => {
   const sectionInitiallyExpanded = useRef(expanded);
   const first = props.position?.includes('first') ?  'first' : undefined;
 
+  const liRef = useRef<_ListItemMethods>(null);
+
+  useImperativeHandle(ref, () => ({
+    //  These functions exposed to the parent component through the ref.
+    resetEditor,
+  }));
+
+  const resetEditor = () => {
+    liRef.current?.resetEditor();
+  };
+
   const renderListItem = () => {
     return (
       <>
         <_ListItem
+          ref={liRef}
           {...props}
           containerStyle={[
             {...props.containerStyle, ...s.container},
@@ -101,7 +117,7 @@ const ListItem = (props: Props) => {
   } else {
     return renderListItem();
   }
-}
+});
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   collapsible: {

@@ -2,10 +2,11 @@ import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecu
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { useQuery, useRealm } from '@realm/react';
 
+import { ActionSheet } from 'react-native-ui-lib';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
@@ -37,6 +38,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
   const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
 
+  const [newBatterySheetVisible, setNewBatterySheetVisible] = useState(false);
   const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
@@ -101,10 +103,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                     style={[s.headerIcon, listEditor.enabled ? s.headerIconDisabled : {}]}
                   />
                 }
-                onPress={() => navigation.navigate('NewBatteryNavigator', {
-                  screen: 'NewBattery',
-                  params: {}
-                })}
+                onPress={() => setNewBatterySheetVisible(true)}
               />
             }
           </>
@@ -283,6 +282,34 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             : null
         }
         ListFooterComponent={renderInactive()}
+      />
+      <ActionSheet
+        cancelButtonIndex={2}
+        options={[
+          {
+            label: 'Add New',
+            onPress: () => {
+              navigation.navigate('NewBatteryNavigator', {
+                screen: 'NewBattery',
+                params: {},
+              })
+              setNewBatterySheetVisible(false);
+            }
+          },
+          {
+            label: 'Add From Template',
+            onPress: () => {
+              navigation.navigate('BatteryTemplates');
+              setNewBatterySheetVisible(false);
+            }
+          },
+          {
+            label: 'Cancel',
+            onPress: () => setNewBatterySheetVisible(false),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={newBatterySheetVisible}
       />
       <ActionSheetConfirm
         ref={actionSheetConfirm}

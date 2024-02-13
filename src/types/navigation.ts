@@ -1,10 +1,11 @@
+import { BatteryTemplate, ListBatteries } from 'types/battery';
+
 import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { FilterType } from 'types/filter';
 import { FlightOutcome } from 'types/flight';
 import { JChecklistAction } from 'realmdb/ChecklistTemplate';
-import { ListBatteries } from 'types/battery';
 import { ListModels } from 'types/model';
 import { ModelPickerInterface } from 'components/ModelPickerScreen';
 import { NavigatorScreenParams } from '@react-navigation/core';
@@ -38,6 +39,7 @@ export type BatteriesNavigatorParamList = {
   Battery: {
     batteryId: string;
   };
+  BatteryTemplates: undefined;
   BatteryCellValuesEditor: {
     config: {
       name: string;
@@ -60,6 +62,7 @@ export type BatteriesNavigatorParamList = {
   };
   BatteryEditor: {
     batteryId: string;
+    batteryTemplate?: BatteryTemplate;
   };
   BatteryFiltersNavigator: NavigatorScreenParams<BatteryFiltersNavigatorParamList>;
   BatteryCycleFiltersNavigator: NavigatorScreenParams<BatteryCycleFiltersNavigatorParamList>;
@@ -208,6 +211,7 @@ export type NewBatteryNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   NewBattery: {
     batteryId?: string;
+    batteryTemplate?: BatteryTemplate;
   };
   Notes: {
     title?: string;

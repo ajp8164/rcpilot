@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -23,7 +23,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   const realm = useRealm();
 
   const allModelCategories = useQuery(ModelCategory);
-  const [deleteCategoryActionSheetVisible, setDeleteCategoryActionSheetVisible] = useState<ModelCategory>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,10 +38,6 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
       },
     });
   }, []);
-
-  const confirmDeleteCategory = (category: ModelCategory) => {
-    setDeleteCategoryActionSheetVisible(category);
-  };
 
   const deleteCategory = (category: ModelCategory) => {
     realm.write(() => {
@@ -66,7 +62,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteCategory(category),
+            onPress: () => actionSheetConfirm.current?.confirm(category),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', index)}
@@ -87,25 +83,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
           <EmptyView info message={'No Model Categories'} details={"Tap the + button to add your first model category."} />
         }
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Category',
-            onPress: () => {
-              deleteCategory(deleteCategoryActionSheetVisible!);
-              setDeleteCategoryActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteCategoryActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteCategoryActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Category'} onConfirm={deleteCategory} />
     </>
   );
 };

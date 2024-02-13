@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -23,7 +23,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const realm = useRealm();
 
   const allModelFuels = useQuery(ModelFuel);
-  const [deleteFuelActionSheetVisible, setDeleteFuelActionSheetVisible] = useState<ModelFuel>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,10 +40,6 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
       },
     });
   }, []);
-
-  const confirmDeleteFuel = (fuel: ModelFuel) => {
-    setDeleteFuelActionSheetVisible(fuel);
-  };
 
   const deleteFuel = (fuel: ModelFuel) => {
     realm.write(() => {
@@ -68,7 +64,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteFuel(fuel),
+            onPress: () => actionSheetConfirm.current?.confirm(fuel),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', index)}
@@ -89,25 +85,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
           <EmptyView info message={'No Model Fuels'} details={"Tap the + button to add your first model fuel."} />
         }
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Fuel',
-            onPress: () => {
-              deleteFuel(deleteFuelActionSheetVisible!);
-              setDeleteFuelActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteFuelActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteFuelActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Fuel'} onConfirm={deleteFuel} />
     </>
   );
 };

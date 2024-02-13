@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ScrollView, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { BSON } from 'realm';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
@@ -35,7 +35,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  const [deleteCycleActionSheetVisible, setDeleteCycleActionSheetVisible] = useState<number>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -92,11 +92,8 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     return `${averageCurrent} ${cRating}\nD:\nC:\nS:${notes}`;
   };
 
-  const confirmDeleteCycle = (cycleNumber: number) => {
-    setDeleteCycleActionSheetVisible(cycleNumber);
-  };
-
   const deleteCycle = (cycleNumber: number) => {
+    console.log(cycleNumber, '<<');
     realm.write(() => {
       const index = battery?.cycles.findIndex(c => c.cycleNumber === cycleNumber);
       if (index !== undefined && index >= 0) {
@@ -143,7 +140,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteCycle(cycle.cycleNumber),
+            onPress: () => actionSheetConfirm.current?.confirm(cycle.cycleNumber),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycles', index)}
@@ -175,25 +172,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
           <EmptyView info message={'No battery cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
         }
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Cycle',
-            onPress: () => {
-              deleteCycle(deleteCycleActionSheetVisible!);
-              setDeleteCycleActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteCycleActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteCycleActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Cycle'} onConfirm={deleteCycle} />
     </ScrollView>
   );
 };

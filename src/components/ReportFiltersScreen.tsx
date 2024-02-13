@@ -1,9 +1,9 @@
-import { ActionSheet, View } from 'react-native-ui-lib';
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { FilterType, ReportFilterType } from 'types/filter';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -11,6 +11,7 @@ import { Filter } from 'realmdb/Filter';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
+import { View } from 'react-native-ui-lib';
 import { filterSummary } from 'lib/filter';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -39,7 +40,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
 
   const reportFilterEditor = reportFilterEditors[filterType as ReportFilterType];
   const [selectedFilter, setSelectedFilter] = useState(filterId);
-  const [deleteFilterActionSheetVisible, setDeleteFilterActionSheetVisible] = useState<Filter>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -59,10 +60,6 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     event.emit(eventName, selectedFilter);
   }, [ selectedFilter ]);
-
-  const confirmDeleteFilter = (filter: Filter) => {
-    setDeleteFilterActionSheetVisible(filter);
-  };
 
   const deleteFilter = (filter: Filter) => {
     // If removing the selected filter then set the current selection to no-filter.
@@ -90,7 +87,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteFilter(filter),
+            onPress: () => actionSheetConfirm.current?.confirm(filter),
           }]
         }}
         onPress={() => setSelectedFilter(filter._id.toString())}
@@ -134,25 +131,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Saved Filter',
-            onPress: () => {
-              deleteFilter(deleteFilterActionSheetVisible!);
-              setDeleteFilterActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteFilterActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteFilterActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Saved Filter'} onConfirm={deleteFilter} />
     </View>
   );
 };

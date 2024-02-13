@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -23,7 +23,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   const realm = useRealm();
 
   const allModelPropellers = useQuery(ModelPropeller);
-  const [deletePropellerActionSheetVisible, setDeletePropellerActionSheetVisible] = useState<ModelPropeller>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,10 +40,6 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
       },
     });
   }, []);
-
-  const confirmDeletePropeller = (propeller: ModelPropeller) => {
-    setDeletePropellerActionSheetVisible(propeller);
-  };
 
   const deletePropeller = (propeller: ModelPropeller) => {
     realm.write(() => {
@@ -68,7 +64,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeletePropeller(propeller),
+            onPress: () => actionSheetConfirm.current?.confirm(propeller),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', index)}
@@ -89,25 +85,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
           <EmptyView info message={'No Model Propellers'} details={"Tap the + button to add your first model propeller."} />
         }
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Propeller',
-            onPress: () => {
-              deletePropeller(deletePropellerActionSheetVisible!);
-              setDeletePropellerActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeletePropellerActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deletePropellerActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Propeller'} onConfirm={deletePropeller} />
     </>
   );
 };

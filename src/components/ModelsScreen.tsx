@@ -1,3 +1,4 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import {
@@ -9,11 +10,10 @@ import {
   View,
 } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -49,7 +49,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
-  const [deleteModelActionSheetVisible, setDeleteModelActionSheetVisible] = useState<Model>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -124,10 +124,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       },
     });
   }, [ listEditor.enabled ]);
-
-  const confirmDeleteModel = (model: Model) => {
-    setDeleteModelActionSheetVisible(model);
-  };
 
   const deleteModel = (model: Model) => {
     realm.write(() => {
@@ -224,7 +220,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteModel(model),
+            onPress: () => actionSheetConfirm.current?.confirm(model),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', index)}
@@ -274,24 +270,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         }
         ListFooterComponent={renderInactive()}
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model',
-            onPress: () => {
-              deleteModel(deleteModelActionSheetVisible!);
-              setDeleteModelActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteModelActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteModelActionSheetVisible}
+      <ActionSheetConfirm
+        ref={actionSheetConfirm}
+        label={
+          listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model'
+        }
+        onConfirm={deleteModel}
       />
     </ScrollView>
   );

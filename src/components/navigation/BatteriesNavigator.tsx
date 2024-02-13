@@ -51,7 +51,7 @@ const BatteriesNavigator = () => {
         name='BatteryEditor'
         component={BatteryEditorScreen}
         options={{
-          title: '',
+          title: 'Battery',
         }}
       />
       <BatteriesStack.Screen

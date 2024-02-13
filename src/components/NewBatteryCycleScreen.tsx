@@ -45,6 +45,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   const mustDischarge = battery?.cycles.length === 0;
   const shouldDischarge = !!lastCycle?.charge;
   const initialAction = mustDischarge || shouldDischarge ? Action.Discharge : Action.Charge;
+  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
 
   const [date, _setDate] = useState(DateTime.now().toISO()!);
   const [amount, setAmount] = useState<string>('0');
@@ -216,7 +217,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
         leftImage={
           <View>
             <Icon
-              name={'battery-full'}
+              name={isCharged ? 'battery-full' : 'battery-quarter'}
               solid={true}
               size={45}
               color={theme.colors.brandPrimary}

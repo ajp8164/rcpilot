@@ -157,6 +157,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
+    const isCharged = battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length;
     return (
       <ListItem
         ref={ref => listEditor.add(ref, 'batteries', index)}
@@ -174,7 +175,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         leftImage={
           <View>
             <Icon
-              name={'battery-full'}
+              name={isCharged ? 'battery-full' : 'battery-quarter'}
               solid={true}
               size={45}
               color={theme.colors.brandPrimary}

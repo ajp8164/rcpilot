@@ -1,10 +1,10 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Battery, BatteryChemistry } from 'types/battery';
 import { FlatList, ListRenderItem, SectionList, SectionListData, Text, View } from 'react-native';
 import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { FlightNavigatorParamList } from 'types/navigation';
@@ -39,11 +39,11 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
   ];
 
   const favoriteBatteries = batteries;
-  const [cancelFlightActionSheetVisible, setCancelFlightActionSheetVisible] = useState(false);
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     const onCancel = () => {
-      setCancelFlightActionSheetVisible(true);
+      actionSheetConfirm.current?.confirm(true);
     };
 
     const onDone = () => navigation.navigate('FlightPreFlight', {
@@ -126,22 +126,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
           </View>
         )}
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Do Not Log Flight',
-            onPress: () => navigation.goBack(),
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setCancelFlightActionSheetVisible(false),
-        },
-        ]}
-        useNativeIOS={true}
-        visible={cancelFlightActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Do Not Log Flight'} onConfirm={navigation.goBack} />
     </View>
   );
 };

@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ScrollView, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
@@ -37,7 +37,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
   const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
 
-  const [deleteBatteryActionSheetVisible, setDeleteBatteryActionSheetVisible] = useState<Battery>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -112,10 +112,6 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       },
     });
   }, [ listEditor.enabled, activeBatteries, retiredBatteries ]);
-
-  const confirmDeleteBattery = (battery: Battery) => {
-    setDeleteBatteryActionSheetVisible(battery);
-  };
 
   const deleteBattery = (battery: Battery) => {
     realm.write(() => {
@@ -217,7 +213,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteBattery(battery),
+            onPress: () => actionSheetConfirm.current?.confirm(battery),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('batteries', index)}
@@ -288,29 +284,16 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         }
         ListFooterComponent={renderInactive()}
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: listBatteries === 'retired' ?
-              'Delete Retired Battery'
-              : listBatteries === 'in-storage' ?
-              'Delete In Storage Battery'
-              : 'Delete Battery',
-            onPress: () => {
-              deleteBattery(deleteBatteryActionSheetVisible!);
-              setDeleteBatteryActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteBatteryActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteBatteryActionSheetVisible}
-      />
+      <ActionSheetConfirm
+        ref={actionSheetConfirm}
+        label={
+          listBatteries === 'retired' ?
+          'Delete Retired Battery'
+          : listBatteries === 'in-storage' ?
+          'Delete In Storage Battery'
+          : 'Delete Battery'
+        }
+        onConfirm={deleteBattery} />
     </ScrollView>
   );
 };

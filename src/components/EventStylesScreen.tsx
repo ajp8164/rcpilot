@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventStyle } from 'realmdb/EventStyle';
@@ -23,7 +23,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
   const realm = useRealm();
 
   const allEventStyles = useQuery(EventStyle);
-  const [deleteStyleActionSheetVisible, setDeleteStyleActionSheetVisible] = useState<EventStyle>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -38,10 +38,6 @@ const EventStylesScreen = ({ navigation }: Props) => {
       },
     });
   }, []);
-
-  const confirmDeleteStyle = (style: EventStyle) => {
-    setDeleteStyleActionSheetVisible(style);
-  };
 
   const deleteStyle = (style: EventStyle) => {
     realm.write(() => {
@@ -66,7 +62,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeleteStyle(style),
+            onPress: () => actionSheetConfirm.current?.confirm(style),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', index)}
@@ -87,25 +83,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
           <EmptyView info message={'No Event Styles'} details={"Tap the + button to add your first event style."} />
         }
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Style',
-            onPress: () => {
-              deleteStyle(deleteStyleActionSheetVisible!);
-              setDeleteStyleActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteStyleActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteStyleActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Style'} onConfirm={deleteStyle} />
     </>
   );
 };

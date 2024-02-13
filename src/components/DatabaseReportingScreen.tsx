@@ -1,3 +1,4 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import {
@@ -10,7 +11,7 @@ import { ListItem, listItemPosition } from 'components/atoms/List';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -59,7 +60,8 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const scReports = useQuery<ScanCodesReport>('ScanCodesReport');
 
   const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
-  const [deleteReportActionSheetVisible, setDeleteReportActionSheetVisible] = useState<Report>();
+  // const [deleteReportActionSheetVisible, setDeleteReportActionSheetVisible] = useState<Report>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -120,10 +122,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     return `${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
   };
 
-  const confirmDeleteReport = (report: Report) => {
-    setDeleteReportActionSheetVisible(report);
-  };
-
   const deleteReport = (report: Report) => {
     realm.write(() => {
       realm.delete(report);
@@ -176,7 +174,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               text: 'Delete',
               color: theme.colors.assertive,
               x: 64,
-              onPress: () => confirmDeleteReport(report),
+              onPress: () => actionSheetConfirm.current?.confirm(report),
             }]
           }}
           onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, index)}
@@ -357,25 +355,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={newReportSheetVisible}
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Report',
-            onPress: () => {
-              deleteReport(deleteReportActionSheetVisible!);
-              setDeleteReportActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeleteReportActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deleteReportActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Report'} onConfirm={deleteReport} />
     </NestableScrollContainer>
   );
 };

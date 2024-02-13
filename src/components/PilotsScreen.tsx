@@ -1,11 +1,11 @@
+import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -29,7 +29,7 @@ const PilotsScreen = ({ navigation }: Props) => {
   const selectedPilotId = useSelector(selectPilot).pilotId;
   const dispatch = useDispatch();
 
-  const [deletePilotActionSheetVisible, setDeletePilotActionSheetVisible] = useState<Pilot>();
+  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -51,10 +51,6 @@ const PilotsScreen = ({ navigation }: Props) => {
         pilotId: pilot?._id?.toString(),
       }),
     );
-  };
-
-  const confirmDeletePilot = (pilot: Pilot) => {
-    setDeletePilotActionSheetVisible(pilot);
   };
 
   const deletePilot = (pilot: Pilot) => {
@@ -81,7 +77,7 @@ const PilotsScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => confirmDeletePilot(pilot),
+            onPress: () => actionSheetConfirm.current?.confirm(pilot),
           }]
         }}
       />
@@ -117,25 +113,7 @@ const PilotsScreen = ({ navigation }: Props) => {
         ListHeaderComponent={Divider}
         ListFooterComponent={renderFooter}
       />
-      <ActionSheet
-        cancelButtonIndex={1}
-        destructiveButtonIndex={0}
-        options={[
-          {
-            label: 'Delete Pilot',
-            onPress: () => {
-              deletePilot(deletePilotActionSheetVisible!);
-              setDeletePilotActionSheetVisible(undefined);
-            },
-          },
-          {
-            label: 'Cancel' ,
-            onPress: () => setDeletePilotActionSheetVisible(undefined),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={!!deletePilotActionSheetVisible}
-      />
+      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Pilot'} onConfirm={deletePilot} />
     </SafeAreaView>
   );
 };

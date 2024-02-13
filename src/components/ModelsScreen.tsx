@@ -1,7 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import {
   Image,
+  ScrollView,
   SectionList,
   SectionListData,
   SectionListRenderItem,
@@ -253,13 +254,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
+    <ScrollView style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
       <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
+        scrollEnabled={false}
         stickySectionHeadersEnabled={true}
         style={s.sectionList}
         sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
@@ -294,7 +293,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         useNativeIOS={true}
         visible={!!deleteModelActionSheetVisible}
       />
-    </ListEditorView>
+    </ScrollView>
   );
 };
 

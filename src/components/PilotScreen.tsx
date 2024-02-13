@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { Image, Keyboard, Platform, View } from 'react-native';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
@@ -199,81 +199,76 @@ const PilotScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
-      <NestableScrollContainer
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={"PILOT'S NAME"}/>
-        <ListItemInput
-          value={name}
-          placeholder={'Pilot Name'}
-          position={['first', 'last']}
-          onChangeText={setName}
-          onBlur={() => setIsEditing(false)}
-          onFocus={() => setIsEditing(true)}
-        /> 
-        <Divider text={'MODEL USAGE'}/>
-        <ListItem
-          title={'Blade 150S'}
-          value={'0:04, 1 event'}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('Flights', {
-            pilotId: pilot!._id.toString(),
-          })}
-        />
-        <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
-        <Divider text={'EVENT STYLES'}/>
-        <ListItem
-          title={'Sport'}
-          value={'0:04, 1 event'}
-          position={['first', 'last']}
-          onPress={() => null}
-        />
-        <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
-        {pilot?.favoriteModels && pilot.favoriteModels.length > 0 &&
-          <>
-            <Divider text={'FAVORITE MODELS'}/>
-            <NestableDraggableFlatList
-              data={pilot.favoriteModels}
-              renderItem={renderFavoriteModel}
-              keyExtractor={(_item, index) => `${index}`}
-              showsVerticalScrollIndicator={false}
-              scrollEnabled={false}
-              style={s.favoriteModelsList}
-              animationConfig={{
-                damping: 20,
-                mass: 0.01,
-                stiffness: 100,
-                overshootClamping: false,
-                restSpeedThreshold: 0.2,
-                restDisplacementThreshold: 2,
-              }}
-              onDragEnd={({ data }) => reorderFavoriteModels(data)}
-            />
-          </>
-        }
-        <Divider />
-        <ListItem
-          title={'Select Favorite Models'}
-          titleStyle={s.actionButtonTitle}
-          position={['first', 'last']}
-          rightImage={false}
-          onPress={() => navigation.navigate('PilotNavigator', {
-            screen:'ModelPicker',
-            params: {
-              title: 'Models',
-              selected: pilot!.favoriteModels,
-              mode: 'many',
-              eventName: 'pilot-favorite-models',
-            }
-          })}
-        />
-        <Divider />
-      </NestableScrollContainer>
-    </ListEditorView>
+    <NestableScrollContainer
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider text={"PILOT'S NAME"}/>
+      <ListItemInput
+        value={name}
+        placeholder={'Pilot Name'}
+        position={['first', 'last']}
+        onChangeText={setName}
+        onBlur={() => setIsEditing(false)}
+        onFocus={() => setIsEditing(true)}
+      /> 
+      <Divider text={'MODEL USAGE'}/>
+      <ListItem
+        title={'Blade 150S'}
+        value={'0:04, 1 event'}
+        position={['first', 'last']}
+        onPress={() => navigation.navigate('Flights', {
+          pilotId: pilot!._id.toString(),
+        })}
+      />
+      <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
+      <Divider text={'EVENT STYLES'}/>
+      <ListItem
+        title={'Sport'}
+        value={'0:04, 1 event'}
+        position={['first', 'last']}
+        onPress={() => null}
+      />
+      <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
+      {pilot?.favoriteModels && pilot.favoriteModels.length > 0 &&
+        <>
+          <Divider text={'FAVORITE MODELS'}/>
+          <NestableDraggableFlatList
+            data={pilot.favoriteModels}
+            renderItem={renderFavoriteModel}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            style={s.favoriteModelsList}
+            animationConfig={{
+              damping: 20,
+              mass: 0.01,
+              stiffness: 100,
+              overshootClamping: false,
+              restSpeedThreshold: 0.2,
+              restDisplacementThreshold: 2,
+            }}
+            onDragEnd={({ data }) => reorderFavoriteModels(data)}
+          />
+        </>
+      }
+      <Divider />
+      <ListItem
+        title={'Select Favorite Models'}
+        titleStyle={s.actionButtonTitle}
+        position={['first', 'last']}
+        rightImage={false}
+        onPress={() => navigation.navigate('PilotNavigator', {
+          screen:'ModelPicker',
+          params: {
+            title: 'Models',
+            selected: pilot!.favoriteModels,
+            mode: 'many',
+            eventName: 'pilot-favorite-models',
+          }
+        })}
+      />
+      <Divider />
+    </NestableScrollContainer>
   );
 };
 

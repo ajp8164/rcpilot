@@ -24,3 +24,13 @@ export enum BatteryCellArchitecture {
   SeriesCells = 'SeriesCells',
   SeriesParallelCells = 'SeriesParallelCells',
 }
+
+export type BatteryTemplate = {
+  capacity?: number;
+  chemistry?: BatteryChemistry;
+  cRating?: number;
+  name?: string;
+  pCells?: number;
+  sCells?: number;
+  vendor?: string;
+};

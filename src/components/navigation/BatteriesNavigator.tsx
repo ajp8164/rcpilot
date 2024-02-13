@@ -9,6 +9,7 @@ import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigat
 import BatteryPerformanceComparisonPickerScreen from 'components/BatteryPerformanceComparisonPickerScreen';
 import BatteryPerformanceNavigator from 'components/navigation/BatteryPerformanceNavigator';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
+import BatteryTemplatesScreen from 'components/BatteryTemplatesScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
 import NewBatteryNavigator from './NewBatteryNavigator';
@@ -46,6 +47,14 @@ const BatteriesNavigator = () => {
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         })}
+      />
+      <BatteriesStack.Screen
+        name='BatteryTemplates'
+        component={BatteryTemplatesScreen}
+        options={{
+          title: 'Battery Templates',
+          presentation: 'modal',
+        }}
       />
       <BatteriesStack.Screen
         name='BatteryEditor'

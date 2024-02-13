@@ -6,6 +6,7 @@ import {
   ChecklistTemplateType
 } from 'types/checklistTemplate';
 import { ChecklistTemplate, JChecklistAction } from 'realmdb/ChecklistTemplate';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import {
   NestableDraggableFlatList,
@@ -20,10 +21,8 @@ import { useObject, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -38,11 +37,11 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const listEditor = useListEditor();
   const event = useEvent();
-
   const realm = useRealm();
+
   const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
-  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
 
   const [name, setName] = useState(checklistTemplate?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
@@ -79,10 +78,6 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    const onEdit = () => {
-      setListEditModeEnabled(!listEditModeEnabled);
-    };
-
     navigation.setOptions({
       headerLeft: () => {
         if (!checklistTemplateId) {
@@ -110,17 +105,17 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           if (actions.length > 0) {
             return (
               <Button
-              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              title={listEditor.enabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-                onPress={onEdit}
+                onPress={listEditor.onEdit}
               />
             )
           }
         }
       },
     });
-  }, [ name, type, actions, listEditModeEnabled ]);
+  }, [ name, type, actions, listEditor.enabled ]);
 
   useEffect(() => {
     event.on('checklist-template-type', onChangeTemplateType);
@@ -240,7 +235,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
     return result;
   };
 
-  const renderAction = ({
+  const renderChecklistAction = ({
     item: action,
     getIndex,
     drag,
@@ -253,6 +248,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         key={index}
         style={[isActive ? s.shadow : {}]}>
         <ListItem
+          ref={ref => listEditor.add(ref, 'checklist-actions', index)}
           title={action.description}
           subtitle={actionScheduleSummary(action)}
           subtitleNumberOfLines={1}
@@ -267,7 +263,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
             },
             reorder: true,
           }}
-          showEditor={listEditModeEnabled}
+          showEditor={listEditor.show}
           swipeable={{
             rightItems: [{
               icon: 'trash',
@@ -278,7 +274,9 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
               onPress: () => deleteAction(index),
             }]
           }}
-          onPress={() => navigation.navigate('ChecklistActionEditor', {
+          onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklist-actions', index)}
+          onSwipeableWillClose={listEditor.onItemWillClose}
+            onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
             checklistTemplateType: type,
             eventName: 'checklist-action',
@@ -289,9 +287,10 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   };
   
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <NestableScrollContainer
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
@@ -317,7 +316,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         {actions.length > 0 && <Divider text={'ACTIONS'} />}
         <NestableDraggableFlatList
           data={actions}
-          renderItem={renderAction}
+          renderItem={renderChecklistAction}
           keyExtractor={(_item, index) => `${index}`}
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
@@ -348,7 +347,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         />
         <Divider />
       </NestableScrollContainer>
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

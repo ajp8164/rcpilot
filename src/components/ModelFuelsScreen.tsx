@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -6,12 +7,10 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
@@ -20,7 +19,7 @@ export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuels'
 const ModelFuelsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const listEditor = useListEditor();
   const realm = useRealm();
 
   const allModelFuels = useQuery(ModelFuel);
@@ -52,9 +51,10 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderItems: ListRenderItem<ModelFuel> = ({ item: fuel, index }) => {
+  const renderModelFuel: ListRenderItem<ModelFuel> = ({ item: fuel, index }) => {
     return (
       <ListItem
+      ref={ref => listEditor.add(ref, 'model-fuels', index)}
       key={fuel._id.toString()}
       title={fuel.name}
       position={listItemPosition(index, allModelFuels.length)}
@@ -71,17 +71,20 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
             onPress: () => confirmDeleteFuel(fuel),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <FlatList
         data={allModelFuels}
-        renderItem={renderItems}
+        renderItem={renderModelFuel}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
@@ -108,7 +111,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={!!deleteFuelActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

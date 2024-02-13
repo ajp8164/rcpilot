@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -6,12 +7,10 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
@@ -20,7 +19,7 @@ export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelCatego
 const ModelCategoriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const listEditor = useListEditor();
   const realm = useRealm();
 
   const allModelCategories = useQuery(ModelCategory);
@@ -50,9 +49,10 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderItems: ListRenderItem<ModelCategory> = ({ item: category, index }) => {
+  const renderModelCategory: ListRenderItem<ModelCategory> = ({ item: category, index }) => {
     return (
       <ListItem
+        ref={ref => listEditor.add(ref, 'model-categories', index)}
         key={category._id.toString()}
         title={category.name}
         position={listItemPosition(index, allModelCategories.length)}
@@ -69,17 +69,20 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
             onPress: () => confirmDeleteCategory(category),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <FlatList
         data={allModelCategories}
-        renderItem={renderItems}
+        renderItem={renderModelCategory}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
@@ -106,7 +109,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={!!deleteCategoryActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import { Divider, ListEditorView, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import {
   Image,
   SectionList,
@@ -21,7 +21,6 @@ import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
@@ -40,6 +39,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
+  const listEditor = useListEditor();
   const realm = useRealm();
 
   const _pilot = useSelector(selectPilot);
@@ -48,25 +48,20 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
-  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [deleteModelActionSheetVisible, setDeleteModelActionSheetVisible] = useState<Model>();
 
   useEffect(() => {  
-    const onEdit = () => {
-      setListEditModeEnabled(!listEditModeEnabled);
-    };
-
     navigation.setOptions({
       headerLeft: () => {
         if (listModels === 'all') {
           return (
             <Button
-              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabled={!activeModels.length}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={onEdit}
+              onPress={listEditor.onEdit}
             />
           );
         } else {
@@ -79,14 +74,14 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditModeEnabled || 
+              disabled={listEditor.enabled || 
                 (listModels === 'all' && !activeModels.length) ||
                 (listModels !== 'all' && !retiredModels.length)}
               icon={
                 <Icon
                   name={'filter'}
                   style={[s.headerIcon,
-                    listEditModeEnabled ||
+                    listEditor.enabled ||
                     (listModels === 'all' && !activeModels.length) ||
                     (listModels !== 'all' && !retiredModels.length)
                     ? s.headerIconDisabled : {}
@@ -99,22 +94,22 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             />
             {listModels !== 'all' ?
               <Button
-                title={listEditModeEnabled ? 'Done' : 'Edit'}
+                title={listEditor.enabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 disabled={!retiredModels.length}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={onEdit}
+                onPress={listEditor.onEdit}
               />
             :
               <Button
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                disabled={listEditModeEnabled}
+                disabled={listEditor.enabled}
                 icon={
                   <Icon
                     name={'plus'}
-                    style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                    style={[s.headerIcon, listEditor.enabled ? s.headerIconDisabled : {}]}
                   />
                 }
                 onPress={() => navigation.navigate('NewModelNavigator', {
@@ -127,7 +122,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditModeEnabled ]);
+  }, [ listEditor.enabled ]);
 
   const confirmDeleteModel = (model: Model) => {
     setDeleteModelActionSheetVisible(model);
@@ -167,6 +162,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
+        ref={ref => listEditor.add(ref, 'models', index)}
         key={model._id.toString()}
         title={model.name}
         subtitle={modelShortSummary(model)}
@@ -219,7 +215,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           },
           reorder: true,
         }}
-        showEditor={listEditModeEnabled}
+        showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
             icon: 'trash',
@@ -230,12 +226,37 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             onPress: () => confirmDeleteModel(model),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
      />
     )
   };
 
+  const renderInactive = () => {
+    return (
+      listModels === 'all' && retiredModels.length ?
+      <>
+        <Divider text={'INACTIVE MODELS'} />
+        <ListItem
+          title={'Retired'}
+          value={`${retiredModels.length}`}
+          position={['first', 'last']}
+          onPress={() => navigation.push('Models', {
+            listModels: 'retired',
+          })}
+        />
+        <Divider />
+      </>
+    :
+      <Divider />
+    );
+  };
+
   return (
-    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <SectionList
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}
@@ -252,23 +273,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <EmptyView info message={'No Models'} details={"Tap the + button to add your first model."} />
             : null
         }
-        ListFooterComponent={
-          listModels === 'all' && retiredModels.length ?
-            <>
-              <Divider text={'INACTIVE MODELS'} />
-              <ListItem
-                title={'Retired'}
-                value={`${retiredModels.length}`}
-                position={['first', 'last']}
-                onPress={() => navigation.push('Models', {
-                  listModels: 'retired',
-                })}
-              />
-              <Divider />
-            </>
-          :
-            <Divider />
-        }
+        ListFooterComponent={renderInactive()}
       />
       <ActionSheet
         cancelButtonIndex={1}
@@ -289,7 +294,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         useNativeIOS={true}
         visible={!!deleteModelActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

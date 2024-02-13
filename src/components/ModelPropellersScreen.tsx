@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -6,12 +7,10 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
@@ -20,7 +19,7 @@ export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropel
 const ModelPropellersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const listEditor = useListEditor();
   const realm = useRealm();
 
   const allModelPropellers = useQuery(ModelPropeller);
@@ -52,9 +51,10 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderItems: ListRenderItem<ModelPropeller> = ({ item: propeller, index }) => {
+  const renderModelPropeller: ListRenderItem<ModelPropeller> = ({ item: propeller, index }) => {
     return (
       <ListItem
+        ref={ref => listEditor.add(ref, 'model-propellers', index)}
         key={propeller._id.toString()}
         title={propeller.name}
         position={listItemPosition(index, allModelPropellers.length)}
@@ -71,17 +71,20 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
             onPress: () => confirmDeletePropeller(propeller),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <FlatList
         data={allModelPropellers}
-        renderItem={renderItems}
+        renderItem={renderModelPropeller}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
@@ -108,7 +111,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={!!deletePropellerActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

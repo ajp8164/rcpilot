@@ -6,6 +6,8 @@ import {
   StringFilterState
 } from 'components/molecules/filters';
 
+import { PickEnum } from 'types/custom';
+
 export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
   BatteryCycleFilter = 'BatteryCycleFilter',
@@ -15,6 +17,15 @@ export enum FilterType {
   ReportBatteryScanCodesFilter = 'ReportBatteryScanCodesFilter',
   ReportModelScanCodesFilter = 'ReportModelScanCodesFilter',
 };
+
+// Only report filter types.
+export type ReportFilterType = PickEnum<
+  FilterType,
+  | FilterType.ReportEventsFilter
+  | FilterType.ReportMaintenanceFilter
+  | FilterType.ReportModelScanCodesFilter
+  | FilterType.ReportBatteryScanCodesFilter
+>;
 
 // Battery filter
 //

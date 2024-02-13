@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import { Divider, ListEditorView, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { Image, Keyboard, Platform, View } from 'react-native';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
@@ -13,7 +13,6 @@ import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { SvgXml } from 'react-native-svg';
 import { eqString } from 'realmdb/helpers';
@@ -29,14 +28,14 @@ const PilotScreen = ({ navigation, route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
+  const listEditor = useListEditor();
   const event = useEvent();
-
   const realm = useRealm();
+
   const pilot = useObject(Pilot, new BSON.ObjectId(pilotId));
 
   const [name, setName] = useState(pilot?.name);
   const [isEditing, setIsEditing] = useState(false);
-  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
 
   useEffect(() => {
     const canSave = name && (
@@ -55,10 +54,6 @@ const PilotScreen = ({ navigation, route }: Props) => {
       save();
       Keyboard.dismiss();
       setIsEditing(false);
-    };
-
-    const onEdit = () => {
-      setListEditModeEnabled(!listEditModeEnabled);
     };
 
     navigation.setOptions({
@@ -91,16 +86,16 @@ const PilotScreen = ({ navigation, route }: Props) => {
         } else if (pilot?.favoriteModels && pilot.favoriteModels.length > 1) {
           return (
             <Button
-              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              onPress={onEdit}
+              onPress={listEditor.onEdit}
             />
           )
         }
       },
     });
-  }, [ isEditing, listEditModeEnabled, name, pilot?.favoriteModels ]);
+  }, [ isEditing, listEditor.enabled, name, pilot?.favoriteModels ]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -143,6 +138,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         key={index}
         style={[isActive ? s.shadow : {}]}>
       <ListItem
+        ref={ref => listEditor.add(ref, 'favorite-models', index)}
         title={model.name}
         subtitle={modelShortSummary(model)}
         titleStyle={s.modelText}
@@ -180,7 +176,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
           },
           reorder: true,
         }}
-        showEditor={listEditModeEnabled}
+        showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
             icon: 'eye-slash',
@@ -191,6 +187,8 @@ const PilotScreen = ({ navigation, route }: Props) => {
             onPress: () => forgetFavoriteModel(model),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('favorite-models', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
       />
       </View>
     );
@@ -201,7 +199,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <NestableScrollContainer
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
@@ -272,7 +273,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         />
         <Divider />
       </NestableScrollContainer>
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

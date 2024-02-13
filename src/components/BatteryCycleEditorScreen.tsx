@@ -35,6 +35,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
   const cycle = battery?.cycles.find(c => {return c.cycleNumber === cycleNumber});
+  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
 
   // Discharge phase
   const [dischargeDate, setDischargeDate] = useState(cycle?.discharge?.date);
@@ -221,7 +222,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
           leftImage={
             <View>
               <Icon
-                name={'battery-full'}
+                name={isCharged ? 'battery-full' : 'battery-quarter'}
                 solid={true}
                 size={45}
                 color={theme.colors.brandPrimary}

@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -76,10 +76,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
+    <>
       <FlatList
         data={allEventStyles}
         renderItem={renderEventStyle}
@@ -109,7 +106,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={!!deleteStyleActionSheetVisible}
       />
-    </ListEditorView>
+    </>
   );
 };
 

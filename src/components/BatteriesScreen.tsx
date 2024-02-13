@@ -1,8 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { ScrollView, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
@@ -260,15 +260,13 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       </>
     );
   };
-
+  
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
+    <ScrollView style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
       <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
+        scrollEnabled={false}
         stickySectionHeadersEnabled={true}
         style={s.sectionList}
         sections={groupBatteries(
@@ -312,7 +310,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         useNativeIOS={true}
         visible={!!deleteBatteryActionSheetVisible}
       />
-    </ListEditorView>
+    </ScrollView>
   );
 };
 

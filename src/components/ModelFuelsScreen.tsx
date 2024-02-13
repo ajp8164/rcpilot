@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -78,10 +78,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
+    <>
       <FlatList
         data={allModelFuels}
         renderItem={renderModelFuel}
@@ -111,7 +108,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={!!deleteFuelActionSheetVisible}
       />
-    </ListEditorView>
+    </>
   );
 };
 

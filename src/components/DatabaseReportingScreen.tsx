@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import {
   DragEndParams,
   NestableDraggableFlatList,
@@ -244,144 +244,139 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
-      <NestableScrollContainer
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={'DESTINATION'}/>
-        <ListItem
-          title={'Output Report To'}
-          value={outputReportTo}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('EnumPicker', {
-            title: 'Output To',
-            footer: 'Specifies the destination for database report output.',
-            values: Object.values(OutputReportTo),
-            selected: outputReportTo,
-            eventName: 'output-report-to',
-          })}
-        />
-        <Divider type={'note'} text={
-          OutputReportToDescription[
-            Object.keys(OutputReportTo)[Object.values(OutputReportTo).indexOf(outputReportTo)] as keyof typeof OutputReportToDescription
-          ]
-        }/>
-        <ListItem
-          title={'Add a New Report'}
-          titleStyle={s.newReport}
-          position={['first', 'last']}
-          rightImage={false}
-          onPress={() => setNewReportSheetVisible(true)}
-        />
-        {emReports.length ?
-          <>
-            <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
-            <View style={{flex:1}}>
-              <NestableDraggableFlatList
-                // @ts-expect-error: typing seems incorrect on renderItem
-                data={emReports.sorted('ordinal')}
-                renderItem={renderEMReport}
-                keyExtractor={(_item, index) => `${index}`}
-                showsVerticalScrollIndicator={false}
-                scrollEnabled={false}
-                style={s.reportsList}
-                animationConfig={{
-                  damping: 20,
-                  mass: 0.01,
-                  stiffness: 100,
-                  overshootClamping: false,
-                  restSpeedThreshold: 0.2,
-                  restDisplacementThreshold: 2,
-                }}
-                onDragEnd={reorderReports}
-              />
-            </View>
-            <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
-          </>
-          : null
-        }
-        {scReports.length ?
-          <>
-            <Divider text={'QR CODE REPORTS'}/>
-            <View style={{flex:1}}>
-              <NestableDraggableFlatList
-                // @ts-expect-error: typing seems incorrect on renderItem
-                data={scReports.sorted('ordinal')}
-                renderItem={renderSCReport}
-                keyExtractor={(_item, index) => `${index}`}
-                showsVerticalScrollIndicator={false}
-                scrollEnabled={false}
-                style={s.reportsList}
-                animationConfig={{
-                  damping: 20,
-                  mass: 0.01,
-                  stiffness: 100,
-                  overshootClamping: false,
-                  restSpeedThreshold: 0.2,
-                  restDisplacementThreshold: 2,
-                }}
-                onDragEnd={reorderReports}
-              />
-            </View>
-            <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
-          </>
-          : null
-        }
-        <ActionSheet
-          cancelButtonIndex={2}
-          options={[
-            {
-              label: 'Event/Maintenance Log',
-              onPress: () => {
-                navigation.navigate('NewReportNavigator', {
-                  screen: 'ReportEventsMaintenanceEditor',
-                  params: {},
-                });
-                setNewReportSheetVisible(false);
-              }
+    <NestableScrollContainer
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider text={'DESTINATION'}/>
+      <ListItem
+        title={'Output Report To'}
+        value={outputReportTo}
+        position={['first', 'last']}
+        onPress={() => navigation.navigate('EnumPicker', {
+          title: 'Output To',
+          footer: 'Specifies the destination for database report output.',
+          values: Object.values(OutputReportTo),
+          selected: outputReportTo,
+          eventName: 'output-report-to',
+        })}
+      />
+      <Divider type={'note'} text={
+        OutputReportToDescription[
+          Object.keys(OutputReportTo)[Object.values(OutputReportTo).indexOf(outputReportTo)] as keyof typeof OutputReportToDescription
+        ]
+      }/>
+      <ListItem
+        title={'Add a New Report'}
+        titleStyle={s.newReport}
+        position={['first', 'last']}
+        rightImage={false}
+        onPress={() => setNewReportSheetVisible(true)}
+      />
+      {emReports.length ?
+        <>
+          <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
+          <View style={{flex:1}}>
+            <NestableDraggableFlatList
+              // @ts-expect-error: typing seems incorrect on renderItem
+              data={emReports.sorted('ordinal')}
+              renderItem={renderEMReport}
+              keyExtractor={(_item, index) => `${index}`}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+              style={s.reportsList}
+              animationConfig={{
+                damping: 20,
+                mass: 0.01,
+                stiffness: 100,
+                overshootClamping: false,
+                restSpeedThreshold: 0.2,
+                restDisplacementThreshold: 2,
+              }}
+              onDragEnd={reorderReports}
+            />
+          </View>
+          <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+        </>
+        : null
+      }
+      {scReports.length ?
+        <>
+          <Divider text={'QR CODE REPORTS'}/>
+          <View style={{flex:1}}>
+            <NestableDraggableFlatList
+              // @ts-expect-error: typing seems incorrect on renderItem
+              data={scReports.sorted('ordinal')}
+              renderItem={renderSCReport}
+              keyExtractor={(_item, index) => `${index}`}
+              showsVerticalScrollIndicator={false}
+              scrollEnabled={false}
+              style={s.reportsList}
+              animationConfig={{
+                damping: 20,
+                mass: 0.01,
+                stiffness: 100,
+                overshootClamping: false,
+                restSpeedThreshold: 0.2,
+                restDisplacementThreshold: 2,
+              }}
+              onDragEnd={reorderReports}
+            />
+          </View>
+          <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+        </>
+        : null
+      }
+      <ActionSheet
+        cancelButtonIndex={2}
+        options={[
+          {
+            label: 'Event/Maintenance Log',
+            onPress: () => {
+              navigation.navigate('NewReportNavigator', {
+                screen: 'ReportEventsMaintenanceEditor',
+                params: {},
+              });
+              setNewReportSheetVisible(false);
+            }
+          },
+          {
+            label: 'QR Codes',
+            onPress: () => {
+              navigation.navigate('NewReportNavigator', {
+                screen: 'ReportScanCodesEditor',
+                params: {},
+              });
+              setNewReportSheetVisible(false);
+            }
+          },
+          {
+            label: 'Cancel',
+            onPress: () => setNewReportSheetVisible(false),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={newReportSheetVisible}
+      />
+      <ActionSheet
+        cancelButtonIndex={1}
+        destructiveButtonIndex={0}
+        options={[
+          {
+            label: 'Delete Report',
+            onPress: () => {
+              deleteReport(deleteReportActionSheetVisible!);
+              setDeleteReportActionSheetVisible(undefined);
             },
-            {
-              label: 'QR Codes',
-              onPress: () => {
-                navigation.navigate('NewReportNavigator', {
-                  screen: 'ReportScanCodesEditor',
-                  params: {},
-                });
-                setNewReportSheetVisible(false);
-              }
-            },
-            {
-              label: 'Cancel',
-              onPress: () => setNewReportSheetVisible(false),
-            },
-          ]}
-          useNativeIOS={true}
-          visible={newReportSheetVisible}
-        />
-        <ActionSheet
-          cancelButtonIndex={1}
-          destructiveButtonIndex={0}
-          options={[
-            {
-              label: 'Delete Report',
-              onPress: () => {
-                deleteReport(deleteReportActionSheetVisible!);
-                setDeleteReportActionSheetVisible(undefined);
-              },
-            },
-            {
-              label: 'Cancel' ,
-              onPress: () => setDeleteReportActionSheetVisible(undefined),
-            },
-          ]}
-          useNativeIOS={true}
-          visible={!!deleteReportActionSheetVisible}
-        />
-      </NestableScrollContainer>
-    </ListEditorView>
+          },
+          {
+            label: 'Cancel' ,
+            onPress: () => setDeleteReportActionSheetVisible(undefined),
+          },
+        ]}
+        useNativeIOS={true}
+        visible={!!deleteReportActionSheetVisible}
+      />
+    </NestableScrollContainer>
   );
 };
 

@@ -6,7 +6,7 @@ import {
   ChecklistTemplateType
 } from 'types/checklistTemplate';
 import { ChecklistTemplate, JChecklistAction } from 'realmdb/ChecklistTemplate';
-import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import {
   NestableDraggableFlatList,
@@ -287,67 +287,62 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   };
   
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
-      <NestableScrollContainer
+    <NestableScrollContainer
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider text={'NAME & TYPE'} />
+      <ListItemInput
+        value={name}
+        placeholder={'Checklist Template Name'}
+        position={['first']}
+        onChangeText={setName}
+      /> 
+      <ListItem
+        title={'Template for List Type'}
+        value={type}
+        position={['last']}
+        onPress={() => navigation.navigate('EnumPicker', {
+          title: 'Template Type',
+          headerBackTitle: 'Back',
+          values: Object.values(ChecklistTemplateType),
+          selected: type,
+          eventName: 'checklist-template-type',
+        })}
+      />
+      {actions.length > 0 && <Divider text={'ACTIONS'} />}
+      <NestableDraggableFlatList
+        data={actions}
+        renderItem={renderChecklistAction}
+        keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={'NAME & TYPE'} />
-        <ListItemInput
-          value={name}
-          placeholder={'Checklist Template Name'}
-          position={['first']}
-          onChangeText={setName}
-        /> 
-        <ListItem
-          title={'Template for List Type'}
-          value={type}
-          position={['last']}
-          onPress={() => navigation.navigate('EnumPicker', {
-            title: 'Template Type',
-            headerBackTitle: 'Back',
-            values: Object.values(ChecklistTemplateType),
-            selected: type,
-            eventName: 'checklist-template-type',
-          })}
-        />
-        {actions.length > 0 && <Divider text={'ACTIONS'} />}
-        <NestableDraggableFlatList
-          data={actions}
-          renderItem={renderChecklistAction}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          style={s.actionsList}
-          animationConfig={{
-            damping: 20,
-            mass: 0.01,
-            stiffness: 100,
-            overshootClamping: false,
-            restSpeedThreshold: 0.2,
-            restDisplacementThreshold: 2,
-          }}
-          onDragEnd={({ data }) => reorderActions(data)}
-        />
-        <Divider />
-        <ListItem
-          title={'Add a New Action'}
-          titleStyle={s.actionTitle}
-          position={['first', 'last']}
-          rightImage={false}
-          onPress={() => navigation.navigate('NewChecklistActionNavigator', {
-            screen: 'NewChecklistAction',
-            params: { 
-              checklistTemplateType: type,
-              eventName: 'checklist-action'
-            },
-          })}
-        />
-        <Divider />
-      </NestableScrollContainer>
-    </ListEditorView>
+        scrollEnabled={false}
+        style={s.actionsList}
+        animationConfig={{
+          damping: 20,
+          mass: 0.01,
+          stiffness: 100,
+          overshootClamping: false,
+          restSpeedThreshold: 0.2,
+          restDisplacementThreshold: 2,
+        }}
+        onDragEnd={({ data }) => reorderActions(data)}
+      />
+      <Divider />
+      <ListItem
+        title={'Add a New Action'}
+        titleStyle={s.actionTitle}
+        position={['first', 'last']}
+        rightImage={false}
+        onPress={() => navigation.navigate('NewChecklistActionNavigator', {
+          screen: 'NewChecklistAction',
+          params: { 
+            checklistTemplateType: type,
+            eventName: 'checklist-action'
+          },
+        })}
+      />
+      <Divider />
+    </NestableScrollContainer>
   );
 };
 

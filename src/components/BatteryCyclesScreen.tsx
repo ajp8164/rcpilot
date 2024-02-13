@@ -1,8 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import { ScrollView, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
@@ -157,13 +157,11 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <ListEditorView
-      style={theme.styles.view}
-      editorEnabledBySwipe={listEditor.enabledBySwipe}
-      resetEditor={listEditor.reset}>
+    <ScrollView style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
       <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
+        scrollEnabled={false}
         stickySectionHeadersEnabled={true}
         style={s.sectionList}
         sections={groupCycles([...battery?.cycles].reverse())} // Latest cycles at the top
@@ -196,7 +194,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         useNativeIOS={true}
         visible={!!deleteCycleActionSheetVisible}
       />
-    </ListEditorView>
+    </ScrollView>
   );
 };
 

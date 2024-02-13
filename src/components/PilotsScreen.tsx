@@ -63,7 +63,7 @@ const PilotsScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderItems: ListRenderItem<Pilot> = ({ item: pilot, index }) => {
+  const renderPilot: ListRenderItem<Pilot> = ({ item: pilot, index }) => {
     return (
       <ListItemCheckboxInfo
         key={pilot._id.toString()}
@@ -111,7 +111,7 @@ const PilotsScreen = ({ navigation }: Props) => {
       style={theme.styles.view}>
       <FlatList
         data={allPilots}
-        renderItem={renderItems}
+        renderItem={renderPilot}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}

@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
@@ -10,11 +11,9 @@ import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
 import { Button } from '@rneui/base';
 import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { batteryTintIcons } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
@@ -31,31 +30,27 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const listEditor = useListEditor();
   const realm = useRealm();
 
   const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
   const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
   const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
 
-  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [deleteBatteryActionSheetVisible, setDeleteBatteryActionSheetVisible] = useState<Battery>();
 
   useEffect(() => {
-    const onEdit = () => {
-      setListEditModeEnabled(!listEditModeEnabled);
-    };
-
     navigation.setOptions({
       headerLeft: () => {
         if (listBatteries === 'all') {
           return (
             <Button
-              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabled={!activeBatteries.length}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={onEdit}
+              onPress={listEditor.onEdit}
             />
           );
         } else {
@@ -68,14 +63,14 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditModeEnabled || 
+              disabled={listEditor.enabled ||
                 (listBatteries === 'all' && !activeBatteries.length) ||
                 (listBatteries !== 'all' && !retiredBatteries.length)}
               icon={
                 <Icon
                   name={'filter'}
                   style={[s.headerIcon,
-                    listEditModeEnabled ||
+                    listEditor.enabled ||
                     (listBatteries === 'all' && !activeBatteries.length) ||
                     (listBatteries !== 'all' && !retiredBatteries.length)
                     ? s.headerIconDisabled : {}
@@ -88,22 +83,22 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             />
             {listBatteries !== 'all' ?
               <Button
-                title={listEditModeEnabled ? 'Done' : 'Edit'}
+                title={listEditor.enabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 disabled={!retiredBatteries.length}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={onEdit}
+                onPress={listEditor.onEdit}
               />
             :
               <Button
                 buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                disabled={listEditModeEnabled}
+                disabled={listEditor.enabled}
                 icon={
                   <Icon
                     name={'plus'}
-                    style={[s.headerIcon, listEditModeEnabled ? s.headerIconDisabled : {}]}
+                    style={[s.headerIcon, listEditor.enabled ? s.headerIconDisabled : {}]}
                   />
                 }
                 onPress={() => navigation.navigate('NewBatteryNavigator', {
@@ -116,7 +111,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditModeEnabled, activeBatteries, retiredBatteries ]);
+  }, [ listEditor.enabled, activeBatteries, retiredBatteries ]);
 
   const confirmDeleteBattery = (battery: Battery) => {
     setDeleteBatteryActionSheetVisible(battery);
@@ -153,7 +148,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     }).sort();
   };
 
-  const renderItem: SectionListRenderItem<Battery, Section> = ({
+  const renderBattery: SectionListRenderItem<Battery, Section> = ({
     item: battery,
     section,
     index,
@@ -164,6 +159,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
+        ref={ref => listEditor.add(ref, 'batteries', index)}
         key={battery._id.toString()}
         title={battery.name}
         subtitle={batterySummary(battery)}
@@ -212,7 +208,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
           },
           reorder: true,
         }}
-        showEditor={listEditModeEnabled}
+        showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
             icon: 'trash',
@@ -223,12 +219,53 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             onPress: () => confirmDeleteBattery(battery),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('batteries', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
      />
     )
   };
 
+  const renderInactive = () => {
+    return (
+      <>
+      {listBatteries === 'all' && (retiredBatteries.length || inStorageBatteries.length)
+        ?
+          <>
+            <Divider text={'INACTIVE BATTERIES'} />
+            {retiredBatteries.length ?
+              <ListItem
+                title={'Retired'}
+                value={`${retiredBatteries.length}`}
+                position={inStorageBatteries.length ? ['first'] : ['first', 'last']}
+                onPress={() => navigation.push('Batteries', {
+                  listBatteries: 'retired',
+                })}
+              />
+            : null}
+            {inStorageBatteries.length ?
+              <ListItem
+                title={'In Storage'}
+                value={`${inStorageBatteries.length}`}
+                position={inStorageBatteries.length ? ['last'] : ['first', 'last']}
+                onPress={() => navigation.push('Batteries', {
+                  listBatteries: 'in-storage',
+                })}
+              />
+            : null}
+            <Divider />
+          </>
+        :
+          <Divider />
+      }
+      </>
+    );
+  };
+
   return (
-    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <SectionList
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}
@@ -241,7 +278,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             inStorageBatteries
             : activeBatteries)}
         keyExtractor={item => item._id.toString()}
-        renderItem={renderItem}
+        renderItem={renderBattery}
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}
@@ -250,39 +287,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />
             : null
         }
-        ListFooterComponent={
-          <>
-          {listBatteries === 'all' && (retiredBatteries.length || inStorageBatteries.length)
-            ?
-              <>
-                <Divider text={'INACTIVE BATTERIES'} />
-                {retiredBatteries.length ?
-                  <ListItem
-                    title={'Retired'}
-                    value={`${retiredBatteries.length}`}
-                    position={inStorageBatteries.length ? ['first'] : ['first', 'last']}
-                    onPress={() => navigation.push('Batteries', {
-                      listBatteries: 'retired',
-                    })}
-                  />
-                : null}
-                {inStorageBatteries.length ?
-                  <ListItem
-                    title={'In Storage'}
-                    value={`${inStorageBatteries.length}`}
-                    position={inStorageBatteries.length ? ['last'] : ['first', 'last']}
-                    onPress={() => navigation.push('Batteries', {
-                      listBatteries: 'in-storage',
-                    })}
-                  />
-                : null}
-                <Divider />
-              </>
-            :
-              <Divider />
-          }
-          </>
-        }
+        ListFooterComponent={renderInactive()}
       />
       <ActionSheet
         cancelButtonIndex={1}
@@ -307,7 +312,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         useNativeIOS={true}
         visible={!!deleteBatteryActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

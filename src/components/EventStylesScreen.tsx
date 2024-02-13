@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -6,12 +7,10 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventStyle } from 'realmdb/EventStyle';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
@@ -20,7 +19,7 @@ export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'EventStyles
 const EventStylesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const listEditor = useListEditor();
   const realm = useRealm();
 
   const allEventStyles = useQuery(EventStyle);
@@ -50,9 +49,10 @@ const EventStylesScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderItems: ListRenderItem<EventStyle> = ({ item: style, index }) => {
+  const renderEventStyle: ListRenderItem<EventStyle> = ({ item: style, index }) => {
     return (
       <ListItem
+        ref={ref => listEditor.add(ref, 'event-styles', index)}
         key={style._id.toString()}
         title={style.name}
         position={listItemPosition(index, allEventStyles.length)}
@@ -69,17 +69,20 @@ const EventStylesScreen = ({ navigation }: Props) => {
             onPress: () => confirmDeleteStyle(style),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <FlatList
         data={allEventStyles}
-        renderItem={renderItems}
+        renderItem={renderEventStyle}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={Divider}
@@ -106,7 +109,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
         useNativeIOS={true}
         visible={!!deleteStyleActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

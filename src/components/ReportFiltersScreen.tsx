@@ -1,5 +1,6 @@
 import { ActionSheet, View } from 'react-native-ui-lib';
 import { AppTheme, useTheme } from 'theme';
+import { FilterType, ReportFilterType } from 'types/filter';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -7,7 +8,6 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { ListItemCheckboxInfo } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
@@ -16,13 +16,11 @@ import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
 // Destination report editor based on report type.
-const reportFilterEditor: {[key in FilterType]: any} = {
+const reportFilterEditors: {[key in ReportFilterType]: any} = {
   [FilterType.ReportEventsFilter]: 'ReportEventsFilterEditor',
   [FilterType.ReportMaintenanceFilter]: 'ReportMaintenanceFilterEditor',
   [FilterType.ReportModelScanCodesFilter]: 'ReportModelScanCodesFilterEditor',
   [FilterType.ReportBatteryScanCodesFilter]: 'ReportBatteryScanCodesFilterEditor',
-  [FilterType.BatteriesFilter]: undefined,
-  [FilterType.ModelsFilter]: undefined,
 };
 
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportFilters'>;
@@ -39,6 +37,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
     return filter.filtered('type == $0', filterType);
   });
 
+  const reportFilterEditor = reportFilterEditors[filterType as ReportFilterType];
   const [selectedFilter, setSelectedFilter] = useState(filterId);
   const [deleteFilterActionSheetVisible, setDeleteFilterActionSheetVisible] = useState<Filter>();
 
@@ -95,7 +94,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
           }]
         }}
         onPress={() => setSelectedFilter(filter._id.toString())}
-        onPressInfo={() => filterType && navigation.navigate(reportFilterEditor[filterType], {
+        onPressInfo={() => filterType && navigation.navigate(reportFilterEditor, {
           filterId: filter._id.toString(),
           eventName: 'report-filter',
         })}
@@ -120,7 +119,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         titleStyle={s.newFilter}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => filterType && navigation.navigate(reportFilterEditor[filterType], {})}
+        onPress={() => filterType && navigation.navigate(reportFilterEditor, {})}
       />
       {filters.length ?
         filterType === FilterType.ReportEventsFilter && <Divider text={'SAVED EVENT FILTERS'} /> ||

@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Divider, ListEditorView, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
@@ -11,11 +12,9 @@ import { Battery } from 'realmdb/Battery';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { Button } from '@rneui/base';
 import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 
@@ -31,19 +30,14 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const listEditor = useListEditor();
   const realm = useRealm();
   
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  const [listEditModeEnabled, setListEditModeEnabled] = useState(false);
   const [deleteCycleActionSheetVisible, setDeleteCycleActionSheetVisible] = useState<number>();
 
   useEffect(() => {  
-    const onEdit = () => {
-      setListEditModeEnabled(!listEditModeEnabled);
-    };
-
     navigation.setOptions({
       headerRight: ()  => {
         return (
@@ -51,11 +45,11 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditModeEnabled || !battery?.cycles.length}
+              disabled={listEditor.enabled || !battery?.cycles.length}
               icon={
                 <Icon
                   name={'filter'}
-                  style={[s.headerIcon, listEditModeEnabled || !battery?.cycles.length ? s.headerIconDisabled : {}]}
+                  style={[s.headerIcon, listEditor.enabled || !battery?.cycles.length ? s.headerIconDisabled : {}]}
                 />
               }
               onPress={() => navigation.navigate('BatteryCycleFiltersNavigator', {
@@ -63,18 +57,18 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               })}
             />
             <Button
-              title={listEditModeEnabled ? 'Done' : 'Edit'}
+              title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!battery?.cycles.length}
-              onPress={onEdit}
+              onPress={listEditor.onEdit}
             />
           </>
         );
       },
     });
-  }, [ listEditModeEnabled ]);
+  }, [ listEditor.enabled ]);
 
   const groupCycles = (cycles?: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
     return groupItems<BatteryCycle, Section>(cycles || [], (cycle) => {
@@ -113,7 +107,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const renderCycle: SectionListRenderItem<BatteryCycle, Section> = ({
+  const renderBatteryCycle: SectionListRenderItem<BatteryCycle, Section> = ({
     item: cycle,
     section,
     index,
@@ -124,6 +118,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
+        ref={ref => listEditor.add(ref, 'battery-cycles', index)}
         key={index}
         title={cycleTitle(cycle)}
         subtitle={cycleSubtitle(cycle)}
@@ -140,7 +135,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
           },
           reorder: true,
         }}
-        showEditor={listEditModeEnabled}
+        showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
             icon: 'trash',
@@ -151,6 +146,8 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             onPress: () => confirmDeleteCycle(cycle.cycleNumber),
           }]
         }}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycles', index)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
   };
@@ -160,7 +157,10 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
+    <ListEditorView
+      style={theme.styles.view}
+      editorEnabledBySwipe={listEditor.enabledBySwipe}
+      resetEditor={listEditor.reset}>
       <SectionList
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}
@@ -168,7 +168,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         style={s.sectionList}
         sections={groupCycles([...battery?.cycles].reverse())} // Latest cycles at the top
         keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
-        renderItem={renderCycle}
+        renderItem={renderBatteryCycle}
         renderSectionHeader={({section: {title}}) => (
           <SectionListHeader title={title} />
         )}
@@ -196,7 +196,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         useNativeIOS={true}
         visible={!!deleteCycleActionSheetVisible}
       />
-    </SafeAreaView>
+    </ListEditorView>
   );
 };
 

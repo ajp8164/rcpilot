@@ -44,6 +44,7 @@ const ModelsNavigator = () => {
         component={ModelEditorScreen}
         options={({ route }) => ({
           header: () => <ModelHeader modelId={route.params.modelId}/>,
+          title: 'Model',
         })}
       />
       <ModelsStack.Screen

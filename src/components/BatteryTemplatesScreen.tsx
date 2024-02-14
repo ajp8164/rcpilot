@@ -83,7 +83,6 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
     } else {
       number = '1';
     }
-    console.log(`${name}${number}`, '<<');
     return `${name}${number}`;
   };
 

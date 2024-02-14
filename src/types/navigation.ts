@@ -1,5 +1,6 @@
 import { BatteryTemplate, ListBatteries } from 'types/battery';
 
+import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
 import { ChecklistTemplateType } from 'types/checklistTemplate';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
@@ -23,6 +24,7 @@ export enum StartupScreen {
 // instead of chosing one at random.
 export type MultipleNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
+  BatteryPicker: BatteryPickerInterface;
   ModelPicker: ModelPickerInterface;
   Notes: {
     title?: string;
@@ -111,6 +113,7 @@ export type MainNavigatorParamList = {
 };
 
 export type ModelsNavigatorParamList = {
+  BatteryPicker: BatteryPickerInterface;
   EnumPicker: EnumPickerInterface;
   Flights: {
     pilotId?: string;

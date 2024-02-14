@@ -4,6 +4,7 @@ import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 import { useQuery, useRealm } from '@realm/react';
 
 import { ActionSheet } from 'react-native-ui-lib';
@@ -15,7 +16,6 @@ import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { batteryTintIcons } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 
@@ -148,8 +148,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
 
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
     return groupItems<Battery, Section>(batteries, (battery) => {
-      const isCharged = battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length;
-      if (isCharged) {
+      if (batteryIsCharged(battery)) {
         const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
         const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
         return `${c}${battery.sCells}S${p} PACKS`;  
@@ -168,7 +167,6 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
-    const isCharged = battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length;
     return (
       <ListItem
         ref={ref => listEditor.add(ref, 'batteries', index)}
@@ -186,7 +184,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         leftImage={
           <View>
             <Icon
-              name={isCharged ? 'battery-full' : 'battery-quarter'}
+              name={batteryIsCharged(battery) ? 'battery-full' : 'battery-quarter'}
               solid={true}
               size={45}
               color={theme.colors.brandPrimary}

@@ -73,6 +73,20 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
     });
   }, [ list ]);
 
+  const nameSuggestion = (battery: Battery) => {
+    const matches =  battery.name.trim().split(/(\W|\w)(\d+)$/);
+    const name = `${matches[0]}${matches[1] || ''}`;
+    let number = matches[2];
+
+    if (number) {
+      number = (parseInt(number) + 1).toString();
+    } else {
+      number = '1';
+    }
+    console.log(`${name}${number}`, '<<');
+    return `${name}${number}`;
+  };
+
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
     const sections =  groupItems<Battery, Section>(batteries, (battery) => {
       const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
@@ -84,11 +98,12 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
 
     // Only need one item per group.
     const templates = sections.map(section => {
+      // The section data is an array of the batteries in the section.
+      // Use the first battery in the list to provide a new battery name suggestion.
       return {
         title: section.title,
         data: [section.data[0]],
-        // Suggest a name for the new battery
-        nameSuggestion: `${section.data[0].name} #${section.data.length + 1}`,
+        nameSuggestion: nameSuggestion(section.data[section.data.length - 1]),
       }
     });
 

@@ -32,7 +32,7 @@ export type Props = CompositeScreenProps<
 >;
 
 const BatteryEditorScreen = ({ navigation, route }: Props) => {  
-  const { batteryId } = route.params;
+  const { batteryId, batteryTemplate } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -43,16 +43,16 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  const [name, setName] = useState(battery?.name || undefined);
-  const [chemistry, setChemistry] = useState<BatteryChemistry>(battery?.chemistry || BatteryChemistry.LiPo);
-  const [vendor, setVendor] = useState(battery?.vendor || undefined);
+  const [name, setName] = useState(battery?.name || batteryTemplate?.name || undefined);
+  const [chemistry, setChemistry] = useState<BatteryChemistry>(battery?.chemistry || batteryTemplate?.chemistry || BatteryChemistry.LiPo);
+  const [vendor, setVendor] = useState(battery?.vendor || batteryTemplate?.vendor || undefined);
   const [purchasePrice, setPurchasePrice] = useState(battery?.purchasePrice?.toString() || undefined);
   const [retired, setRetired] = useState(battery?.retired || false);
-  const [cRating, setCRating] = useState(battery?.cRating?.toString() || undefined);
-  const [capacity, setCapacity] = useState(battery?.capacity?.toString() || '1000');
+  const [cRating, setCRating] = useState(battery?.cRating?.toString() || batteryTemplate?.cRating?.toString() || undefined);
+  const [capacity, setCapacity] = useState(battery?.capacity?.toString() || batteryTemplate?.capacity?.toString() || '1000');
   const [totalCycles, setTotalCycles] = useState(battery?.totalCycles?.toString() || undefined);
-  const [sCells, setSCells] = useState(battery?.sCells?.toString() || '3');
-  const [pCells, setPCells] = useState(battery?.pCells?.toString() || '1');
+  const [sCells, setSCells] = useState(battery?.sCells?.toString() || batteryTemplate?.sCells?.toString() || '3');
+  const [pCells, setPCells] = useState(battery?.pCells?.toString() || batteryTemplate?.pCells?.toString() || '1');
   const [tint, setTint] = useState(battery?.tint || BatteryTint.None);
   const [scanCodeSize, setScanCodeSize] = useState(battery?.scanCodeSize || ScanCodeSize.None);
   const [notes, setNotes] = useState(battery?.notes || undefined);

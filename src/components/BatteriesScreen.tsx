@@ -38,7 +38,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
   const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
 
-  const [newBatterySheetVisible, setNewBatterySheetVisible] = useState(false);
+  const [newBatteryActionSheetVisible, setNewBatteryActionSheetVisible] = useState(false);
   const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
@@ -114,7 +114,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
 
   const addBattery = () => {
     if (activeBatteries.length || retiredBatteries.length || inStorageBatteries.length) {
-      setNewBatterySheetVisible(true);
+      setNewBatteryActionSheetVisible(true);
     } else {
       navigation.navigate('NewBatteryNavigator', {
         screen: 'NewBattery',
@@ -307,23 +307,23 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 screen: 'NewBattery',
                 params: {},
               });
-              setNewBatterySheetVisible(false);
+              setNewBatteryActionSheetVisible(false);
             }
           },
           {
             label: 'Add From Template',
             onPress: () => {
               navigation.navigate('BatteryTemplates');
-              setNewBatterySheetVisible(false);
+              setNewBatteryActionSheetVisible(false);
             }
           },
           {
             label: 'Cancel',
-            onPress: () => setNewBatterySheetVisible(false),
+            onPress: () => setNewBatteryActionSheetVisible(false),
           },
         ]}
         useNativeIOS={true}
-        visible={newBatterySheetVisible}
+        visible={newBatteryActionSheetVisible}
       />
       <ActionSheetConfirm
         ref={actionSheetConfirm}

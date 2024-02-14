@@ -334,7 +334,8 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
           'Delete In Storage Battery'
           : 'Delete Battery'
         }
-        onConfirm={deleteBattery} />
+        onConfirm={deleteBattery}
+      />
     </ScrollView>
   );
 };

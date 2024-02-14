@@ -103,7 +103,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                     style={[s.headerIcon, listEditor.enabled ? s.headerIconDisabled : {}]}
                   />
                 }
-                onPress={() => setNewBatterySheetVisible(true)}
+                onPress={addBattery}
               />
             }
           </>
@@ -111,6 +111,17 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       },
     });
   }, [ listEditor.enabled, activeBatteries, retiredBatteries ]);
+
+  const addBattery = () => {
+    if (activeBatteries.length || retiredBatteries.length || inStorageBatteries.length) {
+      setNewBatterySheetVisible(true);
+    } else {
+      navigation.navigate('NewBatteryNavigator', {
+        screen: 'NewBattery',
+        params: {},
+      });
+    }
+  };
 
   const deleteBattery = (battery: Battery) => {
     realm.write(() => {
@@ -297,7 +308,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
               navigation.navigate('NewBatteryNavigator', {
                 screen: 'NewBattery',
                 params: {},
-              })
+              });
               setNewBatterySheetVisible(false);
             }
           },

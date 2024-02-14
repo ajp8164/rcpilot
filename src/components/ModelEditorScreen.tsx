@@ -326,7 +326,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           />
         }
         <View style={theme.styles.view}>
-          {model && <Divider />}
+          {!!model && <Divider />}
           <Divider />
           <ListItemInput
             placeholder={'New Model'}
@@ -400,7 +400,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               onChangeText={setTotalEvents}
             />
           </CollapsibleView>
-          <CollapsibleView expanded={!!modelId}>
+          {!!modelId &&
             <ListItem
               title={'Statistics'}
               value={'4:00 in a flight'}
@@ -409,27 +409,39 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 modelId,
               })}
             />
-          </CollapsibleView>
-          <ListItemDate
-            title={'Last Flight'}
-            value={lastEvent
-              ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
-              : 'Tap to Set...'}
-            pickerValue={lastEvent}
-            rightImage={false}
-            expanded={expandedLastFlight}
-            position={modelId ? [] : ['last']}
-            onPress={() => setExpandedLastFlight(!expandedLastFlight)}
-            onDateChange={onLastEventChange}
-          />
-          <CollapsibleView expanded={!!modelId}>
-            <ListItem
-              title={'Logged Flight Details'}
-              value={'0'}
-              position={['last']}
-              onPress={() => navigation.navigate('Flights', {})}
+          }
+          {!modelId &&
+            <ListItemDate
+              title={'Last Flight'}
+              value={lastEvent
+                ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
+                : 'Tap to Set...'}
+              pickerValue={lastEvent}
+              rightImage={false}
+              expanded={expandedLastFlight}
+              position={modelId ? [] : ['last']}
+              onPress={() => setExpandedLastFlight(!expandedLastFlight)}
+              onDateChange={onLastEventChange}
             />
-          </CollapsibleView>
+          }
+          {!!modelId &&
+            <>
+              <ListItem
+                title={'Last Flight'}
+                value={lastEvent
+                  ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
+                  : 'Unknown'
+                }
+                rightImage={false}
+              />
+              <ListItem
+                title={'Logged Flight Details'}
+                value={`${model?.totalEvents || 0}`}
+                position={['last']}
+                onPress={() => navigation.navigate('Flights', {})}
+              />
+            </>
+          }
           <Divider />
           <ListItemSwitch
             title={'Battery Logging'}
@@ -483,26 +495,28 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               </>
             }
           />
-          <CollapsibleView expanded={!!modelId}>
-            <Divider />
-            <ListItem
-              title={'Checklists'}
-              value={'1'}
-              position={['first']}
-              onPress={() => null}
-            />
-            <ListItem
-              title={'Perform Maintenance'}
-              value={'0'}
-              onPress={() => null}
-            />
-            <ListItem
-              title={'Maintenance Log'}
-              value={'0'}
-              position={['last']}
-              onPress={() => null}
-            />
-          </CollapsibleView>
+          {!!modelId &&
+            <>
+              <Divider />
+              <ListItem
+                title={'Checklists'}
+                value={'1'}
+                position={['first']}
+                onPress={() => null}
+              />
+              <ListItem
+                title={'Perform Maintenance'}
+                value={'0'}
+                onPress={() => null}
+              />
+              <ListItem
+                title={'Maintenance Log'}
+                value={'0'}
+                position={['last']}
+                onPress={() => null}
+              />
+            </>
+          }
           <Divider />
           <ListItem
             title={'Default Style'}
@@ -518,7 +532,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               eventName: 'default-style',
             })}
           />
-          <CollapsibleView expanded={hasPropeller}>
+          {hasPropeller &&
             <ListItem
               title={'Default Propeller'}
               value={defaultPropeller?.name || 'None'}
@@ -533,7 +547,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 eventName: 'default-propeller',
               })}
             />
-          </CollapsibleView>
+          }
           <CollapsibleView expanded={logsFuel}>
             <ListItem
               title={'Default Fuel'}
@@ -568,18 +582,19 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             title={'Purchase Price'}
             value={purchasePrice}
             numeric={true}
+            numericProps={{maxValue: 99999}}
             keyboardType={'number-pad'}
             placeholder={'Unknown'}
             position={['first']}
             onChangeText={setPurchasePrice}
           /> 
-          <CollapsibleView expanded={!!modelId}>
+          {!!modelId &&
             <ListItemSwitch
               title={`${type} is Retired`}
               value={retired}
               onValueChange={setRetired}
             />
-          </CollapsibleView>
+          }
           <ListItemSwitch
             title={`${type} is Damaged`}
             position={['last']}

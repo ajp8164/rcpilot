@@ -111,7 +111,7 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
     return (
       <ListItemCheckbox
         key={`${index}`}
-        title={battery.vendor || 'Unknown Vendor'}
+        title={battery.name}
         subtitle={batterySummary(battery)}
         titleStyle={s.batteryText}
         subtitleStyle={s.batteryText}

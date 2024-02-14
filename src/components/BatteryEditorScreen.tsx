@@ -12,6 +12,7 @@ import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { CompositeScreenProps } from '@react-navigation/core';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -81,7 +82,10 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
     const save = () => {
       realm.write(() => {
+        const now = DateTime.now().toISO()!;
         realm.create('Battery', {
+          createdOn: now,
+          updatedOn: now,
           name,
           chemistry,
           vendor,
@@ -144,6 +148,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
     if (canSave) {
       realm.write(() => {
+        battery.updatedOn = DateTime.now().toISO()!,
         battery.name = name!;
         battery.vendor = vendor;
         battery.purchasePrice = toNumber(purchasePrice),

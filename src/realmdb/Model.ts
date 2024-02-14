@@ -9,6 +9,8 @@ import { ModelType } from 'types/model';
 
 export class Model extends Object<Model> {
   _id!: BSON.ObjectId;
+  createdOn!: ISODateString;
+  updatedOn!: ISODateString;
   name!: string;
   image?: string;
   type!: ModelType;
@@ -34,6 +36,8 @@ export class Model extends Object<Model> {
     name: 'Model',
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
+      createdOn: 'string',
+      updatedOn: 'string',
       name: 'string',
       image: 'string?',
       type: { type: 'string', default: ModelType.Airplane },

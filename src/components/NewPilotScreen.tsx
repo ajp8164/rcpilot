@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -23,8 +24,11 @@ const NewPilotScreen = ({ navigation }: Props) => {
     const canSave = name !== undefined;
 
     const save = () => {
+      const now = DateTime.now().toISO()!;
       realm.write(() => {
         realm.create('Pilot', {
+          createdOn: now,
+          updatedOn: now,
           name
         });
       });

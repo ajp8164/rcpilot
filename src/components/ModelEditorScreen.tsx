@@ -502,7 +502,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 title={'Checklists'}
                 value={'1'}
                 position={['first']}
-                onPress={() => null}
+                onPress={() => navigation.navigate('ModelChecklists')}
               />
               <ListItem
                 title={'Perform Maintenance'}

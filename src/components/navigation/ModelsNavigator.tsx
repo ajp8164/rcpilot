@@ -3,6 +3,7 @@ import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
 import FlightsScreen from 'components/FlightsScreen';
+import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import { ModelHeader } from 'components/molecules/ModelHeader';
@@ -94,6 +95,13 @@ const ModelsNavigator = () => {
         component={FlightDetailsScreen}
         options={{
           title: 'Flight Details',
+        }}
+      />
+      <ModelsStack.Screen
+        name='ModelChecklists'
+        component={ModelChecklistsScreen}
+        options={{
+          title: 'Checklists',
         }}
       />
       <ModelsStack.Screen

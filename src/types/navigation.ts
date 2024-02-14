@@ -131,6 +131,7 @@ export type ModelsNavigatorParamList = {
     locationId: string;
   };
   NewModelNavigator: NavigatorScreenParams<NewModelNavigatorParamList>;
+  ModelChecklists: undefined;
   ModelEditor: {
     modelId: string;
   };

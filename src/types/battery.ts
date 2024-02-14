@@ -32,5 +32,6 @@ export type BatteryTemplate = {
   name?: string;
   pCells?: number;
   sCells?: number;
+  tint?: string;
   vendor?: string;
 };

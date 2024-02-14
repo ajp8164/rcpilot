@@ -122,7 +122,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     const capacity = `${battery.capacity}mAh`;
     const cells = `${battery.sCells}S/${battery.pCells}P`;
     const chemistry = battery.chemistry;
-    const cycles = `${battery.totalCycles} cycles`;
+    const cycles = `${battery.totalCycles ? battery.totalCycles : 'No'} cycles`;
     const lastCycle = battery.cycles[battery.cycles.length - 1];
     const lastCycleInfo = lastCycle ? (
       lastCycle.charge

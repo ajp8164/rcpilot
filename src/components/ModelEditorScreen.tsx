@@ -2,12 +2,13 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
-import { eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
+import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
+import { BatteryPickerResult } from 'components/BatteryPickerScreen';
 import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { DateTime } from 'luxon';
@@ -59,6 +60,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [totalTime, setTotalTime] = useState(model?.totalTime?.toString() || undefined);
   const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
   const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
+  const [favoriteBatteries, setFavoriteBatteries] = useState(model?.favoriteBatteries || []);
   const [logsFuel, setLogsFuel] = useState(model?.logsFuel || false);
   const [fuelCapacity, setFuelCapacity] = useState(model?.fuelCapacity?.toString() || undefined);
   const [totalFuel, setTotalFuel] = useState(model?.totalFuel?.toString() || undefined);
@@ -87,6 +89,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       !eqNumber(model?.totalTime, totalTime) ||
       !eqString(model?.lastEvent, lastEvent) ||
       !eqBoolean(model?.logsBatteries, logsBatteries) ||
+      !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
       !eqBoolean(model?.logsFuel, logsFuel) ||
       !eqNumber(model?.fuelCapacity, fuelCapacity) ||
       !eqNumber(model?.totalFuel, totalFuel) ||
@@ -115,6 +118,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           totalTime: hmsMaskToSeconds(totalTime),
           lastEvent,
           logsBatteries,
+          favoriteBatteries,
           logsFuel,
           fuelCapacity: toNumber(fuelCapacity),
           totalFuel: toNumber(totalFuel),
@@ -150,6 +154,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     totalTime,
     lastEvent,
     logsBatteries,
+    favoriteBatteries,
     logsFuel,
     fuelCapacity,
     totalFuel,
@@ -172,6 +177,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       !eqBoolean(model?.damaged, damaged) ||
       !eqBoolean(model?.retired, retired) ||
       !eqBoolean(model?.logsBatteries, logsBatteries) ||
+      !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
       !eqBoolean(model?.logsFuel, logsFuel) ||
       !eqNumber(model?.fuelCapacity, fuelCapacity) ||
       !eqNumber(model?.totalFuel, totalFuel) ||
@@ -193,6 +199,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.retired = retired;
         model.damaged = damaged;
         model.logsBatteries = logsBatteries;
+        model.favoriteBatteries = favoriteBatteries;
         model.logsFuel = logsFuel
         model.fuelCapacity = toNumber(fuelCapacity);
         model.totalFuel = toNumber(totalFuel);
@@ -212,6 +219,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     retired,
     damaged,
     logsBatteries,
+    favoriteBatteries,
     logsFuel,
     fuelCapacity,
     totalFuel,
@@ -240,6 +248,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     // Event handlers for EnumPicker
     event.on('model-type', onChangeType);
     event.on('model-category', onChangeCategory);
+    event.on('model-favorite-batteries', onChangeFavoriteBatteries);
     event.on('default-propeller', onChangeDefaultPropeller);
     event.on('default-style', onChangeDefaultStyle);
     event.on('default-fuel', onChangeDefaultFuel);
@@ -249,6 +258,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     return () => {
       event.removeListener('model-type', onChangeType);
       event.removeListener('model-category', onChangeCategory);
+      event.removeListener('model-favorite-batteries', onChangeFavoriteBatteries);
       event.removeListener('default-propeller', onChangeDefaultPropeller);
       event.removeListener('default-style', onChangeDefaultStyle);
       event.removeListener('default-fuel', onChangeDefaultFuel);
@@ -270,6 +280,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const onChangeCategory = (result: EnumPickerResult) => {
     const c = modelCategories.find(c => {return c.name === result.value[0]});
     setCategory(c);
+  };
+
+  const onChangeFavoriteBatteries = (result: BatteryPickerResult) => {
+    setFavoriteBatteries(result.batteries);
   };
 
   const onChangeDefaultPropeller = (result: EnumPickerResult) => {
@@ -426,8 +440,14 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             ExpandableComponent={
               <ListItem
                 title={'Favorite Batteries'}
-                value={'1'}
-                onPress={() => null}
+                value={`${favoriteBatteries.length}`}
+                onPress={() => navigation.navigate('BatteryPicker', {
+                  title: 'Favorite Batteries',
+                  backTitle: 'Model',
+                  selected: favoriteBatteries,
+                  mode: 'many',
+                  eventName: 'model-favorite-batteries',
+                })}
               />
             }
           />

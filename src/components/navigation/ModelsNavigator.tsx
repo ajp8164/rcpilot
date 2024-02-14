@@ -1,3 +1,4 @@
+import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
@@ -44,6 +45,14 @@ const ModelsNavigator = () => {
         options={({ route }) => ({
           header: () => <ModelHeader modelId={route.params.modelId}/>,
         })}
+      />
+      <ModelsStack.Screen
+        name="BatteryPicker"
+        component={BatteryPickerScreen}
+        options={{
+          title: '',
+          headerBackTitle: '',
+        }}
       />
       <ModelsStack.Screen
         name='ModelStatistics'

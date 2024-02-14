@@ -88,7 +88,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
   };
 
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
-    const sections =  groupItems<Battery, Section>(batteries, (battery) => {
+    const sections = groupItems<Battery, Section>(batteries, (battery) => {
       const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
       const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
       return `${c}${battery.sCells}S${p} PACKS`;

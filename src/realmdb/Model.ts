@@ -1,6 +1,7 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 import { ISODateString, ScanCodeSize } from 'types/common';
 
+import { Battery } from './Battery';
 import { EventStyle } from './EventStyle';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
@@ -23,6 +24,7 @@ export class Model extends Object<Model> {
   totalTime?: number;
   lastEvent?: ISODateString;
   logsBatteries!: boolean;
+  favoriteBatteries: Battery[] = [];
   logsFuel!: boolean;
   fuelCapacity?: number;
   totalFuel?: number;
@@ -50,6 +52,7 @@ export class Model extends Object<Model> {
       totalTime: 'int?',
       lastEvent: 'string?',
       logsBatteries: { type: 'bool', default: false },
+      favoriteBatteries: { type: 'list', objectType: 'Battery', default: () => [] },
       logsFuel: { type: 'bool', default: false },
       fuelCapacity: 'float?',
       totalFuel: 'float?',

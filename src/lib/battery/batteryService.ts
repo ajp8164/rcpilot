@@ -1,6 +1,8 @@
 import { BatteryCellArchitecture, BatteryChemistry } from "types/battery";
 import { batterySCellConfigurationItems, batterySPCellConfigurationItems } from "lib/battery";
 
+import { Battery } from "realmdb/Battery";
+
 const getBatteryCellArchitecture = (chemistry: BatteryChemistry): BatteryCellArchitecture => {
   if (
     chemistry.includes(BatteryChemistry.NiCd) ||
@@ -40,4 +42,8 @@ export const getBatteryCellConfigurationItems = (chemistry: BatteryChemistry) =>
   } else {
     return batterySCellConfigurationItems;
   }
+};
+
+export const batteryIsCharged = (battery: Battery) => {
+  return battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length;
 };

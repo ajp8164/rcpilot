@@ -2,15 +2,16 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 
 import { Battery } from 'realmdb/Battery';
+import { BatteryTint } from 'types/battery';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { batteryIsCharged } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
@@ -114,6 +115,10 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
         subtitle={batterySummary(battery)}
         titleStyle={s.batteryText}
         subtitleStyle={s.batteryText}
+        containerStyle={{
+          ...s.batteryTint,
+          borderLeftColor: battery.tint !== BatteryTint.None ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent,
+        }}
         position={listItemPosition(index, section.data.length)}
         checked={list.selected.findIndex(s => s._id.toString() === battery._id.toString()) > -1}
         leftImage={
@@ -162,6 +167,9 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   batteryText: {
     left: 15,
     maxWidth: '90%',
+  },
+  batteryTint: {
+    borderLeftWidth: 8,
   },
   sectionList: {
     flex: 1,

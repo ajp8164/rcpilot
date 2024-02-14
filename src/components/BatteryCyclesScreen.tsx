@@ -93,7 +93,6 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   };
 
   const deleteCycle = (cycleNumber: number) => {
-    console.log(cycleNumber, '<<');
     realm.write(() => {
       const index = battery?.cycles.findIndex(c => c.cycleNumber === cycleNumber);
       if (index !== undefined && index >= 0) {

@@ -137,9 +137,14 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
 
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
     return groupItems<Battery, Section>(batteries, (battery) => {
-      const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
-      const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
-      return `${c}${battery.sCells}S${p} PACKS`;
+      const isCharged = battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length;
+      if (isCharged) {
+        const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
+        const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
+        return `${c}${battery.sCells}S${p} PACKS`;  
+      } else {
+        return 'READY TO CHARGE';
+      }
     }).sort();
   };
 

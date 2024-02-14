@@ -108,6 +108,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
       name: nameSuggestion,
       pCells: battery.pCells,
       sCells: battery.sCells,
+      tint: battery.tint,
       vendor: battery.vendor,
     };
     setList({ selected: index, value: template }, {assign: true});

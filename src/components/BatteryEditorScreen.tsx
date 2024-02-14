@@ -53,7 +53,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const [totalCycles, setTotalCycles] = useState(battery?.totalCycles?.toString() || undefined);
   const [sCells, setSCells] = useState(battery?.sCells?.toString() || batteryTemplate?.sCells?.toString() || '3');
   const [pCells, setPCells] = useState(battery?.pCells?.toString() || batteryTemplate?.pCells?.toString() || '1');
-  const [tint, setTint] = useState(battery?.tint || BatteryTint.None);
+  const [tint, setTint] = useState(battery?.tint || batteryTemplate?.tint as BatteryTint || BatteryTint.None);
   const [scanCodeSize, setScanCodeSize] = useState(battery?.scanCodeSize || ScanCodeSize.None);
   const [notes, setNotes] = useState(battery?.notes || undefined);
 

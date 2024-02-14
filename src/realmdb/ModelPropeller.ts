@@ -1,9 +1,10 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-
-import { MeasurementUnits } from 'types/common';
+import { ISODateString, MeasurementUnits } from 'types/common';
 
 export class ModelPropeller extends Object<ModelPropeller> {
   _id!: BSON.ObjectId;
+  createdOn!: ISODateString;
+  updatedOn!: ISODateString;
   name!: string;
   vendor?: string;
   numberOfBlades?: number;
@@ -16,6 +17,8 @@ export class ModelPropeller extends Object<ModelPropeller> {
     name: 'ModelPropeller',
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
+      createdOn: 'string',
+      updatedOn: 'string',
       name: 'string',
       numberOfBlades: 'int?',
       vendor: 'string?',

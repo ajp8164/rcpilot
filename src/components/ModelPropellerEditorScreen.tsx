@@ -7,6 +7,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { CompositeScreenProps } from '@react-navigation/core';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
@@ -53,6 +54,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
     const save = () => {
       if (modelPropeller) {
         realm.write(() => {
+          modelPropeller.updatedOn = DateTime.now().toISO()!,
           modelPropeller.name = name!;
           modelPropeller.vendor = vendor;
           modelPropeller.numberOfBlades = toNumber(numberOfBlades);
@@ -63,7 +65,10 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         });
       } else {
         realm.write(() => {
+          const now = DateTime.now().toISO()!;
           realm.create('ModelPropeller', {
+            createdOn: now,
+            updatedOn: now,
             name,
             vendor,
             numberOfBlades: toNumber(numberOfBlades),

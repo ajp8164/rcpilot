@@ -8,6 +8,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
@@ -45,6 +46,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
     const save = () => {
       if (pilot) {
         realm.write(() => {
+          pilot.updatedOn = DateTime.now().toISO()!,
           pilot.name = name!;
         });
       }
@@ -108,12 +110,14 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   const onChangeFavoriteModels = (result: ModelPickerResult) => {
     realm.write(() => {
+      pilot!.updatedOn = DateTime.now().toISO()!,
       pilot!.favoriteModels = result.models;
     });
   };
 
   const forgetFavoriteModel = (model: Model) => {    
     realm.write(() => {
+      pilot!.updatedOn = DateTime.now().toISO()!,
       pilot!.favoriteModels =
         pilot?.favoriteModels.filter(m => m._id.toString() !== model._id.toString()) || [];
     });

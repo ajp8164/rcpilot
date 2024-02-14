@@ -6,6 +6,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { CompositeScreenProps } from '@react-navigation/core';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -43,13 +44,17 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
     const save = () => {
       if (modelFuel) {
         realm.write(() => {
+          modelFuel.updatedOn = DateTime.now().toISO()!,
           modelFuel.name = name!;
           modelFuel.cost = toNumber(cost);
           modelFuel.notes = notes;
         });
       } else {
         realm.write(() => {
+          const now = DateTime.now().toISO()!;
           realm.create('ModelFuel', {
+            createdOn: now,
+            updatedOn: now,
             name,
             cost: toNumber(cost),
             notes,

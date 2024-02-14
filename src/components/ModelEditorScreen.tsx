@@ -99,7 +99,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
     const save = () => {
       realm.write(() => {
+        const now = DateTime.now().toISO()!;
         realm.create('Model', {
+          createdOn: now,
+          updatedOn: now,
           name,
           image,
           type,
@@ -181,6 +184,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
     if (canSave) {
       realm.write(() => {
+        model.updatedOn = DateTime.now().toISO()!,
         model.name = name!;
         model.image = image;
         model.vendor = vendor;

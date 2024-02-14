@@ -1,11 +1,13 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
+import { ISODateString, ScanCodeSize } from 'types/common';
 
 import { BatteryCycle } from 'realmdb/BatteryCycle';
-import { ScanCodeSize } from 'types/common';
 
 export class Battery extends Object<Battery> {
   _id!: BSON.ObjectId;
+  createdOn!: ISODateString;
+  updatedOn!: ISODateString;
   name!: string;
   chemistry!: BatteryChemistry;
   vendor?: string;
@@ -26,6 +28,8 @@ export class Battery extends Object<Battery> {
     name: 'Battery',
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
+      createdOn: 'string',
+      updatedOn: 'string',
       name: 'string',
       chemistry: { type: 'string', default: BatteryChemistry.LiPo },
       vendor: 'string?',

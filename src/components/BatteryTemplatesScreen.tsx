@@ -172,8 +172,8 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
         keyExtractor={(_item, index )=> `${index}`}
         renderItem={renderBatteryTemplate}
         renderSectionHeader={() => <></>}
-        ListHeaderComponent={<Divider />}
-        ListFooterComponent={<Divider />}
+        ListHeaderComponent={allBatteries.length ? <Divider /> : null}
+        ListFooterComponent={allBatteries.length ? <Divider /> : null}
       />
     </View>
   );

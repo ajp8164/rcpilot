@@ -80,7 +80,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
         renderItem={renderModelPropeller}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={Divider}
+        ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
         ListEmptyComponent={
           <EmptyView info message={'No Model Propellers'} details={"Tap the + button to add your first model propeller."} />
         }

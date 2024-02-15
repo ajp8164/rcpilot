@@ -26,19 +26,19 @@ export const EmptyView = ({
 
   const header = useHeaderHeight();
   const tabBar = useBottomTabBarHeight();
-  const top = (viewport.height - theme.insets.top - header - tabBar) / 3;
+  const top = (viewport.height - theme.insets.top - header - tabBar) / 2.5;
   
   return (
     <View style={[s.container, {paddingTop: top}]}>
-    <Icon
-      name={error ? 'triangle-exclamation' : info ? 'circle-info' : 'magnifying-glass'}
-      size={45}
-      color={theme.colors.midGray}
-    />
-    <Text style={s.message}>{message}</Text>
-    <Text style={s.details}>{details}</Text>
-  </View>
-);
+      <Icon
+        name={error ? 'triangle-exclamation' : info ? 'circle-info' : 'magnifying-glass'}
+        size={45}
+        color={theme.colors.midGray}
+      />
+      <Text style={s.message}>{message}</Text>
+      <Text style={s.details}>{details}</Text>
+    </View>
+  );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({

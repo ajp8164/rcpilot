@@ -73,6 +73,12 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
     )
   };
 
+  if (!allModelFuels.length) {
+    return (
+      <EmptyView info message={'No Model Fuels'} details={"Tap the + button to add your first model fuel."} />
+    );    
+  }
+
   return (
     <>
       <FlatList
@@ -81,9 +87,6 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allModelFuels.length ? <Divider /> : null}
-        ListEmptyComponent={
-          <EmptyView info message={'No Model Fuels'} details={"Tap the + button to add your first model fuel."} />
-        }
       />
       <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Fuel'} onConfirm={deleteFuel} />
     </>

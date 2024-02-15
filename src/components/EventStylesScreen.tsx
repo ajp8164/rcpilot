@@ -71,6 +71,12 @@ const EventStylesScreen = ({ navigation }: Props) => {
     )
   };
 
+  if (!allEventStyles.length) {
+    return (
+      <EmptyView info message={'No Event Styles'} details={"Tap the + button to add your first event style."} />
+    )
+  }
+
   return (
     <>
       <FlatList
@@ -79,9 +85,6 @@ const EventStylesScreen = ({ navigation }: Props) => {
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allEventStyles.length ? <Divider /> : null}
-        ListEmptyComponent={
-          <EmptyView info message={'No Event Styles'} details={"Tap the + button to add your first event style."} />
-        }
       />
       <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Style'} onConfirm={deleteStyle} />
     </>

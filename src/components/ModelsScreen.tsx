@@ -249,6 +249,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  if (!activeModels.length && !retiredModels.length) {
+    return (
+      <EmptyView info message={'No Models'} details={"Tap the + button to add your first model."} />
+    );    
+  }
+
   return (
     <ScrollView style={theme.styles.view}
       showsVerticalScrollIndicator={false}
@@ -263,11 +269,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}
-        ListEmptyComponent={
-          !retiredModels.length ?
-            <EmptyView info message={'No Models'} details={"Tap the + button to add your first model."} />
-            : null
-        }
         ListFooterComponent={renderInactive()}
       />
       <ActionSheetConfirm

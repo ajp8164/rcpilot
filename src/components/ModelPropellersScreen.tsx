@@ -73,6 +73,12 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
     )
   };
 
+  if (!allModelPropellers.length) {
+    return (
+      <EmptyView info message={'No Model Propellers'} details={"Tap the + button to add your first model propeller."} />
+    );    
+  }
+
   return (
     <>
       <FlatList
@@ -81,9 +87,6 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
-        ListEmptyComponent={
-          <EmptyView info message={'No Model Propellers'} details={"Tap the + button to add your first model propeller."} />
-        }
       />
       <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Propeller'} onConfirm={deletePropeller} />
     </>

@@ -36,12 +36,6 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const allChecklistTemplates = useQuery(ChecklistTemplate);
 
-  const [allModelChecklists, setAllModelChecklists] = useState<{[key in ChecklistType]: Checklist[]}>({
-    [ChecklistType.PreEvent]: [],
-    [ChecklistType.PostEvent]: [],
-    [ChecklistType.Maintenance]: [],
-  });
-
   const [newChecklistActionSheetVisible, setNewChecklistActionSheetVisible] = useState(false);
   const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
@@ -59,27 +53,16 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     });
   }, []);
 
-  useEffect(() => {
-    if (!model) return;
+  const preEventModelChecklists = () => {
+    return model?.checklists.filter(t => t.type === ChecklistType.PreEvent) || [];
+  };
 
-    // Can't update checklists in this hook on model data changes (using hook deps)
-    // since the hook will run after the render cycle caused by the model data changes
-    // via the realm update. Instead, initialize here and update local state during
-    // adds and deletes.
-    updateChecklists(model);
-  }, []);
+  const postEventModelChecklists = () => {
+    return model?.checklists.filter(t => t.type === ChecklistType.PostEvent) || [];
+  };
 
-  const updateChecklists = (model: Model) => {
-    if (!model) return;
-
-    const pre = model.checklists.filter(t => t.type === ChecklistType.PreEvent);
-    const post = model.checklists.filter(t => t.type === ChecklistType.PostEvent);
-    const maint = model.checklists.filter(t => t.type === ChecklistType.Maintenance);
-    setAllModelChecklists({
-      [ChecklistType.PreEvent]: pre,
-      [ChecklistType.PostEvent]: post,
-      [ChecklistType.Maintenance]: maint,
-    });
+  const maintenanceModelChecklists = () => {
+    return model?.checklists.filter(t => t.type === ChecklistType.Maintenance) || [];
   };
 
   useEffect(() => {
@@ -106,7 +89,6 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
           model!.checklists.push(newChecklist);
         }
       });
-      updateChecklists(model!);
     }
     navigation.goBack();
   };
@@ -128,7 +110,6 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         model?.checklists.splice(index, 1);
       }
     });
-    updateChecklists(model!);
   };
 
   const renderChecklist = (checklist: Checklist, index: number, arrLength: number) => {
@@ -139,9 +120,10 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         title={checklist.name}
         subtitle={`Contains ${checklist.actions.length} actions`}
         position={listItemPosition(index, arrLength)}
-        // onPress={() => navigation.navigate('ChecklistEditor', {
-        //   checklistTemplateId: item._id.toString(),
-        // })}
+        onPress={() => navigation.navigate('ChecklistEditor', {
+          modelId,
+          modelChecklistRefId: checklist.refId,
+        })}
         editable={{
           item: {
             icon: 'remove-circle',
@@ -174,7 +156,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     return renderChecklist(
       checklist,
       index,
-      allModelChecklists[ChecklistType.PreEvent].length
+      preEventModelChecklists().length,
     );
   };
 
@@ -185,7 +167,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     return renderChecklist(
       checklist,
       index,
-      allModelChecklists[ChecklistType.PostEvent].length
+      postEventModelChecklists().length,
     );
   };
 
@@ -196,7 +178,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     return renderChecklist(
       checklist,
       index,
-      allModelChecklists[ChecklistType.Maintenance].length
+      maintenanceModelChecklists().length,
     );
   };
 
@@ -246,37 +228,37 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <FlatList
-        data={allModelChecklists[ChecklistType.PreEvent]}
+        data={preEventModelChecklists()}
         renderItem={renderPreEventChecklist}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          allModelChecklists[ChecklistType.PreEvent].length > 0
+          preEventModelChecklists().length > 0
             ? <Divider text={'PRE-FLIGHT'}/>
             : <></>            
         }
       />
       <FlatList
-        data={allModelChecklists[ChecklistType.PostEvent]}
+        data={postEventModelChecklists()}
         renderItem={renderPostEventChecklist}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          allModelChecklists[ChecklistType.PostEvent].length > 0
+          postEventModelChecklists().length > 0
             ? <Divider text={'POST-FLIGHT'}/>
             : <></>            
         }
       />
       <FlatList
-        data={allModelChecklists[ChecklistType.Maintenance]}
+        data={maintenanceModelChecklists()}
         renderItem={renderMaintenanceChecklist}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          allModelChecklists[ChecklistType.Maintenance].length > 0
+          maintenanceModelChecklists().length > 0
             ? <Divider text={'MAINTENANCE'}/>
             : <></>            
         }

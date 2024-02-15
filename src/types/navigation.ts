@@ -363,7 +363,7 @@ export type SetupNavigatorParamList = {
     eventName: string;
   };
   ChecklistTemplates: undefined;
-  ChecklistTemplateEditor: {
+  ChecklistEditor: {
     checklistTemplateId: string;
   };
   Content: {

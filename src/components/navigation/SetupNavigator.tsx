@@ -1,7 +1,7 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
-import ChecklistTemplateEditorScreen from 'components/ChecklistTemplateEditorScreen';
+import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
 import DatabaseInfoScreen from 'components/DatabaseInfoScreen';
@@ -271,8 +271,8 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="ChecklistTemplateEditor"
-        component={ChecklistTemplateEditorScreen}
+        name="ChecklistEditor"
+        component={ChecklistEditorScreen}
         options={{
           title: 'Template',
           headerBackTitle: 'Templates',

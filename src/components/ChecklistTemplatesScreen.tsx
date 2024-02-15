@@ -76,7 +76,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         title={checklistTemplate.name}
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
         position={listItemPosition(index, arrLength)}
-        onPress={() => navigation.navigate('ChecklistTemplateEditor', {
+        onPress={() => navigation.navigate('ChecklistEditor', {
           checklistTemplateId: checklistTemplate._id.toString(),
         })}
         editable={{

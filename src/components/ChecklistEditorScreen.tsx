@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { Checklist, ChecklistAction, JChecklistAction } from 'realmdb/Checklist';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
@@ -7,14 +8,14 @@ import {
 } from 'types/checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
+import { ModelsNavigatorParamList, NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import {
   NestableDraggableFlatList,
   NestableScrollContainer,
   RenderItemParams
 } from 'react-native-draggable-flatlist';
-import { NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { Platform, View } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -22,19 +23,23 @@ import { Button } from '@rneui/base';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { JChecklistAction } from 'realmdb/Checklist';
+import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { uuidv4 } from 'lib/utils';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistEditor'>,
-  NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>
+  CompositeScreenProps<
+    NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistEditor'>,
+    NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>
+  >  
 >;
 
 const ChecklistEditorScreen = ({ navigation, route }: Props) => {
-  const { checklistTemplateId } = route.params || {};
+  const { checklistTemplateId, modelId, modelChecklistRefId } = route.params || {};
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -42,35 +47,70 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
   const realm = useRealm();
 
+  // This editor provides capability for checklist templates and model checklists. We use a
+  // 'working' reference to the correct object throughout the editor.
   const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
 
-  const [name, setName] = useState(checklistTemplate?.name || undefined);
-  const [type, setType] = useState(checklistTemplate?.type || ChecklistType.PreEvent);
-  const [actions, setActions] = useState(
-    (checklistTemplate?.actions.toJSON() || []) as JChecklistAction[]
-  );
+  const model = useObject(Model, new BSON.ObjectId(modelId));
+  const modelChecklist = model?.checklists.find(c => c.refId === modelChecklistRefId);
+
+  const workingChecklist = checklistTemplate || modelChecklist || undefined;
+  const editingTemplate = useRef(!modelId).current; // This is a template editor if no modelId.
+  const eventNameId = useRef(uuidv4()).current; // Used for unique action change event name.
+
+  const [name, setName] = useState(checklistTemplate?.name || modelChecklist?.name || undefined);
+  const [type, setType] = useState(checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent);
+  const [actions, setActions] = useState<JChecklistAction[]>(
+    checklistTemplate?.actions.toJSON() ||
+    (modelChecklist !== undefined ? JSON.parse(JSON.stringify(modelChecklist.actions)) : [])
+  ); // Need to convert the model checklist actions into a plain object to decouple from the realm array instance.
 
   useEffect(() => {
     const canSave = !!name && (
-      !eqString(checklistTemplate?.name, name) ||
-      !eqString(checklistTemplate?.type, type)
+      !eqString(workingChecklist?.name, name) ||
+      !eqString(workingChecklist?.type, type)
     );
 
     const save = () => {
-      if (checklistTemplate) {
-        realm.write(() => {
-          checklistTemplate.name = name!;
-          checklistTemplate.type = type;
-          // Existing actions are saved inline with edits/adds.
-        });
-      } else {
-        realm.write(() => {
-          realm.create('ChecklistTemplate', {
-            name,
-            type,
-            actions,
+      if (editingTemplate) {
+        // Not a model checklist, handle saving a checklist template.
+        if (checklistTemplate) {
+          realm.write(() => {
+            checklistTemplate.name = name!;
+            checklistTemplate.type = type;
+            // Existing actions are saved inline with edits/adds.
           });
-        });
+        } else {
+          realm.write(() => {
+            realm.create('ChecklistTemplate', {
+              name,
+              type,
+              actions,
+            });
+          });
+        }
+      } else {
+        // Is a model checklist, handle updating the checklist on the model.
+        if (model && modelChecklist) {
+          // Update an existing model checklist.
+          realm.write(() => {
+            const index = model?.checklists.findIndex(c => c.refId === modelChecklistRefId);
+            model.checklists[index].name = name!;
+            model.checklists[index].type = type;
+            // Existing actions are saved inline with edits/adds.          
+          });
+        } else {
+          // Create a new checklist on the model.
+          realm.write(() => {
+            const newModelChecklist = {
+              name,
+              type,
+              actions,
+            } as Checklist;
+
+            model?.checklists.push(newModelChecklist);
+          });
+        }
       }
     };
   
@@ -81,7 +121,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
     navigation.setOptions({
       headerLeft: () => {
-        if (!checklistTemplateId) {
+        if (!checklistTemplateId && !modelChecklistRefId) {
           return (
             <Button
               title={'Cancel'}
@@ -119,38 +159,51 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   }, [ name, type, actions, listEditor.enabled ]);
 
   useEffect(() => {
-    event.on('checklist-template-type', onChangeTemplateType);
-    event.on('checklist-action', upsertAction);
+    event.on(`checklist-type-${eventNameId}`, onChangeType);
+    event.on(`checklist-action-${eventNameId}`, upsertAction);
     return () => {
-      event.removeListener('checklist-template-type', onChangeTemplateType);
-      event.removeListener('checklist-action', upsertAction);
+      event.removeListener(`checklist-type-${eventNameId}`, onChangeType);
+      event.removeListener(`checklist-action-${eventNameId}`, upsertAction);
     };
   }, []);
 
-  const onChangeTemplateType = (result: EnumPickerResult) => {
-    setType(result.value[0] as ChecklistType);
-  };
-
   useEffect(() => {
-    if (checklistTemplate) {
-      realm.write(() => {
-        // @ts-expect-error: not recognizing the target as a (realm) embedded array
-        checklistTemplate.actions = actions;
-      });
+    if (editingTemplate) {
+      if (checklistTemplate) {
+        realm.write(() => {
+          // @ts-expect-error: not recognizing the target as a (realm) embedded array
+          checklistTemplate.actions = actions;
+        });
+      }
+    } else {
+      if (model && modelChecklist) {
+        // Update an existing model checklist.
+        realm.write(() => {
+          const index = model.checklists.findIndex(c => c.refId === modelChecklistRefId);
+          model.checklists[index].actions = actions as ChecklistAction[];
+        });
+      }
     }
   }, [ actions ]);
 
+  const onChangeType = (result: EnumPickerResult) => {
+    setType(result.value[0] as ChecklistType);
+  };
+
   const upsertAction = (newOrChangedAction: JChecklistAction) => {
-    if (checklistTemplate && newOrChangedAction.ordinal !== undefined) {
+    console.log(newOrChangedAction);
+    if ((checklistTemplate && newOrChangedAction.refId !== undefined) ||
+      (modelChecklist && newOrChangedAction.refId !== undefined)) {
       // Update existing action.
       setActions(prevState => {
-        const a = [...prevState];
-        a[newOrChangedAction.ordinal!] = newOrChangedAction;
-        return a;
+        const actns = [...prevState];
+        const index = actns.findIndex(a => a.refId === newOrChangedAction.refId);
+        actns[index] = newOrChangedAction;
+        return actns;
       });  
     } else {
       // Insert a new action.
-      newOrChangedAction.ordinal = actions.length;
+      newOrChangedAction.refId = uuidv4();
       setActions(prevState => {
         return [...prevState].concat(newOrChangedAction);
       });
@@ -158,17 +211,14 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const deleteAction = (index: number) => {
-    if (checklistTemplate) {
+    if ((editingTemplate && checklistTemplate) || modelChecklist) {
       const a = [...actions];
       a.splice(index, 1);
-      reorderActions(a);
+      setActions(a);
     }
   };
 
   const reorderActions = (data: JChecklistAction[]) => {
-    for (let i = 0; i < data.length; i++) {
-      data[i].ordinal = i;
-    };
     setActions(data);
   };
 
@@ -280,7 +330,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
             onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
             checklistType: type,
-            eventName: 'checklist-action',
+            eventName: `checklist-action-${eventNameId}`,
           })}
         />
       </View>
@@ -289,25 +339,26 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   
   return (
     <NestableScrollContainer
+      style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'NAME & TYPE'} />
       <ListItemInput
         value={name}
-        placeholder={'Checklist Template Name'}
+        placeholder={editingTemplate ? 'Checklist Template Name' : 'Checklist Name'}
         position={['first']}
         onChangeText={setName}
       /> 
       <ListItem
-        title={'Template for List Type'}
+        title={editingTemplate ? 'Template for List Type' : 'List Type'}
         value={type}
         position={['last']}
         onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Template Type',
+          title: editingTemplate ? 'Template Type' : 'Checklist Type',
           headerBackTitle: 'Back',
           values: Object.values(ChecklistType),
           selected: type,
-          eventName: 'checklist-template-type',
+          eventName: `checklist-type-${eventNameId}`,
         })}
       />
       {actions.length > 0 && <Divider text={'ACTIONS'} />}
@@ -338,7 +389,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           screen: 'NewChecklistAction',
           params: { 
             checklistType: type,
-            eventName: 'checklist-action'
+            eventName: `checklist-action-${eventNameId}`
           },
         })}
       />

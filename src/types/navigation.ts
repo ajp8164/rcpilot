@@ -117,6 +117,16 @@ export type ModelsNavigatorParamList = {
   ChecklistTemplatePicker: {
     eventName: string;
   };
+  ChecklistEditor: {
+    checklistTemplateId?: string;
+    modelId?: string;
+    modelChecklistRefId?: string;
+  };
+  ChecklistActionEditor: {
+    checklistAction?: JChecklistAction;
+    checklistType: ChecklistType;
+    eventName: string;
+  };
   EnumPicker: EnumPickerInterface;
   Flights: {
     pilotId?: string;
@@ -133,6 +143,7 @@ export type ModelsNavigatorParamList = {
   LocationDetails: {
     locationId: string;
   };
+  NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewModelNavigator: NavigatorScreenParams<NewModelNavigatorParamList>;
   ModelChecklists: {
     modelId?: string;
@@ -364,7 +375,9 @@ export type SetupNavigatorParamList = {
   };
   ChecklistTemplates: undefined;
   ChecklistEditor: {
-    checklistTemplateId: string;
+    checklistTemplateId?: string;
+    modelId?: string;
+    modelChecklistRefId?: string;
   };
   Content: {
     content: ContentView;

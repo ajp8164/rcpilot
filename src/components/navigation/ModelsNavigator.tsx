@@ -1,4 +1,6 @@
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
+import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
+import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatePickerScreen from 'components/ChecklistTemplatePickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
@@ -11,6 +13,7 @@ import { ModelHeader } from 'components/molecules/ModelHeader';
 import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
+import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
@@ -63,6 +66,28 @@ const ModelsNavigator = () => {
         options={{
           title: 'Checklist Templates',
           presentation: 'modal',
+        }}
+      />
+      <ModelsStack.Screen
+        name="ChecklistEditor"
+        component={ChecklistEditorScreen}
+        options={{
+          title: 'Checklist',
+        }}
+      />
+      <ModelsStack.Screen
+        name="ChecklistActionEditor"
+        component={ChecklistActionEditorScreen}
+        options={{
+          title: 'Action',
+        }}
+      />
+      <ModelsStack.Screen
+        name="NewChecklistActionNavigator"
+        component={NewChecklistActionNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
         }}
       />
       <ModelsStack.Screen

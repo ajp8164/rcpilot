@@ -8,7 +8,7 @@ import {
 } from 'types/checklist';
 import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/Checklist';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import { NewChecklistActionNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { ModelsNavigatorParamList, NewChecklistActionNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString } from 'realmdb/helpers';
 
@@ -27,7 +27,10 @@ import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'>,
-  NativeStackScreenProps<NewChecklistActionNavigatorParamList, 'NewChecklistAction'>
+  CompositeScreenProps<
+    NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistActionEditor'>,
+    NativeStackScreenProps<NewChecklistActionNavigatorParamList, 'NewChecklistAction'>
+  >  
 >;
 
 const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
@@ -42,8 +45,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const setScreenEditHeader = useScreenEditHeader();
   
   const action = useRef(checklistAction).current;
-  // If ordinal is undefined then we're creating a new action.
-  const isNewAction = useRef(checklistAction?.ordinal === undefined).current;
+  // If refId is undefined then we're creating a new action.
+  const isNewAction = useRef(checklistAction?.refId === undefined).current;
 
   const initialScheduleItems = useRef(getChecklistActionScheduleItems(action?.schedule.type ? ChecklistActionScheduleType.NonRepeating : ChecklistActionScheduleType.Repeating)).current;
 

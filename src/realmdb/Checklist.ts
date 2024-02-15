@@ -20,29 +20,29 @@ export class Checklist extends Object<Checklist> {
 };
 
 export type JChecklistAction =  {
+  refId?: string;
   description: string;
   schedule: JChecklistActionSchedule;
   cost?: number;
   notes?: string;
-  ordinal?: number;
 };
 
 export class ChecklistAction extends Object<ChecklistAction> {
+  refId!: string;
   description!: string;
   schedule!: ChecklistActionSchedule;
   cost?: number;
   notes?: string;
-  ordinal!: number;
 
   static schema: ObjectSchema = {
     name: 'ChecklistAction',
     embedded: true,
     properties: {
+      refId: 'string',
       description: 'string',
       schedule: 'ChecklistActionSchedule',
       cost: 'float?',
       notes: 'string?',
-      ordinal: 'float',
     },
   };
 };

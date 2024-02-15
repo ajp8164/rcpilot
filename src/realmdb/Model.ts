@@ -2,6 +2,7 @@ import { BSON, Object, ObjectSchema } from 'realm';
 import { ISODateString, ScanCodeSize } from 'types/common';
 
 import { Battery } from './Battery';
+import { Checklist } from 'realmdb/Checklist';
 import { EventStyle } from './EventStyle';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
@@ -17,6 +18,7 @@ export class Model extends Object<Model> {
   type!: ModelType;
   vendor?: string;
   category?: ModelCategory;
+  checklists: Checklist[] = [];
   purchasePrice?: number;
   retired!: boolean;
   damaged!: boolean;
@@ -45,6 +47,7 @@ export class Model extends Object<Model> {
       type: { type: 'string', default: ModelType.Airplane },
       vendor: 'string?',
       category: 'ModelCategory?',
+      checklists: { type: 'list', objectType: 'Checklist', default: () => [] },
       purchasePrice: 'float?',
       retired: { type: 'bool', default: false },
       damaged: { type: 'bool', default: false },

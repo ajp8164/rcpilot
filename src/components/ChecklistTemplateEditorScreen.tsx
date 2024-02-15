@@ -2,10 +2,9 @@ import { AppTheme, useTheme } from 'theme';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
-  ChecklistTemplateActionScheduleType,
-  ChecklistTemplateType
-} from 'types/checklistTemplate';
-import { ChecklistTemplate, JChecklistAction } from 'realmdb/ChecklistTemplate';
+  ChecklistActionScheduleType,
+  ChecklistType
+} from 'types/checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import {
@@ -20,8 +19,10 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { JChecklistAction } from 'realmdb/Checklist';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
@@ -44,7 +45,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
 
   const [name, setName] = useState(checklistTemplate?.name || undefined);
-  const [type, setType] = useState(checklistTemplate?.type || ChecklistTemplateType.PreEvent);
+  const [type, setType] = useState(checklistTemplate?.type || ChecklistType.PreEvent);
   const [actions, setActions] = useState(
     (checklistTemplate?.actions.toJSON() || []) as JChecklistAction[]
   );
@@ -127,7 +128,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const onChangeTemplateType = (result: EnumPickerResult) => {
-    setType(result.value[0] as ChecklistTemplateType);
+    setType(result.value[0] as ChecklistType);
   };
 
   useEffect(() => {
@@ -173,7 +174,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
 
   const actionScheduleSummary = (action: JChecklistAction) => {
     let result = '';
-    if (action.schedule.type === ChecklistTemplateActionScheduleType.Repeating) {
+    if (action.schedule.type === ChecklistActionScheduleType.Repeating) {
       let when = '';
       let times = '';
       let freq = '';
@@ -195,7 +196,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         }
       }
 
-      if (type === ChecklistTemplateType.PreEvent) {
+      if (type === ChecklistType.PreEvent) {
         when = 'before every';
       } else {
         when = 'after every';
@@ -278,7 +279,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
           onSwipeableWillClose={listEditor.onItemWillClose}
             onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
-            checklistTemplateType: type,
+            checklistType: type,
             eventName: 'checklist-action',
           })}
         />
@@ -304,7 +305,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Template Type',
           headerBackTitle: 'Back',
-          values: Object.values(ChecklistTemplateType),
+          values: Object.values(ChecklistType),
           selected: type,
           eventName: 'checklist-template-type',
         })}
@@ -336,7 +337,7 @@ const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => navigation.navigate('NewChecklistActionNavigator', {
           screen: 'NewChecklistAction',
           params: { 
-            checklistTemplateType: type,
+            checklistType: type,
             eventName: 'checklist-action'
           },
         })}

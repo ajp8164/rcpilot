@@ -1,12 +1,12 @@
 import { BatteryTemplate, ListBatteries } from 'types/battery';
 
 import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
-import { ChecklistTemplateType } from 'types/checklistTemplate';
+import { ChecklistType } from 'types/checklist';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { FilterType } from 'types/filter';
 import { FlightOutcome } from 'types/flight';
-import { JChecklistAction } from 'realmdb/ChecklistTemplate';
+import { JChecklistAction } from 'realmdb/Checklist';
 import { ListModels } from 'types/model';
 import { ModelPickerInterface } from 'components/ModelPickerScreen';
 import { NavigatorScreenParams } from '@react-navigation/core';
@@ -114,6 +114,9 @@ export type MainNavigatorParamList = {
 
 export type ModelsNavigatorParamList = {
   BatteryPicker: BatteryPickerInterface;
+  ChecklistTemplatePicker: {
+    eventName: string;
+  };
   EnumPicker: EnumPickerInterface;
   Flights: {
     pilotId?: string;
@@ -131,7 +134,9 @@ export type ModelsNavigatorParamList = {
     locationId: string;
   };
   NewModelNavigator: NavigatorScreenParams<NewModelNavigatorParamList>;
-  ModelChecklists: undefined;
+  ModelChecklists: {
+    modelId?: string;
+  };
   ModelEditor: {
     modelId: string;
   };
@@ -322,7 +327,7 @@ export type NewModelPropellerNavigatorParamList = {
 export type NewChecklistTemplateNavigatorParamList = {
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
-    checklistTemplateType: ChecklistTemplateType;
+    checklistType: ChecklistType;
     eventName: string;
   };
   EnumPicker: EnumPickerInterface;
@@ -338,7 +343,7 @@ export type NewChecklistTemplateNavigatorParamList = {
 export type NewChecklistActionNavigatorParamList = {
   NewChecklistAction: {
     checklistAction?: JChecklistAction;
-    checklistTemplateType: ChecklistTemplateType;
+    checklistType: ChecklistType;
     eventName: string;
   };
   Notes: {
@@ -354,7 +359,7 @@ export type SetupNavigatorParamList = {
   AppSettings: undefined;
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
-    checklistTemplateType: ChecklistTemplateType;
+    checklistType: ChecklistType;
     eventName: string;
   };
   ChecklistTemplates: undefined;

@@ -80,7 +80,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         renderItem={renderModelFuel}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={Divider}
+        ListHeaderComponent={allModelFuels.length ? <Divider /> : null}
         ListEmptyComponent={
           <EmptyView info message={'No Model Fuels'} details={"Tap the + button to add your first model fuel."} />
         }

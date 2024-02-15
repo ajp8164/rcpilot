@@ -110,7 +110,7 @@ const PilotsScreen = ({ navigation }: Props) => {
         renderItem={renderPilot}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={Divider}
+        ListHeaderComponent={allPilots.length ? <Divider /> : null}
         ListFooterComponent={renderFooter}
       />
       <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Pilot'} onConfirm={deletePilot} />

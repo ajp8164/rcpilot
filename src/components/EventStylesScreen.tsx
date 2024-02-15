@@ -78,7 +78,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
         renderItem={renderEventStyle}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={Divider}
+        ListHeaderComponent={allEventStyles.length ? <Divider /> : null}
         ListEmptyComponent={
           <EmptyView info message={'No Event Styles'} details={"Tap the + button to add your first event style."} />
         }

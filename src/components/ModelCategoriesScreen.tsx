@@ -78,7 +78,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         renderItem={renderModelCategory}
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={Divider}
+        ListHeaderComponent={allModelCategories.length ? <Divider /> : null}
         ListEmptyComponent={
           <EmptyView info message={'No Model Categories'} details={"Tap the + button to add your first model category."} />
         }

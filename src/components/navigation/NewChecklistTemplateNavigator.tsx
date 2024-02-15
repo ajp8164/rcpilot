@@ -1,5 +1,5 @@
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
-import ChecklistTemplateEditorScreen from 'components/ChecklistTemplateEditorScreen';
+import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
 import { NewChecklistTemplateNavigatorParamList } from 'types/navigation';
@@ -25,7 +25,7 @@ const NewChecklistTemplateNavigator = () => {
         <NewChecklistTemplateStack.Screen
           name="NewChecklistTemplate"
           // @ts-expect-error
-          component={ChecklistTemplateEditorScreen}
+          component={ChecklistEditorScreen}
           options={{
             title: 'New Template',
           }}

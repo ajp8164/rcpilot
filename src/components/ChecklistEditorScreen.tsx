@@ -29,11 +29,11 @@ import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
-  NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplateEditor'>,
+  NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistEditor'>,
   NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>
 >;
 
-const ChecklistTemplateEditorScreen = ({ navigation, route }: Props) => {
+const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   const { checklistTemplateId } = route.params || {};
 
   const theme = useTheme();
@@ -371,4 +371,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default ChecklistTemplateEditorScreen;
+export default ChecklistEditorScreen;

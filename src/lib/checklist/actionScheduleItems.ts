@@ -1,8 +1,8 @@
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
-  ChecklistTemplateActionScheduleType
-} from "types/checklistTemplate";
+  ChecklistActionScheduleType
+} from "types/checklist";
 
 import { WheelPickerItem } from "components/atoms/WheelPicker";
 
@@ -31,8 +31,8 @@ const checklistActionNonRepeatingScheduleItems: WheelPickerItem[][] = [
   )),
 ];
 
-export const getChecklistActionScheduleItems = (type?: ChecklistTemplateActionScheduleType) => {
-  const items = type && type === ChecklistTemplateActionScheduleType.NonRepeating
+export const getChecklistActionScheduleItems = (type?: ChecklistActionScheduleType) => {
+  const items = type && type === ChecklistActionScheduleType.NonRepeating
     ? checklistActionNonRepeatingScheduleItems
     : checklistActionRepeatingScheduleItems;
   return {

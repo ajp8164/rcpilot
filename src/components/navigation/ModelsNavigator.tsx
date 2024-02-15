@@ -1,4 +1,5 @@
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
+import ChecklistTemplatePickerScreen from 'components/ChecklistTemplatePickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import FlightDetailsScreen from 'components/FlightDetailsScreen';
 import FlightNavigator from 'components/navigation/FlightNavigator';
@@ -54,6 +55,14 @@ const ModelsNavigator = () => {
         options={{
           title: '',
           headerBackTitle: '',
+        }}
+      />
+      <ModelsStack.Screen
+        name="ChecklistTemplatePicker"
+        component={ChecklistTemplatePickerScreen}
+        options={{
+          title: 'Checklist Templates',
+          presentation: 'modal',
         }}
       />
       <ModelsStack.Screen

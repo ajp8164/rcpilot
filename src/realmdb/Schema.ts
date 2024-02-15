@@ -1,8 +1,10 @@
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
-import { ChecklistAction, ChecklistActionSchedule, ChecklistTemplate } from './ChecklistTemplate';
+import { ChecklistAction, ChecklistActionSchedule } from './Checklist';
 import { Filter, FilterState } from './Filter';
 
 import { Battery } from './Battery';
+import { Checklist } from './Checklist';
+import { ChecklistTemplate } from './ChecklistTemplate';
 import { EventStyle } from './EventStyle';
 import { EventsMaintenanceReport } from './EventsMaintenanceReport';
 import { Model } from './Model';
@@ -14,6 +16,7 @@ import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [
   Battery,
+  Checklist,
   ChecklistTemplate,
   EventsMaintenanceReport,
   EventStyle,

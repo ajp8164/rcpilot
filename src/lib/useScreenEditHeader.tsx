@@ -32,7 +32,7 @@ export const useScreenEditHeader = () => {
     let options = navigationOpts || {};
 
     options.headerLeft = () => {
-      if (leftButton?.visible ? leftButton.visible : true) {
+      if (leftButton?.visible !== undefined ? leftButton.visible : true) {
         return (
           <Button
             title={leftButton?.label || 'Cancel'}
@@ -45,7 +45,7 @@ export const useScreenEditHeader = () => {
     };
 
     options.headerRight = () => {
-      if (rightButton?.visible ? rightButton.visible : false) {
+      if (rightButton?.visible !== undefined ? rightButton.visible : false) {
         return (
           <Button
             title={rightButton?.label || 'Done'}

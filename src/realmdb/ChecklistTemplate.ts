@@ -1,10 +1,12 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-import { ChecklistActionSchedulePeriod, ChecklistTemplateActionScheduleType, ChecklistTemplateType } from 'types/checklistTemplate';
+
+import { ChecklistAction } from './Checklist';
+import { ChecklistType } from 'types/checklist';
 
 export class ChecklistTemplate extends Object<ChecklistTemplate> {
   _id!: BSON.ObjectId;
   name!: string;
-  type!: ChecklistTemplateType;
+  type!: ChecklistType;
   actions!: Realm.List<ChecklistAction>;
 
   static schema: ObjectSchema = {
@@ -16,56 +18,5 @@ export class ChecklistTemplate extends Object<ChecklistTemplate> {
       actions: { type: 'list', objectType: 'ChecklistAction', default: [] },
     },
     primaryKey: '_id',
-  };
-};
-
-export type JChecklistAction =  {
-  description: string;
-  schedule: JChecklistActionSchedule;
-  cost?: number;
-  notes?: string;
-  ordinal?: number;
-};
-
-export class ChecklistAction extends Object<ChecklistAction> {
-  description!: string;
-  schedule!: ChecklistActionSchedule;
-  cost?: number;
-  notes?: string;
-  ordinal!: number;
-
-  static schema: ObjectSchema = {
-    name: 'ChecklistAction',
-    embedded: true,
-    properties: {
-      description: 'string',
-      schedule: 'ChecklistActionSchedule',
-      cost: 'float?',
-      notes: 'string?',
-      ordinal: 'float',
-    },
-  };
-};
-
-// Plain JS object type.
-export interface JChecklistActionSchedule  {
-  period: keyof typeof ChecklistActionSchedulePeriod;
-  type: ChecklistTemplateActionScheduleType;
-  value: number;
-};
-
-export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
-  period!: keyof typeof ChecklistActionSchedulePeriod;
-  type!: ChecklistTemplateActionScheduleType;
-  value!: number;
-
-  static schema: ObjectSchema = {
-    name: 'ChecklistActionSchedule',
-    embedded: true,
-    properties: {
-      period: 'string',
-      type: 'string',
-      value: 'int?',
-    },
   };
 };

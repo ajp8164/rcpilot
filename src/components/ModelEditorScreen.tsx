@@ -500,9 +500,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               <Divider />
               <ListItem
                 title={'Checklists'}
-                value={'1'}
+                value={`${model?.checklists.length || 0}`}
                 position={['first']}
-                onPress={() => navigation.navigate('ModelChecklists')}
+                onPress={() => navigation.navigate('ModelChecklists', {
+                  modelId,
+                })}
               />
               <ListItem
                 title={'Perform Maintenance'}

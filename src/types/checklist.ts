@@ -15,7 +15,10 @@ export const ChecklistActionNonRepeatingScheduleTimeframe = {
   Today: 'Today',
 };
 
-export const ChecklistActionSchedulePeriod = { ...ChecklistActionRepeatingScheduleFrequency, ...ChecklistActionNonRepeatingScheduleTimeframe };
+export const ChecklistActionSchedulePeriod = {
+  ...ChecklistActionRepeatingScheduleFrequency,
+  ...ChecklistActionNonRepeatingScheduleTimeframe
+};
 
 export type ChecklistActionSchedulePeriod = keyof typeof ChecklistActionSchedulePeriod;
 export type ChecklistActionRepeatingScheduleFrequency = keyof typeof ChecklistActionRepeatingScheduleFrequency;
@@ -34,13 +37,13 @@ export enum ChecklistActionScheduleFollowing {
   InstallDate = 'Installation Date',
 };
 
-export enum ChecklistTemplateType {
+export enum ChecklistType {
   PreEvent = 'Pre-Event',
   PostEvent = 'Post-Event',
   Maintenance = 'Maintenance',
 };
 
-export enum ChecklistTemplateActionScheduleType {
+export enum ChecklistActionScheduleType {
   NonRepeating = 'NonRepeating',
   Repeating = 'Repeating',
 };

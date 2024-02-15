@@ -270,15 +270,22 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       </>
     );
   };
-  
+
+  if (!retiredBatteries.length && !inStorageBatteries.length) {
+    return (
+      <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />
+    );
+  }
+
   return (
-    <ScrollView style={theme.styles.view}
+    <ScrollView style={[theme.styles.view, {borderWidth: 4, borderColor: 'red'}]}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <SectionList
         scrollEnabled={false}
         stickySectionHeadersEnabled={true}
-        style={s.sectionList}
+        style={[s.sectionList, {borderWidth: 3}]}
+        contentContainerStyle={{flexGrow: 1, flex: 1, justifyContent: 'center', borderWidth: 2, borderColor: 'green' }}
         sections={groupBatteries(
           listBatteries === 'retired' ?
             retiredBatteries
@@ -290,11 +297,6 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}
-        ListEmptyComponent={
-          !retiredBatteries.length && !inStorageBatteries.length ?
-            <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />
-            : null
-        }
         ListFooterComponent={renderInactive()}
       />
       <ActionSheet

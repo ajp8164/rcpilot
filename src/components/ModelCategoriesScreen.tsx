@@ -71,6 +71,12 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
     )
   };
 
+  if (!allModelCategories.length) {
+    return (
+      <EmptyView info message={'No Model Categories'} details={"Tap the + button to add your first model category."} />
+    );
+  }
+
   return (
     <>
       <FlatList
@@ -79,9 +85,6 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allModelCategories.length ? <Divider /> : null}
-        ListEmptyComponent={
-          <EmptyView info message={'No Model Categories'} details={"Tap the + button to add your first model category."} />
-        }
       />
       <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Category'} onConfirm={deleteCategory} />
     </>

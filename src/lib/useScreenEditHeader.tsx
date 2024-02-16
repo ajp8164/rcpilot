@@ -10,6 +10,7 @@ export type ScreenEditHeaderAction = {
   action?: () => void;
   enabled?: boolean;
   label?: string;
+  visible?: boolean;
 };
 
 /**
@@ -32,29 +33,33 @@ export const useScreenEditHeader = () => {
     let options = navigationOpts || {};
 
     options.headerLeft = () => {
-      return (
-        <Button
-          title={leftButton?.label || 'Cancel'}
-          titleStyle={theme.styles.buttonScreenHeaderTitle}
-          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-          disabled={leftButton?.enabled !== undefined ? leftButton.enabled : false}
-          disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-          onPress={() => leftButton && leftButton.action ? leftButton.action() : navigation.goBack()}
-        />
-      )
+      if (leftButton?.visible !== undefined ? leftButton.visible : true) {
+        return (
+          <Button
+            title={leftButton?.label || 'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            disabled={leftButton?.enabled !== undefined ? !leftButton.enabled : false}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            onPress={() => leftButton && leftButton.action ? leftButton.action() : navigation.goBack()}
+          />
+        )
+      }
     };
 
     options.headerRight = () => {
-      return (
-        <Button
-          title={rightButton?.label || 'Save'}
-          titleStyle={theme.styles.buttonScreenHeaderTitle}
-          buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-          disabled={rightButton?.enabled !== undefined ? !rightButton.enabled : false}
-          disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-          onPress={() => rightButton && rightButton.action ? rightButton.action() : () => { return }}
-        />
-      )
+      if (rightButton?.visible !== undefined ? rightButton.visible : true) {
+        return (
+          <Button
+            title={rightButton?.label || 'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            disabled={rightButton?.enabled !== undefined ? !rightButton.enabled : false}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            onPress={() => rightButton && rightButton.action ? rightButton.action() : () => { return }}
+          />
+        )
+      }
     };
 
     navigation.setOptions(options);

@@ -2,6 +2,7 @@ import { Text, View } from 'react-native';
 
 import ActionBar from 'components/atoms/ActionBar';
 import { BatteriesNavigatorParamList } from 'types/navigation';
+import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -11,9 +12,10 @@ export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'Battery
 
 const BatteryPerformanceScreen = ({ navigation }: Props) => {
   const theme = useTheme();
+
   return (
     <View style={theme.styles.view}>
-      <Text>{'Performance'}</Text>
+      <EmptyView info message={'No Performance Data'} />
       <ActionBar
         actions={[
           {

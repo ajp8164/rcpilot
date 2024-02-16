@@ -136,6 +136,12 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
     )
   };
 
+  if (!activeBatteries.length) {
+    return (
+      <EmptyView info message={'No Batteries'} details={"Add your first battery on the Batteries tab."} />
+    );    
+  }
+
   return (
     <SectionList
       showsVerticalScrollIndicator={false}
@@ -148,9 +154,6 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
       renderSectionHeader={({section: {title}}) => (
         <Divider text={title} />
       )}
-      ListEmptyComponent={
-        <EmptyView info message={'No Batteries'} details={"Add your first battery on the Batteries tab."} />
-      }
     />
   );
 };

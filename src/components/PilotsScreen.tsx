@@ -1,8 +1,7 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -16,20 +15,19 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { saveSelectedPilot } from 'store/slices/pilot';
 import { selectPilot } from 'store/selectors/pilotSelectors';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilots'>;
 
 const PilotsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allPilots = useQuery(Pilot);
   const selectedPilotId = useSelector(selectPilot).pilotId;
   const dispatch = useDispatch();
-
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -77,7 +75,7 @@ const PilotsScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(pilot),
+            onPress: () => confirmAction('Delete Pilot', pilot, deletePilot),
           }]
         }}
       />
@@ -113,7 +111,6 @@ const PilotsScreen = ({ navigation }: Props) => {
         ListHeaderComponent={allPilots.length ? <Divider /> : null}
         ListFooterComponent={renderFooter}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Pilot'} onConfirm={deletePilot} />
     </SafeAreaView>
   );
 };

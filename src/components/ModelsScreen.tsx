@@ -1,4 +1,3 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import {
@@ -10,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -26,6 +25,7 @@ import { SvgXml } from 'react-native-svg';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { selectPilot } from 'store/selectors/pilotSelectors';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useSelector } from 'react-redux';
 
 type Section = {
@@ -41,6 +41,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const _pilot = useSelector(selectPilot);
@@ -48,8 +49,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
-
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -220,7 +219,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(model),
+            onPress: () => {
+              const label = listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model'
+              confirmAction(label, model, deleteModel);
+            },
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', index)}
@@ -270,13 +272,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           <Divider text={title} />
         )}
         ListFooterComponent={renderInactive()}
-      />
-      <ActionSheetConfirm
-        ref={actionSheetConfirm}
-        label={
-          listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model'
-        }
-        onConfirm={deleteModel}
       />
     </ScrollView>
   );

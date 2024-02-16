@@ -1,4 +1,3 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import {
@@ -11,11 +10,10 @@ import { ListItem, listItemPosition } from 'components/atoms/List';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { Button } from '@rneui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import CustomIcon from 'theme/icomoon/CustomIcon';
@@ -26,6 +24,8 @@ import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import { makeStyles } from '@rneui/themed';
 import { saveOutputReportTo } from 'store/slices/appSettings';
 import { selectOutputReportTo } from 'store/selectors/appSettingsSelectors';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
@@ -50,6 +50,8 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const { showActionSheetWithOptions } = useActionSheet();
+  const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const event = useEvent();
 
@@ -58,10 +60,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const realm = useRealm();
   const emReports = useQuery<EventsMaintenanceReport>('EventsMaintenanceReport');
   const scReports = useQuery<ScanCodesReport>('ScanCodesReport');
-
-  const [newReportSheetVisible, setNewReportSheetVisible] = useState(false);
-  // const [deleteReportActionSheetVisible, setDeleteReportActionSheetVisible] = useState<Report>();
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -122,6 +120,33 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     return `${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
   };
 
+  const addReport = () => {
+    showActionSheetWithOptions(
+      {
+        options: ['Event/Maintenance Log', 'QR Codes', 'Cancel'],
+        cancelButtonIndex: 2,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.navigate('NewReportNavigator', {
+              screen: 'ReportEventsMaintenanceEditor',
+              params: {},
+            });
+          break;
+          case 1:
+            navigation.navigate('NewReportNavigator', {
+              screen: 'ReportScanCodesEditor',
+              params: {},
+            });
+          break;
+          default:
+            break;
+        }
+      },
+    );
+  };
+
   const deleteReport = (report: Report) => {
     realm.write(() => {
       realm.delete(report);
@@ -174,7 +199,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               text: 'Delete',
               color: theme.colors.assertive,
               x: 64,
-              onPress: () => actionSheetConfirm.current?.confirm(report),
+              onPress: () => confirmAction('Delete Report', report, deleteReport),
             }]
           }}
           onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, index)}
@@ -268,7 +293,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         titleStyle={s.newReport}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => setNewReportSheetVisible(true)}
+        onPress={addReport}
       />
       {emReports.length ?
         <>
@@ -324,38 +349,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         </>
         : null
       }
-      <ActionSheet
-        cancelButtonIndex={2}
-        options={[
-          {
-            label: 'Event/Maintenance Log',
-            onPress: () => {
-              navigation.navigate('NewReportNavigator', {
-                screen: 'ReportEventsMaintenanceEditor',
-                params: {},
-              });
-              setNewReportSheetVisible(false);
-            }
-          },
-          {
-            label: 'QR Codes',
-            onPress: () => {
-              navigation.navigate('NewReportNavigator', {
-                screen: 'ReportScanCodesEditor',
-                params: {},
-              });
-              setNewReportSheetVisible(false);
-            }
-          },
-          {
-            label: 'Cancel',
-            onPress: () => setNewReportSheetVisible(false),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={newReportSheetVisible}
-      />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Report'} onConfirm={deleteReport} />
     </NestableScrollContainer>
   );
 };

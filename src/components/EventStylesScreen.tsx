@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Button } from '@rneui/base';
@@ -13,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'EventStyles'>;
 
@@ -20,10 +20,10 @@ const EventStylesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allEventStyles = useQuery(EventStyle);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -62,7 +62,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(style),
+            onPress: () => confirmAction('Delete Style', style, deleteStyle),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', index)}
@@ -86,7 +86,6 @@ const EventStylesScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allEventStyles.length ? <Divider /> : null}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Style'} onConfirm={deleteStyle} />
     </>
   );
 };

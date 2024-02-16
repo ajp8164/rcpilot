@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Button } from '@rneui/base';
@@ -13,6 +12,7 @@ import { ModelCategory } from 'realmdb/ModelCategory';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelCategories'>;
 
@@ -20,10 +20,10 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allModelCategories = useQuery(ModelCategory);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -62,7 +62,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(category),
+            onPress: () => confirmAction('Delete Category', category, deleteCategory),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', index)}
@@ -86,7 +86,6 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allModelCategories.length ? <Divider /> : null}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Category'} onConfirm={deleteCategory} />
     </>
   );
 };

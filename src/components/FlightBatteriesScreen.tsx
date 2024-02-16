@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Battery, BatteryChemistry } from 'types/battery';
 import { FlatList, ListRenderItem, SectionList, SectionListData, Text, View } from 'react-native';
 import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -11,6 +10,7 @@ import { FlightNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { batteryCellConfigurationToString } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightBatteries'>;
@@ -19,6 +19,7 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const setScreenEditHeader = useScreenEditHeader();
+  const confirmAction = useConfirmAction();
 
   const batteries = [{
       id: '1',
@@ -39,11 +40,10 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
   ];
 
   const favoriteBatteries = batteries;
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     const onCancel = () => {
-      actionSheetConfirm.current?.confirm(true);
+      confirmAction('Do Not Log Flight', true, navigation.goBack);
     };
 
     const onDone = () => navigation.navigate('FlightPreFlight', {
@@ -126,7 +126,6 @@ const FlightBatteriesScreen = ({ navigation }: Props) => {
           </View>
         )}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Do Not Log Flight'} onConfirm={navigation.goBack} />
     </View>
   );
 };

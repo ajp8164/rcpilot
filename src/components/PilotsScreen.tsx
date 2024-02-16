@@ -22,11 +22,11 @@ const PilotsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const confirmAction = useConfirmAction();
+  const dispatch = useDispatch();
   const realm = useRealm();
 
   const allPilots = useQuery(Pilot);
   const selectedPilotId = useSelector(selectPilot).pilotId;
-  const dispatch = useDispatch();
 
   useEffect(() => {
     navigation.setOptions({

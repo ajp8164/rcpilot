@@ -109,7 +109,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader(
       {enabled: canSave, action: onDone},
-      {enabled: isNewAction},
+      {visible: isNewAction},
     );
   }, [ description, selectedSchedule, cost, notes ]);
 

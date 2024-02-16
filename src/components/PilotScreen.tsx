@@ -204,6 +204,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   return (
     <NestableScrollContainer
+      style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={"PILOT'S NAME"}/>

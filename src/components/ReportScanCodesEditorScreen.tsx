@@ -10,8 +10,8 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
+import { ScrollView } from 'react-native';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
@@ -144,9 +144,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   ]);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ScrollView style={theme.styles.view}>
       <Divider text={'REPORT NAME'}/>
       <ListItemInput
         value={name}
@@ -200,7 +198,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
           />
         }
       />
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

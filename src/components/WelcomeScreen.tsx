@@ -1,11 +1,9 @@
-import { Platform, ScrollView, StatusBar, Text } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { CheckBox } from '@rneui/base';
-import { viewport } from '@react-native-ajp-elements/ui';
+import { Platform, ScrollView, StatusBar, Text } from 'react-native';
 import React, { useRef } from 'react';
 
+import { CheckBox } from '@rneui/base';
 import { LegalModal } from 'components/modals/LegalModal';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { dispatch } from 'store';
 import { makeStyles } from '@rneui/themed';
@@ -14,6 +12,7 @@ import { selectTou } from 'store/selectors/appSettingsSelectors';
 import { useFocusEffect } from '@react-navigation/native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSelector } from 'react-redux';
+import { viewport } from '@react-native-ajp-elements/ui';
 
 const WelcomeScreen = () => {
   const theme = useTheme();
@@ -78,8 +77,9 @@ const WelcomeScreen = () => {
   };
 
   return (
-    <SafeAreaView edges={['right', 'left']} style={theme.styles.viewInv}>
+    <>
       <ScrollView
+        style={theme.styles.viewInv}
         contentInsetAdjustmentBehavior={'always'}
         overScrollMode={'always'}
         showsVerticalScrollIndicator={true}
@@ -87,7 +87,7 @@ const WelcomeScreen = () => {
         {agreement()}
       </ScrollView>
       <LegalModal ref={legalModalRef} />
-    </SafeAreaView>
+    </>
   );
 };
 

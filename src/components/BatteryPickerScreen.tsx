@@ -11,7 +11,6 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
@@ -138,23 +137,21 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
-      <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
-        stickySectionHeadersEnabled={true}
-        style={s.sectionList}
-        sections={groupBatteries(activeBatteries)}
-        keyExtractor={item => item._id.toString()}
-        renderItem={renderBattery}
-        renderSectionHeader={({section: {title}}) => (
-          <Divider text={title} />
-        )}
-        ListEmptyComponent={
-          <EmptyView info message={'No Batteries'} details={"Add your first battery on the Batteries tab."} />
-        }
-      />
-    </SafeAreaView>
+    <SectionList
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}
+      stickySectionHeadersEnabled={true}
+      style={[theme.styles.view, s.sectionList]}
+      sections={groupBatteries(activeBatteries)}
+      keyExtractor={item => item._id.toString()}
+      renderItem={renderBattery}
+      renderSectionHeader={({section: {title}}) => (
+        <Divider text={title} />
+      )}
+      ListEmptyComponent={
+        <EmptyView info message={'No Batteries'} details={"Add your first battery on the Batteries tab."} />
+      }
+    />
   );
 };
 

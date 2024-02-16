@@ -12,7 +12,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -103,81 +102,78 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider />
-        <ListItemInput
-          value={name}
-          placeholder={'Unnamed Propeller'}
-          position={['first', 'last']}
-          onChangeText={setName}
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider />
+      <ListItemInput
+        value={name}
+        placeholder={'Unnamed Propeller'}
+        position={['first', 'last']}
+        onChangeText={setName}
+      /> 
+      <Divider />
+      <ListItemInput
+        value={vendor}
+        placeholder={'Unnamed Vendor'}
+        position={['first']}
+        onChangeText={setVendor}
+      /> 
+      <ListItemInput
+        title={'Number of Blades'}
+        value={numberOfBlades}
+        placeholder={'Unknown'}
+        numeric={true}
+        numericProps={{prefix: '', precision: 0}}
+        keyboardType={'number-pad'}
+        onChangeText={setNumberOfBlades}
+      />
+      <ListItemInput
+        title={'Diameter'}
+        label={MeasurementUnitsAbbr[measurementUnits]}
+        value={diameter}
+        placeholder={'Unknown'}
+        numeric={true}
+        numericProps={{prefix: ''}}
+        keyboardType={'number-pad'}
+        onChangeText={setDiameter}
+      />
+      <ListItemInput
+        title={'Pitch'}
+        label={MeasurementUnitsAbbr[measurementUnits]}
+        value={pitch}
+        placeholder={'Unknown'}
+        numeric={true}
+        numericProps={{prefix: ''}}
+        keyboardType={'number-pad'}
+        position={['last']}
+        onChangeText={setPitch}
+      />
+      <Divider />
+      <ListItem
+        title={'Measurement Units'}
+        value={measurementUnits}
+        position={['first', 'last']}
+        onPress={() => navigation.navigate('EnumPicker', {
+          title: 'Measurement Units',
+          headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
+          values: Object.values(MeasurementUnits),
+          selected: measurementUnits,
+          eventName: 'propeller-measurement-units',
+        })}
         /> 
-        <Divider />
-        <ListItemInput
-          value={vendor}
-          placeholder={'Unnamed Vendor'}
-          position={['first']}
-          onChangeText={setVendor}
-        /> 
-        <ListItemInput
-          title={'Number of Blades'}
-          value={numberOfBlades}
-          placeholder={'Unknown'}
-          numeric={true}
-          numericProps={{prefix: '', precision: 0}}
-          keyboardType={'number-pad'}
-          onChangeText={setNumberOfBlades}
-        />
-        <ListItemInput
-          title={'Diameter'}
-          label={MeasurementUnitsAbbr[measurementUnits]}
-          value={diameter}
-          placeholder={'Unknown'}
-          numeric={true}
-          numericProps={{prefix: ''}}
-          keyboardType={'number-pad'}
-          onChangeText={setDiameter}
-        />
-        <ListItemInput
-          title={'Pitch'}
-          label={MeasurementUnitsAbbr[measurementUnits]}
-          value={pitch}
-          placeholder={'Unknown'}
-          numeric={true}
-          numericProps={{prefix: ''}}
-          keyboardType={'number-pad'}
-          position={['last']}
-          onChangeText={setPitch}
-        />
-        <Divider />
-        <ListItem
-          title={'Measurement Units'}
-          value={measurementUnits}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('EnumPicker', {
-            title: 'Measurement Units',
-            headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
-            values: Object.values(MeasurementUnits),
-            selected: measurementUnits,
-            eventName: 'propeller-measurement-units',
-          })}
-          /> 
-        <Divider text={'NOTES'} />
-        <ListItem
-          title={notes || 'Notes'}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('Notes', {
-            title: 'Propeller Notes',
-            text: notes,
-            eventName: 'propeller-notes',
-          })}
-        />
-      </ScrollView>
-    </SafeAreaView>
+      <Divider text={'NOTES'} />
+      <ListItem
+        title={notes || 'Notes'}
+        position={['first', 'last']}
+        onPress={() => navigation.navigate('Notes', {
+          title: 'Propeller Notes',
+          text: notes,
+          eventName: 'propeller-notes',
+        })}
+      />
+    </ScrollView>
   );
 };
 

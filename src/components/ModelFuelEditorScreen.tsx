@@ -10,7 +10,6 @@ import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -79,42 +78,39 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   }, []);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={'DETAILS'} />
-        <ListItemInput
-          value={name}
-          placeholder={'Name for the fuel'}
-          position={['first', 'last']}
-          onChangeText={setName}
-        /> 
-        <Divider />
-        <ListItemInput
-          title={'Fuel Cost'}
-          label={'per gal'}
-          value={cost}
-          placeholder={'Amount'}
-          numeric={true}
-          keyboardType={'number-pad'}
-          position={['first', 'last']}
-          onChangeText={setCost}
-        />
-        <Divider text={'NOTES'} />
-        <ListItem
-          title={notes || 'Notes'}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('Notes', {
-            title: 'Fuel Notes',
-            text: notes,
-            eventName: 'fuel-notes',
-          })}
-        />
-      </ScrollView>
-    </SafeAreaView>
+  <ScrollView
+    style={theme.styles.view}
+    showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider text={'DETAILS'} />
+      <ListItemInput
+        value={name}
+        placeholder={'Name for the fuel'}
+        position={['first', 'last']}
+        onChangeText={setName}
+      /> 
+      <Divider />
+      <ListItemInput
+        title={'Fuel Cost'}
+        label={'per gal'}
+        value={cost}
+        placeholder={'Amount'}
+        numeric={true}
+        keyboardType={'number-pad'}
+        position={['first', 'last']}
+        onChangeText={setCost}
+      />
+      <Divider text={'NOTES'} />
+      <ListItem
+        title={notes || 'Notes'}
+        position={['first', 'last']}
+        onPress={() => navigation.navigate('Notes', {
+          title: 'Fuel Notes',
+          text: notes,
+          eventName: 'fuel-notes',
+        })}
+      />
+    </ScrollView>
   );
 };
 

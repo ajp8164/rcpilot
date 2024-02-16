@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LogNavigatorParamList } from 'types/navigation';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import isEmpty from 'lodash/isEmpty';
 import { makeStyles } from '@rneui/themed';
 
@@ -300,80 +299,77 @@ const LogScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={[theme.styles.view, { paddingHorizontal: 0 }]}>
-      <CalendarProvider
-        // date={selectedDate}
-        date={new Date().toISOString().split('T')[0]}
-        // onDateChanged={setSelectedDate}
-        // onMonthChange={onMonthChange}
-        // disabledOpacity={0.6}
-        showTodayButton
-        todayBottomMargin={30}
-        theme={todayBtnTheme.current}>
-        {weekView ? (
-          <WeekCalendar firstDay={1} markedDates={marked.current as MarkedDates}/>
-        ) : (
-          <ExpandableCalendar
-            // horizontal={false}
-            // hideArrows
-            // disablePan
-            // hideKnob
-            // initialPosition={ExpandableCalendar.positions.OPEN}
-            // calendarStyle={styles.calendar}
-            // headerStyle={s.sectionHeader} // for horizontal only
-            // disableWeekScroll
-            theme={calendarTheme.current}
-            // disableAllTouchEventsForDisabledDays
-            firstDay={1}
-            markedDates={marked.current as MarkedDates}
-            leftArrowImageSource={leftArrowIcon}
-            rightArrowImageSource={rightArrowIcon}
-            // animateScroll
-            // closeOnDayPress={false}
-            dayComponent={renderDay}
+    <CalendarProvider
+      style={[theme.styles.view, { paddingHorizontal: 0 }]}
+      // date={selectedDate}
+      date={new Date().toISOString().split('T')[0]}
+      // onDateChanged={setSelectedDate}
+      // onMonthChange={onMonthChange}
+      // disabledOpacity={0.6}
+      showTodayButton
+      todayBottomMargin={30}
+      theme={todayBtnTheme.current}>
+      {weekView ? (
+        <WeekCalendar firstDay={1} markedDates={marked.current as MarkedDates}/>
+      ) : (
+        <ExpandableCalendar
+          // horizontal={false}
+          // hideArrows
+          // disablePan
+          // hideKnob
+          // initialPosition={ExpandableCalendar.positions.OPEN}
+          // calendarStyle={styles.calendar}
+          // headerStyle={s.sectionHeader} // for horizontal only
+          // disableWeekScroll
+          theme={calendarTheme.current}
+          // disableAllTouchEventsForDisabledDays
+          firstDay={1}
+          markedDates={marked.current as MarkedDates}
+          leftArrowImageSource={leftArrowIcon}
+          rightArrowImageSource={rightArrowIcon}
+          // animateScroll
+          // closeOnDayPress={false}
+          dayComponent={renderDay}
+        />
+      )}
+      <AgendaList
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        keyExtractor={item => item.id}
+        sections={groupEvents(events)}
+        renderItem={({ item: logEntry, index, section }) => (
+          <ListItem
+            key={index}
+            title={logEntry.modelId}
+            subtitle={logEntry.locationId}
+            position={listItemPosition(index, section.data.length)}
+            containerStyle={{marginHorizontal: 15}}
+            onPress={() => {
+              logEntry.modelId
+              ? navigation.navigate('FlightDetails', {
+                flightId: logEntry.flightId,
+              })
+              : navigation.navigate('BatteryCycleEditor', {
+                batteryId: logEntry.batteryId,
+                cycleNumber: logEntry.batteryCycleNumber,
+              });
+            }}
           />
         )}
-        <AgendaList
-          showsVerticalScrollIndicator={false}
-          contentInsetAdjustmentBehavior={'automatic'}
-          stickySectionHeadersEnabled={true}
-          keyExtractor={item => item.id}
-          sections={groupEvents(events)}
-          renderItem={({ item: logEntry, index, section }) => (
-            <ListItem
-              key={index}
-              title={logEntry.modelId}
-              subtitle={logEntry.locationId}
-              position={listItemPosition(index, section.data.length)}
-              containerStyle={{marginHorizontal: 15}}
-              onPress={() => {
-                logEntry.modelId
-                ? navigation.navigate('FlightDetails', {
-                  flightId: logEntry.flightId,
-                })
-                : navigation.navigate('BatteryCycleEditor', {
-                  batteryId: logEntry.batteryId,
-                  cycleNumber: logEntry.batteryCycleNumber,
-                });
-              }}
-           />
-          )}
-          // scrollToNextEvent
-          // sectionStyle={s.section}
-          // dayFormat={'yyyy-MM-d'}
-          renderSectionHeader={(title: string | any) => (  // Lib typing is incorrect
-            <View style={s.sectionHeaderContainer}>
-              <Text style={s.sectionHeader}>
-                {DateTime.fromISO(title).toFormat('MMMM d, yyyy')}
-              </Text>
-            </View>
-          )}
-        />
-        <Divider />
-      </CalendarProvider>
-    </SafeAreaView>
+        // scrollToNextEvent
+        // sectionStyle={s.section}
+        // dayFormat={'yyyy-MM-d'}
+        renderSectionHeader={(title: string | any) => (  // Lib typing is incorrect
+          <View style={s.sectionHeaderContainer}>
+            <Text style={s.sectionHeader}>
+              {DateTime.fromISO(title).toFormat('MMMM d, yyyy')}
+            </Text>
+          </View>
+        )}
+      />
+      <Divider />
+    </CalendarProvider>
   );
 };
 

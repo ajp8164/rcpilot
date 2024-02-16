@@ -10,7 +10,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { saveSelectedPilot } from 'store/slices/pilot';
@@ -100,18 +99,15 @@ const PilotsScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <FlatList
-        data={allPilots}
-        renderItem={renderPilot}
-        keyExtractor={item => item._id.toString()}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allPilots.length ? <Divider /> : null}
-        ListFooterComponent={renderFooter}
-      />
-    </SafeAreaView>
+    <FlatList
+      style={theme.styles.view}
+      data={allPilots}
+      renderItem={renderPilot}
+      keyExtractor={item => item._id.toString()}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={allPilots.length ? <Divider /> : null}
+      ListFooterComponent={renderFooter}
+    />
   );
 };
 

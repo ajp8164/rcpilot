@@ -11,7 +11,7 @@ import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native';
 import { filterSummary } from 'lib/filter';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -150,9 +150,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   ]);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <ScrollView style={theme.styles.view}>
       <Divider text={'REPORT NAME'}/>
       <ListItemInput
         value={name}
@@ -213,7 +211,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
           />
         }
       />
-    </SafeAreaView>
+    </ScrollView>
   );
 };
 

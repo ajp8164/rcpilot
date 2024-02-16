@@ -9,7 +9,6 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { Model } from 'realmdb/Model';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
@@ -132,23 +131,21 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <SafeAreaView edges={['left', 'right']} style={theme.styles.view}>
-      <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
-        stickySectionHeadersEnabled={true}
-        style={s.sectionList}
-        sections={groupModels(activeModels)}
-        keyExtractor={item => item._id.toString()}
-        renderItem={renderItem}
-        renderSectionHeader={({section: {title}}) => (
-          <Divider text={title} />
-        )}
-        ListEmptyComponent={
-          <EmptyView info message={'No Models'} details={"Add your first model on the Models tab."} />
-        }
-      />
-    </SafeAreaView>
+    <SectionList
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}
+      stickySectionHeadersEnabled={true}
+      style={[theme.styles.view, s.sectionList]}
+      sections={groupModels(activeModels)}
+      keyExtractor={item => item._id.toString()}
+      renderItem={renderItem}
+      renderSectionHeader={({section: {title}}) => (
+        <Divider text={title} />
+      )}
+      ListEmptyComponent={
+        <EmptyView info message={'No Models'} details={"Add your first model on the Models tab."} />
+      }
+    />
   );
 };
 

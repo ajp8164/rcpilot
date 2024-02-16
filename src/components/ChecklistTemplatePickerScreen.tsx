@@ -10,7 +10,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
@@ -121,51 +120,48 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <FlatList
+        data={allChecklistTemplates[ChecklistType.PreEvent]}
+        renderItem={renderPreEventChecklistTemplate}
+        keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <FlatList
-          data={allChecklistTemplates[ChecklistType.PreEvent]}
-          renderItem={renderPreEventChecklistTemplate}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          ListHeaderComponent={
-            allChecklistTemplates[ChecklistType.PreEvent].length > 0
-              ? <Divider text={'PRE-FLIGHT'}/>
-              : <></>            
-          }
-        />
-        <FlatList
-          data={allChecklistTemplates[ChecklistType.PostEvent]}
-          renderItem={renderPostEventChecklistTemplate}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          ListHeaderComponent={
-            allChecklistTemplates[ChecklistType.PostEvent].length > 0
-              ? <Divider text={'POST-FLIGHT'}/>
-              : <></>            
-          }
-        />
-        <FlatList
-          data={allChecklistTemplates[ChecklistType.Maintenance]}
-          renderItem={renderMaintenanceChecklistTemplate}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-          ListHeaderComponent={
-            allChecklistTemplates[ChecklistType.Maintenance].length > 0
-              ? <Divider text={'MAINTENANCE'}/>
-              : <></>            
-          }
-        />
-        <Divider />
-      </ScrollView>
-    </SafeAreaView>
+        scrollEnabled={false}
+        ListHeaderComponent={
+          allChecklistTemplates[ChecklistType.PreEvent].length > 0
+            ? <Divider text={'PRE-FLIGHT'}/>
+            : <></>            
+        }
+      />
+      <FlatList
+        data={allChecklistTemplates[ChecklistType.PostEvent]}
+        renderItem={renderPostEventChecklistTemplate}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+        ListHeaderComponent={
+          allChecklistTemplates[ChecklistType.PostEvent].length > 0
+            ? <Divider text={'POST-FLIGHT'}/>
+            : <></>            
+        }
+      />
+      <FlatList
+        data={allChecklistTemplates[ChecklistType.Maintenance]}
+        renderItem={renderMaintenanceChecklistTemplate}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+        ListHeaderComponent={
+          allChecklistTemplates[ChecklistType.Maintenance].length > 0
+            ? <Divider text={'MAINTENANCE'}/>
+            : <></>            
+        }
+      />
+      <Divider />
+    </ScrollView>
   );
 };
 

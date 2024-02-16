@@ -80,6 +80,7 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
       <ListItem
         title={'After Expiring'}
         value={'None'}
+        position={['last']}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'After Expiring',
           values: Object.values(ChimeAfterExpiring),

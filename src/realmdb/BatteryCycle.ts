@@ -3,6 +3,7 @@ import { Object, ObjectSchema } from 'realm';
 import { ISODateString } from 'types/common';
 
 export class BatteryCycle extends Object<BatteryCycle> {
+  refId!: string;
   cycleNumber!: number;
   excludeFromPlots?: boolean;
   discharge?: BatteryDischarge;
@@ -13,6 +14,7 @@ export class BatteryCycle extends Object<BatteryCycle> {
     name: 'BatteryCycle',
     embedded: true,
     properties: {
+      refId: 'string',
       cycleNumber: 'int',
       excludeFromPlots: 'bool?',
       discharge: 'BatteryDischarge?',

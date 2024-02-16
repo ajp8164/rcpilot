@@ -66,7 +66,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   const renderChecklistTemplate = (checklistTemplate: ChecklistTemplate, index: number, arrLength: number) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'checklistTemplates', index)}
+        ref={ref => ref && listEditor.add(ref, 'checklistTemplates', checklistTemplate._id.toString())}
         key={checklistTemplate._id.toString()}
         title={checklistTemplate.name}
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
@@ -93,7 +93,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
             onPress: () => confirmAction('Delete Checklist Template', checklistTemplate, deleteChecklistTemplate),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklistTemplates', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklistTemplates', checklistTemplate._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

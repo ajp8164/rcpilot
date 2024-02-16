@@ -151,7 +151,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'models', index)}
+        ref={ref => ref && listEditor.add(ref, 'models', model._id.toString())}
         key={model._id.toString()}
         title={model.name}
         subtitle={modelShortSummary(model)}
@@ -218,7 +218,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             },
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', model._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
      />
     )

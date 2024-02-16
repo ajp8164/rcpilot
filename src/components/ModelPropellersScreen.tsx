@@ -50,7 +50,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   const renderModelPropeller: ListRenderItem<ModelPropeller> = ({ item: propeller, index }) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'model-propellers', index)}
+        ref={ref => ref && listEditor.add(ref, 'model-propellers', propeller._id.toString())}
         key={propeller._id.toString()}
         title={propeller.name}
         position={listItemPosition(index, allModelPropellers.length)}
@@ -67,7 +67,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
             onPress: () => confirmAction('Delete Propeller', propeller, deletePropeller),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', propeller._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

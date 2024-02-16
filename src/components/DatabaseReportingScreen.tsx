@@ -176,7 +176,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         key={index}
         style={[isActive ? s.shadow : {}]}>
         <ListItem
-          ref={ref => listEditor.add(ref, reportType, index)}
+          ref={ref => ref && listEditor.add(ref, reportType, report._id.toString())}
           title={report.name}
           subtitle={reportSummary}
           subtitleNumberOfLines={1}
@@ -202,7 +202,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               onPress: () => confirmAction('Delete Report', report, deleteReport),
             }]
           }}
-          onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, index)}
+          onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, report._id.toString())}
           onSwipeableWillClose={listEditor.onItemWillClose}
           rightImage={
             <Pressable

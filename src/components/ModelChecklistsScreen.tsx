@@ -134,7 +134,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const renderChecklist = (checklist: Checklist, index: number, arrLength: number) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'checklists', index)}
+        ref={ref => ref && listEditor.add(ref, 'checklists', checklist.refId)}
         key={checklist.refId}
         title={checklist.name}
         subtitle={`Contains ${checklist.actions.length} actions`}
@@ -162,7 +162,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
             onPress: () => confirmDeleteChecklist('Delete Checklist', checklist, deleteChecklist),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', checklist.refId)}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

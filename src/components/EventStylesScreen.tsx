@@ -48,7 +48,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
   const renderEventStyle: ListRenderItem<EventStyle> = ({ item: style, index }) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'event-styles', index)}
+        ref={ref => ref && listEditor.add(ref, 'event-styles', style._id.toString())}
         key={style._id.toString()}
         title={style.name}
         position={listItemPosition(index, allEventStyles.length)}
@@ -65,7 +65,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
             onPress: () => confirmAction('Delete Style', style, deleteStyle),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', style._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

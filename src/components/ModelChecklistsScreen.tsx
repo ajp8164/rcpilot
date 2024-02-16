@@ -97,9 +97,12 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     if (allChecklistTemplates.length) {
       setNewChecklistActionSheetVisible(true);
     } else {
-      // navigation.navigate('NewChecklist', {
-      //   modelId,
-      // });
+      navigation.navigate('NewChecklistNavigator', {
+        screen: 'NewChecklist',
+        params: {
+          modelId,
+        },
+      });
     }
   };
 
@@ -190,6 +193,12 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
           {
             label: 'Add New',
             onPress: () => {
+              navigation.navigate('NewChecklistNavigator', {
+                screen: 'NewChecklist',
+                params: {
+                  modelId,
+                },
+              });
               setNewChecklistActionSheetVisible(false);
             }
           },

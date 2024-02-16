@@ -143,6 +143,7 @@ export type ModelsNavigatorParamList = {
   LocationDetails: {
     locationId: string;
   };
+  NewChecklistNavigator: NavigatorScreenParams<NewChecklistNavigatorParamList>;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewModelNavigator: NavigatorScreenParams<NewModelNavigatorParamList>;
   ModelChecklists: {
@@ -335,14 +336,18 @@ export type NewModelPropellerNavigatorParamList = {
   };
 };
 
-export type NewChecklistTemplateNavigatorParamList = {
+export type NewChecklistNavigatorParamList = {
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
     eventName: string;
   };
   EnumPicker: EnumPickerInterface;
-  NewChecklistTemplate: undefined;
+  NewChecklist:{
+    checklistTemplateId?: string;
+    modelId?: string;
+    modelChecklistRefId?: string;
+  },
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle | TextStyle[];
@@ -429,7 +434,7 @@ export type SetupNavigatorParamList = {
   ModelPropellerEditor: {
     modelPropellerId: string;
   }
-  NewChecklistTemplateNavigator: NavigatorScreenParams<NewChecklistTemplateNavigatorParamList>;
+  NewChecklistNavigator: NavigatorScreenParams<NewChecklistNavigatorParamList>;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewEventStyle: {
     eventStyleId?: string;

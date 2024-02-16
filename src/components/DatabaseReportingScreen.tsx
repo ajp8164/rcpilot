@@ -268,6 +268,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 
   return (
     <NestableScrollContainer
+      style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'DESTINATION'}/>

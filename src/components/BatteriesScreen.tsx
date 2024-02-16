@@ -1,13 +1,11 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 import { useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
@@ -18,6 +16,8 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 type Section = {
   title?: string;
@@ -32,14 +32,13 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const { showActionSheetWithOptions } = useActionSheet();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
   const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
   const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
-
-  const [newBatteryActionSheetVisible, setNewBatteryActionSheetVisible] = useState(false);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -113,14 +112,30 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   }, [ listEditor.enabled, activeBatteries, retiredBatteries ]);
 
   const addBattery = () => {
-    if (activeBatteries.length || retiredBatteries.length || inStorageBatteries.length) {
-      setNewBatteryActionSheetVisible(true);
-    } else {
-      navigation.navigate('NewBatteryNavigator', {
-        screen: 'NewBattery',
-        params: {},
-      });
-    }
+    const haveBatteries = !!activeBatteries.length || !!retiredBatteries.length || !!inStorageBatteries.length;
+    showActionSheetWithOptions(
+      {
+        options: ['Add New', 'Add From Template', 'Cancel'],
+        disabledButtonIndices: haveBatteries ? [] : [1],
+        message: haveBatteries ? '' : 'Create your first battery. Existing batteries can be used as templates for creating new batteries.',
+        cancelButtonIndex: 2,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.navigate('NewBatteryNavigator', {
+              screen: 'NewBattery',
+              params: {},
+            });
+          break;
+          case 1:
+            navigation.navigate('BatteryTemplates');
+            break;
+          default:
+            break;
+        }
+      },
+    );
   };
 
   const deleteBattery = (battery: Battery) => {
@@ -226,7 +241,14 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(battery),
+            onPress: () => {
+              const label = listBatteries === 'retired'
+                ? 'Delete Retired Battery'
+                : listBatteries === 'in-storage'
+                ? 'Delete In Storage Battery'
+                : 'Delete Battery';
+              confirmAction(label, battery, deleteBattery);
+            }
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('batteries', index)}
@@ -298,45 +320,6 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
           <Divider text={title} />
         )}
         ListFooterComponent={renderInactive()}
-      />
-      <ActionSheet
-        cancelButtonIndex={2}
-        options={[
-          {
-            label: 'Add New',
-            onPress: () => {
-              navigation.navigate('NewBatteryNavigator', {
-                screen: 'NewBattery',
-                params: {},
-              });
-              setNewBatteryActionSheetVisible(false);
-            }
-          },
-          {
-            label: 'Add From Template',
-            onPress: () => {
-              navigation.navigate('BatteryTemplates');
-              setNewBatteryActionSheetVisible(false);
-            }
-          },
-          {
-            label: 'Cancel',
-            onPress: () => setNewBatteryActionSheetVisible(false),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={newBatteryActionSheetVisible}
-      />
-      <ActionSheetConfirm
-        ref={actionSheetConfirm}
-        label={
-          listBatteries === 'retired' ?
-          'Delete Retired Battery'
-          : listBatteries === 'in-storage' ?
-          'Delete In Storage Battery'
-          : 'Delete Battery'
-        }
-        onConfirm={deleteBattery}
       />
     </ScrollView>
   );

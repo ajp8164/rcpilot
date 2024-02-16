@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Button } from '@rneui/base';
@@ -13,6 +12,7 @@ import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuels'>;
 
@@ -20,10 +20,10 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allModelFuels = useQuery(ModelFuel);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,7 +64,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(fuel),
+            onPress: () => confirmAction('Delete Fuel', fuel, deleteFuel),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', index)}
@@ -88,7 +88,6 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allModelFuels.length ? <Divider /> : null}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Fuel'} onConfirm={deleteFuel} />
     </>
   );
 };

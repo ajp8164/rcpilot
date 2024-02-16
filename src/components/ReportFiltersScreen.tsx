@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { FilterType, ReportFilterType } from 'types/filter';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -14,6 +13,7 @@ import { ReportFiltersNavigatorParamList } from 'types/navigation';
 import { View } from 'react-native-ui-lib';
 import { filterSummary } from 'lib/filter';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 
 // Destination report editor based on report type.
@@ -32,15 +32,15 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
-
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
+
   const filters = useQuery<Filter>('Filter', filter => {
     return filter.filtered('type == $0', filterType);
   });
 
   const reportFilterEditor = reportFilterEditors[filterType as ReportFilterType];
   const [selectedFilter, setSelectedFilter] = useState(filterId);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -87,7 +87,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(filter),
+            onPress: () => confirmAction('Delete Saved Filter', filter, deleteFilter),
           }]
         }}
         onPress={() => setSelectedFilter(filter._id.toString())}
@@ -131,7 +131,6 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Saved Filter'} onConfirm={deleteFilter} />
     </View>
   );
 };

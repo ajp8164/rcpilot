@@ -1,8 +1,7 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
@@ -17,6 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 type Section = {
   title?: string;
@@ -31,11 +31,10 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
   
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
-
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -139,7 +138,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(cycle.cycleNumber),
+            onPress: () => confirmAction('Delete Cycle', cycle.cycleNumber, deleteCycle),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycles', index)}
@@ -171,7 +170,6 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
           <EmptyView info message={'No battery cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
         }
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Cycle'} onConfirm={deleteCycle} />
     </ScrollView>
   );
 };

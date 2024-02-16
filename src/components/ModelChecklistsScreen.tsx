@@ -1,13 +1,11 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, JChecklistAction } from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
-import { ActionSheet } from 'react-native-ui-lib';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
@@ -19,6 +17,8 @@ import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
+import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
@@ -30,14 +30,13 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const { showActionSheetWithOptions } = useActionSheet();
+  const confirmDeleteChecklist = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const allChecklistTemplates = useQuery(ChecklistTemplate);
-
-  const [newChecklistActionSheetVisible, setNewChecklistActionSheetVisible] = useState(false);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -94,16 +93,33 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   };
 
   const addChecklist = () => {
-    if (allChecklistTemplates.length) {
-      setNewChecklistActionSheetVisible(true);
-    } else {
-      navigation.navigate('NewChecklistNavigator', {
-        screen: 'NewChecklist',
-        params: {
-          modelId,
-        },
-      });
-    }
+    showActionSheetWithOptions(
+      {
+        options: ['Add New', 'Add From Template', 'Cancel'],
+        disabledButtonIndices: allChecklistTemplates.length ? [] : [1],
+        message: allChecklistTemplates.length ? '' : 'No checklist templates. Create your first checklist template on the Setup tab.',
+        cancelButtonIndex: 2,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.navigate('NewChecklistNavigator', {
+              screen: 'NewChecklist',
+              params: {
+                modelId,
+              },
+            });
+            break;
+          case 1:
+            navigation.navigate('ChecklistTemplatePicker', {
+              eventName: 'model-checklist',
+            });
+            break;
+          default:
+            break;
+        }
+      },
+    );
   };
 
   const deleteChecklist = (checklist: Checklist) => {
@@ -143,7 +159,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(checklist),
+            onPress: () => confirmDeleteChecklist('Delete Checklist', checklist, deleteChecklist),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', index)}
@@ -185,48 +201,10 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const renderNewChecklistActionSheet = () => {
-    return (
-      <ActionSheet
-        cancelButtonIndex={2}
-        options={[
-          {
-            label: 'Add New',
-            onPress: () => {
-              navigation.navigate('NewChecklistNavigator', {
-                screen: 'NewChecklist',
-                params: {
-                  modelId,
-                },
-              });
-              setNewChecklistActionSheetVisible(false);
-            }
-          },
-          {
-            label: 'Add From Template',
-            onPress: () => {
-              navigation.navigate('ChecklistTemplatePicker', {
-                eventName: 'model-checklist',
-              });
-              setNewChecklistActionSheetVisible(false);
-            }
-          },
-          {
-            label: 'Cancel',
-            onPress: () => setNewChecklistActionSheetVisible(false),
-          },
-        ]}
-        useNativeIOS={true}
-        visible={newChecklistActionSheetVisible}
-      />
-    );    
-  };
-
   if (!model?.checklists.length) {
     return (
       <>
         <EmptyView info message={'No Checklists'} details={"Tap the + button to add your first checklist."} />
-        {renderNewChecklistActionSheet()}
       </>
     );
   }
@@ -273,12 +251,6 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         }
       />
       <Divider />
-      {renderNewChecklistActionSheet()}
-      <ActionSheetConfirm
-        ref={actionSheetConfirm}
-        label={'Delete Checklist'}
-        onConfirm={deleteChecklist}
-      />
     </ScrollView>
   );
 };

@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Button } from '@rneui/base';
@@ -15,6 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplates'>;
 
@@ -22,11 +22,10 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const checklistTemplates = useQuery(ChecklistTemplate);
-
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -91,7 +90,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(checklistTemplate),
+            onPress: () => confirmAction('Delete Checklist Template', checklistTemplate, deleteChecklistTemplate),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklistTemplates', index)}
@@ -179,11 +178,6 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         </>}
         <Divider />
       </ScrollView>
-      <ActionSheetConfirm
-        ref={actionSheetConfirm}
-        label={'Delete Checklist Template'}
-        onConfirm={deleteChecklistTemplate}
-      />
     </SafeAreaView>
   );
 };

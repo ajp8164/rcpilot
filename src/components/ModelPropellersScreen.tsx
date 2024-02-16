@@ -1,9 +1,8 @@
-import { ActionSheetConfirm, ActionSheetConfirmMethods } from 'components/molecules/ActionSheetConfirm';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Button } from '@rneui/base';
@@ -13,6 +12,7 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellers'>;
 
@@ -20,10 +20,10 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allModelPropellers = useQuery(ModelPropeller);
-  const actionSheetConfirm = useRef<ActionSheetConfirmMethods>(null);
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,7 +64,7 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
             text: 'Delete',
             color: theme.colors.assertive,
             x: 64,
-            onPress: () => actionSheetConfirm.current?.confirm(propeller),
+            onPress: () => confirmAction('Delete Propeller', propeller, deletePropeller),
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', index)}
@@ -88,7 +88,6 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
       />
-      <ActionSheetConfirm ref={actionSheetConfirm} label={'Delete Propeller'} onConfirm={deletePropeller} />
     </>
   );
 };

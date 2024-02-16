@@ -73,7 +73,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
       navigation.goBack();
     };
 
-    setScreenEditHeader({visible: canSave, action: onDone});
+    setScreenEditHeader({enabled: canSave, action: onDone});
   }, [ name, values ]);  
 
   const onFilterValueChange = (property: keyof BatteryScanCodesReportFilterValues, filterState: FilterState) => {

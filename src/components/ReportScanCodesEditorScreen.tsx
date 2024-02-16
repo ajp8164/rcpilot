@@ -132,8 +132,8 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {visible: canSave, action: onDone},
-      {visible: !reportId},
+      {enabled: canSave, action: onDone},
+      {enabled: !reportId},
     );
   }, [
     name,

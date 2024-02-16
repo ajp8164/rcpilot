@@ -128,7 +128,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({visible: canSave, action: onDone});
+    setScreenEditHeader({enabled: canSave, action: onDone});
   }, [
     dischargeDate,
     dischargeDuration,

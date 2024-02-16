@@ -31,7 +31,7 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
   useEffect(() => {
     const onDone = () => {};
     setScreenEditHeader(
-      {visible: true, action: onDone},
+      {enabled: true, action: onDone},
       undefined,
     );
   }, []);

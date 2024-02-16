@@ -11,7 +11,6 @@ import { ChecklistType } from 'types/checklist';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -137,48 +136,45 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        {preEventModelChecklists().length > 0 &&
-        <>
-          <Divider text={'PRE-EVENT LIST TEMPLATES'}/>
-          <FlatList
-            data={preEventModelChecklists()}
-            renderItem={renderPreEventChecklistTemplate}
-            keyExtractor={(_item, index) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
-          />
-        </>}
-        {postEventModelChecklists().length > 0 &&
-        <>
-          <Divider text={'POST EVENT LIST TEMPLATES'}/>
-          <FlatList
-            data={postEventModelChecklists()}
-            renderItem={renderPostEventChecklistTemplate}
-            keyExtractor={(_item, index) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
-          />
-        </>}
-        {maintenanceModelChecklists().length > 0 &&
-        <>
-          <Divider text={'MAINTENANCE LIST TEMPLATES'}/>
-          <FlatList
-            data={maintenanceModelChecklists()}
-            renderItem={renderMaintenanceChecklistTemplate}
-            keyExtractor={(_item, index) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
-          />
-        </>}
-        <Divider />
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      {preEventModelChecklists().length > 0 &&
+      <>
+        <Divider text={'PRE-EVENT LIST TEMPLATES'}/>
+        <FlatList
+          data={preEventModelChecklists()}
+          renderItem={renderPreEventChecklistTemplate}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+        />
+      </>}
+      {postEventModelChecklists().length > 0 &&
+      <>
+        <Divider text={'POST EVENT LIST TEMPLATES'}/>
+        <FlatList
+          data={postEventModelChecklists()}
+          renderItem={renderPostEventChecklistTemplate}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+        />
+      </>}
+      {maintenanceModelChecklists().length > 0 &&
+      <>
+        <Divider text={'MAINTENANCE LIST TEMPLATES'}/>
+        <FlatList
+          data={maintenanceModelChecklists()}
+          renderItem={renderMaintenanceChecklistTemplate}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          scrollEnabled={false}
+        />
+      </>}
+      <Divider />
+    </ScrollView>
   );
 };
 

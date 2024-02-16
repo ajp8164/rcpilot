@@ -80,6 +80,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   return (
     <>
       <FlatList
+        style={theme.styles.view}
         data={allModelCategories}
         renderItem={renderModelCategory}
         keyExtractor={item => item._id.toString()}

@@ -299,7 +299,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         key={index}
         style={[isActive ? s.shadow : {}]}>
         <ListItem
-          ref={ref => listEditor.add(ref, 'checklist-actions', index)}
+          ref={ref => ref && action.refId && listEditor.add(ref, 'checklist-actions', action.refId)}
           title={action.description}
           subtitle={actionScheduleSummary(action)}
           subtitleNumberOfLines={1}
@@ -325,7 +325,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
               onPress: () => deleteAction(index),
             }]
           }}
-          onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklist-actions', index)}
+          onSwipeableWillOpen={() => action.refId && listEditor.onItemWillOpen('checklist-actions', action.refId)}
           onSwipeableWillClose={listEditor.onItemWillClose}
           onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,

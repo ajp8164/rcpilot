@@ -142,7 +142,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         key={index}
         style={[isActive ? s.shadow : {}]}>
       <ListItem
-        ref={ref => listEditor.add(ref, 'favorite-models', index)}
+        ref={ref => ref && listEditor.add(ref, 'favorite-models', model._id.toString())}
         title={model.name}
         subtitle={modelShortSummary(model)}
         titleStyle={s.modelText}
@@ -191,7 +191,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
             onPress: () => forgetFavoriteModel(model),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('favorite-models', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('favorite-models', model._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
       </View>

@@ -50,7 +50,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const renderModelFuel: ListRenderItem<ModelFuel> = ({ item: fuel, index }) => {
     return (
       <ListItem
-      ref={ref => listEditor.add(ref, 'model-fuels', index)}
+      ref={ref => ref && listEditor.add(ref, 'model-fuels', fuel._id.toString())}
       key={fuel._id.toString()}
       title={fuel.name}
       position={listItemPosition(index, allModelFuels.length)}
@@ -67,7 +67,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
             onPress: () => confirmAction('Delete Fuel', fuel, deleteFuel),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', fuel._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

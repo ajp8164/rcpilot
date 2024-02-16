@@ -48,7 +48,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
   const renderModelCategory: ListRenderItem<ModelCategory> = ({ item: category, index }) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'model-categories', index)}
+        ref={ref => ref && listEditor.add(ref, 'model-categories', category._id.toString())}
         key={category._id.toString()}
         title={category.name}
         position={listItemPosition(index, allModelCategories.length)}
@@ -65,7 +65,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
             onPress: () => confirmAction('Delete Category', category, deleteCategory),
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', category._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

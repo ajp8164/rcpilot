@@ -168,7 +168,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       if (batteryIsCharged(battery)) {
         const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
         const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
-        return `${c}${battery.sCells}S${p} PACKS`;  
+        return `${c}${battery.sCells}S${p} PACKS`;
       } else {
         return 'READY TO CHARGE';
       }
@@ -186,7 +186,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
-        ref={ref => listEditor.add(ref, 'batteries', index)}
+        ref={ref => ref && listEditor.add(ref, 'batteries', battery._id.toString())}
         key={battery._id.toString()}
         title={battery.name}
         subtitle={batterySummary(battery)}
@@ -253,7 +253,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             }
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('batteries', index)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('batteries', battery._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
      />
     )

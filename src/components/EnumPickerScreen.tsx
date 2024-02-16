@@ -84,7 +84,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     });
 
     if (mode === 'many-or-none' || mode === 'many-with-actions') {
-      setScreenEditHeader({visible: canSave, action: onDone});
+      setScreenEditHeader({enabled: canSave, action: onDone});
       }
   }, [ list ]);
 

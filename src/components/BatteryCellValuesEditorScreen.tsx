@@ -51,7 +51,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({visible: true, action: onDone});
+    setScreenEditHeader({enabled: true, action: onDone});
   }, [ cellValues, packValue ]);
 
   useEffect(() => {

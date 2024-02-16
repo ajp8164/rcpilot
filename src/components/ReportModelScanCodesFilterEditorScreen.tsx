@@ -18,16 +18,16 @@ import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 const defaultFilter: ModelScanCodesReportFilterValues = {
-  modelType: {relation: EnumRelation.Any, value: []},
-  category: {relation: EnumRelation.Any, value: []},
-  lastEvent: {relation: DateRelation.Any, value: []},
+  modelType: { relation: EnumRelation.Any, value: [] },
+  category: { relation: EnumRelation.Any, value: [] },
+  lastEvent: { relation: DateRelation.Any, value: [] },
 };
 
 export type Props = NativeStackScreenProps<ReportFiltersNavigatorParamList, 'ReportModelScanCodesFilterEditor'>;
 
 const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) => {
   const { filterId, eventName } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
@@ -63,29 +63,29 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
           });
         });
       }
-    };  
-  
+    };
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader({visible: canSave, action: onDone});
-  }, [ name, values ]);  
+    setScreenEditHeader({ enabled: canSave, action: onDone });
+  }, [name, values]);
 
   const onFilterValueChange = (property: keyof ModelScanCodesReportFilterValues, filterState: FilterState) => {
-    setValues({ [property]: filterState }, {assign: true});
+    setValues({ [property]: filterState }, { assign: true });
   };
 
   const resetFilter = () => {
-    setValues(defaultFilter, {assign: true});
+    setValues(defaultFilter, { assign: true });
   };
 
   const relationsAreDefault = () => {
     // Whether or not the set value relations are all set to the default value relations.
     let result = false;
     Object.keys(values).forEach(k => {
-      result = result || 
+      result = result ||
         (values[k as keyof ModelScanCodesReportFilterValues].relation !==
           defaultFilter[k as keyof ModelScanCodesReportFilterValues].relation);
     });
@@ -94,13 +94,13 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
+      <Divider text={'FILTER NAME'} />
       <ListItemInput
         value={name}
         placeholder={'Filter Name'}
         position={['first', 'last']}
         onChangeText={setName}
-      /> 
+      />
       <Divider />
       <ListItem
         title={'Reset Filter'}
@@ -111,7 +111,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
         rightImage={false}
         onPress={resetFilter}
       />
-      <Divider text={'This filter shows all the maintenance items that match all of these criteria.'}/>
+      <Divider text={'This filter shows all the maintenance items that match all of these criteria.'} />
       <ListItemFilterEnum
         title={'Model Type'}
         value={values.modelType.value}
@@ -144,8 +144,8 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
         }}
       />
       <Divider />
-      <View style={{height: theme.insets.bottom}}/>
-    </ScrollView>  );
+      <View style={{ height: theme.insets.bottom }} />
+    </ScrollView>);
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({

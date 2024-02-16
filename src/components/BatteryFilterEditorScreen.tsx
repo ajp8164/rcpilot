@@ -41,7 +41,7 @@ const BatteryFilterEditorScreen = ({ navigation: _navigation }: Props) => {
   useEffect(() => {
     const onDone = () => {};
     setScreenEditHeader(
-      {visible: true, action: onDone},
+      {enabled: true, action: onDone},
       undefined,
     );
   }, []);  

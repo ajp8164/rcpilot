@@ -109,7 +109,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {visible: canSave, action: onDone},
+      {enabled: canSave, action: onDone},
       undefined,
       {title: 'New Battery'}
     );

@@ -21,6 +21,7 @@ import { makeStyles } from '@rneui/themed';
 import { toNumber } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { uuidv4 } from 'lib/utils';
 
 enum Action {
   Charge = 0,
@@ -81,6 +82,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
           //  - New duration in this discharge phase is added to the last cycle discharge phase duration.
           //  - The date of the first discharge phase is retained.
           //  - All other values in this discharge phase overwrite last cycle discharge phase values.
+          let refId = uuidv4();
           let cycleNumber =  battery.totalCycles ? battery.totalCycles + 1 : 1;
 
           let newDuration = MSSToSeconds(duration);
@@ -88,6 +90,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
           let updateLastDischargePhase = false;
 
           if (lastCycle && lastCycle.discharge && !lastCycle.charge) {
+            refId = lastCycle.refId;
             newDuration = newDuration + lastCycle.discharge.duration;
             newDate = lastCycle.discharge.date;
             cycleNumber = lastCycle.cycleNumber;
@@ -95,6 +98,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
           }
 
           const newCycle = {
+            refId,
             cycleNumber,
             discharge: {
               date: newDate,

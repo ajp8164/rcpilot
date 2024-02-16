@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -42,6 +43,11 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   const initializing = useRef(true);
 
   useEffect(() => {
+    const canSave = !lodash.isEqual(
+      _cellValues.map(v => {return v.toString()}),
+      cellValues.map(v => {return v.toString()}),
+    );
+
     const onDone = () => {
       event.emit(eventName, {
         cellValues: cellValues.map(v => {return v.length > 0 ? parseFloat(v) : 0}),
@@ -51,7 +57,10 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({enabled: true, action: onDone});
+    setScreenEditHeader(
+      {enabled: canSave, action: onDone},
+      {visible: false}
+    );
   }, [ cellValues, packValue ]);
 
   useEffect(() => {

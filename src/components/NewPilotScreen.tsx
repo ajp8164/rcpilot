@@ -4,8 +4,8 @@ import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SetupNavigatorParamList } from 'types/navigation';
+import { View } from 'react-native';
 import { useRealm } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
@@ -43,9 +43,7 @@ const NewPilotScreen = ({ navigation }: Props) => {
   }, [name]);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
+    <View style={theme.styles.view}>
       <Divider />
       <ListItemInput
         value={name}
@@ -53,7 +51,7 @@ const NewPilotScreen = ({ navigation }: Props) => {
         position={['first', 'last']}
         onChangeText={setName}
       /> 
-    </SafeAreaView>
+    </View>
   );
 };
 

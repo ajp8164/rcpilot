@@ -6,7 +6,6 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EventStyle } from 'realmdb/EventStyle';
 import { ListItemInput } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { eqString } from 'realmdb/helpers';
@@ -57,21 +56,18 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   }, [name]);
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider />
-        <ListItemInput
-          value={name}
-          placeholder={'Name for the style'}
-          position={['first', 'last']}
-          onChangeText={setName}
-        />
-      </ScrollView>
-    </SafeAreaView>
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider />
+      <ListItemInput
+        value={name}
+        placeholder={'Name for the style'}
+        position={['first', 'last']}
+        onChangeText={setName}
+      />
+    </ScrollView>
   );
 };
 

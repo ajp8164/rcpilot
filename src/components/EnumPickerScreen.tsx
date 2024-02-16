@@ -6,7 +6,6 @@ import React, { useEffect } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
@@ -178,59 +177,56 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        {(mode === 'many-with-actions' || mode === 'many-or-none') &&
-          <>
-            <Divider text={'ACTIONS'} />
-            <ListItem
-              title={'Select All'}
-              rightImage={false}
-              position={['first']}
-              onPress={selectAll}
-            />
-            <ListItem
-              title={'Select None'}
-              rightImage={false}
-              position={['last']}
-              onPress={selectNone}
-            />
-          </>
-        }
-        <Divider text={sectionName} />
-        <FlatList
-          data={list.values}
-          renderItem={renderValue}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          scrollEnabled={false}
-        />
-        {mode === 'one-or-none' &&
-          <ListItemCheckbox
-            title={'None'}
-            position={list.values.length === 0 ? ['first', 'last'] : ['last']}
-            checked={!list.selected.length}
-            onPress={() => toggleSelect()}
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      {(mode === 'many-with-actions' || mode === 'many-or-none') &&
+        <>
+          <Divider text={'ACTIONS'} />
+          <ListItem
+            title={'Select All'}
+            rightImage={false}
+            position={['first']}
+            onPress={selectAll}
           />
-        }
-        {mode === 'many-or-none' &&
-          <>
-            <Divider />
-            <ListItemCheckbox
-              title={'Unspecified'}
-              position={['first', 'last']}
-              checked={list.selected[0] === 'Unspecified'}
-              onPress={selectUnspecified}
-            />
-          </>
-        }
-        <Divider type={'note'} text={footer} />
-      </ScrollView>
-    </SafeAreaView>
+          <ListItem
+            title={'Select None'}
+            rightImage={false}
+            position={['last']}
+            onPress={selectNone}
+          />
+        </>
+      }
+      <Divider text={sectionName} />
+      <FlatList
+        data={list.values}
+        renderItem={renderValue}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+      />
+      {mode === 'one-or-none' &&
+        <ListItemCheckbox
+          title={'None'}
+          position={list.values.length === 0 ? ['first', 'last'] : ['last']}
+          checked={!list.selected.length}
+          onPress={() => toggleSelect()}
+        />
+      }
+      {mode === 'many-or-none' &&
+        <>
+          <Divider />
+          <ListItemCheckbox
+            title={'Unspecified'}
+            position={['first', 'last']}
+            checked={list.selected[0] === 'Unspecified'}
+            onPress={selectUnspecified}
+          />
+        </>
+      }
+      <Divider type={'note'} text={footer} />
+    </ScrollView>
   );
 };
 

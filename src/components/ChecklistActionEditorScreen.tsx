@@ -16,7 +16,6 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import Realm from 'realm';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { getChecklistActionScheduleItems } from 'lib/checklist';
@@ -199,81 +198,78 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const hideValueWheel = schedulePickerValue[1] === ChecklistActionNonRepeatingScheduleTimeframe.Today;
 
   return (
-    <SafeAreaView
-      edges={['left', 'right']}
-      style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <Divider text={'PERFORM'} />
-        <ListItemInput
-          value={description}
-          placeholder={'Brief action description'}
-          position={['first', 'last']}
-          onChangeText={setDescription}
-        /> 
-        <Divider text={'ON SCHEDULE'} />
-        <ListItem
-          title={scheduleStr.whenPerform}
-          value={scheduleStr.whenPerformValue}
-          position={['first']}
-          onPress={toggleSchedulePickerOpen}
-          rightImage={false}
-          expanded={schedulePickerOpen}
-          ExpandableComponent={
-            // Wheel index 0 is value, wheel index 1 is timeframe/frequency.
-            <WheelPicker
-              placeholder={'none'}
-              itemWidth={hideValueWheel ? ['0%', '100%'] : ['30%', '70%']}
-              wheelVisible={[!hideValueWheel, true]}
-              items={schedulePickerItems.current}
-              value={schedulePickerValue}
-              onValueChange={(_wheelIndex, value, _index) => {
-                setSchedulePickerValue(value as string[]);
-              }}
-            />
-          }
-        /> 
-        <ListItem
-          title={'Following'}
-          value={scheduleStr.following}
-          visible={!!scheduleStr.following}
-          rightImage={false}
-          onPress={() => null}
-        />
-        <ListItemSwitch
-          title={'Action Repeats'}
-          value={selectedSchedule.type === ChecklistActionScheduleType.Repeating}
-          disabled={selectedSchedule?.period === ChecklistActionNonRepeatingScheduleTimeframe.Today}
-          position={['last']}
-          onValueChange={toggleActionRepeats}
-        />
-        {checklistType === ChecklistType.Maintenance &&
-          <>
-            <Divider text={'MAINTENANCE COSTS'} />
-            <ListItemInput
-              title={'Total Costs'}
-              value={cost}
-              numeric={true}
-              keyboardType={'number-pad'}
-              placeholder={'None'}
-              position={['first', 'last']}
-              onChangeText={setTotalCost}
-            />
-          </>
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+      <Divider text={'PERFORM'} />
+      <ListItemInput
+        value={description}
+        placeholder={'Brief action description'}
+        position={['first', 'last']}
+        onChangeText={setDescription}
+      /> 
+      <Divider text={'ON SCHEDULE'} />
+      <ListItem
+        title={scheduleStr.whenPerform}
+        value={scheduleStr.whenPerformValue}
+        position={['first']}
+        onPress={toggleSchedulePickerOpen}
+        rightImage={false}
+        expanded={schedulePickerOpen}
+        ExpandableComponent={
+          // Wheel index 0 is value, wheel index 1 is timeframe/frequency.
+          <WheelPicker
+            placeholder={'none'}
+            itemWidth={hideValueWheel ? ['0%', '100%'] : ['30%', '70%']}
+            wheelVisible={[!hideValueWheel, true]}
+            items={schedulePickerItems.current}
+            value={schedulePickerValue}
+            onValueChange={(_wheelIndex, value, _index) => {
+              setSchedulePickerValue(value as string[]);
+            }}
+          />
         }
-        <Divider text={'NOTES'} />
-        <ListItem
-          title={notes || 'Notes'}
-          position={['first', 'last']}
-          onPress={() => navigation.navigate('Notes', {
-            title: 'Action Notes',
-            text: notes,
-            eventName: 'checklist-template-action-notes',
-          })}
-        />
-      </ScrollView>
-    </SafeAreaView>
+      /> 
+      <ListItem
+        title={'Following'}
+        value={scheduleStr.following}
+        visible={!!scheduleStr.following}
+        rightImage={false}
+        onPress={() => null}
+      />
+      <ListItemSwitch
+        title={'Action Repeats'}
+        value={selectedSchedule.type === ChecklistActionScheduleType.Repeating}
+        disabled={selectedSchedule?.period === ChecklistActionNonRepeatingScheduleTimeframe.Today}
+        position={['last']}
+        onValueChange={toggleActionRepeats}
+      />
+      {checklistType === ChecklistType.Maintenance &&
+        <>
+          <Divider text={'MAINTENANCE COSTS'} />
+          <ListItemInput
+            title={'Total Costs'}
+            value={cost}
+            numeric={true}
+            keyboardType={'number-pad'}
+            placeholder={'None'}
+            position={['first', 'last']}
+            onChangeText={setTotalCost}
+          />
+        </>
+      }
+      <Divider text={'NOTES'} />
+      <ListItem
+        title={notes || 'Notes'}
+        position={['first', 'last']}
+        onPress={() => navigation.navigate('Notes', {
+          title: 'Action Notes',
+          text: notes,
+          eventName: 'checklist-template-action-notes',
+        })}
+      />
+    </ScrollView>
   );
 };
 

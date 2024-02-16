@@ -8,7 +8,7 @@ import {
 } from 'types/checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
-import { ModelsNavigatorParamList, NewChecklistTemplateNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { ModelsNavigatorParamList, NewChecklistNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import {
   NestableDraggableFlatList,
   NestableScrollContainer,
@@ -34,7 +34,7 @@ export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistEditor'>,
   CompositeScreenProps<
     NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistEditor'>,
-    NativeStackScreenProps<NewChecklistTemplateNavigatorParamList, 'NewChecklistTemplate'>
+    NativeStackScreenProps<NewChecklistNavigatorParamList, 'NewChecklist'>
   >  
 >;
 
@@ -103,6 +103,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           // Create a new checklist on the model.
           realm.write(() => {
             const newModelChecklist = {
+              refId: uuidv4(),
               name,
               type,
               actions,
@@ -191,7 +192,6 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const upsertAction = (newOrChangedAction: JChecklistAction) => {
-    console.log(newOrChangedAction);
     if ((checklistTemplate && newOrChangedAction.refId !== undefined) ||
       (modelChecklist && newOrChangedAction.refId !== undefined)) {
       // Update existing action.
@@ -327,7 +327,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           }}
           onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklist-actions', index)}
           onSwipeableWillClose={listEditor.onItemWillClose}
-            onPress={() => navigation.navigate('ChecklistActionEditor', {
+          onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
             checklistType: type,
             eventName: `checklist-action-${eventNameId}`,

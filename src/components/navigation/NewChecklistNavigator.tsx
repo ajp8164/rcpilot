@@ -2,42 +2,42 @@ import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen'
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
-import { NewChecklistTemplateNavigatorParamList } from 'types/navigation';
+import { NewChecklistNavigatorParamList } from 'types/navigation';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const NewChecklistTemplateStack = createNativeStackNavigator<NewChecklistTemplateNavigatorParamList>();
+const NewChecklistStack = createNativeStackNavigator<NewChecklistNavigatorParamList>();
 
-const NewChecklistTemplateNavigator = () => {
+const NewChecklistNavigator = () => {
   const theme = useTheme();
 
   return (
     <NavContext.Provider value={{isModal: true}}>
-      <NewChecklistTemplateStack.Navigator
-        initialRouteName='NewChecklistTemplate'
+      <NewChecklistStack.Navigator
+        initialRouteName='NewChecklist'
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
-        <NewChecklistTemplateStack.Screen
-          name="NewChecklistTemplate"
+        <NewChecklistStack.Screen
+          name="NewChecklist"
           // @ts-expect-error
           component={ChecklistEditorScreen}
-          options={{
-            title: 'New Template',
-          }}
+          options={({ route }) => ({
+            title: route.params.modelId ? 'New Checklist' : 'New Template',
+          })}
         />
-        <NewChecklistTemplateStack.Screen
+        <NewChecklistStack.Screen
           name="ChecklistActionEditor"
           component={ChecklistActionEditorScreen}
           options={{
             title: 'Action',
           }}
         />
-        <NewChecklistTemplateStack.Screen
+        <NewChecklistStack.Screen
           name='EnumPicker'
           component={EnumPickerScreen}
           options={{
@@ -45,16 +45,16 @@ const NewChecklistTemplateNavigator = () => {
             headerBackTitle: '',
           }}
         />
-        <NewChecklistTemplateStack.Screen
+        <NewChecklistStack.Screen
           name='Notes'
           component={NotesScreen}
           options={{
             title: 'Action Notes',
           }}
         />
-      </NewChecklistTemplateStack.Navigator>
+      </NewChecklistStack.Navigator>
     </NavContext.Provider>
   );
 };
 
-export default NewChecklistTemplateNavigator;
+export default NewChecklistNavigator;

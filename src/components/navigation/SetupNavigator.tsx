@@ -21,7 +21,7 @@ import ModelFuelsScreen from 'components/ModelFuelsScreen';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
-import NewChecklistTemplateNavigator from 'components/navigation/NewChecklistTemplateNavigator';
+import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
 import NewPilotScreen from 'components/NewPilotScreen';
@@ -279,8 +279,8 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="NewChecklistTemplateNavigator"
-        component={NewChecklistTemplateNavigator}
+        name="NewChecklistNavigator"
+        component={NewChecklistNavigator}
         options={{
           headerShown: false,
           presentation: 'fullScreenModal',

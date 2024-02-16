@@ -14,6 +14,7 @@ import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
+import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
@@ -85,6 +86,14 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name="NewChecklistActionNavigator"
         component={NewChecklistActionNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
+        }}
+      />
+      <ModelsStack.Screen
+        name="NewChecklistNavigator"
+        component={NewChecklistNavigator}
         options={{
           headerShown: false,
           presentation: 'fullScreenModal',

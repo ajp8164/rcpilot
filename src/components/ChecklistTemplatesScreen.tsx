@@ -35,8 +35,9 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
           <Button
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
             icon={<Icon name={'plus'} style={s.headerIcon}/>}
-            onPress={() => navigation.navigate('NewChecklistTemplateNavigator', {
-              screen: 'NewChecklistTemplate',
+            onPress={() => navigation.navigate('NewChecklistNavigator', {
+              screen: 'NewChecklist',
+              params: {},
             })}
           />
         )

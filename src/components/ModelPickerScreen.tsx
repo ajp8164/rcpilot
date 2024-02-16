@@ -130,6 +130,12 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
     )
   };
 
+  if (!activeModels.length) {
+    return (
+      <EmptyView info message={'No Models'} details={"Add your first model on the Models tab."} />
+    );    
+  }
+
   return (
     <SectionList
       showsVerticalScrollIndicator={false}
@@ -142,9 +148,6 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       renderSectionHeader={({section: {title}}) => (
         <Divider text={title} />
       )}
-      ListEmptyComponent={
-        <EmptyView info message={'No Models'} details={"Add your first model on the Models tab."} />
-      }
     />
   );
 };

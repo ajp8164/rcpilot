@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { ScrollView, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -151,26 +151,26 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     return (<EmptyView error message={'Battery not found!'} />);
   }
 
+  if (!battery.cycles.length) {
+    return (
+      <EmptyView info message={'No battery cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
+    );    
+  }
+
   return (
-    <ScrollView style={theme.styles.view}
+    <SectionList
       showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <SectionList
-        scrollEnabled={false}
-        stickySectionHeadersEnabled={true}
-        style={s.sectionList}
-        sections={groupCycles([...battery?.cycles].reverse())} // Latest cycles at the top
-        keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
-        renderItem={renderBatteryCycle}
-        renderSectionHeader={({section: {title}}) => (
-          <SectionListHeader title={title} />
-        )}
-        ListFooterComponent={<Divider />}
-        ListEmptyComponent={
-          <EmptyView info message={'No battery cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
-        }
-      />
-    </ScrollView>
+      contentInsetAdjustmentBehavior={'automatic'}
+      stickySectionHeadersEnabled={true}
+      style={[theme.styles.view, s.sectionList, {borderWidth: 2}]}
+      sections={groupCycles([...battery?.cycles].reverse())} // Most recent cycles at the top
+      keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
+      renderItem={renderBatteryCycle}
+      renderSectionHeader={({section: {title}}) => (
+        <SectionListHeader title={title} />
+      )}
+      ListFooterComponent={<Divider />}
+    />
   );
 };
 

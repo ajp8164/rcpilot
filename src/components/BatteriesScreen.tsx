@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { ScrollView, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -66,14 +66,16 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={listEditor.enabled ||
                 (listBatteries === 'all' && !activeBatteries.length) ||
-                (listBatteries !== 'all' && !retiredBatteries.length)}
+                (listBatteries !== 'all' && !retiredBatteries.length) ||
+                (listBatteries !== 'all' && !inStorageBatteries.length)}
               icon={
                 <Icon
                   name={'filter'}
                   style={[s.headerIcon,
                     listEditor.enabled ||
                     (listBatteries === 'all' && !activeBatteries.length) ||
-                    (listBatteries !== 'all' && !retiredBatteries.length)
+                    (listBatteries !== 'all' && !retiredBatteries.length) ||
+                    (listBatteries !== 'all' && !inStorageBatteries.length)
                     ? s.headerIconDisabled : {}
                   ]}
                 />
@@ -109,7 +111,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditor.enabled, activeBatteries, retiredBatteries ]);
+  }, [ listEditor.enabled, activeBatteries, retiredBatteries, inStorageBatteries ]);
 
   const addBattery = () => {
     const haveBatteries = !!activeBatteries.length || !!retiredBatteries.length || !!inStorageBatteries.length;
@@ -293,35 +295,31 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  if (!retiredBatteries.length && !inStorageBatteries.length) {
+  if (!activeBatteries.length && !retiredBatteries.length && !inStorageBatteries.length) {
     return (
       <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />
     );
   }
 
   return (
-    <ScrollView style={[theme.styles.view, {borderWidth: 4, borderColor: 'red'}]}
+    <SectionList
       showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <SectionList
-        scrollEnabled={false}
-        stickySectionHeadersEnabled={true}
-        style={[s.sectionList, {borderWidth: 3}]}
-        contentContainerStyle={{flexGrow: 1, flex: 1, justifyContent: 'center', borderWidth: 2, borderColor: 'green' }}
-        sections={groupBatteries(
-          listBatteries === 'retired' ?
-            retiredBatteries
-            : listBatteries === 'in-storage' ?
-            inStorageBatteries
-            : activeBatteries)}
-        keyExtractor={item => item._id.toString()}
-        renderItem={renderBattery}
-        renderSectionHeader={({section: {title}}) => (
-          <Divider text={title} />
-        )}
-        ListFooterComponent={renderInactive()}
-      />
-    </ScrollView>
+      contentInsetAdjustmentBehavior={'automatic'}
+      stickySectionHeadersEnabled={true}
+      style={[theme.styles.view, s.sectionList]}
+      sections={groupBatteries(
+        listBatteries === 'retired' ?
+          retiredBatteries
+          : listBatteries === 'in-storage' ?
+          inStorageBatteries
+          : activeBatteries)}
+      keyExtractor={item => item._id.toString()}
+      renderItem={renderBattery}
+      renderSectionHeader={({section: {title}}) => (
+        <Divider text={title} />
+      )}
+      ListFooterComponent={renderInactive()}
+    />
   );
 };
 

@@ -1,13 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
-import {
-  Image,
-  ScrollView,
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-  View,
-} from 'react-native';
+import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
@@ -122,7 +115,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditor.enabled ]);
+  }, [ activeModels, retiredModels, listEditor.enabled ]);
 
   const deleteModel = (model: Model) => {
     realm.write(() => {
@@ -258,22 +251,19 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <ScrollView style={theme.styles.view}
+    <SectionList
       showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <SectionList
-        scrollEnabled={false}
-        stickySectionHeadersEnabled={true}
-        style={s.sectionList}
-        sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
-        keyExtractor={item => item._id.toString()}
-        renderItem={renderModel}
-        renderSectionHeader={({section: {title}}) => (
-          <Divider text={title} />
-        )}
-        ListFooterComponent={renderInactive()}
-      />
-    </ScrollView>
+      contentInsetAdjustmentBehavior={'automatic'}
+      stickySectionHeadersEnabled={true}
+      style={[theme.styles.view, s.sectionList]}
+      sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
+      keyExtractor={item => item._id.toString()}
+      renderItem={renderModel}
+      renderSectionHeader={({section: {title}}) => (
+        <Divider text={title} />
+      )}
+      ListFooterComponent={renderInactive()}
+    />
   );
 };
 

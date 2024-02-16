@@ -80,6 +80,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
   return (
     <>
       <FlatList
+        style={theme.styles.view}
         data={allEventStyles}
         renderItem={renderEventStyle}
         keyExtractor={item => item._id.toString()}

@@ -80,15 +80,14 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <>
-      <FlatList
-        data={allModelPropellers}
-        renderItem={renderModelPropeller}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
-      />
-    </>
+    <FlatList
+      style={theme.styles.view}
+      data={allModelPropellers}
+      renderItem={renderModelPropeller}
+      keyExtractor={(_item, index) => `${index}`}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
+    />
   );
 };
 

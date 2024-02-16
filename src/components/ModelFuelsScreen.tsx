@@ -80,15 +80,14 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <>
-      <FlatList
-        data={allModelFuels}
-        renderItem={renderModelFuel}
-        keyExtractor={item => item._id.toString()}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allModelFuels.length ? <Divider /> : null}
-      />
-    </>
+    <FlatList
+      style={theme.styles.view}
+      data={allModelFuels}
+      renderItem={renderModelFuel}
+      keyExtractor={item => item._id.toString()}
+      showsVerticalScrollIndicator={false}
+      ListHeaderComponent={allModelFuels.length ? <Divider /> : null}
+    />
   );
 };
 

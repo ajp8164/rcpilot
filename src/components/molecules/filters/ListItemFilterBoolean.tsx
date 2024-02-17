@@ -7,7 +7,6 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: BooleanFilterState) => void;
   relation: BooleanRelation;
   title: string;
-  value: string;
 };
 
 const ListItemFilterBoolean = (props: Props) => {  

@@ -105,12 +105,6 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
     return !result;
   };
 
-  if (!reportFilter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
-  }
-
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>

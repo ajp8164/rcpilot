@@ -103,12 +103,6 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
     return !result;
   };
 
-  if (!reportFilter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
-  }
-
   return (
     <AvoidSoftInputView style={{ flex: 1 }}>
     <ScrollView style={theme.styles.view}>

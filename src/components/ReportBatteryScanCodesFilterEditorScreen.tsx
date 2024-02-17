@@ -9,6 +9,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
@@ -96,6 +97,12 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
     });
     return !result;
   };
+
+  if (!reportFilter) {
+    return (
+      <EmptyView error message={'Filter Not Found!'} />
+    );
+  }
 
   return (
     <ScrollView style={theme.styles.view}>

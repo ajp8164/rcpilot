@@ -24,8 +24,6 @@ const ListItemFilterBoolean = (props: Props) => {
 
   const initializing = useRef(true);
   
-  const [relation, setRelation] = useState<BooleanRelation>(props.relation);
-  const [value, setValue] = useState(props.value);
   const [index, setIndex] = useState(() =>
     segments.findIndex(seg => { return seg === props.relation })
   );
@@ -38,14 +36,11 @@ const ListItemFilterBoolean = (props: Props) => {
     }
     const newIndex = segments.findIndex(seg => { return seg === props.relation });
     setIndex(newIndex);
-    setRelation(props.relation);
-    setValue(props.value);
-  }, [ props.relation, props.value ]);
+  }, [ props.relation ]);
   
   const onRelationSelect = (index: number) => {
-    setRelation(Object.values(BooleanRelation)[index] as BooleanRelation);
-    setValue(index === 1 ? 'true' : 'false');
-    onValueChange({relation, value: [value]});
+    const newRelation = Object.values(BooleanRelation)[index] as BooleanRelation;
+    onValueChange({relation: newRelation, value: []});
   };
 
   return (

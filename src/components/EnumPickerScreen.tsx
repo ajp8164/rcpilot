@@ -61,8 +61,8 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   const [list, setList] = useSetState<{ values: string[]; selected: string[]; initial: string[]; }>({
     values,
      // Use an empty array if empty string is set.
-    selected: lodash.isArray(selected) ? selected : selected ? [selected] : [],
-    initial: lodash.isArray(selected) ? selected : selected ? [selected] : [],
+    selected: lodash.isString(selected) ? [selected] : selected ? selected : [],
+    initial: lodash.isString(selected) ? [selected] : selected ? selected : [],
   });
 
   useEffect(() => {

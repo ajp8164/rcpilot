@@ -78,7 +78,6 @@ const ListItemFilterEnum = (props: Props) => {
   }, [ props.relation, props.value ]);
 
   useEffect(() => {
-    // const onChangeFilter = (value: string[]) => {
     const onChangeFilter = (result: EnumPickerResult) => {
       // Set our local state and pass the entire state back to the caller.
       setFilterState({relation: filterState.relation, value: result.value});

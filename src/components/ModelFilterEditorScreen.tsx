@@ -1,18 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
+import { FilterType, ModelFilterValues } from 'types/filter';
+import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import {
-  BooleanRelation,
-  DateRelation,
-  EnumRelation,
   ListItemFilterBoolean,
   ListItemFilterDate,
   ListItemFilterEnum,
   ListItemFilterNumber,
   ListItemFilterString,
-  NumberRelation,
-  StringRelation
 } from 'components/molecules/filters';
-import { FilterType, ModelFilterValues } from 'types/filter';
-import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ScrollView, View } from 'react-native';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -20,23 +15,12 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
+import { defaultFilter } from 'lib/model';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
 export const generalModelsFilterName = 'general-models-filter';
-
-const defaultFilter: ModelFilterValues = {
-  modelType: { relation: EnumRelation.Any, value: [] },
-  category: { relation: EnumRelation.Any, value: [] },
-  lastEvent: { relation: DateRelation.Any, value: [] },
-  totalTime: { relation: NumberRelation.Any, value: [] },
-  logsBatteries: { relation: BooleanRelation.Any, value: [] },
-  logsFuel: { relation: BooleanRelation.Any, value: [] },
-  damaged: { relation: BooleanRelation.Any, value: [] },
-  vendor: { relation: StringRelation.Any, value: [] },
-  notes: { relation: StringRelation.Any, value: [] },
-};
 
 const filterValueLabels: Record<string, string> = {};
 

@@ -1,4 +1,3 @@
-import { BooleanRelation, DateRelation, EnumRelation, NumberRelation, StringRelation } from 'components/molecules/filters';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
@@ -11,6 +10,7 @@ import { FilterType } from 'types/filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
+import { defaultFilter } from 'lib/model';
 import { generalModelsFilterName } from 'components/ModelFilterEditorScreen';
 import { saveSelectedModelFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -44,17 +44,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
         const gmf = realm.create('Filter', {
           name: generalModelsFilterName,
           type: FilterType.ModelsFilter,
-          values: {
-            modelType: {relation: EnumRelation.Any, value: []},
-            category: {relation: EnumRelation.Any, value: []},
-            lastEvent: {relation: DateRelation.Any, value: []},
-            totalTime: {relation: NumberRelation.Any, value: []},
-            logsBatteries: {relation: BooleanRelation.Any, value: []},
-            logsFuel: {relation: BooleanRelation.Any, value: []},
-            damaged: {relation: BooleanRelation.Any, value: []},
-            vendor: {relation: StringRelation.Any, value: []},
-            notes: {relation: StringRelation.Any, value: []},
-          }
+          values: defaultFilter,
         });
 
         // @ts-ignore

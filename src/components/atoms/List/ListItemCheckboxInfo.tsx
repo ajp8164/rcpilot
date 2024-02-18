@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from "theme";
+import React, { useImperativeHandle, useRef } from "react";
 
 import CustomIcon from "theme/icomoon/CustomIcon";
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -15,8 +16,12 @@ interface Props extends _ListItem {
   iconSize?: number;
 };
 
-const ListItemCheckboxInfo = (props: Props) => {
-  const { 
+export interface ListItemCheckboxInfoMethods {
+  resetEditor: () => void;
+}
+
+const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props>((props, ref) => {
+    const { 
     checked,
     onPressInfo,
     hideInfo,
@@ -27,11 +32,22 @@ const ListItemCheckboxInfo = (props: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const liRef = useRef<ListItemCheckboxInfoMethods>(null);
 
   const checkIcon = checked ? iconChecked : iconUnchecked;
-  
+
+  useImperativeHandle(ref, () => ({
+    //  These functions exposed to the parent component through the ref.
+    resetEditor,
+  }));
+
+  const resetEditor = () => {
+    liRef.current?.resetEditor();
+  };
+
   return (
     <_ListItem
+      ref={liRef}
       {...props}
       containerStyle={[
         {...props.containerStyle, ...s.container},
@@ -59,7 +75,7 @@ const ListItemCheckboxInfo = (props: Props) => {
       }
     />
   );
-}
+});
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   container: {

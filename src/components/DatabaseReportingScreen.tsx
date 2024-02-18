@@ -6,7 +6,7 @@ import {
   NestableScrollContainer,
   RenderItemParams
 } from 'react-native-draggable-flatlist';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
@@ -194,11 +194,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           showEditor={listEditor.show}
           swipeable={{
             rightItems: [{
-              icon: 'trash',
-              iconType: 'font-awesome',
-              text: 'Delete',
-              color: theme.colors.assertive,
-              x: 64,
+              ...swipeableDeleteItem[theme.mode],
               onPress: () => confirmAction('Delete Report', report, deleteReport),
             }]
           }}

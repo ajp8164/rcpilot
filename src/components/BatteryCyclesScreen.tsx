@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
@@ -133,11 +133,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
-            icon: 'trash',
-            iconType: 'font-awesome',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
+            ...swipeableDeleteItem[theme.mode],
             onPress: () => confirmAction('Delete Cycle', cycle.cycleNumber, deleteCycle),
           }]
         }}

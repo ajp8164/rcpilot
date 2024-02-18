@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
@@ -238,11 +238,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
-            icon: 'trash',
-            iconType: 'font-awesome',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
+            ...swipeableDeleteItem[theme.mode],
             onPress: () => {
               const label = listBatteries === 'retired'
                 ? 'Delete Retired Battery'

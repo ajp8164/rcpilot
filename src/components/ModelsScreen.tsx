@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -207,11 +207,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
-            icon: 'trash',
-            iconType: 'font-awesome',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
+            ...swipeableDeleteItem[theme.mode],
             onPress: () => {
               const label = listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model'
               confirmAction(label, model, deleteModel);

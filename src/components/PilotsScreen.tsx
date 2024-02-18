@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItemCheckboxInfo, listItemPosition } from 'components/atoms/List';
+import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -69,11 +69,7 @@ const PilotsScreen = ({ navigation }: Props) => {
         })}
         swipeable={{
           rightItems: [{
-            icon: 'trash',
-            iconType: 'font-awesome',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
+            ...swipeableDeleteItem[theme.mode],
             onPress: () => confirmAction('Delete Pilot', pilot, deletePilot),
           }]
         }}

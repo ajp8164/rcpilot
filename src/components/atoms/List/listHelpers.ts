@@ -11,14 +11,14 @@ export const swipeableDeleteItem = {
     icon: 'trash',
     iconType: 'font-awesome',
     text: 'Delete',
-    color: theme.lightColors?.white,
+    color: theme.lightColors?.assertive,
     x: 64,
   },
   dark: {
     icon: 'trash',
     iconType: 'font-awesome',
     text: 'Delete',
-    color: theme.darkColors?.white,
+    color: theme.darkColors?.assertive,
     x: 64,
   }
 };

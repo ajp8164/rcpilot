@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
-import { useSetState } from '@react-native-ajp-elements/core';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -35,7 +34,7 @@ const ListItemFilterNumber = (props: Props) => {
   const initializing = useRef(true);
 
   const [expanded, setExpanded] = useState(props.value.length > 0);
-  const [filterState, setFilterState] = useSetState<NumberFilterState>({
+  const [filterState, setFilterState] = useState<NumberFilterState>({
     relation: props.relation,
     value: props.value.length ? props.value : [],
   });
@@ -53,19 +52,19 @@ const ListItemFilterNumber = (props: Props) => {
     setIndex(newIndex);
 
     if (props.relation !== filterState.relation && props.relation === NumberRelation.Any) {
-      // Closing
+      // Closing (moving relation to Any)
       setExpanded(false);
       setTimeout(() => {
-        setFilterState({relation: props.relation, value: props.value}, {assign: true});
+        setFilterState({relation: props.relation, value: props.value});
       }, 300);
     } else if (props.relation !== filterState.relation && props.relation !== NumberRelation.Any) {
-      // Opening
-      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      // Opening (moving relation to something other than Any)
+      setFilterState({relation: props.relation, value: props.value});
       setTimeout(() => {
         setExpanded(true);
       }, 300);
     } else {
-      setFilterState({relation: props.relation, value: props.value}, {assign: true});
+      setFilterState({relation: props.relation, value: props.value});
     }
   }, [ props.relation, props.value ]);
 
@@ -80,7 +79,7 @@ const ListItemFilterNumber = (props: Props) => {
 
     if (newRelation !== NumberRelation.Any) {
       // Opening
-      setFilterState({relation: newRelation, value: newValue}, {assign: true});
+      setFilterState({relation: newRelation, value: newValue});
       onValueChange({relation: newRelation, value: newValue});
       setTimeout(() => {
         setExpanded(true);
@@ -89,16 +88,21 @@ const ListItemFilterNumber = (props: Props) => {
       // Closing
       setExpanded(false);
       setTimeout(() => {
-        setFilterState({relation: newRelation, value: newValue}, {assign: true});
+        setFilterState({relation: newRelation, value: newValue});
         onValueChange({relation: newRelation, value: newValue});
       }, 300);
     }
   };
 
   const onChangedFilter = (value: string) => {
-    // Set our local state and pass the entire state back to the caller.
-    setFilterState({value: [value]}, {assign: true});
-    onValueChange({relation: filterState.relation, value: [value]});
+    // Set our local state and pass the entire state back to the caller only if
+    // the input is visible - this prevents the text-input from bubbling events up
+    // when the caller of this list item has controlled this component without
+    // interacting with the text-input (e.g. a filter reset).
+    if (expanded) {
+      setFilterState({relation: filterState.relation, value: [value]});
+      onValueChange({relation: filterState.relation, value: [value]});
+    }
   };    
 
   return (

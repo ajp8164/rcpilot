@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Checklist, JChecklistAction } from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -154,11 +154,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         showEditor={listEditor.show}
         swipeable={{
           rightItems: [{
-            icon: 'trash',
-            iconType: 'font-awesome',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
+            ...swipeableDeleteItem[theme.mode],
             onPress: () => confirmDeleteChecklist('Delete Checklist', checklist, deleteChecklist),
           }]
         }}

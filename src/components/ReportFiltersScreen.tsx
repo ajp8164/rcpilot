@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { FilterType, ReportFilterType } from 'types/filter';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -82,11 +82,7 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         checked={selectedFilter === filter._id.toString()}
         swipeable={{
           rightItems: [{
-            icon: 'trash',
-            iconType: 'font-awesome',
-            text: 'Delete',
-            color: theme.colors.assertive,
-            x: 64,
+            ...swipeableDeleteItem[theme.mode],
             onPress: () => confirmAction('Delete Saved Filter', filter, deleteFilter),
           }]
         }}

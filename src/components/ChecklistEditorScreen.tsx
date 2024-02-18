@@ -7,7 +7,7 @@ import {
   ChecklistType
 } from 'types/checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
+import { ListItem, ListItemInput, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewChecklistNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import {
   NestableDraggableFlatList,
@@ -317,11 +317,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           showEditor={listEditor.show}
           swipeable={{
             rightItems: [{
-              icon: 'trash',
-              iconType: 'font-awesome',
-              text: 'Delete',
-              color: theme.colors.assertive,
-              x: 64,
+              ...swipeableDeleteItem[theme.mode],
               onPress: () => deleteAction(index),
             }]
           }}

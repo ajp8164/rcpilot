@@ -1,184 +1,194 @@
 import { AppTheme, useTheme } from 'theme';
-import { BooleanRelation, DateRelation, EnumRelation, FilterState, ListItemFilterBoolean, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
+import {
+  BooleanRelation,
+  DateRelation,
+  EnumRelation,
+  ListItemFilterBoolean,
+  ListItemFilterDate,
+  ListItemFilterEnum,
+  ListItemFilterNumber,
+  ListItemFilterString,
+  NumberRelation,
+  StringRelation
+} from 'components/molecules/filters';
+import { FilterType, ModelFilterValues } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { useFilterEditor } from 'lib/useFilterEditor';
 
-enum ModelProperty {
-  ModelType = 'modelType',
-  Category = 'category',
-  LastEvent ='lastEvent',
-  TotalTime = 'totalTime',
-  LogsBatteries = 'logsBatteries',
-  LogsFuel = 'logsFuel',
-  Damaged = 'damaged',
-  Vendor = 'vendor',
-  Notes = 'notes',
+export const generalModelsFilterName = 'general-models-filter';
+
+const defaultFilter: ModelFilterValues = {
+  modelType: { relation: EnumRelation.Any, value: [] },
+  category: { relation: EnumRelation.Any, value: [] },
+  lastEvent: { relation: DateRelation.Any, value: [] },
+  totalTime: { relation: NumberRelation.Any, value: [] },
+  logsBatteries: { relation: BooleanRelation.Any, value: [] },
+  logsFuel: { relation: BooleanRelation.Any, value: [] },
+  damaged: { relation: BooleanRelation.Any, value: [] },
+  vendor: { relation: StringRelation.Any, value: [] },
+  notes: { relation: StringRelation.Any, value: [] },
 };
+
+const filterValueLabels: Record<string, string> = {};
 
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;
 
-const ModelFilterEditorScreen = ({ navigation: _navigation }: Props) => {
+const ModelFilterEditorScreen = ({ route }: Props) => {
+  const { filterId } = route.params;
+  
   const theme = useTheme();
   const s = useStyles(theme);
-  const setScreenEditHeader = useScreenEditHeader();
 
-  const [createSavedFilter, setCreateSavedFilter] = useState(false);
-
-  const [filter, setFilter] = useSetState<{[key in ModelProperty] : FilterState}>({
-    [ModelProperty.ModelType]: {relation: EnumRelation.Any, value: []},
-    [ModelProperty.Category]: {relation: EnumRelation.Any, value: []},
-    [ModelProperty.LastEvent]: {relation: DateRelation.Any, value: []},
-    [ModelProperty.TotalTime]: {relation: NumberRelation.Any, value: []},
-    [ModelProperty.LogsBatteries]: {relation: BooleanRelation.Any, value: []},
-    [ModelProperty.LogsFuel]: {relation: BooleanRelation.Any, value: []},
-    [ModelProperty.Damaged]: {relation: BooleanRelation.Any, value: []},
-    [ModelProperty.Vendor]: {relation: StringRelation.Any, value: []},
-    [ModelProperty.Notes]: {relation: StringRelation.Any, value: []},
+  const filterEditor = useFilterEditor<ModelFilterValues>({
+    filterId,
+    filterType: FilterType.ModelsFilter,
+    defaultFilter,
+    filterValueLabels,
+    generalFilterName: generalModelsFilterName,
   });
 
-  useEffect(() => {
-    const onDone = () => {};
-    setScreenEditHeader({enabled: true, action: onDone});
-  }, []);
-
-  const toggleCreateSavedFilter = (value: boolean) => {
-    setCreateSavedFilter(value);
-  };
-
-  const onFilterValueChange = (property: ModelProperty, value: FilterState) => {
-    setFilter({
-      [property]: value,
-    });
-  };
+  if (!filterEditor.filter) {
+    return (
+      <EmptyView error message={'Filter Not Found!'} />
+    );
+  }
 
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
-      <ListItemSwitch
+      {filterEditor.name === filterEditor.generalFilterName ?
+        <ListItemSwitch
         title={'Create a Saved Filter'}
-        position={createSavedFilter ? ['first'] : ['first', 'last']}
-        value={createSavedFilter}
-        expanded={createSavedFilter}
-        onValueChange={toggleCreateSavedFilter}
+        position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+        value={filterEditor.createSavedFilter}
+        expanded={filterEditor.createSavedFilter}
+        onValueChange={filterEditor.setCreateSavedFilter}
         ExpandableComponent={
           <ListItemInput
+            value={filterEditor.customName}
             placeholder={'Filter Name'}
             position={['last']}
-            value={''}
-            onChangeText={() => null}
+            onChangeText={filterEditor.setCustomName}
           />
-          }
+        }
+      />
+      :
+        <ListItemInput
+          value={filterEditor.name}
+          placeholder={'Filter Name'}
+          position={['first', 'last']}
+          onChangeText={filterEditor.setName}
         />
+      }
       <Divider />
       <ListItem
         title={'Reset Filter'}
         titleStyle={s.reset}
-        disabled={true}
+        disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
         disabledStyle={s.resetDisabled}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => null}
+        onPress={filterEditor.resetFilter}
       />
       <Divider text={'This filter shows all the models that match all of these criteria.'}/>
       <ListItemFilterEnum
         title={'Model Type'}
-        value={filter[ModelProperty.ModelType].value}
-        relation={EnumRelation.Any}
+        value={filterEditor.values.modelType.value}
+        relation={filterEditor.values.modelType.relation}
         enumName={'ModelTypes'}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.ModelType, filterState);
-        } }
+          filterEditor.onFilterValueChange('modelType', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterEnum
         title={'Category'}
-        value={filter[ModelProperty.Category].value}
-        relation={EnumRelation.Any}
+        value={filterEditor.values.category.value}
+        relation={filterEditor.values.category.relation}
         enumName={'Categories'}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.Category, filterState);
-        } }
+          filterEditor.onFilterValueChange('category', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterDate
         title={'Last Event'}
-        value={filter[ModelProperty.LastEvent].value}
-        relation={DateRelation.Any}
+        value={filterEditor.values.lastEvent.value}
+        relation={filterEditor.values.lastEvent.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.LastEvent, filterState);
-        } }
+          filterEditor.onFilterValueChange('lastEvent', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'Total Time'}
         label={'h:mm'}
-        value={filter[ModelProperty.TotalTime].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.totalTime.value}
+        relation={filterEditor.values.totalTime.relation}
+        numericProps={{prefix: ''}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.TotalTime, filterState);
-        } }
+          filterEditor.onFilterValueChange('totalTime', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterBoolean
         title={'Logs Batteries'}
-        value={filter[ModelProperty.LogsBatteries].value[0]}
-        relation={BooleanRelation.Any}
+        relation={filterEditor.values.logsBatteries.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.LogsBatteries, filterState);
-        } }
+          filterEditor.onFilterValueChange('logsBatteries', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterBoolean
         title={'Logs Fuel'}
-        value={filter[ModelProperty.LogsFuel].value[0]}
-        relation={BooleanRelation.Any}
+        relation={filterEditor.values.logsFuel.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.LogsFuel, filterState);
-        } }
+          filterEditor.onFilterValueChange('logsFuel', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterBoolean
         title={'Damaged'}
-        value={filter[ModelProperty.Damaged].value[0]}
-        relation={BooleanRelation.Any}
+        relation={filterEditor.values.damaged.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.Damaged, filterState);
-        } }
+          filterEditor.onFilterValueChange('damaged', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterString
         title={'Vendor'}
-        value={filter[ModelProperty.Vendor].value}
-        relation={StringRelation.Any}
+        value={filterEditor.values.vendor.value}
+        relation={filterEditor.values.vendor.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.Vendor, filterState);
-        } }
+          filterEditor.onFilterValueChange('vendor', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterString
         title={'Notes'}
-        value={filter[ModelProperty.Notes].value}
-        relation={StringRelation.Any}
+        value={filterEditor.values.notes.value}
+        relation={filterEditor.values.notes.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(ModelProperty.Notes, filterState);
-        } }
+          filterEditor.onFilterValueChange('notes', filterState);
+        }}
       />
       <View style={{height: theme.insets.bottom}}/>
     </ScrollView>

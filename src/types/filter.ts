@@ -27,6 +27,26 @@ export type ReportFilterType = PickEnum<
   | FilterType.ReportBatteryScanCodesFilter
 >;
 
+export type FilterValues =
+  & ModelFilterValues
+  & BatteryFilterValues
+  & BatteryCycleFilterValues
+  & EventReportFilterValues
+  & EventFilterValues
+  & MaintenanceReportFilterValues
+  & ModelScanCodesReportFilterValues
+  & BatteryScanCodesReportFilterValues;
+
+export type AnyFilterValues =
+  | ModelFilterValues
+  | BatteryFilterValues
+  | BatteryCycleFilterValues
+  | EventReportFilterValues
+  | EventFilterValues
+  | MaintenanceReportFilterValues
+  | ModelScanCodesReportFilterValues
+  | BatteryScanCodesReportFilterValues;
+
 // Battery filter
 //
 export type BatteryFilterValues = {
@@ -52,8 +72,8 @@ export type BatteryCycleFilterValues = {
 // Model filter
 //
 export type ModelFilterValues = {
-  name: StringFilterState;
   modelType: EnumFilterState;
+  category: EnumFilterState;
   lastEvent: DateFilterState;
   totalTime: NumberFilterState;
   logsBatteries: BooleanFilterState;
@@ -63,13 +83,26 @@ export type ModelFilterValues = {
   notes: StringFilterState;
 };
 
+// Event filter
+//
+export type EventFilterValues = {
+  date: DateFilterState;
+  duration: NumberFilterState;
+  style: EnumFilterState;
+  location: StringFilterState;
+  battery: StringFilterState;
+  pilot: StringFilterState;
+  outcome: EnumFilterState;
+  notes: StringFilterState;
+};
+
 // Any report filter
 //
 export type ReportFilterValues = 
-  EventReportFilterValues |
-  MaintenanceReportFilterValues |
-  ModelScanCodesReportFilterValues |
-  BatteryScanCodesReportFilterValues;
+  | EventReportFilterValues
+  | MaintenanceReportFilterValues
+  | ModelScanCodesReportFilterValues
+  | BatteryScanCodesReportFilterValues;
 
 // Event report filter
 //
@@ -80,7 +113,7 @@ export type EventReportFilterValues = {
   date: DateFilterState;
   duration: NumberFilterState;
   pilot: EnumFilterState;
-  location: EnumFilterState;
+  location: StringFilterState;
   modelStyle: EnumFilterState;
   outcome: EnumFilterState;
 };

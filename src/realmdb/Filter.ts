@@ -1,27 +1,11 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-import {
-  BatteryCycleFilterValues,
-  BatteryFilterValues,
-  BatteryScanCodesReportFilterValues,
-  EventReportFilterValues,
-  FilterType,
-  MaintenanceReportFilterValues,
-  ModelFilterValues,
-  ModelScanCodesReportFilterValues,
-} from 'types/filter';
+import { FilterType, FilterValues } from 'types/filter';
 
 export class Filter extends Object<Filter> {
   _id!: BSON.ObjectId;
   name!: string;
   type!: FilterType;
-  values!:
-    ModelFilterValues |
-    BatteryFilterValues |
-    BatteryCycleFilterValues |
-    EventReportFilterValues |
-    MaintenanceReportFilterValues |
-    ModelScanCodesReportFilterValues |
-    BatteryScanCodesReportFilterValues;
+  values!: FilterValues;
 
   static schema: ObjectSchema = {
     name: 'Filter',

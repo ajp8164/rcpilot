@@ -1,150 +1,150 @@
 import { AppTheme, useTheme } from 'theme';
-import { EnumRelation, FilterState, ListItemFilterEnum, ListItemFilterNumber, NumberRelation } from 'components/molecules/filters';
+import { BatteryFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import { ListItemFilterEnum, ListItemFilterNumber } from 'components/molecules/filters';
 import { ScrollView, View } from 'react-native';
 
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
+import { defaultFilter } from 'lib/battery';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { useFilterEditor } from 'lib/useFilterEditor';
 
-enum BatteryProperty {
-  Chemistry = 'chemistry',
-  TotalTime = 'totalTime',
-  Capacity = 'capacity',
-  CRating = 'cRating',
-  SCells = 'sCells',
-  PCells = 'pCells',
-};
+export const generalBatteriesFilterName = 'general-batteries-filter';
+
+const filterValueLabels: Record<string, string> = {};
 
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilterEditor'>;
 
-const BatteryFilterEditorScreen = ({ navigation: _navigation }: Props) => {
+const BatteryFilterEditorScreen = ({ route }: Props) => {
+  const { filterId } = route.params;
+  
   const theme = useTheme();
   const s = useStyles(theme);
-  const setScreenEditHeader = useScreenEditHeader();
 
-  const [createSavedFilter, setCreateSavedFilter] = useState(false);
-
-  const [filter, setFilter] = useSetState<{[key in BatteryProperty] : FilterState}>({
-    [BatteryProperty.Chemistry]: {relation: EnumRelation.Any, value: []},
-    [BatteryProperty.TotalTime]: {relation: NumberRelation.Any, value: []},
-    [BatteryProperty.Capacity]: {relation: NumberRelation.Any, value: []},
-    [BatteryProperty.CRating]: {relation: NumberRelation.Any, value: []},
-    [BatteryProperty.SCells]: {relation: NumberRelation.Any, value: []},
-    [BatteryProperty.PCells]: {relation: NumberRelation.Any, value: []},
+  const filterEditor = useFilterEditor<BatteryFilterValues>({
+    filterId,
+    filterType: FilterType.BatteriesFilter,
+    defaultFilter,
+    filterValueLabels,
+    generalFilterName: generalBatteriesFilterName,
   });
 
-  useEffect(() => {
-    const onDone = () => {};
-    setScreenEditHeader({enabled: true, action: onDone});
-  }, []);  
-
-  const toggleCreateSavedFilter = (value: boolean) => {
-    setCreateSavedFilter(value);
-  };
-
-  const onFilterValueChange = (property: BatteryProperty, value: FilterState) => {
-    setFilter({
-      [property]: value,
-    });
-  };
+  if (!filterEditor.filter) {
+    return (
+      <EmptyView error message={'Filter Not Found!'} />
+    );
+  }
 
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
-      <ListItemSwitch
-        title={'Create a Saved Filter'}
-        position={createSavedFilter ? ['first'] : ['first', 'last']}
-        value={createSavedFilter}
-        expanded={createSavedFilter}
-        onValueChange={toggleCreateSavedFilter}
-        ExpandableComponent={
-          <ListItemInput
-            placeholder={'Filter Name'}
-            position={['last']}
-            value={''}
-            onChangeText={() => null}
-          />
+      {filterEditor.name === filterEditor.generalFilterName ?
+        <ListItemSwitch
+          title={'Create a Saved Filter'}
+          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          value={filterEditor.createSavedFilter}
+          expanded={filterEditor.createSavedFilter}
+          onValueChange={filterEditor.setCreateSavedFilter}
+          ExpandableComponent={
+            <ListItemInput
+              value={filterEditor.customName}
+              placeholder={'Filter Name'}
+              position={['last']}
+              onChangeText={filterEditor.setCustomName}
+            />
           }
         />
+      :
+        <ListItemInput
+          value={filterEditor.name}
+          placeholder={'Filter Name'}
+          position={['first', 'last']}
+          onChangeText={filterEditor.setName}
+        />
+      }
       <Divider />
       <ListItem
         title={'Reset Filter'}
         titleStyle={s.reset}
-        disabled={true}
+        disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
         disabledStyle={s.resetDisabled}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => null}
+        onPress={filterEditor.resetFilter}
       />
       <Divider text={'This filter shows all the batteries that match all of these criteria.'}/>
       <ListItemFilterEnum
         title={'Chemistry'}
-        value={filter[BatteryProperty.Chemistry].value}
-        relation={EnumRelation.Any}
+        value={filterEditor.values.chemistry.value}
+        relation={filterEditor.values.chemistry.relation}
         enumName={'Chemistries'}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryProperty.Chemistry, filterState);
-        } }
+          filterEditor.onFilterValueChange('chemistry', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'Total Time'}
         label={'h:mm'}
-        value={filter[BatteryProperty.TotalTime].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.totalTime.value}
+        relation={filterEditor.values.totalTime.relation}
+        numericProps={{prefix: '', separator: ':'}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryProperty.TotalTime, filterState);
-        } }
+          filterEditor.onFilterValueChange('totalTime', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'Capacity'}
         label={'mAh'}
         numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99999}}
-        value={filter[BatteryProperty.Capacity].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.capacity.value}
+        relation={filterEditor.values.capacity.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryProperty.Capacity, filterState);
-        } }
+          filterEditor.onFilterValueChange('capacity', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'C Rating'}
         label={'C'}
-        value={filter[BatteryProperty.Capacity].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.cRating.value}
+        relation={filterEditor.values.cRating.relation}
+        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 999}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryProperty.Capacity, filterState);
-        } }
+          filterEditor.onFilterValueChange('cRating', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'S Cells'}
-        value={filter[BatteryProperty.SCells].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.sCells.value}
+        relation={filterEditor.values.sCells.relation}
+        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryProperty.SCells, filterState);
-        } }
+          filterEditor.onFilterValueChange('sCells', filterState);
+        }}
       />
       <Divider />
       <ListItemFilterNumber
         title={'P Cells'}
-        value={filter[BatteryProperty.PCells].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.pCells.value}
+        relation={filterEditor.values.pCells.relation}
+        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryProperty.PCells, filterState);
-        } }
+          filterEditor.onFilterValueChange('pCells', filterState);
+        }}
       />
       <View style={{height: theme.insets.bottom}}/>
     </ScrollView>  );

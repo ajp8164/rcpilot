@@ -50,7 +50,6 @@ export type AnyFilterValues =
 // Battery filter
 //
 export type BatteryFilterValues = {
-  name: StringFilterState;
   chemistry: EnumFilterState;
   totalTime: NumberFilterState;
   capacity: NumberFilterState;
@@ -112,7 +111,7 @@ export type EventReportFilterValues = {
   category: EnumFilterState;
   date: DateFilterState;
   duration: NumberFilterState;
-  pilot: EnumFilterState;
+  pilot: StringFilterState;
   location: StringFilterState;
   modelStyle: EnumFilterState;
   outcome: EnumFilterState;

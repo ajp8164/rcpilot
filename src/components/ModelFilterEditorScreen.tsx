@@ -51,20 +51,20 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
       <Divider text={'FILTER NAME'}/>
       {filterEditor.name === filterEditor.generalFilterName ?
         <ListItemSwitch
-        title={'Create a Saved Filter'}
-        position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
-        value={filterEditor.createSavedFilter}
-        expanded={filterEditor.createSavedFilter}
-        onValueChange={filterEditor.setCreateSavedFilter}
-        ExpandableComponent={
-          <ListItemInput
-            value={filterEditor.customName}
-            placeholder={'Filter Name'}
-            position={['last']}
-            onChangeText={filterEditor.setCustomName}
-          />
-        }
-      />
+          title={'Create a Saved Filter'}
+          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          value={filterEditor.createSavedFilter}
+          expanded={filterEditor.createSavedFilter}
+          onValueChange={filterEditor.setCreateSavedFilter}
+          ExpandableComponent={
+            <ListItemInput
+              value={filterEditor.customName}
+              placeholder={'Filter Name'}
+              position={['last']}
+              onChangeText={filterEditor.setCustomName}
+            />
+          }
+        />
       :
         <ListItemInput
           value={filterEditor.name}
@@ -121,7 +121,7 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
         label={'h:mm'}
         value={filterEditor.values.totalTime.value}
         relation={filterEditor.values.totalTime.relation}
-        numericProps={{prefix: ''}}
+        numericProps={{prefix: '', separator: ':'}}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('totalTime', filterState);

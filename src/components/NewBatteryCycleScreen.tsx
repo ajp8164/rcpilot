@@ -100,6 +100,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
           const newCycle = {
             refId,
             cycleNumber,
+            battery,
             discharge: {
               date: newDate,
               duration: newDuration,
@@ -208,7 +209,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     <Divider text={'BATTERY'} />
     <ListItem
         title={battery.name}
-        subtitle={'1 flight, last Nov 4, 2023\n0:04:00 total time, 4:00 avg time'}
+        subtitle={'TODO event detail'}
         subtitleNumberOfLines={2}
         containerStyle={{
           ...s.batteryTint,

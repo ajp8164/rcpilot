@@ -70,7 +70,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [scanCodeSize, setScanCodeSize] = useState(model?.scanCodeSize || ScanCodeSize.None);
   const [notes, setNotes] = useState(model?.notes || undefined);
 
-  const [expandedLastFlight, setExpandedLastFlight] = useState(false);
+  const [expandedLastEvent, setExpandedLastEvent] = useState(false);
   const scrollY = useSharedValue(0);
 
   useEffect(() => {
@@ -390,9 +390,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               }
             />
             <ListItemInput
-              title={'Total Flights'}
+              title={'Total Events'}
               value={totalEvents}
-              label='Flights'
+              label='Events'
               placeholder={'No'}
               keyboardType={'number-pad'}
               numeric={true}
@@ -403,7 +403,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           {!!modelId &&
             <ListItem
               title={'Statistics'}
-              value={'4:00 in a flight'}
+              value={'4:00 in a event'}
               position={['first']}
               onPress={() => navigation.navigate('ModelStatistics', {
                 modelId,
@@ -412,22 +412,22 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           }
           {!modelId &&
             <ListItemDate
-              title={'Last Flight'}
+              title={'Last Event'}
               value={lastEvent
                 ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
                 : 'Tap to Set...'}
               pickerValue={lastEvent}
               rightImage={false}
-              expanded={expandedLastFlight}
+              expanded={expandedLastEvent}
               position={modelId ? [] : ['last']}
-              onPress={() => setExpandedLastFlight(!expandedLastFlight)}
+              onPress={() => setExpandedLastEvent(!expandedLastEvent)}
               onDateChange={onLastEventChange}
             />
           }
           {!!modelId &&
             <>
               <ListItem
-                title={'Last Flight'}
+                title={'Last Event'}
                 value={lastEvent
                   ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
                   : 'Unknown'
@@ -435,10 +435,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 rightImage={false}
               />
               <ListItem
-                title={'Logged Flight Details'}
+                title={'Logged Event Details'}
                 value={`${model?.totalEvents || 0}`}
                 position={['last']}
-                onPress={() => navigation.navigate('Flights', {})}
+                onPress={() => navigation.navigate('Events', {})}
               />
             </>
           }

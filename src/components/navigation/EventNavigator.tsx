@@ -1,59 +1,60 @@
-import FlightBatteriesScreen from 'components/FlightBatteriesScreen';
-import FlightChecklistItemScreen from 'components/FlightChecklistItemScreen';
-import { FlightNavigatorParamList } from 'types/navigation';
-import FlightPreFlightScreen from 'components/FlightPreFlightScreen';
-import FlightTimerScreen from 'components/FlightTimerScreen';
+import BatteryPickerScreen from 'components/BatteryPickerScreen';
+import EventChecklistItemScreen from 'components/EventChecklistItemScreen';
+import { EventNavigatorParamList } from 'types/navigation';
+import EventPreCheckScreen from 'components/EventPreCheckScreen';
+import EventTimerScreen from 'components/EventTimerScreen';
 import NavContext from './NavContext';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const FlightStack = createNativeStackNavigator<FlightNavigatorParamList>();
+const EventStack = createNativeStackNavigator<EventNavigatorParamList>();
 
-const FlightNavigator = () => {
+const EventNavigator = () => {
   const theme = useTheme();
 
   return (
     <NavContext.Provider value={{isModal: true}}>
-      <FlightStack.Navigator
-      initialRouteName='FlightBatteries'
+      <EventStack.Navigator
+      initialRouteName='BatteryPicker'
       screenOptions={{
         headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
         headerTitleStyle: { color: theme.colors.stickyWhite },
         headerTintColor: theme.colors.stickyWhite,
       }}>
-        <FlightStack.Screen
-          name='FlightBatteries'
-          component={FlightBatteriesScreen}
+        <EventStack.Screen
+          name='BatteryPicker'
+          component={BatteryPickerScreen}
           options={{
             title: 'Batteries',
+            headerBackTitle: 'Cancel',
           }}
-        />
-        <FlightStack.Screen
-          name='FlightPreFlight'
-          component={FlightPreFlightScreen}
+          />
+        <EventStack.Screen
+          name='EventPreCheck'
+          component={EventPreCheckScreen}
           options={{
             title: 'Pre-Flight',
           }}
         />
-        <FlightStack.Screen
-          name='FlightChecklistItem'
-          component={FlightChecklistItemScreen}
+        <EventStack.Screen
+          name='EventChecklistItem'
+          component={EventChecklistItemScreen}
           options={{
             title: 'Checklist Item',
           }}
         />
-        <FlightStack.Screen
+        <EventStack.Screen
           name='Notes'
           component={NotesScreen}
           options={{
             title: 'Action Notes',
           }}
         />
-        <FlightStack.Screen
-          name='FlightTimer'
-          component={FlightTimerScreen}
+        <EventStack.Screen
+          name='EventTimer'
+          component={EventTimerScreen}
           options={{
             title: 'Flight Timer',
             headerLargeStyle: { backgroundColor: theme.colors.brandPrimary },
@@ -62,9 +63,9 @@ const FlightNavigator = () => {
             headerShadowVisible: false,
           }}
         />
-      </FlightStack.Navigator>
+      </EventStack.Navigator>
     </NavContext.Provider>
   );
 };
 
-export default FlightNavigator;
+export default EventNavigator;

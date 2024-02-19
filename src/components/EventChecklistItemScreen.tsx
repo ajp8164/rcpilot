@@ -1,34 +1,25 @@
 import { AppTheme, useTheme } from 'theme';
-import { ChecklistAction, ChecklistFrequencyUnit } from 'types/model';
 
 import { Divider } from '@react-native-ajp-elements/ui';
-import { FlightNavigatorParamList } from 'types/navigation';
+import { EventNavigatorParamList } from 'types/navigation';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightChecklistItem'>;
+export type Props = NativeStackScreenProps<EventNavigatorParamList, 'EventChecklistItem'>;
 
-const FlightChecklistItemScreen = ({ navigation }: Props) => {
+const EventChecklistItemScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
-  const action: ChecklistAction = {
-    description: 'description',
-    frequencyValue: 1,
-    frequencyUnit: ChecklistFrequencyUnit.Event,
-    repeats: false,
-    notes: '',
-  };
 
   return (
     <View style={theme.styles.view}>
       <Divider text={'ACTION'}/>
       <ListItem
-        title={action.description}
-        subtitle={'From checklist "Pre-Flight"'}
+        title={'action.description'}
+        subtitle={'From checklist "Pre-Check"'}
         position={['first', 'last']}
         rightImage={false}
       />
@@ -45,7 +36,7 @@ const FlightChecklistItemScreen = ({ navigation }: Props) => {
         position={['first', 'last']}
         onPress={() => navigation.navigate('Notes', {
           headerButtonStyle: s.notesHeaderButtonStyle,
-          eventName: 'flight-checklist-item-notes',
+          eventName: 'event-checklist-item-notes',
         })}
       />
     </View>
@@ -63,4 +54,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   }
 }));
 
-export default FlightChecklistItemScreen;
+export default EventChecklistItemScreen;

@@ -3,10 +3,10 @@ import { modelCategories, modelStyles } from '../../../mocks/enums';
 import { BatteryChemistry } from 'types/battery';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EnumRelation } from 'components/molecules/filters';
-import { FlightOutcome } from 'types/flight';
+import { EventOutcome } from 'types/event';
 import { ModelType } from 'types/model';
 import { enumIdsToValues } from 'lib/utils';
-import { flightOutcomeIcons } from 'lib/flight';
+import { eventOutcomeIcons } from 'lib/event';
 
 export type EnumName = keyof typeof enumFilterConfigs;
 type EnumPickerProps = Omit<EnumPickerInterface, 'selected' | 'eventName'>;
@@ -61,8 +61,8 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     mode: 'many-with-actions',
     title: 'Outcomes',
     sectionName: 'OUTCOMES TO {0} RESULTS',
-    icons: flightOutcomeIcons,
-    values: Object.values(FlightOutcome),
+    icons: eventOutcomeIcons,
+    values: Object.values(EventOutcome),
   },
   Pilots: {
     mode: 'many-or-none',

@@ -5,7 +5,7 @@ import { Picker, PickerItem, SwipeButton, viewport } from '@react-native-ajp-ele
 import { Pressable, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { FlightNavigatorParamList } from 'types/navigation';
+import { EventNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
@@ -25,9 +25,9 @@ type TimerButton = {
   onPress?: () => void | undefined;
 };
 
-export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightTimer'>;
+export type Props = NativeStackScreenProps<EventNavigatorParamList, 'EventTimer'>;
 
-const FlightTimerScreen = ({ navigation }: Props) => {
+const EventTimerScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -192,7 +192,7 @@ const FlightTimerScreen = ({ navigation }: Props) => {
         <View style={s.summary}>
           <ListItem
             title={'Goblin Buddy'}
-            subtitle={'Flight  2'}
+            subtitle={'#2'}
             position={['first']}
             containerStyle={s.listItemContainer}
             titleStyle={s.listItemTitle}
@@ -322,4 +322,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   }
 }));
 
-export default FlightTimerScreen;
+export default EventTimerScreen;

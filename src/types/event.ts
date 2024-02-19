@@ -1,9 +1,10 @@
 export enum EventOutcome {
-    OneStar = '1',
-    TwoStar = '2',
-    ThreeStar = '3',
-    FourStar = '4',
-    Crash = 'C',
+  Unspecified = 'Unspecified',
+  Star1 = '1',
+  Star2 = '2',
+  Star3 = '3',
+  Star4 = '4',
+  Crashed = 'Crashed',
 };
 
 export enum TimerStartDelay {

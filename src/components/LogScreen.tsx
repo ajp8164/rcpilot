@@ -1,7 +1,6 @@
 import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import { AppTheme, useTheme } from 'theme';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
-import { Event, EventOutcome } from 'types/event';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
 import { SectionListData, Text, TouchableOpacity, View } from 'react-native';
@@ -10,6 +9,8 @@ import {getTheme, themeColor} from '../mocks/calendarTheme';
 import { DateTime } from 'luxon';
 import { DayProps } from 'react-native-calendars/src/calendar/day';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { Event } from 'realmdb/Event';
+import { EventOutcome } from 'types/event';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LogNavigatorParamList } from 'types/navigation';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
@@ -21,7 +22,7 @@ import { makeStyles } from '@rneui/themed';
 // This allows the presentation of specific icons on the calendar day to show
 // flights or battery cycles.
 interface ExtendedMarkingProps extends MarkingProps {
-  hasFlight?: boolean;
+  hasEvent?: boolean;
   hasBatteryCycle?: boolean;
 };
 
@@ -40,9 +41,9 @@ const LogScreen = ({ navigation }: Props) => {
 
   const events: Event[] = [
     {
-      id: '1',
+      id: '123456789012',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-11-18T03:28:04.651Z',
       duration: '30:25',
       modelId: '1',
@@ -58,7 +59,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '1.1',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-11-20T03:28:04.651Z',
       duration: '30:25',
       modelId: '0',
@@ -74,7 +75,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '1.2',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-11-20T03:28:04.651Z',
       duration: '30:25',
       modelId: '',
@@ -90,7 +91,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '2',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-18T03:28:04.651Z',
       duration: '30:25',
       modelId: '1',
@@ -106,7 +107,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '3',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-19T03:28:04.651Z',
       duration: '30:25',
       modelId: '',
@@ -122,7 +123,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '4',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-20T03:28:04.651Z',
       duration: '30:25',
       modelId: '1',
@@ -138,7 +139,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '5',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-21T03:28:04.651Z',
       duration: '30:25',
       modelId: '1',
@@ -154,7 +155,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '6',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-22T03:28:04.651Z',
       duration: '30:25',
       modelId: '1',
@@ -170,7 +171,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '7',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-23T03:28:04.651Z',
       duration: '30:25',
       modelId: '',
@@ -186,7 +187,7 @@ const LogScreen = ({ navigation }: Props) => {
     {
       id: '8',
       number: 1,
-      outcome: EventOutcome.FourStar,
+      outcome: EventOutcome.Star4,
       date: '2023-12-24T03:28:04.651Z',
       duration: '30:25',
       modelId: '1',
@@ -242,7 +243,7 @@ const LogScreen = ({ navigation }: Props) => {
       if (event.data && event.data.length > 0 && !isEmpty(event.data[0])) {
         // Check for flights and/or battery cycles on this day. Return an indication
         // fpr each in the marked data.
-        const hasFlight = event.data.findIndex(e => {
+        const hasEvent = event.data.findIndex(e => {
           return e && e.modelId === '1'; // test is temp for testing
         }) >= 0;
         const hasBatteryCycle = event.data.findIndex(e => {
@@ -250,7 +251,7 @@ const LogScreen = ({ navigation }: Props) => {
         }) >= 0;
 
         const d = event.data[0].date.split('T')[0];
-        marked[d] = { marked: true, hasFlight, hasBatteryCycle };
+        marked[d] = { marked: true, hasEvent, hasBatteryCycle };
       }
     });
     return marked;
@@ -274,7 +275,7 @@ const LogScreen = ({ navigation }: Props) => {
           </Text>
         </View>
         <View style={s.eventIcons}>
-          {marking?.hasFlight &&
+          {marking?.hasEvent &&
             <View style={s.eventFlightIcon}>
               <Icon
                 name={'plane-up'}
@@ -347,8 +348,8 @@ const LogScreen = ({ navigation }: Props) => {
             containerStyle={{marginHorizontal: 15}}
             onPress={() => {
               logEntry.modelId
-              ? navigation.navigate('FlightDetails', {
-                flightId: logEntry.flightId,
+              ? navigation.navigate('EventEditor', {
+                eventId: logEntry.eventId,
               })
               : navigation.navigate('BatteryCycleEditor', {
                 batteryId: logEntry.batteryId,

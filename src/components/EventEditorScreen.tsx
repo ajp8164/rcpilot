@@ -3,19 +3,19 @@ import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
-import { FlightOutcome } from 'types/flight';
-import { FlightRating } from 'components/molecules/FlightRating';
+import { EventOutcome } from 'types/event';
+import { EventRating } from 'components/molecules/EventRating';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { enumIdsToValues } from 'lib/utils';
-import { flightOutcomeIcons } from 'lib/flight';
+import { eventOutcomeIcons } from 'lib/event';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'FlightDetails'>;
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'EventEditor'>;
 
-const FlightDetailsScreen = ({ navigation }: Props) => {
+const EventEditorScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -88,13 +88,13 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Outcome'}
         position={['last']}
-        value={<FlightRating value={FlightOutcome.Star3}/>}
+        value={<EventRating value={EventOutcome.Star3}/>}
         onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Flight Outcome',
-          headerBackTitle: 'Flight',
-          values: Object.values(FlightOutcome),
-          icons: flightOutcomeIcons,
-          selected: FlightOutcome.Star3,
+          title: 'Event Outcome',
+          headerBackTitle: 'Event',
+          values: Object.values(EventOutcome),
+          icons: eventOutcomeIcons,
+          selected: EventOutcome.Star3,
           eventName: 'outcome',
         })}
       />
@@ -105,7 +105,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
         value={'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Fuel',
-          headerBackTitle: 'Flight',
+          headerBackTitle: 'Event',
           footer: 'You can manage fuels through the Globals section in the Setup tab.',
           values: Object.values(fuels),
           selected: enumIdsToValues(['id2'], fuels),
@@ -127,7 +127,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
         value={'Andy'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Pilot',
-          headerBackTitle: 'Flight',
+          headerBackTitle: 'Event',
           footer: 'You can manage pilots through the Globals section in the Setup tab.',
           values: Object.values(pilots),
           selected: enumIdsToValues(['id2'], pilots),
@@ -140,7 +140,7 @@ const FlightDetailsScreen = ({ navigation }: Props) => {
         value={'Sport'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Style',
-          headerBackTitle: 'Flight',
+          headerBackTitle: 'Event',
           footer: 'You can manage styles through the Globals section in the Setup tab.',
           values: Object.values(modelStyles),
           selected: enumIdsToValues(['id2'], modelStyles),
@@ -174,4 +174,4 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   }
 }));
 
-export default FlightDetailsScreen;
+export default EventEditorScreen;

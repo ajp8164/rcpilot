@@ -7,20 +7,20 @@ import React, { useEffect } from 'react';
 import ActionBar from 'components/atoms/ActionBar';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { FlightNavigatorParamList } from 'types/navigation';
+import { EventNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = NativeStackScreenProps<FlightNavigatorParamList, 'FlightPreFlight'>;
+export type Props = NativeStackScreenProps<EventNavigatorParamList, 'EventPreCheck'>;
 
-const FlightPreFlightScreen = ({ navigation }: Props) => {
+const EventPreCheckScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   const checklist: Checklist = {
     id: '1',
     name: 'test',
-    type: ChecklistType.PreFlight,
+    type: ChecklistType.PreCheck,
     actions: [
       {
         description: 'description',
@@ -46,8 +46,8 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
           title={'Done'}
           titleStyle={[theme.styles.buttonClearTitle, s.headerButton]}
           buttonStyle={[theme.styles.buttonClear, s.doneButton]}
-          onPress={() => navigation.navigate('FlightTimer', {
-            flightId: '1'
+          onPress={() => navigation.navigate('EventTimer', {
+            eventId: '1'
           })}
         />
       ),
@@ -66,7 +66,7 @@ const FlightPreFlightScreen = ({ navigation }: Props) => {
         checked={true}
         position={listItemPosition(index, checklist.actions.length)}
         onPress={() => null}
-        onPressInfo={() => navigation.navigate('FlightChecklistItem', {
+        onPressInfo={() => navigation.navigate('EventChecklistItem', {
           checklistId: '1',
           actionIndex: 0,
         })}
@@ -109,4 +109,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default FlightPreFlightScreen;
+export default EventPreCheckScreen;

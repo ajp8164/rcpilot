@@ -3,9 +3,9 @@ import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen'
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatePickerScreen from 'components/ChecklistTemplatePickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
-import FlightDetailsScreen from 'components/FlightDetailsScreen';
-import FlightNavigator from 'components/navigation/FlightNavigator';
-import FlightsScreen from 'components/FlightsScreen';
+import EventEditorScreen from 'components/EventEditorScreen';
+import EventNavigator from 'components/navigation/EventNavigator';
+import EventsScreen from 'components/EventsScreen';
 import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
@@ -115,8 +115,8 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='FlightNavigator'
-        component={FlightNavigator}
+        name='EventNavigator'
+        component={EventNavigator}
         options={{
           headerShown: false,
           presentation: 'fullScreenModal'
@@ -130,14 +130,14 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name="Flights"
-        component={FlightsScreen}
+        name="Events"
+        component={EventsScreen}
       />
       <ModelsStack.Screen
-        name="FlightDetails"
-        component={FlightDetailsScreen}
+        name="EventEditor"
+        component={EventEditorScreen}
         options={{
-          title: 'Flight Details',
+          title: 'Event Details',
         }}
       />
       <ModelsStack.Screen

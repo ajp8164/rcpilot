@@ -8,10 +8,10 @@ import DatabaseInfoScreen from 'components/DatabaseInfoScreen';
 import DatabaseReportingScreen from 'components/DatabaseReportingScreen';
 import DropboxAccessScreen from 'components/DropboxAccessScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
+import EventEditorScreen from 'components/EventEditorScreen';
 import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
 import EventStylesScreen from 'components/EventStylesScreen';
-import FlightDetailsScreen from 'components/FlightDetailsScreen';
-import FlightsScreen from 'components/FlightsScreen';
+import EventsScreen from 'components/EventsScreen';
 import LocationNavigator from 'components/navigation/LocationNavigator';
 import LocationsScreen from 'components/LocationsScreen';
 import ModelCategoriesScreen from 'components/ModelCategoriesScreen';
@@ -103,14 +103,14 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="Flights"
-        component={FlightsScreen}
+        name="Events"
+        component={EventsScreen}
       />
       <SetupStack.Screen
-        name="FlightDetails"
-        component={FlightDetailsScreen}
+        name="EventEditor"
+        component={EventEditorScreen}
         options={{
-          title: 'Flight Details',
+          title: 'Event Details',
         }}
       />
       <SetupStack.Screen

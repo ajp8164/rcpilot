@@ -221,7 +221,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         title={'Blade 150S'}
         value={'0:04, 1 event'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Flights', {
+        onPress={() => navigation.navigate('Events', {
           pilotId: pilot!._id.toString(),
         })}
       />

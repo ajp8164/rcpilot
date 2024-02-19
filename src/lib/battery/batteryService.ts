@@ -16,10 +16,10 @@ const getBatteryCellArchitecture = (chemistry: BatteryChemistry): BatteryCellArc
 
 export const batteryCellConfigurationToString = (
   chemistry: BatteryChemistry,
-  cellConfiguration: string[],
+  cellConfiguration: string[] | number[],
 ) => {
-  const sCells = parseInt(cellConfiguration[0]);
-  const pCells = parseInt(cellConfiguration[1]);
+  const sCells = typeof cellConfiguration[0] === 'string' ? parseInt(cellConfiguration[0]) : cellConfiguration[0];
+  const pCells = typeof cellConfiguration[1] === 'string' ? parseInt(cellConfiguration[1]) : cellConfiguration[1];
   if (getBatteryCellArchitecture(chemistry) === BatteryCellArchitecture.SeriesParallelCells) {
     const series =
       sCells > 0

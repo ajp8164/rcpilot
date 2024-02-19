@@ -2,18 +2,18 @@ import { AppTheme, useTheme } from 'theme';
 import { Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 
-import { FlightOutcome } from 'types/flight';
+import { EventOutcome } from 'types/event';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import React from 'react';
 import { makeStyles } from '@rneui/themed';
 
-interface FlightRatingInterface {
-  value: FlightOutcome;
+interface EventRatingInterface {
+  value: EventOutcome;
 }
 
-export const FlightRating = ({
+export const EventRating = ({
   value,
-}: FlightRatingInterface) => {
+}: EventRatingInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -40,7 +40,7 @@ export const FlightRating = ({
         );
       }
     } catch(_e: any) {
-      if (value === FlightOutcome.Crashed) {
+      if (value === EventOutcome.Crashed) {
         outcomeEl.push(<Text style={theme.styles.textNormal}>{'Crashed'}</Text>);
       } else {
         outcomeEl.push(<Text style={theme.styles.textNormal}>{'Unspecified'}</Text>);

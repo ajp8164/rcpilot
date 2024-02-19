@@ -186,8 +186,15 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               modelId: model._id.toString(),
             });
           } else {
-            navigation.navigate('FlightNavigator', {
-              modelId: model._id.toString(),
+            navigation.navigate('EventNavigator', {
+              screen: 'BatteryPicker',
+              params: {
+                mode: 'many',
+                title: 'Batteries',
+                backTitle: 'Cancel',
+                selected: undefined,
+                eventName: '',
+              },
             });
           }
         }}

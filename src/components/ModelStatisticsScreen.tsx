@@ -9,7 +9,7 @@ const ModelStatisticsScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
   
   return (
-    <EmptyView message={'No Flights for Statistics'} />
+    <EmptyView message={'No Events for Statistics'} />
   );
 };
 

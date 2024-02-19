@@ -4,8 +4,8 @@ import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
 import { ChecklistType } from 'types/checklist';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
+import { EventOutcome } from 'types/event';
 import { FilterType } from 'types/filter';
-import { FlightOutcome } from 'types/flight';
 import { JChecklistAction } from 'realmdb/Checklist';
 import { ListModels } from 'types/model';
 import { ModelPickerInterface } from 'components/ModelPickerScreen';
@@ -98,8 +98,8 @@ export type BatteryPerformanceNavigatorParamList = {
 
 export type LogNavigatorParamList = {
   Log: undefined;
-  FlightDetails: {
-    flightId: string;
+  EventEditor: {
+    eventId: string;
   };
   BatteryCycleEditor: {
     batteryId: string;
@@ -128,18 +128,17 @@ export type ModelsNavigatorParamList = {
     eventName: string;
   };
   EnumPicker: EnumPickerInterface;
-  Flights: {
+  Events: {
+    modelId?: string;
     pilotId?: string;
   };
-  FlightDetails: {
-    flightId: string;
+  EventEditor: {
+    eventId: string;
   };
-  FlightOutcome: {
-    flightOutcome: FlightOutcome;
+  EventOutcome: {
+    eventOutcome: EventOutcome;
   };
-  FlightNavigator: {
-    modelId: string;
-  };
+  EventNavigator: NavigatorScreenParams<EventNavigatorParamList>;
   LocationDetails: {
     locationId: string;
   };
@@ -280,19 +279,17 @@ export type NewModelNavigatorParamList = {
   };
 };
 
-export type FlightNavigatorParamList = {
-  FlightBatteries: {
-    modelId: string;
-  };
-  FlightPreFlight: {
-    flightId: string;
+export type EventNavigatorParamList = {
+  BatteryPicker: BatteryPickerInterface;
+  EventPreCheck: {
+    eventId: string;
   }
-  FlightChecklistItem: {
+  EventChecklistItem: {
     checklistId: string;
     actionIndex: number;
   }
-  FlightTimer: {
-    flightId: string;
+  EventTimer: {
+    eventId: string;
   }
   Notes: {
     title?: string;
@@ -391,14 +388,15 @@ export type SetupNavigatorParamList = {
   DropboxAccess: undefined;
   DatabaseReporting: undefined;
   EnumPicker: EnumPickerInterface;
-  Flights: {
+  Events: {
+    modelId?: string;
     pilotId?: string;
   };
-  FlightDetails: {
-    flightId: string;
+  EventEditor: {
+    eventId: string;
   };
-  FlightOutcome: {
-    flightOutcome: FlightOutcome;
+  EventOutcome: {
+    eventOutcome: EventOutcome;
   };
   LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
   Pilot: {

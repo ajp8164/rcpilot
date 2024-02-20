@@ -10,7 +10,7 @@ import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'Notes'>;
 
 const NotesScreen = ({ navigation, route }: Props) => {
-  const { title, text, eventName } = route.params;
+  const { title, text, headerButtonStyle, eventName } = route.params;
 
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
@@ -26,9 +26,9 @@ const NotesScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {enabled: canSave, action: onDone},
-      undefined,
-      {title}
+      {enabled: canSave, action: onDone, style: headerButtonStyle},
+      {style: headerButtonStyle},
+      title ? {title} : {},
     );
   }, [newText]);
 

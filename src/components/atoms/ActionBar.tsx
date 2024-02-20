@@ -13,7 +13,7 @@ export type ActionBarItem = {
 }
 
 interface ActionBarInterface {
-  actions?: ActionBarItem[];
+  actions: ActionBarItem[];
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
@@ -28,7 +28,11 @@ const ActionBar = ({
     return (
       <View
         key={index}
-        style={s.actionContainer}>
+        style={[
+          s.actionContainer,
+          index === 0 ? {paddingLeft: 10} : {},
+          index === actions.length - 1 ? {paddingRight: 10} : {},
+        ]}>
         <View style={s.actionButton}>
           <Pressable onPress={action.onPress}>
             {action.ActionComponent}
@@ -63,24 +67,22 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     right: 0,
     bottom: 0,
     height: buttonSize + theme.insets.bottom,
-    backgroundColor: theme.colors.white
+    backgroundColor: theme.colors.white,
   },
   contentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: '100%'
+    height: '100%',
   },
   actionContainer: {
-    width: buttonSize,
+    minWidth: buttonSize,
     height: buttonSize,
     justifyContent: 'center',
     marginTop: -theme.insets.bottom,
-    paddingHorizontal: 20,
   },
   actionButton: {
-    position: 'absolute',
-    width: buttonSize,
+    minWidth: buttonSize,
     height: buttonSize,
     justifyContent: 'center',
     alignItems: 'center',

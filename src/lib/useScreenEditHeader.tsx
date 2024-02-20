@@ -4,6 +4,7 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { Button } from '@rneui/base';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
+import { TextStyle } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 export type ScreenEditHeaderAction = {
@@ -11,6 +12,7 @@ export type ScreenEditHeaderAction = {
   enabled?: boolean;
   label?: string;
   visible?: boolean;
+  style?: TextStyle;
 };
 
 /**
@@ -37,7 +39,7 @@ export const useScreenEditHeader = () => {
         return (
           <Button
             title={leftButton?.label || 'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            titleStyle={[theme.styles.buttonScreenHeaderTitle, leftButton?.style]}
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
             disabled={leftButton?.enabled !== undefined ? !leftButton.enabled : false}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
@@ -52,7 +54,7 @@ export const useScreenEditHeader = () => {
         return (
           <Button
             title={rightButton?.label || 'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            titleStyle={[theme.styles.buttonScreenHeaderTitle, rightButton?.style]}
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
             disabled={rightButton?.enabled !== undefined ? !rightButton.enabled : false}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}

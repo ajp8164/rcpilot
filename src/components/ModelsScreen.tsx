@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
 import { ChecklistType } from 'types/checklist';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -46,7 +45,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
-  const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -153,7 +151,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       return c.type === ChecklistType.PreEvent;
     });
   
-    if (activeBatteries.length) {
+    if (model.logsBatteries) {
       navigation.navigate('EventSequenceNavigator', {
         screen: 'EventSequenceBatteryPicker',
         params: { cancelable: true },
@@ -166,6 +164,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     } else {
       navigation.navigate('EventSequenceNavigator', {
         screen: 'EventSequenceTimer',
+        params: { cancelable: true },
       });
     }
   };

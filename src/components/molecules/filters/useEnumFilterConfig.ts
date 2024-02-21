@@ -1,12 +1,15 @@
-import { modelCategories, modelStyles } from '../../../mocks/enums';
-
+import { Battery } from 'realmdb/Battery';
 import { BatteryChemistry } from 'types/battery';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EnumRelation } from 'components/molecules/filters';
 import { EventOutcome } from 'types/event';
+import { EventStyle } from 'realmdb/EventStyle';
+import { Location } from 'realmdb/Location';
+import { ModelCategory } from 'realmdb/ModelCategory';
 import { ModelType } from 'types/model';
-import { enumIdsToValues } from 'lib/utils';
+import { Pilot } from 'realmdb/Pilot';
 import { eventOutcomeIcons } from 'lib/event';
+import { useRealm } from '@realm/react';
 
 export type EnumName = keyof typeof enumFilterConfigs;
 type EnumPickerProps = Omit<EnumPickerInterface, 'selected' | 'eventName'>;
@@ -73,26 +76,33 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
 });
 
 export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) => {
+  const realm = useRealm();
+
   let config = Object.assign({}, enumFilterConfigs[enumName]);
   config.sectionName = config.sectionName?.replace('{0}', relation === EnumRelation.Is ? 'INCLUDE IN' : 'EXCLUDE FROM');
-
+  
   // Dynamic list of values. These enum names capture a user entered list of values.
   // Use a database selector to fill values dynamically; use enumName
   switch (enumName) {
     case 'Batteries':
-      // config.values = enumIdsToValues(['id0'], batteries);
+      const batteries = realm.objects(Battery);
+      config.values = batteries.map(b => b.name).sort();
       break;
     case 'Categories':
-      config.values = enumIdsToValues(['id1'], modelCategories);
+      const categories = realm.objects(ModelCategory);
+      config.values = categories.map(c => c.name).sort();
       break;
     case 'Locations':
-      // config.values = enumIdsToValues(['id0'], locations);
+      const locations = realm.objects(Location);
+      config.values = locations.map(l => l.name).sort();
       break;
     case 'ModelStyles':
-      config.values = enumIdsToValues(['id0'], modelStyles);
+      const styles = realm.objects(EventStyle);
+      config.values = styles.map(s => s.name).sort();
       break;
     case 'Pilots':
-      // config.values = enumIdsToValues(['id0'], pilots);
+      const pilots = realm.objects(Pilot);
+      config.values = pilots.map(p => p.name).sort();
       break;
     }
 

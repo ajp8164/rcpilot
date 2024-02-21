@@ -166,7 +166,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     setDischargePackResistance(result.packValue.toString());
   };
 
-  const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {console.log(result);
+  const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
     setDischargeCellVoltages(result.cellValues.map(v => {return v.toString()}));
     setDischargePackVoltage(result.packValue.toString());
   };

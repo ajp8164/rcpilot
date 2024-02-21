@@ -70,7 +70,7 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
               title={'Timer'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => navigation.navigate('EventSequenceTimer')}
+              onPress={() => navigation.navigate('EventSequenceTimer', {})}
             />
             <Icon
               name={'chevron-right'}

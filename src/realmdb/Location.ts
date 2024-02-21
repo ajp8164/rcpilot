@@ -1,7 +1,6 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 
 import { ISODateString } from 'types/common';
-import { LocationPosition } from 'types/location';
 
 export class Location extends Object<Location> {
   _id!: BSON.ObjectId;
@@ -12,14 +11,29 @@ export class Location extends Object<Location> {
   notes?: string;
 
   static schema: ObjectSchema = {
-    name: 'Event',
+    name: 'Location',
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       createdOn: 'string',
       updatedOn: 'string',
+      name: 'string',
       position: 'LocationPosition',
       notes: 'string?',
     },
     primaryKey: '_id',
+  };
+};
+
+export class LocationPosition extends Object<LocationPosition> {
+  latitude!: number;
+  longitude!: number;
+
+  static schema: ObjectSchema = {
+    name: 'LocationPosition',
+    embedded: true,
+    properties: {
+      latitude: 'float',
+      longitude: 'float',
+    },
   };
 };

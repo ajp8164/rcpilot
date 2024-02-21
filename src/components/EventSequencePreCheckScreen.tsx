@@ -85,7 +85,6 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
   }, []);
   
   useEffect(() => {
-    console.log(JSON.stringify(actionsToDo.current));
     // Intialize action history entries.
     actionsToDo.current.forEach(a => {
       dispatch(eventSequence.addChecklistActionHistoryEntry({
@@ -142,7 +141,6 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
 
   const completeAllActions = () => {
     Object.keys(currentEventSequence.checklistActionHistoryEntries).forEach(key => {
-      console.log(currentEventSequence.checklistActionHistoryEntries[key]);
       if (!currentEventSequence.checklistActionHistoryEntries[key].complete) {
         dispatch(eventSequence.toggleChecklistActionComplete({
           checklistActionRefId: key,

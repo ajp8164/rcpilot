@@ -9,6 +9,7 @@ const buttonSize = 60;
 export type ActionBarItem = {
   ActionComponent?: ReactNode;
   label?: string;
+  visible?: boolean;
   onPress?: () => void;
 }
 
@@ -33,16 +34,18 @@ const ActionBar = ({
           index === 0 ? {paddingLeft: 10} : {},
           index === actions.length - 1 ? {paddingRight: 10} : {},
         ]}>
-        <View style={s.actionButton}>
-          <Pressable onPress={action.onPress}>
-            {action.ActionComponent}
-            {action.label &&
-              <Text style={s.label}>
-                {action.label}
-              </Text>
-            }
-          </Pressable>
-        </View>
+        {(action.visible === undefined ? true : action.visible) &&
+          <View style={s.actionButton}>
+            <Pressable onPress={action.onPress}>
+              {action.ActionComponent}
+              {action.label &&
+                <Text style={s.label}>
+                  {action.label}
+                </Text>
+              }
+            </Pressable>
+          </View>
+        }
       </View>
     );
   };

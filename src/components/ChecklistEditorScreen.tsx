@@ -137,7 +137,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         if (canSave) {
           return (
             <Button
-              title={'Done'}
+              title={'Save'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               onPress={onDone}

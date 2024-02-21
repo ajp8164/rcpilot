@@ -61,10 +61,12 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
           size={iconSize}
           color={iconColor}
           solid={checked}
-          style={(checked && (iconChecked === iconUnchecked)) || (iconChecked !== iconUnchecked) ?
-            {} :
-            s.uncheckedIcon
-          }
+          style={[
+            s.icon,
+            (checked && (iconChecked === iconUnchecked)) || (iconChecked !== iconUnchecked)
+              ? {}
+              : s.uncheckedIcon
+          ]}
         />
       }
       rightImage={
@@ -84,6 +86,9 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   container: {
     minHeight: 48
+  },
+  icon: {
+    paddingRight: 5,
   },
   uncheckedIcon: {
     opacity: 0,

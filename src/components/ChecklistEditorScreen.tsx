@@ -1,11 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, JChecklistAction } from 'realmdb/Checklist';
-import {
-  ChecklistActionNonRepeatingScheduleTimeframe,
-  ChecklistActionRepeatingScheduleFrequency,
-  ChecklistActionScheduleType,
-  ChecklistType
-} from 'types/checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, ListItemInput, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewChecklistNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
@@ -21,10 +15,12 @@ import { useObject, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
+import { ChecklistType } from 'types/checklist';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { actionScheduleSummary } from 'lib/checklist';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -222,70 +218,6 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     setActions(data);
   };
 
-  const actionScheduleSummary = (action: JChecklistAction) => {
-    let result = '';
-    if (action.schedule.type === ChecklistActionScheduleType.Repeating) {
-      let when = '';
-      let times = '';
-      let freq = '';
-
-      if (action.schedule.period === ChecklistActionRepeatingScheduleFrequency.ModelMinutes) {
-        times = action.schedule.value.toString();
-        freq = ` minute${action.schedule.value === 1 ? '' : 's'} of model time`;
-      } else {
-        if (action.schedule.value === 1) {
-          times = '';
-          freq = action.schedule.period.toLowerCase().replace(/s$/, '');
-        } else {
-          times = `${action.schedule.value} `;
-          freq = action.schedule.period.toLowerCase();
-        }
-
-        if (action.schedule.period !== ChecklistActionRepeatingScheduleFrequency.Events) {
-          freq += ' of calendar time';
-        }
-      }
-
-      if (type === ChecklistType.PreEvent) {
-        when = 'before every';
-      } else {
-        when = 'after every';
-      }
-      result = `Perform ${when} ${times}${freq}`;
-    } else {
-      let after = '';
-      let value = '';
-      let timeframe = '';
-
-      if (action.schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.Today) {
-        value = '';
-        timeframe = '';
-        after = 'immediatley at install';
-      } else {
-        value = `${action.schedule.value} `;
-        timeframe = action.schedule.period!.toString().toLowerCase();
-
-        if (action.schedule.value === 1) {
-          timeframe = timeframe.replace(/s$/, '');
-        }
-
-        if (action.schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.ModelMinutes) {
-          timeframe = 'minutes';
-          if (action.schedule.value === 1) {
-            timeframe = timeframe.replace(/s$/, '');
-          }  
-          after = ' after total model time at install';
-        } else if (action.schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.Events) {
-          after = ' after total events at install';
-        }  else {
-          after = ' after date at install';
-        }
-      }
-      result = `Perform once ${value}${timeframe}${after}`;
-    }
-    return result;
-  };
-
   const renderChecklistAction = ({
     item: action,
     getIndex,
@@ -301,7 +233,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           ref={ref => ref && action.refId && listEditor.add(ref, 'checklist-actions', action.refId)}
           title={action.description}
-          subtitle={actionScheduleSummary(action)}
+          subtitle={actionScheduleSummary(action, type)}
           subtitleNumberOfLines={1}
           position={listItemPosition(index, actions!.length)}
           titleNumberOfLines={1}

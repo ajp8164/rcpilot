@@ -149,7 +149,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
 
   if (!battery.cycles.length) {
     return (
-      <EmptyView info message={'No battery cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
+      <EmptyView info message={'No Battery Cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
     );    
   }
 
@@ -158,7 +158,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
-      style={[theme.styles.view, s.sectionList, {borderWidth: 2}]}
+      style={[theme.styles.view, s.sectionList]}
       sections={groupCycles([...battery?.cycles].reverse())} // Most recent cycles at the top
       keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
       renderItem={renderBatteryCycle}

@@ -4,10 +4,13 @@ import { Image, SectionList, SectionListData, SectionListRenderItem, View } from
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
+import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
+import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
+import { ChecklistType } from 'types/checklist';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
@@ -15,11 +18,11 @@ import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
+import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
-import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
@@ -35,6 +38,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
+  const dispatch = useDispatch();
   const realm = useRealm();
 
   const _pilot = useSelector(selectPilot);
@@ -42,6 +46,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
+  const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -140,6 +145,31 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     return groups;
   };
 
+  const startNewEventSequence= (model: Model) => {
+    dispatch(eventSequence.reset());
+    dispatch(eventSequence.setModel({modelId: model._id.toString()}));
+
+    const checklists = model?.checklists.filter(c => {
+      return c.type === ChecklistType.PreEvent;
+    });
+  
+    if (activeBatteries.length) {
+      navigation.navigate('EventSequenceNavigator', {
+        screen: 'EventSequenceBatteryPicker',
+        params: { cancelable: true },
+      });
+    } else if (checklists.length) {
+      navigation.navigate('EventSequenceNavigator', {
+        screen: 'EventSequencePreCheck',
+        params: { cancelable: true },
+      });
+    } else {
+      navigation.navigate('EventSequenceNavigator', {
+        screen: 'EventSequenceTimer',
+      });
+    }
+  };
+
   const renderModel: SectionListRenderItem<Model, Section> = ({
     item: model,
     section,
@@ -186,16 +216,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               modelId: model._id.toString(),
             });
           } else {
-            navigation.navigate('EventNavigator', {
-              screen: 'BatteryPicker',
-              params: {
-                mode: 'many',
-                title: 'Batteries',
-                backTitle: 'Cancel',
-                selected: undefined,
-                eventName: '',
-              },
-            });
+            startNewEventSequence(model);
           }
         }}
         showInfo={listModels === 'all'}

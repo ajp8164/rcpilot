@@ -1,5 +1,5 @@
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
-import { ChecklistAction, ChecklistActionSchedule } from './Checklist';
+import { ChecklistAction, ChecklistActionHistoryEntry, ChecklistActionSchedule } from './Checklist';
 import { Filter, FilterState } from './Filter';
 
 import { Battery } from './Battery';
@@ -33,6 +33,7 @@ const Schema = [
   BatteryCycle,
   BatteryDischarge,
   ChecklistAction,
+  ChecklistActionHistoryEntry,
   ChecklistActionSchedule,
   FilterState,
 ];

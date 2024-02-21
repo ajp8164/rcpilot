@@ -1,5 +1,11 @@
-import { ChecklistActionSchedulePeriod, ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
+import {
+  ChecklistActionSchedulePeriod,
+  ChecklistActionScheduleType,
+  ChecklistType
+} from 'types/checklist';
 import { Object, ObjectSchema } from 'realm';
+
+import { ISODateString } from 'types/common';
 
 export class Checklist extends Object<Checklist> {
   refId!: string;
@@ -33,6 +39,7 @@ export class ChecklistAction extends Object<ChecklistAction> {
   schedule!: ChecklistActionSchedule;
   cost?: number;
   notes?: string;
+  history!: ChecklistActionHistoryEntry[];
 
   static schema: ObjectSchema = {
     name: 'ChecklistAction',
@@ -43,6 +50,7 @@ export class ChecklistAction extends Object<ChecklistAction> {
       schedule: 'ChecklistActionSchedule',
       cost: 'float?',
       notes: 'string?',
+      history: { type: 'list', objectType: 'ChecklistActionHistoryEntry', default: [] },
     },
   };
 };
@@ -66,6 +74,29 @@ export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
       period: 'string',
       type: 'string',
       value: 'int?',
+    },
+  };
+};
+
+// Plain JS object type.
+export class JChecklistActionHistoryEntry {
+  date!: ISODateString;
+  complete!: boolean;
+  notes?: string;
+};
+
+export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEntry> {
+  date!: ISODateString;
+  complete!: boolean;
+  notes?: string;
+
+  static schema: ObjectSchema = {
+    name: 'ChecklistActionHistoryEntry',
+    embedded: true,
+    properties: {
+      date: 'string',
+      complete: 'bool',
+      notes: 'string?',
     },
   };
 };

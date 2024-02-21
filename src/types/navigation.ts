@@ -28,7 +28,7 @@ export type MultipleNavigatorParamList = {
   ModelPicker: ModelPickerInterface;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -76,7 +76,7 @@ export type BatteriesNavigatorParamList = {
   NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -90,7 +90,7 @@ export type BatteryPerformanceNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -138,7 +138,7 @@ export type ModelsNavigatorParamList = {
   EventOutcome: {
     eventOutcome: EventOutcome;
   };
-  EventNavigator: NavigatorScreenParams<EventNavigatorParamList>;
+  EventSequenceNavigator: NavigatorScreenParams<EventSequenceNavigatorParamList>;
   LocationDetails: {
     locationId: string;
   };
@@ -160,7 +160,7 @@ export type ModelsNavigatorParamList = {
   ModelFiltersNavigator: NavigatorScreenParams<ModelFiltersNavigatorParamList>;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -174,7 +174,7 @@ export type ModelFiltersNavigatorParamList = {
   };
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -200,7 +200,7 @@ export type ReportFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -235,7 +235,7 @@ export type NewBatteryNavigatorParamList = {
   };
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -260,7 +260,7 @@ export type NewBatteryCycleNavigatorParamList = {
   };
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -273,27 +273,27 @@ export type NewModelNavigatorParamList = {
   };
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
 };
 
-export type EventNavigatorParamList = {
-  BatteryPicker: BatteryPickerInterface;
-  EventPreCheck: {
-    eventId: string;
+export type EventSequenceNavigatorParamList = {
+  EventSequenceBatteryPicker: {
+    cancelable?: boolean;
+  };
+  EventSequencePreCheck: {
+    cancelable?: boolean;
+  };
+  EventSequenceChecklistItem: {
+    checklistRefId: string;
+    actionRefId: string;
   }
-  EventChecklistItem: {
-    checklistId: string;
-    actionIndex: number;
-  }
-  EventTimer: {
-    eventId: string;
-  }
+  EventSequenceTimer: undefined;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   }
@@ -306,7 +306,7 @@ export type LocationNavigatorParamList = {
   };
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -316,7 +316,7 @@ export type NewModelFuelNavigatorParamList = {
   NewModelFuel: undefined;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -327,7 +327,7 @@ export type NewModelPropellerNavigatorParamList = {
   NewModelPropeller: undefined;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -347,7 +347,7 @@ export type NewChecklistNavigatorParamList = {
   },
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -361,7 +361,7 @@ export type NewChecklistActionNavigatorParamList = {
   };
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };
@@ -443,7 +443,7 @@ export type SetupNavigatorParamList = {
   NewReportNavigator: NavigatorScreenParams<NewReportNavigatorParamList>;
   Notes: {
     title?: string;
-    headerButtonStyle?: TextStyle | TextStyle[];
+    headerButtonStyle?: TextStyle;
     text?: string;
     eventName: string;
   };

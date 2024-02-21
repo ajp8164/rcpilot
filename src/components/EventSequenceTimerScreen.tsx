@@ -5,7 +5,7 @@ import { Picker, PickerItem, SwipeButton, viewport } from '@react-native-ajp-ele
 import { Pressable, Text, View } from 'react-native';
 import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 
-import { EventNavigatorParamList } from 'types/navigation';
+import { EventSequenceNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { makeStyles } from '@rneui/themed';
@@ -25,9 +25,9 @@ type TimerButton = {
   onPress?: () => void | undefined;
 };
 
-export type Props = NativeStackScreenProps<EventNavigatorParamList, 'EventTimer'>;
+export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceTimer'>;
 
-const EventTimerScreen = ({ navigation }: Props) => {
+const EventSequenceTimerScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -322,4 +322,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   }
 }));
 
-export default EventTimerScreen;
+export default EventSequenceTimerScreen;

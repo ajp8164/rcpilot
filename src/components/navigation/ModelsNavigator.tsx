@@ -4,7 +4,7 @@ import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatePickerScreen from 'components/ChecklistTemplatePickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
-import EventNavigator from 'components/navigation/EventNavigator';
+import EventSequenceNavigator from 'components/navigation/EventSequenceNavigator';
 import EventsScreen from 'components/EventsScreen';
 import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
@@ -111,15 +111,15 @@ const ModelsNavigator = () => {
         component={ModelFiltersNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal'
+          presentation: 'modal',
         }}
       />
       <ModelsStack.Screen
-        name='EventNavigator'
-        component={EventNavigator}
+        name='EventSequenceNavigator'
+        component={EventSequenceNavigator}
         options={{
           headerShown: false,
-          presentation: 'fullScreenModal'
+          presentation: 'fullScreenModal',
         }}
       />
       <ModelsStack.Screen

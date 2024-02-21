@@ -22,7 +22,7 @@ const ReportScanCodesViewerScreen = ({ route, navigation }: Props) => {
   const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
 
   if (!report) {
-    return (<EmptyView error message={'Report not found!'} />);
+    return (<EmptyView error message={'Report Not Found!'} />);
   }
 
   return (

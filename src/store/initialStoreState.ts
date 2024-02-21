@@ -3,6 +3,7 @@ import {
   initialAppSettingsState,
 } from 'store/slices/appSettings';
 import { AppState, initialAppState } from 'store/slices/app';
+import { EventSequenceState, initialEventSequenceState } from 'store/slices/eventSequence';
 import { FiltersState, initialFiltersState } from 'store/slices/filters';
 import {
   NetworkStatusState,
@@ -14,6 +15,7 @@ import { UserState, initialUserState } from 'store/slices/user';
 export interface StoreState {
   app: AppState;
   appSettings: AppSettingsState;
+  eventSequence: EventSequenceState;
   filters: FiltersState;
   networkStatus: NetworkStatusState;
   pilot: PilotState;
@@ -23,6 +25,7 @@ export interface StoreState {
 export const initialStoreState = Object.freeze<StoreState>({
   app: initialAppState,
   appSettings: initialAppSettingsState,
+  eventSequence: initialEventSequenceState,
   filters: initialFiltersState,
   networkStatus: initialNetworkStatusState,
   pilot: initialPilotState,

@@ -70,7 +70,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
   });
 
   if (!report) {
-    return (<EmptyView error message={'Report not found!'} />);
+    return (<EmptyView error message={'Report Not Found!'} />);
   }
 
   return (

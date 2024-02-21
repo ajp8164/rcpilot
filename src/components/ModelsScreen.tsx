@@ -268,6 +268,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  if (listModels === 'retired' && !retiredModels.length) {
+    return (
+      <EmptyView info message={'No Retired Models'} />
+    );
+  }
+
   if (!activeModels.length && !retiredModels.length) {
     return (
       <EmptyView info message={'No Models'} details={"Tap the + button to add your first model."} />

@@ -291,6 +291,18 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  if (listBatteries === 'retired' && !retiredBatteries.length) {
+    return (
+      <EmptyView info message={'No Retired Batteries'} />
+    );
+  }
+
+  if (listBatteries === 'in-storage' && !inStorageBatteries.length) {
+    return (
+      <EmptyView info message={'No Batteries In Storage'} />
+    );
+  }
+
   if (!activeBatteries.length && !retiredBatteries.length && !inStorageBatteries.length) {
     return (
       <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />

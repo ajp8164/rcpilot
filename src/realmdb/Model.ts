@@ -3,6 +3,7 @@ import { ISODateString, ScanCodeSize } from 'types/common';
 
 import { Battery } from './Battery';
 import { Checklist } from 'realmdb/Checklist';
+import { Event } from './Event';
 import { EventStyle } from './EventStyle';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
@@ -25,6 +26,7 @@ export class Model extends Object<Model> {
   totalEvents?: number;
   totalTime?: number;
   lastEvent?: ISODateString;
+  events: Event[] = [];
   logsBatteries!: boolean;
   favoriteBatteries: Battery[] = [];
   logsFuel!: boolean;
@@ -54,6 +56,7 @@ export class Model extends Object<Model> {
       totalEvents: 'int?',
       totalTime: 'int?',
       lastEvent: 'string?',
+      events: { type: 'list', objectType: 'Event', default: [] },
       logsBatteries: { type: 'bool', default: false },
       favoriteBatteries: { type: 'list', objectType: 'Battery', default: [] },
       logsFuel: { type: 'bool', default: false },

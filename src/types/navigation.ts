@@ -290,7 +290,9 @@ export type EventSequenceNavigatorParamList = {
     checklistRefId: string;
     actionRefId: string;
   }
-  EventSequenceTimer: undefined;
+  EventSequenceTimer:  {
+    cancelable?: boolean;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle;

@@ -17,7 +17,7 @@ export class Pilot extends Object<Pilot> {
       createdOn: 'string',
       updatedOn: 'string',
       name: 'string',
-      favoriteModels: { type: 'list', objectType: 'Model', default: () => [] }
+      favoriteModels: { type: 'list', objectType: 'Model', default: [] }
     },
     primaryKey: '_id',
   };

@@ -1,9 +1,9 @@
 import { AppTheme, useTheme } from "theme";
+import { ColorValue, Pressable } from "react-native";
 import React, { useImperativeHandle, useRef } from "react";
 
 import CustomIcon from "theme/icomoon/CustomIcon";
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { Pressable } from "react-native";
 import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
 import { makeStyles } from "@rneui/themed";
 
@@ -14,6 +14,7 @@ interface Props extends _ListItem {
   iconChecked?: string;
   iconUnchecked?: string;
   iconSize?: number;
+  iconColor?: ColorValue;
 };
 
 export interface ListItemCheckboxInfoMethods {
@@ -28,6 +29,7 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
     iconChecked = 'check',
     iconUnchecked = 'check',
     iconSize = 18,
+    iconColor,
     } = props;
 
   const theme = useTheme();
@@ -57,9 +59,11 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
         <Icon
           name={checkIcon}
           size={iconSize}
+          color={iconColor}
+          solid={checked}
           style={(checked && (iconChecked === iconUnchecked)) || (iconChecked !== iconUnchecked) ?
-             {} :
-             s.uncheckedIcon
+            {} :
+            s.uncheckedIcon
           }
         />
       }

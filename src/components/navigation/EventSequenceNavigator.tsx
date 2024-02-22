@@ -1,3 +1,4 @@
+import EventEditorScreen from 'components/EventEditorScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
 import EventSequenceChecklistItemScreen from 'components/EventSequenceChecklistItemScreen';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
@@ -42,6 +43,13 @@ const EventSequenceNavigator = () => {
           component={EventSequenceChecklistItemScreen}
           options={{
             title: 'Checklist Item',
+          }}
+        />
+        <EventSequenceStack.Screen
+          name='EventEditor'
+          component={EventEditorScreen}
+          options={{
+            title: 'Log Event',
           }}
         />
         <EventSequenceStack.Screen

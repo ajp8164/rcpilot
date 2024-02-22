@@ -125,6 +125,7 @@
     "react-native-system-navigation-bar": "^2.2.0",
     "react-native-tab-view": "^3.5.1",
     "react-native-tcp-socket": "^6.0.5",
+    "react-native-tts": "^4.1.0",
     "react-native-typing-animation": "^0.1.7",
     "react-native-udp": "^4.1.7",
     "react-native-ui-lib": "^7.15.0",

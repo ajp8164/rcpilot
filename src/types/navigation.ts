@@ -99,7 +99,7 @@ export type BatteryPerformanceNavigatorParamList = {
 export type LogNavigatorParamList = {
   Log: undefined;
   EventEditor: {
-    eventId: string;
+    eventId?: string;
   };
   BatteryCycleEditor: {
     batteryId: string;
@@ -133,7 +133,7 @@ export type ModelsNavigatorParamList = {
     pilotId?: string;
   };
   EventEditor: {
-    eventId: string;
+    eventId?: string;
   };
   EventOutcome: {
     eventOutcome: EventOutcome;
@@ -280,6 +280,9 @@ export type NewModelNavigatorParamList = {
 };
 
 export type EventSequenceNavigatorParamList = {
+  EventEditor: {
+    eventId?: string;
+  };
   EventSequenceBatteryPicker: {
     cancelable?: boolean;
   };
@@ -395,7 +398,7 @@ export type SetupNavigatorParamList = {
     pilotId?: string;
   };
   EventEditor: {
-    eventId: string;
+    eventId?: string;
   };
   EventOutcome: {
     eventOutcome: EventOutcome;

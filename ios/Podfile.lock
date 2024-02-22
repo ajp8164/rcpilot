@@ -1466,6 +1466,8 @@ PODS:
     - React-Core
   - Sentry/HybridSDK (7.31.5)
   - SocketRocket (0.6.1)
+  - TextToSpeech (4.1.0):
+    - React
   - TwitterCore (3.2.0)
   - TwitterKit5 (5.2.0):
     - TwitterCore (>= 3.1.0)
@@ -1574,6 +1576,7 @@ DEPENDENCIES:
   - RNShare (from `../node_modules/react-native-share`)
   - RNSVG (from `../node_modules/react-native-svg`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
+  - TextToSpeech (from `../node_modules/react-native-tts`)
   - VisionCamera (from `../node_modules/react-native-vision-camera`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
@@ -1817,6 +1820,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-svg"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
+  TextToSpeech:
+    :path: "../node_modules/react-native-tts"
   VisionCamera:
     :path: "../node_modules/react-native-vision-camera"
   Yoga:
@@ -1960,6 +1965,7 @@ SPEC CHECKSUMS:
   RNVectorIcons: 72a70504e1b0aebcc2d3bbcdf65a75f5f77175f3
   Sentry: 4c9babff9034785067c896fd580b1f7de44da020
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
+  TextToSpeech: b3aa777ff5585705f179c0a2436bfd0926d1716e
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit5: 64095dfefcf39be2355711ef27112d55e340d90e
   VisionCamera: fe093403c5753a37a9f7c703249d603b1069308c

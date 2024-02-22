@@ -466,6 +466,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             position={['first', 'last']}
             containerStyle={s.listItemContainer}
             titleStyle={s.listItemTitle}
+            disabled={timer.state.mode !== TimerMode.Initial}
             onValueChange={toggleCountdownTimer}
           />
         </View>

@@ -1,9 +1,10 @@
 import Animated, { Easing, FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { Divider, Picker, PickerItem, SwipeButton, getColoredSvg, viewport } from '@react-native-ajp-elements/ui';
+import { Divider, PickerItem, SwipeButton, getColoredSvg, viewport } from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, Pressable, ScrollView, Text, View } from 'react-native';
 import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/List';
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
+import { TimerMode, TimerState } from 'types/timer';
 import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analysis';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
@@ -12,12 +13,12 @@ import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { Event } from 'realmdb/Event';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SvgXml } from 'react-native-svg';
+import WheelPicker from 'components/atoms/WheelPicker';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
@@ -25,14 +26,7 @@ import { secondsToMSS } from 'lib/formatters';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
-
-enum TimerState {
-  Initial,
-  Armed,
-  Running,
-  Paused,
-  Stopped,
-};
+import { useTimer } from 'lib/useTimer';
 
 type TimerButton = {
   icon: string;
@@ -57,9 +51,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const [batteries, setBatteries] = useState<Battery[]>([]);
 
   const timerUsesButtons = true;
-
   const [countdownTimerEnabled, setCountdownTimerEnabled] = useState(false);
-  const [timerState, setTimerState] = useState(TimerState.Initial);
+  const countdownValue = useRef(0);
 
   const timerMessageAnim = useSharedValue(1);
   const duration = 850;
@@ -69,11 +62,24 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     transform: [{ scale: timerMessageAnim.value / 5 + 1 }],
   }));
 
+  const timer = useTimer(tick, {
+    initialValue: 0,
+    isCountdown: false,
+    allowOvertime: true,
+    alerts: undefined,
+  });
+
+  function tick(state: TimerState) {
+    if (state.mode === TimerMode.Stopped) {
+      navigation.navigate('EventEditor', {});
+    }
+  };
+
   useEffect(() => {
     navigation.setOptions({
-      headerBackVisible: timerState === TimerState.Initial,
+      headerBackVisible: timer.state.mode === TimerMode.Initial,
       headerLeft: () => {
-        if (cancelable && timerState === TimerState.Initial) {
+        if (cancelable && timer.state.mode === TimerMode.Initial) {
           return (
             <Button
               title={'Cancel'}
@@ -85,7 +91,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         }
       },
     });
-  }, [ timerState ]);
+  }, [ timer.state.mode ]);
 
   useEffect(() => {
     // Get all the batteries for this event.
@@ -128,59 +134,63 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
 
   const toggleCountdownTimer = (value: boolean) => {
     setCountdownTimerEnabled(value);
+    // Preserves any prior set countdown value for better ux.
+    timer.setCountdown(value ? countdownValue.current : 0);
+  };
+
+  const onCountdownValueChange = (value: string[]) => {
+    const min = value[0] ? parseInt(value[0]) : 0;
+    const sec = value[1] ? parseInt(value[1]) : 0;
+    const ms = ((min * 60) + sec) * 1000;
+    timer.setCountdown(ms);
+    countdownValue.current = ms;
+  };
+
+  const millisecondsToPickerMSS = (ms: number) => {
+    const secs = ms / 1000;
+    const nearest5 = Math.ceil(secs / 5) * 5;
+    const mss = secondsToMSS(nearest5);
+    const str = mss.split(':');
+    return [`${+str[0]}`, `${+str[1]}`];
   };
 
   const onSwipeArmTimer = (isToggled: boolean) => {
-    isToggled ? armTimer() : disarmTimer();
-  };
-
-  const armTimer = () => {
-    setTimerState(TimerState.Armed);
-  };
-
-  const disarmTimer = () => {
-    setTimerState(TimerState.Initial);
-  };
-
-  const startTimer = () => {
-    setTimerState(TimerState.Running);
-  };
-
-  const pauseTimer = () => {
-    setTimerState(TimerState.Paused);
-  };
-
-  const stopTimer = () => {
-    setTimerState(TimerState.Stopped);
+    isToggled ? timer.arm() : timer.disarm();
   };
 
   const renderTimerButtons = (): ReactNode => {
-    let leftButton: TimerButton = { icon: 'circle-check', color: theme.colors.assertive, onPress: armTimer };
-    let rightButton: TimerButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
+    let leftButton: TimerButton;
+    let rightButton: TimerButton;
 
-    if (timerState === TimerState.Armed)  {
-      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: disarmTimer };
-      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: startTimer };
-    } else if (timerState === TimerState.Running)  {
+    if (timer.state.mode === TimerMode.Initial) {
+      leftButton = { icon: 'circle-check', color: theme.colors.assertive, onPress: timer.arm };
+      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
+    } else if (timer.state.mode === TimerMode.Armed) {
+      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: timer.disarm };
+      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: timer.start };
+    } else if (timer.state.mode === TimerMode.Running) {
       leftButton = { icon: 'circle-stop', color: theme.colors.stickyWhite, onPress: undefined };
-      rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: pauseTimer };
-    } else if (timerState === TimerState.Paused)  {
-      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: stopTimer };
-      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: startTimer };
-    } else if (timerState === TimerState.Stopped)  {
-      leftButton = { icon: 'circle-check', color: theme.colors.assertive, onPress: undefined };
+      rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: timer.pause };
+    } else if (timer.state.mode === TimerMode.Paused) {
+      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: timer.stop };
+      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: timer.start };
+    } else if (timer.state.mode === TimerMode.Expired) {
+      leftButton = { icon: 'circle-stop', color: theme.colors.stickyWhite, onPress: undefined };
+      rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: timer.pause };
+    } else { // Stopped
+      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: undefined };
       rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
     }
 
     return (
-      <>
-      <Pressable onPress={leftButton.onPress}>
-        <Icon
-          name={leftButton.icon}
-          size={52}
-          color={leftButton.color}
-          style={leftButton.onPress ? {opacity: 1} : {opacity: 0.3}}
-        />
+      <View style={s.timerButtons}>
+        <Pressable onPress={leftButton.onPress}>
+          <Icon
+            name={leftButton.icon}
+            size={52}
+            color={leftButton.color}
+            style={leftButton.onPress ? {opacity: 1} : {opacity: 0.3}}
+          />
         </Pressable>
         <Pressable onPress={rightButton.onPress}>
           <Icon
@@ -190,7 +200,36 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             style={rightButton.onPress ? {opacity: 1} : {opacity: 0.3}}
           />
         </Pressable>
-      </>
+      </View>
+    );
+  };
+
+  const renderTimerSwipe = () => {
+    return (
+      <View style={s.timerSwipeable}>
+        <SwipeButton
+          trackColor={timer.state.mode === TimerMode.Running
+            ? theme.colors.blackTransparentSubtle
+            : theme.colors.assertive
+          }
+          text={'Slide to arm'}
+          textStyle={s.swipeText}
+          backText={timer.state.mode === TimerMode.Running ? 'Timer running' : 'Slide to disarm'}
+          backTextStyle={s.swipeText}
+          padding={7}
+          height={60}
+          width={viewport.width - 45}
+          trackStartColor={timer.state.mode === TimerMode.Running
+            ? theme.colors.blackTransparentSubtle
+            : theme.colors.success
+          }
+          trackEndColor={timer.state.mode === TimerMode.Running
+            ? theme.colors.blackTransparentSubtle
+            : theme.colors.success
+          }
+          thumbStyle={timer.state.mode === TimerMode.Running ? s.swipeThumbTimerRunning : {}}
+          onToggle={onSwipeArmTimer} />
+      </View>
     );
   };
 
@@ -386,31 +425,38 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       <EmptyView error message={'Model Not Found!'} />
     );    
   }
-
+;
   return (
     <View style={s.view}>
       <View style={s.upper}>
-        {(!countdownTimerEnabled || (countdownTimerEnabled && timerState !== TimerState.Initial)) && 
+        {(!countdownTimerEnabled || (countdownTimerEnabled && timer.state.mode !== TimerMode.Initial)) && 
           <Animated.Text
             entering={FadeIn} exiting={FadeOut}
-            style={[s.timerValue, timerState === TimerState.Armed ? s.timerValueArmed : {}]}>
-            {'0:00'}
+            style={[
+              s.timerValue,
+              timer.state.mode === TimerMode.Armed ? s.timerValueArmed : {},
+              timer.state.inOvertime ? s.timerOvertime : {},
+            ]}>
+            {secondsToMSS(Math.abs(Math.ceil(timer.state.value / 1000)))}
           </Animated.Text>
         }
-        {timerState === TimerState.Armed &&
+        {timer.state.mode === TimerMode.Armed &&
           <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
             <Text style={s.timerMessage}>
               {timerUsesButtons ? 'Tap to Start Timer...' : 'Shake to Start Timer...'}
             </Text>
           </Animated.View>
         }
-        {(countdownTimerEnabled && timerState === TimerState.Initial) &&
+        {(countdownTimerEnabled && timer.state.mode === TimerMode.Initial) &&
           <Animated.View entering={FadeIn} exiting={FadeOut}>
-            <Picker
+            <WheelPicker
               placeholder={'none'}
-              itemWidth={[viewport.width / 2 - 5.5, viewport.width / 2 - 5.5]}
+              wheelVisible={[true, true]}
+              itemWidth={['45%', '45%']}
               items={countdownTimerItems}
-              onValueChange={() => null} />
+              value={millisecondsToPickerMSS(countdownValue.current)}
+              onValueChange={(_wheelIndex, value) => onCountdownValueChange(value as string[])}
+            />
           </Animated.View>
         }
         <View style={s.timerType}>
@@ -446,36 +492,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           }
         </View>
       </View>
-      {timerUsesButtons ?
-        <View style={s.timerButtons}>
-          {renderTimerButtons()}
-        </View>
-        :
-        <View style={s.timerSwipeable}>
-          <SwipeButton
-            trackColor={timerState === TimerState.Running
-              ? theme.colors.blackTransparentSubtle
-              : theme.colors.assertive
-            }
-            text={'Slide to arm'}
-            textStyle={s.swipeText}
-            backText={timerState === TimerState.Running ? 'Timer running' : 'Slide to disarm'}
-            backTextStyle={s.swipeText}
-            padding={7}
-            height={60}
-            width={viewport.width - 45}
-            trackStartColor={timerState === TimerState.Running
-              ? theme.colors.blackTransparentSubtle
-              : theme.colors.success
-            }
-            trackEndColor={timerState === TimerState.Running
-              ? theme.colors.blackTransparentSubtle
-              : theme.colors.success
-            }
-            thumbStyle={timerState === TimerState.Running ? s.swipeThumbTimerRunning : {}}
-            onToggle={onSwipeArmTimer} />
-        </View>
-      }
+      {timerUsesButtons ? renderTimerButtons() : renderTimerSwipe()}
     </View>
   );
 };
@@ -566,6 +583,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   timerMessage:  {
     ...theme.styles.textLarge,
     color: theme.colors.stickyWhite,
+  },
+  timerOvertime: {
+    backgroundColor: theme.colors.assertive,
+    borderRadius: 10,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: theme.colors.whiteTransparentLight,
   },
   lower: {
     height: '42%',

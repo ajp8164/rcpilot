@@ -8,7 +8,7 @@ import React from 'react';
 import { makeStyles } from '@rneui/themed';
 
 interface EventRatingInterface {
-  value: EventOutcome;
+  value?: EventOutcome;
 }
 
 export const EventRating = ({
@@ -22,7 +22,7 @@ export const EventRating = ({
   useEffect(() => {
     const outcomeEl = [];
     try {
-      const num = parseInt(value);
+      const num = parseInt(value!);
 
       if (isNaN(num)) {
         throw 'NaN';
@@ -47,7 +47,7 @@ export const EventRating = ({
       }
     }
     setElement(<View style={s.outcome}>{outcomeEl}</View>);
-  }, []);
+  }, [ value ]);
     
   return (element);
 };

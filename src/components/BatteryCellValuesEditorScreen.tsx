@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, NewBatteryCycleNavigatorParamList } from 'types/navigation';
-import { FlatList, ListRenderItem, Text, View } from 'react-native';
+import { FlatList, ListRenderItem, Text, TextStyle, View } from 'react-native';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
 
@@ -12,9 +12,19 @@ import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
+export type BatteryCellValuesEditorConfig = {
+  name: string;
+  namePlural: string;
+  label: string;
+  precision: number;
+  headerButtonStyle?: TextStyle;
+  extraData?: any; // Caller data that is simply passed through the editor.
+};
+
 export type BatteryCellValuesEditorResult = {
   cellValues: number[];
   packValue: number;
+  extraData?: any;
 };
 
 export type Props = CompositeScreenProps<
@@ -52,14 +62,15 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       event.emit(eventName, {
         cellValues: cellValues.map(v => {return v.length > 0 ? parseFloat(v) : 0}),
         packValue: parseFloat(packValue),
+        extraData: config.extraData,
       } as BatteryCellValuesEditorResult);
 
       navigation.goBack();
     };
 
     setScreenEditHeader(
-      {enabled: canSave, action: onDone},
-      {visible: false}
+      {enabled: canSave, action: onDone, style: config.headerButtonStyle},
+      {visible: false},
     );
   }, [ cellValues, packValue ]);
 
@@ -73,7 +84,6 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     const newPackValue = cellValues.reduce((previousValue, currentValue) => {
       const pv = previousValue || '0';
       const cv = currentValue || '0';
-      // return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
       return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
     });
     setPackValue(newPackValue);

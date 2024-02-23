@@ -71,7 +71,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
 
   function tick(state: TimerState) {
     if (state.mode === TimerMode.Stopped) {
-      navigation.navigate('EventEditor', {});
+      stopEvent(state);
     }
   };
 
@@ -126,6 +126,20 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const cancelEvent = () => {
     dispatch(eventSequence.reset());
     navigation.goBack();
+  };
+
+  const stopEvent = (state: TimerState) => {
+    // Calculate the total time the timer has been runnng.
+    let duration = state.value;
+    if (state.isCountdown) {
+      if (state.inOvertime) {
+        duration = state.initialValue + state.value;
+      } else {
+        duration = state.initialValue - state.value;
+      }
+    }
+    dispatch(eventSequence.setDuration({duration}));
+    navigation.navigate('EventEditor', {});
   };
 
   const onDeviceShake = () => {
@@ -292,7 +306,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToMSS(s.seconds)} (80%)`,
+        time: `${secondsToMSS(s.seconds, {format: 'm:ss'})} (80%)`,
       };
     });
   };
@@ -303,7 +317,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToMSS(s.seconds)} (80%)`,
+        time: `${secondsToMSS(s.seconds, {format: 'm:ss'})} (80%)`,
       };
     });
   };
@@ -424,8 +438,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     return (
       <EmptyView error message={'Model Not Found!'} />
     );    
-  }
-;
+  };
+  
   return (
     <View style={s.view}>
       <View style={s.upper}>
@@ -437,7 +451,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               timer.state.mode === TimerMode.Armed ? s.timerValueArmed : {},
               timer.state.inOvertime ? s.timerOvertime : {},
             ]}>
-            {secondsToMSS(Math.abs(Math.ceil(timer.state.value / 1000)))}
+            {secondsToMSS(Math.abs(Math.ceil(timer.state.value / 1000)), {format: 'm:ss'})}
           </Animated.Text>
         }
         {timer.state.mode === TimerMode.Armed &&

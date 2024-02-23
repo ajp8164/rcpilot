@@ -1,3 +1,5 @@
+import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
 import EventSequenceChecklistItemScreen from 'components/EventSequenceChecklistItemScreen';
@@ -8,6 +10,7 @@ import NavContext from './NavContext';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import lodash from 'lodash';
 import { useTheme } from 'theme';
 
 const EventSequenceStack = createNativeStackNavigator<EventSequenceNavigatorParamList>();
@@ -53,10 +56,17 @@ const EventSequenceNavigator = () => {
           }}
         />
         <EventSequenceStack.Screen
+          name="EnumPicker"
+          component={EnumPickerScreen}
+          options={{
+            title: '',
+          }}
+        />
+        <EventSequenceStack.Screen
           name='Notes'
           component={NotesScreen}
           options={{
-            title: 'Action Notes',
+            title: 'Event Notes',
           }}
         />
         <EventSequenceStack.Screen
@@ -69,6 +79,13 @@ const EventSequenceNavigator = () => {
             headerTintColor: theme.colors.stickyWhite,
             headerShadowVisible: false,
           }}
+        />
+        <EventSequenceStack.Screen
+          name='BatteryCellValuesEditor'
+          component={BatteryCellValuesEditorScreen}
+          options={({ route }) => ({
+            title: `Cell ${lodash.startCase(route.params.config.namePlural)}`,
+          })}
         />
       </EventSequenceStack.Navigator>
     </NavContext.Provider>

@@ -3,7 +3,7 @@ import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
-import { useObject, useQuery, useRealm } from '@realm/react';
+import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
@@ -31,40 +31,26 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
-  const allEvents = useQuery(Event, events => { return events.filtered('model == $0', model) }, []);
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={listEditor.enabled ? 'Done' : 'Edit'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            disabled={!allEvents.length}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-            onPress={listEditor.onEdit}
-          />
-        );
-      },
       headerRight: ()  => {
         return (
           <>
             <Button
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditor.enabled || !allEvents.length}
+              disabled={listEditor.enabled || !model?.events.length}
               icon={
                 <Icon
                   name={'filter'}
                   style={[s.headerIcon,
-                    listEditor.enabled || !allEvents.length ? s.headerIconDisabled : {}
+                    listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
                   ]}
                 />
               }
@@ -76,7 +62,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
               title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-              disabled={!allEvents.length}
+              disabled={!model?.events.length}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               onPress={listEditor.onEdit}
             />
@@ -84,7 +70,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditor.enabled, allEvents ]);
+  }, [ listEditor.enabled ]);
 
   const deleteEvent = (event: Event) => {
     realm.write(() => {
@@ -92,19 +78,39 @@ const EventsScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const eventSummary = (event: Event) => {
+  const eventTitle = (event: Event) => {console.log(event);
     const number = `#${event.number}`;
-    const duration = `${secondsToMSS(event.duration)}`;
+    const duration = `${secondsToMSS(event.duration, {format: 'm:ss'})}`;
     const time = DateTime.fromISO(event.createdOn).toLocaleString(DateTime.TIME_SIMPLE);
-    const location = `${event.location?.name}`;
-    const battery = `Battery: ${event.batteryCycle?.battery.name}`;
+    const location = `${event.location?.name || 'Unknown location'}`;
+
+    return `${number}: ${duration} at ${time}, ${location}`;
+  };
+  const eventSummary = (event: Event) => {
+    let battery = '';
+    if (model?.logsBatteries) {
+      if (event.batteryCycles.length === 0) {
+        battery = 'no batteries used during this event';
+      } else if (event.batteryCycles.length === 1) {
+        battery = `Battery: ${event.batteryCycles[0].battery.name}`;
+      } else {
+        battery = `${event.batteryCycles.length} batteries used during this event`;
+      }
+    }
+
+    let fuel = '';
+    if (model?.logsFuel) {
+      if (event.fuelConsumed !== undefined) {
+        fuel = `Fuel: ${event.fuelConsumed}oz`;
+      }
+    }
     
-    return `${number}: ${duration} at ${time}, ${location}\n${battery}`;
+    return `${fuel}${fuel && battery ? ', ' : ''}${battery}`;
   };
 
-  const groupEvents = (events: Realm.Results<Event>): SectionListData<Event, Section>[] => {
+  const groupEvents = (events: Event[]): SectionListData<Event, Section>[] => {
     return groupItems<Event, Section>(events, (event) => {
-      return DateTime.fromISO(event.createdOn).toFormat('MMMM dd,yyyy').toUpperCase();
+      return DateTime.fromISO(event.createdOn).toFormat('MMMM dd, yyyy').toUpperCase();
     }).sort();
   };
 
@@ -121,8 +127,8 @@ const EventsScreen = ({ navigation, route }: Props) => {
       <ListItem
         ref={ref => ref && listEditor.add(ref, 'events', event._id.toString())}
         key={event._id.toString()}
-        title={eventSummary(event)}
-        titleStyle={s.eventText}
+        title={eventTitle(event)}
+        subtitle={eventSummary(event)}
         position={listItemPosition(index, section.data.length)}
         onPress={() => {
           navigation.navigate('EventEditor', {
@@ -153,7 +159,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
     )
   };
 
-  if (!allEvents.length) {
+  if (!model?.events.length) {
     return (
       <EmptyView info message={'No Events'} />
     );
@@ -165,7 +171,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
-      sections={groupEvents(allEvents)}
+      sections={groupEvents(model.events)}
       keyExtractor={item => item._id.toString()}
       renderItem={renderEvent}
       renderSectionHeader={({section: {title}}) => (
@@ -176,10 +182,6 @@ const EventsScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  eventText: {
-    left: 15,
-    maxWidth: '90%',
-  },
   headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

@@ -1,5 +1,6 @@
 import { BatteryTemplate, ListBatteries } from 'types/battery';
 
+import { BatteryCellValuesEditorConfig } from 'components/BatteryCellValuesEditorScreen';
 import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
 import { ChecklistType } from 'types/checklist';
 import { ContentView } from 'types/content';
@@ -43,12 +44,7 @@ export type BatteriesNavigatorParamList = {
   };
   BatteryTemplates: undefined;
   BatteryCellValuesEditor: {
-    config: {
-      name: string;
-      namePlural: string;
-      label: string;
-      precision: number;
-    };
+    config: BatteryCellValuesEditorConfig;
     packValue: number;
     cellValues: number[];
     sCells: number;
@@ -246,12 +242,7 @@ export type NewBatteryCycleNavigatorParamList = {
     batteryId: string;
   };
   BatteryCellValuesEditor: {
-    config: {
-      name: string;
-      namePlural: string;
-      label: string;
-      precision: number;
-    };
+    config: BatteryCellValuesEditorConfig;
     packValue: number;
     cellValues: number[];
     sCells: number;
@@ -280,6 +271,7 @@ export type NewModelNavigatorParamList = {
 };
 
 export type EventSequenceNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
   EventEditor: {
     eventId?: string;
   };
@@ -295,6 +287,14 @@ export type EventSequenceNavigatorParamList = {
   }
   EventSequenceTimer:  {
     cancelable?: boolean;
+  };
+  BatteryCellValuesEditor: {
+    config: BatteryCellValuesEditorConfig;
+    packValue: number;
+    cellValues: number[];
+    sCells: number;
+    pCells: number;
+    eventName: string;
   };
   Notes: {
     title?: string;

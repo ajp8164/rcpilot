@@ -1,10 +1,10 @@
-import { Object, ObjectSchema } from 'realm';
+import { BSON, Object, ObjectSchema } from 'realm';
 
 import { Battery } from 'realmdb/Battery';
 import { ISODateString } from 'types/common';
 
 export class BatteryCycle extends Object<BatteryCycle> {
-  refId!: string;
+  _id!: BSON.ObjectId;
   cycleNumber!: number;
   battery!: Battery;
   excludeFromPlots?: boolean;
@@ -14,9 +14,8 @@ export class BatteryCycle extends Object<BatteryCycle> {
   
   static schema: ObjectSchema = {
     name: 'BatteryCycle',
-    embedded: true,
     properties: {
-      refId: 'string',
+      _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       cycleNumber: 'int',
       battery: 'Battery',
       excludeFromPlots: 'bool?',
@@ -24,6 +23,7 @@ export class BatteryCycle extends Object<BatteryCycle> {
       charge: 'BatteryCharge?',
       notes: 'string?',
     },
+    primaryKey: '_id',
   };
 };
 
@@ -48,6 +48,18 @@ export class BatteryCharge extends Object<BatteryCharge> {
       cellResistance: 'float[]',
     },
   };
+};
+
+// Plain JS object types.
+export type JBatteryDischargeValues = Omit<JBatteryDischarge, 'date' | 'duration'>;
+export type JBatteryDischarge = {
+  date: ISODateString;
+  duration: number;
+  packVoltage?: number;
+  packResistance?: number;
+  // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
+  cellVoltage: number[];
+  cellResistance: number[];
 };
 
 export class BatteryDischarge extends Object<BatteryDischarge> {

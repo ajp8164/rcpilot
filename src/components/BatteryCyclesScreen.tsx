@@ -113,7 +113,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
-        ref={ref => ref && cycle.refId && listEditor.add(ref, 'battery-cycles', cycle.refId)}
+        ref={ref => ref && listEditor.add(ref, 'battery-cycles', cycle._id.toString())}
         key={index}
         title={cycleTitle(cycle)}
         subtitle={cycleSubtitle(cycle)}
@@ -137,7 +137,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             onPress: () => confirmAction('Delete Cycle', cycle.cycleNumber, deleteCycle),
           }]
         }}
-        onSwipeableWillOpen={() => cycle.refId && listEditor.onItemWillOpen('battery-cycles', cycle.refId)}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycles', cycle._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )

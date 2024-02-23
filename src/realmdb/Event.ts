@@ -1,9 +1,9 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-import { ISODateString, ISODurationString } from 'types/common';
 
 import { BatteryCycle } from './BatteryCycle';
 import { EventOutcome } from 'types/event';
 import { EventStyle } from 'realmdb/EventStyle';
+import { ISODateString } from 'types/common';
 import { Location } from 'realmdb/Location';
 import { Model } from 'realmdb/Model';
 import { ModelFuel } from 'realmdb/ModelFuel';
@@ -16,15 +16,15 @@ export class Event extends Object<Event> {
   updatedOn!: ISODateString;
   number!: number;
   outcome?: EventOutcome;
-  duration!: ISODurationString;
+  duration!: number;
   model?: Model;
   pilot?: Pilot;
   location?: Location;
   fuel?: ModelFuel;
-  propeller?: ModelPropeller;
-  style?: EventStyle;
   fuelConsumed?: number;
-  batteryCycle?: BatteryCycle;
+  propeller?: ModelPropeller;
+  eventStyle?: EventStyle;
+  batteryCycles!: BatteryCycle[];
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -35,15 +35,15 @@ export class Event extends Object<Event> {
       updatedOn: 'string',
       number: 'int',
       outcome: 'string?',
-      duration: 'string',
+      duration: 'float',
       model: 'Model?',
       pilot: 'Pilot?',
       location: 'Location?',
       fuel: 'ModelFuel?',
-      propeller: 'ModelPropeller?',
-      style: 'EventStyle?',
       fuelConsumed: 'float?',
-      batteryCycle: 'BatteryCycle?',
+      propeller: 'ModelPropeller?',
+      eventStyle: 'EventStyle?',
+      batteryCycles: 'BatteryCycle[]',
       notes: 'string?',
     },
     primaryKey: '_id',

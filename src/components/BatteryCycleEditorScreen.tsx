@@ -21,7 +21,6 @@ import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { uuidv4 } from 'lib/utils';
 
 export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCycleEditor'>;
 
@@ -95,8 +94,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
 
     const save = () => {
       realm.write(() => {
-        const newCycle = {
-          refId: cycle.refId || uuidv4(),
+        const newCycle = realm.create('BatteryCycle', {
           cycleNumber,
           discharge: {
             date: dischargeDate,
@@ -116,7 +114,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
           },
           excludeFromPlots,
           notes,
-        } as BatteryCycle;
+        } as BatteryCycle);
 
         // Update the battery with changed cycle data.
         battery.cycles[battery.cycles.length - 1] = newCycle;

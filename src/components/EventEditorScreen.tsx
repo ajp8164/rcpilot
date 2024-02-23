@@ -1,59 +1,318 @@
 import { AppTheme, useTheme } from 'theme';
+import { BatteryCycle, JBatteryDischarge, JBatteryDischargeValues } from 'realmdb/BatteryCycle';
+import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import { EventSequenceNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import React, { useEffect } from 'react';
+import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
+import React, { useEffect, useState } from 'react';
+import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
+import { useDispatch, useSelector } from 'react-redux';
+import { useObject, useQuery, useRealm } from '@realm/react';
 
-import { Divider } from '@react-native-ajp-elements/ui';
+import { BSON } from 'realm';
+import { Battery } from 'realmdb/Battery';
+import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { DateTime } from 'luxon';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { Event } from 'realmdb/Event';
 import { EventOutcome } from 'types/event';
 import { EventRating } from 'components/molecules/EventRating';
+import { EventStyle } from 'realmdb/EventStyle';
+import { Location } from 'realmdb/Location';
+import { Model } from 'realmdb/Model';
+import { ModelFuel } from 'realmdb/ModelFuel';
+import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScrollView } from 'react-native';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { enumIdsToValues } from 'lib/utils';
+import { Pilot } from 'realmdb/Pilot';
+import { SvgXml } from 'react-native-svg';
 import { eventOutcomeIcons } from 'lib/event';
+import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
+import { selectEventSequence } from 'store/selectors/eventSequence';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'EventEditor'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<SetupNavigatorParamList, 'EventEditor'>,
+  NativeStackScreenProps<EventSequenceNavigatorParamList>
+>;
 
 const EventEditorScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
-
+  const setScreenEditHeader = useScreenEditHeader();
+  const confirmAction = useConfirmAction();
   const event = useEvent();
+  const dispatch = useDispatch();
+  const realm = useRealm();
 
-  const fuels = {
-    'id0': 'High Octane',
-    'id2': 'Unspecified'
-  };
-  const modelStyles = {
-    'id0': '3D',
-    'id1': 'Sport',
-    'id2': 'None'
-  };
-  const pilots = {
-    'id0': 'Andy',
-    'id2': 'Unknown'
-  };
+  const currentEventSequence = useSelector(selectEventSequence);
+  const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const [batteries, setBatteries] = useState<Battery[]>([]);
+
+  const modelFuels = useQuery(ModelFuel);
+  const modelPropellers = useQuery(ModelPropeller);
+  const eventStyles = useQuery(EventStyle);
+  const locations = useQuery(Location);
+  const pilots = useQuery(Pilot);
+  const [date] = useState(DateTime.now());
+  const [duration, setDuration] = useState(secondsToMSS(currentEventSequence.duration / 1000));
+  const [fuel, setFuel] = useState<ModelFuel>();
+  const [fuelConsumed, setFuelConsumed] = useState<string>();
+  const [propeller, setPropeller] = useState<ModelPropeller>();
+  const [eventStyle, setEventStyle] = useState<EventStyle>();
+  const [location, setLocation] = useState<Location>();
+  const [pilot, setPilot] = useState<Pilot>();
+  const [outcome, setOutcome] = useState<EventOutcome>();
+  const [notes, setNotes] = useState(model?.notes || undefined);
+
+  const [allBatteryDischarges, setAllBatteryDischarges] = useState<JBatteryDischarge[]>([]);
 
   useEffect(() => {
-    // Event handlers for EnumPicker
-    event.on('fuel', onChangeFuel);
-    event.on('model-style', onChangeModelStyle);
-    event.on('outcome', onChangeOutcome);
-    event.on('pilot', onChangePilot);
-
-    return () => {
-      event.removeListener('fuel', onChangeFuel);
-      event.removeListener('model-style', onChangeModelStyle);
-      event.removeListener('outcome', onChangeOutcome);
-      event.removeListener('pilot', onChangePilot);
+    const onCancel = () => {
+      confirmAction('Do Not Log Event', undefined, cancelEvent);
     };
+
+    const onDone = () => {
+      realm.write(() => {
+
+        // For each battery we need to create a new battery cycle and then add the
+        // battery cycle to the battery's list of cycles.
+        const eventBatteryCycles = [] as BatteryCycle[];
+        batteries.forEach((battery, index) => {
+          const cycleNumber = battery.totalCycles ? battery.totalCycles + 1 : 1;
+
+          const newCycle = realm.create('BatteryCycle', {
+            cycleNumber,
+            battery,
+            excludeFromPlots: false,
+            discharge: allBatteryDischarges[index],
+          } as BatteryCycle);
+
+          // Total cycles is tracked on the battery to enable a new battery to be created
+          // with some number of unlogged cycles.
+          battery.totalCycles = cycleNumber;
+          battery.cycles.push(newCycle);
+
+          // Attach the battery cycle to the event.
+          eventBatteryCycles.push(newCycle);
+        });
+
+        const newEvent = realm.create('Event', {
+          createdOn: date.toISO(),
+          updatedOn: date.toISO(),
+          number: model?.events ? model?.events.length + 1 : 1,
+          outcome,
+          duration: MSSToSeconds(duration),
+          model,
+          pilot,
+          location,
+          fuel,
+          fuelConsumed,
+          propeller,
+          eventStyle,
+          batteryCycles: eventBatteryCycles,
+          notes,
+        } as Event);
+
+        // Attach the event to the model and update the model event count.
+        model!.totalEvents = model!.totalEvents ? model!.totalEvents + 1 : 1;
+        model!.events.push(newEvent);
+      });
+
+      dispatch(eventSequence.reset());
+      navigation.getParent()?.goBack();
+    };
+
+    setScreenEditHeader(
+      {enabled: true, action: onDone, style: {color: theme.colors.screenHeaderInvButtonText}},
+      {enabled: true, action: onCancel, style: {color: theme.colors.screenHeaderInvButtonText}},
+    );
+  }, [ batteries ]);
+
+  useEffect(() => {
+    // Get all the batteries for this event.
+    const eventBatteries: Battery[] = [];
+    currentEventSequence.batteryIds.forEach(id => {
+      const b = realm.objectForPrimaryKey(Battery, new BSON.ObjectId(new BSON.ObjectId(id)));
+      b && eventBatteries.push(b);
+    });
+    setBatteries(eventBatteries);
+
+    // Create initial values for battery cell voltages and resistances.
+    const initialBatteryDischarges = [] as JBatteryDischarge[];
+    eventBatteries.forEach((battery) => {
+      initialBatteryDischarges.push({
+        date: date.toISO()!,
+        duration: MSSToSeconds(duration),
+        packVoltage: 0,
+        packResistance: 0,
+        cellVoltage: new Array(battery.sCells).fill(0),
+        cellResistance: new Array(battery.sCells).fill(0),
+      });
+    });
+    setAllBatteryDischarges(initialBatteryDischarges);
   }, []);
 
-  const onChangeFuel = (v: string) => {};
-  const onChangeModelStyle = (v: string) => {};
-  const onChangeOutcome = (v: string) => {};
-  const onChangePilot = (v: string) => {};
+  useEffect(() => {
+    // Need to wait for initial values to be set before registering the discharge handlers.
+    // (Will just do all handlers at the same time.)
+    if (!allBatteryDischarges?.length) return;
+    
+    // Event handlers for EnumPicker
+    event.on('event-model-fuel', onChangeModelFuel);
+    event.on('event-model-propeller', onChangeModelPropeller);
+    event.on('event-model-style', onChangeEventStyle);
+    event.on('event-location', onChangeLocation);
+    event.on('event-pilot', onChangePilot);
+    event.on('event-outcome', onChangeOutcome);
+    event.on('event-notes', setNotes);
+    event.on(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
+    event.on(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
+
+    return () => {
+      event.removeListener('event-model-fuel', onChangeModelFuel);
+      event.removeListener('event-model-propeller', onChangeModelPropeller);
+      event.removeListener('event-model-style', onChangeEventStyle);
+      event.removeListener('event-pilot', onChangePilot);
+      event.removeListener('event-location', onChangeLocation);
+      event.removeListener('event-outcome', onChangeOutcome);
+      event.removeListener('event-notes', setNotes);
+      event.removeListener(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
+      event.removeListener(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
+  };
+  }, [allBatteryDischarges?.length]);
+
+  const cancelEvent = () => {
+    dispatch(eventSequence.reset());
+    navigation.getParent()?.goBack();
+  };
+
+  const onChangeModelFuel = (result: EnumPickerResult) => {
+    const f = modelFuels.find(f => {return f.name === result.value[0]});
+    setFuel(f);
+  };
+
+  const onChangeModelPropeller = (result: EnumPickerResult) => {
+    const p = modelPropellers.find(p => {return p.name === result.value[0]});
+    setPropeller(p);
+  };
+
+  const onChangeEventStyle = (result: EnumPickerResult) => {
+    const s = eventStyles.find(s => {return s.name === result.value[0]});
+    setEventStyle(s);
+  };
+
+  const onChangeLocation = (result: EnumPickerResult) => {
+    const l = locations.find(l => {return l.name === result.value[0]});
+    setLocation(l);
+  };
+
+  const onChangePilot = (result: EnumPickerResult) => {
+    const p = pilots.find(p => {return p.name === result.value[0]});
+    setPilot(p);
+  };
+  
+  const onChangeOutcome = (result: EnumPickerResult) => {
+    setOutcome(result.value[0] as EventOutcome);
+  };
+
+  const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
+    // extraData is the battery index.
+    setDischargeValue('cellVoltage', result.cellValues, result.extraData);
+    setDischargeValue('packVoltage', result.packValue, result.extraData);
+  };
+
+  const onChangeDischargeCellResistances = (result: BatteryCellValuesEditorResult) => {
+    // extraData is the battery index.
+    setDischargeValue('cellResistance', result.cellValues, result.extraData);
+    setDischargeValue('packResistance', result.packValue, result.extraData);
+  };
+    
+  const setDischargeValue = (property: keyof JBatteryDischargeValues, value: number | number[], index: number) => {
+    const batteryDischarges = ([] as JBatteryDischarge[]).concat(allBatteryDischarges);
+    batteryDischarges[index][property] = value as number & number[];
+    setAllBatteryDischarges(batteryDischarges);
+  };
+  
+  const renderBatteryPostEvent: ListRenderItem<Battery> = ({ item: battery, index }) => {
+    const batteryDischarge = allBatteryDischarges[index];
+    const packVoltage = batteryDischarge.packVoltage;
+    const cellVoltage = batteryDischarge.cellVoltage;
+    const packResistance = batteryDischarge.packResistance;
+    const cellResistance = batteryDischarge.cellResistance;
+    return (
+      <View key={index}>
+        <Divider text={`POST-EVENT FOR ${battery.name.toLocaleUpperCase()}`} />
+        <ListItemInput
+          title={'Pack Voltage'}
+          label={'V'}
+          value={packVoltage && packVoltage > 0 ? packVoltage.toString() : undefined}
+          position={['first']}
+          placeholder={'Value'}
+          numeric={true}
+          numericProps={{prefix: ''}}
+          onChangeText={value => setDischargeValue('packVoltage', parseFloat(value), index)}
+        />
+        <ListItemInput
+          title={'Pack Resistance'}
+          label={'mΩ'}
+          value={packResistance && packResistance > 0 ? packResistance.toString() : undefined}
+          placeholder={'Value'}
+          numeric={true}
+          numericProps={{prefix: '', precision: 3}}
+          onChangeText={value => setDischargeValue('packResistance', parseFloat(value), index)}
+        />
+        <ListItem
+          title={'Cell Voltage'}
+          onPress={() => navigation.navigate('BatteryCellValuesEditor', {
+            config: {
+              name: 'voltage',
+              namePlural: 'voltages',
+              label: 'V',
+              precision: 2,
+              headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
+              extraData: index,
+            },
+            packValue: packVoltage || 0,
+            cellValues: cellVoltage?.map(v => {return v || 0}),
+            sCells: battery.sCells,
+            pCells: battery.pCells,
+            eventName: `event-battery-cell-voltages`,
+          })}
+        />
+        <ListItem
+          title={'Cell Resistance'}
+          position={['last']}
+          onPress={() => navigation.navigate('BatteryCellValuesEditor', {
+            config: {
+              name: 'resistance',
+              namePlural: 'resistances',
+              label: 'mΩ',
+              precision: 3,
+              headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
+              extraData: index,
+            },
+            packValue: packResistance || 0,
+            cellValues: cellResistance?.map(r => {return r || 0}),
+            sCells: battery.sCells,
+            pCells: battery.pCells,
+            eventName: `event-battery-cell-resistances`,
+          })}
+        />
+      </View>
+    )
+  };
+  
+  if (!model) {
+    return (
+      <EmptyView error message={'Model Not Found!'} />
+    );    
+  };
 
   return (
     <ScrollView
@@ -62,113 +321,192 @@ const EventEditorScreen = ({ navigation }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider />
       <ListItem
-        title={'Blade 150S'}
-        subtitle={'Blade'}
+        title={model?.name}
+        subtitle={modelShortSummary(model)}
+        titleStyle={s.modelText}
+        subtitleStyle={s.modelText}
+        subtitleNumberOfLines={2}
         position={['first', 'last']}
+        leftImage={
+          <View style={s.modelIconContainer}>
+            {model.image ?
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
+            :
+              <View style={s.modelSvgContainer}>
+                <SvgXml
+                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                  width={s.modelImage.width}
+                  height={s.modelImage.height}
+                  color={theme.colors.brandSecondary}
+                  style={s.modelIcon}
+                />
+              </View>
+            }
+          </View>
+        }
         rightImage={false}
-        onPress={() => null}
-      />
+        zeroEdgeContent={true}
+       />
       <Divider />
       <ListItem
         title={'Date'}
-        value={'Nov 4, 2023 at 11:49PM'}
+        value={date.toFormat("MMM dd, yyyy 'at' h:mma")}
         position={['first']}
+        rightImage={false}
       />
       <ListItemInput
         title={'Duration'}
         label={'m:ss'}
-        value={'4:00'}
+        value={duration}
+        placeholder={'Value'}
+        numeric={true}
+        numericProps={{prefix: '', separator: ':'}}
         keyboardType={'number-pad'}
-        onChangeText={() => null}
+        onChangeText={setDuration}
       /> 
       <ListItem
         title={'Location'}
-        value={'Nickajack Elementary School'}
+        value={location?.name || 'Unknown'}
+        // onPress={() => navigation.navigate('Location', {
+        // })}
       />
       <ListItem
         title={'Outcome'}
         position={['last']}
-        value={<EventRating value={EventOutcome.Star3}/>}
+        value={<EventRating value={outcome}/>}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Event Outcome',
           headerBackTitle: 'Event',
           values: Object.values(EventOutcome),
           icons: eventOutcomeIcons,
-          selected: EventOutcome.Star3,
-          eventName: 'outcome',
+          selected: outcome,
+          eventName: 'event-outcome',
         })}
       />
+      <Divider />
+      {modelHasPropeller(model.type) &&
+        <ListItem
+          title={'Default Propeller'}
+          value={propeller?.name || 'None'}
+          position={['first','last']}
+          onPress={() => navigation.navigate('EnumPicker', {
+            title: 'Default Propeller',
+            headerBackTitle: 'Model',
+            footer: 'You can manage propellers through the Globals section in the Setup tab.',
+            values: modelPropellers.map(p => { return p.name }),
+            selected: propeller?.name,
+            mode: 'one-or-none',
+            eventName: 'default-propeller',
+          })}
+        />
+      }
       <Divider />
       <ListItem
         title={'Fuel'}
         position={['first']}
-        value={'Unspecified'}
+        value={fuel?.name || 'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Fuel',
           headerBackTitle: 'Event',
           footer: 'You can manage fuels through the Globals section in the Setup tab.',
-          values: Object.values(fuels),
-          selected: enumIdsToValues(['id2'], fuels),
-          eventName: 'fuel',
+          values: modelFuels.map(f => { return f.name }),
+          selected: fuel?.name,
+          mode: 'one-or-none',
+          eventName: 'event-fuel',
         })}
       />
       <ListItemInput
         title={'Fuel Consumed'}
-        label={'oz'}
-        value={'Value'}
+        value={fuelConsumed}
+        label='oz'
+        placeholder={'Value'}
+        numeric={true}
+        numericProps={{precision: 2, prefix: ''}}
         keyboardType={'number-pad'}
-        position={['last']}
-        onChangeText={() => null}
-        /> 
+        onChangeText={setFuelConsumed}
+      />
       <Divider />
       <ListItem
         title={'Pilot'}
         position={['first']}
-        value={'Andy'}
+        value={pilot?.name || 'Unknown'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Pilot',
           headerBackTitle: 'Event',
           footer: 'You can manage pilots through the Globals section in the Setup tab.',
-          values: Object.values(pilots),
-          selected: enumIdsToValues(['id2'], pilots),
-          eventName: 'pilot',
+          values: pilots.map(p => { return p.name }),
+          selected: pilot?.name,
+          mode: 'one-or-none',
+          eventName: 'event-pilot',
         })}
       />
       <ListItem
         title={'Style'}
         position={['last']}
-        value={'Sport'}
+        value={eventStyle?.name || 'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Style',
           headerBackTitle: 'Event',
           footer: 'You can manage styles through the Globals section in the Setup tab.',
-          values: Object.values(modelStyles),
-          selected: enumIdsToValues(['id2'], modelStyles),
-          eventName: 'model-style',
+          values: eventStyles.map(s => { return s.name }),
+          selected: eventStyle?.name,
+          mode: 'one-or-none',
+          eventName: 'event-style',
         })}
       />
       <Divider text={'NOTES'} />
       <ListItem
-        title={'Notes'}
+        title={notes || 'Notes'}
         position={['first', 'last']}
         onPress={() => navigation.navigate('Notes', {
-          title: 'Fuel Notes',
-          text: 'notes', // mock
-          eventName: 'fuel-notes',  
+          title: 'Event Notes',
+          headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
+          text: notes,
+          eventName: 'event-notes',
         })}
       />
-      <Divider text={'BATTERY USED'} />
-      <ListItem
-        title={'150S #1,3S/1P LiPo'}
-        subtitle={'Cycle 20  out of 22\nDischarge at 13.5A (30C) average, rest at unknown voltages\nCharge replaces 900mAh, rest at 3.8V (1.3V/Cell'}
-        position={['first', 'last']}
-        onPress={() => null}
-      />
+      {model.logsBatteries &&
+        <FlatList
+        scrollEnabled={false}
+          data={batteries}
+          renderItem={renderBatteryPostEvent}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={<Divider />}
+        />
+      }
     </ScrollView>
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
+  modelIcon: {
+    transform: [{rotate: '-45deg'}],
+  },
+  modelIconContainer: {
+    position: 'absolute',
+    left: -15,
+  },
+  modelImage: {
+    width: 150,
+    height: 85
+  },
+  modelSvgContainer: {
+    backgroundColor: theme.colors.subtleGray,
+  },
+  modelText: {
+    left: 140,
+    maxWidth: '48%',
+  },
   outcome: {
     flexDirection: 'row',
   }

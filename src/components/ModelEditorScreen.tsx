@@ -4,6 +4,7 @@ import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navi
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
+import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
@@ -24,7 +25,6 @@ import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
-import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
@@ -267,12 +267,6 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     };
   }, []);
 
-  const hasPropeller = [
-    ModelType.Airplane,
-    ModelType.Sailplane,
-    ModelType.Multicopter,
-  ].includes(type as ModelType);
-
   const onChangeType = (result: EnumPickerResult) => {
     setType(result.value[0] as ModelType);
   };
@@ -436,9 +430,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               />
               <ListItem
                 title={'Logged Event Details'}
-                value={`${model?.totalEvents || 0}`}
+                value={`${model?.events.length || 0}`}
                 position={['last']}
-                onPress={() => navigation.navigate('Events', {})}
+                onPress={() => navigation.navigate('Events', {
+                  modelId,
+                })}
               />
             </>
           }
@@ -480,7 +476,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                   numericProps={{precision: 2, prefix: ''}}
                   keyboardType={'number-pad'}
                   onChangeText={setFuelCapacity}
-                  />
+                />
                 <ListItemInput
                   title={'Total Fuel Consumed'}
                   value={totalFuel}
@@ -523,7 +519,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           <ListItem
             title={'Default Style'}
             value={defaultStyle?.name || 'None'}
-            position={!hasPropeller && !logsFuel ? ['first', 'last'] : ['first']}
+            position={!modelHasPropeller(type) && !logsFuel ? ['first', 'last'] : ['first']}
             onPress={() => navigation.navigate('EnumPicker', {
               title: 'Default Style',
               headerBackTitle: 'Model',
@@ -534,7 +530,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               eventName: 'default-style',
             })}
           />
-          {hasPropeller &&
+          {modelHasPropeller(type) &&
             <ListItem
               title={'Default Propeller'}
               value={defaultPropeller?.name || 'None'}

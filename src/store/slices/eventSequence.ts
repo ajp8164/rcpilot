@@ -7,12 +7,14 @@ export interface EventSequenceState {
   modelId?: string;
   batteryIds: string[];
   checklistActionHistoryEntries: Record<string, JChecklistActionHistoryEntry>;
+  duration: number;
 }
 
 export const initialEventSequenceState = Object.freeze<EventSequenceState>({
   modelId: undefined,
   batteryIds: [],
   checklistActionHistoryEntries: {},
+  duration: 0,
 });
 
 const handleAddChecklistActionHistoryEntry: CaseReducer<
@@ -34,11 +36,7 @@ const handleAddChecklistActionHistoryEntry: CaseReducer<
 const handleReset: CaseReducer<
   EventSequenceState
 > = (_state) => {
-  return {
-    modelId: undefined,
-    batteryIds: [],
-    checklistActionHistoryEntries: {},
-  };
+  return initialEventSequenceState;
 };
 
 const handleSetBatteries: CaseReducer<
@@ -48,6 +46,16 @@ const handleSetBatteries: CaseReducer<
   return {
     ...state,
     batteryIds: payload.batteryIds,
+  };
+};
+
+const handleSetDuration: CaseReducer<
+  EventSequenceState,
+  PayloadAction<{ duration: number }>
+> = (state, { payload }) => {
+  return {
+    ...state,
+    duration: payload.duration,
   };
 };
 
@@ -100,6 +108,7 @@ const eventSequenceSlice = createSlice({
     addChecklistActionHistoryEntry: handleAddChecklistActionHistoryEntry,
     reset: handleReset,
     setBatteries: handleSetBatteries,
+    setDuration: handleSetDuration,
     setChecklistActionNotes: handleSetChecklistActionNotes,
     setModel: handleSetModel,
     toggleChecklistActionComplete: handleToggleChecklistActionComplete,

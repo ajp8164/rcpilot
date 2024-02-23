@@ -41,9 +41,9 @@ export const EventRating = ({
       }
     } catch(_e: any) {
       if (value === EventOutcome.Crashed) {
-        outcomeEl.push(<Text style={theme.styles.textNormal}>{'Crashed'}</Text>);
+        outcomeEl.push(<Text key={'crashed'} style={theme.styles.textNormal}>{'Crashed'}</Text>);
       } else {
-        outcomeEl.push(<Text style={theme.styles.textNormal}>{'Unspecified'}</Text>);
+        outcomeEl.push(<Text key={'unspecified'} style={theme.styles.textNormal}>{'Unspecified'}</Text>);
       }
     }
     setElement(<View style={s.outcome}>{outcomeEl}</View>);

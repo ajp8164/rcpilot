@@ -1,9 +1,9 @@
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
-import EventEditorScreen from 'components/EventEditorScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
 import EventSequenceChecklistItemScreen from 'components/EventSequenceChecklistItemScreen';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
+import EventSequenceNewEventEditorScreen from 'components/EventSequenceNewEventEditorScreen';
 import EventSequencePreCheckScreen from 'components/EventSequencePreCheckScreen';
 import EventSequenceTimerScreen from 'components/EventSequenceTimerScreen';
 import NavContext from './NavContext';
@@ -49,8 +49,8 @@ const EventSequenceNavigator = () => {
           }}
         />
         <EventSequenceStack.Screen
-          name='EventEditor'
-          component={EventEditorScreen}
+          name='EventSequenceNewEventEditor'
+          component={EventSequenceNewEventEditorScreen}
           options={{
             title: 'Log Event',
           }}

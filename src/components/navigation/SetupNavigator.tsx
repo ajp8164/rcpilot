@@ -1,5 +1,6 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
+import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
@@ -111,6 +112,13 @@ const SetupNavigator = () => {
         component={EventEditorScreen}
         options={{
           title: 'Event Details',
+        }}
+      />
+      <SetupStack.Screen
+        name='BatteryCycleEditor'
+        component={BatteryCycleEditorScreen}
+        options={{
+          title: 'Cycle Details',
         }}
       />
       <SetupStack.Screen

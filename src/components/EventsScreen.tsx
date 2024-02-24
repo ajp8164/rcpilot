@@ -129,6 +129,8 @@ const EventsScreen = ({ navigation, route }: Props) => {
         key={event._id.toString()}
         title={eventTitle(event)}
         subtitle={eventSummary(event)}
+        titleNumberOfLines={1}
+        subtitleNumberOfLines={1}
         position={listItemPosition(index, section.data.length)}
         onPress={() => {
           navigation.navigate('EventEditor', {

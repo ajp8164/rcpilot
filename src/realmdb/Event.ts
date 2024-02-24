@@ -14,6 +14,7 @@ export class Event extends Object<Event> {
   _id!: BSON.ObjectId;
   createdOn!: ISODateString;
   updatedOn!: ISODateString;
+  date!: ISODateString;
   number!: number;
   outcome?: EventOutcome;
   duration!: number;
@@ -33,6 +34,7 @@ export class Event extends Object<Event> {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       createdOn: 'string',
       updatedOn: 'string',
+      date: 'string',
       number: 'int',
       outcome: 'string?',
       duration: 'float',

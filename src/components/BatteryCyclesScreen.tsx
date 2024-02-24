@@ -3,6 +3,7 @@ import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -76,21 +77,6 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const cycleTitle = (cycle: BatteryCycle) => {
-    const kind = (cycle.charge && cycle.discharge) ? 'Full Cycle' : 'Partial Cycle (Discharge Only)';
-    const averageCurrent = 'Average Current ?A';
-    const cRating = (battery?.cRating && battery.cRating > 0) ? `(${battery.cRating}C)` : '';
-    // return `#${cycle.cycleNumber} ${kind}, ${averageCurrent} ${cRating}`;
-    return `#${cycle.cycleNumber}: ${kind}`;
-  };
-
-  const cycleSubtitle = (cycle: BatteryCycle) => {
-    const averageCurrent = 'Average Current ?A';
-    const cRating = (battery?.cRating && battery.cRating > 0) ? `(${battery.cRating}C)` : '';
-    const notes = cycle.notes ? `\n\n${cycle.notes}` : '';
-    return `${averageCurrent} ${cRating}\nD:\nC:\nS:${notes}`;
-  };
-
   const deleteCycle = (cycleNumber: number) => {
     realm.write(() => {
       const index = battery?.cycles.findIndex(c => c.cycleNumber === cycleNumber);
@@ -115,8 +101,8 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
       <ListItem
         ref={ref => ref && listEditor.add(ref, 'battery-cycles', cycle._id.toString())}
         key={index}
-        title={cycleTitle(cycle)}
-        subtitle={cycleSubtitle(cycle)}
+        title={batteryCycleTitle(cycle)}
+        subtitle={batteryCycleDescription(cycle)}
         position={listItemPosition(index, section.data.length)}
         onPress={() => navigation.navigate('BatteryCycleEditor', {
           batteryId,

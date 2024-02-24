@@ -37,7 +37,7 @@ const LogNavigator = () => {
         name="BatteryCycleEditor"
         component={BatteryCycleEditorScreen}
         options={{
-          title: 'Battery Cycle',
+          title: 'Cycle Details',
         }}
       />
     </LogStack.Navigator>

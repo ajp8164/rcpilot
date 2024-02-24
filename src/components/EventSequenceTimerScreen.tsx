@@ -139,7 +139,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       }
     }
     dispatch(eventSequence.setDuration({duration}));
-    navigation.navigate('EventEditor', {});
+    navigation.navigate('EventSequenceNewEventEditor');
   };
 
   const onDeviceShake = () => {

@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery } from '@realm/react';
 
@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
+import { eventKind } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
@@ -30,6 +31,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
     navigation.setOptions({
@@ -40,7 +42,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => confirmAction('Do Not Log Event', undefined, cancelEvent)}
+              onPress={() => confirmAction(`Do Not Log ${kind.name}`, undefined, cancelEvent)}
             />
           )
         }

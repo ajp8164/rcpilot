@@ -5,6 +5,7 @@ import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native'
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useState } from 'react';
+import { eventKind, eventOutcomeIcons } from 'lib/event';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -27,7 +28,6 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
-import { eventOutcomeIcons } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
@@ -67,10 +67,11 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
   const [allBatteryDischarges, setAllBatteryDischarges] = useState<JBatteryDischarge[]>([]);
+  const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
     const onCancel = () => {
-      confirmAction('Do Not Log Event', undefined, cancelEvent);
+      confirmAction(`Do Not Log ${kind.name}`, undefined, cancelEvent);
     };
 
     const onDone = () => {
@@ -376,8 +377,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         position={['last']}
         value={<EventRating value={outcome}/>}
         onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Event Outcome',
-          headerBackTitle: 'Event',
+          title: `${kind.name} Outcome`,
+          headerBackTitle: `${kind.name}`,
           values: Object.values(EventOutcome),
           icons: eventOutcomeIcons,
           selected: outcome,
@@ -408,7 +409,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         value={fuel?.name || 'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Fuel',
-          headerBackTitle: 'Event',
+          headerBackTitle: `${kind.name}`,
           footer: 'You can manage fuels through the Globals section in the Setup tab.',
           values: modelFuels.map(f => { return f.name }),
           selected: fuel?.name,
@@ -433,7 +434,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         value={pilot?.name || 'Unknown'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Pilot',
-          headerBackTitle: 'Event',
+          headerBackTitle: `${kind.name}`,
           footer: 'You can manage pilots through the Globals section in the Setup tab.',
           values: pilots.map(p => { return p.name }),
           selected: pilot?.name,
@@ -447,7 +448,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         value={eventStyle?.name || 'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Style',
-          headerBackTitle: 'Event',
+          headerBackTitle: `${kind.name}`,
           footer: 'You can manage styles through the Globals section in the Setup tab.',
           values: eventStyles.map(s => { return s.name }),
           selected: eventStyle?.name,

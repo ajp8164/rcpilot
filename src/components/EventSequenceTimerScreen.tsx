@@ -6,6 +6,7 @@ import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/Lis
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { TimerMode, TimerState } from 'types/timer';
 import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analysis';
+import { eventKind, useEvent } from 'lib/event';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
@@ -25,7 +26,6 @@ import { modelTypeIcons } from 'lib/model';
 import { secondsToMSS } from 'lib/formatters';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
-import { useEvent } from 'lib/event';
 import { useTimer } from 'lib/useTimer';
 
 type TimerButton = {
@@ -49,6 +49,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
   const [batteries, setBatteries] = useState<Battery[]>([]);
+  const [kind] = useState(eventKind(model?.type));
 
   const timerUsesButtons = true;
   const [countdownTimerEnabled, setCountdownTimerEnabled] = useState(false);
@@ -85,7 +86,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => confirmAction('Do Not Log Event', undefined, cancelEvent)}
+              onPress={() => confirmAction(`Do Not Log ${kind.name}`, undefined, cancelEvent)}
             />
           )
         }

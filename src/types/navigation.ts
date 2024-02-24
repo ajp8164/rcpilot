@@ -95,7 +95,7 @@ export type BatteryPerformanceNavigatorParamList = {
 export type LogNavigatorParamList = {
   Log: undefined;
   EventEditor: {
-    eventId?: string;
+    eventId: string;
   };
   BatteryCycleEditor: {
     batteryId: string;
@@ -109,6 +109,10 @@ export type MainNavigatorParamList = {
 };
 
 export type ModelsNavigatorParamList = {
+  BatteryCycleEditor: {
+    batteryId: string;
+    cycleNumber: number;
+  };
   BatteryPicker: BatteryPickerInterface;
   ChecklistTemplatePicker: {
     eventName: string;
@@ -129,7 +133,7 @@ export type ModelsNavigatorParamList = {
     pilotId?: string;
   };
   EventEditor: {
-    eventId?: string;
+    eventId: string;
   };
   EventOutcome: {
     eventOutcome: EventOutcome;
@@ -272,9 +276,7 @@ export type NewModelNavigatorParamList = {
 
 export type EventSequenceNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
-  EventEditor: {
-    eventId?: string;
-  };
+  EventSequenceNewEventEditor: undefined;
   EventSequenceBatteryPicker: {
     cancelable?: boolean;
   };
@@ -375,6 +377,10 @@ export type NewChecklistActionNavigatorParamList = {
 export type SetupNavigatorParamList = {
   About: undefined;
   AppSettings: undefined;
+  BatteryCycleEditor: {
+    batteryId: string;
+    cycleNumber: number;
+  };
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
@@ -398,7 +404,7 @@ export type SetupNavigatorParamList = {
     pilotId?: string;
   };
   EventEditor: {
-    eventId?: string;
+    eventId: string;
   };
   EventOutcome: {
     eventOutcome: EventOutcome;

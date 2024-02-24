@@ -1,3 +1,4 @@
+import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
@@ -52,6 +53,13 @@ const ModelsNavigator = () => {
           header: () => <ModelHeader modelId={route.params.modelId}/>,
           title: 'Model',
         })}
+      />
+      <ModelsStack.Screen
+        name='BatteryCycleEditor'
+        component={BatteryCycleEditorScreen}
+        options={{
+          title: 'Cycle Details',
+        }}
       />
       <ModelsStack.Screen
         name="BatteryPicker"

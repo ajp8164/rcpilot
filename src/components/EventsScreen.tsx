@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
+import { eventKind } from 'lib/event';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';
@@ -36,6 +37,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
+  const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
     navigation.setOptions({
@@ -150,7 +152,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
             onPress: () => {
-              const label = 'Delete Event';
+              const label = `Delete ${kind.name}`;
               confirmAction(label, event, deleteEvent);
             }
           }]
@@ -163,7 +165,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   if (!model?.events.length) {
     return (
-      <EmptyView info message={'No Events'} />
+      <EmptyView info message={`No ${kind.namePlural}`} />
     );
   }
 

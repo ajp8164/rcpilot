@@ -3,7 +3,7 @@ import { Checklist, ChecklistAction } from 'realmdb/Checklist';
 import { ChecklistActionSchedulePeriod, ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
 import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import { ListRenderItem, SectionList, SectionListData, View } from 'react-native';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ActionBar from 'components/atoms/ActionBar';
@@ -17,6 +17,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { actionScheduleSummary } from 'lib/checklist';
+import { eventKind } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
@@ -42,6 +43,7 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
 
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const [kind] = useState(eventKind(model?.type));
 
   const actionsToDo = useRef<ChecklistAction[]>([]);
   const actionDate = useRef(DateTime.now().toISO()!).current;
@@ -58,7 +60,7 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => confirmAction('Do Not Log Event', undefined, cancelEvent)}
+              onPress={() => confirmAction(`Do Not Log ${kind.name}`, undefined, cancelEvent)}
             />
           )
         }

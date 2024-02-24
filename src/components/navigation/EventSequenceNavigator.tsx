@@ -1,3 +1,4 @@
+import { BSON } from 'realm';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
@@ -6,17 +7,22 @@ import { EventSequenceNavigatorParamList } from 'types/navigation';
 import EventSequenceNewEventEditorScreen from 'components/EventSequenceNewEventEditorScreen';
 import EventSequencePreCheckScreen from 'components/EventSequencePreCheckScreen';
 import EventSequenceTimerScreen from 'components/EventSequenceTimerScreen';
+import { Model } from 'realmdb/Model';
 import NavContext from './NavContext';
 import NotesScreen from 'components/NotesScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { eventKind } from 'lib/event';
 import lodash from 'lodash';
+import { store } from 'store';
+import { useRealm } from '@realm/react';
 import { useTheme } from 'theme';
 
 const EventSequenceStack = createNativeStackNavigator<EventSequenceNavigatorParamList>();
 
 const EventSequenceNavigator = () => {
   const theme = useTheme();
+  const realm = useRealm();
 
   return (
     <NavContext.Provider value={{isModal: true}}>
@@ -37,8 +43,13 @@ const EventSequenceNavigator = () => {
         <EventSequenceStack.Screen
           name='EventSequencePreCheck'
           component={EventSequencePreCheckScreen}
-          options={{
-            title: 'Pre-Event',
+          options={() => {
+            const modelId = store.getState().eventSequence.modelId;
+            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const kind = eventKind(model ? model.type : undefined);
+            return {
+              title: `Pre-${kind.name}`,
+            }
           }}
         />
         <EventSequenceStack.Screen
@@ -51,8 +62,13 @@ const EventSequenceNavigator = () => {
         <EventSequenceStack.Screen
           name='EventSequenceNewEventEditor'
           component={EventSequenceNewEventEditorScreen}
-          options={{
-            title: 'Log Event',
+          options={() => {
+            const modelId = store.getState().eventSequence.modelId;
+            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const kind = eventKind(model ? model.type : undefined);
+            return {
+              title: `Log ${kind.name}`,
+            }
           }}
         />
         <EventSequenceStack.Screen
@@ -65,19 +81,29 @@ const EventSequenceNavigator = () => {
         <EventSequenceStack.Screen
           name='Notes'
           component={NotesScreen}
-          options={{
-            title: 'Event Notes',
+          options={() => {
+            const modelId = store.getState().eventSequence.modelId;
+            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const kind = eventKind(model ? model.type : undefined);
+            return {
+              title: `${kind.name} Notes`,
+            }
           }}
         />
         <EventSequenceStack.Screen
           name='EventSequenceTimer'
           component={EventSequenceTimerScreen}
-          options={{
-            title: 'Event Timer',
-            headerLargeStyle: { backgroundColor: theme.colors.brandPrimary },
-            headerTitleStyle: { color: theme.colors.stickyWhite },
-            headerTintColor: theme.colors.stickyWhite,
-            headerShadowVisible: false,
+          options={() => {
+            const modelId = store.getState().eventSequence.modelId;
+            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const kind = eventKind(model ? model.type : undefined);
+            return {
+              title: `${kind.name} Timer`,
+              headerLargeStyle: { backgroundColor: theme.colors.brandPrimary },
+              headerTitleStyle: { color: theme.colors.stickyWhite },
+              headerTintColor: theme.colors.stickyWhite,
+              headerShadowVisible: false,
+            }
           }}
         />
         <EventSequenceStack.Screen

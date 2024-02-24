@@ -25,6 +25,7 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
+import { eventKind } from 'lib/event';
 import { eventOutcomeIcons } from 'lib/event';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';
@@ -68,6 +69,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const [notes, setNotes] = useState(modelEvent?.notes || undefined);
 
   const [expandedDate, setExpandedDate] = useState(false);
+  const [kind] = useState(eventKind(modelEvent?.model?.type));
 
   useEffect(() => {
     if (!eventId || !modelEvent) return;
@@ -257,8 +259,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         position={['last']}
         value={<EventRating value={outcome}/>}
         onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Event Outcome',
-          headerBackTitle: 'Event',
+          title: `${kind.name} Outcome`,
+          headerBackTitle: `${kind.name}`,
           values: Object.values(EventOutcome),
           icons: eventOutcomeIcons,
           selected: outcome,
@@ -289,7 +291,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         value={fuel?.name || 'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Fuel',
-          headerBackTitle: 'Event',
+          headerBackTitle: `${kind.name}`,
           footer: 'You can manage fuels through the Globals section in the Setup tab.',
           values: modelFuels.map(f => { return f.name }),
           selected: fuel?.name,
@@ -315,7 +317,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         value={pilot?.name || 'Unknown'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Pilot',
-          headerBackTitle: 'Event',
+          headerBackTitle: `${kind.name}`,
           footer: 'You can manage pilots through the Globals section in the Setup tab.',
           values: pilots.map(p => { return p.name }),
           selected: pilot?.name,
@@ -329,7 +331,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         value={eventStyle?.name || 'Unspecified'}
         onPress={() => navigation.navigate('EnumPicker', {
           title: 'Style',
-          headerBackTitle: 'Event',
+          headerBackTitle: `${kind.name}`,
           footer: 'You can manage styles through the Globals section in the Setup tab.',
           values: eventStyles.map(s => { return s.name }),
           selected: eventStyle?.name,

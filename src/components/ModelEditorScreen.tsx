@@ -3,6 +3,7 @@ import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'component
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
+import { eventKind, useEvent } from 'lib/event';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -25,7 +26,6 @@ import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
-import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
 
@@ -47,6 +47,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const modelPropellers = useQuery(ModelPropeller);
   const eventStyles = useQuery(EventStyle);
   const modelFuels = useQuery(ModelFuel);
+  const [kind, setKind] = useState(eventKind(model?.type));
 
   const [name, setName] = useState(model?.name || undefined);
   const [image, setImage] = useState(model?.image || undefined);
@@ -72,6 +73,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
   const [expandedLastEvent, setExpandedLastEvent] = useState(false);
   const scrollY = useSharedValue(0);
+
+  useEffect(() => {
+    setKind(eventKind(type));
+  }, [type]);
 
   useEffect(() => {
     if (modelId) return;
@@ -384,9 +389,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               }
             />
             <ListItemInput
-              title={'Total Events'}
+              title={`Total ${kind.namePlural}`}
               value={totalEvents}
-              label='Events'
+              label={`${kind.namePlural}`}
               placeholder={'No'}
               keyboardType={'number-pad'}
               numeric={true}
@@ -406,7 +411,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           }
           {!modelId &&
             <ListItemDate
-              title={'Last Event'}
+              title={`Last ${kind.name}`}
               value={lastEvent
                 ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
                 : 'Tap to Set...'}
@@ -421,7 +426,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           {!!modelId &&
             <>
               <ListItem
-                title={'Last Event'}
+                title={`Last ${kind.name}`}
                 value={lastEvent
                   ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
                   : 'Unknown'
@@ -429,7 +434,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 rightImage={false}
               />
               <ListItem
-                title={'Logged Event Details'}
+                title={`Logged ${kind.name} Details`}
                 value={`${model?.events.length || 0}`}
                 position={['last']}
                 onPress={() => navigation.navigate('Events', {

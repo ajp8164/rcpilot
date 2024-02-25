@@ -197,6 +197,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         }}
         titleStyle={s.batteryText}
         subtitleStyle={s.batteryText}
+        bottomDividerLeft={72}
         position={listItemPosition(index, section.data.length)}
         leftImage={
           <View>

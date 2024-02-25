@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
-import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { Image, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
@@ -187,6 +187,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}
+        bottomDividerLeft={s.modelImage.width + 15}
         position={listItemPosition(index, section.data.length)}
         leftImage={
           <View style={s.modelIconContainer}>
@@ -205,6 +206,19 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                   color={theme.colors.brandSecondary}
                   style={s.modelIcon}
                 />
+              </View>
+            }
+            {model.damaged &&
+              <View style={[s.modelStatusContainer,{flexDirection: 'row'}]}>
+                <Icon
+                  name={'triangle-exclamation'}
+                  size={10}
+                  color={theme.colors.stickyWhite}
+                  style={s.modelStatusIcon}
+                />
+                <Text style={s.modelStatusText}>
+                  {'Damaged'}
+                </Text>
               </View>
             }
           </View>
@@ -315,11 +329,29 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   modelIconContainer: {
     position: 'absolute',
-    left: -15,
+    left: -10,
+    borderRadius: 10,
+    overflow:'hidden',
   },
   modelImage: {
     width: 150,
-    height: 85
+    height: 70,
+  },
+  modelStatusContainer: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 15,
+    justifyContent: 'center',
+    backgroundColor: theme.colors.blackTransparentLight,
+  },
+  modelStatusIcon: {
+    top: 2,
+    marginRight: 5
+  },
+  modelStatusText: {
+    ...theme.styles.textTiny,
+    color: theme.colors.stickyWhite,
   },
   modelSvgContainer: {
     backgroundColor: theme.colors.subtleGray,

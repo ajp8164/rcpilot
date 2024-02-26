@@ -86,7 +86,11 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
             onPress: () => {
-              confirmAction('Delete Saved Filter', filter, deleteFilter);
+              confirmAction(deleteFilter, {
+                label: 'Delete Saved Filter',
+                title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+                value: filter,
+              });
             }
           }]
         }}

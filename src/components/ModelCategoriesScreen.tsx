@@ -58,7 +58,11 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Category', category, deleteCategory),
+            onPress: () => confirmAction(deleteCategory, {
+              label: 'Delete Category',
+              title: "This action cannot be undone.\nAre you sure you don't want to log this model category?",
+              value: category,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', category._id.toString())}

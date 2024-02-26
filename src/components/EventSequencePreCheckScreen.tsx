@@ -60,7 +60,10 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => confirmAction(`Do Not Log ${kind.name}`, undefined, cancelEvent)}
+              onPressIn={() => confirmAction(cancelEvent, {
+                label: `Do Not Log ${kind.name}`,
+                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+              })}
             />
           )
         }

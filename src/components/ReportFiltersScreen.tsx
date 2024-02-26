@@ -83,7 +83,11 @@ const ReportFiltersScreen = ({ navigation, route }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Saved Filter', filter, deleteFilter),
+            onPress: () => confirmAction(deleteFilter, {
+              label: 'Delete Saved Filter',
+              title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+              value: filter,
+            })
           }]
         }}
         onPress={() => setSelectedFilter(filter._id.toString())}

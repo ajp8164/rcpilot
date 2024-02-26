@@ -151,11 +151,13 @@ const EventsScreen = ({ navigation, route }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => {
-              const label = `Delete ${kind.name}`;
-              confirmAction(label, event, deleteEvent);
+            onPress: () => confirmAction(deleteEvent, {
+                label: `Delete ${kind.name}`,
+                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                value: event,
+              })
             }
-          }]
+          ]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('events', event._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}

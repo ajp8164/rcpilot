@@ -70,7 +70,11 @@ const PilotsScreen = ({ navigation }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Pilot', pilot, deletePilot),
+            onPress: () => confirmAction(deletePilot, {
+              label: 'Delete Pilot',
+              title: 'This action cannot be undone.\nAre you sure you want to delete this pilot?',
+              value: pilot,
+            })
           }]
         }}
       />

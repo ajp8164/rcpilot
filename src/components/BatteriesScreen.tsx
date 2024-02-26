@@ -246,7 +246,11 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 : listBatteries === 'in-storage'
                 ? 'Delete In Storage Battery'
                 : 'Delete Battery';
-              confirmAction(label, battery, deleteBattery);
+              confirmAction(deleteBattery, {
+                label,
+                title: 'This action cannot be undone.\nAre you sure you want to delete this battery?',
+                value: battery,
+              });
             }
           }]
         }}

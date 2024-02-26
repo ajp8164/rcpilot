@@ -60,7 +60,11 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Fuel', fuel, deleteFuel),
+            onPress: () => confirmAction(deleteFuel, {
+              label: 'Delete Saved Filter',
+              title: 'This action cannot be undone.\nAre you sure you want to delete this fuel?',
+              value: fuel,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', fuel._id.toString())}

@@ -58,7 +58,11 @@ const EventStylesScreen = ({ navigation }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Style', style, deleteStyle),
+            onPress: () => confirmAction(deleteStyle, {
+              label: 'Delete Style',
+              title: "This action cannot be undone.\nAre you sure you don't want to log this event style?",
+              value: style,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', style._id.toString())}

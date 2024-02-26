@@ -85,7 +85,11 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Checklist Template', checklistTemplate, deleteChecklistTemplate),
+            onPress: () => confirmAction(deleteChecklistTemplate, {
+              label: 'Delete Checklist Template',
+              title: 'This action cannot be undone.\nAre you sure you want to delete this checklist template?',
+              value: checklistTemplate,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklistTemplates', checklistTemplate._id.toString())}

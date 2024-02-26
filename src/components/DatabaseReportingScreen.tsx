@@ -195,7 +195,11 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           swipeable={{
             rightItems: [{
               ...swipeableDeleteItem[theme.mode],
-              onPress: () => confirmAction('Delete Report', report, deleteReport),
+              onPress: () => confirmAction(deleteReport, {
+                label: 'Delete Report',
+                title: 'This action cannot be undone.\nAre you sure you want to delete this report?',
+                value: report,
+              })
             }]
           }}
           onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, report._id.toString())}

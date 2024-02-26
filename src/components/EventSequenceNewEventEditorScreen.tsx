@@ -71,7 +71,10 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     const onCancel = () => {
-      confirmAction(`Do Not Log ${kind.name}`, undefined, cancelEvent);
+      confirmAction(cancelEvent, {
+        label: `Do Not Log ${kind.name}`,
+        title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+      })
     };
 
     const onDone = () => {

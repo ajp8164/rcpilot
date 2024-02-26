@@ -120,7 +120,11 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Cycle', cycle.cycleNumber, deleteCycle),
+            onPress: () => confirmAction(deleteCycle, {
+              label: 'Delete Cycle',
+              title: 'This action cannot be undone.\nAre you sure you want to delete this battery cycle?',
+              value: cycle.cycleNumber,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycles', cycle._id.toString())}

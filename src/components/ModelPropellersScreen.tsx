@@ -60,7 +60,11 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction('Delete Propeller', propeller, deletePropeller),
+            onPress: () => confirmAction(deletePropeller, {
+              label: 'Delete Saved Filter',
+              title: 'This action cannot be undone.\nAre you sure you want to delete this propeller?',
+              value: propeller,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', propeller._id.toString())}

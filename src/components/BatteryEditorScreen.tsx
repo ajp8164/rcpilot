@@ -23,6 +23,7 @@ import { View } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -37,6 +38,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const confirmAction = useConfirmAction();
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
   const formatCurrency = useCurrencyFormatter();
@@ -229,6 +231,21 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  const confirmDeleteBattery =() => {
+    confirmAction(deleteBattery, {
+      label: 'Delete Battery',
+      title: 'This action cannot be undone.\nAre you sure you want to delete this battery?',
+      value: battery
+    });
+  };
+
+  const deleteBattery = () => {
+    realm.write(() => {
+      realm.delete(battery);
+    });
+    navigation.goBack();
+  };
+
   return (
     <AvoidSoftInputView style={[theme.styles.view]}>
       <ScrollView
@@ -411,6 +428,14 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
             eventName: 'battery-notes',
           })}
         />
+          <Divider text={'DANGER ZONE'} />
+          <ListItem
+            title={'Delete Battery'}
+            titleStyle={s.delete}
+            position={['first', 'last']}
+            rightImage={false}
+            onPress={confirmDeleteBattery}
+          />
         <Divider />
       </ScrollView>
     </AvoidSoftInputView>
@@ -418,6 +443,11 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  delete: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    color: theme.colors.assertive,
+  },
   tintValueContainer: {
     flexDirection: 'row',
     width: 100,

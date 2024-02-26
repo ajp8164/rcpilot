@@ -3,17 +3,22 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 export const useConfirmAction = () => {
   const { showActionSheetWithOptions } = useActionSheet();
 
-  return (label: string, value: any, onConfirm: (value: any) => void) => {
+  return (onConfirm: (value: any) => void, opts: {
+    label: string;
+    title?: string;
+    value?: any;
+  }) => {
     showActionSheetWithOptions(
       {
-        options: [label, 'Cancel'],
+        options: [opts.label, 'Cancel'],
         destructiveButtonIndex: [0],
         cancelButtonIndex: 1,
+        title: opts.title,
       },
       buttonIndex => {
         switch (buttonIndex) {
           case 0:
-            onConfirm(value);
+            onConfirm(opts.value);
             break;
           default:
             break;

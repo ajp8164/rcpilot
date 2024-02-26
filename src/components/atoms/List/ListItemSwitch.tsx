@@ -26,6 +26,7 @@ const ListItemSwitch = (props: Props) => {
     <>
       <_ListItemSwitch
         titleStyle={s.title}
+        subtitleStyle={s.subtitle}
         {...props}
         containerStyle={{...props.containerStyle, ...s.container}}
         position={expanded ? [first] : props.position}
@@ -56,6 +57,9 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     minHeight: 48,
   },
   title: {
+    width: '120%',
+  },
+  subtitle: {
     width: '120%',
   }
 }));

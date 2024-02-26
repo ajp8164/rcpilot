@@ -1,4 +1,5 @@
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
+import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
@@ -26,8 +27,9 @@ import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
+import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'ModelEditor'>,
@@ -38,6 +40,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
+  const s = useStyles(theme);
+  const confirmAction = useConfirmAction();
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
@@ -311,6 +315,21 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const scrollHandler = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
   });
+
+  const confirmDeleteModel =() => {
+    confirmAction(deleteModel, {
+      label: `Delete ${model?.type}`,
+      title: `This action cannot be undone.\nAre you sure you want to delete this ${model?.type.toLocaleLowerCase()}?`,
+      value: model
+    });
+  };
+
+  const deleteModel = () => {
+    realm.write(() => {
+      realm.delete(model);
+    });
+    navigation.goBack();
+  };
 
   return (
     <AvoidSoftInputView>
@@ -614,11 +633,28 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               eventName: 'model-notes',
             })}
           />
+          <Divider text={'DANGER ZONE'} />
+          <ListItem
+            title={`Delete ${model?.type}`}
+            titleStyle={s.delete}
+            position={['first', 'last']}
+            rightImage={false}
+            onPress={confirmDeleteModel}
+          />
           <Divider />
         </View>
       </Animated.ScrollView>
     </AvoidSoftInputView>
   );
 };
+
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  delete: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    color: theme.colors.assertive,
+  },
+}));
+
 
 export default ModelEditorScreen;

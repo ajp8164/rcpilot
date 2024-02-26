@@ -5,19 +5,17 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import {
-  Divider,
-  ListItem,
-  ListItemSwitch,
-} from '@react-native-ajp-elements/ui';
+import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { saveBiometrics, saveThemeSettings } from 'store/slices/appSettings';
+import { saveBiometrics, saveShowModelCards, saveThemeSettings } from 'store/slices/appSettings';
 import {
+  selectAppSettings,
   selectBiometrics,
   selectThemeSettings,
 } from 'store/selectors/appSettingsSelectors';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { Divider } from '@react-native-ajp-elements/ui';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
 import { hasPushNotificationsPermission } from 'lib/notifications';
 import { useTheme } from 'theme';
@@ -29,6 +27,7 @@ const AppSettings = () => {
   const dispatch = useDispatch();
   const themeSettings = useSelector(selectThemeSettings);
   const biometrics = useSelector(selectBiometrics);
+  const appSettings = useSelector(selectAppSettings);
 
   const [biometricsValue, setBiometricsValue] = useState(biometrics);
   const [hasPNPermission, setHasPNPermission] = useState(false);
@@ -86,6 +85,12 @@ const AppSettings = () => {
     theme.updateTheme({ mode: control === 'dark' ? 'dark' : 'light' });
   };
 
+  const toggleShowModelCards = (value: boolean) => {
+    dispatch(
+      saveShowModelCards({value}),
+    );
+  };
+
   return (
     <View style={theme.styles.view}>
       <ScrollView
@@ -124,6 +129,14 @@ const AppSettings = () => {
           value={themeSettings.followDevice}
           position={['last']}
           onValueChange={toggleUseDevice}
+        />
+        <Divider text={'VIEW OPTIONS'} />
+        <ListItemSwitch
+          title={'Show Models As Cards'}
+          subtitle={'Show model cards on the Models tab'}
+          value={appSettings.showModelCards}
+          position={['first', 'last']}
+          onValueChange={toggleShowModelCards}
         />
       </ScrollView>
     </View>

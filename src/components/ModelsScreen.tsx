@@ -10,6 +10,8 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { ChecklistType } from 'types/checklist';
+import CustomIcon from "theme/icomoon/CustomIcon";
+import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
@@ -17,9 +19,12 @@ import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
+import { eventKind } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { reward } from 'lib/reward';
+import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
@@ -41,6 +46,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const _pilot = useSelector(selectPilot);
+  const appSettings = useSelector(selectAppSettings);
 
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
@@ -49,7 +55,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   useEffect(() => {  
     navigation.setOptions({
       headerLeft: () => {
-        if (listModels === 'all') {
+        if (listModels === 'all' && !appSettings.showModelCards) {
           return (
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -118,7 +124,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ activeModels, retiredModels, listEditor.enabled ]);
+  }, [ activeModels, retiredModels, listEditor.enabled, appSettings ]);
 
   const deleteModel = (model: Model) => {
     realm.write(() => {
@@ -131,7 +137,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       if (model.category) {
         return `${model.type.toUpperCase()} - ${model.category.name.toUpperCase()}`;
       }
-      return model.type.toUpperCase();
+      return `${model.type.toUpperCase()}S`;
     }).sort();
 
     if (pilot && pilot.favoriteModels.length > 0) {
@@ -169,7 +175,108 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const renderModel: SectionListRenderItem<Model, Section> = ({
+  const renderModelCard: SectionListRenderItem<Model, Section> = ({
+    item: model,
+    section: _model,
+    index: _index,
+  }: {
+    item: Model;
+    section: Section;
+    index: number;
+  }) => {
+    const r = reward(model);
+    return (
+    <View style={s.modelCard}>
+      <View style={s.modelCardHeader}>
+        <Icon
+          name={r.icon}
+          color={r.iconColor}
+          size={20}
+          style={{ marginRight: 10, alignSelf: 'center', paddingBottom: 15, width: 23}}
+        />
+        <View style={{flex: 1}}>
+          <View style={s.modelCardTitleContainer}>
+            <Text style={s.modelCardTitleLeft}>
+              {model.name}
+            </Text>
+            <Text style={s.modelCardTitleRight}>
+              {model.lastEvent
+                ? `Last ${DateTime.fromISO(model.lastEvent).toFormat('mm/dd/yyyy')}`
+                : `No ${eventKind(model.type).namePlural}`}
+            </Text>
+          </View>
+          <View style={s.modelCardSubtitleContainer}>
+            <Text style={s.modelCardSubtitle}>
+              {`${model.totalEvents || 0} events`}
+            </Text>
+            <Text style={s.modelCardSubtitle}>
+              {`${model.totalTime} total time`}
+            </Text>
+          </View>
+        </View>
+      </View>
+      {model.image ?
+        <Image
+          source={{ uri: model.image }}
+          resizeMode={'cover'}
+          style={s.modelCardImage}
+        />
+      :
+        <View style={s.modelCardSvg}>
+          <SvgXml
+            xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+            width={s.modelImage.width}
+            height={'100%'}
+            color={theme.colors.brandSecondary}
+            style={s.modelIcon}
+          />
+        </View>
+      }
+      <View style={s.modelCardFooter}>
+        <Button
+          title={'Details'}
+          titleStyle={s.modelCardButtonTitle}
+          buttonStyle={s.modelCardButton}
+          icon={
+            <CustomIcon
+              name={'circle-info'}
+              size={20}
+              color={theme.colors.midGray}
+              style={{ paddingRight: 5}}
+            />
+          }
+          onPress={() => navigation.navigate('ModelEditor', {
+            modelId: model._id.toString(),
+          })}
+        />
+        <Button
+          title={`New ${eventKind(model.type).name}`}
+          titleStyle={s.modelCardButtonTitle}
+          buttonStyle={s.modelCardButton}
+          icon={
+            <Icon
+              name={'circle-play'}
+              size={20}
+              color={theme.colors.midGray}
+              style={{ paddingRight: 5}}
+            />
+          }
+          onPress={() => {
+            if (listModels !== 'all') {
+              navigation.navigate('ModelEditor', {
+                modelId: model._id.toString(),
+              });
+            } else {
+              startNewEventSequence(model);
+            }
+          }}
+        />
+      </View>
+    </View>
+    )
+  };
+
+  const renderModelListItem: SectionListRenderItem<Model, Section> = ({
     item: model,
     section,
     index,
@@ -250,8 +357,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
             onPress: () => {
-              const label = listModels === 'retired' ? 'Delete Retired Model' : 'Delete Model'
-              confirmAction(label, model, deleteModel);
+              const label = listModels === 'retired' ? `Delete Retired ${model.type}` : `Delete ${model.type}`;
+              confirmAction(deleteModel, {
+                label,
+                title: `This action cannot be undone.\nAre you sure you want to delete this ${model.type.toLocaleLowerCase()}?`,
+                value: model
+              });
             },
           }]
         }}
@@ -301,7 +412,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       style={[theme.styles.view, s.sectionList]}
       sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
       keyExtractor={item => item._id.toString()}
-      renderItem={renderModel}
+      renderItem={section => appSettings.showModelCards ? renderModelCard(section) : renderModelListItem(section)}
       renderSectionHeader={({section: {title}}) => (
         <Divider text={title} />
       )}
@@ -323,6 +434,72 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   headerIconDisabled: {
     color: theme.colors.disabled,
+  },
+  modelCard: {
+    width: '100%',
+    height: 250,
+    paddingVertical: 10,
+    marginBottom: 15,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: theme.colors.listItem,
+  },
+  modelCardHeader: {
+    flexDirection: 'row',
+    width: '100%',
+    height: 50,
+    paddingHorizontal: 20,
+  },
+  modelCardTitleLeft: {
+    ...theme.styles.textNormal,
+    ...theme.styles.textBold,
+  },
+  modelCardTitleRight: {
+    ...theme.styles.textSmall,
+    flex: 1,
+    top: 2,
+    textAlign: 'right',
+  },
+  modelCardTitleContainer: {
+    flexDirection: 'row',
+  },
+  modelCardSubtitleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  modelCardSubtitle: {
+    ...theme.styles.textSmall,
+    ...theme.styles.textDim,
+    paddingBottom: 5,
+  },
+  modelCardImage: {
+    width: '100%',
+    flex: 1,
+  },
+  modelCardSvg: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#E3F2FD',
+  },
+  modelCardFooter: {
+    flexDirection: 'row',
+    height: 48,
+    paddingTop: 10,
+    paddingHorizontal: 20,
+    justifyContent:'space-between',
+    alignItems: 'center',
+  },
+  modelCardButtonTitle: {
+    ...theme.styles.buttonScreenHeaderTitle,
+    ...theme.styles.textSmall,
+    ...theme.styles.textBold,
+    color: theme.colors.midGray,
+  },
+  modelCardButton: {
+    ...theme.styles.buttonScreenHeader,
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
   },
   modelIcon: {
     transform: [{rotate: '-45deg'}],

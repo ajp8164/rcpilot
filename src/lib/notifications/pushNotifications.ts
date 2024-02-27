@@ -1,3 +1,4 @@
+import { NotificationInterface } from 'types/notification';
 import { UserProfile } from 'types/user';
 import { isEmulator } from 'react-native-device-info';
 import lodash from 'lodash';
@@ -98,4 +99,22 @@ export const removePushNotificationsFromUser = async (
 
   // Remove app icon badge count.
   notifee.setBadgeCount(0);
+};
+
+export const displayNotification = async (props: NotificationInterface) => {
+  // Create a channel (required for Android)
+  const channelId = await notifee.createChannel({
+    id: 'default',
+    name: 'Default Channel',
+  });
+
+  // Display a notification
+  await notifee.displayNotification({
+    title: props.title,
+    body: props.description,
+    android: {
+      channelId,
+      smallIcon: 'ic_launcher',
+    },
+  });
 };

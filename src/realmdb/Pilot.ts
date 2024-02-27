@@ -1,5 +1,6 @@
 import { BSON, Object, ObjectSchema } from 'realm';
 
+import { Event } from 'realmdb/Event';
 import { ISODateString } from 'types/common';
 import { Model } from 'realmdb/Model';
 
@@ -9,6 +10,7 @@ export class Pilot extends Object<Pilot> {
   updatedOn!: ISODateString;
   name!: string;
   favoriteModels: Model[] = [];
+  achievements: Achievement[] = [];
 
   static schema: ObjectSchema = {
     name: 'Pilot',
@@ -17,8 +19,25 @@ export class Pilot extends Object<Pilot> {
       createdOn: 'string',
       updatedOn: 'string',
       name: 'string',
-      favoriteModels: { type: 'list', objectType: 'Model', default: [] }
+      favoriteModels: { type: 'list', objectType: 'Model', default: [] },
+      achievements: { type: 'list', objectType: 'Achievement', default: [] },
     },
     primaryKey: '_id',
+  };
+};
+
+export class Achievement extends Object<Achievement> {
+  date!: ISODateString;
+  name!: string;
+  event!: Event;
+
+  static schema: ObjectSchema = {
+    name: 'Achievement',
+    embedded: true,
+    properties: {
+      date: 'string',
+      name: 'string',
+      event: 'Event',
+    },
   };
 };

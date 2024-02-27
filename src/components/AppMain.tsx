@@ -24,6 +24,7 @@ import { SignInModal } from 'components/modals/SignInModal';
 import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
 import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
+import { useAchievementConveyor } from 'lib/achievement';
 import { useColorScheme } from 'react-native';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { useSelector } from 'react-redux';
@@ -46,6 +47,7 @@ const AppMain = () => {
   const camera = useCameraContext(cameraModalRef);
   const network = useNetworkContext();
   useDeviceShake();
+  useAchievementConveyor();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(
     StartupScreen.None,

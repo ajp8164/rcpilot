@@ -1,3 +1,4 @@
+import { Achievement, Pilot } from './Pilot';
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
 import { ChecklistAction, ChecklistActionHistoryEntry, ChecklistActionSchedule } from './Checklist';
 import { Filter, FilterState } from './Filter';
@@ -13,7 +14,6 @@ import { Model } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
-import { Pilot } from './Pilot';
 import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [
@@ -33,6 +33,7 @@ const Schema = [
   ScanCodesReport,
   
   // Embedded objects
+  Achievement,
   BatteryCharge,
   BatteryCycle,
   BatteryDischarge,

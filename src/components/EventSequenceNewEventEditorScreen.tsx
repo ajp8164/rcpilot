@@ -133,7 +133,17 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       {enabled: true, action: onDone, style: {color: theme.colors.screenHeaderInvButtonText}},
       {enabled: true, action: onCancel, style: {color: theme.colors.screenHeaderInvButtonText}},
     );
-  }, [ batteries ]);
+  }, [
+    duration,
+    outcome,
+    pilot,
+    location,
+    fuel,
+    fuelConsumed,
+    propeller,
+    eventStyle,
+    notes,
+  ]);
 
   useEffect(() => {
     // Get all the batteries for this event.
@@ -159,11 +169,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     setAllBatteryDischarges(initialBatteryDischarges);
   }, []);
 
-  useEffect(() => {
-    // Need to wait for initial values to be set before registering the discharge handlers.
-    // (Will just do all handlers at the same time.)
-    if (!allBatteryDischarges?.length) return;
-    
+  useEffect(() => {    
     // Event handlers for EnumPicker
     event.on('event-model-fuel', onChangeModelFuel);
     event.on('event-model-propeller', onChangeModelPropeller);
@@ -186,7 +192,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       event.removeListener(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
       event.removeListener(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
   };
-  }, [allBatteryDischarges?.length]);
+  }, []);
 
   const cancelEvent = () => {
     dispatch(eventSequence.reset());

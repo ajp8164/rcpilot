@@ -2,11 +2,12 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { Image, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
+import { AchievementModal } from 'components/modals/AchievementModal';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { ChecklistType } from 'types/checklist';
@@ -23,7 +24,6 @@ import { eventKind } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
-import { reward } from 'lib/reward';
 import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -51,6 +51,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
+
+  const achievementModalRef = useRef<AchievementModal>(null);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -184,16 +186,25 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
-    const r = reward(model);
     return (
     <View style={s.modelCard}>
       <View style={s.modelCardHeader}>
-        <Icon
-          name={r.icon}
-          color={r.iconColor}
-          size={20}
-          style={{ marginRight: 10, alignSelf: 'center', paddingBottom: 15, width: 23}}
-        />
+        {pilot &&
+          <Button
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton, {borderWidth: 0}]}
+            icon={
+              <Icon
+                name={'certificate'}
+                color={theme.colors.subtleGray}
+                size={30}
+                style={{ top: -2, height: 30,}}
+              />
+            }
+            titleStyle={[theme.styles.textTiny,theme.styles.textBold,{marginLeft: -30, color: theme.colors.lightGray, top: -2, marginRight: 10, borderWidth: 0, width: 30}]}
+            title={pilot ? `${pilot.achievements.length}` : '0'}
+            onPress={() => achievementModalRef.current?.present(pilot, model)}
+          />
+        }
         <View style={{flex: 1}}>
           <View style={s.modelCardTitleContainer}>
             <Text style={s.modelCardTitleLeft}>
@@ -405,19 +416,22 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SectionList
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}
-      stickySectionHeadersEnabled={true}
-      style={[theme.styles.view, s.sectionList]}
-      sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
-      keyExtractor={item => item._id.toString()}
-      renderItem={section => appSettings.showModelCards ? renderModelCard(section) : renderModelListItem(section)}
-      renderSectionHeader={({section: {title}}) => (
-        <Divider text={title} />
-      )}
-      ListFooterComponent={renderInactive()}
-    />
+    <>
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        style={[theme.styles.view, s.sectionList]}
+        sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
+        keyExtractor={item => item._id.toString()}
+        renderItem={section => appSettings.showModelCards ? renderModelCard(section) : renderModelListItem(section)}
+        renderSectionHeader={({section: {title}}) => (
+          <Divider text={title} />
+        )}
+        ListFooterComponent={renderInactive()}
+      />
+      <AchievementModal ref={achievementModalRef} />
+    </>
   );
 };
 
@@ -448,7 +462,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
     width: '100%',
     height: 50,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
   },
   modelCardTitleLeft: {
     ...theme.styles.textNormal,
@@ -485,7 +499,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
     height: 48,
     paddingTop: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     justifyContent:'space-between',
     alignItems: 'center',
   },

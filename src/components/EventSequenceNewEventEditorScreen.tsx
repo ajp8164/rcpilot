@@ -31,6 +31,7 @@ import { SvgXml } from 'react-native-svg';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
+import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -54,15 +55,18 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const eventStyles = useQuery(EventStyle);
   const locations = useQuery(Location);
   const pilots = useQuery(Pilot);
-  
+
+  const _pilot = useSelector(selectPilot);
+  const currentPilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
+
   const [date] = useState(DateTime.now());
   const [duration, setDuration] = useState(secondsToMSS(currentEventSequence.duration / 1000));
-  const [fuel, setFuel] = useState<ModelFuel>();
+  const [fuel, setFuel] = useState<ModelFuel | undefined>(model?.defaultFuel);
   const [fuelConsumed, setFuelConsumed] = useState<string>();
-  const [propeller, setPropeller] = useState<ModelPropeller>();
-  const [eventStyle, setEventStyle] = useState<EventStyle>();
+  const [propeller, setPropeller] = useState<ModelPropeller | undefined>(model?.defaultPropeller);
+  const [eventStyle, setEventStyle] = useState<EventStyle | undefined>(model?.defaultStyle);
   const [location, setLocation] = useState<Location>();
-  const [pilot, setPilot] = useState<Pilot>();
+  const [pilot, setPilot] = useState<Pilot | undefined>(currentPilot ? currentPilot : undefined);
   const [outcome, setOutcome] = useState<EventOutcome>();
   const [notes, setNotes] = useState<string | undefined>(undefined);
 

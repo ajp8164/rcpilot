@@ -520,13 +520,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   modelIconContainer: {
     position: 'absolute',
-    left: -10,
-    borderRadius: 10,
+    left: -15,
     overflow:'hidden',
   },
   modelImage: {
     width: 150,
-    height: 70,
+    height: 85,
   },
   modelStatusContainer: {
     position: 'absolute',

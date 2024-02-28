@@ -7,7 +7,7 @@ import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { TimerMode, TimerState } from 'types/timer';
 import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analysis';
 import { eventKind, useEvent } from 'lib/event';
-import { modelChecklistPending, modelTypeIcons } from 'lib/model';
+import { modelChecklistActionsPending, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
@@ -145,7 +145,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     }
     dispatch(eventSequence.setDuration({duration}));
 
-    const checklists = modelChecklistPending(model!, ChecklistType.PostEvent);
+    const checklists = modelChecklistActionsPending(model!, ChecklistType.PostEvent);
   
     if (checklists?.length) {
       navigation.push('EventSequenceChecklist', {

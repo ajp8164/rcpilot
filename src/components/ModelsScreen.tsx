@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { modelChecklistPending, modelShortSummary, modelTypeIcons } from 'lib/model';
+import { modelChecklistActionsPending, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -152,7 +152,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   };
 
   const confirmStartNewEventSequence= (model: Model) => {
-    const maintenancePending = modelChecklistPending(model, ChecklistType.Maintenance).length > 0;
+    const maintenancePending = modelChecklistActionsPending(model, ChecklistType.Maintenance).length > 0;
     if (maintenancePending) {
       Alert.alert(
         'Maintenance Due',

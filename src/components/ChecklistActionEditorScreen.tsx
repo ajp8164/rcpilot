@@ -10,16 +10,21 @@ import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/Checklist';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewChecklistActionNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
+import Realm, { BSON } from 'realm';
 import { eqNumber, eqString } from 'realmdb/helpers';
+import { eventKind, useEvent } from 'lib/event';
 
 import { CompositeScreenProps } from '@react-navigation/core';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { ISODateString } from 'types/common';
+import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import Realm from 'realm';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { getChecklistActionScheduleItems } from 'lib/checklist';
-import { useEvent } from 'lib/event';
+import { secondsToMSS } from 'lib/formatters';
+import { useObject } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
 import { useTheme } from 'theme';
@@ -36,13 +41,17 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const {
     checklistType,
     checklistAction,
+    modelId,
     eventName,
   } = route.params;
 
   const theme = useTheme();
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
-  
+
+  // If a model id is provided then this action is attached to a checklist on the model, not a checklist template.
+  const model = useObject(Model, new BSON.ObjectId(modelId));
+
   const action = useRef(checklistAction).current;
   // If refId is undefined then we're creating a new action.
   const isNewAction = useRef(checklistAction?.refId === undefined).current;
@@ -103,7 +112,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         result.cost = cost ? Number(cost) : undefined;
       }
 
-      event.emit(eventName, result);
+      event.emit(eventName, result);console.log(result);
       navigation.goBack();
     };
 
@@ -114,41 +123,71 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   }, [ description, selectedSchedule, cost, notes ]);
 
   useEffect(() => {
-    event.on('checklist-template-action-notes', setNotes);
+    event.on('checklist-action-notes', setNotes);
     return () => {
-      event.removeListener('checklist-template-action-notes', setNotes);
+      event.removeListener('checklist-action-notes', setNotes);
     };
   }, []);
 
   useEffect(() => {
+    let following: ISODateString | string;
+    let followingStr = '';
     const period = schedulePickerValue[1] as ChecklistActionSchedulePeriod;
     const whenPerformValue = whenPerformValueToString(schedulePickerValue[0], schedulePickerValue[1]);
 
     // Set strings based on selected action schedule.
     switch (period) {
       case ChecklistActionSchedulePeriod.Events:
+        if (selectedSchedule.type === ChecklistActionScheduleType.NonRepeating) {
+          if (!model) {
+            followingStr = ChecklistActionScheduleFollowing.EventAtInstall;
+          } else {
+            const followingEventNumber = model?.totalEvents ? model.totalEvents + 1 : 1;
+            following = `${followingEventNumber}`;
+            followingStr = `${eventKind(model.type).name} ${followingEventNumber}`;
+          }
+        }
         setScheduleStr({
-          following: selectedSchedule.type === ChecklistActionScheduleType.NonRepeating ? ChecklistActionScheduleFollowing.EventAtInstall : '',
+          following: followingStr,
           whenPerform: selectedSchedule.type === ChecklistActionScheduleType.NonRepeating ? ChecklistActionScheduleWhenPerform.After : ChecklistActionScheduleWhenPerform.Every,
           whenPerformValue,
         });
         break;
+
       case ChecklistActionSchedulePeriod.ModelMinutes:
+        if (selectedSchedule.type === ChecklistActionScheduleType.NonRepeating) {
+          if (!model) {
+            followingStr = ChecklistActionScheduleFollowing.TimeAtInstall;
+          } else {
+            following = `${model.totalTime}`;
+            followingStr = `Total Time ${secondsToMSS(model.totalTime, {format: 'm:ss'})}`;
+          }
+        }
         setScheduleStr({
-          following: selectedSchedule.type === ChecklistActionScheduleType.NonRepeating ? ChecklistActionScheduleFollowing.TimeAtInstall : '',
+          following: followingStr,
           whenPerform: selectedSchedule.type === ChecklistActionScheduleType.NonRepeating ? ChecklistActionScheduleWhenPerform.After : ChecklistActionScheduleWhenPerform.Every,
           whenPerformValue,
         });
         break;
+
       case ChecklistActionSchedulePeriod.Days:
       case ChecklistActionSchedulePeriod.Weeks:
       case ChecklistActionSchedulePeriod.Months:
+        if (selectedSchedule.type === ChecklistActionScheduleType.NonRepeating) {
+          if (!model) {
+            followingStr = ChecklistActionScheduleFollowing.InstallDate;
+          } else {
+            following = DateTime.now().toISO()!;
+            followingStr = DateTime.now().toFormat('MMMM d, yyyy');
+          }
+        }
         setScheduleStr({
-          following: selectedSchedule.type === ChecklistActionScheduleType.NonRepeating ? ChecklistActionScheduleFollowing.InstallDate : '',
+          following: followingStr,
           whenPerform: selectedSchedule.type === ChecklistActionScheduleType.NonRepeating ? ChecklistActionScheduleWhenPerform.In : ChecklistActionScheduleWhenPerform.Every,
           whenPerformValue,
         });
         break;
+
       case ChecklistActionSchedulePeriod.Today:
         setScheduleStr({
           following: '',
@@ -163,6 +202,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         ...prevState,
         period,
         value: Number(schedulePickerValue[0]),
+        following,
       }
     });
   },[ schedulePickerValue, selectedSchedule.type ]);
@@ -266,7 +306,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => navigation.navigate('Notes', {
           title: 'Action Notes',
           text: notes,
-          eventName: 'checklist-template-action-notes',
+          eventName: 'checklist-action-notes',
         })}
       />
     </ScrollView>

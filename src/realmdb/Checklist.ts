@@ -57,12 +57,14 @@ export class ChecklistAction extends Object<ChecklistAction> {
 
 // Plain JS object type.
 export interface JChecklistActionSchedule  {
+  following?: string;
   period: keyof typeof ChecklistActionSchedulePeriod;
   type: ChecklistActionScheduleType;
   value: number;
 };
 
 export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
+  following?: string;
   period!: keyof typeof ChecklistActionSchedulePeriod;
   type!: ChecklistActionScheduleType;
   value!: number;
@@ -71,6 +73,7 @@ export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
     name: 'ChecklistActionSchedule',
     embedded: true,
     properties: {
+      following: 'string?',
       period: 'string',
       type: 'string',
       value: 'int?',

@@ -1,4 +1,4 @@
-export * from './modelChecklistPending';
+export * from './modelChecklistActionsPending';
 export * from './modelFilter';
 export * from './modelHasPropeller';
 export * from './modelSummary';

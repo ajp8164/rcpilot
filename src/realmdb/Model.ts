@@ -24,9 +24,6 @@ export class Model extends Object<Model> {
   retired!: boolean;
   damaged!: boolean;
   requiresMaintenance!: boolean;
-  totalEvents?: number;
-  totalTime?: number;
-  lastEvent?: ISODateString;
   events: Event[] = [];
   logsBatteries!: boolean;
   favoriteBatteries: Battery[] = [];
@@ -38,6 +35,7 @@ export class Model extends Object<Model> {
   defaultStyle?: EventStyle;
   scanCodeSize?: ScanCodeSize;
   notes?: string;
+  stats!: ModelStatistics;
 
   static schema: ObjectSchema = {
     name: 'Model',
@@ -55,9 +53,6 @@ export class Model extends Object<Model> {
       retired: { type: 'bool', default: false },
       damaged: { type: 'bool', default: false },
       requiresMaintenance: { type: 'bool', default: false },
-      totalEvents: 'int?',
-      totalTime: 'int?',
-      lastEvent: 'string?',
       events: { type: 'list', objectType: 'Event', default: [] },
       logsBatteries: { type: 'bool', default: false },
       favoriteBatteries: { type: 'list', objectType: 'Battery', default: [] },
@@ -69,7 +64,26 @@ export class Model extends Object<Model> {
       defaultStyle: 'EventStyle?',
       scanCodeSize: 'string?',
       notes: 'string?',
+      stats: 'ModelStatistics',
     },
     primaryKey: '_id',
+  };
+};
+
+export class ModelStatistics extends Object<ModelStatistics> {
+  averageEventDuration!: number;
+  lastEvent?: ISODateString;
+  totalEvents!: number;
+  totalTime!: number;
+
+  static schema: ObjectSchema = {
+    name: 'ModelStatistics',
+    embedded: true,
+    properties: {
+      averageEventDuration: 'float',
+      lastEvent: 'string?',
+      totalEvents: 'int',
+      totalTime: 'int',
+    },
   };
 };

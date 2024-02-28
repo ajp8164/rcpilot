@@ -20,9 +20,9 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { actionScheduleSummary } from 'lib/checklist';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
+import { useActionScheduleSummary } from 'lib/checklist';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
@@ -53,6 +53,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   const workingChecklist = checklistTemplate || modelChecklist || undefined;
   const editingTemplate = useRef(!modelId).current; // This is a template editor if no modelId.
   const eventNameId = useRef(uuidv4()).current; // Used for unique action change event name.
+  const actionScheduleSummary = useActionScheduleSummary(modelId);
 
   const [name, setName] = useState(checklistTemplate?.name || modelChecklist?.name || undefined);
   const [type, setType] = useState(checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent);
@@ -233,7 +234,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           ref={ref => ref && action.refId && listEditor.add(ref, 'checklist-actions', action.refId)}
           title={action.description}
           subtitle={actionScheduleSummary(action, type)}
-          subtitleNumberOfLines={1}
+          // subtitleNumberOfLines={2}
           position={listItemPosition(index, actions!.length)}
           titleNumberOfLines={1}
           drag={drag}

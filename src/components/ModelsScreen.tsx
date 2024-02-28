@@ -1,9 +1,9 @@
+import { Alert, Image, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
-import { Image, SectionList, SectionListData, SectionListRenderItem, Text, View } from 'react-native';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { modelShortSummary, modelTypeIcons } from 'lib/model';
+import { modelChecklistPending, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -151,6 +151,31 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     return groups;
   };
 
+  const confirmStartNewEventSequence= (model: Model) => {
+    const maintenancePending = modelChecklistPending(model, ChecklistType.Maintenance).length > 0;
+    if (maintenancePending) {
+      Alert.alert(
+        'Maintenance Due',
+        `This ${model.type.toLowerCase()} has one or more maintenance actions due.\n\nAre you sure you want to use it for this ${eventKind(model.type).name.toLowerCase()}?`,
+        [
+          { text: 'Yes', onPress: () => startNewEventSequence(model)},
+          { text: 'Cancel', style: 'cancel' },
+        ],
+        { cancelable: false },
+      );
+    } else if (model.damaged) {
+      Alert.alert(
+        `Damaged ${model.type}`,
+        `This ${model.type.toLowerCase()} is marked as damaged.\n\nAre you sure you want to use it for this ${eventKind(model.type).name.toLowerCase()}?`,
+        [
+          { text: 'Yes', onPress: () => startNewEventSequence(model)},
+          { text: 'Cancel', style: 'cancel' },
+        ],
+        { cancelable: false },
+      );
+    }
+  };
+
   const startNewEventSequence= (model: Model) => {
     dispatch(eventSequence.reset());
     dispatch(eventSequence.setModel({modelId: model._id.toString()}));
@@ -284,7 +309,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 modelId: model._id.toString(),
               });
             } else {
-              startNewEventSequence(model);
+              confirmStartNewEventSequence(model);
             }
           }}
         />
@@ -360,7 +385,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               modelId: model._id.toString(),
             });
           } else {
-            startNewEventSequence(model);
+            confirmStartNewEventSequence(model);
           }
         }}
         showInfo={listModels === 'all'}

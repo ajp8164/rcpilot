@@ -142,9 +142,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.EventAtInstall;
           } else {
-            const followingEventNumber = model?.totalEvents ? model.totalEvents + 1 : 1;
+            const followingEventNumber = model?.stats.totalEvents ? model.stats.totalEvents + 1 : 1;
             following = `${followingEventNumber}`;
-            followingStr = `${eventKind(model.type).name} ${followingEventNumber}`;
+            followingStr = `${eventKind(model.type).name} #${followingEventNumber}`;
           }
         }
         setScheduleStr({
@@ -159,8 +159,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.TimeAtInstall;
           } else {
-            following = `${model.totalTime}`;
-            followingStr = `Total Time ${secondsToMSS(model.totalTime, {format: 'm:ss'})}`;
+            following = `${model.stats.totalTime}`;
+            followingStr = `Total Time ${secondsToMSS(model.stats.totalTime, {format: 'm:ss'})}`;
           }
         }
         setScheduleStr({
@@ -200,9 +200,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     setSelectedSchedule(prevState => {
       return {
         ...prevState,
+        following,
         period,
         value: Number(schedulePickerValue[0]),
-        following,
       }
     });
   },[ schedulePickerValue, selectedSchedule.type ]);

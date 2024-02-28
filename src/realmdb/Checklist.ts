@@ -31,6 +31,7 @@ export type JChecklistAction =  {
   schedule: JChecklistActionSchedule;
   cost?: number;
   notes?: string;
+  history?: ChecklistActionHistoryEntry[];
 };
 
 export class ChecklistAction extends Object<ChecklistAction> {

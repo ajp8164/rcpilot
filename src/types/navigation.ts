@@ -125,6 +125,7 @@ export type ModelsNavigatorParamList = {
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
+    modelId?: string;
     eventName: string;
   };
   EnumPicker: EnumPickerInterface;
@@ -345,6 +346,7 @@ export type NewChecklistNavigatorParamList = {
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
+    modelId?: string;
     eventName: string;
   };
   EnumPicker: EnumPickerInterface;
@@ -365,6 +367,7 @@ export type NewChecklistActionNavigatorParamList = {
   NewChecklistAction: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
+    modelId?: string;
     eventName: string;
   };
   Notes: {
@@ -385,6 +388,7 @@ export type SetupNavigatorParamList = {
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
+    modelId?: string;
     eventName: string;
   };
   ChecklistTemplates: undefined;

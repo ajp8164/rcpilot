@@ -258,6 +258,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           onPress={() => navigation.navigate('ChecklistActionEditor', {
             checklistAction: action,
             checklistType: type,
+            modelId,
             eventName: `checklist-action-${eventNameId}`,
           })}
         />
@@ -317,6 +318,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           screen: 'NewChecklistAction',
           params: { 
             checklistType: type,
+            modelId,
             eventName: `checklist-action-${eventNameId}`
           },
         })}

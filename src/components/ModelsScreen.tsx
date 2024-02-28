@@ -166,8 +166,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       });
     } else if (checklists.length) {
       navigation.navigate('EventSequenceNavigator', {
-        screen: 'EventSequencePreCheck',
-        params: { cancelable: true },
+        screen: 'EventSequenceChecklist',
+        params: { cancelable: true, checklistType: ChecklistType.PreEvent },
       });
     } else {
       navigation.navigate('EventSequenceNavigator', {

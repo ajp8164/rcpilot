@@ -1,11 +1,12 @@
 import { BSON } from 'realm';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
+import { ChecklistType } from 'types/checklist';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
 import EventSequenceChecklistItemScreen from 'components/EventSequenceChecklistItemScreen';
+import EventSequenceChecklistScreen from 'components/EventSequenceChecklistScreen';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import EventSequenceNewEventEditorScreen from 'components/EventSequenceNewEventEditorScreen';
-import EventSequencePreCheckScreen from 'components/EventSequencePreCheckScreen';
 import EventSequenceTimerScreen from 'components/EventSequenceTimerScreen';
 import { Model } from 'realmdb/Model';
 import NavContext from './NavContext';
@@ -41,14 +42,15 @@ const EventSequenceNavigator = () => {
           }}
           />
         <EventSequenceStack.Screen
-          name='EventSequencePreCheck'
-          component={EventSequencePreCheckScreen}
-          options={() => {
+          name='EventSequenceChecklist'
+          component={EventSequenceChecklistScreen}
+          options={({route}) => {
             const modelId = store.getState().eventSequence.modelId;
             const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
             const kind = eventKind(model ? model.type : undefined);
+            const type = route.params.checklistType === ChecklistType.PreEvent ? 'Pre-' : 'Post-';
             return {
-              title: `Pre-${kind.name}`,
+              title: `${type}${kind.name}`,
             }
           }}
         />

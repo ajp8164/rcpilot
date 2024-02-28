@@ -298,7 +298,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           {model.name}
         </Text>
         <Text style={[theme.styles.textSmall, {color: theme.colors.whiteTransparentLight, textAlign: 'center', marginBottom: 10}]}>
-          {`Event Number ${model.events.length + 1}`}
+          {`${eventKind(model.type).name} #${model.events.length + 1}`}
         </Text>
       </>
     );
@@ -354,6 +354,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           </View>
         }
         containerStyle={s.listItemContainer}
+        bottomDividerColor={theme.colors.whiteTransparentLight}
         titleStyle={[s.listItemTitle, s.batteryTitle]}
         position={listItemPosition(index, batteries.length)}
         rightImage={false}
@@ -490,26 +491,26 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         </View>
       </View>
       <View style={s.lower}>
-        <View style={s.summary}>
+        <ScrollView style={s.summary} showsVerticalScrollIndicator={false}>
+          {renderModel()}
+          {model.logsFuel &&
+            <>
+              {renderFuelConsumption()}
+              <Divider />
+            </>
+          }
           {model.logsBatteries &&
             <FlatList
               data={batteries}
               renderItem={renderBattery}
               keyExtractor={(_item, index) => `${index}`}
               showsVerticalScrollIndicator={false}
-              ListHeaderComponent={renderModel()}
+              scrollEnabled={false}
               ListFooterComponent={<Divider />}
               ListEmptyComponent={renderNoBatteries()}
             />
           }
-          {model.logsFuel &&
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {renderModel()}
-              {renderFuelConsumption()}
-              <Divider />
-            </ScrollView>
-          }
-        </View>
+        </ScrollView>
       </View>
       {timerUsesButtons ? renderTimerButtons() : renderTimerSwipe()}
     </View>

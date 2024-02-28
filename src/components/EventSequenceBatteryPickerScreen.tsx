@@ -7,6 +7,7 @@ import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import BatteryPickerView from 'components/views/BatteryPickerView';
 import { Button } from '@rneui/base';
+import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
@@ -52,22 +53,26 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
       },
       headerRight: () => {
         return (
-          <>
-            <Button
-              title={'Checklist'}
-              titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => 
-                navigation.navigate('EventSequencePreCheck', {cancelable: false})
-              }
-            />
-            <Icon
-              name={'chevron-right'}
-              color={theme.colors.stickyWhite}
-              size={22}
-              style={s.headerIcon}
-            />
-          </>
+          <Button
+            title={'Checklist'}
+            titleStyle={theme.styles.buttonInvScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
+            iconRight
+            icon={
+              <Icon
+                name={'chevron-right'}
+                color={theme.colors.stickyWhite}
+                size={22}
+                style={s.headerIcon}
+              />
+            }
+            onPress={() => 
+              navigation.navigate('EventSequenceChecklist', {
+                cancelable: false,
+                checklistType: ChecklistType.PreEvent,
+              })
+            }
+          />
         )
       },
     });

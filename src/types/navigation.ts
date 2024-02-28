@@ -280,8 +280,9 @@ export type EventSequenceNavigatorParamList = {
   EventSequenceBatteryPicker: {
     cancelable?: boolean;
   };
-  EventSequencePreCheck: {
+  EventSequenceChecklist: {
     cancelable?: boolean;
+    checklistType: Omit<ChecklistType, 'Maintenance'>;
   };
   EventSequenceChecklistItem: {
     checklistRefId: string;

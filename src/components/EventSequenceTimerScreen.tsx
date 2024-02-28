@@ -13,6 +13,7 @@ import { useObject, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Button } from '@rneui/base';
+import { ChecklistType } from 'types/checklist';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -143,7 +144,19 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       }
     }
     dispatch(eventSequence.setDuration({duration}));
-    navigation.navigate('EventSequenceNewEventEditor');
+
+    const checklists = model?.checklists.filter(c => {
+      return c.type === ChecklistType.PostEvent;
+    });
+  
+    if (checklists?.length) {
+      navigation.push('EventSequenceChecklist', {
+        cancelable: true,
+        checklistType: ChecklistType.PostEvent,
+      });
+    } else {
+      navigation.navigate('EventSequenceNewEventEditor');
+    }
   };
 
   const onDeviceShake = () => {

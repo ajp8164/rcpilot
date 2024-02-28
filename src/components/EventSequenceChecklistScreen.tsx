@@ -31,10 +31,10 @@ type Section = {
   data: ChecklistActionItemData[];
 };
 
-export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequencePreCheck'>;
+export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceChecklist'>;
 
-const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
-  const { cancelable } = route.params;
+const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
+  const { cancelable, checklistType } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -48,7 +48,7 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
   const actionsToDo = useRef<ChecklistAction[]>([]);
   const actionDate = useRef(DateTime.now().toISO()!).current;
   const checklists = useRef(model?.checklists.filter(c => {
-    return c.type === ChecklistType.PreEvent;
+    return c.type === checklistType;
   })).current;
 
   useEffect(() => {
@@ -70,20 +70,27 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
       },
       headerRight: () => {
         return (
-          <>
-            <Button
-              title={'Timer'}
-              titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
-              onPress={() => navigation.navigate('EventSequenceTimer', {})}
-            />
-            <Icon
-              name={'chevron-right'}
-              color={theme.colors.stickyWhite}
-              size={22}
-              style={s.headerIcon}
-            />
-          </>
+          <Button
+            title={checklistType === ChecklistType.PreEvent ? 'Timer' : 'Log'}
+            titleStyle={theme.styles.buttonInvScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
+            iconRight={true}
+            icon={
+              <Icon
+                name={'chevron-right'}
+                color={theme.colors.stickyWhite}
+                size={22}
+                style={s.headerIcon}
+              />
+            }
+            onPress={() => {
+              if (checklistType === ChecklistType.PreEvent) {
+                navigation.navigate('EventSequenceTimer', {});
+              } else {
+                navigation.navigate('EventSequenceNewEventEditor');
+              }
+            }}
+          />
         )
       },
     });
@@ -104,7 +111,7 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
 
   const cancelEvent = () => {
     dispatch(eventSequence.reset());
-    navigation.goBack();
+    navigation.getParent()?.goBack();
   };
 
   const groupChecklistActions = (checklists: Checklist[]): SectionListData<ChecklistActionItemData, Section>[] => {
@@ -171,7 +178,7 @@ const EventSequencePreCheckScreen = ({ navigation, route }: Props) => {
       <ListItemCheckboxInfo
         key={index}
         title={actionItem.action.description}
-        subtitle={actionScheduleSummary(actionItem.action, ChecklistType.PreEvent)}
+        subtitle={actionScheduleSummary(actionItem.action, checklistType as ChecklistType)}
         iconChecked={'square-check'}
         iconUnchecked={'square'}
         iconSize={26}
@@ -247,4 +254,4 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   },
 }));
 
-export default EventSequencePreCheckScreen;
+export default EventSequenceChecklistScreen;

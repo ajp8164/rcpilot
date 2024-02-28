@@ -424,7 +424,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         style={[theme.styles.view, s.sectionList]}
         sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
         keyExtractor={item => item._id.toString()}
-        renderItem={section => appSettings.showModelCards ? renderModelCard(section) : renderModelListItem(section)}
+        renderItem={section => appSettings.showModelCards && listModels !== 'retired'
+          ? renderModelCard(section)
+          : renderModelListItem(section)}
         renderSectionHeader={({section: {title}}) => (
           <Divider text={title} />
         )}

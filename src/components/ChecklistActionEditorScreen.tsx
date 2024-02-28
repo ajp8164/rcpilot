@@ -112,7 +112,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         result.cost = cost ? Number(cost) : undefined;
       }
 
-      event.emit(eventName, result);console.log(result);
+      event.emit(eventName, result);
       navigation.goBack();
     };
 

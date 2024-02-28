@@ -243,6 +243,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           />
         </View>
       }
+      {(model.damaged || model.requiresMaintenance) &&
+        <View style={s.modelTagContainer}>
+          {model.damaged && <Text style={s.modelTag}>{'Damaged'}</Text>}
+          {model.requiresMaintenance && <Text style={s.modelTag}>{'Maintenance Due'}</Text>}
+        </View>
+      }
       <View style={s.modelCardFooter}>
         <Button
           title={'Details'}
@@ -326,17 +332,24 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 />
               </View>
             }
-            {model.damaged &&
-              <View style={[s.modelStatusContainer,{flexDirection: 'row'}]}>
-                <Icon
-                  name={'triangle-exclamation'}
-                  size={10}
-                  color={theme.colors.stickyWhite}
-                  style={s.modelStatusIcon}
-                />
-                <Text style={s.modelStatusText}>
-                  {'Damaged'}
-                </Text>
+            {(model.damaged || model.requiresMaintenance) &&
+              <View style={s.modelStatusContainer}>
+                {model.damaged &&
+                  <Icon
+                    name={'bandage'}
+                    size={12}
+                    color={theme.colors.stickyWhite}
+                    style={s.modelStatusIcon}
+                  />
+                }
+                {model.requiresMaintenance &&
+                  <Icon
+                    name={'wrench'}
+                    size={10}
+                    color={theme.colors.stickyWhite}
+                    style={s.modelStatusIcon}
+                  />
+                }
               </View>
             }
           </View>
@@ -453,7 +466,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   modelCard: {
     width: '100%',
-    height: 250,
     paddingVertical: 10,
     marginBottom: 15,
     borderRadius: 10,
@@ -489,11 +501,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingBottom: 5,
   },
   modelCardImage: {
-    width: '100%',
     flex: 1,
+    minHeight: 132,
   },
   modelCardSvg: {
     flex: 1,
+    minHeight: 132,
     alignItems: 'center',
     backgroundColor: '#E3F2FD',
   },
@@ -532,21 +545,35 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelStatusContainer: {
     position: 'absolute',
     bottom: 0,
+    flexDirection: 'row',
     width: '100%',
-    height: 15,
+    height: 16,
+    paddingTop: 1,
     justifyContent: 'center',
     backgroundColor: theme.colors.blackTransparentLight,
   },
   modelStatusIcon: {
-    top: 2,
-    marginRight: 5
-  },
-  modelStatusText: {
-    ...theme.styles.textTiny,
-    color: theme.colors.stickyWhite,
+    paddingHorizontal: 10,
   },
   modelSvgContainer: {
     backgroundColor: theme.colors.subtleGray,
+  },
+  modelTagContainer: {
+    flexDirection: 'row',
+    padding: 5,
+    paddingTop: 10,
+    marginHorizontal: 10,
+  },
+  modelTag: {
+    ...theme.styles.textTiny,
+    ...theme.styles.textBold,
+    paddingVertical: 2,
+    paddingHorizontal: 10,
+    marginRight: 5,
+    borderRadius: 10,
+    overflow: 'hidden',
+    textAlign: 'center',
+    backgroundColor: theme.colors.lightGray, color: theme.colors.stickyWhite,
   },
   modelText: {
     left: 140,

@@ -1,6 +1,5 @@
 import { useQuery, useRealm } from '@realm/react';
 
-import { ChecklistType } from 'types/checklist';
 import { Model } from 'realmdb/Model';
 import { actionScheduleState } from 'lib/checklist';
 import { useEffect } from 'react';
@@ -12,9 +11,10 @@ export const useChecklistActionScheduleUpdater = () => {
   useEffect(() => {
     allModels.forEach(model => {
       model.checklists.forEach(checklist => {
+        const checklistType = checklist.type;
         checklist.actions.forEach(action => {
           realm.write(() => {
-            action.schedule.state = actionScheduleState(action, ChecklistType.PreEvent, model);
+            action.schedule.state = actionScheduleState(action, checklistType, model);
           });
         });
       });

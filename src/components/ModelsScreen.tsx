@@ -236,17 +236,17 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               {model.name}
             </Text>
             <Text style={s.modelCardTitleRight}>
-              {model.stats.lastEvent
-                ? `Last ${DateTime.fromISO(model.stats.lastEvent).toFormat('mm/dd/yyyy')}`
+              {model.lastEvent
+                ? `Last ${DateTime.fromISO(model.lastEvent).toFormat('mm/dd/yyyy')}`
                 : `No ${eventKind(model.type).namePlural}`}
             </Text>
           </View>
           <View style={s.modelCardSubtitleContainer}>
             <Text style={s.modelCardSubtitle}>
-              {`${model.stats.totalEvents || 0} events`}
+              {`${model.totalEvents || 0} events`}
             </Text>
             <Text style={s.modelCardSubtitle}>
-              {`${model.stats.totalTime} total time`}
+              {`${model.totalTime} total time`}
             </Text>
           </View>
         </View>

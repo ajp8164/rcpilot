@@ -68,12 +68,13 @@ export const useActionScheduleSummary = (modelId?: string) => {
 
           if (model && action.schedule.following !== undefined) {
             let estEvents = parseInt(action.schedule.following);
-            if (model?.stats.averageEventDuration) {
-              estEvents = model?.stats.averageEventDuration / parseInt(action.schedule.following);
+            const modelAverageEventDuration = model.totalTime / model.totalEvents;
+            if (modelAverageEventDuration) {
+              estEvents = modelAverageEventDuration / parseInt(action.schedule.following);
             }
             after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToMSS(action.schedule.following, {format: 'm:ss'})}`;
 
-            const estTime = parseInt(action.schedule.following) - model.stats.totalTime;
+            const estTime = parseInt(action.schedule.following) - model.totalTime;
             if (estTime === 0 ) {
               due = 'Due today';
             } else if (estTime < 0) {
@@ -92,7 +93,7 @@ export const useActionScheduleSummary = (modelId?: string) => {
           if (model && action.schedule.following !== undefined) {
             after = ` after ${eventKind(model?.type).name.toLowerCase()} #${action.schedule.following}`;
 
-            const estEvents = parseInt(action.schedule.following) - model.stats.totalEvents;
+            const estEvents = parseInt(action.schedule.following) - model.totalEvents;
             if (estEvents === 0) {
               due = 'Due today';
             } else if (estEvents < 0) {

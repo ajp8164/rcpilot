@@ -3,7 +3,6 @@ import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
 import { ChecklistAction, ChecklistActionHistoryEntry, ChecklistActionSchedule } from './Checklist';
 import { Filter, FilterState } from './Filter';
 import { Location, LocationPosition } from './Location';
-import { Model, ModelStatistics } from './Model';
 
 import { Battery } from './Battery';
 import { Checklist } from './Checklist';
@@ -11,6 +10,7 @@ import { ChecklistTemplate } from './ChecklistTemplate';
 import { Event } from './Event';
 import { EventStyle } from './EventStyle';
 import { EventsMaintenanceReport } from './EventsMaintenanceReport';
+import { Model } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
@@ -42,7 +42,6 @@ const Schema = [
   ChecklistActionSchedule,
   FilterState,
   LocationPosition,
-  ModelStatistics,
 ];
 
 export default Schema;

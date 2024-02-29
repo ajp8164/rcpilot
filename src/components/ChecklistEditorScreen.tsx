@@ -234,7 +234,6 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           ref={ref => ref && action.refId && listEditor.add(ref, 'checklist-actions', action.refId)}
           title={action.description}
           subtitle={actionScheduleSummary(action, type)}
-          // subtitleNumberOfLines={2}
           position={listItemPosition(index, actions!.length)}
           titleNumberOfLines={1}
           drag={drag}

@@ -61,9 +61,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [purchasePrice, setPurchasePrice] = useState(model?.purchasePrice?.toString() || undefined);
   const [damaged, setDamaged] = useState(model?.damaged || false);
   const [retired, setRetired] = useState(model?.retired || false);
-  const [totalEvents, setTotalEvents] = useState(model?.stats.totalEvents?.toString() || undefined);
-  const [totalTime, setTotalTime] = useState(model?.stats.totalTime?.toString() || undefined);
-  const [lastEvent, setLastEvent] = useState(model?.stats.lastEvent || undefined);
+  const [totalEvents, setTotalEvents] = useState(model?.totalEvents?.toString() || undefined);
+  const [totalTime, setTotalTime] = useState(model?.totalTime?.toString() || undefined);
+  const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
   const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
   const [favoriteBatteries, setFavoriteBatteries] = useState(model?.favoriteBatteries || []);
   const [logsFuel, setLogsFuel] = useState(model?.logsFuel || false);
@@ -94,9 +94,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       !eqNumber(model?.purchasePrice, purchasePrice) ||
       !eqBoolean(model?.damaged, damaged) ||
       !eqBoolean(model?.retired, retired) ||
-      !eqNumber(model?.stats.totalEvents, totalEvents) ||
-      !eqNumber(model?.stats.totalTime, totalTime) ||
-      !eqString(model?.stats.lastEvent, lastEvent) ||
+      !eqNumber(model?.totalEvents, totalEvents) ||
+      !eqNumber(model?.totalTime, totalTime) ||
+      !eqString(model?.lastEvent, lastEvent) ||
       !eqBoolean(model?.logsBatteries, logsBatteries) ||
       !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
       !eqBoolean(model?.logsFuel, logsFuel) ||

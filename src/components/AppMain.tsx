@@ -25,6 +25,7 @@ import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
 import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
 import { useAchievementConveyor } from 'lib/achievement';
+import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useColorScheme } from 'react-native';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { useSelector } from 'react-redux';
@@ -48,6 +49,7 @@ const AppMain = () => {
   const network = useNetworkContext();
   useDeviceShake();
   useAchievementConveyor();
+  useChecklistActionScheduleUpdater();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(
     StartupScreen.None,

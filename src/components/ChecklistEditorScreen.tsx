@@ -187,7 +187,6 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const upsertAction = (newOrChangedAction: JChecklistAction) => {
-    console.log(JSON.stringify(newOrChangedAction));
     if (newOrChangedAction.refId !== undefined) {
       // Update existing action.
       setActions(prevState => {

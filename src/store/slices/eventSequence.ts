@@ -17,22 +17,6 @@ export const initialEventSequenceState = Object.freeze<EventSequenceState>({
   duration: 0,
 });
 
-const handleAddChecklistActionHistoryEntry: CaseReducer<
-  EventSequenceState,
-  PayloadAction<{
-    checklistActionRefId: string,
-    checklistActionHistortEntry: JChecklistActionHistoryEntry
-  }>
-> = (state, { payload }) => {
-  return {
-    ...state,
-    checklistActionHistoryEntries: {
-      ...state.checklistActionHistoryEntries,
-      [payload.checklistActionRefId]: payload.checklistActionHistortEntry,
-    }
-  };
-};
-
 const handleReset: CaseReducer<
   EventSequenceState
 > = (_state) => {
@@ -84,18 +68,31 @@ const handleSetChecklistActionNotes: CaseReducer<
   };
 };
 
-const handleToggleChecklistActionComplete: CaseReducer<
+const handleSetChecklistActionComplete: CaseReducer<
   EventSequenceState,
-  PayloadAction<{checklistActionRefId: string}>
+  PayloadAction<{
+    checklistActionRefId: string,
+    checklistActionHistoryEntry: JChecklistActionHistoryEntry
+  }>
 > = (state, { payload }) => {
-  const entry = Object.assign({}, state.checklistActionHistoryEntries[payload.checklistActionRefId]);
-  entry.complete = !entry.complete;
   return {
     ...state,
     checklistActionHistoryEntries: {
       ...state.checklistActionHistoryEntries,
-      [payload.checklistActionRefId]: entry,
+      [payload.checklistActionRefId]: payload.checklistActionHistoryEntry,
     }
+  };
+};
+
+const handleSetChecklistActionNotComplete: CaseReducer<
+  EventSequenceState,
+  PayloadAction<{checklistActionRefId: string}>
+> = (state, { payload }) => {
+  const entries = Object.assign({}, state.checklistActionHistoryEntries);
+  delete entries[payload.checklistActionRefId];
+  return {
+    ...state,
+    checklistActionHistoryEntries: entries,
   };
 };
 
@@ -105,13 +102,13 @@ const eventSequenceSlice = createSlice({
   extraReducers: builder =>
     builder.addCase(revertAll, () => initialEventSequenceState),
   reducers: {
-    addChecklistActionHistoryEntry: handleAddChecklistActionHistoryEntry,
     reset: handleReset,
     setBatteries: handleSetBatteries,
     setDuration: handleSetDuration,
     setChecklistActionNotes: handleSetChecklistActionNotes,
+    setChecklistActionComplete: handleSetChecklistActionComplete,
+    setChecklistActionNotComplete: handleSetChecklistActionNotComplete,
     setModel: handleSetModel,
-    toggleChecklistActionComplete: handleToggleChecklistActionComplete,
   },
 });
 

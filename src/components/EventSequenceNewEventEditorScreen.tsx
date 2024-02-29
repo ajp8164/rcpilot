@@ -13,6 +13,7 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
+import { ChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
@@ -48,6 +49,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const realm = useRealm();
 
   const currentEventSequence = useSelector(selectEventSequence);
+  const events = useQuery(Event);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const modelFuels = useQuery(ModelFuel);
@@ -106,13 +108,28 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           eventBatteryCycles.push(newCycle);
         });
 
+        // Add a checklist action history entry to each action performed during this event.
+        Object.keys(currentEventSequence.checklistActionHistoryEntries).forEach(actionRefId => {
+          const historyEntry = currentEventSequence.checklistActionHistoryEntries[actionRefId];
+          model?.checklists.forEach(checklist => {
+            const action = checklist.actions.find(action => action.refId === actionRefId);
+            action?.history.push(historyEntry as ChecklistActionHistoryEntry);
+          });
+        });
+
+        // Update model attributes according to the event.
+        const eventDuration = MSSToSeconds(duration);
+        model!.totalEvents = model!.totalEvents + 1;
+        model!.totalTime = model!.totalTime + eventDuration;
+        model!.lastEvent = date.toISO()!;
+
         const newEvent = realm.create('Event', {
-          createdOn: date.toISO(),
-          updatedOn: date.toISO(),
-          date: date.toISO(),
-          number: model?.events ? model?.events.length + 1 : 1,
+          createdOn: date.toISO()!,
+          updatedOn: date.toISO()!,
+          date: date.toISO()!,
+          number: events.length + 1,
           outcome,
-          duration: MSSToSeconds(duration),
+          duration: eventDuration,
           model,
           pilot,
           location,
@@ -124,8 +141,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           notes,
         } as Event);
 
-        // Attach the event to the model and update the model event count.
-        model!.totalEvents = model!.totalEvents ? model!.totalEvents + 1 : 1;
+        // Attach the event to the model.
         model!.events.push(newEvent);
       });
 

@@ -6,8 +6,7 @@ import {
 } from 'types/checklist';
 import {
   ChecklistActionScheduleState,
-  JChecklistActionHistoryEntry,
-  JChecklistActionSchedule,
+  JChecklistAction,
   JChecklistActionScheduleDue
 } from 'realmdb/Checklist';
 
@@ -17,24 +16,25 @@ import { eventKind } from 'lib/event';
 import { secondsToMSS } from "lib/formatters";
 
 export const actionScheduleState = (
-  schedule: JChecklistActionSchedule,
+  action: JChecklistAction,
   checklistType: ChecklistType,
-  history: JChecklistActionHistoryEntry[],
   model?: Model,
 ) => {
-  if (schedule.type === ChecklistActionScheduleType.Repeating) {
-    return actionRepeatingScheduleState(schedule, checklistType, history, model);
+  if (action.schedule.type === ChecklistActionScheduleType.Repeating) {
+    return actionRepeatingScheduleState(action, checklistType, model);
   } else {
-    return actionNonRepeatingScheduleState(schedule, checklistType, history, model);
+    return actionNonRepeatingScheduleState(action, checklistType, model);
   }
 };
 
 function actionRepeatingScheduleState(
-  schedule: JChecklistActionSchedule,
+  action: JChecklistAction,
   checklistType: ChecklistType,
-  history: JChecklistActionHistoryEntry[],
   model?: Model
 ) {
+  const schedule = action.schedule; 
+  const history = action.history;
+
   let when = '';
   let times = '';
   let freq = '';
@@ -137,11 +137,13 @@ function actionRepeatingScheduleState(
 };
 
 function actionNonRepeatingScheduleState (
-  schedule: JChecklistActionSchedule,
+  action: JChecklistAction,
   _checklistType: ChecklistType,
-  history: JChecklistActionHistoryEntry[],
   model?: Model,
 ) {
+  const schedule = action.schedule; 
+  const history = action.history;
+
   let after = '';
   let value = '';
   let timeframe = '';

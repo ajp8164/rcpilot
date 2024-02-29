@@ -100,24 +100,20 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     );
 
     const onDone = () => {
-      const scheduleState = actionScheduleState(
-        selectedSchedule,
-        checklistType,
-        action?.history || [],
-        model || undefined,
-      );
-
       const result: JChecklistAction = {
         history: [],
         ...action,
         description: description!,
-        schedule: {
-          ...selectedSchedule,
-          state: scheduleState,
-        },
+        schedule: selectedSchedule,
         cost: Number(cost) || undefined,
         notes,
       };
+
+      result.schedule.state = actionScheduleState(
+        result,
+        checklistType,
+        model || undefined,
+      );
 
       event.emit(eventName, result);
       navigation.goBack();

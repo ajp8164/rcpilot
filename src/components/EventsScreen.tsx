@@ -80,7 +80,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const eventTitle = (event: Event) => {console.log(event);
+  const eventTitle = (event: Event) => {
     const number = `#${event.number}`;
     const duration = `${secondsToMSS(event.duration, {format: 'm:ss'})}`;
     const time = DateTime.fromISO(event.createdOn).toLocaleString(DateTime.TIME_SIMPLE);

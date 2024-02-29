@@ -11,6 +11,7 @@ import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewChecklistActionNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import Realm, { BSON } from 'realm';
+import { actionScheduleState, getChecklistActionScheduleItems } from 'lib/checklist';
 import { eqNumber, eqString } from 'realmdb/helpers';
 import { eventKind, useEvent } from 'lib/event';
 
@@ -22,7 +23,6 @@ import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
-import { getChecklistActionScheduleItems } from 'lib/checklist';
 import { secondsToMSS } from 'lib/formatters';
 import { useObject } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -100,17 +100,24 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     );
 
     const onDone = () => {
+      const scheduleState = actionScheduleState(
+        selectedSchedule,
+        checklistType,
+        action?.history || [],
+        model || undefined,
+      );
+
       const result: JChecklistAction = {
+        history: [],
         ...action,
         description: description!,
-        schedule: selectedSchedule,
+        schedule: {
+          ...selectedSchedule,
+          state: scheduleState,
+        },
         cost: Number(cost) || undefined,
         notes,
       };
-          
-      if (checklistType === ChecklistType.Maintenance) {
-        result.cost = cost ? Number(cost) : undefined;
-      }
 
       event.emit(eventName, result);
       navigation.goBack();

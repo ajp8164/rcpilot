@@ -1,6 +1,6 @@
 import { Achievement, Pilot } from './Pilot';
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
-import { ChecklistAction, ChecklistActionHistoryEntry, ChecklistActionSchedule } from './Checklist';
+import { ChecklistAction, ChecklistActionHistoryEntry, ChecklistActionSchedule, ChecklistActionScheduleDue, ChecklistActionScheduleState } from './Checklist';
 import { Filter, FilterState } from './Filter';
 import { Location, LocationPosition } from './Location';
 
@@ -40,6 +40,8 @@ const Schema = [
   ChecklistAction,
   ChecklistActionHistoryEntry,
   ChecklistActionSchedule,
+  ChecklistActionScheduleDue,
+  ChecklistActionScheduleState,
   FilterState,
   LocationPosition,
 ];

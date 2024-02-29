@@ -173,6 +173,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         ],
         { cancelable: false },
       );
+    } else {
+      startNewEventSequence(model);
     }
   };
 
@@ -183,7 +185,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     const checklists = model?.checklists.filter(c => {
       return c.type === ChecklistType.PreEvent;
     });
-  
+
     if (model.logsBatteries) {
       navigation.navigate('EventSequenceNavigator', {
         screen: 'EventSequenceBatteryPicker',

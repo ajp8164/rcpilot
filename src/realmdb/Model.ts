@@ -69,7 +69,6 @@ export class Model extends Object<Model> {
       defaultStyle: 'EventStyle?',
       scanCodeSize: 'string?',
       notes: 'string?',
-      stats: 'ModelStatistics',
     },
     primaryKey: '_id',
   };

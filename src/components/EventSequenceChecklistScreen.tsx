@@ -44,10 +44,11 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
   const [kind] = useState(eventKind(model?.type));
 
-  const actionsToDo = useRef<ChecklistAction[]>([]);
   const checklists = useRef(model?.checklists.filter(c => {
     return c.type === checklistType;
   })).current;
+
+  const actionsToDo = useRef(groupChecklistActions(checklists || []));
 
   useEffect(() => {
     navigation.setOptions({
@@ -99,7 +100,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     navigation.getParent()?.goBack();
   };
 
-  const groupChecklistActions = (checklists: Checklist[]): SectionListData<ChecklistActionItemData, Section>[] => {
+  function groupChecklistActions(checklists: Checklist[]): SectionListData<ChecklistActionItemData, Section>[] {
     let actionItemData: ChecklistActionItemData[] = [];
     let actions: ChecklistAction[] = [];
 
@@ -113,14 +114,15 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
       });  
     });
 
-    actionsToDo.current = actions;
     return groupItems<ChecklistActionItemData, Section>(actionItemData, (actionItem) => {
       return actionItem.checklist.name.toUpperCase();
     });
   };
 
   const allActionsComplete = () => {
-    return Object.keys(currentEventSequence.checklistActionHistoryEntries).every(key =>
+    const entries = Object.keys(currentEventSequence.checklistActionHistoryEntries);
+    if (!entries.length) return false;
+    return entries.every(key =>
       !!currentEventSequence.checklistActionHistoryEntries[key].date
     );
   };
@@ -132,18 +134,21 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   };
 
   const completeAllActions = () => {
-    Object.keys(currentEventSequence.checklistActionHistoryEntries).forEach(key => {
-      if (!currentEventSequence.checklistActionHistoryEntries[key].date) {
-        dispatch(eventSequence.setChecklistActionComplete({
-          checklistActionRefId: key,
-          checklistActionHistoryEntry: {
-            date: DateTime.now().toISO()!,
-            modelTime: model!.totalTime,
-            eventNumber: model!.totalEvents,
-          }
-        }))
-      }}
-    );
+    actionsToDo.current.forEach(section => {
+      section.data.forEach(actionItem => {
+        const action = actionItem.action;
+        if (!currentEventSequence.checklistActionHistoryEntries[action.refId]?.date) {
+          dispatch(eventSequence.setChecklistActionComplete({
+            checklistActionRefId: action.refId,
+            checklistActionHistoryEntry: {
+              date: DateTime.now().toISO()!,
+              modelTime: model!.totalTime,
+              eventNumber: model!.totalEvents,
+            }
+          }))
+        }
+      })
+    })
   };
 
   const pendAllActions = () => {
@@ -192,9 +197,9 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  if (!checklists?.length) {
+  if (!actionsToDo.current.length) {
     return (
-      <EmptyView info message={'No Checklists Pending'} />
+      <EmptyView info message={'No Checklist Actions Pending'} />
     );    
   }
 
@@ -208,7 +213,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         contentInsetAdjustmentBehavior={'automatic'}
         stickySectionHeadersEnabled={true}
         style={[theme.styles.view, s.sectionList]}
-        sections={groupChecklistActions(checklists)}
+        sections={actionsToDo.current}
         keyExtractor={(item, index)=> `${index}${item.action.refId}`}
         renderItem={renderChecklistAction}
         renderSectionHeader={({section: {title}}) => (

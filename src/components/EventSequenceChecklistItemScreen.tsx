@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
-import { ChecklistType } from 'types/checklist';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -12,7 +11,6 @@ import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
-import { actionScheduleSummary } from 'lib/checklist';
 import { eventSequence } from 'store/slices/eventSequence';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useEvent } from 'lib/event';
@@ -71,17 +69,17 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
       />
       <Divider text={'FREQUENCY'}/>
       <ListItem
-        title={actionScheduleSummary(action, ChecklistType.PreEvent)}
+        title={action.schedule.state.text}
         subtitle={`Last time was ${lastTimePerformed(action)}`}
         position={['first', 'last']}
         rightImage={false}
       />
       <Divider text={'NOTES'}/>
       <ListItem
-        title={currentEventSequence.checklistActionHistoryEntries[action!.refId].notes || 'Notes'}
+        title={currentEventSequence.checklistActionHistoryEntries[action!.refId]?.notes || 'Notes'}
         position={['first', 'last']}
         onPress={() => navigation.navigate('Notes', {
-          text: currentEventSequence.checklistActionHistoryEntries[action!.refId].notes,
+          text: currentEventSequence.checklistActionHistoryEntries[action!.refId]?.notes,
           headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
           eventName: 'event-checklist-item-notes',
         })}

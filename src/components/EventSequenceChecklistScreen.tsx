@@ -16,7 +16,6 @@ import { EventSequenceNavigatorParamList } from 'types/navigation';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { actionScheduleState } from 'lib/checklist';
 import { eventKind } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
@@ -94,20 +93,6 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
       },
     });
   }, []);
-  
-  // useEffect(() => {
-  //   // Intialize action history entries.
-  //   actionsToDo.current.forEach(a => {
-  //     dispatch(eventSequence.addChecklistActionHistoryEntry({
-  //       checklistActionRefId: a.refId,
-  //       checklistActionHistortEntry: {
-  //         date: DateTime.now().toISO()!,
-  //         modelTime: model!.totalTime,
-  //         eventNumber: model!.totalEvents,
-  //       },
-  //     }));
-  //   })
-  // }, []);
 
   const cancelEvent = () => {
     dispatch(eventSequence.reset());
@@ -176,7 +161,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
       <ListItemCheckboxInfo
         key={index}
         title={actionItem.action.description}
-        subtitle={actionScheduleState(actionItem.action, checklistType as ChecklistType, model!).text}
+        subtitle={actionItem.action.schedule.state.text}
         iconChecked={'square-check'}
         iconUnchecked={'square'}
         iconSize={26}

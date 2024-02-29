@@ -31,7 +31,7 @@ export type JChecklistAction =  {
   schedule: JChecklistActionSchedule;
   cost?: number;
   notes?: string;
-  history?: ChecklistActionHistoryEntry[];
+  history: JChecklistActionHistoryEntry[];
 };
 
 export class ChecklistAction extends Object<ChecklistAction> {
@@ -57,18 +57,14 @@ export class ChecklistAction extends Object<ChecklistAction> {
 };
 
 // Plain JS object type.
-export interface JChecklistActionSchedule  {
-  following?: string;
-  period: keyof typeof ChecklistActionSchedulePeriod;
-  type: ChecklistActionScheduleType;
-  value: number;
-};
+export type JChecklistActionSchedule = Omit<ChecklistActionSchedule, keyof Realm.Object>;
 
 export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
   following?: string;
   period!: keyof typeof ChecklistActionSchedulePeriod;
   type!: ChecklistActionScheduleType;
   value!: number;
+  state!: ChecklistActionScheduleState;
 
   static schema: ObjectSchema = {
     name: 'ChecklistActionSchedule',
@@ -78,20 +74,51 @@ export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
       period: 'string',
       type: 'string',
       value: 'int?',
+      state: 'ChecklistActionScheduleState',
+    },
+  };
+};
+
+export class ChecklistActionScheduleState extends Object<ChecklistActionScheduleState> {
+  text!: string;
+  due!: ChecklistActionScheduleDue;
+
+  static schema: ObjectSchema = {
+    name: 'ChecklistActionScheduleState',
+    embedded: true,
+    properties: {
+      text: 'string',
+      due: 'ChecklistActionScheduleDue',
     },
   };
 };
 
 // Plain JS object type.
-export class JChecklistActionHistoryEntry {
-  date!: ISODateString;
-  complete!: boolean;
-  notes?: string;
+export type JChecklistActionScheduleDue = Omit<ChecklistActionScheduleDue, keyof Realm.Object>;
+
+export class ChecklistActionScheduleDue extends Object<ChecklistActionScheduleDue> {
+  now!: boolean;
+  value!: number;
+  units!: 'events' | 'days';
+
+  static schema: ObjectSchema = {
+    name: 'ChecklistActionScheduleDue',
+    embedded: true,
+    properties: {
+      now: 'bool',
+      value: 'int',
+      units: 'string',
+    },
+  };
 };
+
+// Plain JS object type.
+export type JChecklistActionHistoryEntry = Omit<ChecklistActionHistoryEntry, keyof Realm.Object>;
 
 export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEntry> {
   date!: ISODateString;
-  complete!: boolean;
+  modelTime!: number;
+  eventNumber!: number;
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -99,7 +126,8 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
     embedded: true,
     properties: {
       date: 'string',
-      complete: 'bool',
+      modelTime: 'int',
+      eventNumber: 'int',
       notes: 'string?',
     },
   };

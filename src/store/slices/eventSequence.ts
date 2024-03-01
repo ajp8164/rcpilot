@@ -53,21 +53,6 @@ const handleSetModel: CaseReducer<
   };
 };
 
-const handleSetChecklistActionNotes: CaseReducer<
-  EventSequenceState,
-  PayloadAction<{checklistActionRefId: string, text: string}>
-> = (state, { payload }) => {
-  const entry = Object.assign({}, state.checklistActionHistoryEntries[payload.checklistActionRefId]);
-  entry.notes = payload.text;
-  return {
-    ...state,
-    checklistActionHistoryEntries: {
-      ...state.checklistActionHistoryEntries,
-      [payload.checklistActionRefId]: entry,
-    }
-  };
-};
-
 const handleSetChecklistActionComplete: CaseReducer<
   EventSequenceState,
   PayloadAction<{
@@ -105,7 +90,6 @@ const eventSequenceSlice = createSlice({
     reset: handleReset,
     setBatteries: handleSetBatteries,
     setDuration: handleSetDuration,
-    setChecklistActionNotes: handleSetChecklistActionNotes,
     setChecklistActionComplete: handleSetChecklistActionComplete,
     setChecklistActionNotComplete: handleSetChecklistActionNotComplete,
     setModel: handleSetModel,

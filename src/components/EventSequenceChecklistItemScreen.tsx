@@ -40,7 +40,7 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
 
   const lastTimePerformed = (action: ChecklistAction) => {
     if (action.history.length) {
-      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat('MMM dd, yyyy');
+      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat('MMM d, yyyy');
     }
     return 'never';
   };

@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteryCycle, JBatteryDischarge, JBatteryDischargeValues } from 'realmdb/BatteryCycle';
+import { ChecklistActionHistoryEntry, JChecklistAction } from 'realmdb/Checklist';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
@@ -13,7 +14,6 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
-import { ChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
@@ -29,6 +29,7 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
+import { actionScheduleState } from 'lib/checklist';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
@@ -62,7 +63,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const currentPilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
   const [date] = useState(DateTime.now());
-  const [duration, setDuration] = useState(secondsToMSS(currentEventSequence.duration / 1000));
+  const [duration, setDuration] = useState(secondsToMSS(currentEventSequence.duration));
   const [fuel, setFuel] = useState<ModelFuel | undefined>(model?.defaultFuel);
   const [fuelConsumed, setFuelConsumed] = useState<string>();
   const [propeller, setPropeller] = useState<ModelPropeller | undefined>(model?.defaultPropeller);
@@ -108,20 +109,31 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           eventBatteryCycles.push(newCycle);
         });
 
-        // Add a checklist action history entry to each action performed during this event.
-        Object.keys(currentEventSequence.checklistActionHistoryEntries).forEach(actionRefId => {
-          const historyEntry = currentEventSequence.checklistActionHistoryEntries[actionRefId];
-          model?.checklists.forEach(checklist => {
-            const action = checklist.actions.find(action => action.refId === actionRefId);
-            action?.history.push(historyEntry as ChecklistActionHistoryEntry);
-          });
-        });
-
         // Update model attributes according to the event.
+        // Note - update model before the checklist schedule since the scheduling replies
+        // on current model state.
         const eventDuration = MSSToSeconds(duration);
         model!.totalEvents = model!.totalEvents + 1;
         model!.totalTime = model!.totalTime + eventDuration;
         model!.lastEvent = date.toISO()!;
+
+        // Update model checklist actions.
+        model?.checklists.forEach(checklist => {
+          checklist.actions.forEach(action => {
+            console.log('action', JSON.stringify(action));
+
+            // Add a checklist action history entry to each action performed during this event.
+            const historyEntry = currentEventSequence.checklistActionHistoryEntries[action.refId];
+            if (historyEntry) {
+              action.history.push(historyEntry as ChecklistActionHistoryEntry);
+              console.log('action after history update', JSON.stringify(action));
+            }
+  
+            // Update model checklist action schedule for next event.
+            action.schedule.state = actionScheduleState(action as JChecklistAction, checklist.type, model);
+            console.log('actionScheduleState', JSON.stringify(action.schedule.state));
+          });
+        });
 
         const newEvent = realm.create('Event', {
           createdOn: date.toISO()!,

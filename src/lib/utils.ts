@@ -1,5 +1,3 @@
-import lodash from "lodash";
-
 export const toArrayOrdinals = (array: string[]): number[] => {
   return array.map(str => {
     return Number(str);
@@ -19,7 +17,7 @@ export const uuidv4 = () => {
 export const enumValuesToIds = (values: string[], enumObj: {[key in string]: string;}): string[] => {
   const keys = [];
   for (let i = 0; i < values.length; i++) {
-    const k = lodash.findKey(enumObj, values[i]);
+    const k = Object.keys(enumObj).find(key => enumObj[key] === values[i]);
     if (k) {
       keys.push(k);
     }

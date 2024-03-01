@@ -143,7 +143,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         duration = state.initialValue - state.value;
       }
     }
-    dispatch(eventSequence.setDuration({duration}));
+    // Set the number of seconds.
+    dispatch(eventSequence.setDuration({duration: Math.trunc(duration / 1000)}));
 
     const checklists = modelChecklistActionsPending(model!, ChecklistType.PostEvent);
   
@@ -467,7 +468,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               timer.state.mode === TimerMode.Armed ? s.timerValueArmed : {},
               timer.state.inOvertime ? s.timerOvertime : {},
             ]}>
-            {secondsToMSS(Math.abs(Math.ceil(timer.state.value / 1000)), {format: 'm:ss'})}
+            {secondsToMSS(Math.abs(Math.trunc(timer.state.value / 1000)), {format: 'm:ss'})}
           </Animated.Text>
         }
         {timer.state.mode === TimerMode.Armed &&

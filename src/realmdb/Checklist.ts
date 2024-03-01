@@ -61,7 +61,7 @@ export type JChecklistActionSchedule = Omit<ChecklistActionSchedule, keyof Realm
 
 export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
   following?: string;
-  period!: keyof typeof ChecklistActionSchedulePeriod;
+  period!: ChecklistActionSchedulePeriod;
   type!: ChecklistActionScheduleType;
   value!: number;
   state!: ChecklistActionScheduleState;
@@ -119,7 +119,6 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
   date!: ISODateString;
   modelTime!: number;
   eventNumber!: number;
-  notes?: string;
 
   static schema: ObjectSchema = {
     name: 'ChecklistActionHistoryEntry',
@@ -128,7 +127,6 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
       date: 'string',
       modelTime: 'int',
       eventNumber: 'int',
-      notes: 'string?',
     },
   };
 };

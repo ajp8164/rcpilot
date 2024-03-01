@@ -76,10 +76,10 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
       />
       <Divider text={'NOTES'}/>
       <ListItem
-        title={currentEventSequence.checklistActionHistoryEntries[action!.refId]?.notes || 'Notes'}
+        title={action.notes || 'Notes'}
         position={['first', 'last']}
         onPress={() => navigation.navigate('Notes', {
-          text: currentEventSequence.checklistActionHistoryEntries[action!.refId]?.notes,
+          text: action.notes,
           headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
           eventName: 'event-checklist-item-notes',
         })}

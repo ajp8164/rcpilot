@@ -64,7 +64,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const [selectedSchedule, setSelectedSchedule] = useSetState<Omit<ChecklistActionSchedule, keyof Realm.Object>>();
 
   const [schedulePickerOpen, setSchedulePickerOpen] = useState(false);
-  const [schedulePickerValue, setSchedulePickerValue] = useState<string[]>(action ?  [action.schedule.value.toString(), action.schedule.period ] : initialScheduleItems.default.items);
+  const [schedulePickerValue, setSchedulePickerValue] = useState<string[]>(action ? [action.schedule.value.toString(), action.schedule.period ] : initialScheduleItems.default.items);
   const schedulePickerItems = useRef(initialScheduleItems.items);
   const [scheduleStr, setScheduleStr] = useSetState({
     following: '',

@@ -20,6 +20,7 @@ import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Event } from 'realmdb/Event';
 import { EventOutcome } from 'types/event';
 import { EventRating } from 'components/molecules/EventRating';
+import { EventSequenceChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
@@ -120,18 +121,14 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         // Update model checklist actions.
         model?.checklists.forEach(checklist => {
           checklist.actions.forEach(action => {
-            console.log('action', JSON.stringify(action));
-
             // Add a checklist action history entry to each action performed during this event.
-            const historyEntry = currentEventSequence.checklistActionHistoryEntries[action.refId];
+            const historyEntry = currentEventSequence.checklistActionHistoryEntries[checklist.type as EventSequenceChecklistType][action.refId];
             if (historyEntry) {
               action.history.push(historyEntry as ChecklistActionHistoryEntry);
-              console.log('action after history update', JSON.stringify(action));
             }
   
             // Update model checklist action schedule for next event.
             action.schedule.state = actionScheduleState(action as JChecklistAction, checklist.type, model);
-            console.log('actionScheduleState', JSON.stringify(action.schedule.state));
           });
         });
 

@@ -1,18 +1,18 @@
-export const ChecklistActionRepeatingScheduleFrequency = {
-  Events:'Events',
-  ModelMinutes: 'Model Minutes',
-  Days: 'Days',
-  Weeks: 'Weeks',
-  Months: 'Months',
+export enum ChecklistActionRepeatingScheduleFrequency {
+  Events = 'Events',
+  ModelMinutes = 'Model Minutes',
+  Days = 'Days',
+  Weeks = 'Weeks',
+  Months = 'Months',
 };
 
-export const ChecklistActionNonRepeatingScheduleTimeframe = {
-  Events:'Events',
-  ModelMinutes: 'Model Minutes',
-  Days: 'Days',
-  Weeks: 'Weeks',
-  Months: 'Months',
-  Today: 'Today',
+export enum ChecklistActionNonRepeatingScheduleTimeframe {
+  Events = 'Events',
+  ModelMinutes = 'Model Minutes',
+  Days = 'Days',
+  Weeks = 'Weeks',
+  Months = 'Months',
+  Today = 'Today',
 };
 
 export const ChecklistActionSchedulePeriod = {
@@ -20,9 +20,9 @@ export const ChecklistActionSchedulePeriod = {
   ...ChecklistActionNonRepeatingScheduleTimeframe
 };
 
-export type ChecklistActionSchedulePeriod = keyof typeof ChecklistActionSchedulePeriod;
-export type ChecklistActionRepeatingScheduleFrequency = keyof typeof ChecklistActionRepeatingScheduleFrequency;
-export type ChecklistActionNonRepeatingScheduleTimeframe = keyof typeof ChecklistActionNonRepeatingScheduleTimeframe;
+export type ChecklistActionSchedulePeriod =
+  | ChecklistActionRepeatingScheduleFrequency
+  | ChecklistActionNonRepeatingScheduleTimeframe;
 
 export enum ChecklistActionScheduleWhenPerform {
   After = 'Perform After',

@@ -24,6 +24,7 @@ import { eventKind } from 'lib/event';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { secondsToMSS } from 'lib/formatters';
 import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -239,16 +240,16 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             </Text>
             <Text style={s.modelCardTitleRight}>
               {model.lastEvent
-                ? `Last ${DateTime.fromISO(model.lastEvent).toFormat('mm/dd/yyyy')}`
+                ? `Last ${DateTime.fromISO(model.lastEvent).toFormat('M/d/yyyy')}`
                 : `No ${eventKind(model.type).namePlural}`}
             </Text>
           </View>
           <View style={s.modelCardSubtitleContainer}>
             <Text style={s.modelCardSubtitle}>
-              {`${model.totalEvents || 0} events`}
+              {`${model.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
             </Text>
             <Text style={s.modelCardSubtitle}>
-              {`${model.totalTime} total time`}
+              {`${secondsToMSS(model.totalTime, {format: 'm:ss'})} total time`}
             </Text>
           </View>
         </View>

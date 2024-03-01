@@ -70,7 +70,12 @@ function actionRepeatingScheduleState(
     switch (schedule.period) {
       case 'Events':
         // EVENTS
-        lastPerformed = history && history[history.length - 1].eventNumber;
+        if (!history.length) {
+          due = {value: 0, units: 'events', now: true};
+          break;
+        }
+
+        lastPerformed = history[history.length - 1]?.eventNumber;
         const eventsSinceLastPerformed = model.totalEvents - lastPerformed;
 
         if (eventsSinceLastPerformed >= schedule.value) {
@@ -79,53 +84,57 @@ function actionRepeatingScheduleState(
           due = {value: eventsPastDue, units: 'events', now: true};
         } else {
           // Action is not due
-          const targetEvent = eventsSinceLastPerformed + schedule.value;
+          const targetEvent = lastPerformed + (schedule.value - 1);
           const estEvents = targetEvent - model.totalEvents;
-          due = {value: estEvents, units: 'events', now: false};
+          due = {value: estEvents, units: 'events', now: estEvents === 0};
         }
         break;
 
-      case 'ModelMinutes':
+      case 'Model Minutes':
         // MODEL MINUTES
-        lastPerformed = history && history[history.length - 1].modelTime;
-        const minutesSinceLastPerformed = model.totalTime - lastPerformed;
+        if (!history.length) {
+          due = {value: 0, units: 'events', now: true};
+          break;
+        }
+
+        // Note: model time and model total time is expressed in seconds, convert to minutes.
+        const modelTotalTime = model.totalTime / 60;
+
+        lastPerformed = history[history.length - 1].modelTime / 60;
+        const minutesSinceLastPerformed = modelTotalTime - lastPerformed;
 
         if (minutesSinceLastPerformed >= schedule.value) {
           // Action is due
           const minutesPastDue = schedule.value - minutesSinceLastPerformed;
-          const modelAverageEventDuration = model.totalTime / model.totalEvents;
-          const estEvents = (minutesPastDue * 60) / modelAverageEventDuration;
+          const modelAverageEventDurationMins = modelTotalTime / model.totalEvents;
+          const estEvents = Math.round(minutesPastDue / modelAverageEventDurationMins);
           due = {value: estEvents, units: 'events', now: true};
         } else {
           // Action is not due
-          const modelAverageEventDuration = model.totalTime / model.totalEvents;
-          const estEvents = modelAverageEventDuration / (minutesSinceLastPerformed * 60);
+          const modelAverageEventDurationMins = modelTotalTime / model.totalEvents;
+          const estEvents = Math.round((schedule.value - minutesSinceLastPerformed) / modelAverageEventDurationMins);
           due = {value: estEvents, units: 'events', now: false};
         }
         break;
         
       default:
         // DATE
-        lastPerformed = history.length && DateTime.fromISO(history[history.length - 1].date);
-
-        if (lastPerformed) {
-          let valueInDays = schedule.value;
-          switch (schedule.period) {
-            case 'Weeks': valueInDays = schedule.value * 7; break;
-            case 'Months': valueInDays = schedule.value * 30; break;
-          };
-
-          const targetDate = lastPerformed.plus({days: valueInDays});
-          const days = Math.round(targetDate.diff(DateTime.now(), 'days').days);
-
-          if (days <= 0) {
-            due = {value: days, units: 'days', now: true};
-          } else {
-            due = {value: days, units: 'days', now: false};
-          }
-        } else {
+        if (!history.length) {
           due = {value: 0, units: 'days', now: true};
+          break;
         }
+
+        lastPerformed = DateTime.fromISO(history[history.length - 1].date);
+
+        let valueInDays = schedule.value;
+        switch (schedule.period) {
+          case 'Weeks': valueInDays = schedule.value * 7; break;
+          case 'Months': valueInDays = schedule.value * 30; break;
+        };
+
+        const targetDate = lastPerformed.plus({days: valueInDays});
+        const days = Math.round(targetDate.diff(DateTime.now(), 'days').days);
+        due = {value: days, units: 'days', now: days <= 0};
         break;
     }
   }

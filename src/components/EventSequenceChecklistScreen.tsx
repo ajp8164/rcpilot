@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction } from 'realmdb/Checklist';
+import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import { ListRenderItem, SectionList, SectionListData, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
@@ -49,6 +49,14 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   })).current;
 
   const actionsToDo = useRef(groupChecklistActions(checklists || []));
+
+  // History captures the current date, the model time before the event, and the
+  // event number at which the checklist action is performed.
+  const [newChecklistActionHistoryEntry] = useState({
+    date: DateTime.now().toISO()!,
+    modelTime: model ? model.totalTime : 0,
+    eventNumber: model ? model.totalEvents + 1 : 0,
+  } as ChecklistActionHistoryEntry);
 
   useEffect(() => {
     navigation.setOptions({
@@ -140,11 +148,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         if (!currentEventSequence.checklistActionHistoryEntries[action.refId]?.date) {
           dispatch(eventSequence.setChecklistActionComplete({
             checklistActionRefId: action.refId,
-            checklistActionHistoryEntry: {
-              date: DateTime.now().toISO()!,
-              modelTime: model!.totalTime,
-              eventNumber: model!.totalEvents,
-            }
+            checklistActionHistoryEntry: newChecklistActionHistoryEntry,
           }))
         }
       })
@@ -181,11 +185,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
           } else {
             dispatch(eventSequence.setChecklistActionComplete({
               checklistActionRefId: actionItem.action.refId,
-              checklistActionHistoryEntry: {
-                date: DateTime.now().toISO()!,
-                modelTime: model!.totalTime,
-                eventNumber: model!.totalEvents,
-              },
+              checklistActionHistoryEntry: newChecklistActionHistoryEntry,
             }));
           }
         }}

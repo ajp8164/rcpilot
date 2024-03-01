@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
-import { ListRenderItem, SectionList, SectionListData, View } from 'react-native';
+import { ListRenderItem, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -167,7 +167,15 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const renderChecklistAction: ListRenderItem<ChecklistActionItemData> = ({ item: actionItem, index }) => {
+  const renderChecklistAction: SectionListRenderItem<ChecklistActionItemData, Section> = ({
+    item: actionItem,
+    section,
+    index,
+  }: {
+    item: ChecklistActionItemData;
+    section: Section;
+    index: number;
+  }) => {
     return (
       <ListItemCheckboxInfo
         key={index}
@@ -178,7 +186,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         iconSize={26}
         iconColor={theme.colors.screenHeaderButtonText}
         checked={!!currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date}
-        position={listItemPosition(index, actionsToDo.current.length)}
+        position={listItemPosition(index, section.data.length)}
         onPress={() => {
           if (currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date) {
             dispatch(eventSequence.setChecklistActionNotComplete({

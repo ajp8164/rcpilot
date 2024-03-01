@@ -220,7 +220,7 @@ function actionNonRepeatingScheduleState (
       if (model && schedule.following !== undefined) {
         after = ` after ${eventKind(model?.type).name.toLowerCase()} #${schedule.following}`;
 
-        const targetEvent = parseInt(schedule.following) + schedule.value;
+        const targetEvent = parseInt(schedule.following) + (schedule.value - 1);
         const estEvents = targetEvent - model.totalEvents;
 
         if (estEvents === 0) {

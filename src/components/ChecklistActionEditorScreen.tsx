@@ -255,9 +255,13 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={scheduleStr.whenPerform}
         value={scheduleStr.whenPerformValue}
-        position={['first']}
+        position={action?.history.length ? ['first', 'last'] : ['first']}
         onPress={toggleSchedulePickerOpen}
         rightImage={false}
+        disabled={
+          action?.schedule.type === ChecklistActionScheduleType.NonRepeating && 
+          action?.history.length > 0
+        }
         expanded={schedulePickerOpen}
         ExpandableComponent={
           // Wheel index 0 is value, wheel index 1 is timeframe/frequency.
@@ -280,13 +284,17 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         onPress={() => null}
       />
-      <ListItemSwitch
-        title={'Action Repeats'}
-        value={selectedSchedule.type === ChecklistActionScheduleType.Repeating}
-        disabled={selectedSchedule?.period === ChecklistActionNonRepeatingScheduleTimeframe.Today}
-        position={['last']}
-        onValueChange={toggleActionRepeats}
-      />
+      {!action?.history.length ?
+        <ListItemSwitch
+          title={'Action Repeats'}
+          value={selectedSchedule.type === ChecklistActionScheduleType.Repeating}
+          disabled={selectedSchedule?.period === ChecklistActionNonRepeatingScheduleTimeframe.Today}
+          position={['last']}
+          onValueChange={toggleActionRepeats}
+        />
+      :
+        <Divider type={'note'} text={'Changes to the action are limited because this action has been performed at least once.'} />
+      }
       {checklistType === ChecklistType.Maintenance &&
         <>
           <Divider text={'MAINTENANCE COSTS'} />

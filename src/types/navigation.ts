@@ -1,8 +1,8 @@
 import { BatteryTemplate, ListBatteries } from 'types/battery';
+import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 
 import { BatteryCellValuesEditorConfig } from 'components/BatteryCellValuesEditorScreen';
 import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
-import { ChecklistType } from 'types/checklist';
 import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EventOutcome } from 'types/event';
@@ -283,7 +283,7 @@ export type EventSequenceNavigatorParamList = {
   };
   EventSequenceChecklist: {
     cancelable?: boolean;
-    checklistType: Omit<ChecklistType, 'Maintenance'>;
+    checklistType: EventSequenceChecklistType;
   };
   EventSequenceChecklistItem: {
     checklistRefId: string;

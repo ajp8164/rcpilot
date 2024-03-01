@@ -43,6 +43,8 @@ export enum ChecklistType {
   Maintenance = 'Maintenance',
 };
 
+export type EventSequenceChecklistType = ChecklistType.PreEvent | ChecklistType.PostEvent;
+
 export enum ChecklistActionScheduleType {
   NonRepeating = 'NonRepeating',
   Repeating = 'Repeating',

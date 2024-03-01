@@ -128,16 +128,16 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   };
 
   const allActionsComplete = () => {
-    const entries = Object.keys(currentEventSequence.checklistActionHistoryEntries);
+    const entries = Object.keys(currentEventSequence.checklistActionHistoryEntries[checklistType]);
     if (!entries.length) return false;
     return entries.every(key =>
-      !!currentEventSequence.checklistActionHistoryEntries[key].date
+      !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date,
     );
   };
 
   const someActionsComplete = () => {
     return Object.keys(currentEventSequence.checklistActionHistoryEntries).some(key =>
-      !!currentEventSequence.checklistActionHistoryEntries[key].date
+      !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date
     );
   };
 
@@ -145,10 +145,11 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     actionsToDo.current.forEach(section => {
       section.data.forEach(actionItem => {
         const action = actionItem.action;
-        if (!currentEventSequence.checklistActionHistoryEntries[action.refId]?.date) {
+        if (!currentEventSequence.checklistActionHistoryEntries[checklistType][action.refId]?.date) {
           dispatch(eventSequence.setChecklistActionComplete({
             checklistActionRefId: action.refId,
             checklistActionHistoryEntry: newChecklistActionHistoryEntry,
+            checklistType,
           }))
         }
       })
@@ -156,10 +157,11 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   };
 
   const pendAllActions = () => {
-    Object.keys(currentEventSequence.checklistActionHistoryEntries).forEach(key => {
-      if (currentEventSequence.checklistActionHistoryEntries[key].date) {
+    Object.keys(currentEventSequence.checklistActionHistoryEntries[checklistType]).forEach(key => {
+      if (currentEventSequence.checklistActionHistoryEntries[checklistType][key].date) {
         dispatch(eventSequence.setChecklistActionNotComplete({
           checklistActionRefId: key,
+          checklistType,
         }))
       }}
     );
@@ -175,17 +177,19 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         iconUnchecked={'square'}
         iconSize={26}
         iconColor={theme.colors.screenHeaderButtonText}
-        checked={!!currentEventSequence.checklistActionHistoryEntries[actionItem.action.refId]?.date}
+        checked={!!currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date}
         position={listItemPosition(index, actionsToDo.current.length)}
         onPress={() => {
-          if (currentEventSequence.checklistActionHistoryEntries[actionItem.action.refId]?.date) {
+          if (currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date) {
             dispatch(eventSequence.setChecklistActionNotComplete({
               checklistActionRefId: actionItem.action.refId,
+              checklistType,
             }));
           } else {
             dispatch(eventSequence.setChecklistActionComplete({
               checklistActionRefId: actionItem.action.refId,
               checklistActionHistoryEntry: newChecklistActionHistoryEntry,
+              checklistType,
             }));
           }
         }}

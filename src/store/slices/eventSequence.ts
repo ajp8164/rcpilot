@@ -1,19 +1,27 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { revertAll } from 'store/actions';
 
+type EventSequenceChecklistActionHistoryEntries = {
+  [key in EventSequenceChecklistType]: Record<string, JChecklistActionHistoryEntry>;
+};
+
 export interface EventSequenceState {
   modelId?: string;
   batteryIds: string[];
-  checklistActionHistoryEntries: Record<string, JChecklistActionHistoryEntry>;
+  checklistActionHistoryEntries: EventSequenceChecklistActionHistoryEntries;
   duration: number;
 }
 
 export const initialEventSequenceState = Object.freeze<EventSequenceState>({
   modelId: undefined,
   batteryIds: [],
-  checklistActionHistoryEntries: {},
+  checklistActionHistoryEntries: {
+    [ChecklistType.PreEvent]: {},
+    [ChecklistType.PostEvent]: {},
+  },
   duration: 0,
 });
 
@@ -57,27 +65,36 @@ const handleSetChecklistActionComplete: CaseReducer<
   EventSequenceState,
   PayloadAction<{
     checklistActionRefId: string,
-    checklistActionHistoryEntry: JChecklistActionHistoryEntry
+    checklistActionHistoryEntry: JChecklistActionHistoryEntry,
+    checklistType: EventSequenceChecklistType,
   }>
 > = (state, { payload }) => {
   return {
     ...state,
     checklistActionHistoryEntries: {
       ...state.checklistActionHistoryEntries,
-      [payload.checklistActionRefId]: payload.checklistActionHistoryEntry,
-    }
+      [payload.checklistType]: {
+        [payload.checklistActionRefId]: payload.checklistActionHistoryEntry,
+      },
+    },
   };
 };
 
 const handleSetChecklistActionNotComplete: CaseReducer<
   EventSequenceState,
-  PayloadAction<{checklistActionRefId: string}>
+  PayloadAction<{
+    checklistActionRefId: string,
+    checklistType: EventSequenceChecklistType,
+  }>
 > = (state, { payload }) => {
-  const entries = Object.assign({}, state.checklistActionHistoryEntries);
+  const entries = Object.assign({}, state.checklistActionHistoryEntries[payload.checklistType]);
   delete entries[payload.checklistActionRefId];
   return {
     ...state,
-    checklistActionHistoryEntries: entries,
+    checklistActionHistoryEntries: {
+      ...state.checklistActionHistoryEntries,
+      [payload.checklistType]: entries,
+    },
   };
 };
 

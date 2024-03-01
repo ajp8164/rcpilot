@@ -227,7 +227,7 @@ function actionNonRepeatingScheduleState (
           dueStr = 'Due today';
           due = {value: 0, units: 'events', now: true};
         } else if (estEvents < 0) {
-          dueStr = `Past due by ${Math.abs(estEvents)} ${eventKind(model.type).namePlural}`;
+          dueStr = `Past due by ${Math.abs(estEvents)} ${eventKind(model.type).namePlural.toLowerCase()}`;
           dueStr = Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
           due = {value: estEvents, units: 'events', now: true};
         } else {

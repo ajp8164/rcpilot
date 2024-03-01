@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
@@ -11,10 +11,9 @@ import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
-import { eventSequence } from 'store/slices/eventSequence';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useEvent } from 'lib/event';
-import { useObject } from '@realm/react';
+import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceChecklistItem'>;
@@ -24,7 +23,7 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const event = useEvent();
-  const dispatch = useDispatch();
+  const realm = useRealm();
 
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
@@ -45,11 +44,10 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
     return 'never';
   };
 
-  const setNotes = (text: string) => {
-    dispatch(eventSequence.setChecklistActionNotes({
-      checklistActionRefId: action!.refId,
-      text,
-    }));
+  const setNotes = (text: string) => {console.log(text);
+    realm.write(() => {
+      action!.notes = text;
+    });
   };
 
   if (!action) {

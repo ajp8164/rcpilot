@@ -2,7 +2,7 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, useEvent } from 'lib/event';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';

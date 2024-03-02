@@ -155,7 +155,11 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmDeleteChecklist('Delete Checklist', checklist, deleteChecklist),
+            onPress: () => confirmDeleteChecklist(deleteChecklist, {
+              label: `Delete Checklist`,
+              title: `This action cannot be undone.\nAre you sure you want to delete this checklist?`,
+              value: event,
+            })
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', checklist.refId)}

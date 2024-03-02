@@ -44,7 +44,7 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
     return 'never';
   };
 
-  const setNotes = (text: string) => {console.log(text);
+  const setNotes = (text: string) => {
     realm.write(() => {
       action!.notes = text;
     });

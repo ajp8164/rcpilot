@@ -255,7 +255,13 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={scheduleStr.whenPerform}
         value={scheduleStr.whenPerformValue}
-        position={action?.history.length ? ['first', 'last'] : ['first']}
+        position={
+          action?.history.length && scheduleStr.following
+            ? ['first']
+            : action?.history.length
+              ? ['first', 'last']
+              : ['first']
+        }
         onPress={toggleSchedulePickerOpen}
         rightImage={false}
         disabled={
@@ -281,6 +287,12 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         title={'Following'}
         value={scheduleStr.following}
         visible={!!scheduleStr.following}
+        position={
+          action?.schedule.type === ChecklistActionScheduleType.NonRepeating && 
+          action?.history.length > 0
+            ? ['last']
+            : []
+        }
         rightImage={false}
         onPress={() => null}
       />

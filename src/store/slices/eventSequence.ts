@@ -74,6 +74,7 @@ const handleSetChecklistActionComplete: CaseReducer<
     checklistActionHistoryEntries: {
       ...state.checklistActionHistoryEntries,
       [payload.checklistType]: {
+        ...state.checklistActionHistoryEntries[payload.checklistType],
         [payload.checklistActionRefId]: payload.checklistActionHistoryEntry,
       },
     },

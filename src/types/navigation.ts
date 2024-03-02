@@ -163,6 +163,14 @@ export type ModelsNavigatorParamList = {
     listModels?: ListModels;
   };
   ModelFiltersNavigator: NavigatorScreenParams<ModelFiltersNavigatorParamList>;
+  ModelMaintenance: {
+    modelId: string;
+  };
+  ModelMaintenanceItem: {
+    modelId: string;
+    checklistRefId: string;
+    actionRefId: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle;

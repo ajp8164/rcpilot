@@ -1,19 +1,23 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
-import React, { useRef, useState } from 'react';
+import { ListItem, ListItemCheckboxInfo, ListItemInput, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import React, { useEffect, useRef, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
+import { Button } from '@rneui/base';
 import { ChecklistType } from 'types/checklist';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { groupItems } from 'lib/sectionList';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
-import { useObject } from '@realm/react';
+import { useEvent } from 'lib/event';
 
 type ChecklistActionItemData = {checklist: Checklist, action: ChecklistAction};
 type Section = {
@@ -28,6 +32,8 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const event = useEvent();
+  const realm = useRealm();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
@@ -37,6 +43,11 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   const actionsToDo = useRef(groupChecklistActions(checklists || []));
 
+  const [pendingMaintenanceActions, setPendingMaintenanceActions] = useState<string[]>([]);
+
+  // Used to force a render since notes state changes are immediatley pushed to realm.
+  const [render, setRender] = useState(false);
+
   // History captures the current date, the model time before the event, and the
   // event number at which the checklist action is performed.
   const [newChecklistActionHistoryEntry] = useState({
@@ -44,6 +55,79 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     modelTime: model ? model.totalTime : 0,
     eventNumber: model ? model.totalEvents + 1 : 0,
   } as ChecklistActionHistoryEntry);
+
+  useEffect(() => {
+    const onPerform = () => {
+      // Write a history entry for each pending action.
+      realm.write(() => {
+        actionsToDo.current.forEach(section => {
+          pendingMaintenanceActions.forEach(actionRefId => {
+            const actionItem = section.data.find(item => item.action.refId === actionRefId);
+            if (actionItem) {
+              actionItem.action.history.push(newChecklistActionHistoryEntry);
+            }
+          });
+        });
+      });
+    };
+
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <Button
+            title={'Perform'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            disabled={pendingMaintenanceActions.length === 0}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            onPress={() => {
+              onPerform();
+              navigation.goBack();
+            }}
+          />
+        )
+      },
+    });
+  }, [ pendingMaintenanceActions ]);
+
+  useEffect(() => {
+    // Event handlers for EnumPicker
+    event.on('maintenance-notes', onChangeNotes);
+
+    return () => {
+      event.removeListener('maintenance-notes', onChangeNotes);
+    };
+  }, []);
+  
+  const onChangeCost = (value: number, action: ChecklistAction) => {
+    realm.write(() => {
+      action.cost = value;
+    });
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    // Set the notes on the correct action using the data passed through the notes editor.
+    const actionRefId = result.extraData;
+    realm.write(() => {
+      actionsToDo.current.forEach(section => {
+        const actionItem = section.data.find(item => item.action.refId === actionRefId);
+        if (actionItem) {
+          actionItem.action.notes = result.text;
+          setRender(!render);
+        }
+      });
+    });
+  };
+
+  const togglePendMaintenanceItem = (actionRefId: string) => {
+    if (pendingMaintenanceActions.includes(actionRefId)) {
+      const actions = ([] as string[]).concat(pendingMaintenanceActions);
+      lodash.remove(actions, refId => refId === actionRefId);
+      setPendingMaintenanceActions(actions);
+    } else {
+      setPendingMaintenanceActions(pendingMaintenanceActions.concat(actionRefId));
+    }
+  };
 
   function groupChecklistActions(checklists: Checklist[]): SectionListData<ChecklistActionItemData, Section>[] {
     let actionItemData: ChecklistActionItemData[] = [];
@@ -73,23 +157,51 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
+    const isExpanded = pendingMaintenanceActions.includes(actionItem.action.refId);
+    const isLastInList = index === section.data.length - 1;
     return (
       <ListItemCheckboxInfo
-        key={index}
+        key={actionItem.action.refId}
         title={actionItem.action.description}
         subtitle={actionItem.action.schedule.state.text}
         iconChecked={'square-check'}
         iconUnchecked={'square'}
         iconSize={26}
         iconColor={theme.colors.screenHeaderButtonText}
-        checked={false}
-        position={listItemPosition(index, section.data.length)}
-        onPress={() => {return null}}
+        checked={isExpanded}
+        position={!isExpanded ? listItemPosition(index, section.data.length) : index === 0 ? ['first'] : []}
+        onPress={() => {
+          togglePendMaintenanceItem(actionItem.action.refId);
+        }}
         onPressInfo={() => navigation.navigate('ModelMaintenanceItem', {
           modelId,
           checklistRefId: actionItem.checklist.refId,
           actionRefId: actionItem.action.refId,
         })}
+        expanded={isExpanded}
+        ExpandableComponent={
+          <>
+            <ListItemInput
+              title={'Total Costs'}
+              value={`${actionItem.action.cost || 0}`}
+              numeric={true}
+              numericProps={{maxValue: 99999}}
+              keyboardType={'number-pad'}
+              placeholder={'Unknown'}
+              onChangeText={value => onChangeCost(parseFloat(value), actionItem.action)}
+              /> 
+            <ListItem
+              title={actionItem.action.notes || 'No notes'}
+              position={isExpanded && isLastInList ? ['last'] : []}
+              onPress={() => navigation.navigate('NotesEditor', {
+                title: 'Maintenance Notes',
+                text: actionItem.action.notes,
+                extraData: actionItem.action.refId,
+                eventName: 'maintenance-notes',
+              })}
+            />
+          </>
+        }  
        /> 
     );
   };
@@ -114,6 +226,11 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+  headerButton: {
+    justifyContent: 'flex-start',
+    paddingHorizontal: 0,
+    minWidth: 0,
+  },
   sectionList: {
     flex: 1,
     flexGrow: 1,

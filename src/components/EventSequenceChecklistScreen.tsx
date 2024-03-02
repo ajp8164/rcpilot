@@ -1,8 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
-import { ListRenderItem, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
+import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ActionBar from 'components/atoms/ActionBar';

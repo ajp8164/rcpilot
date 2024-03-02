@@ -129,7 +129,11 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             }
   
             // Update model checklist action schedule for next event.
-            action.schedule.state = actionScheduleState(action as JChecklistAction, checklist.type, model);
+            action.schedule.state = actionScheduleState(
+              action as JChecklistAction,
+              checklist.type,
+              model
+            );
           });
         });
 

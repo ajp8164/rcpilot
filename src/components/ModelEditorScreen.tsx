@@ -2,7 +2,7 @@ import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, useEvent } from 'lib/event';
 import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
@@ -31,6 +31,7 @@ import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useFocusEffect } from '@react-navigation/native';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type Props = CompositeScreenProps<
@@ -266,9 +267,18 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     });
   }, []);
 
-  useEffect(() => {
-    const m = model?.checklists.filter(c => c.type === ChecklistType.Maintenance);
-    m && setPendingMaintenanceActionsCount(m.length);
+  useFocusEffect(() => {
+    let count = 0;
+    const maintenanceChecklists = model?.checklists.filter(c => c.type === ChecklistType.Maintenance);
+    maintenanceChecklists?.forEach(c => {
+      c.actions.forEach(a => {
+        if (a.schedule.state.due.now) {
+          count++;
+        }
+      });
+    });
+    
+    setPendingMaintenanceActionsCount(count);
   });
 
   useEffect(() => {

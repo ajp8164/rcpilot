@@ -14,6 +14,7 @@ import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
@@ -42,8 +43,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   })).current;
 
   const actionsToDo = useRef(groupChecklistActions(checklists || []));
-
-  const [pendingMaintenanceActions, setPendingMaintenanceActions] = useState<string[]>([]);
+  const [selectedMaintenanceActions, setSelectedMaintenanceActions] = useState<string[]>([]);
 
   // Used to force a render since notes state changes are immediatley pushed to realm.
   const [render, setRender] = useState(false);
@@ -61,10 +61,18 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
       // Write a history entry for each pending action.
       realm.write(() => {
         actionsToDo.current.forEach(section => {
-          pendingMaintenanceActions.forEach(actionRefId => {
+          selectedMaintenanceActions.forEach(actionRefId => {
             const actionItem = section.data.find(item => item.action.refId === actionRefId);
             if (actionItem) {
+              // Note: write the history entry before updating the schedule.
               actionItem.action.history.push(newChecklistActionHistoryEntry);
+
+              // Update the action schedule state.
+              actionItem.action.schedule.state = actionScheduleState(
+                actionItem.action,
+                actionItem.checklist.type,
+                model!,
+              );
             }
           });
         });
@@ -78,7 +86,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
             title={'Perform'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
-            disabled={pendingMaintenanceActions.length === 0}
+            disabled={selectedMaintenanceActions.length === 0}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() => {
               onPerform();
@@ -88,7 +96,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         )
       },
     });
-  }, [ pendingMaintenanceActions ]);
+  }, [ selectedMaintenanceActions ]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -120,12 +128,12 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   };
 
   const togglePendMaintenanceItem = (actionRefId: string) => {
-    if (pendingMaintenanceActions.includes(actionRefId)) {
-      const actions = ([] as string[]).concat(pendingMaintenanceActions);
+    if (selectedMaintenanceActions.includes(actionRefId)) {
+      const actions = ([] as string[]).concat(selectedMaintenanceActions);
       lodash.remove(actions, refId => refId === actionRefId);
-      setPendingMaintenanceActions(actions);
+      setSelectedMaintenanceActions(actions);
     } else {
-      setPendingMaintenanceActions(pendingMaintenanceActions.concat(actionRefId));
+      setSelectedMaintenanceActions(selectedMaintenanceActions.concat(actionRefId));
     }
   };
 
@@ -136,10 +144,12 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     checklists.forEach(c => {
       actions = c.actions.filter(a => a.schedule.state.due.now);
       actions.forEach(a => {
-        actionItemData.push({
-          checklist: c,
-          action: a,
-        });
+        if (a.schedule.state.due.now) {
+          actionItemData.push({
+            checklist: c,
+            action: a,
+          });
+        }
       });  
     });
 
@@ -157,7 +167,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
-    const isExpanded = pendingMaintenanceActions.includes(actionItem.action.refId);
+    const isExpanded = selectedMaintenanceActions.includes(actionItem.action.refId);
     const isLastInList = index === section.data.length - 1;
     return (
       <ListItemCheckboxInfo

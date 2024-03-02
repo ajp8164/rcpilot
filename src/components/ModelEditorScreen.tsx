@@ -441,7 +441,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             <ListItemDate
               title={`Last ${kind.name}`}
               value={lastEvent
-                ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
+                ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
                 : 'Tap to Set...'}
               pickerValue={lastEvent}
               rightImage={false}
@@ -456,7 +456,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               <ListItem
                 title={`Last ${kind.name}`}
                 value={lastEvent
-                  ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' hh:mm a")
+                  ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
                   : 'Unknown'
                 }
                 rightImage={false}

@@ -229,7 +229,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemDate
         title={'Date'}
-        value={DateTime.fromISO(date!).toFormat("MMM d, yyyy 'at' hh:mm a")}
+        value={DateTime.fromISO(date!).toFormat("MMM d, yyyy 'at' h:mm a")}
         pickerValue={date}
         rightImage={false}
         expanded={expandedDate}

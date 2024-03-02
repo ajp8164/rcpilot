@@ -142,7 +142,7 @@ const ListItemFilterDate = (props: Props) => {
         ?
           <ListItemDate
             title={'Date'}
-            value={DateTime.fromISO(filterState.value[0]).toFormat("MMM d, yyyy 'at' hh:mm a")}
+            value={DateTime.fromISO(filterState.value[0]).toFormat("MMM d, yyyy 'at' h:mm a")}
             rightImage={false}
             onPress={() => setPickerExpanded(!pickerExpanded)}
             expanded={pickerExpanded}

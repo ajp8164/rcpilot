@@ -1,4 +1,5 @@
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
+import ChecklistActionHistoryScreen from 'components/ChecklistActionHistoryScreen';
 import NavContext from './NavContext';
 import { NewChecklistActionNavigatorParamList } from 'types/navigation';
 import NotesScreen from 'components/NotesScreen';
@@ -33,6 +34,13 @@ const NewChecklistActionNavigator = () => {
           component={NotesScreen}
           options={{
             title: 'Action Notes',
+          }}
+        />
+        <NewChecklistActionStack.Screen
+          name="ChecklistActionHistory"
+          component={ChecklistActionHistoryScreen}
+          options={{
+            title: 'Action History',
           }}
         />
       </NewChecklistActionStack.Navigator>

@@ -374,6 +374,10 @@ export type NewChecklistActionNavigatorParamList = {
     modelId?: string;
     eventName: string;
   };
+  ChecklistActionHistory: {
+    action: JChecklistAction;
+    modelId: string;
+  };
   Notes: {
     title?: string;
     headerButtonStyle?: TextStyle;

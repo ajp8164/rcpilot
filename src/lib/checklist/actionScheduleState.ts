@@ -164,8 +164,14 @@ function actionNonRepeatingScheduleState (
     value = '';
     timeframe = '';
     after = schedule.following ? 'immediately' : 'immediatley at install';
-    dueStr = schedule.following ? 'Due now' : '';
-    due = {value: 0, units: 'days', now: true};
+
+    if (history.length) {
+      dueStr = 'Has already been performed';
+      due = {value: 0, units: 'events', now: false};
+    } else {
+      dueStr = schedule.following ? 'Due now' : '';
+      due = {value: 0, units: 'days', now: true};
+    }
 
   } else {
     value = `${schedule.value} `;
@@ -184,16 +190,19 @@ function actionNonRepeatingScheduleState (
         const targetMinute = parseInt(schedule.following) + schedule.value;
         const estMinutes = targetMinute - Math.trunc(model.totalTime / 60);
 
-        if (estMinutes === 0 ) {
+        if (history.length) {
+          dueStr = 'Has already been performed';
+          due = {value: 0, units: 'events', now: false};
+        } else  if (estMinutes === 0 ) {
           dueStr = 'Due today';
-          due = {value: 0, units: 'days', now: true};
+          due = {value: 0, units: 'events', now: true};
         } else if (estMinutes < 0) {
           const modelAverageEventDuration = model.totalTime / model.totalEvents;
           const estEvents = modelAverageEventDuration / (estMinutes * 60);
 
           dueStr = `Past due by about ${Math.abs(estEvents)} ${eventKind(model.type).namePlural.toLowerCase()}`;
           dueStr = estMinutes === 1 ? dueStr.replace(/s$/, '') : dueStr;
-          due = {value: estEvents, units: 'days', now: true};
+          due = {value: estEvents, units: 'events', now: true};
         } else {
           let estEvents = 0;
           const modelAverageEventDuration = model.totalTime / model.totalEvents;
@@ -223,7 +232,10 @@ function actionNonRepeatingScheduleState (
         const targetEvent = parseInt(schedule.following) + (schedule.value - 1);
         const estEvents = targetEvent - model.totalEvents;
 
-        if (estEvents === 0) {
+        if (history.length) {
+          dueStr = 'Has already been performed';
+          due = {value: 0, units: 'events', now: false};
+        } else if (estEvents === 0) {
           dueStr = 'Due today';
           due = {value: 0, units: 'events', now: true};
         } else if (estEvents < 0) {
@@ -255,7 +267,10 @@ function actionNonRepeatingScheduleState (
         const targetDate = date.plus({days: valueInDays});
         const days = Math.round(targetDate.diff(DateTime.now(), 'days').days);
         
-        if (days === 0) {
+        if (history.length) {
+          dueStr = 'Has already been performed';
+          due = {value: 0, units: 'days', now: false};
+        } else if (days === 0) {
           dueStr = 'Due today';
           due = {value: 0, units: 'days', now: true};
         } else if (days < 0) {

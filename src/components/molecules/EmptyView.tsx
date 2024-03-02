@@ -1,5 +1,5 @@
+import { ActivityIndicator, LayoutChangeEvent, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { LayoutChangeEvent, Text, View } from 'react-native';
 import React, { useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -12,6 +12,7 @@ interface EmptyViewInterface {
   info?: boolean;
   message?: string;
   details?: string;
+  isLoading?: boolean;
 }
 
 export const EmptyView = ({
@@ -19,6 +20,7 @@ export const EmptyView = ({
   error,
   message = 'Nothing here!',
   details,
+  isLoading,
 }: EmptyViewInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
@@ -34,11 +36,15 @@ export const EmptyView = ({
   return (
     <View style={s.container}>
       <View style={[s.items, {bottom: bottom - height}]} onLayout={onLayout}>
-        <Icon
-          name={error ? 'triangle-exclamation' : info ? 'circle-info' : 'magnifying-glass'}
-          size={45}
-          color={theme.colors.midGray}
-        />
+        {isLoading ?
+          <ActivityIndicator size={'large'} color={theme.colors.midGray} style={{height: 45}} />
+        :
+          <Icon
+            name={error ? 'triangle-exclamation' : info ? 'circle-info' : 'magnifying-glass'}
+            size={45}
+            color={theme.colors.midGray}
+          />
+        }
         <Text style={s.message}>{message}</Text>
         <Text style={s.details}>{details}</Text>
       </View>

@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
+import { Checklist, ChecklistAction, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
@@ -23,6 +23,7 @@ import { makeStyles } from '@rneui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useObject } from '@realm/react';
+import { uuidv4 } from 'lib/utils';
 
 type ChecklistActionItemData = {checklist: Checklist, action: ChecklistAction};
 type Section = {
@@ -52,11 +53,12 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
 
   // History captures the current date, the model time before the event, and the
   // event number at which the checklist action is performed.
-  const [newChecklistActionHistoryEntry] = useState({
+  const [newChecklistActionHistoryEntry] = useState<JChecklistActionHistoryEntry>({
+    refId: '',
     date: DateTime.now().toISO()!,
     modelTime: model ? model.totalTime : 0,
     eventNumber: model ? model.totalEvents + 1 : 0,
-  } as ChecklistActionHistoryEntry);
+  });
 
   useEffect(() => {
     navigation.setOptions({
@@ -148,7 +150,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         if (!currentEventSequence.checklistActionHistoryEntries[checklistType][action.refId]?.date) {
           dispatch(eventSequence.setChecklistActionComplete({
             checklistActionRefId: action.refId,
-            checklistActionHistoryEntry: newChecklistActionHistoryEntry,
+            checklistActionHistoryEntry: {
+              ...newChecklistActionHistoryEntry,
+              refId: uuidv4(), // Create a unique reference
+            },
             checklistType,
           }))
         }
@@ -196,7 +201,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
           } else {
             dispatch(eventSequence.setChecklistActionComplete({
               checklistActionRefId: actionItem.action.refId,
-              checklistActionHistoryEntry: newChecklistActionHistoryEntry,
+              checklistActionHistoryEntry: {
+                ...newChecklistActionHistoryEntry,
+                refId: uuidv4(), // Create a unique reference
+              },
               checklistType,
             }));
           }

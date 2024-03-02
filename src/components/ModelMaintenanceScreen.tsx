@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
+import { Checklist, ChecklistAction, ChecklistActionHistoryEntry, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItem, ListItemCheckboxInfo, ListItemInput, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
@@ -19,6 +19,7 @@ import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { uuidv4 } from 'lib/utils';
 
 type ChecklistActionItemData = {checklist: Checklist, action: ChecklistAction};
 type Section = {
@@ -50,11 +51,12 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   // History captures the current date, the model time before the event, and the
   // event number at which the checklist action is performed.
-  const [newChecklistActionHistoryEntry] = useState({
+  const [newChecklistActionHistoryEntry] = useState<JChecklistActionHistoryEntry>({
+    refId: '',
     date: DateTime.now().toISO()!,
     modelTime: model ? model.totalTime : 0,
     eventNumber: model ? model.totalEvents + 1 : 0,
-  } as ChecklistActionHistoryEntry);
+  });
 
   useEffect(() => {
     const onPerform = () => {
@@ -65,7 +67,10 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
             const actionItem = section.data.find(item => item.action.refId === actionRefId);
             if (actionItem) {
               // Note: write the history entry before updating the schedule.
-              actionItem.action.history.push(newChecklistActionHistoryEntry);
+              actionItem.action.history.push({
+                ...newChecklistActionHistoryEntry,
+                refId: uuidv4(), // Create a unique reference
+              } as ChecklistActionHistoryEntry);
 
               // Update the action schedule state.
               actionItem.action.schedule.state = actionScheduleState(

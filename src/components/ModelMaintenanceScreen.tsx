@@ -85,10 +85,11 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         checked={false}
         position={listItemPosition(index, section.data.length)}
         onPress={() => {return null}}
-        // onPressInfo={() => navigation.navigate('ModelMaintenanceItem', {
-        //   checklistRefId: actionItem.checklist.refId,
-        //   actionRefId: actionItem.action.refId,
-        // })}
+        onPressInfo={() => navigation.navigate('ModelMaintenanceItem', {
+          modelId,
+          checklistRefId: actionItem.checklist.refId,
+          actionRefId: actionItem.action.refId,
+        })}
        /> 
     );
   };

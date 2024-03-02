@@ -12,6 +12,7 @@ import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import { ModelHeader } from 'components/molecules/ModelHeader';
+import ModelMaintenanceItemScreen from 'components/ModelMaintenanceItemScreen';
 import ModelMaintenanceScreen from 'components/ModelMaintenanceScreen';
 import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -128,6 +129,13 @@ const ModelsNavigator = () => {
         component={ModelMaintenanceScreen}
         options={{
           title: 'Maintenance',
+        }}
+      />
+      <ModelsStack.Screen
+        name="ModelMaintenanceItem"
+        component={ModelMaintenanceItemScreen}
+        options={{
+          title: 'Action',
         }}
       />
       <ModelsStack.Screen

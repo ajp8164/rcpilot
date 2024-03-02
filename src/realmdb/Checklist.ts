@@ -116,6 +116,7 @@ export class ChecklistActionScheduleDue extends Object<ChecklistActionScheduleDu
 export type JChecklistActionHistoryEntry = Omit<ChecklistActionHistoryEntry, keyof Realm.Object>;
 
 export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEntry> {
+  refId!: string;
   date!: ISODateString;
   modelTime!: number;
   eventNumber!: number;
@@ -124,6 +125,7 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
     name: 'ChecklistActionHistoryEntry',
     embedded: true,
     properties: {
+      refId: 'string',
       date: 'string',
       modelTime: 'int',
       eventNumber: 'int',

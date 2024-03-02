@@ -78,6 +78,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [scanCodeSize, setScanCodeSize] = useState(model?.scanCodeSize || ScanCodeSize.None);
   const [notes, setNotes] = useState(model?.notes || undefined);
 
+  const [completedMaintenanceActionsCount, setCompletedMaintenanceActionsCount] = useState(0);
   const [pendingMaintenanceActionsCount, setPendingMaintenanceActionsCount] = useState(0);
 
   const [expandedLastEvent, setExpandedLastEvent] = useState(false);
@@ -268,17 +269,20 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useFocusEffect(() => {
-    let count = 0;
+    let completedCount = 0;
+    let pendingCount = 0;
     const maintenanceChecklists = model?.checklists.filter(c => c.type === ChecklistType.Maintenance);
     maintenanceChecklists?.forEach(c => {
       c.actions.forEach(a => {
         if (a.schedule.state.due.now) {
-          count++;
+          pendingCount++;
         }
+        completedCount = completedCount + a.history.length;
       });
     });
     
-    setPendingMaintenanceActionsCount(count);
+    setCompletedMaintenanceActionsCount(completedCount);
+    setPendingMaintenanceActionsCount(pendingCount);
   });
 
   useEffect(() => {
@@ -567,9 +571,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               />
               <ListItem
                 title={'Maintenance Log'}
-                value={'0'}
+                value={`${completedMaintenanceActionsCount}`}
                 position={['last']}
-                onPress={() => null}
+                onPress={() => navigation.navigate('ModelMaintenanceHistory', {
+                  modelId,
+                })}
               />
             </>
           }

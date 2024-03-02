@@ -102,8 +102,11 @@ function actionRepeatingScheduleState(
 
         lastPerformed = history[history.length - 1].modelTime / 60;
         const minutesSinceLastPerformed = modelTotalTime - lastPerformed;
-
-        if (minutesSinceLastPerformed >= schedule.value) {
+        
+        if (model.totalEvents === 0) {
+          // Due object value indicates calculation could not be performed
+          due = {value: -1, units: 'events', now: false};
+        } else if (minutesSinceLastPerformed >= schedule.value) {
           // Action is due
           const minutesPastDue = schedule.value - minutesSinceLastPerformed;
           const modelAverageEventDurationMins = modelTotalTime / model.totalEvents;
@@ -213,7 +216,8 @@ function actionNonRepeatingScheduleState (
 
           if (estEvents === 0) {
             dueStr = `Due in several ${eventKind(model.type).namePlural.toLowerCase()}`;
-            // No due object since its not definitive
+            // Due object value indicates calculation could not be performed.
+            due = {value: -1, units: 'events', now: false};
           } else {
             dueStr = `Due in about ${estEvents} ${eventKind(model.type).namePlural.toLowerCase()}`;
             dueStr = estMinutes === 1 ? dueStr.replace(/s$/, '') : dueStr;

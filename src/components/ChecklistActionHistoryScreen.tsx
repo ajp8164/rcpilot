@@ -49,7 +49,7 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       <ListItem
         key={`${index}`}
         title={`${eventKind(model?.type).name} #${historyEntry.eventNumber}`}
-        subtitle={DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy')}
+        subtitle={DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}
         value={`Model Time ${secondsToMSS(historyEntry.modelTime, {format: 'm:ss'})}`}
         position={listItemPosition(index, action!.history.length)}
         rightImage={false}

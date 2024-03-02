@@ -2,7 +2,7 @@ import BatteryEditorScreen from 'components/BatteryEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
 import { NewBatteryNavigatorParamList } from 'types/navigation';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -30,8 +30,8 @@ const NewBatteryNavigator = () => {
           }}
         />
         <NewBatteryStack.Screen
-          name='Notes'
-          component={NotesScreen}
+          name='NotesEditor'
+          component={NotesEditorScreen}
           options={{
             title: 'Battery Notes',
           }}

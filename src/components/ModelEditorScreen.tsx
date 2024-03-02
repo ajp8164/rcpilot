@@ -26,6 +26,7 @@ import { ModelHeader } from 'components/molecules/ModelHeader';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
 import { makeStyles } from '@rneui/themed';
@@ -279,7 +280,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     event.on('default-style', onChangeDefaultStyle);
     event.on('default-fuel', onChangeDefaultFuel);
     event.on('model-scan-code-size', onChangeScanCodeSize);
-    event.on('model-notes', setNotes);
+    event.on('model-notes', onChangeNotes);
 
     return () => {
       event.removeListener('model-type', onChangeType);
@@ -289,7 +290,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       event.removeListener('default-style', onChangeDefaultStyle);
       event.removeListener('default-fuel', onChangeDefaultFuel);
       event.removeListener('model-scan-code-size', onChangeScanCodeSize);
-      event.removeListener('model-notes', setNotes);
+      event.removeListener('model-notes', onChangeNotes);
     };
   }, []);
 
@@ -327,6 +328,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
   const onChangeScanCodeSize = (result: EnumPickerResult) => {
     setScanCodeSize(result.value[0] as ScanCodeSize);
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
   };
 
   const scrollHandler = useAnimatedScrollHandler((event) => {
@@ -646,7 +651,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           <ListItem
             title={notes || 'Notes'}
             position={['first', 'last']}
-            onPress={() => navigation.navigate('Notes', {
+            onPress={() => navigation.navigate('NotesEditor', {
               title: 'Model Notes',
               text: notes,
               eventName: 'model-notes',

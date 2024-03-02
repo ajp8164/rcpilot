@@ -12,6 +12,7 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -89,16 +90,20 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   }, [name, vendor, diameter, pitch, measurementUnits, numberOfBlades, notes]);
 
   useEffect(() => {
-    event.on('propeller-notes', setNotes);
     event.on('propeller-measurement-units', onChangeMeasurementUnits);
+    event.on('propeller-notes', onChangeNotes);
     return () => {
-      event.removeListener('propeller-notes', setNotes);
       event.removeListener('propeller-measurement-units', onChangeMeasurementUnits);
+      event.removeListener('propeller-notes', onChangeNotes);
     };
   }, []);
 
   const onChangeMeasurementUnits = (result: EnumPickerResult) => {
     setMeasurementUnits(result.value[0] as MeasurementUnits);
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
   };
 
   return (
@@ -167,7 +172,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Propeller Notes',
           text: notes,
           eventName: 'propeller-notes',

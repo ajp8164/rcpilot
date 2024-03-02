@@ -10,7 +10,7 @@ import EventSequenceNewEventEditorScreen from 'components/EventSequenceNewEventE
 import EventSequenceTimerScreen from 'components/EventSequenceTimerScreen';
 import { Model } from 'realmdb/Model';
 import NavContext from './NavContext';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/event';
@@ -81,8 +81,8 @@ const EventSequenceNavigator = () => {
           }}
         />
         <EventSequenceStack.Screen
-          name='Notes'
-          component={NotesScreen}
+          name='NotesEditor'
+          component={NotesEditorScreen}
           options={() => {
             const modelId = store.getState().eventSequence.modelId;
             const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;

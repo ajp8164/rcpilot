@@ -7,10 +7,15 @@ import { eqString } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
-export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'Notes'>;
+export type NotesEditorResult = {
+  text: string;
+  extraData?: any;
+};
 
-const NotesScreen = ({ navigation, route }: Props) => {
-  const { title, text, headerButtonStyle, eventName } = route.params;
+export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'NotesEditor'>;
+
+const NotesEditorScreen = ({ navigation, route }: Props) => {
+  const { title, text, headerButtonStyle, extraData, eventName } = route.params;
 
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
@@ -21,7 +26,10 @@ const NotesScreen = ({ navigation, route }: Props) => {
     const canSave = !eqString(text, newText);
 
     const onDone = () => {
-      event.emit(eventName, newText);
+      event.emit(eventName, {
+        text: newText,
+        extraData,
+      } as NotesEditorResult);
       navigation.goBack();
     };
 
@@ -42,4 +50,4 @@ const NotesScreen = ({ navigation, route }: Props) => {
   );
 };
 
-export default NotesScreen;
+export default NotesEditorScreen;

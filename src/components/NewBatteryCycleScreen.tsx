@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { MSSToSeconds } from 'lib/formatters';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { toNumber } from 'realmdb/helpers';
@@ -175,11 +176,11 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     event.on('battery-cycle-cell-resistances', onChangeCellResistances);
     event.on('battery-cycle-cell-voltages', onChangeCellVoltages);
-    event.on('battery-cycle-notes', setNotes);
+    event.on('battery-cycle-notes', onChangeNotes);
     return () => {
       event.removeListener('battery-cycle-cell-resistances', onChangeCellResistances);
       event.removeListener('battery-cycle-cell-voltages', onChangeCellVoltages);
-      event.removeListener('battery-cycle-notes', setNotes);
+      event.removeListener('battery-cycle-notes', onChangeNotes);
     };
   }, []);
 
@@ -191,6 +192,10 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   const onChangeCellVoltages = (result: BatteryCellValuesEditorResult) => {
     setCellVoltages(result.cellValues.map(v => {return v.toString()}));
     setPackVoltage(result.packValue.toString());
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
   };
 
   if (!battery) {
@@ -339,7 +344,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     <ListItem
       title={notes || 'Notes'}
       position={['first', 'last']}
-      onPress={() => navigation.navigate('Notes', {
+      onPress={() => navigation.navigate('NotesEditor', {
         title: 'Cycle Notes',
         text: notes,
         eventName: 'battery-cycle-notes',

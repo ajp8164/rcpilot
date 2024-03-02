@@ -129,7 +129,7 @@ const ListItemFilterString = (props: Props) => {
           titleStyle={!filterState.value ? {color: theme.colors.assertive}: {}}
           subtitle={!filterState.value.length ?  'Matching text not specified' : filterState.value[0]}
           position={position?.includes('last') ? ['last'] : []}
-          onPress={() => navigation.navigate('Notes', {
+          onPress={() => navigation.navigate('NotesEditor', {
             title: 'String Value Notes',
             text: filterState.value[0],
             eventName,

@@ -3,7 +3,7 @@ import BatteryPerformanceFiltersScreen from 'components/BatteryPerformanceFilter
 import { BatteryPerformanceNavigatorParamList } from 'types/navigation';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -37,8 +37,8 @@ const BatteryPerformanceNavigator = () => {
           }}
         />
         <BatteryPerformanceStack.Screen
-          name='Notes'
-          component={NotesScreen}
+          name='NotesEditor'
+          component={NotesEditorScreen}
           options={{
             title: 'Model Notes',
           }}

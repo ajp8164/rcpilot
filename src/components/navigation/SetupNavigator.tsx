@@ -27,7 +27,7 @@ import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
 import NewPilotScreen from 'components/NewPilotScreen';
 import NewReportNavigator from 'components/navigation/NewReportNavigator';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import PilotNavigator from 'components/navigation/PilotNavigator';
 import PilotScreen from 'components/PilotScreen';
 import PilotsScreen from 'components/PilotsScreen';
@@ -242,8 +242,8 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='Notes'
-        component={NotesScreen}
+        name='NotesEditor'
+        component={NotesEditorScreen}
         options={{
           title: '',
         }}

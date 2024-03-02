@@ -32,7 +32,7 @@ const LocationDetailsScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Fuel Notes',
           text: 'notes', // mock
           eventName: 'fuel-notes',  

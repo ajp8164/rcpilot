@@ -28,6 +28,7 @@ import { Model } from 'realmdb/Model';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
 import { actionScheduleState } from 'lib/checklist';
@@ -206,7 +207,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     event.on('event-location', onChangeLocation);
     event.on('event-pilot', onChangePilot);
     event.on('event-outcome', onChangeOutcome);
-    event.on('event-notes', setNotes);
+    event.on('event-notes', onChangeNotes);
     event.on(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
     event.on(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
 
@@ -217,7 +218,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       event.removeListener('event-pilot', onChangePilot);
       event.removeListener('event-location', onChangeLocation);
       event.removeListener('event-outcome', onChangeOutcome);
-      event.removeListener('event-notes', setNotes);
+      event.removeListener('event-notes', onChangeNotes);
       event.removeListener(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
       event.removeListener(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
   };
@@ -255,6 +256,10 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   
   const onChangeOutcome = (result: EnumPickerResult) => {
     setOutcome(result.value[0] as EventOutcome);
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
   };
 
   const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
@@ -498,7 +503,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Event Notes',
           headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
           text: notes,

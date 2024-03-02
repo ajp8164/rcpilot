@@ -1,6 +1,7 @@
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
+import ChecklistActionHistoryScreen from 'components/ChecklistActionHistoryScreen';
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatePickerScreen from 'components/ChecklistTemplatePickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
@@ -89,6 +90,13 @@ const ModelsNavigator = () => {
         component={ChecklistActionEditorScreen}
         options={{
           title: 'Action',
+        }}
+      />
+      <ModelsStack.Screen
+        name="ChecklistActionHistory"
+        component={ChecklistActionHistoryScreen}
+        options={{
+          title: 'Action History',
         }}
       />
       <ModelsStack.Screen

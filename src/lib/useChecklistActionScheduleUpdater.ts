@@ -9,12 +9,16 @@ export const useChecklistActionScheduleUpdater = () => {
   const allModels = useQuery(Model);
 
   useEffect(() => {
-    allModels.forEach(model => {
-      model.checklists.forEach(checklist => {
-        const checklistType = checklist.type;
-        checklist.actions.forEach(action => {
-          realm.write(() => {
-            action.schedule.state = actionScheduleState(action, checklistType, model);
+    realm.write(() => {
+      allModels.forEach(model => {
+        model.checklists.forEach(checklist => {
+          const checklistType = checklist.type;
+          checklist.actions.forEach(action => {
+            action.schedule.state = actionScheduleState(
+              action,
+              checklistType,
+              model
+            );
           });
         });
       });

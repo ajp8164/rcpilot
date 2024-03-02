@@ -1,6 +1,6 @@
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NavContext from './NavContext';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import ReportBatteryScanCodesFilterEditorScreen from 'components/ReportBatteryScanCodesFilterEditorScreen';
 import ReportEventsFilterEditorScreen from 'components/ReportEventsFilterEditorScreen';
@@ -68,8 +68,8 @@ const ReportFiltersNavigator = () => {
           }}
         />
         <ReportFiltersStack.Screen
-          name='Notes'
-          component={NotesScreen}
+          name='NotesEditor'
+          component={NotesEditorScreen}
           options={{
             title: 'String Value',
           }}

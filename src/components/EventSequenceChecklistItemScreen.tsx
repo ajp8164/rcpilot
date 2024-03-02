@@ -10,6 +10,7 @@ import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { View } from 'react-native';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useEvent } from 'lib/event';
@@ -31,11 +32,15 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
   const action = useRef(checklist?.actions.find(a => a.refId === actionRefId)).current;
 
   useEffect(() => {
-    event.on('event-checklist-item-notes', setNotes);
+    event.on('event-checklist-item-notes', onChangeNotes);
     return () => {
-      event.removeListener('event-checklist-item-notes', setNotes);
+      event.removeListener('event-checklist-item-notes', onChangeNotes);
     };
   }, []);
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
+  };
 
   const lastTimePerformed = (action: ChecklistAction) => {
     if (action.history.length) {
@@ -76,7 +81,7 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={action.notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           text: action.notes,
           headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
           eventName: 'event-checklist-item-notes',

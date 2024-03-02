@@ -27,10 +27,11 @@ export type MultipleNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   BatteryPicker: BatteryPickerInterface;
   ModelPicker: ModelPickerInterface;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -70,10 +71,11 @@ export type BatteriesNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   NewBatteryNavigator: NavigatorScreenParams<NewBatteryNavigatorParamList>;
   NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -84,10 +86,11 @@ export type BatteryPerformanceNavigatorParamList = {
     filterId: string;
   }
   EnumPicker: EnumPickerInterface;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -171,10 +174,11 @@ export type ModelsNavigatorParamList = {
     checklistRefId: string;
     actionRefId: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -185,7 +189,7 @@ export type ModelFiltersNavigatorParamList = {
   ModelFilterEditor: {
     filterId: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
@@ -211,10 +215,11 @@ export type BatteryCycleFiltersNavigatorParamList = {
 
 export type ReportFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
   ReportBatteryScanCodesFilterEditor: {
@@ -246,10 +251,11 @@ export type NewBatteryNavigatorParamList = {
     batteryId?: string;
     batteryTemplate?: BatteryTemplate;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -266,10 +272,11 @@ export type NewBatteryCycleNavigatorParamList = {
     pCells: number;
     eventName: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -279,10 +286,11 @@ export type NewModelNavigatorParamList = {
   NewModel: {
     modelId?: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -312,10 +320,11 @@ export type EventSequenceNavigatorParamList = {
     pCells: number;
     eventName: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   }
 };
@@ -325,20 +334,22 @@ export type LocationNavigatorParamList = {
   LocationDetails: {
     locationId: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
 
 export type NewModelFuelNavigatorParamList = {
   NewModelFuel: undefined;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -346,10 +357,11 @@ export type NewModelFuelNavigatorParamList = {
 export type NewModelPropellerNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   NewModelPropeller: undefined;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -367,10 +379,11 @@ export type NewChecklistNavigatorParamList = {
     modelId?: string;
     modelChecklistRefId?: string;
   },
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -386,10 +399,11 @@ export type NewChecklistActionNavigatorParamList = {
     action: JChecklistAction;
     modelId: string;
   };
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
 };
@@ -473,10 +487,11 @@ export type SetupNavigatorParamList = {
   NewModelFuelNavigator: NavigatorScreenParams<NewModelFuelNavigatorParamList>;
   NewModelPropellerNavigator: NavigatorScreenParams<NewModelPropellerNavigatorParamList>;
   NewReportNavigator: NavigatorScreenParams<NewReportNavigatorParamList>;
-  Notes: {
+  NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    extraData?: any;
     eventName: string;
   };
   ReportEventsMaintenanceEditor: {

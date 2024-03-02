@@ -17,6 +17,7 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Icon as RNEIcon } from "@rneui/base";
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
@@ -183,13 +184,13 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     event.on('battery-chemistry', onChangeChemistry);
     event.on('battery-tint', onChangeBatteryTint);
     event.on('battery-scan-code-size', onChangeScanCodeSize);
-    event.on('battery-notes', setNotes);
+    event.on('battery-notes', onChangeNotes);
 
     return () => {
       event.removeListener('battery-chemistry', onChangeChemistry);
       event.removeListener('battery-tint', onChangeBatteryTint);
       event.removeListener('battery-scan-code-size', onChangeScanCodeSize);
-      event.removeListener('battery-notes', setNotes);
+      event.removeListener('battery-notes', onChangeNotes);
     };
   }, []);
 
@@ -203,6 +204,10 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
   const onChangeScanCodeSize = (result: EnumPickerResult) => {
     setScanCodeSize(result.value[0] as ScanCodeSize);
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
   };
 
   const validateCapacity = () => {
@@ -422,7 +427,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         <ListItem
           title={'Notes'}
           position={['first', 'last']}
-          onPress={() => navigation.navigate('Notes', {
+          onPress={() => navigation.navigate('NotesEditor', {
             title: 'String Value Notes',
             text: notes,
             eventName: 'battery-notes',

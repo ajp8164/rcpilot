@@ -20,7 +20,7 @@ import ModelsScreen from 'components/ModelsScreen';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -155,8 +155,8 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='Notes'
-        component={NotesScreen}
+        name='NotesEditor'
+        component={NotesEditorScreen}
         options={{
           title: 'Model Notes',
         }}

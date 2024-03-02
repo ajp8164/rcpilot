@@ -21,6 +21,7 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { ISODateString } from 'types/common';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { secondsToMSS } from 'lib/formatters';
@@ -126,11 +127,15 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   }, [ description, selectedSchedule, cost, notes ]);
 
   useEffect(() => {
-    event.on('checklist-action-notes', setNotes);
+    event.on('checklist-action-notes', onChangeNotes);
     return () => {
-      event.removeListener('checklist-action-notes', setNotes);
+      event.removeListener('checklist-action-notes', onChangeNotes);
     };
   }, []);
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
+  };
 
   useEffect(() => {
     let following: ISODateString | string;
@@ -325,7 +330,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Action Notes',
           text: notes,
           eventName: 'checklist-action-notes',

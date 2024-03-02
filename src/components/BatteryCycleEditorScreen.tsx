@@ -17,6 +17,7 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -149,13 +150,13 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     event.on('battery-discharge-cell-voltages', onChangeDischargeCellVoltages);
     event.on('battery-charge-cell-resistances', onChangeChargeCellResistances);
     event.on('battery-charge-cell-voltages', onChangeChargeCellVoltages);
-    event.on('battery-cycle-notes', setNotes);
+    event.on('battery-cycle-notes', onChangeNotes);
     return () => {
       event.removeListener('battery-discharge-cell-resistances', onChangeDischargeCellResistances);
       event.removeListener('battery-discharge-cell-voltages', onChangeDischargeCellVoltages);
       event.removeListener('battery-charge-cell-resistances', onChangeChargeCellResistances);
       event.removeListener('battery-charge-cell-voltages', onChangeChargeCellVoltages);
-      event.removeListener('battery-cycle-notes', setNotes);
+      event.removeListener('battery-cycle-notes', onChangeNotes);
     };
   }, []);
 
@@ -185,6 +186,10 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
 
   const onChargeDateChange = (date?: Date) => {
     date && setChargeDate(DateTime.fromJSDate(date).toISO() || DateTime.now().toISO()!);
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
   };
 
   const batterySummary = (battery: Battery) => {
@@ -419,7 +424,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Cycle Notes',
           text: notes,
           eventName: 'battery-cycle-notes',

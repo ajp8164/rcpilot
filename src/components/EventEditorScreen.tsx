@@ -23,6 +23,7 @@ import { Location } from 'realmdb/Location';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
 import { eventKind } from 'lib/event';
@@ -120,7 +121,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     event.on('event-location', onChangeLocation);
     event.on('event-pilot', onChangePilot);
     event.on('event-outcome', onChangeOutcome);
-    event.on('event-notes', setNotes);
+    event.on('event-notes', onChangeNotes);
 
     return () => {
       event.removeListener('event-model-fuel', onChangeModelFuel);
@@ -129,7 +130,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       event.removeListener('event-pilot', onChangePilot);
       event.removeListener('event-location', onChangeLocation);
       event.removeListener('event-outcome', onChangeOutcome);
-      event.removeListener('event-notes', setNotes);
+      event.removeListener('event-notes', onChangeNotes);
     };
   }, []);
 
@@ -166,6 +167,10 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     setOutcome(result.value[0] as EventOutcome);
   };
   
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
+  };
+
   const renderBatteryCycle: ListRenderItem<BatteryCycle> = ({ item: cycle, index }) => {
     return (
       <ListItem
@@ -343,7 +348,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Event Notes',
           headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
           text: notes,

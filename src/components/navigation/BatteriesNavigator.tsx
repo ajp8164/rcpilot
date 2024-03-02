@@ -13,7 +13,7 @@ import BatteryTemplatesScreen from 'components/BatteryTemplatesScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
 import NewBatteryNavigator from './NewBatteryNavigator';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import lodash from 'lodash';
@@ -141,8 +141,8 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='Notes'
-        component={NotesScreen}
+        name='NotesEditor'
+        component={NotesEditorScreen}
         options={{
           title: 'Battery Notes',
         }}

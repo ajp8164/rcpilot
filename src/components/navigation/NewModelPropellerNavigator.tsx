@@ -2,7 +2,7 @@ import EnumPickerScreen from 'components/EnumPickerScreen';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import NavContext from './NavContext';
 import { NewModelPropellerNavigatorParamList } from 'types/navigation';
-import NotesScreen from 'components/NotesScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
@@ -38,8 +38,8 @@ const NewModelPropellerNavigator = () => {
           }}
         />
         <NewModelPropellerStack.Screen
-          name='Notes'
-          component={NotesScreen}
+          name='NotesEditor'
+          component={NotesEditorScreen}
           options={{
             title: 'Propeller Notes',
           }}

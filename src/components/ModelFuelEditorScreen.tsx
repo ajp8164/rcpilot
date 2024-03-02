@@ -10,6 +10,7 @@ import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -71,11 +72,15 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   }, [name, cost, notes]);
 
   useEffect(() => {
-    event.on('fuel-notes', setNotes);
+    event.on('fuel-notes', onChangeNotes);
     return () => {
-      event.removeListener('fuel-notes', setNotes);
+      event.removeListener('fuel-notes', onChangeNotes);
     };
   }, []);
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
+  };
 
   return (
   <ScrollView
@@ -104,7 +109,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('Notes', {
+        onPress={() => navigation.navigate('NotesEditor', {
           title: 'Fuel Notes',
           text: notes,
           eventName: 'fuel-notes',

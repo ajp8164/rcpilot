@@ -12,6 +12,7 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { BatteryPickerResult } from 'components/BatteryPickerScreen';
+import { ChecklistType } from 'types/checklist';
 import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { DateTime } from 'luxon';
@@ -74,6 +75,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [defaultStyle, setDefaultStyle] = useState(model?.defaultStyle || undefined);
   const [scanCodeSize, setScanCodeSize] = useState(model?.scanCodeSize || ScanCodeSize.None);
   const [notes, setNotes] = useState(model?.notes || undefined);
+
+  const [pendingMaintenanceActionsCount, setPendingMaintenanceActionsCount] = useState(0);
 
   const [expandedLastEvent, setExpandedLastEvent] = useState(false);
   const scrollY = useSharedValue(0);
@@ -261,6 +264,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       ),
     });
   }, []);
+
+  useEffect(() => {
+    const m = model?.checklists.filter(c => c.type === ChecklistType.Maintenance);
+    m && setPendingMaintenanceActionsCount(m.length);
+  });
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -537,8 +545,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               />
               <ListItem
                 title={'Perform Maintenance'}
-                value={'0'}
-                onPress={() => null}
+                value={`${pendingMaintenanceActionsCount}`}
+                onPress={() => navigation.navigate('ModelMaintenance', {
+                  modelId,
+                })}
               />
               <ListItem
                 title={'Maintenance Log'}

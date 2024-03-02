@@ -31,7 +31,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const listEditor = useListEditor();
   const { showActionSheetWithOptions } = useActionSheet();
-  const confirmDeleteChecklist = useConfirmAction();
+  const confirmAction = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
 
@@ -122,6 +122,14 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  const confirmDeleteChecklist = (checklist: Checklist) => {
+    confirmAction(deleteChecklist, {
+      label: `Delete Checklist`,
+      title: `This action cannot be undone.\nAre you sure you want to delete this checklist?`,
+      value: checklist,
+    });
+  };
+
   const deleteChecklist = (checklist: Checklist) => {
     realm.write(() => {
       const index = model?.checklists.findIndex(cl => cl.refId === checklist.refId);
@@ -155,11 +163,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         swipeable={{
           rightItems: [{
             ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmDeleteChecklist(deleteChecklist, {
-              label: `Delete Checklist`,
-              title: `This action cannot be undone.\nAre you sure you want to delete this checklist?`,
-              value: event,
-            })
+            onPress: () => confirmDeleteChecklist(checklist)
           }]
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', checklist.refId)}

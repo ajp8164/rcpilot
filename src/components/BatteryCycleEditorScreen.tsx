@@ -236,7 +236,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         title={'Date'}
         value={dischargeDate
           ? DateTime.fromISO(dischargeDate).toFormat(
-            "MMM d, yyyy 'at' hh:mm a"
+            "MMM d, yyyy 'at' h:mm a"
           )
           : 'Tap to Set...'}
         pickerValue={dischargeDate}
@@ -306,7 +306,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             title={'Date'}
             value={chargeDate
               ? DateTime.fromISO(chargeDate).toFormat(
-                "MMM d, yyyy 'at' hh:mm a"
+                "MMM d, yyyy 'at' h:mm a"
               )
               : 'Tap to Set...'}
             pickerValue={chargeDate}

@@ -331,6 +331,20 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
           eventName: 'checklist-action-notes',
         })}
       />
+      {modelId && action &&
+        <>
+          <Divider text={'HISTORY'} />
+          <ListItem
+            title={'History'}
+            value={action.history.length === 1 ? `${action.history.length} entry` : `${action.history.length} entries`}
+            position={['first', 'last']}
+            onPress={() => navigation.navigate('ChecklistActionHistory', {
+              action,
+              modelId,
+            })}
+          />
+        </>
+      }
     </ScrollView>
   );
 };

@@ -128,6 +128,10 @@ export type ModelsNavigatorParamList = {
     modelId?: string;
     eventName: string;
   };
+  ChecklistActionHistory: {
+    action: JChecklistAction;
+    modelId: string;
+  };
   EnumPicker: EnumPickerInterface;
   Events: {
     modelId?: string;

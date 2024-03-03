@@ -169,18 +169,16 @@ function actionNonRepeatingScheduleState (
 
     if (checklistType === ChecklistType.OneTimeMaintenance) {
       after = 'immediately';
-      dueStr = 'Due now';
-      due = {value: 0, units: 'days', now: true};
     } else {
       after = schedule.following ? 'immediately' : 'immediatley at install';
+    }
 
-      if (history.length) {
-        dueStr = 'Has already been performed';
-        due = {value: 0, units: 'events', now: false};
-      } else {
-        dueStr = schedule.following ? 'Due now' : '';
-        due = {value: 0, units: 'days', now: true};
-      }
+    if (history.length) {
+      dueStr = 'Has already been performed';
+      due = {value: 0, units: 'events', now: false};
+    } else {
+      dueStr = (schedule.following || checklistType === ChecklistType.OneTimeMaintenance) ? 'Due now' : '';
+      due = {value: 0, units: 'days', now: true};
     }
   } else {
     value = `${schedule.value} `;

@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, ChecklistActionHistoryEntry, JChecklistAction, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItem, ListItemCheckboxInfo, ListItemInput, SectionListHeader, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
@@ -39,11 +39,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
-  const checklists = useRef(model?.checklists.filter(c => {
-    return c.type === ChecklistType.Maintenance;
-  })).current;
-
-  const actionsToDo = useRef(groupChecklistActions(checklists || []));
+  const [actionsToDo, setActionsToDo] = useState<SectionListData<ChecklistActionItemData, Section>[]>([]);
   const [selectedMaintenanceActions, setSelectedMaintenanceActions] = useState<string[]>([]);
 
   // Used to force a render since notes state changes are immediatley pushed to realm.
@@ -59,10 +55,18 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   });
 
   useEffect(() => {
+    const c = model?.checklists.filter(c => {
+      return c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance;
+    })
+    const sections = groupChecklistActions(c || []);
+    setActionsToDo(sections);
+  }, [model?.checklists]);
+
+  useEffect(() => {
     const onPerform = () => {
       // Write a history entry for each pending action.
       realm.write(() => {
-        actionsToDo.current.forEach(section => {
+        actionsToDo.forEach(section => {
           selectedMaintenanceActions.forEach(actionRefId => {
             const actionItem = section.data.find(item => item.action.refId === actionRefId);
             if (actionItem) {
@@ -125,7 +129,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     // Set the notes on the correct action using the data passed through the notes editor.
     const actionRefId = result.extraData;
     realm.write(() => {
-      actionsToDo.current.forEach(section => {
+      actionsToDo.forEach(section => {
         const actionItem = section.data.find(item => item.action.refId === actionRefId);
         if (actionItem) {
           actionItem.action.notes = result.text;
@@ -137,7 +141,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   const onAddOneTimeAction = (action: JChecklistAction) => {
     // Assign a refId to the action.
-    action.refId = uuidv4();console.log(JSON.stringify(action));
+    action.refId = uuidv4();
 
     const oneTimeChecklist = model?.checklists.find(c => c.type === ChecklistType.OneTimeMaintenance);
 
@@ -253,12 +257,11 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   return (
     <SectionList
-      contentContainerStyle={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
-      sections={actionsToDo.current}
+      sections={actionsToDo}
       keyExtractor={(item, index)=> `${index}${item.action.refId}`}
       renderItem={renderChecklistAction}
       renderSectionHeader={({section: {title}}) => (
@@ -281,6 +284,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
             }
           })}
         />
+        <Divider />
       </>
       }
     />

@@ -177,6 +177,12 @@ export type ModelsNavigatorParamList = {
     checklistRefId: string;
     actionRefId: string;
   };
+  ModelMaintenanceHistoryEntry: {
+    modelId: string;
+    checklistRefId: string;
+    actionRefId: string;
+    historyRefId: string;
+  };
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;

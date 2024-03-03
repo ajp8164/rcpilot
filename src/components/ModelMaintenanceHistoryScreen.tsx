@@ -1,7 +1,17 @@
 import { AppTheme, useTheme } from 'theme';
-import { ChecklistAction, ChecklistActionHistoryEntry, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
+import {
+  Checklist,
+  ChecklistAction,
+  ChecklistActionHistoryEntry,
+  JChecklistActionHistoryEntry
+} from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  SectionListHeader,
+  listItemPosition,
+  swipeableDeleteItem
+} from 'components/atoms/List';
 import { ListRenderItem, SectionList, SectionListData } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
@@ -26,6 +36,7 @@ type Section = {
 };
 
 type HistoryEntry = {
+  checklist: Checklist;
   action: ChecklistAction,
   history: ChecklistActionHistoryEntry,
 };
@@ -90,6 +101,7 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
       c.actions.forEach(a => {
         a.history.forEach(h => {
           e.push({
+            checklist: c,
             action: a,
             history: h,  
           } as HistoryEntry);
@@ -146,7 +158,12 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
         subtitle={subtitle}
         titleNumberOfLines={1}
         position={listItemPosition(index, entries.length)}
-        onPress={() => {return}}
+        onPress={() => navigation.navigate('ModelMaintenanceHistoryEntry',{
+          modelId,
+          checklistRefId: entry.checklist.refId,
+          actionRefId: entry.action.refId,
+          historyRefId: entry.history.refId,
+        })}
         editable={{
           item: {
             icon: 'remove-circle',

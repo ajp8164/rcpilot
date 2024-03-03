@@ -57,7 +57,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     refId: '',
     date: DateTime.now().toISO()!,
     modelTime: model ? model.totalTime : 0,
-    eventNumber: model ? model.totalEvents + 1 : 0,
+    eventNumber: model ? model.totalEvents : 0,
   });
 
   useEffect(() => {

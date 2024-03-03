@@ -271,7 +271,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   useFocusEffect(() => {
     let completedCount = 0;
     let pendingCount = 0;
-    const maintenanceChecklists = model?.checklists.filter(c => c.type === ChecklistType.Maintenance);
+    const maintenanceChecklists = model?.checklists.filter(c =>
+      c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance
+    );
     maintenanceChecklists?.forEach(c => {
       c.actions.forEach(a => {
         if (a.schedule.state.due.now) {

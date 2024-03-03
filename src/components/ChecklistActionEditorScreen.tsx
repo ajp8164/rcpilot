@@ -87,6 +87,11 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       // items first index = value wheel, items second index = timeframe wheel
       const todayIndex = initialScheduleItems.items[1].findIndex(k => k.label === ChecklistActionNonRepeatingScheduleTimeframe.Today);
       setSchedulePickerValue([initialScheduleItems.items[0][0].label, initialScheduleItems.items[1][todayIndex].label]);
+
+      // Only need to specify the type, other properties set via hook.
+      setSelectedSchedule({
+        type: ChecklistActionScheduleType.NonRepeating,
+      });
     } else if (!!!action) {
       // Default values for a new action.
       setSelectedSchedule({

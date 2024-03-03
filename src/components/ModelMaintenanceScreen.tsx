@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, ChecklistActionHistoryEntry, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
+import { Checklist, ChecklistAction, ChecklistActionHistoryEntry, JChecklistAction, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItem, ListItemCheckboxInfo, ListItemInput, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
@@ -106,9 +106,12 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     // Event handlers for EnumPicker
     event.on('maintenance-notes', onChangeNotes);
+    event.on('model-maintenance-one-time', onAddOneTimeAction);
 
     return () => {
       event.removeListener('maintenance-notes', onChangeNotes);
+      event.removeListener('model-maintenance-one-time', onAddOneTimeAction);
+      
     };
   }, []);
   
@@ -130,6 +133,33 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         }
       });
     });
+  };
+
+  const onAddOneTimeAction = (action: JChecklistAction) => {
+    // Assign a refId to the action.
+    action.refId = uuidv4();console.log(JSON.stringify(action));
+
+    const oneTimeChecklist = model?.checklists.find(c => c.type === ChecklistType.OneTimeMaintenance);
+
+    if (!oneTimeChecklist) {
+      // Lazily create the only one-time maintenance checklist for the model.
+      // Insert the action at the same time.
+      realm.write(() => {
+        const newModelChecklist = {
+          refId: uuidv4(),
+          name: 'One-Time Maintenance',
+          type: ChecklistType.OneTimeMaintenance,
+          actions: [action],
+        } as Checklist;
+
+        model!.checklists.push(newModelChecklist);
+      });
+    } else {
+      // Add the action to the models one-time maintenance checklist.
+      realm.write(() => {
+        oneTimeChecklist.actions.push(action as ChecklistAction);
+      });      
+    }
   };
 
   const togglePendMaintenanceItem = (actionRefId: string) => {

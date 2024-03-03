@@ -1,15 +1,28 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, ChecklistActionHistoryEntry, JChecklistAction, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import { ListItem, ListItemCheckboxInfo, ListItemInput, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import {
+  Checklist,
+  ChecklistAction,
+  ChecklistActionHistoryEntry,
+  JChecklistAction,
+  JChecklistActionHistoryEntry
+} from 'realmdb/Checklist';
+import { ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  ListItemInput,
+  SectionListHeader,
+  listItemPosition,
+  swipeableDeleteItem
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
-import { ChecklistType } from 'types/checklist';
 import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -18,6 +31,7 @@ import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
@@ -34,6 +48,8 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
 
@@ -53,14 +69,6 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     modelTime: model ? model.totalTime : 0,
     eventNumber: model ? model.totalEvents + 1 : 0,
   });
-
-  useEffect(() => {
-    const c = model?.checklists.filter(c => {
-      return c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance;
-    })
-    const sections = groupChecklistActions(c || []);
-    setActionsToDo(sections);
-  }, [model?.checklists]);
 
   useEffect(() => {
     const onPerform = () => {
@@ -105,6 +113,12 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
       },
     });
   }, [ selectedMaintenanceActions ]);
+
+  useEffect(() => {
+    // Checklists change when an action is performed.
+    // Note: deleted actions are reset at time of deletion, not on next render.
+    refreshActionsToDo();
+  }, [model?.checklists]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -165,6 +179,23 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  const refreshActionsToDo = () => {
+    const c = model?.checklists.filter(c => {
+      return c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance;
+    })
+    const sections = groupChecklistActions(c || []);
+    setActionsToDo(sections);
+  };
+
+  const deleteAction = (actionItem: ChecklistActionItemData) => {
+    realm.write(() => {
+      const index = actionItem.checklist.actions.findIndex(a => a.refId === actionItem.action.refId);
+      actionItem.checklist.actions.splice(index, 1);
+    });
+    // Need to refresh before next render so as to not reference a deleted object.
+    refreshActionsToDo();
+  };
+
   const togglePendMaintenanceItem = (actionRefId: string) => {
     if (selectedMaintenanceActions.includes(actionRefId)) {
       const actions = ([] as string[]).concat(selectedMaintenanceActions);
@@ -182,18 +213,31 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     checklists.forEach(c => {
       actions = c.actions.filter(a => a.schedule.state.due.now);
       actions.forEach(a => {
-        if (a.schedule.state.due.now) {
-          actionItemData.push({
-            checklist: c,
-            action: a,
-          });
-        }
+        actionItemData.push({
+          checklist: c,
+          action: a,
+        });
       });  
     });
 
     return groupItems<ChecklistActionItemData, Section>(actionItemData, (actionItem) => {
       return actionItem.checklist.name.toUpperCase();
     });
+  };
+
+  const actionSwipeable = (actionItem: ChecklistActionItemData) => {
+    return {
+      rightItems: [{
+        ...swipeableDeleteItem[theme.mode],
+        onPress: () => {
+          confirmAction(deleteAction, {
+            label: 'Delete Maintenance Action',
+            title: 'This action cannot be undone.\nAre you sure you want to delete this maintenance action?',
+            value: actionItem,
+          });
+        }
+      }]
+    }
   };
 
   const renderChecklistAction: SectionListRenderItem<ChecklistActionItemData, Section> = ({
@@ -207,10 +251,18 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   }) => {
     const isExpanded = selectedMaintenanceActions.includes(actionItem.action.refId);
     const isLastInList = index === section.data.length - 1;
+
+    // Cannot delete repeating actions.
+    const swipeable = actionItem.action.schedule.type === ChecklistActionScheduleType.NonRepeating
+      ? actionSwipeable(actionItem)
+      : {};
+
     return (
       <ListItemCheckboxInfo
+        ref={ref => ref && listEditor.add(ref, 'maintenance-actions', actionItem.action.refId)}
         key={actionItem.action.refId}
         title={actionItem.action.description}
+        titleNumberOfLines={1}
         subtitle={actionItem.action.schedule.state.text}
         iconChecked={'square-check'}
         iconUnchecked={'square'}
@@ -249,7 +301,10 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
               })}
             />
           </>
-        }  
+        }
+        swipeable={swipeable}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('maintenance-actions', actionItem.action.refId)}
+        onSwipeableWillClose={listEditor.onItemWillClose}
        /> 
     );
   };

@@ -41,6 +41,7 @@ export enum ChecklistType {
   PreEvent = 'Pre-Event',
   PostEvent = 'Post-Event',
   Maintenance = 'Maintenance',
+  OneTimeMaintenance = 'One-Time Maintenance',
 };
 
 export type EventSequenceChecklistType = ChecklistType.PreEvent | ChecklistType.PostEvent;

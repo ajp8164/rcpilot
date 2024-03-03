@@ -33,6 +33,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
     [ChecklistType.PreEvent]: [],
     [ChecklistType.PostEvent]: [],
     [ChecklistType.Maintenance]: [],
+    [ChecklistType.OneTimeMaintenance]: [],
   });
 
   useEffect(() => {
@@ -58,6 +59,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
       [ChecklistType.PreEvent]: pre,
       [ChecklistType.PostEvent]: post,
       [ChecklistType.Maintenance]: maint,
+      [ChecklistType.OneTimeMaintenance]: [], // Internally managed only.
     });
   }, [checklistTemplates]);
 

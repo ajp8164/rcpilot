@@ -282,7 +282,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => navigation.navigate('EnumPicker', {
           title: editingTemplate ? 'Template Type' : 'Checklist Type',
           headerBackTitle: 'Back',
-          values: Object.values(ChecklistType),
+          values: Object.values(ChecklistType).filter(t => t !== ChecklistType.OneTimeMaintenance),
           selected: type,
           eventName: `checklist-type-${eventNameId}`,
         })}

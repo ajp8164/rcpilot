@@ -18,7 +18,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
-import { secondsToMSS } from 'lib/formatters';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
 type Section = {
@@ -84,7 +83,9 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
   useEffect(() => {
     // Create the section list data set.
     let e: HistoryEntry[] = [];
-    const maintenanceChecklists = model?.checklists.filter(c => c.type === ChecklistType.Maintenance);
+    const maintenanceChecklists = model?.checklists.filter(c =>
+      c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance
+    );
     maintenanceChecklists?.forEach(c => {
       c.actions.forEach(a => {
         a.history.forEach(h => {
@@ -133,13 +134,17 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
     item: entry,
     index
   }) => {
+    let subtitle = DateTime.fromISO(entry.history.date).toFormat('M/d/yyyy h:mm a');
+    if (entry.action.notes) {
+      subtitle = `${subtitle}\n\n${entry.action.notes}`;
+    }
     return (
       <ListItem
         ref={ref => ref && listEditor.add(ref, 'model-maintenance-history', entry.action.refId)}
         key={`${index}`}
         title={entry.action.description}
-        value={DateTime.fromISO(entry.history.date).toFormat('M/d/yyyy h:mm a')}
-        subtitle={`Model Time ${secondsToMSS(entry.history.modelTime, {format: 'm:ss'})}`}
+        subtitle={subtitle}
+        titleNumberOfLines={1}
         position={listItemPosition(index, entries.length)}
         onPress={() => {return}}
         editable={{

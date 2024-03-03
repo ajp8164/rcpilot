@@ -360,9 +360,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       />
       {modelId && action &&
         <>
-          <Divider text={'HISTORY'} />
+          <Divider text={'LOG'} />
           <ListItem
-            title={'History'}
+            title={'Action Log'}
             value={action.history.length === 1 ? `${action.history.length} entry` : `${action.history.length} entries`}
             position={['first', 'last']}
             onPress={() => navigation.navigate('ChecklistActionHistory', {

@@ -172,7 +172,7 @@ export type ModelsNavigatorParamList = {
   ModelMaintenanceHistory: {
     modelId: string;
   };
-  ModelMaintenanceItem: {
+  ModelMaintenanceAction: {
     modelId: string;
     checklistRefId: string;
     actionRefId: string;

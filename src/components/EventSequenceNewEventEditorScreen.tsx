@@ -1,11 +1,12 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteryCycle, JBatteryDischarge, JBatteryDischargeValues } from 'realmdb/BatteryCycle';
 import { ChecklistActionHistoryEntry, JChecklistAction } from 'realmdb/Checklist';
+import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { eventKind, eventOutcomeIcons } from 'lib/event';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +21,6 @@ import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Event } from 'realmdb/Event';
 import { EventOutcome } from 'types/event';
 import { EventRating } from 'components/molecules/EventRating';
-import { EventSequenceChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
@@ -54,6 +54,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const currentEventSequence = useSelector(selectEventSequence);
   const events = useQuery(Event);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const checklists = useRef(model?.checklists.filter(c =>
+    c.type === ChecklistType.PreEvent || c.type === ChecklistType.PostEvent
+  ));
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const modelFuels = useQuery(ModelFuel);
   const modelPropellers = useQuery(ModelPropeller);
@@ -120,7 +123,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         model!.lastEvent = date.toISO()!;
 
         // Update model checklist actions.
-        model?.checklists.forEach(checklist => {
+        checklists.current?.forEach(checklist => {
           checklist.actions.forEach(action => {
             // Add a checklist action history entry to each action performed during this event.
             const historyEntry = currentEventSequence.checklistActionHistoryEntries[checklist.type as EventSequenceChecklistType][action.refId];
@@ -132,7 +135,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             action.schedule.state = actionScheduleState(
               action as JChecklistAction,
               checklist.type,
-              model
+              model!
             );
           });
         });

@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, ChecklistActionHistoryEntry, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { ListItem, ListItemCheckboxInfo, ListItemInput, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -222,25 +222,47 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <View style={theme.styles.view}>
-      <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
-        stickySectionHeadersEnabled={true}
-        style={[theme.styles.view, s.sectionList]}
-        sections={actionsToDo.current}
-        keyExtractor={(item, index)=> `${index}${item.action.refId}`}
-        renderItem={renderChecklistAction}
-        renderSectionHeader={({section: {title}}) => (
-          <SectionListHeader title={title} />
-        )}
-        ListFooterComponent={<Divider />}
-      />
-    </View>
+    <SectionList
+      contentContainerStyle={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}
+      stickySectionHeadersEnabled={true}
+      style={[theme.styles.view, s.sectionList]}
+      sections={actionsToDo.current}
+      keyExtractor={(item, index)=> `${index}${item.action.refId}`}
+      renderItem={renderChecklistAction}
+      renderSectionHeader={({section: {title}}) => (
+        <SectionListHeader title={title} />
+      )}
+      ListFooterComponent={
+        <>
+        <Divider />
+        <ListItem
+          title={'Add One-Time Maintenance'}
+          titleStyle={s.add}
+          position={['first', 'last']}
+          rightImage={false}
+          onPress={() => navigation.navigate('NewChecklistActionNavigator', {
+            screen: 'NewChecklistAction',
+            params: {
+              modelId,
+              checklistType: ChecklistType.Maintenance,
+              eventName: 'model-maintenance-one-time',
+            }
+          })}
+        />
+      </>
+      }
+    />
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  add: {
+    alignSelf: 'center',
+    textAlign: 'center',
+    color: theme.colors.screenHeaderButtonText,
+  },
   headerButton: {
     justifyContent: 'flex-start',
     paddingHorizontal: 0,

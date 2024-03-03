@@ -57,7 +57,11 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   // If refId is undefined then we're creating a new action.
   const isNewAction = useRef(checklistAction?.refId === undefined).current;
 
-  const initialScheduleItems = useRef(getChecklistActionScheduleItems(action?.schedule.type ? ChecklistActionScheduleType.NonRepeating : ChecklistActionScheduleType.Repeating)).current;
+  // Force non-repeating items for creating a one-time maintenance action.
+  const initialScheduleItems = useRef(getChecklistActionScheduleItems(
+    (action?.schedule.type || checklistType === ChecklistType.OneTimeMaintenance)
+      ? ChecklistActionScheduleType.NonRepeating
+      : ChecklistActionScheduleType.Repeating)).current;
 
   const [description, setDescription] = useState(action?.description);
   const [cost, setTotalCost] = useState(action?.cost?.toFixed(2));
@@ -65,16 +69,25 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const [selectedSchedule, setSelectedSchedule] = useSetState<Omit<ChecklistActionSchedule, keyof Realm.Object>>();
 
   const [schedulePickerOpen, setSchedulePickerOpen] = useState(false);
-  const [schedulePickerValue, setSchedulePickerValue] = useState<string[]>(action ? [action.schedule.value.toString(), action.schedule.period ] : initialScheduleItems.default.items);
   const schedulePickerItems = useRef(initialScheduleItems.items);
-  const [scheduleStr, setScheduleStr] = useSetState({
+  const [schedulePickerValue, setSchedulePickerValue] = useState<string[]>(
+    action
+    ? [action.schedule.value.toString(), action.schedule.period ]
+    : initialScheduleItems.default.items);
+
+  const [scheduleStr, setScheduleStr] = useState({
     following: '',
     whenPerform: '',
     whenPerformValue: '',
   });
 
   useEffect(() => {
-    if (!!!action) {
+    if (checklistType === ChecklistType.OneTimeMaintenance) {
+      // Set the selected schedule to 'Today' (appears in non-repeating schedule only).
+      // items first index = value wheel, items second index = timeframe wheel
+      const todayIndex = initialScheduleItems.items[1].findIndex(k => k.label === ChecklistActionNonRepeatingScheduleTimeframe.Today);
+      setSchedulePickerValue([initialScheduleItems.items[0][0].label, initialScheduleItems.items[1][todayIndex].label]);
+    } else if (!!!action) {
       // Default values for a new action.
       setSelectedSchedule({
         period: initialScheduleItems.default.frequency,
@@ -198,6 +211,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
       case ChecklistActionSchedulePeriod.Today:
         setScheduleStr({
+          following: '',
           whenPerform: ChecklistActionScheduleWhenPerform.Now,
           whenPerformValue,
         });
@@ -270,8 +284,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         onPress={toggleSchedulePickerOpen}
         rightImage={false}
         disabled={
-          action?.schedule.type === ChecklistActionScheduleType.NonRepeating && 
-          action?.history.length > 0
+          (action?.schedule.type === ChecklistActionScheduleType.NonRepeating && action?.history.length > 0) ||
+          checklistType === ChecklistType.OneTimeMaintenance
         }
         expanded={schedulePickerOpen}
         ExpandableComponent={
@@ -310,9 +324,12 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
           onValueChange={toggleActionRepeats}
         />
       :
-        <Divider type={'note'} text={'Changes to the action are limited because this action has been performed at least once.'} />
+        <Divider type={'note'} text={'Changes to the action are limited. This action has been performed at least once.'} />
       }
-      {checklistType === ChecklistType.Maintenance &&
+      {checklistType === ChecklistType.OneTimeMaintenance &&
+        <Divider type={'note'} text={'Changes to the action are limited. This is a one-time maintenance action.'} />
+      }
+      {(checklistType === ChecklistType.Maintenance || checklistType === ChecklistType.OneTimeMaintenance) &&
         <>
           <Divider text={'MAINTENANCE COSTS'} />
           <ListItemInput

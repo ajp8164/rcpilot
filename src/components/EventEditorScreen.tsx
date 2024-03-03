@@ -3,6 +3,7 @@ import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemDate, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { LogNavigatorParamList, ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
@@ -29,7 +30,6 @@ import { SvgXml } from 'react-native-svg';
 import { eventKind } from 'lib/event';
 import { eventOutcomeIcons } from 'lib/event';
 import { makeStyles } from '@rneui/themed';
-import { secondsToMSS } from 'lib/formatters';
 import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
@@ -59,7 +59,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const pilots = useQuery(Pilot);
 
   const [date, setDate] = useState(modelEvent?.createdOn);
-  const [duration, setDuration] = useState(modelEvent?.duration ? secondsToMSS(modelEvent.duration) : undefined);
+  const [duration, setDuration] = useState(secondsToMSS(modelEvent?.duration) || undefined);
   const [fuel, setFuel] = useState(modelEvent?.fuel || undefined);
   const [fuelConsumed, setFuelConsumed] = useState(modelEvent?.fuelConsumed?.toString() || undefined);
   const [propeller, setPropeller] = useState(modelEvent?.propeller || undefined);
@@ -75,9 +75,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     if (!eventId || !modelEvent) return;
 
-    const canSave =
+    const canSave = !!duration && (
       !eqString(modelEvent.date, date) ||
-      !eqNumber(modelEvent.duration, duration) ||
+      !eqNumber(modelEvent.duration, MSSToSeconds(duration).toString()) ||
       !eqObjectId(modelEvent.location, location) ||
       !eqString(modelEvent.outcome, outcome) ||
       !eqObjectId(modelEvent.propeller, propeller) ||
@@ -85,13 +85,14 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       !eqNumber(modelEvent.fuelConsumed, fuelConsumed) ||
       !eqObjectId(modelEvent.pilot, pilot) ||
       !eqObjectId(modelEvent.eventStyle, eventStyle) ||
-      !eqString(modelEvent.notes, notes);
+      !eqString(modelEvent.notes, notes)
+    );
 
     if (canSave) {
       realm.write(() => {
         modelEvent.updatedOn = DateTime.now().toISO()!;
         modelEvent.date = date!;
-        modelEvent.duration = toNumber(duration) || 0;
+        modelEvent.duration = MSSToSeconds(duration);
         modelEvent.outcome = outcome;
         modelEvent.propeller = propeller;
         modelEvent.fuel = fuel;

@@ -59,7 +59,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const pilots = useQuery(Pilot);
 
   const [date, setDate] = useState(modelEvent?.createdOn);
-  const [duration, setDuration] = useState(modelEvent?.duration ? secondsToMSS(modelEvent.duration / 1000) : undefined);
+  const [duration, setDuration] = useState(modelEvent?.duration ? secondsToMSS(modelEvent.duration) : undefined);
   const [fuel, setFuel] = useState(modelEvent?.fuel || undefined);
   const [fuelConsumed, setFuelConsumed] = useState(modelEvent?.fuelConsumed?.toString() || undefined);
   const [propeller, setPropeller] = useState(modelEvent?.propeller || undefined);

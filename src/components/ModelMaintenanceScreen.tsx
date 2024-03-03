@@ -86,6 +86,8 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
           });
         });
       });
+      // Completed all selected actions; reset.
+      setSelectedMaintenanceActions([]);
     };
 
     navigation.setOptions({
@@ -97,10 +99,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
             buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
             disabled={selectedMaintenanceActions.length === 0}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-            onPress={() => {
-              onPerform();
-              navigation.goBack();
-            }}
+            onPress={onPerform}
           />
         )
       },
@@ -262,7 +261,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
       sections={actionsToDo}
-      keyExtractor={(item, index)=> `${index}${item.action.refId}`}
+      keyExtractor={item => item.action.refId}
       renderItem={renderChecklistAction}
       renderSectionHeader={({section: {title}}) => (
         <SectionListHeader title={title} />

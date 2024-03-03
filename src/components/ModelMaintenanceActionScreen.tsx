@@ -13,9 +13,9 @@ import { View } from 'react-native';
 import { useObject } from '@realm/react';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenanceItem'>;
+export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenanceAction'>;
 
-const ModelMaintenanceItemScreen = ({ route }: Props) => {
+const ModelMaintenanceActionScreen = ({ route }: Props) => {
   const { modelId, checklistRefId, actionRefId } = route.params;
 
   const theme = useTheme();
@@ -72,4 +72,4 @@ const ModelMaintenanceItemScreen = ({ route }: Props) => {
   );
 };
 
-export default ModelMaintenanceItemScreen;
+export default ModelMaintenanceActionScreen;

@@ -273,7 +273,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         onPress={() => {
           togglePendMaintenanceItem(actionItem.action.refId);
         }}
-        onPressInfo={() => navigation.navigate('ModelMaintenanceItem', {
+        onPressInfo={() => navigation.navigate('ModelMaintenanceAction', {
           modelId,
           checklistRefId: actionItem.checklist.refId,
           actionRefId: actionItem.action.refId,

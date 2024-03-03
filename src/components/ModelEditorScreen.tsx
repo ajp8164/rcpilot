@@ -5,7 +5,7 @@ import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navi
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, useEvent } from 'lib/event';
-import { hmsMaskToSeconds, maskToHMS } from 'lib/formatters';
+import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -459,7 +459,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           {!!modelId &&
             <ListItem
               title={'Statistics'}
-              value={'4:00 in a event'}
+              value={`${secondsToMSS(model?.totalTime, {format: 'm:ss'})} in ${model?.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
               position={['first']}
               onPress={() => navigation.navigate('ModelStatistics', {
                 modelId,

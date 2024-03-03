@@ -246,7 +246,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
             screen: 'NewChecklistAction',
             params: {
               modelId,
-              checklistType: ChecklistType.Maintenance,
+              checklistType: ChecklistType.OneTimeMaintenance,
               eventName: 'model-maintenance-one-time',
             }
           })}

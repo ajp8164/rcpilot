@@ -150,7 +150,7 @@ function actionRepeatingScheduleState(
 
 function actionNonRepeatingScheduleState (
   action: JChecklistAction,
-  _checklistType: ChecklistType,
+  checklistType: ChecklistType,
   model?: Model,
 ) {
   const schedule = action.schedule; 
@@ -166,16 +166,22 @@ function actionNonRepeatingScheduleState (
   if (schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.Today) {
     value = '';
     timeframe = '';
-    after = schedule.following ? 'immediately' : 'immediatley at install';
 
-    if (history.length) {
-      dueStr = 'Has already been performed';
-      due = {value: 0, units: 'events', now: false};
-    } else {
-      dueStr = schedule.following ? 'Due now' : '';
+    if (checklistType === ChecklistType.OneTimeMaintenance) {
+      after = 'immediately';
+      dueStr = 'Due now';
       due = {value: 0, units: 'days', now: true};
-    }
+    } else {
+      after = schedule.following ? 'immediately' : 'immediatley at install';
 
+      if (history.length) {
+        dueStr = 'Has already been performed';
+        due = {value: 0, units: 'events', now: false};
+      } else {
+        dueStr = schedule.following ? 'Due now' : '';
+        due = {value: 0, units: 'days', now: true};
+      }
+    }
   } else {
     value = `${schedule.value} `;
     timeframe = schedule.period.replace('Events', eventKind(model?.type).namePlural.toLowerCase());

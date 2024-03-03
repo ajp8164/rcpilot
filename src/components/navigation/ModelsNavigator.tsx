@@ -99,7 +99,7 @@ const ModelsNavigator = () => {
         name="ChecklistActionHistory"
         component={ChecklistActionHistoryScreen}
         options={{
-          title: 'Action History',
+          title: 'Action Log',
         }}
       />
       <ModelsStack.Screen

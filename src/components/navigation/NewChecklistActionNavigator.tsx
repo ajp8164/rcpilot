@@ -40,7 +40,7 @@ const NewChecklistActionNavigator = () => {
           name="ChecklistActionHistory"
           component={ChecklistActionHistoryScreen}
           options={{
-            title: 'Action History',
+            title: 'Action Log',
           }}
         />
       </NewChecklistActionStack.Navigator>

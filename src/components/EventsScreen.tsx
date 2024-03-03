@@ -177,12 +177,12 @@ const EventsScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
-      sections={groupEvents(model.events)}
+      sections={groupEvents([...model.events].reverse())}
       keyExtractor={item => item._id.toString()}
       renderItem={renderEvent}
       renderSectionHeader={({section: {title}}) => (
         <Divider text={title} />
-      )}
+      )} 
     />
   );
 };

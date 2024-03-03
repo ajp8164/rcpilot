@@ -116,7 +116,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
       event.removeListener('model-maintenance-one-time', onAddOneTimeAction);
       
     };
-  }, []);
+  }, [ actionsToDo ]);
   
   const onChangeCost = (value: number, action: ChecklistAction) => {
     realm.write(() => {

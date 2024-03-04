@@ -13,7 +13,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import Realm, { BSON } from 'realm';
 import { actionScheduleState, getChecklistActionScheduleItems } from 'lib/checklist';
 import { eqNumber, eqString } from 'realmdb/helpers';
-import { eventKind, useEvent } from 'lib/event';
 
 import { CompositeScreenProps } from '@react-navigation/core';
 import { DateTime } from 'luxon';
@@ -24,7 +23,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
+import { eventKind } from 'lib/modelEvent';
 import { secondsToMSS } from 'lib/formatters';
+import { useEvent } from 'lib/event';
 import { useObject } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';

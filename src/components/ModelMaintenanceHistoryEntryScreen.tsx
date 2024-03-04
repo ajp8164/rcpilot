@@ -1,6 +1,5 @@
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { eventKind, useEvent } from 'lib/event';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -12,6 +11,8 @@ import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { View } from 'react-native';
+import { eventKind } from 'lib/modelEvent';
+import { useEvent } from 'lib/event';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenanceHistoryEntry'>;

@@ -4,14 +4,15 @@ import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem, Text, View } from 'react-native';
 import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { eventKind, useEvent } from 'lib/event';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { DateTime } from 'luxon';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { achievementConfig } from 'lib/achievement';
+import { eventKind } from 'lib/modelEvent';
 import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
 
 type AchievementModal = AchievementModalMethods;
 

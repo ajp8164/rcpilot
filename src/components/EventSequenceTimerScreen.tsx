@@ -6,7 +6,6 @@ import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/Lis
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { TimerMode, TimerState } from 'types/timer';
 import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analysis';
-import { eventKind, useEvent } from 'lib/event';
 import { modelChecklistActionsPending, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
@@ -22,11 +21,13 @@ import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SvgXml } from 'react-native-svg';
 import WheelPicker from 'components/atoms/WheelPicker';
+import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useEvent } from 'lib/event';
 import { useTimer } from 'lib/useTimer';
 
 type TimerButton = {

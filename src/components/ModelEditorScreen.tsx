@@ -146,11 +146,12 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           defaultStyle,
           scanCodeSize,
           notes,
-          stats: {
-            averageEventDuration: numTotalTime / numTotalEvents,
-            lastEvent,
-            totalEvents: numTotalEvents,
-            totalTime: numTotalTime,
+          statistics: {
+            eventDurationAverages: [],
+            crashCount: 0,
+            maintenanceCost: 0,
+            maintenanceCostUncertain: false,
+            perEventCost: 0,
           },
         });
       });

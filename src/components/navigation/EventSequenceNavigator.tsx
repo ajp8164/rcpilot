@@ -13,7 +13,7 @@ import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { eventKind } from 'lib/event';
+import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { store } from 'store';
 import { useRealm } from '@realm/react';

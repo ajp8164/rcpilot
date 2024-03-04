@@ -12,7 +12,7 @@ import {
 
 import { DateTime } from "luxon";
 import { Model } from "realmdb/Model";
-import { eventKind } from 'lib/event';
+import { eventKind } from 'lib/modelEvent';
 import { secondsToMSS } from "lib/formatters";
 
 export const actionScheduleState = (

@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { Event } from "realmdb/Event";
 import { achievementConfig } from ".";
 import { displayNotification } from "lib/notifications";
-import { eventKind } from 'lib/event';
+import { eventKind } from 'lib/modelEvent';
 import lodash from "lodash";
 import { selectPilot } from "store/selectors/pilotSelectors";
 import { useEffect } from "react";

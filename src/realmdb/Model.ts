@@ -38,6 +38,7 @@ export class Model extends Object<Model> {
   defaultStyle?: EventStyle;
   scanCodeSize?: ScanCodeSize;
   notes?: string;
+  statistics!: ModelStatistics;
 
   static schema: ObjectSchema = {
     name: 'Model',
@@ -69,7 +70,44 @@ export class Model extends Object<Model> {
       defaultStyle: 'EventStyle?',
       scanCodeSize: 'string?',
       notes: 'string?',
+      statistics: 'ModelStatistics',
     },
     primaryKey: '_id',
+  };
+};
+
+export class ModelStatistics extends Object<ModelStatistics> {
+  crashCount!: number;
+  eventDurationAverages!: ModelEventDurationAverage[];
+  maintenanceCost!: number;
+  maintenanceCostUncertain!: boolean;
+  perEventCost!: number;
+
+  static schema: ObjectSchema = {
+    name: 'ModelStatistics',
+    embedded: true,
+    properties: {
+      crashCount: 'int',
+      eventDurationAverages: 'ModelEventDurationAverage[]',
+      maintenanceCost: 'float',
+      maintenanceCostUncertain: 'bool',
+      perEventCost: 'float',
+    },
+  };
+};
+
+export class ModelEventDurationAverage extends Object<ModelEventDurationAverage> {
+  eventStyleId!: string;
+  percentageContribution!: number;
+  eventAverageDuration!: number;
+
+  static schema: ObjectSchema = {
+    name: 'ModelEventDurationAverage',
+    embedded: true,
+    properties: {
+      eventStyleId: 'string',
+      percentageContribution: 'float',
+      eventAverageDuration: 'int',
+    },
   };
 };

@@ -1,16 +1,19 @@
+import { ListRenderItem, ScrollView } from 'react-native';
+import { Model, ModelEventDurationAverage } from 'realmdb/Model';
+import { useObject, useRealm } from '@realm/react';
+
 import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { EventStyle } from 'realmdb/EventStyle';
+import { FlatList } from 'react-native-gesture-handler';
 import { ListItem } from 'components/atoms/List';
-import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
 import { secondsToMSS } from 'lib/formatters';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
-import { useObject } from '@realm/react';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelStatistics'>;
@@ -19,10 +22,28 @@ const ModelStatisticsScreen = ({ route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
+  const realm = useRealm();
+  
   const formatCurrency = useCurrencyFormatter();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
-  
+
+  const renderEventDurationAverage: ListRenderItem<ModelEventDurationAverage> = ({
+    item: average,
+  }) => {
+    const eventStyle = realm.objectForPrimaryKey(
+      EventStyle ,new BSON.ObjectId(average.eventStyleId)
+    );
+    return (
+      <ListItem
+        title={eventStyle?.name}
+        value={`${average.percentageContribution}, ${average.eventAverageDuration}`}
+        position={['first', 'last']}
+        rightImage={false}
+      />
+    );
+  };
+
   if (!model) {
     return (
       <EmptyView error message={'Model Not Found!'} />
@@ -30,15 +51,24 @@ const ModelStatisticsScreen = ({ route }: Props) => {
   };
 
   return (
-    <View style={theme.styles.view}>
-      <Divider text={`${eventKind(model.type).name.toUpperCase()} DURATION AVERAGES`} />
-      <ListItem
-        title={'style name'}
-        value={'100%, 0:18'}
-        position={['first', 'last']}
-        rightImage={false}
+    <ScrollView style={theme.styles.view}>
+      <FlatList
+        data={model.statistics.eventDurationAverages}
+        renderItem={renderEventDurationAverage}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+        ListHeaderComponent={
+          model.statistics.eventDurationAverages.length ?
+            <Divider text={`${eventKind(model.type).name.toUpperCase()} DURATION AVERAGES`} />
+            : null
+        }
+        ListFooterComponent={
+          model.statistics.eventDurationAverages.length
+            ? <Divider type={'note'} text={`Lists percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`} />
+            : <Divider />
+        }
       />
-      <Divider type={'note'} text={`Lists percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`} />
       <ListItem
         title={'Total Time'}
         value={`${model.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToMSS(model.totalTime, {format: 'm:ss'})}`}
@@ -48,7 +78,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       <Divider text={'CRASH SUMMARY'} />
       <ListItem
         title={'Crashes'}
-        value={'None'}
+        value={`${model.statistics.crashCount}`}
         position={['first', 'last']}
         rightImage={false}
       />
@@ -61,17 +91,19 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       />
       <ListItem
         title={'Maintenance'}
-        value={`$0.00`}
+        value={`${formatCurrency(model.statistics.maintenanceCost)}`}
         rightImage={false}
       />
       <ListItem
         title={`Per ${eventKind(model.type).name}`}
-        value={`$0.00`}
+        value={`${formatCurrency(model.statistics.perEventCost)}`}
         position={['last']}
         rightImage={false}
       />
-      <Divider type={'note'} text={'Costs are uncertain due to gaps in the underlying pricing or currency data.'} />
-    </View>
+      {(!model.purchasePrice || model.statistics.maintenanceCostUncertain) &&
+        <Divider type={'note'} text={'Costs are uncertain due to gaps in the underlying pricing or currency data.'} />
+      }
+    </ScrollView>
   );
 };
 

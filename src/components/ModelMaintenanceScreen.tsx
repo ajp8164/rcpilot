@@ -55,11 +55,8 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
-  const [actionsToDo, setActionsToDo] = useState<SectionListData<ChecklistActionItemData, Section>[]>([]);
+  const actionsToDo = refreshActionsToDo();
   const [selectedMaintenanceActions, setSelectedMaintenanceActions] = useState<string[]>([]);
-
-  // Used to force a render since notes state changes are immediatley pushed to realm.
-  const [render, setRender] = useState(false);
 
   // History captures the current date, the model time before the event, and the
   // event number at which the checklist action is performed.
@@ -71,33 +68,6 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   });
 
   useEffect(() => {
-    const onPerform = () => {
-      // Write a history entry for each pending action.
-      realm.write(() => {
-        actionsToDo.forEach(section => {
-          selectedMaintenanceActions.forEach(actionRefId => {
-            const actionItem = section.data.find(item => item.action.refId === actionRefId);
-            if (actionItem) {
-              // Note: write the history entry before updating the schedule.
-              actionItem.action.history.push({
-                ...newChecklistActionHistoryEntry,
-                refId: uuidv4(), // Create a unique reference
-              } as ChecklistActionHistoryEntry);
-
-              // Update the action schedule state.
-              actionItem.action.schedule.state = actionScheduleState(
-                actionItem.action,
-                actionItem.checklist.type,
-                model!,
-              );
-            }
-          });
-        });
-      });
-      // Completed all selected actions; reset.
-      setSelectedMaintenanceActions([]);
-    };
-
     navigation.setOptions({
       headerRight: () => {
         return (
@@ -115,12 +85,6 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   }, [ selectedMaintenanceActions ]);
 
   useEffect(() => {
-    // Checklists change when an action is performed.
-    // Note: deleted actions are reset at time of deletion, not on next render.
-    refreshActionsToDo();
-  }, [model?.checklists]);
-
-  useEffect(() => {
     // Event handlers for EnumPicker
     event.on('maintenance-notes', onChangeNotes);
     event.on('model-maintenance-one-time', onAddOneTimeAction);
@@ -131,11 +95,45 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
       
     };
   }, [ actionsToDo ]);
-  
+
+  const onPerform = () => {
+    // Write a history entry for each pending action.
+    realm.write(() => {
+      actionsToDo.forEach(section => {
+        selectedMaintenanceActions.forEach(actionRefId => {
+          const actionItem = section.data.find(item => item.action.refId === actionRefId);
+          if (actionItem) {
+            // Note: write the history entry before updating the schedule.
+            actionItem.action.history.push({
+              ...newChecklistActionHistoryEntry,
+              refId: uuidv4(), // Create a unique reference
+            } as ChecklistActionHistoryEntry);
+
+            // Update the action schedule state.
+            actionItem.action.schedule.state = actionScheduleState(
+              actionItem.action,
+              actionItem.checklist.type,
+              model!,
+            );
+          }
+        });
+      });
+    });
+    // Completed all selected actions; reset.
+    setSelectedMaintenanceActions([]);
+  };
+
   const onChangeCost = (value: number, action: ChecklistAction) => {
     realm.write(() => {
       action.cost = value;
     });
+  };
+
+  function refreshActionsToDo() {
+    const c = model?.checklists.filter(c => {
+      return c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance;
+    })
+    return groupChecklistActions(c || []);
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
@@ -146,7 +144,6 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         const actionItem = section.data.find(item => item.action.refId === actionRefId);
         if (actionItem) {
           actionItem.action.notes = result.text;
-          setRender(!render);
         }
       });
     });
@@ -179,21 +176,11 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const refreshActionsToDo = () => {
-    const c = model?.checklists.filter(c => {
-      return c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance;
-    })
-    const sections = groupChecklistActions(c || []);
-    setActionsToDo(sections);
-  };
-
   const deleteAction = (actionItem: ChecklistActionItemData) => {
     realm.write(() => {
       const index = actionItem.checklist.actions.findIndex(a => a.refId === actionItem.action.refId);
       actionItem.checklist.actions.splice(index, 1);
     });
-    // Need to refresh before next render so as to not reference a deleted object.
-    refreshActionsToDo();
   };
 
   const togglePendMaintenanceItem = (actionRefId: string) => {

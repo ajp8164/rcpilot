@@ -8,7 +8,7 @@ import { Location } from 'realmdb/Location';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { ModelType } from 'types/model';
 import { Pilot } from 'realmdb/Pilot';
-import { eventOutcomeIcons } from 'lib/event';
+import { eventOutcomeIcons } from 'lib/modelEvent';
 import { useRealm } from '@realm/react';
 
 export type EnumName = keyof typeof enumFilterConfigs;

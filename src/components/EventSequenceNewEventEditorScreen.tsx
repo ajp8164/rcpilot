@@ -7,7 +7,7 @@ import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native'
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useRef, useState } from 'react';
-import { eventKind, eventOutcomeIcons } from 'lib/event';
+import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';

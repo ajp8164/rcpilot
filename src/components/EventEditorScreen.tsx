@@ -7,6 +7,7 @@ import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
+import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -27,8 +28,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
-import { eventKind } from 'lib/event';
-import { eventOutcomeIcons } from 'lib/event';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 

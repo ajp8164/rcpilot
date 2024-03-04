@@ -7,7 +7,7 @@ import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { View } from 'react-native';
-import { eventKind } from 'lib/event';
+import { eventKind } from 'lib/modelEvent';
 import { secondsToMSS } from 'lib/formatters';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
 import { useObject } from '@realm/react';

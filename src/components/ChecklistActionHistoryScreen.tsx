@@ -11,7 +11,7 @@ import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import { eventKind } from 'lib/event';
+import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';

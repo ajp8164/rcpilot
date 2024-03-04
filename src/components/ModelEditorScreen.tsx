@@ -4,7 +4,6 @@ import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'component
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
-import { eventKind, useEvent } from 'lib/event';
 import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -29,8 +28,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
+import { eventKind } from 'lib/modelEvent';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useEvent } from 'lib/event';
 import { useFocusEffect } from '@react-navigation/native';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 

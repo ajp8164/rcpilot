@@ -38,6 +38,7 @@ import { selectEventSequence } from 'store/selectors/eventSequence';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
+import { useModelStatistics } from 'lib/analytics';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceNewEventEditor'>;
@@ -47,6 +48,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const s = useStyles(theme);
   const setScreenEditHeader = useScreenEditHeader();
   const confirmAction = useConfirmAction();
+  const modelStatistics = useModelStatistics();
   const event = useEvent();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -118,9 +120,11 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         // Note - update model before the checklist schedule since the scheduling replies
         // on current model state.
         const eventDuration = MSSToSeconds(duration);
-        model!.totalEvents = model!.totalEvents + 1;
-        model!.totalTime = model!.totalTime + eventDuration;
+
+        model!.statistics.totalEvents = model!.statistics.totalEvents + 1;
+        model!.statistics.totalTime = model!.statistics.totalTime + eventDuration;
         model!.lastEvent = date.toISO()!;
+        model!.statistics = modelStatistics(model!, eventDuration, eventStyle, outcome);
 
         // Update model checklist actions.
         checklists.current?.forEach(checklist => {
@@ -448,7 +452,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             values: modelPropellers.map(p => { return p.name }),
             selected: propeller?.name,
             mode: 'one-or-none',
-            eventName: 'default-propeller',
+            eventName: 'event-model-propeller',
           })}
         />
       }
@@ -464,7 +468,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           values: modelFuels.map(f => { return f.name }),
           selected: fuel?.name,
           mode: 'one-or-none',
-          eventName: 'event-fuel',
+          eventName: 'event-model-fuel',
         })}
       />
       <ListItemInput
@@ -503,7 +507,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           values: eventStyles.map(s => { return s.name }),
           selected: eventStyle?.name,
           mode: 'one-or-none',
-          eventName: 'event-style',
+          eventName: 'event-model-style',
         })}
       />
       <Divider text={'NOTES'} />

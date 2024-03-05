@@ -29,7 +29,9 @@ import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
+import { modelCostStatistics } from 'lib/analytics';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { useFocusEffect } from '@react-navigation/native';
@@ -65,8 +67,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [purchasePrice, setPurchasePrice] = useState(model?.purchasePrice?.toString() || undefined);
   const [damaged, setDamaged] = useState(model?.damaged || false);
   const [retired, setRetired] = useState(model?.retired || false);
-  const [totalEvents, setTotalEvents] = useState(model?.totalEvents?.toString() || undefined);
-  const [totalTime, setTotalTime] = useState(model?.totalTime?.toString() || undefined);
+  const [totalEvents, setTotalEvents] = useState(model?.statistics.totalEvents?.toString() || undefined);
+  const [totalTime, setTotalTime] = useState(model?.statistics.totalTime?.toString() || undefined);
   const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
   const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
   const [favoriteBatteries, setFavoriteBatteries] = useState(model?.favoriteBatteries || []);
@@ -101,8 +103,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       !eqNumber(model?.purchasePrice, purchasePrice) ||
       !eqBoolean(model?.damaged, damaged) ||
       !eqBoolean(model?.retired, retired) ||
-      !eqNumber(model?.totalEvents, totalEvents) ||
-      !eqNumber(model?.totalTime, totalTime) ||
+      !eqNumber(model?.statistics.totalEvents, totalEvents) ||
+      !eqNumber(model?.statistics.totalTime, totalTime) ||
       !eqString(model?.lastEvent, lastEvent) ||
       !eqBoolean(model?.logsBatteries, logsBatteries) ||
       !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
@@ -147,11 +149,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           scanCodeSize,
           notes,
           statistics: {
-            eventDurationAverages: [],
             crashCount: 0,
-            maintenanceCost: 0,
-            maintenanceCostUncertain: false,
+            eventDurationData: [],
             perEventCost: 0,
+            totalMaintenanceCost: 0,
+            uncertainCost: false,
           },
         });
       });
@@ -197,7 +199,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     const canSave = !!name && (
       !eqString(model?.name, name) ||
       !eqString(model?.image, image) ||
-      !eqString(model?.vendor, type) ||
+      !eqString(model?.vendor, vendor) ||
       !eqObjectId(model?.category, category) ||
       !eqNumber(model?.purchasePrice, purchasePrice) ||
       !eqBoolean(model?.damaged, damaged) ||
@@ -221,7 +223,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.image = image;
         model.vendor = vendor;
         model.category = category;
-        model.purchasePrice = toNumber(purchasePrice),
+        model.purchasePrice = toNumber(purchasePrice);
         model.retired = retired;
         model.damaged = damaged;
         model.logsBatteries = logsBatteries;
@@ -234,9 +236,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.defaultStyle = defaultStyle;
         model.scanCodeSize = scanCodeSize;
         model.notes = notes;
+        model.statistics = lodash.merge(model.statistics, modelCostStatistics(model));
       });
     }
-    }, [ 
+  }, [ 
     name,
     image,
     vendor,
@@ -461,7 +464,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           {!!modelId &&
             <ListItem
               title={'Statistics'}
-              value={`${secondsToMSS(model?.totalTime, {format: 'm:ss'})} in ${model?.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
+              value={`${secondsToMSS(model?.statistics.totalTime, {format: 'm:ss'})} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
               position={['first']}
               onPress={() => navigation.navigate('ModelStatistics', {
                 modelId,

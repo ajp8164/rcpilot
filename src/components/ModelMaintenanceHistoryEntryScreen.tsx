@@ -46,7 +46,7 @@ const ModelMaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   
   const onChangeCost = (value: number) => {
     realm.write(() => {
-      action!.cost = value;
+      history!.cost = value;
     });
   };
 
@@ -74,7 +74,7 @@ const ModelMaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
       <Divider text={'MAINTENANCE COSTS'}/>
       <ListItemInput
         title={'Total Costs'}
-        value={`${action.cost || 0}`}
+        value={`${history.cost || 0}`}
         numeric={true}
         numericProps={{maxValue: 99999}}
         keyboardType={'number-pad'}

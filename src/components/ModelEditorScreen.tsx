@@ -135,8 +135,6 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           purchasePrice: toNumber(purchasePrice),
           retired,
           damaged,
-          totalEvents: numTotalEvents,
-          totalTime: numTotalTime,
           lastEvent,
           logsBatteries,
           favoriteBatteries,
@@ -152,7 +150,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             crashCount: 0,
             eventDurationData: [],
             perEventCost: 0,
+            totalEvents: numTotalEvents,
             totalMaintenanceCost: 0,
+            totalTime: numTotalTime,
             uncertainCost: false,
           },
         });

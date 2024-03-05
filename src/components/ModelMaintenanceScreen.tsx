@@ -106,6 +106,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
             // Note: write the history entry before updating the schedule.
             actionItem.action.history.push({
               ...newChecklistActionHistoryEntry,
+              cost: actionItem.action.cost,
               refId: uuidv4(), // Create a unique reference
             } as ChecklistActionHistoryEntry);
 
@@ -124,6 +125,8 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
   };
 
   const onChangeCost = (value: number, action: ChecklistAction) => {
+    // The action will always have the last updated cost (even though the actual cost
+    // is stored with the history entry).
     realm.write(() => {
       action.cost = value;
     });

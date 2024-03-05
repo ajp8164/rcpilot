@@ -120,6 +120,7 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
   date!: ISODateString;
   modelTime!: number;
   eventNumber!: number;
+  cost?: number;
 
   static schema: ObjectSchema = {
     name: 'ChecklistActionHistoryEntry',
@@ -129,6 +130,7 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
       date: 'string',
       modelTime: 'int',
       eventNumber: 'int',
+      cost: 'float?',
     },
   };
 };

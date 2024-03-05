@@ -56,8 +56,8 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   const [newChecklistActionHistoryEntry] = useState<JChecklistActionHistoryEntry>({
     refId: '',
     date: DateTime.now().toISO()!,
-    modelTime: model ? model.totalTime : 0,
-    eventNumber: model ? model.totalEvents : 0,
+    modelTime: model ? model.statistics.totalTime : 0,
+    eventNumber: model ? model.statistics.totalEvents : 0,
   });
 
   useEffect(() => {

@@ -76,7 +76,7 @@ function actionRepeatingScheduleState(
         }
 
         lastPerformed = history[history.length - 1]?.eventNumber;
-        const eventsSinceLastPerformed = model.totalEvents - lastPerformed;
+        const eventsSinceLastPerformed = model.statistics.totalEvents - lastPerformed;
 
         if (eventsSinceLastPerformed >= schedule.value) {
           // Action is due
@@ -85,7 +85,7 @@ function actionRepeatingScheduleState(
         } else {
           // Action is not due
           const targetEvent = lastPerformed + (schedule.value - 1);
-          const estEvents = targetEvent - model.totalEvents;
+          const estEvents = targetEvent - model.statistics.totalEvents;
           due = {value: estEvents, units: 'events', now: estEvents === 0};
         }
         break;
@@ -98,23 +98,23 @@ function actionRepeatingScheduleState(
         }
 
         // Note: model time and model total time is expressed in seconds, convert to minutes.
-        const modelTotalTime = model.totalTime / 60;
+        const modelTotalTime = model.statistics.totalTime / 60;
 
         lastPerformed = history[history.length - 1].modelTime / 60;
         const minutesSinceLastPerformed = modelTotalTime - lastPerformed;
         
-        if (model.totalEvents === 0) {
+        if (model.statistics.totalEvents === 0) {
           // Due object value indicates calculation could not be performed
           due = {value: -1, units: 'events', now: false};
         } else if (minutesSinceLastPerformed >= schedule.value) {
           // Action is due
           const minutesPastDue = schedule.value - minutesSinceLastPerformed;
-          const modelAverageEventDurationMins = modelTotalTime / model.totalEvents;
+          const modelAverageEventDurationMins = modelTotalTime / model.statistics.totalEvents;
           const estEvents = Math.round(minutesPastDue / modelAverageEventDurationMins);
           due = {value: estEvents, units: 'events', now: true};
         } else {
           // Action is not due
-          const modelAverageEventDurationMins = modelTotalTime / model.totalEvents;
+          const modelAverageEventDurationMins = modelTotalTime / model.statistics.totalEvents;
           const estEvents = Math.round((schedule.value - minutesSinceLastPerformed) / modelAverageEventDurationMins);
           due = {value: estEvents, units: 'events', now: false};
         }
@@ -195,7 +195,7 @@ function actionNonRepeatingScheduleState (
         after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToMSS(schedule.following, {format: 'm:ss'})}`;
 
         const targetMinute = parseInt(schedule.following) + schedule.value;
-        const estMinutes = targetMinute - Math.trunc(model.totalTime / 60);
+        const estMinutes = targetMinute - Math.trunc(model.statistics.totalTime / 60);
 
         if (history.length) {
           dueStr = 'Has already been performed';
@@ -204,7 +204,7 @@ function actionNonRepeatingScheduleState (
           dueStr = 'Due today';
           due = {value: 0, units: 'events', now: true};
         } else if (estMinutes < 0) {
-          const modelAverageEventDuration = model.totalTime / model.totalEvents;
+          const modelAverageEventDuration = model.statistics.totalTime / model.statistics.totalEvents;
           const estEvents = modelAverageEventDuration / (estMinutes * 60);
 
           dueStr = `Past due by about ${Math.abs(estEvents)} ${eventKind(model.type).namePlural.toLowerCase()}`;
@@ -212,7 +212,7 @@ function actionNonRepeatingScheduleState (
           due = {value: estEvents, units: 'events', now: true};
         } else {
           let estEvents = 0;
-          const modelAverageEventDuration = model.totalTime / model.totalEvents;
+          const modelAverageEventDuration = model.statistics.totalTime / model.statistics.totalEvents;
 
           if (modelAverageEventDuration) {
             estEvents = modelAverageEventDuration / parseInt(schedule.following);
@@ -238,7 +238,7 @@ function actionNonRepeatingScheduleState (
         after = ` after ${eventKind(model?.type).name.toLowerCase()} #${schedule.following}`;
 
         const targetEvent = parseInt(schedule.following) + (schedule.value - 1);
-        const estEvents = targetEvent - model.totalEvents;
+        const estEvents = targetEvent - model.statistics.totalEvents;
 
         if (history.length) {
           dueStr = 'Has already been performed';

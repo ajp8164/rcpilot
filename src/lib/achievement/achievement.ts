@@ -14,7 +14,7 @@ type AchievementRule = {
 export const achievementConfig: Record<string, AchievementRule> = {
   ['First {Event}']: {
     criteria: [{
-      path: 'model.totalEvents',
+      path: 'model.statistics.totalEvents',
       value: 1,
       op: '>=',
     }, {

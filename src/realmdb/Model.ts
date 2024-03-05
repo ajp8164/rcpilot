@@ -24,8 +24,6 @@ export class Model extends Object<Model> {
   retired!: boolean;
   damaged!: boolean;
   requiresMaintenance!: boolean;
-  totalEvents!: number;
-  totalTime!: number;
   lastEvent?: ISODateString;
   events: Event[] = [];
   logsBatteries!: boolean;
@@ -56,8 +54,6 @@ export class Model extends Object<Model> {
       retired: { type: 'bool', default: false },
       damaged: { type: 'bool', default: false },
       requiresMaintenance: { type: 'bool', default: false },
-      totalEvents: 'int',
-      totalTime: 'int',
       lastEvent: 'string?',
       events: { type: 'list', objectType: 'Event', default: [] },
       logsBatteries: { type: 'bool', default: false },
@@ -78,36 +74,40 @@ export class Model extends Object<Model> {
 
 export class ModelStatistics extends Object<ModelStatistics> {
   crashCount!: number;
-  eventDurationAverages!: ModelEventDurationAverage[];
-  maintenanceCost!: number;
-  maintenanceCostUncertain!: boolean;
+  eventDurationData!: ModelEventDurationData[];
   perEventCost!: number;
+  totalEvents!: number;
+  totalMaintenanceCost!: number;
+  totalTime!: number;
+  uncertainCost!: boolean;
 
   static schema: ObjectSchema = {
     name: 'ModelStatistics',
     embedded: true,
     properties: {
       crashCount: 'int',
-      eventDurationAverages: 'ModelEventDurationAverage[]',
-      maintenanceCost: 'float',
-      maintenanceCostUncertain: 'bool',
+      eventDurationData: 'ModelEventDurationData[]',
       perEventCost: 'float',
+      totalEvents: 'int',
+      totalMaintenanceCost: 'float',
+      totalTime: 'int',
+      uncertainCost: 'bool',
     },
   };
 };
 
-export class ModelEventDurationAverage extends Object<ModelEventDurationAverage> {
+export class ModelEventDurationData extends Object<ModelEventDurationData> {
   eventStyleId!: string;
-  percentageContribution!: number;
-  eventAverageDuration!: number;
+  eventStyleCount!: number;
+  eventStyleDuration!: number;
 
   static schema: ObjectSchema = {
-    name: 'ModelEventDurationAverage',
+    name: 'ModelEventDurationData',
     embedded: true,
     properties: {
       eventStyleId: 'string',
-      percentageContribution: 'float',
-      eventAverageDuration: 'int',
+      eventStyleCount: 'int',
+      eventStyleDuration: 'int',
     },
   };
 };

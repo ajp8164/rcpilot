@@ -246,10 +246,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           </View>
           <View style={s.modelCardSubtitleContainer}>
             <Text style={s.modelCardSubtitle}>
-              {`${model.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
+              {`${model.statistics.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
             </Text>
             <Text style={s.modelCardSubtitle}>
-              {`${secondsToMSS(model.totalTime, {format: 'm:ss'})} total time`}
+              {`${secondsToMSS(model.statistics.totalTime, {format: 'm:ss'})} total time`}
             </Text>
           </View>
         </View>

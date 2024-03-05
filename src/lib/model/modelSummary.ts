@@ -1,5 +1,5 @@
 import { Model } from "realmdb/Model";
 
 export const modelShortSummary = (model: Model) => {
-  return `${model.totalEvents || 0} events\n${model.totalTime} total time`;
+  return `${model.statistics.totalEvents || 0} events\n${model.statistics.totalTime} total time`;
 };

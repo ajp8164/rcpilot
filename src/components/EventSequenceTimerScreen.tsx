@@ -5,7 +5,7 @@ import { FlatList, Image, ListRenderItem, Pressable, ScrollView, Text, View } fr
 import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/List';
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { TimerMode, TimerState } from 'types/timer';
-import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analysis';
+import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analytics';
 import { modelChecklistActionsPending, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';

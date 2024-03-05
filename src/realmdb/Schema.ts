@@ -9,7 +9,7 @@ import {
 } from './Checklist';
 import { Filter, FilterState } from './Filter';
 import { Location, LocationPosition } from './Location';
-import { Model, ModelEventDurationAverage, ModelStatistics } from './Model';
+import { Model, ModelEventDurationData, ModelStatistics } from './Model';
 
 import { Battery } from './Battery';
 import { Checklist } from './Checklist';
@@ -50,7 +50,7 @@ const Schema = [
   ChecklistActionScheduleState,
   FilterState,
   LocationPosition,
-  ModelEventDurationAverage,
+  ModelEventDurationData,
   ModelStatistics,
 ];
 

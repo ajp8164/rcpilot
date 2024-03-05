@@ -321,7 +321,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         onPress={() => null}
       />
-      {!action?.history.length ?
+      {!action?.history.length &&
         <ListItemSwitch
           title={'Action Repeats'}
           value={selectedSchedule.type === ChecklistActionScheduleType.Repeating}
@@ -329,11 +329,12 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
           position={['last']}
           onValueChange={toggleActionRepeats}
         />
-      :
-        <Divider type={'note'} text={'Changes to the action are limited. This action has been performed at least once.'} />
       }
-      {checklistType === ChecklistType.OneTimeMaintenance &&
-        <Divider type={'note'} text={'Changes to the action are limited. This is a one-time maintenance action.'} />
+      {checklistType === ChecklistType.OneTimeMaintenance
+        ? <Divider type={'note'} text={'Changes to the action are limited. This is a one-time maintenance action.'} />
+        : action?.history.length
+          ? <Divider type={'note'} text={'Changes to the action are limited. This action has been performed at least once.'} />
+          : null
       }
       {(checklistType === ChecklistType.Maintenance || checklistType === ChecklistType.OneTimeMaintenance) &&
         <>

@@ -16,6 +16,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -62,6 +63,10 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
 
   const maintenanceModelChecklists = () => {
     return model?.checklists.filter(t => t.type === ChecklistType.Maintenance) || [];
+  };
+
+  const oneTimeMaintenanceModelChecklists = () => {
+    return model?.checklists.filter(t => t.type === ChecklistType.OneTimeMaintenance) || [];
   };
 
   useEffect(() => {
@@ -140,6 +145,16 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   };
 
   const renderChecklist = (checklist: Checklist, index: number, arrLength: number) => {
+    // Cannot delete the one-time maintenance list.
+    let swipeable = {};
+    if (checklist.type !== ChecklistType.OneTimeMaintenance) {
+      swipeable = {
+        rightItems: [{
+          ...swipeableDeleteItem[theme.mode],
+          onPress: () => confirmDeleteChecklist(checklist)
+        }]
+      };
+    }
     return (
       <ListItem
         ref={ref => ref && listEditor.add(ref, 'checklists', checklist.refId)}
@@ -160,12 +175,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
           reorder: true,
         }}
         showEditor={listEditor.show}
-        swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmDeleteChecklist(checklist)
-          }]
-        }}
+        swipeable={swipeable}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', checklist.refId)}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -202,6 +212,17 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
       checklist,
       index,
       maintenanceModelChecklists().length,
+    );
+  };
+
+  const renderOneTimeMaintenanceChecklist: ListRenderItem<Checklist> = ({
+    item: checklist,
+    index
+  }) => {
+    return renderChecklist(
+      checklist,
+      index,
+      oneTimeMaintenanceModelChecklists().length,
     );
   };
 
@@ -252,6 +273,21 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
           maintenanceModelChecklists().length > 0
             ? <Divider text={'MAINTENANCE'}/>
             : <></>            
+        }
+      />
+      <FlatList
+        data={oneTimeMaintenanceModelChecklists()}
+        renderItem={renderOneTimeMaintenanceChecklist}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
+        ListHeaderComponent={
+          oneTimeMaintenanceModelChecklists().length > 0
+            ? <Divider text={'ONE-TIME MAINTENANCE'}/>
+            : <></>            
+        }
+        ListFooterComponent={
+          <Divider type={'note'} text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}/>
         }
       />
       <Divider />

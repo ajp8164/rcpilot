@@ -273,12 +273,15 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         value={name}
         placeholder={editingTemplate ? 'Checklist Template Name' : 'Checklist Name'}
         position={['first']}
+        disabled={type === ChecklistType.OneTimeMaintenance}
         onChangeText={setName}
       /> 
       <ListItem
         title={editingTemplate ? 'Template for List Type' : 'List Type'}
         value={type}
         position={['last']}
+        rightImage={type !== ChecklistType.OneTimeMaintenance}
+        disabled={type === ChecklistType.OneTimeMaintenance}
         onPress={() => navigation.navigate('EnumPicker', {
           title: editingTemplate ? 'Template Type' : 'Checklist Type',
           headerBackTitle: 'Back',

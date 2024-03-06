@@ -183,16 +183,15 @@ const ModelsNavigator = () => {
         name="Events"
         component={EventsScreen}
         options={({ route }) => ({
-          headerTitle: `${eventKind(route.params.modelType).name} Log`,
-          title: 'Model',
+          title: `${eventKind(route.params.modelType).name} Log`,
         })}
       />
       <ModelsStack.Screen
         name="EventEditor"
         component={EventEditorScreen}
-        options={{
-          title: 'Event Details',
-        }}
+        options={({ route }) => ({
+          headerTitle: `${eventKind(route.params.modelType).name} Details`,
+        })}
       />
       <ModelsStack.Screen
         name='ModelChecklists'

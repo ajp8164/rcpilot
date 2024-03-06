@@ -67,6 +67,12 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
   const [action, setAction] = useState<Action>(initialAction);
 
+  const lastCycleDate = lastCycle
+    ? isCharged
+      ? `${DateTime.fromISO(lastCycle.charge!.date).toFormat('M/d/yyyy')} (charge)`
+      : `${DateTime.fromISO(lastCycle.discharge!.date).toFormat('M/d/yyyy')} (discharge)`
+    : 'none'
+
   useEffect(() => {
     if (!battery) return;
 
@@ -210,7 +216,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     <Divider text={'BATTERY'} />
     <ListItem
         title={battery.name}
-        subtitle={'TODO event detail'}
+        subtitle={`${battery.cRating}mAh, ${battery.sCells}S/${battery.pCells}P ${battery.chemistry}, ${battery.cycles.length} cycles\nLast: ${lastCycleDate}`}
         subtitleNumberOfLines={2}
         containerStyle={{
           ...s.batteryTint,

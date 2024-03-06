@@ -12,6 +12,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
+import lodash from 'lodash';
+import { modelCostStatistics } from 'lib/analytics';
 import { useEvent } from 'lib/event';
 import { useTheme } from 'theme';
 
@@ -46,6 +48,12 @@ const ModelMaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   
   const onChangeCost = (value: number) => {
     realm.write(() => {
+      // Update the model with maintenance cost change.
+      model!.statistics = lodash.merge(
+        model!.statistics,
+        modelCostStatistics(model!, {oldValue: history!.cost, newValue: value})
+      );
+
       history!.cost = value;
     });
   };

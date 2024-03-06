@@ -8,6 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
+import { modelEventOutcomeStatistics, useModelStatistics } from 'lib/analytics';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -28,9 +29,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
-import { useModelStatistics } from 'lib/analytics';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'EventEditor'>,
@@ -90,7 +91,11 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     );
 
     if (canSave) {
-      const previousEventStyle = modelEvent.eventStyle;
+      const previous = {
+        eventStyle: modelEvent.eventStyle,
+        duration: modelEvent.duration,
+        outcome: modelEvent.outcome,
+      };
 
       realm.write(() => {
         modelEvent.updatedOn = DateTime.now().toISO()!;
@@ -105,17 +110,31 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         modelEvent.notes = notes;
 
         // Update model statistics with changes made here.
-        modelEvent.model.statistics.totalTime =
-          modelEvent.model.statistics.totalTime - modelEvent.duration + MSSToSeconds(duration);
+        // Recompute event duration data only when inputs change.
+        if (previous.duration !== modelEvent.duration ||
+          previous.eventStyle?._id.toString() !== modelEvent.eventStyle?._id.toString()) {
 
-        modelEvent.model.statistics = modelStatistics(
-          'update',
-          modelEvent.model,
-          MSSToSeconds(duration),
-          outcome,
-          previousEventStyle,
-          eventStyle,
-        );
+            modelEvent.model.statistics.eventDurationData =
+              modelStatistics(
+                'update',
+                modelEvent.model,
+                modelEvent.duration,
+                previous.eventStyle,
+                eventStyle
+              );
+        }
+
+        if (previous.outcome !== modelEvent.outcome) {
+          modelEvent.model.statistics = lodash.merge(
+            modelEvent.model.statistics,
+            modelEventOutcomeStatistics(modelEvent.model, outcome),
+          );
+        }
+
+        if (previous.duration !== modelEvent.duration) {
+          modelEvent.model.statistics.totalTime =
+            modelEvent.model.statistics.totalTime + modelEvent.duration;
+        }
       });
     }
   }, [ 
@@ -383,9 +402,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
           <Divider
             text={modelEvent.batteryCycles.length === 1 ? 'BATTERY USED' : 'BATTERIES USED'} />
           }
-          ListFooterComponent={<Divider />}
         />
       }
+      <Divider />
     </ScrollView>
   );
 };

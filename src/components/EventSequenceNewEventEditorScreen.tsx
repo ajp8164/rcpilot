@@ -6,8 +6,10 @@ import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
+import { Model, ModelStatistics } from 'realmdb/Model';
 import React, { useEffect, useRef, useState } from 'react';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
+import { modelCostStatistics, modelEventOutcomeStatistics, useModelStatistics } from 'lib/analytics';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -24,7 +26,6 @@ import { EventRating } from 'components/molecules/EventRating';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
-import { Model } from 'realmdb/Model';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -38,7 +39,6 @@ import { selectEventSequence } from 'store/selectors/eventSequence';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
-import { useModelStatistics } from 'lib/analytics';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceNewEventEditor'>;
@@ -124,7 +124,13 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         model!.lastEvent = date.toISO()!;
         model!.statistics.totalEvents = model!.statistics.totalEvents + 1;
         model!.statistics.totalTime = model!.statistics.totalTime + eventDuration;
-        model!.statistics = modelStatistics('add', model!, eventDuration, outcome, undefined, eventStyle);
+
+        model!.statistics = {
+          ...model!.statistics,
+          ...modelCostStatistics(model!),
+          ...modelEventOutcomeStatistics(model!, outcome),
+          eventDurationData: modelStatistics('add', model!, eventDuration, undefined, eventStyle),
+        } as ModelStatistics;
 
         // Update model checklist actions.
         checklists.current?.forEach(checklist => {

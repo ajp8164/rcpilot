@@ -88,7 +88,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
   }, [ list ]);
 
   const toggleSelect = (value?: string) => {
-    if (mode === 'one') {
+    if (mode === 'one' || mode === 'one-or-none') {
       value ? setList({ selected: [value] }) : setList({ selected: [] }, {assign: true});
     } else if (value) {
       if (list.selected.includes(value)) {

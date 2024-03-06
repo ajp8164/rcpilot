@@ -30,6 +30,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
+import { useModelStatistics } from 'lib/analytics';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'EventEditor'>,
@@ -47,6 +48,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
+  const modelStatistics = useModelStatistics();
   const realm = useRealm();
 
   const modelEvent = useObject(Event, new BSON.ObjectId(eventId));
@@ -88,6 +90,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     );
 
     if (canSave) {
+      const previousEventStyle = modelEvent.eventStyle;
+
       realm.write(() => {
         modelEvent.updatedOn = DateTime.now().toISO()!;
         modelEvent.date = date!;
@@ -99,6 +103,19 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         modelEvent.pilot = pilot;
         modelEvent.eventStyle = eventStyle;
         modelEvent.notes = notes;
+
+        // Update model statistics with changes made here.
+        modelEvent.model.statistics.totalTime =
+          modelEvent.model.statistics.totalTime - modelEvent.duration + MSSToSeconds(duration);
+
+        modelEvent.model.statistics = modelStatistics(
+          'update',
+          modelEvent.model,
+          MSSToSeconds(duration),
+          outcome,
+          previousEventStyle,
+          eventStyle,
+        );
       });
     }
   }, [ 
@@ -285,7 +302,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
             values: modelPropellers.map(p => { return p.name }),
             selected: propeller?.name,
             mode: 'one-or-none',
-            eventName: 'default-propeller',
+            eventName: 'event-model-propeller',
           })}
         />
       }
@@ -301,7 +318,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
           values: modelFuels.map(f => { return f.name }),
           selected: fuel?.name,
           mode: 'one-or-none',
-          eventName: 'event-fuel',
+          eventName: 'event-model-fuel',
         })}
       />
       <ListItemInput
@@ -341,7 +358,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
           values: eventStyles.map(s => { return s.name }),
           selected: eventStyle?.name,
           mode: 'one-or-none',
-          eventName: 'event-style',
+          eventName: 'event-model-style',
         })}
       />
       <Divider text={'NOTES'} />

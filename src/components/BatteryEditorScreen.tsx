@@ -260,6 +260,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         <ListItemInput
           value={name}
           placeholder={'New Battery'}
+          placeholderTextColor={theme.colors.assertive}
           position={['first']}
           onChangeText={setName}
         />

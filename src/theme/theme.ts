@@ -20,11 +20,8 @@ export const theme = createTheme(
       ],
       brandPrimary: '#002e5a',
       brandSecondary: '#007bff',
-      calm: '#b260ea',
-      cardBackground: '#202020',
       disabled: '#787878',
       listItemBackgroundAlt: '#101010',
-      shadowColor: '#00000000',
 
       ...Platform.select({
         ios: {
@@ -57,11 +54,8 @@ export const theme = createTheme(
       ],
       brandPrimary: '#002e5a',
       brandSecondary: '#007bff',
-      calm: '#b260ea',
-      cardBackground: '#ffffff',
       disabled: '#787878',
       listItemBackgroundAlt: '#f7f7f7',
-      shadowColor: '#000000',
 
       ...Platform.select({
         ios: {

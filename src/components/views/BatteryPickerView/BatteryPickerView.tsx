@@ -1,12 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
-import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
+import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
-import { Divider } from '@react-native-ajp-elements/ui';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import React from 'react';
 import { groupItems } from 'lib/sectionList';
@@ -129,7 +128,7 @@ const BatteryPickerView = React.forwardRef<BatteryPickerView, BatteryPickerViewP
       keyExtractor={item => item._id.toString()}
       renderItem={renderBattery}
       renderSectionHeader={({section: {title}}) => (
-        <Divider text={title} />
+        <SectionListHeader title={title} />
       )}
     />
   );

@@ -1,7 +1,7 @@
 import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
 import { AppTheme, useTheme } from 'theme';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
-import { ListItem, listItemPosition } from 'components/atoms/List';
+import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
 import { SectionListData, Text, TouchableOpacity, View } from 'react-native';
 import {getTheme, themeColor} from '../mocks/calendarTheme';
@@ -364,11 +364,7 @@ const LogScreen = ({ navigation }: Props) => {
         // sectionStyle={s.section}
         // dayFormat={'yyyy-MM-d'}
         renderSectionHeader={(title: string | any) => (  // Lib typing is incorrect
-          <View style={s.sectionHeaderContainer}>
-            <Text style={s.sectionHeader}>
-              {DateTime.fromISO(title).toFormat('MMMM d, yyyy')}
-            </Text>
-          </View>
+          <SectionListHeader title={DateTime.fromISO(title).toFormat('MMMM d, yyyy')} />
         )}
       />
       <Divider />
@@ -380,16 +376,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   calendar: {
     paddingLeft: 20,
     paddingRight: 20
-  },
-  sectionHeaderContainer: {
-    height: 35,
-    paddingTop: 12,
-    paddingHorizontal: 25,
-    backgroundColor: theme.colors.listHeaderBackground,
-  },
-  sectionHeader: {
-    ...theme.styles.textSmall,
-    ...theme.styles.textDim
   },
   eventDayContainer: {
     alignItems: 'center',

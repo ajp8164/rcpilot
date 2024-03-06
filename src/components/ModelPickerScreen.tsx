@@ -1,7 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
-import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
+import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelShortSummary, modelTypeIcons } from 'lib/model';
 
@@ -10,6 +9,7 @@ import { Model } from 'realmdb/Model';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SvgXml } from 'react-native-svg';
+import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
@@ -146,7 +146,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       keyExtractor={item => item._id.toString()}
       renderItem={renderItem}
       renderSectionHeader={({section: {title}}) => (
-        <Divider text={title} />
+        <SectionListHeader title={title} />
       )}
     />
   );

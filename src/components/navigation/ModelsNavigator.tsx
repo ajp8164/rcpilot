@@ -25,6 +25,7 @@ import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { eventKind } from 'lib/modelEvent';
 import { useTheme } from 'theme';
 
 const ModelsStack = createNativeStackNavigator<ModelsNavigatorParamList>();
@@ -181,6 +182,10 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name="Events"
         component={EventsScreen}
+        options={({ route }) => ({
+          headerTitle: `${eventKind(route.params.modelType).name} Log`,
+          title: 'Model',
+        })}
       />
       <ModelsStack.Screen
         name="EventEditor"

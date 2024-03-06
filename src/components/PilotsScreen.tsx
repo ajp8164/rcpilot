@@ -118,7 +118,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     minWidth: 0,
   },
   headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
+    color: theme.colors.clearButtonText,
     fontSize: 22,
   },
 }));

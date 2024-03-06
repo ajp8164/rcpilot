@@ -20,7 +20,7 @@ const BatteryPerformanceNavigator = () => {
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
+          headerTintColor: theme.colors.clearButtonText,
         }}>
         <BatteryPerformanceStack.Screen
           name='BatteryPerformanceFilters'

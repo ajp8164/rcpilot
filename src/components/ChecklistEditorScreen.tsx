@@ -332,7 +332,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   actionTitle: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderButtonText,
+    color: theme.colors.clearButtonText,
   },
   actionsList: {
     overflow: 'visible',

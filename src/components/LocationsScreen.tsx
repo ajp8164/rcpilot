@@ -225,7 +225,7 @@ const LocationsScreen = ({ navigation }: Props) => {
               <CustomIcon
                 name={recenterButtonState}
                 size={28}
-                color={theme.colors.screenHeaderButtonText}
+                color={theme.colors.clearButtonText}
               />
             ),
             onPress: recenterMap
@@ -234,7 +234,7 @@ const LocationsScreen = ({ navigation }: Props) => {
               <Icon
                 name={'location-dot'}
                 size={28}
-                color={theme.colors.screenHeaderButtonText}
+                color={theme.colors.clearButtonText}
               />
             ),
             onPress: addLocation
@@ -244,7 +244,7 @@ const LocationsScreen = ({ navigation }: Props) => {
                 solid
                 name={mapPresentation.icon}
                 size={28}
-                color={theme.colors.screenHeaderButtonText}
+                color={theme.colors.clearButtonText}
               />
             ),
             onPress: toggleMapPresenation

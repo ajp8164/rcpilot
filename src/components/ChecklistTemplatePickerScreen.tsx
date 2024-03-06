@@ -169,7 +169,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   headerIcon: {
-    color: theme.colors.clearButtonText,
+    color: theme.colors.screenHeaderButtonText,
     fontSize: 22,
   },
 }));

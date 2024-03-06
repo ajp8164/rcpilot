@@ -20,7 +20,7 @@ const NewBatteryCycleNavigator = () => {
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.clearButtonText,
+          headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewBatteryCycleStack.Screen
           name='NewBatteryCycle'

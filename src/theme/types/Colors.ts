@@ -5,5 +5,6 @@ declare module '@rneui/themed' {
     readonly avatarColors: string[];
     readonly clearButtonText: string;
     readonly listItemBackgroundAlt: string;
+    readonly screenHeaderButtonText: string;
   }
 }

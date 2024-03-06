@@ -286,7 +286,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <CustomIcon
               name={'circle-info'}
               size={20}
-              color={theme.colors.midGray}
+              color={theme.colors.clearButtonText}
               style={{ paddingRight: 5}}
             />
           }
@@ -302,7 +302,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Icon
               name={'circle-play'}
               size={20}
-              color={theme.colors.midGray}
+              color={theme.colors.clearButtonText}
               style={{ paddingRight: 5}}
             />
           }
@@ -480,7 +480,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   headerIcon: {
-    color: theme.colors.clearButtonText,
+    color: theme.colors.screenHeaderButtonText,
     fontSize: 22,
     marginHorizontal: 10,
   },
@@ -545,7 +545,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.buttonScreenHeaderTitle,
     ...theme.styles.textSmall,
     ...theme.styles.textBold,
-    color: theme.colors.midGray,
+    color: theme.colors.clearButtonText,
   },
   modelCardButton: {
     ...theme.styles.buttonScreenHeader,

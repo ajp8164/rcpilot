@@ -82,7 +82,7 @@ export const ModelHeader = ({
 
   return (
     <>
-      {/* // Collapsed header */}
+      {/* Collapsed header */}
       <Animated.View style={[s.collapsedHeader, {height: minHeight}, collapsedHeaderOpacity]}>
           <Text style={s.title}>
             {model?.name}
@@ -144,7 +144,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   buttonLeft: {
     top: -22,
     fontSize: 22,
-    color: theme.colors.whiteTransparentMid,
+    width: 50,
+    color: theme.colors.whiteTransparentMid
   },
   buttonLeftContainer: {
     position: 'absolute',

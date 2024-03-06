@@ -3,6 +3,7 @@ import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
+import { batteryCycleSummary, batteryTintIcons } from 'lib/battery';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -17,7 +18,6 @@ import { MSSToSeconds } from 'lib/formatters';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { toNumber } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';
@@ -66,12 +66,6 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
   const [action, setAction] = useState<Action>(initialAction);
-
-  const lastCycleDate = lastCycle
-    ? isCharged
-      ? `${DateTime.fromISO(lastCycle.charge!.date).toFormat('M/d/yyyy')} (charge)`
-      : `${DateTime.fromISO(lastCycle.discharge!.date).toFormat('M/d/yyyy')} (discharge)`
-    : 'none'
 
   useEffect(() => {
     if (!battery) return;
@@ -216,7 +210,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     <Divider text={'BATTERY'} />
     <ListItem
         title={battery.name}
-        subtitle={`${battery.cRating}mAh, ${battery.sCells}S/${battery.pCells}P ${battery.chemistry}, ${battery.cycles.length} cycles\nLast: ${lastCycleDate}`}
+        subtitle={batteryCycleSummary(battery)}
         subtitleNumberOfLines={2}
         containerStyle={{
           ...s.batteryTint,

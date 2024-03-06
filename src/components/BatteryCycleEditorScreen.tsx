@@ -18,6 +18,7 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { batterySummary } from 'lib/battery';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
@@ -190,14 +191,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
 
   const onChangeNotes = (result: NotesEditorResult) => {
     setNotes(result.text);
-  };
-
-  const batterySummary = (battery: Battery) => {
-    const capacity = `${battery.capacity}mAh`;
-    const cells = `${battery.sCells}S/${battery.pCells}P`;
-    const chemistry = battery.chemistry;
-    const cycles = `Cycle ${cycle?.cycleNumber} of ${battery.totalCycles} cycles`;
-    return `${capacity} ${cells} ${chemistry}\n${cycles}`;
   };
 
   if (!battery) {

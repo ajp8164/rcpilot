@@ -394,6 +394,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           <Divider />
           <ListItemInput
             placeholder={'New Model'}
+            placeholderTextColor={theme.colors.assertive}
             position={['first']}
             value={name}
             onChangeText={setName}
@@ -434,8 +435,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               eventName: 'model-category',
             })}
           />
-          <Divider />
           <CollapsibleView expanded={!modelId}>
+            <Divider />
             <ListItemInput
               title={'Total Time'}
               value={totalTime}
@@ -465,14 +466,17 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             />
           </CollapsibleView>
           {!!modelId &&
-            <ListItem
-              title={'Statistics'}
-              value={`${secondsToMSS(model?.statistics.totalTime, {format: 'm:ss'})} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
-              position={['first']}
-              onPress={() => navigation.navigate('ModelStatistics', {
-                modelId,
-              })}
-            />
+            <>
+              <Divider text={kind.namePlural.toUpperCase()}/>
+              <ListItem
+                title={'Statistics'}
+                value={`${secondsToMSS(model?.statistics.totalTime, {format: 'm:ss'})} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
+                position={['first']}
+                onPress={() => navigation.navigate('ModelStatistics', {
+                  modelId,
+                })}
+              />
+            </>
           }
           {!modelId &&
             <ListItemDate
@@ -499,10 +503,38 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 rightImage={false}
               />
               <ListItem
-                title={`Logged ${kind.name} Details`}
-                value={`${model?.events.length || 0}`}
+                title={`${kind.name} Log`}
+                value={`${model?.events.length || 0} ${kind.namePlural.toLowerCase()}`}
                 position={['last']}
                 onPress={() => navigation.navigate('Events', {
+                  modelId,
+                })}
+              />
+            </>
+          }
+          {!!modelId &&
+            <>
+              <Divider text={'MAINTENANCE'}/>
+              <ListItem
+                title={'Checklists'}
+                value={`${model?.checklists.length || 0}`}
+                position={['first']}
+                onPress={() => navigation.navigate('ModelChecklists', {
+                  modelId,
+                })}
+              />
+              <ListItem
+                title={'Perform Maintenance'}
+                value={`${pendingMaintenanceActionsCount} pending`}
+                onPress={() => navigation.navigate('ModelMaintenance', {
+                  modelId,
+                })}
+              />
+              <ListItem
+                title={'Maintenance Log'}
+                value={`${completedMaintenanceActionsCount} entries`}
+                position={['last']}
+                onPress={() => navigation.navigate('ModelMaintenanceHistory', {
                   modelId,
                 })}
               />
@@ -561,34 +593,6 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               </>
             }
           />
-          {!!modelId &&
-            <>
-              <Divider />
-              <ListItem
-                title={'Checklists'}
-                value={`${model?.checklists.length || 0}`}
-                position={['first']}
-                onPress={() => navigation.navigate('ModelChecklists', {
-                  modelId,
-                })}
-              />
-              <ListItem
-                title={'Perform Maintenance'}
-                value={`${pendingMaintenanceActionsCount}`}
-                onPress={() => navigation.navigate('ModelMaintenance', {
-                  modelId,
-                })}
-              />
-              <ListItem
-                title={'Maintenance Log'}
-                value={`${completedMaintenanceActionsCount}`}
-                position={['last']}
-                onPress={() => navigation.navigate('ModelMaintenanceHistory', {
-                  modelId,
-                })}
-              />
-            </>
-          }
           <Divider />
           <ListItem
             title={'Default Style'}

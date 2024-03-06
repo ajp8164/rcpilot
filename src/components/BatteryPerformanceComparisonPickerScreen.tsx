@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
+import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, Text } from 'react-native';
 
@@ -67,11 +67,7 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
         />
       )}
       renderSectionHeader={({section: {title}}) => (
-        <View style={s.sectionHeaderContainer}>
-          <Text style={s.sectionHeader}>
-            {title}
-          </Text>
-        </View>
+        <SectionListHeader title={title} />
       )}
       ListHeaderComponent={
         <View style={s.listHeader}>
@@ -86,16 +82,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,
-  },
-  sectionHeaderContainer: {
-    height: 35,
-    paddingTop: 12,
-    paddingHorizontal: 25,
-    backgroundColor: theme.colors.listHeaderBackground,
-  },
-  sectionHeader: {
-    ...theme.styles.textSmall,
-    ...theme.styles.textDim
   },
   listHeader: {
     ...theme.styles.view,

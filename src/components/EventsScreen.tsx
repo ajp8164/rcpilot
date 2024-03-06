@@ -1,6 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
@@ -19,6 +18,7 @@ import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useListEditor } from '@react-native-ajp-elements/ui';
 
 type Section = {
   title?: string;
@@ -182,7 +182,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
       keyExtractor={item => item._id.toString()}
       renderItem={renderEvent}
       renderSectionHeader={({section: {title}}) => (
-        <Divider text={title} />
+        <SectionListHeader title={title} />
       )} 
     />
   );

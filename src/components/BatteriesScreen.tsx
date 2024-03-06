@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
@@ -329,7 +329,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       keyExtractor={item => item._id.toString()}
       renderItem={renderBattery}
       renderSectionHeader={({section: {title}}) => (
-        <Divider text={title} />
+        <SectionListHeader title={title} />
       )}
       ListFooterComponent={renderInactive()}
     />

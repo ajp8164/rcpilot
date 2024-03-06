@@ -9,7 +9,7 @@ import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import { Model, ModelStatistics } from 'realmdb/Model';
 import React, { useEffect, useRef, useState } from 'react';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
-import { modelCostStatistics, modelEventOutcomeStatistics, useModelStatistics } from 'lib/analytics';
+import { modelCostStatistics, modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -48,7 +48,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const s = useStyles(theme);
   const setScreenEditHeader = useScreenEditHeader();
   const confirmAction = useConfirmAction();
-  const modelStatistics = useModelStatistics();
+  const modelEventStyleStatistics = useModelEventStyleStatistics();
   const event = useEvent();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -129,7 +129,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           ...model!.statistics,
           ...modelCostStatistics(model!),
           ...modelEventOutcomeStatistics(model!, outcome),
-          eventDurationData: modelStatistics('add', model!, eventDuration, undefined, eventStyle),
+          eventStyleData: modelEventStyleStatistics('add', model!, eventDuration, undefined, eventStyle),
         } as ModelStatistics;
 
         // Update model checklist actions.

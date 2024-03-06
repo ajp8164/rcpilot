@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
-import { modelEventOutcomeStatistics, useModelStatistics } from 'lib/analytics';
+import { modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
 import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -49,7 +49,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
-  const modelStatistics = useModelStatistics();
+  const modelEventStyleStatistics = useModelEventStyleStatistics();
   const realm = useRealm();
 
   const modelEvent = useObject(Event, new BSON.ObjectId(eventId));
@@ -114,8 +114,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         if (previous.duration !== modelEvent.duration ||
           previous.eventStyle?._id.toString() !== modelEvent.eventStyle?._id.toString()) {
 
-            modelEvent.model.statistics.eventDurationData =
-              modelStatistics(
+            modelEvent.model.statistics.eventStyleData =
+              modelEventStyleStatistics(
                 'update',
                 modelEvent.model,
                 modelEvent.duration,

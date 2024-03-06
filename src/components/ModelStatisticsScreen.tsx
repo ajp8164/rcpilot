@@ -1,6 +1,6 @@
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import { ListRenderItem, ScrollView } from 'react-native';
-import { Model, ModelEventDurationData } from 'realmdb/Model';
+import { Model, ModelEventStyleData } from 'realmdb/Model';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -28,7 +28,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
-  const renderEventDurationAverage: ListRenderItem<ModelEventDurationData> = ({
+  const renderEventDurationAverage: ListRenderItem<ModelEventStyleData> = ({
     item: data,
     index,
   }) => {
@@ -43,7 +43,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         title={eventStyle?.name || 'Unspecified'}
         subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToMSS(data.eventStyleDuration, {format: 'm:ss'})}`}
         value={`${Math.round(percentage)}%, ${secondsToMSS(average, {format: 'm:ss'})}`}
-        position={listItemPosition(index, model!.statistics.eventDurationData.length)}
+        position={listItemPosition(index, model!.statistics.eventStyleData.length)}
         rightImage={false}
       />
     );
@@ -58,18 +58,18 @@ const ModelStatisticsScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <FlatList
-        data={model.statistics.eventDurationData}
+        data={model.statistics.eventStyleData}
         renderItem={renderEventDurationAverage}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          model.statistics.eventDurationData.length ?
+          model.statistics.eventStyleData.length ?
             <Divider text={`${eventKind(model.type).name.toUpperCase()} DURATION AVERAGE BY STYLE`} />
             : null
         }
         ListFooterComponent={
-          model.statistics.eventDurationData.length
+          model.statistics.eventStyleData.length
             ? <Divider type={'note'} text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`} />
             : <Divider />
         }

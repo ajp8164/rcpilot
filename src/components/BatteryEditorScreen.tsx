@@ -4,7 +4,7 @@ import { BatteriesNavigatorParamList, NewBatteryNavigatorParamList } from 'types
 import { BatteryChemistry, BatteryTint } from 'types/battery';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
-import { batteryCellConfigurationToString, getBatteryCellConfigurationItems } from 'lib/battery';
+import { batteryCellConfigurationToString, batterySummary, getBatteryCellConfigurationItems } from 'lib/battery';
 import { eqBoolean, eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
@@ -46,6 +46,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
+  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
 
   const [name, setName] = useState(battery?.name || batteryTemplate?.name || undefined);
   const [chemistry, setChemistry] = useState<BatteryChemistry>(battery?.chemistry || batteryTemplate?.chemistry || BatteryChemistry.LiPo);
@@ -257,6 +258,32 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         <Divider />
+        <ListItem
+          title={battery ? battery.name : name || 'New Battery'}
+          subtitle={battery ? batterySummary(battery) : undefined}
+          subtitleNumberOfLines={2}
+          containerStyle={{
+            ...s.batteryTint,
+            borderLeftColor: battery && battery?.tint !== BatteryTint.None
+              ? batteryTintIcons[battery.tint]?.color : theme.colors.transparent,
+          }}
+          titleStyle={s.batteryText}
+          subtitleStyle={s.batteryText}
+          position={['first', 'last']}
+          rightImage={false}
+          leftImage={
+            <View>
+              <Icon
+                name={isCharged ? 'battery-full' : 'battery-quarter'}
+                solid={true}
+                size={45}
+                color={theme.colors.brandPrimary}
+                style={s.batteryIcon}
+              />
+            </View>
+          }
+        />
+        <Divider />
         <ListItemInput
           value={name}
           placeholder={'New Battery'}
@@ -324,9 +351,10 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           position={['last']}
           onChangeText={setCRating}
         />
-        <Divider />
+        {!batteryId && <Divider />}
         {batteryId &&
           <>
+            <Divider text={'BATTERY CYCLES'} />
             <ListItem
               title={'Statistics'}
               value={averageDischargeRate()}
@@ -338,8 +366,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
               onPress={() => navigation.navigate('BatteryPerformance')}
             />
             <ListItem
-              title={'Logged Cycle Details'}
-              value={battery?.cycles.length.toString() || '0'}
+              title={'Battery Cycle Log'}
+              value={`${battery?.cycles.length.toString() || '0'} cycles`}
               position={['last']}
               onPress={() => navigation.navigate('BatteryCycles', {
                 batteryId,
@@ -449,7 +477,18 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  delete: {
+  batteryIcon: {
+    transform: [{rotate: '-90deg'}],
+    width: '100%',
+    left: -8,
+  },
+  batteryText: {
+    left: 15,
+    maxWidth: '90%',
+  },
+  batteryTint: {
+    borderLeftWidth: 8,
+  },  delete: {
     alignSelf: 'center',
     textAlign: 'center',
     color: theme.colors.assertive,

@@ -137,6 +137,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
         onPress={() => {
           navigation.navigate('EventEditor', {
             eventId: event._id.toString(),
+            modelType: model!.type,
           });
         }}
         editable={{

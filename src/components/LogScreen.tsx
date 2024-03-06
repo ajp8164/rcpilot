@@ -14,6 +14,7 @@ import { EventOutcome } from 'types/event';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LogNavigatorParamList } from 'types/navigation';
 import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
+import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import isEmpty from 'lodash/isEmpty';
 import { makeStyles } from '@rneui/themed';
@@ -350,6 +351,7 @@ const LogScreen = ({ navigation }: Props) => {
               logEntry.modelId
               ? navigation.navigate('EventEditor', {
                 eventId: logEntry.eventId,
+                modelType: ModelType.Car,
               })
               : navigation.navigate('BatteryCycleEditor', {
                 batteryId: logEntry.batteryId,

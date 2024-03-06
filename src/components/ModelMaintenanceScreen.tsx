@@ -264,7 +264,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         iconChecked={'square-check'}
         iconUnchecked={'square'}
         iconSize={26}
-        iconColor={theme.colors.screenHeaderButtonText}
+        iconColor={theme.colors.clearButtonText}
         checked={isExpanded}
         position={!isExpanded ? listItemPosition(index, section.data.length) : index === 0 ? ['first'] : []}
         onPress={() => {
@@ -346,7 +346,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   add: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderButtonText,
+    color: theme.colors.clearButtonText,
   },
   headerButton: {
     justifyContent: 'flex-start',

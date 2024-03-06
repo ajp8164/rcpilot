@@ -15,7 +15,7 @@ const ScanNavigator = () => {
       screenOptions={{
         headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
+        headerTintColor: theme.colors.clearButtonText,
       }}>
       <ScanStack.Screen
         name="Scan"

@@ -77,7 +77,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
                 <CustomIcon
                   name={'circle-info'}
                   size={20}
-                  color={theme.colors.screenHeaderButtonText}
+                  color={theme.colors.clearButtonText}
                   style={{right: 5}}
                 />
                 <Icon

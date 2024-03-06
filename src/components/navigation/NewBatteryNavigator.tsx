@@ -19,7 +19,7 @@ const NewBatteryNavigator = () => {
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
+          headerTintColor: theme.colors.clearButtonText,
         }}>
         <NewBatteryStack.Screen
           name='NewBattery'

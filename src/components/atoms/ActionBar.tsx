@@ -92,7 +92,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   label: {
     ...theme.styles.textNormal,
-    color: theme.colors.screenHeaderButtonText,
+    color: theme.colors.clearButtonText,
   }
 }));
 

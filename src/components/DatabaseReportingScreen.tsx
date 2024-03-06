@@ -213,7 +213,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               <CustomIcon
                 name={'circle-info'}
                 size={22}
-                color={theme.colors.screenHeaderButtonText}
+                color={theme.colors.clearButtonText}
               />
             </Pressable>
           }
@@ -363,7 +363,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   newReport: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderButtonText,
+    color: theme.colors.clearButtonText,
   },
   reportsList: {
     overflow: 'visible',

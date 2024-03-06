@@ -19,7 +19,7 @@ const LocationNavigator = () => {
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
+          headerTintColor: theme.colors.clearButtonText,
         }}>
         <LocationStack.Screen
           name="Locations"

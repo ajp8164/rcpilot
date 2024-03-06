@@ -189,7 +189,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         iconChecked={'square-check'}
         iconUnchecked={'square'}
         iconSize={26}
-        iconColor={theme.colors.screenHeaderButtonText}
+        iconColor={theme.colors.clearButtonText}
         checked={!!currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date}
         position={listItemPosition(index, section.data.length)}
         onPress={() => {

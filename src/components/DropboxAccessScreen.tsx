@@ -67,7 +67,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   signin: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.screenHeaderButtonText,
+    color: theme.colors.clearButtonText,
   },
 }));
 

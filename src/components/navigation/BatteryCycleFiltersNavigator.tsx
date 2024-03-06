@@ -19,7 +19,7 @@ const BatteryCycleFiltersNavigator = () => {
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
+          headerTintColor: theme.colors.clearButtonText,
         }}>
         <BatteryCycleFiltersStack.Screen
           name='BatteryCycleFilters'

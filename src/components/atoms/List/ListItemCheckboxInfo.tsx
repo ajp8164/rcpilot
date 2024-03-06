@@ -81,7 +81,7 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
             <CustomIcon
               name={'circle-info'}
               size={22}
-              color={theme.colors.screenHeaderButtonText}
+              color={theme.colors.clearButtonText}
               style={hideInfo ? {opacity: 0} : {opacity: 1}}
             />
           </Pressable>

@@ -25,13 +25,14 @@ export const theme = createTheme(
 
       ...Platform.select({
         ios: {
-          screenHeaderButtonText: '#007bff',
+          clearButtonText: '#007bff',
           switchOffThumb: '#ffffff',
           switchOnThumb: '#ffffff',
           switchOffTrack: '#e5e5e5',
           switchOnTrack: '#007bff',
         },
         android: {
+          clearButtonText: '#ffffff',
           switchOffThumb: '#787878',
           switchOnThumb: '#007bff',
           switchOffTrack: '#e5e5e5',
@@ -59,19 +60,18 @@ export const theme = createTheme(
 
       ...Platform.select({
         ios: {
-          screenHeaderButtonText: '#007bff',
+          clearButtonText: '#007bff',
           switchOffThumb: '#ffffff',
           switchOnThumb: '#ffffff',
           switchOffTrack: '#787878',
           switchOnTrack: '#007bff',
         },
         android: {
+          clearButtonText: '#000000',
           switchOffThumb: '#cccccc',
           switchOnThumb: '#007bff',
           switchOffTrack: '#787878',
           switchOnTrack: '#007bff40',
-          screenHeaderButtonText: '#000000',
-          screenHeaderInvBackButton: '#ffffff',
         },
       }),
     },

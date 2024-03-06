@@ -1,10 +1,12 @@
 import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
+import { Model, ModelStatistics } from 'realmdb/Model';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
+import { modelCostStatistics, modelEventOutcomeStatistics, useModelStatistics } from 'lib/analytics';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -18,7 +20,6 @@ import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { EventStyle } from 'realmdb/EventStyle';
-import { Model } from 'realmdb/Model';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelHeader } from 'components/molecules/ModelHeader';
@@ -31,7 +32,6 @@ import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
-import { modelCostStatistics } from 'lib/analytics';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { useFocusEffect } from '@react-navigation/native';
@@ -50,6 +50,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
+  const modelStatistics = useModelStatistics();
 
   const realm = useRealm();
   const model = useObject(Model, new BSON.ObjectId(modelId));
@@ -124,7 +125,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         const numTotalEvents = toNumber(totalEvents) || 0;
         const numTotalTime = hmsMaskToSeconds(totalTime);
 
-        realm.create('Model', {
+        const model = {
           createdOn: now,
           updatedOn: now,
           name,
@@ -146,16 +147,18 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           defaultStyle,
           scanCodeSize,
           notes,
-          statistics: {
-            crashCount: 0,
-            eventDurationData: [],
-            perEventCost: 0,
-            totalEvents: numTotalEvents,
-            totalMaintenanceCost: 0,
-            totalTime: numTotalTime,
-            uncertainCost: false,
-          },
-        });
+          statistics: {},
+        } as Model;
+
+        model.statistics = {
+          ...modelCostStatistics(model),
+          ...modelEventOutcomeStatistics(model, undefined),
+          eventDurationData: modelStatistics('init', model, 0),
+          totalEvents: numTotalEvents,
+          totalTime: numTotalTime,
+        } as ModelStatistics;
+
+        realm.create('Model', model);
       });
     };
   

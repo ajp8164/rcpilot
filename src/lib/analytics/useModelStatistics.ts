@@ -74,19 +74,19 @@ export const modelCostStatistics = (model: Model, maintenance?: {oldValue?: numb
     uncertainCost = true;
   }
 
-  // Per-event cost.
-  let perEventCost = 0;
-  if (model.statistics.totalEvents > 0) {
-    perEventCost =
-      ((model.purchasePrice || 0) + model.statistics.totalMaintenanceCost) / model.statistics.totalEvents;
-  } else {
-    perEventCost = (model.purchasePrice || 0) + model.statistics.totalMaintenanceCost;
-  }
-  
   // Maintenance cost.
   const totalMaintenanceCost =
     model.statistics.totalMaintenanceCost - (maintenance?.oldValue || 0) + (maintenance?.newValue || 0);
 
+  // Per-event cost.
+  let perEventCost = 0;
+  if (model.statistics.totalEvents > 0) {
+    perEventCost =
+      ((model.purchasePrice || 0) + totalMaintenanceCost) / model.statistics.totalEvents;
+  } else {
+    perEventCost = (model.purchasePrice || 0) + totalMaintenanceCost;
+  }
+  
   return {
     perEventCost,
     totalMaintenanceCost,

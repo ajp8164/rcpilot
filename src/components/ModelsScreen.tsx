@@ -63,7 +63,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonScreenHeader}
               disabled={!activeModels.length}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               onPress={listEditor.onEdit}
@@ -77,7 +77,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         return (
           <>
             <Button
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={listEditor.enabled || 
                 (listModels === 'all' && !activeModels.length) ||
@@ -101,14 +101,14 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               <Button
                 title={listEditor.enabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                buttonStyle={theme.styles.buttonScreenHeader}
                 disabled={!retiredModels.length}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 onPress={listEditor.onEdit}
               />
             :
               <Button
-                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 disabled={listEditor.enabled}
                 icon={
@@ -219,7 +219,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <View style={s.modelCardHeader}>
         {pilot &&
           <Button
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton, {borderWidth: 0}]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             icon={
               <Icon
                 name={'certificate'}
@@ -479,11 +479,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   headerIcon: {
     color: theme.colors.clearButtonText,
     fontSize: 22,
@@ -554,9 +549,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   modelCardButton: {
     ...theme.styles.buttonScreenHeader,
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
   },
   modelIcon: {
     transform: [{rotate: '-45deg'}],

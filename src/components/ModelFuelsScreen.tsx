@@ -30,7 +30,7 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
       headerRight: ()  => {
         return (
           <Button
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             icon={<Icon name={'plus'} style={s.headerIcon}/>}
             onPress={() => navigation.navigate('NewModelFuelNavigator', {
               screen: 'NewModelFuel',
@@ -92,11 +92,6 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   headerIcon: {
     color: theme.colors.clearButtonText,
     fontSize: 22,

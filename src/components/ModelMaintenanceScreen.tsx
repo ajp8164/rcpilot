@@ -75,7 +75,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
           <Button
             title={'Perform'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             disabled={selectedMaintenanceActions.length === 0}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={onPerform}
@@ -347,11 +347,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignSelf: 'center',
     textAlign: 'center',
     color: theme.colors.clearButtonText,
-  },
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
   },
   sectionList: {
     flex: 1,

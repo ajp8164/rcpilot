@@ -55,7 +55,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
           <Button
             title={'Cancel'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             onPress={navigation.goBack}
           />
         )
@@ -65,7 +65,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
           <Button
             title={'Create'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             onPress={onCreate}
           />
         )
@@ -180,11 +180,6 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   sectionList: {
     flex: 1,
     flexGrow: 1,

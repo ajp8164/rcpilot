@@ -43,7 +43,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
             <Button
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonInvScreenHeader}
               onPress={() => confirmAction(cancelEvent, {
                 label: `Do Not Log ${kind.name}`,
                 title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
@@ -58,7 +58,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
           <Button
             title={modelHasChecklist ? 'Checklist' : 'Timer'}
             titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonInvScreenHeader}
             iconRight
             icon={
               <Icon
@@ -106,11 +106,6 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   headerIcon: {
     paddingLeft: 5
   },

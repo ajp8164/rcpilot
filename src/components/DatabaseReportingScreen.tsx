@@ -71,7 +71,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           <Button
             title={listEditor.enabled ? 'Done' : 'Edit'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             onPress={listEditor.onEdit}
           />
         )
@@ -355,11 +355,6 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   newReport: {
     alignSelf: 'center',
     textAlign: 'center',

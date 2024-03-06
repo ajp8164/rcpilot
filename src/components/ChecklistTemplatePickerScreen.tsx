@@ -43,7 +43,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
           <Button
             title={'Cancel'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             onPress={navigation.goBack}
           />
         )
@@ -168,11 +168,6 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   headerIcon: {
     color: theme.colors.clearButtonText,
     fontSize: 22,

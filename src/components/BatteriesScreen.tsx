@@ -350,7 +350,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderLeftWidth: 8,
   },
   headerIcon: {
-    color: theme.colors.clearButtonText,
+    color: theme.colors.screenHeaderButtonText,
     fontSize: 22,
     marginHorizontal: 10,
   },

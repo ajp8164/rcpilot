@@ -22,6 +22,7 @@ export const theme = createTheme(
       brandSecondary: '#007bff',
       disabled: '#787878',
       listItemBackgroundAlt: '#101010',
+      screenHeaderButtonText: '#007bff',
 
       ...Platform.select({
         ios: {
@@ -57,6 +58,7 @@ export const theme = createTheme(
       brandSecondary: '#007bff',
       disabled: '#787878',
       listItemBackgroundAlt: '#f7f7f7',
+      screenHeaderButtonText: '#007bff',
 
       ...Platform.select({
         ios: {

@@ -159,7 +159,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   buttonLeftCollapsed: {
     top: 0,
-    color: theme.colors.clearButtonText,
+    color: theme.colors.screenHeaderButtonText,
   },
   collapsedHeader: {
     backgroundColor: theme.colors.white,

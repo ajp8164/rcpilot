@@ -1,5 +1,6 @@
 import { BatteryTemplate, ListBatteries } from 'types/battery';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
+import { ListModels, ModelType } from 'types/model';
 
 import { BatteryCellValuesEditorConfig } from 'components/BatteryCellValuesEditorScreen';
 import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
@@ -8,7 +9,6 @@ import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EventOutcome } from 'types/event';
 import { FilterType } from 'types/filter';
 import { JChecklistAction } from 'realmdb/Checklist';
-import { ListModels } from 'types/model';
 import { ModelPickerInterface } from 'components/ModelPickerScreen';
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { TextStyle } from 'react-native';
@@ -138,7 +138,7 @@ export type ModelsNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   Events: {
     modelId?: string;
-    pilotId?: string;
+    modelType?: ModelType;
   };
   EventEditor: {
     eventId: string;

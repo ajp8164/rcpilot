@@ -508,6 +508,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 position={['last']}
                 onPress={() => navigation.navigate('Events', {
                   modelId,
+                  modelType: model?.type,
                 })}
               />
             </>

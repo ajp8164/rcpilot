@@ -18,7 +18,7 @@ export class Event extends Object<Event> {
   number!: number;
   outcome?: EventOutcome;
   duration!: number;
-  model?: Model;
+  model!: Model;
   pilot?: Pilot;
   location?: Location;
   fuel?: ModelFuel;
@@ -38,7 +38,7 @@ export class Event extends Object<Event> {
       number: 'int',
       outcome: 'string?',
       duration: 'float',
-      model: 'Model?',
+      model: 'Model',
       pilot: 'Pilot?',
       location: 'Location?',
       fuel: 'ModelFuel?',

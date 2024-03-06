@@ -117,13 +117,13 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         });
 
         // Update model attributes according to the event.
-        // Note - update model before the checklist schedule since the scheduling replies
+        // Note - update model before the checklist schedule since the scheduling relies
         // on current model state.
         const eventDuration = MSSToSeconds(duration);
 
+        model!.lastEvent = date.toISO()!;
         model!.statistics.totalEvents = model!.statistics.totalEvents + 1;
         model!.statistics.totalTime = model!.statistics.totalTime + eventDuration;
-        model!.lastEvent = date.toISO()!;
         model!.statistics = modelStatistics(model!, eventDuration, eventStyle, outcome);
 
         // Update model checklist actions.

@@ -6,6 +6,7 @@ import { useRealm } from '@realm/react';
 
 export type ModelCostStatistics = {
   perEventCost: number;
+  totalMaintenanceCost: number;
   uncertainCost: boolean;
 };
 
@@ -55,25 +56,36 @@ export const useModelStatistics = () => {
   };
 };
 
-export const modelCostStatistics = (model: Model) => {
+export const modelCostStatistics = (model: Model, maintenance?: {oldValue?: number; newValue?: number}) => {
   // Operating costs.
   // Can only compute per event cost here.
-  let uncertainCost = model!.statistics.uncertainCost || false;
-  if (!model!.purchasePrice) {
+  let uncertainCost = model.statistics.uncertainCost || false;
+  if (!model.purchasePrice) {
     uncertainCost = true;
   }
 
   // Per-event cost.
   let perEventCost = 0;
-  if (model!.statistics.totalEvents > 0) {
+  if (model.statistics.totalEvents > 0) {
     perEventCost =
-      ((model!.purchasePrice || 0) + model!.statistics.totalMaintenanceCost) / model!.statistics.totalEvents;
+      ((model.purchasePrice || 0) + model.statistics.totalMaintenanceCost) / model.statistics.totalEvents;
+  } else {
+    perEventCost = (model.purchasePrice || 0) + model.statistics.totalMaintenanceCost;
   }
-    
+  
+  // Maintenance cost.
+  const totalMaintenanceCost =
+    model.statistics.totalMaintenanceCost - (maintenance?.oldValue || 0) + (maintenance?.newValue || 0);
+
   return {
     perEventCost,
+    totalMaintenanceCost,
     uncertainCost,
   } as ModelCostStatistics;
+};
+
+export const updateModelMaintenanceCost = (model: Model, oldValue: number, newValue: number) => {
+  model.statistics.totalMaintenanceCost = model.statistics.totalMaintenanceCost - oldValue + newValue;
 };
 
 // Computes event duration data for the event and the specified event style. This function

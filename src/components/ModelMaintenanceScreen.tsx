@@ -31,6 +31,7 @@ import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
+import { modelCostStatistics } from 'lib/analytics';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
@@ -109,6 +110,12 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
               cost: actionItem.action.cost,
               refId: uuidv4(), // Create a unique reference
             } as ChecklistActionHistoryEntry);
+
+            // Update the model with maintenance cost change.
+            model!.statistics = lodash.merge(
+              model!.statistics,
+              modelCostStatistics(model!, {newValue: actionItem.action.cost})
+            );
 
             // Update the action schedule state.
             actionItem.action.schedule.state = actionScheduleState(

@@ -1,19 +1,13 @@
-import { Model, ModelEventDurationData } from 'realmdb/Model';
+import { Model, ModelEventStyleData } from 'realmdb/Model';
 
-import { EventOutcome } from 'types/event';
 import { EventStyle } from 'realmdb/EventStyle';
 import { useRealm } from '@realm/react';
 
 export type ModelStatisticsMode = 'add' | 'init' | 'update';
-export type ModelCostStatistics = {
-  perEventCost: number;
-  totalMaintenanceCost: number;
-  uncertainCost: boolean;
-};
 
 // Computes all model statistics in response to a new model event. The result of these
 // calculations should replace the previous model statistics.
-export const useModelStatistics = () => {
+export const useModelEventStyleStatistics = () => {
   const realm = useRealm();
 
   return (
@@ -24,13 +18,13 @@ export const useModelStatistics = () => {
     newEventStyle?: EventStyle,
   ) => {
     // Event duration data.
-    const eventDurationData = [] as ModelEventDurationData[];
+    const eventStyleData = [] as ModelEventStyleData[];
 
     // Recompute event durations for all styles.
     const allEventStyles = realm.objects<EventStyle>('EventStyle');
     if (allEventStyles.length) {
       allEventStyles.forEach(style => {
-        eventDurationData.push(
+        eventStyleData.push(
           computeEventDurationData(
             mode,
             model,
@@ -43,64 +37,12 @@ export const useModelStatistics = () => {
       });
     }
     // Unspecified style.
-    eventDurationData.push(
+    eventStyleData.push(
       computeEventDurationData(mode, model, newEventDuration, oldEventStyle, newEventStyle)
     );
 
-    return eventDurationData;
+    return eventStyleData;
   };
-};
-
-export const modelEventOutcomeStatistics = (
-  model: Model,
-  newEventOutcome?: EventOutcome,
-) => {
-  // Crash summary.
-  let crashCount = model.statistics.crashCount || 0;
-  if (newEventOutcome === EventOutcome.Crashed) {
-    crashCount++;
-  }
-
-  return { crashCount };
-};
-
-export const modelCostStatistics = (
-  model: Model,
-  maintenance?: {
-    oldValue?: number,
-    newValue?: number,
-  }
-) => {
-  // Operating costs.
-  // Can only compute per event cost here.
-  let uncertainCost = model.statistics.uncertainCost || false;
-  if (!model.purchasePrice) {
-    uncertainCost = true;
-  }
-
-  // Maintenance cost.
-  let totalMaintenanceCost =
-    model.statistics.totalMaintenanceCost - (maintenance?.oldValue || 0) + (maintenance?.newValue || 0);
-  totalMaintenanceCost = totalMaintenanceCost || 0;
-
-  // Per-event cost.
-  let perEventCost = 0;
-  if (model.statistics.totalEvents > 0) {
-    perEventCost =
-      ((model.purchasePrice || 0) + totalMaintenanceCost) / model.statistics.totalEvents;
-  } else {
-    perEventCost = (model.purchasePrice || 0) + totalMaintenanceCost;
-  }
-  
-  return {
-    perEventCost,
-    totalMaintenanceCost,
-    uncertainCost,
-  } as ModelCostStatistics;
-};
-
-export const updateModelMaintenanceCost = (model: Model, oldValue: number, newValue: number) => {
-  model.statistics.totalMaintenanceCost = model.statistics.totalMaintenanceCost - oldValue + newValue;
 };
 
 // Computes event duration data for the event and the specified event style. This function
@@ -116,7 +58,7 @@ const computeEventDurationData = (
   style?: EventStyle,
 ) => {
   // Find existing duration data for the specified style.
-  let previousDurationData = model.statistics.eventDurationData?.find(d =>
+  let previousDurationData = model.statistics.eventStyleData?.find(d =>
     d.eventStyleId === (style?._id.toString() || '')
   );
 
@@ -126,7 +68,7 @@ const computeEventDurationData = (
       eventStyleId: style?._id.toString() || '',
       eventStyleCount: 0,
       eventStyleDuration: 0,
-    } as ModelEventDurationData;
+    } as ModelEventStyleData;
   }
 
   let durationData = {
@@ -143,20 +85,20 @@ const computeEventDurationData = (
       ...previousDurationData,
       eventStyleCount: 0,
       eventStyleDuration: 0,
-    } as ModelEventDurationData;
+    } as ModelEventStyleData;
   } else if (mode === 'update' && style?._id.toString() === oldEventStyle?._id.toString()) {
     durationData = {
       ...previousDurationData,
       eventStyleCount: previousDurationData.eventStyleCount - 1,
       eventStyleDuration: previousDurationData.eventStyleDuration - newEventDuration,
-    } as ModelEventDurationData;
+    } as ModelEventStyleData;
   } else if (style?._id.toString() === newEventStyle?._id.toString()) {
     durationData = {
       ...previousDurationData,
       eventStyleCount: previousDurationData.eventStyleCount + 1,
       eventStyleDuration: previousDurationData.eventStyleDuration + newEventDuration,
-    } as ModelEventDurationData;
+    } as ModelEventStyleData;
   }
 
-  return durationData as ModelEventDurationData;
+  return durationData as ModelEventStyleData;
 };

@@ -74,7 +74,7 @@ export class Model extends Object<Model> {
 
 export class ModelStatistics extends Object<ModelStatistics> {
   crashCount!: number;
-  eventDurationData!: ModelEventDurationData[];
+  eventStyleData!: ModelEventStyleData[];
   perEventCost!: number;
   totalEvents!: number;
   totalMaintenanceCost!: number;
@@ -86,7 +86,7 @@ export class ModelStatistics extends Object<ModelStatistics> {
     embedded: true,
     properties: {
       crashCount: 'int',
-      eventDurationData: 'ModelEventDurationData[]',
+      eventStyleData: 'ModelEventStyleData[]',
       perEventCost: 'float',
       totalEvents: 'int',
       totalMaintenanceCost: 'float',
@@ -96,13 +96,13 @@ export class ModelStatistics extends Object<ModelStatistics> {
   };
 };
 
-export class ModelEventDurationData extends Object<ModelEventDurationData> {
+export class ModelEventStyleData extends Object<ModelEventStyleData> {
   eventStyleId!: string;
   eventStyleCount!: number;
   eventStyleDuration!: number;
 
   static schema: ObjectSchema = {
-    name: 'ModelEventDurationData',
+    name: 'ModelEventStyleData',
     embedded: true,
     properties: {
       eventStyleId: 'string',

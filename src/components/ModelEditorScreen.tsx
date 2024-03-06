@@ -6,7 +6,7 @@ import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navi
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
-import { modelCostStatistics, modelEventOutcomeStatistics, useModelStatistics } from 'lib/analytics';
+import { modelCostStatistics, modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -50,7 +50,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
-  const modelStatistics = useModelStatistics();
+  const modelEventStyleStatistics = useModelEventStyleStatistics();
 
   const realm = useRealm();
   const model = useObject(Model, new BSON.ObjectId(modelId));
@@ -153,7 +153,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.statistics = {
           ...modelCostStatistics(model),
           ...modelEventOutcomeStatistics(model, undefined),
-          eventDurationData: modelStatistics('init', model, 0),
+          eventStyleData: modelEventStyleStatistics('init', model, 0),
           totalEvents: numTotalEvents,
           totalTime: numTotalTime,
         } as ModelStatistics;

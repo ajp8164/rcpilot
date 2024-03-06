@@ -124,7 +124,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         model!.lastEvent = date.toISO()!;
         model!.statistics.totalEvents = model!.statistics.totalEvents + 1;
         model!.statistics.totalTime = model!.statistics.totalTime + eventDuration;
-        model!.statistics = modelStatistics(model!, eventDuration, eventStyle, outcome);
+        model!.statistics = modelStatistics('add', model!, eventDuration, outcome, undefined, eventStyle);
 
         // Update model checklist actions.
         checklists.current?.forEach(checklist => {

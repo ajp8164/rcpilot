@@ -64,7 +64,7 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
         return (
           <>
             <Button
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={listEditor.enabled || !entries.length}
               icon={
@@ -80,7 +80,7 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!entries.length}
               onPress={listEditor.onEdit}
@@ -222,11 +222,6 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   headerIcon: {
     color: theme.colors.clearButtonText,
     fontSize: 22,

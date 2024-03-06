@@ -122,7 +122,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
             <Button
               title={'Cancel'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonScreenHeader}
               onPress={navigation.goBack}
             />
           )
@@ -134,7 +134,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
             <Button
               title={'Save'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonScreenHeader}
               onPress={onDone}
             />
           )
@@ -144,7 +144,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
               <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+                buttonStyle={theme.styles.buttonScreenHeader}
                 onPress={listEditor.onEdit}
               />
             )
@@ -336,11 +336,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   actionsList: {
     overflow: 'visible',
-  },
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
   },
   shadow: {
     ...theme.styles.shadowGlow,

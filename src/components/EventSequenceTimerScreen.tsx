@@ -87,7 +87,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             <Button
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={[theme.styles.buttonInvScreenHeader, s.headerButton]}
+              buttonStyle={theme.styles.buttonInvScreenHeader}
               onPressIn={() => confirmAction(cancelEvent, {
                 label: `Do Not Log ${kind.name}`,
                 title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
@@ -534,11 +534,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   view: {
     ...theme.styles.view,
     backgroundColor: theme.colors.brandPrimary,
-  },
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
   },
   modelIcon: {
     transform: [{rotate: '-45deg'}],

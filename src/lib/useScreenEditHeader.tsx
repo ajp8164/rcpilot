@@ -40,7 +40,7 @@ export const useScreenEditHeader = () => {
           <Button
             title={leftButton?.label || 'Cancel'}
             titleStyle={[theme.styles.buttonScreenHeaderTitle, leftButton?.style]}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             disabled={leftButton?.enabled !== undefined ? !leftButton.enabled : false}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() => leftButton && leftButton.action ? leftButton.action() : navigation.goBack()}
@@ -55,7 +55,7 @@ export const useScreenEditHeader = () => {
           <Button
             title={rightButton?.label || 'Save'}
             titleStyle={[theme.styles.buttonScreenHeaderTitle, rightButton?.style]}
-            buttonStyle={[theme.styles.buttonScreenHeader, s.headerButton]}
+            buttonStyle={theme.styles.buttonScreenHeader}
             disabled={rightButton?.enabled !== undefined ? !rightButton.enabled : false}
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() => rightButton && rightButton.action ? rightButton.action() : () => { return }}
@@ -71,9 +71,4 @@ export const useScreenEditHeader = () => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
 }));

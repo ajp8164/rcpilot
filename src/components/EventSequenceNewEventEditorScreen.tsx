@@ -542,11 +542,6 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerButton: {
-    justifyContent: 'flex-start',
-    paddingHorizontal: 0,
-    minWidth: 0,
-  },
   modelIcon: {
     transform: [{rotate: '-45deg'}],
   },

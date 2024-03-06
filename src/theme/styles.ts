@@ -14,17 +14,6 @@ export const fontSizes = {
 
 export const useStyles = makeStyles(
   (theme): Styles => ({
-    navigationBarTitle: {
-      color: theme.colors.black,
-      fontSize: fontSizes.heading5,
-      fontFamily,
-      // fontWeight: 'normal',
-    },
-
-    /**
-     * Styles
-     */
-
     swipeableListItemContainer: {
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,

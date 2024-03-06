@@ -41,7 +41,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}
-        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}`}
+        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToMSS(data.eventStyleDuration, {format: 'm:ss'})}`}
         value={`${Math.round(percentage)}%, ${secondsToMSS(average, {format: 'm:ss'})}`}
         position={listItemPosition(index, model!.statistics.eventDurationData.length)}
         rightImage={false}

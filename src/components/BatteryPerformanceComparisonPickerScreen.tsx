@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { SectionList, SectionListData, Text } from 'react-native';
+import { SectionList, SectionListData } from 'react-native';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
@@ -71,7 +71,7 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
       )}
       ListHeaderComponent={
         <View style={s.listHeader}>
-          <Divider type={'note'} text={'Choose up to four batteries to compare.'} />
+          <Divider note text={'Choose up to four batteries to compare.'} />
         </View>
       }
     />

@@ -88,7 +88,7 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
           eventName: 'after-expiring',
         })}
       />
-      <Divider type={'note'} text={'Vibration is not supported on all devices.'}/>
+      <Divider note text={'Vibration is not supported on all devices.'}/>
     </ScrollView>
   );
 };

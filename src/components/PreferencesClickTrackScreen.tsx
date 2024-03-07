@@ -56,7 +56,7 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
           eventName: 'after-expiring',
         })}
       />
-      <Divider type={'note'} text={'Higher BPM values may not aloways operate smoothly  on older devices.'}/>
+      <Divider note text={'Higher BPM values may not aloways operate smoothly  on older devices.'}/>
     </ScrollView>
   );
 };

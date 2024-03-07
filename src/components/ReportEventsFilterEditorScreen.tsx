@@ -3,16 +3,15 @@ import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFi
 import { EventReportFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
 import { eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
+import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -212,9 +211,9 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
           onFilterValueChange('modelStyle', filterState);
         }}
       />
-      <Divider />
-      <View style={{height: theme.insets.bottom}}/>
-    </ScrollView>  );
+      <Divider style={{height: theme.insets.bottom}} />
+    </ScrollView>
+  );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({

@@ -2,11 +2,11 @@ import { AppTheme, useTheme } from 'theme';
 import { DateRelation, FilterState, ListItemFilterDate, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
 
 import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
@@ -131,7 +131,7 @@ const BatteryCycleFilterEditorScreen = ({ navigation: _navigation }: Props) => {
           onFilterValueChange(BatteryCycleProperty.Notes, filterState);
         }}
       />
-      <View style={{height: theme.insets.bottom}}/>
+      <Divider style={{height: theme.insets.bottom}} />
     </ScrollView>
   );
 };

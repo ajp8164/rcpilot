@@ -8,13 +8,13 @@ import {
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
-import { ScrollView, View } from 'react-native';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
+import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/model';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
@@ -174,7 +174,7 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
           filterEditor.onFilterValueChange('notes', filterState);
         }}
       />
-      <View style={{height: theme.insets.bottom}}/>
+      <Divider style={{height: theme.insets.bottom}} />
     </ScrollView>
   );
 };

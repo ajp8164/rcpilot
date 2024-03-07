@@ -3,17 +3,16 @@ import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFi
 import { FilterType, MaintenanceReportFilterValues } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
 import { eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
+import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -105,90 +104,89 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
 
   return (
     <AvoidSoftInputView style={{ flex: 1 }}>
-    <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
-      <ListItemInput
-        value={name}
-        placeholder={'Filter Name'}
-        position={['first', 'last']}
-        onChangeText={setName}
-      /> 
-      <Divider />
-      <ListItem
-        title={'Reset Filter'}
-        titleStyle={s.reset}
-        disabled={relationsAreDefault()}
-        disabledStyle={s.resetDisabled}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={resetFilter}
-      />
-      <Divider text={'This filter shows all the events that match all of these criteria.'}/>
-      <ListItemFilterEnum
-        title={'Model'}
-        value={values.model.value}
-        relation={values.model.relation}
-        enumName={'Models'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          onFilterValueChange('model', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterEnum
-        title={'Model Type'}
-        value={values.modelType.value}
-        relation={values.modelType.relation}
-        enumName={'ModelTypes'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          onFilterValueChange('modelType', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterEnum
-        title={'Category'}
-        value={values.category.value}
-        relation={values.category.relation}
-        enumName={'Categories'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          onFilterValueChange('category', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterDate
-        title={'Date'}
-        value={values.date.value}
-        relation={values.date.relation}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          onFilterValueChange('date', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterNumber
-        title={'Costs'}
-        value={values.costs.value}
-        relation={values.costs.relation}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          onFilterValueChange('costs', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterString
-        title={'Notes'}
-        value={values.notes.value}
-        relation={values.notes.relation}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          onFilterValueChange('notes', filterState);
-        }}
-      />
-      <Divider />
-      <View style={{height: theme.insets.bottom}}/>
-    </ScrollView>
+      <ScrollView style={theme.styles.view}>
+        <Divider text={'FILTER NAME'}/>
+        <ListItemInput
+          value={name}
+          placeholder={'Filter Name'}
+          position={['first', 'last']}
+          onChangeText={setName}
+        /> 
+        <Divider />
+        <ListItem
+          title={'Reset Filter'}
+          titleStyle={s.reset}
+          disabled={relationsAreDefault()}
+          disabledStyle={s.resetDisabled}
+          position={['first', 'last']}
+          rightImage={false}
+          onPress={resetFilter}
+        />
+        <Divider text={'This filter shows all the events that match all of these criteria.'}/>
+        <ListItemFilterEnum
+          title={'Model'}
+          value={values.model.value}
+          relation={values.model.relation}
+          enumName={'Models'}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            onFilterValueChange('model', filterState);
+          }}
+        />
+        <Divider />
+        <ListItemFilterEnum
+          title={'Model Type'}
+          value={values.modelType.value}
+          relation={values.modelType.relation}
+          enumName={'ModelTypes'}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            onFilterValueChange('modelType', filterState);
+          }}
+        />
+        <Divider />
+        <ListItemFilterEnum
+          title={'Category'}
+          value={values.category.value}
+          relation={values.category.relation}
+          enumName={'Categories'}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            onFilterValueChange('category', filterState);
+          }}
+        />
+        <Divider />
+        <ListItemFilterDate
+          title={'Date'}
+          value={values.date.value}
+          relation={values.date.relation}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            onFilterValueChange('date', filterState);
+          }}
+        />
+        <Divider />
+        <ListItemFilterNumber
+          title={'Costs'}
+          value={values.costs.value}
+          relation={values.costs.relation}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            onFilterValueChange('costs', filterState);
+          }}
+        />
+        <Divider />
+        <ListItemFilterString
+          title={'Notes'}
+          value={values.notes.value}
+          relation={values.notes.relation}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            onFilterValueChange('notes', filterState);
+          }}
+        />
+        <Divider style={{height: theme.insets.bottom}} />
+      </ScrollView>
     </AvoidSoftInputView>
   );
 };

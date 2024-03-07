@@ -225,7 +225,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
           />
         </>
       }
-      <Divider type={'note'} text={footer} />
+      <Divider note text={footer} />
     </ScrollView>
   );
 };

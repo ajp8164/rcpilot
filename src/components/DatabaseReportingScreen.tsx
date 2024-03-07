@@ -284,7 +284,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           eventName: 'output-report-to',
         })}
       />
-      <Divider type={'note'} text={
+      <Divider note text={
         OutputReportToDescription[
           Object.keys(OutputReportTo)[Object.values(OutputReportTo).indexOf(outputReportTo)] as keyof typeof OutputReportToDescription
         ]
@@ -319,7 +319,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               onDragEnd={reorderReports}
             />
           </View>
-          <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+          <Divider note text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
         </>
         : null
       }
@@ -346,7 +346,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               onDragEnd={reorderReports}
             />
           </View>
-          <Divider type={'note'} text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+          <Divider note text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
         </>
         : null
       }

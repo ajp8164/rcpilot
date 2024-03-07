@@ -225,7 +225,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
           pilotId: pilot!._id.toString(),
         })}
       />
-      <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
+      <Divider note text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
       <Divider text={'EVENT STYLES'}/>
       <ListItem
         title={'Sport'}
@@ -233,7 +233,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         position={['first', 'last']}
         onPress={() => null}
       />
-      <Divider type={'note'} text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
+      <Divider note text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
       {pilot?.favoriteModels && pilot.favoriteModels.length > 0 &&
         <>
           <Divider text={'FAVORITE MODELS'}/>

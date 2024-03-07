@@ -2,13 +2,13 @@ import { AppTheme, useTheme } from 'theme';
 import { BatteryFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ListItemFilterEnum, ListItemFilterNumber } from 'components/molecules/filters';
-import { ScrollView, View } from 'react-native';
 
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
+import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/battery';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
@@ -141,13 +141,14 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         value={filterEditor.values.pCells.value}
         relation={filterEditor.values.pCells.relation}
         numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
-        position={['first', 'last']}
+        position={['first', 'last']}  
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('pCells', filterState);
         }}
       />
-      <View style={{height: theme.insets.bottom}}/>
-    </ScrollView>  );
+      <Divider style={{height: theme.insets.bottom}} />
+    </ScrollView>
+  );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({

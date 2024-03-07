@@ -34,14 +34,14 @@ const DropboxAccessScreen = () => {
         title={'Restore From Full Backup'}
         position={['last']}
       />
-      <Divider type={'note'} text={note}/>
+      <Divider note text={note}/>
       <Divider text={'TEXT EXPORT & IMPORT'}/>
       <ListItem
         title={'Export to Text File...'}
         position={['first', 'last']}
         rightImage={false}
       />
-      <Divider type={'note'} text={note}/>
+      <Divider note text={note}/>
       <ListItem
         title={'Import from Text File'}
         position={['first']}
@@ -51,7 +51,7 @@ const DropboxAccessScreen = () => {
         position={['last']}
         rightImage={false}
       />
-      <Divider type={'note'} text={note}/>
+      <Divider note text={note}/>
       <ListItem
         title={'Sign in to Dropbox'}
         titleStyle={s.signin}

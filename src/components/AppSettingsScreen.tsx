@@ -110,11 +110,8 @@ const AppSettings = () => {
           position={['first', 'last']}
           onValueChange={toggleBiometrics}
         />
-        <Divider
-          type={'note'}
-          text={
-            'Biometrics enable face recognition or fingerprint. When enabled biometrics protects changes to your information.'
-          }
+        <Divider note
+          text={'Biometrics enable face recognition or fingerprint. When enabled biometrics protects changes to your information.'}
         />
         <Divider text={'APPEARANCE'} />
         <ListItemSwitch

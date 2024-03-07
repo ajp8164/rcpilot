@@ -124,8 +124,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
           })}
         />
       }
-      <Divider
-        type={'note'}
+      <Divider note
         text={'You can save the General Models Filter to remember a specific filter configuration for later use.'}
       />      
       <FlatList

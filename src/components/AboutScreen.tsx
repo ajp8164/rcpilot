@@ -47,11 +47,8 @@ const AboutScreen = ({ navigation }: Props) => {
           })
         }
       />
-      <Divider
-        type={'note'}
-        text={
-          'This log shows the activity of the application and can be useful for app support.'
-        }
+      <Divider note
+        text={'This log shows the activity of the application and can be useful for app support.'}
       />
       <Text style={s.version}>
         {`App Version ${VersionNumber.appVersion}.${VersionNumber.buildVersion}`}

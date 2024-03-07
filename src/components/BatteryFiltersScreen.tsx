@@ -122,8 +122,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
           })}
         />
       }
-      <Divider
-        type={'note'}
+      <Divider note
         text={'You can save the General Batteries Filter to remember a specific filter configuration for later use.'}
       />
       <FlatList

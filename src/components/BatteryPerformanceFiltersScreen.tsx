@@ -82,8 +82,7 @@ const BatteryPerformanceFiltersScreen = ({ navigation }: Props) => {
           filterId: '1',
         })}
       />
-      <Divider
-        type={'note'}
+      <Divider note
         text={'You can save the General Event Cycles Filter to remember a specific filter configuration for later use.'}
       />
       <Divider text={'SAVED EVENT CYCLE FILTERS'} />

@@ -331,9 +331,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         />
       }
       {checklistType === ChecklistType.OneTimeMaintenance
-        ? <Divider type={'note'} text={'Changes to the action are limited. This is a one-time maintenance action.'} />
+        ? <Divider note text={'Changes to the action are limited. This is a one-time maintenance action.'} />
         : action?.history.length
-          ? <Divider type={'note'} text={'Changes to the action are limited. This action has been performed at least once.'} />
+          ? <Divider note text={'Changes to the action are limited. This action has been performed at least once.'} />
           : null
       }
       {(checklistType === ChecklistType.Maintenance || checklistType === ChecklistType.OneTimeMaintenance) &&

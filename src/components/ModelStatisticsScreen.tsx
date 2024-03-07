@@ -70,7 +70,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         }
         ListFooterComponent={
           model.statistics.eventStyleData.length
-            ? <Divider type={'note'} text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`} />
+            ? <Divider note text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`} />
             : <Divider />
         }
       />
@@ -106,7 +106,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         rightImage={false}
       />
       {(!model.purchasePrice || model.statistics.uncertainCost) &&
-        <Divider type={'note'} text={'Costs are uncertain due to gaps in the underlying pricing or cost data.'} />
+        <Divider note text={'Costs are uncertain due to gaps in the underlying pricing or cost data.'} />
       }
     </ScrollView>
   );

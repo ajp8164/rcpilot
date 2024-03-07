@@ -93,7 +93,7 @@ const PilotsScreen = ({ navigation }: Props) => {
           checked={!selectedPilotId}
           onPress={setPilot}
         />
-        <Divider type={'note'} text={'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'} />
+        <Divider note text={'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'} />
       </>
     );
   };

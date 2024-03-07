@@ -78,7 +78,7 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
         position={['last']}
         onValueChange={toggleDefaultFromLastEvent}
       />
-      <Divider type={'note'} text={'Default from last event will only apply when you are not using the event timer.'}/>
+      <Divider note text={'Default from last event will only apply when you are not using the event timer.'}/>
       <Divider text={'EVENT TIMER SHAKE SENSITIVITY'}/>
       <Slider
         value={0.5}
@@ -89,7 +89,7 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider type={'note'} text={'Adjusts the sensitivity of the application to shake gestures to operate the timer.'}/>
+      <Divider note text={'Adjusts the sensitivity of the application to shake gestures to operate the timer.'}/>
       <Divider text={'EVENT LOCATION SENSITIVITY'}/>
       <Slider
         value={0.5}
@@ -100,7 +100,7 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider type={'note'} text={'Adjusts the sensitivity of database locations. Lower implies locations cover a larger area.'}/>
+      <Divider note text={'Adjusts the sensitivity of database locations. Lower implies locations cover a larger area.'}/>
     </ScrollView>
   );
 };

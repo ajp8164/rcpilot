@@ -287,7 +287,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
             : <></>            
         }
         ListFooterComponent={
-          <Divider type={'note'} text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}/>
+          <Divider note text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}/>
         }
       />
       <Divider />

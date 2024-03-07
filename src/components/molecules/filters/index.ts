@@ -5,11 +5,11 @@ export * from './ListItemFilterNumber';
 export * from './ListItemFilterString';
 
 export type FilterState =
-  BooleanFilterState  |
-  DateFilterState |
-  EnumFilterState |
-  NumberFilterState |
-  StringFilterState;
+  | BooleanFilterState
+  | DateFilterState
+  | EnumFilterState
+  | NumberFilterState
+  | StringFilterState;
 
 export type BooleanFilterState = {
   relation: BooleanRelation;
@@ -69,11 +69,36 @@ export enum StringRelation {
   Missing = 'Missing',
 };
 
-// Union of all relations.
+// Type and union of all relations.
+export type FilterRelation =
+| BooleanRelation
+| DateRelation
+| EnumRelation
+| NumberRelation
+| StringRelation;
+
 export const FilterRelation = {
   ...BooleanRelation,
   ...DateRelation,
   ...EnumRelation,
   ...NumberRelation,
   ...StringRelation
+};
+
+// Realm Query Language relations mapping.
+export const RQL: Record<FilterRelation, string> = {
+  [FilterRelation.Any]: '', // Not used. Excluded from queries.
+  [FilterRelation.Is]: '== ANY',
+  [FilterRelation.IsNot]: '== NONE',
+  [FilterRelation.Before]: '<',
+  [FilterRelation.After]: '>',
+  [FilterRelation.Past]: '>',
+  [FilterRelation.LT]: '<',
+  [FilterRelation.GT]: '>',
+  [FilterRelation.EQ]: '==',
+  [FilterRelation.NE]: '!=',
+  [FilterRelation.Yes]: '== true',
+  [FilterRelation.No]: '== false',
+  [FilterRelation.Contains]: '',
+  [FilterRelation.Missing]: '-',
 };

@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { modelChecklistActionsPending, modelShortSummary, modelTypeIcons } from 'lib/model';
+import { modelChecklistActionsPending, modelShortSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -49,9 +49,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const _pilot = useSelector(selectPilot);
   const appSettings = useSelector(selectAppSettings);
-  const filter = useSelector(selectFilters).modelFilterId;
+  const filterId = useSelector(selectFilters).modelFilterId;
 
-  const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
+  const models = useModelsFilter();
+  const activeModels = models.filtered('retired == $0', false);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
@@ -86,7 +87,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 (listModels !== 'all' && !retiredModels.length)}
               icon={
                 <CustomIcon
-                  name={filter ? 'filter-check' : 'filter'}
+                  name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
                     listEditor.enabled ||
                     (listModels === 'all' && !activeModels.length) ||
@@ -129,7 +130,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ activeModels, filter, retiredModels, listEditor.enabled, appSettings ]);
+  }, [ activeModels, filterId, retiredModels, listEditor.enabled, appSettings ]);
 
   const deleteModel = (model: Model) => {
     realm.write(() => {

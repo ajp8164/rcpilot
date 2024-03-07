@@ -4,6 +4,7 @@ import { StringFilterState, StringRelation } from 'components/molecules/filters'
 import { useEffect, useRef, useState } from "react";
 
 import { MultipleNavigatorParamList } from 'types/navigation';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
@@ -73,10 +74,10 @@ const ListItemFilterString = (props: Props) => {
   }, [ props.relation, props.value ]);
 
   useEffect(() => {
-    const onChangeFilter = (value: string) => {
+    const onChangeFilter = (result: NotesEditorResult) => {
       // Set our local state and pass the entire state back to the caller.
-      setFilterState({value: [value]}, {assign: true});
-      onValueChange({relation: filterState.relation, value: [value]});
+      setFilterState({value: [result.text]}, {assign: true});
+      onValueChange({relation: filterState.relation, value: [result.text]});
     };
 
     // Event handler for Notes

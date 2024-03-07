@@ -26,6 +26,7 @@ import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';
 import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
+import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
@@ -48,6 +49,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const _pilot = useSelector(selectPilot);
   const appSettings = useSelector(selectAppSettings);
+  const filter = useSelector(selectFilters).modelFilterId;
 
   const activeModels = useQuery(Model, models => { return models.filtered('retired == $0', false) }, []);
   const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
@@ -83,8 +85,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 (listModels === 'all' && !activeModels.length) ||
                 (listModels !== 'all' && !retiredModels.length)}
               icon={
-                <Icon
-                  name={'filter'}
+                <CustomIcon
+                  name={filter ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
                     listEditor.enabled ||
                     (listModels === 'all' && !activeModels.length) ||
@@ -127,7 +129,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ activeModels, retiredModels, listEditor.enabled, appSettings ]);
+  }, [ activeModels, filter, retiredModels, listEditor.enabled, appSettings ]);
 
   const deleteModel = (model: Model) => {
     realm.write(() => {

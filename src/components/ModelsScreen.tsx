@@ -5,7 +5,7 @@ import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } fr
 import React, { useEffect, useRef } from 'react';
 import { modelChecklistActionsPending, modelShortSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
-import { useObject, useQuery, useRealm } from '@realm/react';
+import { useObject, useRealm } from '@realm/react';
 
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { BSON } from 'realm';
@@ -53,7 +53,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const models = useModelsFilter();
   const activeModels = models.filtered('retired == $0', false);
-  const retiredModels = useQuery(Model, models => { return models.filtered('retired == $0', true) }, []);
+  const retiredModels = models.filtered('retired == $0', true);
   const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
   const achievementModalRef = useRef<AchievementModal>(null);
@@ -82,17 +82,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditor.enabled || 
-                (listModels === 'all' && !activeModels.length) ||
-                (listModels !== 'all' && !retiredModels.length)}
+              disabled={!filterId && listEditor.enabled}
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
-                    listEditor.enabled ||
-                    (listModels === 'all' && !activeModels.length) ||
-                    (listModels !== 'all' && !retiredModels.length)
-                    ? s.headerIconDisabled : {}
+                    !filterId && listEditor.enabled ? s.headerIconDisabled : {}
                   ]}
                 />
               }
@@ -130,7 +125,13 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ activeModels, filterId, retiredModels, listEditor.enabled, appSettings ]);
+  }, [
+    activeModels,
+    appSettings,
+    filterId,
+    listEditor.enabled,
+    retiredModels,
+  ]);
 
   const deleteModel = (model: Model) => {
     realm.write(() => {
@@ -447,13 +448,21 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  if (listModels === 'retired' && !retiredModels.length) {
+  if (!filterId && listModels === 'retired' && !retiredModels.length) {
     return (
       <EmptyView info message={'No Retired Models'} />
     );
   }
 
-  if (!activeModels.length && !retiredModels.length) {
+  if (
+    (filterId && listModels === 'all' && !activeModels.length && !retiredModels.length) ||
+    (filterId && listModels === 'retired' && !retiredModels.length)) {
+    return (
+      <EmptyView message={'No Models Match Your Filter'} />
+    );
+  }
+
+  if (!filterId && !activeModels.length && !retiredModels.length) {
     return (
       <EmptyView info message={'No Models'} details={"Tap the + button to add your first model."} />
     );    

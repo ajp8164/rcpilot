@@ -3,21 +3,24 @@ import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
-import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
-import { useQuery, useRealm } from '@realm/react';
+import { batteryIsCharged, batteryTintIcons, useBatteriesFilter } from 'lib/battery';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
 import { Button } from '@rneui/base';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { selectFilters } from 'store/selectors/filterSelectors';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useRealm } from '@realm/react';
+import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
@@ -36,9 +39,12 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
-  const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
-  const retiredBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', true) }, []);
-  const inStorageBatteries = useQuery(Battery, batteries => { return batteries.filtered('inStorage == $0', true) }, []);
+  const filterId = useSelector(selectFilters).batteryFilterId;
+
+  const batteries = useBatteriesFilter();
+  const activeBatteries = batteries.filtered('retired == $0 AND inStorage == $1', false, false);
+  const retiredBatteries = batteries.filtered('retired == $0', true);
+  const inStorageBatteries = batteries.filtered('inStorage == $0', true);
 
   useEffect(() => {
     navigation.setOptions({
@@ -64,19 +70,12 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditor.enabled ||
-                (listBatteries === 'all' && !activeBatteries.length) ||
-                (listBatteries !== 'all' && !retiredBatteries.length) ||
-                (listBatteries !== 'all' && !inStorageBatteries.length)}
+              disabled={!filterId && listEditor.enabled}
               icon={
-                <Icon
-                  name={'filter'}
+                <CustomIcon
+                  name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
-                    listEditor.enabled ||
-                    (listBatteries === 'all' && !activeBatteries.length) ||
-                    (listBatteries !== 'all' && !retiredBatteries.length) ||
-                    (listBatteries !== 'all' && !inStorageBatteries.length)
-                    ? s.headerIconDisabled : {}
+                    !filterId && listEditor.enabled ? s.headerIconDisabled : {}
                   ]}
                 />
               }
@@ -111,7 +110,13 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditor.enabled, activeBatteries, retiredBatteries, inStorageBatteries ]);
+  }, [
+    activeBatteries,
+    filterId,
+    inStorageBatteries,
+    listEditor.enabled,
+    retiredBatteries,
+  ]);
 
   const addBattery = () => {
     const haveBatteries = !!activeBatteries.length || !!retiredBatteries.length || !!inStorageBatteries.length;
@@ -296,19 +301,28 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  if (listBatteries === 'retired' && !retiredBatteries.length) {
+  if (!filterId && listBatteries === 'retired' && !retiredBatteries.length) {
     return (
       <EmptyView info message={'No Retired Batteries'} />
     );
   }
 
-  if (listBatteries === 'in-storage' && !inStorageBatteries.length) {
+  if (!filterId && listBatteries === 'in-storage' && !inStorageBatteries.length) {
     return (
       <EmptyView info message={'No Batteries In Storage'} />
     );
   }
 
-  if (!activeBatteries.length && !retiredBatteries.length && !inStorageBatteries.length) {
+  if (
+    (filterId && listBatteries === 'all' && !activeBatteries.length && !retiredBatteries.length && !inStorageBatteries.length) ||
+    (filterId && listBatteries === 'retired' && !retiredBatteries.length) ||
+    (filterId && listBatteries === 'in-storage' &&!inStorageBatteries.length)) {
+    return (
+      <EmptyView message={'No Batteries Match Your Filter'} />
+    );
+  }
+
+  if (!filterId && !activeBatteries.length && !retiredBatteries.length && !inStorageBatteries.length) {
     return (
       <EmptyView info message={'No Batteries'} details={"Tap the + button to add your first battery."} />
     );

@@ -205,7 +205,7 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
         title={'Style'}
         value={values.modelStyle.value}
         relation={values.modelStyle.relation}
-        enumName={'ModelStyles'}
+        enumName={'EventStyles'}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange('modelStyle', filterState);

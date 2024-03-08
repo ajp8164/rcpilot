@@ -1,31 +1,38 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
+import { CompositeScreenProps } from '@react-navigation/core';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { secondsToMSS } from 'lib/formatters';
+import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useEventsFilter } from 'lib/modelEvent';
 import { useListEditor } from '@react-native-ajp-elements/ui';
+import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
   data: Event[];
 };
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Events'>;
+export type Props = CompositeScreenProps<
+  NativeStackScreenProps<ModelsNavigatorParamList, 'Events'>,
+  NativeStackScreenProps<SetupNavigatorParamList>
+>;
 
 const EventsScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
@@ -35,6 +42,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
+
+  const filterId = useSelector(selectFilters).eventFilterId;
+  const events = useEventsFilter(modelId);
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const [kind] = useState(eventKind(model?.type));
@@ -47,18 +57,18 @@ const EventsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditor.enabled || !model?.events.length}
+              disabled={!filterId && listEditor.enabled}
               icon={
-                <Icon
-                  name={'filter'}
+                <CustomIcon
+                  name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
                     listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
                   ]}
                 />
               }
-              // onPress={() => navigation.navigate('EventFiltersNavigator', {
-              //   screen: 'EventFilters'
-              // })}
+              onPress={() => navigation.navigate('EventFiltersNavigator', {
+                screen: 'EventFilters'
+              })}
             />
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -178,7 +188,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
-      sections={groupEvents([...model.events].reverse())}
+      sections={groupEvents([...events].reverse())}
       keyExtractor={item => item._id.toString()}
       renderItem={renderEvent}
       renderSectionHeader={({section: {title}}) => (

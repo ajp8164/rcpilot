@@ -181,6 +181,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       {enabled: true, action: onCancel, style: {color: theme.colors.screenHeaderInvButtonText}},
     );
   }, [
+    allBatteryDischarges,
+    batteries,
     duration,
     outcome,
     pilot,

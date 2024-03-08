@@ -138,13 +138,14 @@ export type ModelsNavigatorParamList = {
   };
   EnumPicker: EnumPickerInterface;
   Events: {
-    modelId?: string;
+    modelId: string;
     modelType?: ModelType;
   };
   EventEditor: {
     eventId: string;
     modelType: ModelType;
   };
+  EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
   EventOutcome: {
     eventOutcome: EventOutcome;
   };
@@ -190,6 +191,20 @@ export type ModelsNavigatorParamList = {
     headerButtonStyle?: TextStyle;
     text?: string;
     extraData?: any;
+    eventName: string;
+  };
+};
+
+export type EventFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  EventFilters: undefined;
+  EventFilterEditor: {
+    filterId: string;
+  };
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
     eventName: string;
   };
 };
@@ -446,7 +461,7 @@ export type SetupNavigatorParamList = {
   DatabaseReporting: undefined;
   EnumPicker: EnumPickerInterface;
   Events: {
-    modelId?: string;
+    modelId: string;
     pilotId?: string;
   };
   EventEditor: {

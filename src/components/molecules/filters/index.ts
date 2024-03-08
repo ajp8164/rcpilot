@@ -86,6 +86,7 @@ export const FilterRelation = {
 };
 
 // Realm Query Language relations mapping.
+// Property queries
 export const RQL: Record<FilterRelation, string> = {
   [FilterRelation.Any]: '', // Not used. Excluded from queries.
   [FilterRelation.Is]: '== ANY',
@@ -101,4 +102,11 @@ export const RQL: Record<FilterRelation, string> = {
   [FilterRelation.No]: '== false',
   [FilterRelation.Contains]: '',
   [FilterRelation.Missing]: '-',
+};
+
+// Collection queries - only applies to enum relations
+export const RQLCol: Record<EnumRelation, string> = {
+  [FilterRelation.Any]: '', // Not used. Excluded from queries.
+  [FilterRelation.Is]: 'SOME',
+  [FilterRelation.IsNot]: 'NONE',
 };

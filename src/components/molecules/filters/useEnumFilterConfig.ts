@@ -48,7 +48,7 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     sectionName: 'MODELS TO {0} RESULTS',
     values: [],
   },
-  ModelStyles: {
+  EventStyles: {
     mode: 'many-or-none',
     title: 'Styles',
     sectionName: 'STYLES TO {0} RESULTS',
@@ -96,7 +96,7 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
       const locations = realm.objects(Location);
       config.values = locations.map(l => l.name).sort();
       break;
-    case 'ModelStyles':
+    case 'EventStyles':
       const styles = realm.objects(EventStyle);
       config.values = styles.map(s => s.name).sort();
       break;

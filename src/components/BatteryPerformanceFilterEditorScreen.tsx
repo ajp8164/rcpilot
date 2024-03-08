@@ -135,7 +135,7 @@ const BatteryPerformanceFilterEditorScreen = ({ navigation: _navigation }: Props
         title={'Style'}
         value={filter[BatteryPerformanceProperty.Style].value}
         relation={EnumRelation.Any}
-        enumName={'ModelStyles'}
+        enumName={'EventStyles'}
         position={['first', 'last']}
         onValueChange={filterState => {
           onFilterValueChange(BatteryPerformanceProperty.Style, filterState);

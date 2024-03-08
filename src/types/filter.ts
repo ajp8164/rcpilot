@@ -11,6 +11,7 @@ import { PickEnum } from 'types/custom';
 export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
   BatteryCycleFilter = 'BatteryCycleFilter',
+  EventsFilter = 'EventsFilter',
   ModelsFilter = 'ModelFilter',
   ReportEventsFilter = 'ReportEventsFilter',
   ReportMaintenanceFilter = 'ReportMaintenanceFilter',
@@ -88,9 +89,9 @@ export type EventFilterValues = {
   date: DateFilterState;
   duration: NumberFilterState;
   style: EnumFilterState;
-  location: StringFilterState;
-  battery: StringFilterState;
-  pilot: StringFilterState;
+  location: EnumFilterState;
+  battery: EnumFilterState;
+  pilot: EnumFilterState;
   outcome: EnumFilterState;
   notes: StringFilterState;
 };
@@ -111,8 +112,8 @@ export type EventReportFilterValues = {
   category: EnumFilterState;
   date: DateFilterState;
   duration: NumberFilterState;
-  pilot: StringFilterState;
-  location: StringFilterState;
+  pilot: EnumFilterState;
+  location: EnumFilterState;
   modelStyle: EnumFilterState;
   outcome: EnumFilterState;
 };

@@ -12,6 +12,7 @@ export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
   BatteryCycleFilter = 'BatteryCycleFilter',
   EventsFilter = 'EventsFilter',
+  MaintenanceFilter = 'MaintenanceFilter',
   ModelsFilter = 'ModelFilter',
   ReportEventsFilter = 'ReportEventsFilter',
   ReportMaintenanceFilter = 'ReportMaintenanceFilter',
@@ -34,6 +35,7 @@ export type FilterValues =
   & BatteryCycleFilterValues
   & EventReportFilterValues
   & EventFilterValues
+  & MaintenanceFilterValues
   & MaintenanceReportFilterValues
   & ModelScanCodesReportFilterValues
   & BatteryScanCodesReportFilterValues;
@@ -44,6 +46,7 @@ export type AnyFilterValues =
   | BatteryCycleFilterValues
   | EventReportFilterValues
   | EventFilterValues
+  | MaintenanceFilterValues
   | MaintenanceReportFilterValues
   | ModelScanCodesReportFilterValues
   | BatteryScanCodesReportFilterValues;
@@ -93,6 +96,14 @@ export type EventFilterValues = {
   battery: EnumFilterState;
   pilot: EnumFilterState;
   outcome: EnumFilterState;
+  notes: StringFilterState;
+};
+
+// Maintenace filter
+//
+export type MaintenanceFilterValues = {
+  date: DateFilterState;
+  costs: NumberFilterState;
   notes: StringFilterState;
 };
 

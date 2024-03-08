@@ -6,7 +6,7 @@ export interface FiltersState {
   batteryFilterId?: string;
   batteryCycleFilterId?: string;
   eventFilterId?: string;
-  maintenanceLogFilterId?: string;
+  maintenanceFilterId?: string;
   modelFilterId?: string;
 }
 
@@ -14,7 +14,7 @@ export const initialFiltersState = Object.freeze<FiltersState>({
   batteryFilterId: undefined,
   batteryCycleFilterId: undefined,
   eventFilterId: undefined,
-  maintenanceLogFilterId: undefined,
+  maintenanceFilterId: undefined,
   modelFilterId: undefined,
 });
 

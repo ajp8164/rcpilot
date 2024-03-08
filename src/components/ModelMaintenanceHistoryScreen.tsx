@@ -1,11 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
-import {
-  Checklist,
-  ChecklistAction,
-  ChecklistActionHistoryEntry,
-  JChecklistActionHistoryEntry
-} from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
+import { HistoryEntry, useMaintenanceFilter } from 'lib/maintenance';
 import {
   ListItem,
   SectionListHeader,
@@ -13,32 +8,29 @@ import {
   swipeableDeleteItem
 } from 'components/atoms/List';
 import { ListRenderItem, SectionList, SectionListData } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { ChecklistType } from 'types/checklist';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
   data: JChecklistActionHistoryEntry[];
-};
-
-type HistoryEntry = {
-  checklist: Checklist;
-  action: ChecklistAction,
-  history: ChecklistActionHistoryEntry,
 };
 
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenanceHistory'>;
@@ -54,9 +46,9 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
+  const filterId = useSelector(selectFilters).maintenanceFilterId;
+  const entries = useMaintenanceFilter(modelId);
   const model = useObject(Model, new BSON.ObjectId(modelId));
-  const [entries, setEntries] = useState<HistoryEntry[]>([]);
-  const loading = useRef(true);
 
   useEffect(() => {  
     navigation.setOptions({
@@ -66,16 +58,18 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditor.enabled || !entries.length}
+              disabled={!filterId && listEditor.enabled}
               icon={
-                <Icon
-                  name={'filter'}
-                  style={[s.headerIcon, listEditor.enabled || !entries.length ? s.headerIconDisabled : {}]}
+                <CustomIcon
+                  name={filterId ? 'filter-check' : 'filter'}
+                  style={[s.headerIcon,
+                    listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
+                  ]}
                 />
               }
-              // onPress={() => navigation.navigate('ModelMaintenanceHistoryFiltersNavigator', {
-              //   screen: 'ModelMaintenanceFilters',
-              // })}
+              onPress={() => navigation.navigate('ModelMaintenanceFiltersNavigator', {
+                screen: 'ModelMaintenanceFilters',
+              })}
             />
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -89,32 +83,7 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditor.enabled, entries ]);
-
-  useEffect(() => {
-    // Create the section list data set.
-    let e: HistoryEntry[] = [];
-    const maintenanceChecklists = model?.checklists.filter(c =>
-      c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance
-    );
-    maintenanceChecklists?.forEach(c => {
-      c.actions.forEach(a => {
-        a.history.forEach(h => {
-          e.push({
-            checklist: c,
-            action: a,
-            history: h,  
-          } as HistoryEntry);
-        });
-      });
-    });
-
-    setEntries(e.sort((a, b) => {
-      return (a.history.date > b.history.date) ? -1 : ((a.history.date < b.history.date) ? 1 : 0)
-    }));
-    
-    loading.current = false;
-  }, []);
+  }, [ filterId, listEditor.enabled, entries ]);
 
   const groupEntries = (entries?: HistoryEntry[]): SectionListData<HistoryEntry, Section>[] => {
     return groupItems<HistoryEntry, Section>(entries || [], (entry) => {
@@ -190,12 +159,6 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
-  };
-
-  if (loading.current) {
-    return (
-      <EmptyView isLoading message={'Loading Maintenance Log'} />
-    );
   };
   
   if (!entries.length) {

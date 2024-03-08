@@ -162,6 +162,7 @@ export type ModelsNavigatorParamList = {
   ModelEditor: {
     modelId: string;
   };
+  ModelMaintenanceFiltersNavigator: NavigatorScreenParams<ModelMaintenanceFiltersNavigatorParamList>;
   ModelStatistics: {
     modelId: string;
   };
@@ -199,6 +200,20 @@ export type EventFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   EventFilters: undefined;
   EventFilterEditor: {
+    filterId: string;
+  };
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
+    eventName: string;
+  };
+};
+
+export type ModelMaintenanceFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  ModelMaintenanceFilters: undefined;
+  ModelMaintenanceFilterEditor: {
     filterId: string;
   };
   NotesEditor: {

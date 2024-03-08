@@ -14,6 +14,7 @@ import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import { ModelHeader } from 'components/molecules/ModelHeader';
 import ModelMaintenanceActionScreen from 'components/ModelMaintenanceActionScreen';
+import ModelMaintenanceFiltersNavigator from 'components/navigation/ModelMaintenanceFiltersNavigator';
 import ModelMaintenanceHistoryEntryScreen from 'components/ModelMaintenanceHistoryEntryScreen';
 import ModelMaintenanceHistoryScreen from 'components/ModelMaintenanceHistoryScreen';
 import ModelMaintenanceScreen from 'components/ModelMaintenanceScreen';
@@ -155,6 +156,14 @@ const ModelsNavigator = () => {
         component={ModelMaintenanceActionScreen}
         options={{
           title: 'Action',
+        }}
+      />
+      <ModelsStack.Screen
+        name='ModelMaintenanceFiltersNavigator'
+        component={ModelMaintenanceFiltersNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
         }}
       />
       <ModelsStack.Screen

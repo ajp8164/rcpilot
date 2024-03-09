@@ -11,6 +11,12 @@ import { useEvent } from 'lib/event';
 import {useTheme} from "theme";
 import { uuidv4 } from 'lib/utils';
 
+const segments = [
+  EnumRelation.Any,
+  EnumRelation.Is,
+  EnumRelation.IsNot
+];
+
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: EnumFilterState) => void;
   enumName: EnumName;
@@ -30,12 +36,6 @@ const ListItemFilterEnum = (props: Props) => {
   const theme = useTheme();
   const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
   const event = useEvent();
-
-  const segments = [
-    EnumRelation.Any,
-    EnumRelation.Is,
-    EnumRelation.IsNot
-  ];
   
   const initializing = useRef(true);
 

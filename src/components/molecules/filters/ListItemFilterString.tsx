@@ -11,6 +11,12 @@ import { useSetState } from '@react-native-ajp-elements/core';
 import {useTheme} from "theme";
 import { uuidv4 } from 'lib/utils';
 
+const segments = [
+  StringRelation.Any,
+  StringRelation.Contains,
+  StringRelation.Missing,
+];
+
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: StringFilterState) => void;
   relation: StringRelation;
@@ -28,12 +34,6 @@ const ListItemFilterString = (props: Props) => {
   const theme = useTheme();
   const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
   const event = useEvent();
-
-  const segments = [
-    StringRelation.Any,
-    StringRelation.Contains,
-    StringRelation.Missing,
-  ];
   
   const initializing = useRef(true);
 
@@ -127,7 +127,7 @@ const ListItemFilterString = (props: Props) => {
       ExpandableComponent={
         <ListItem
           title={'The Text'}
-          titleStyle={!filterState.value ? {color: theme.colors.assertive}: {}}
+          titleStyle={!filterState.value.length ? {color: theme.colors.assertive}: {}}
           subtitle={!filterState.value.length ?  'Matching text not specified' : filterState.value[0]}
           position={position?.includes('last') ? ['last'] : []}
           onPress={() => navigation.navigate('NotesEditor', {

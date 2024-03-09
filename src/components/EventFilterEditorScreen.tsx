@@ -7,6 +7,7 @@ import {
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
+import { defaultFilter, eventKind } from 'lib/modelEvent';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -14,7 +15,6 @@ import { EventFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
@@ -26,7 +26,7 @@ const filterValueLabels: Record<string, string> = {};
 export type Props = NativeStackScreenProps<EventFiltersNavigatorParamList, 'EventFilterEditor'>;
 
 const EventFilterEditorScreen = ({ route }: Props) => {
-  const { filterId } = route.params;
+  const { filterId, modelType } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
@@ -82,7 +82,7 @@ const EventFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the events that match all of these criteria.'}/>
+      <Divider text={`This filter shows all the ${eventKind(modelType).namePlural.toLowerCase()} that match all of these criteria.`}/>
       <ListItemFilterDate
         title={'Date'}
         value={filterEditor.values.date.value}

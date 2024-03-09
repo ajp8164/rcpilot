@@ -2,6 +2,7 @@ import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
 import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
+import { defaultFilter, eventKind } from 'lib/modelEvent';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -10,7 +11,6 @@ import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
-import { defaultFilter } from 'lib/modelEvent';
 import { generalEventsFilterName } from 'components/EventFilterEditorScreen';
 import { saveSelectedEventFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -19,7 +19,9 @@ import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<EventFiltersNavigatorParamList, 'EventFilters'>;
 
-const EventFiltersScreen = ({ navigation }: Props) => {
+const EventFiltersScreen = ({ navigation, route }: Props) => {
+  const {modelType} = route.params;
+
   const theme = useTheme();
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
@@ -81,6 +83,7 @@ const EventFiltersScreen = ({ navigation }: Props) => {
         onPress={() => setFilter(filter)}
         onPressInfo={() => navigation.navigate('EventFilterEditor', {
           filterId: filter._id.toString(),
+          modelType,
         })}
         swipeable={{
           rightItems: [{
@@ -114,18 +117,19 @@ const EventFiltersScreen = ({ navigation }: Props) => {
       <Divider />
       {generalEventsFilter && 
         <ListItemCheckboxInfo
-          title={'General Events Filter'}
-          subtitle={`Matches events where any date, any duration, any style, any location, any battery, any propeller, any pilot, any outcome, and any notes.`}
+          title={`General ${eventKind(modelType).namePlural} Filter`}
+          subtitle={`Matches ${eventKind(modelType).namePlural.toLowerCase()} where any date, any duration, any style, any location, any battery, any propeller, any pilot, any outcome, and any notes.`}
           position={['first', 'last']}
           checked={generalEventsFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalEventsFilter)}
           onPressInfo={() => navigation.navigate('EventFilterEditor', {
             filterId: generalEventsFilter!._id.toString(),
+            modelType,
           })}
         />
       }
       <Divider note
-        text={'You can save the General Events Filter to remember a specific filter configuration for later use.'}
+        text={`You can save the General ${eventKind(modelType).namePlural} Filter to remember a specific filter configuration for later use.`}
       />      
       <FlatList
         data={allEventFilters}

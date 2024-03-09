@@ -19,8 +19,11 @@ export const filterSummary = (filterOrFilterType: Filter | string) => {
   }
 
   const kind =
-    filterType === FilterType.ModelsFilter ? 'models' :
     filterType === FilterType.BatteriesFilter ? 'batteries' :
+    filterType === FilterType.BatteryCyclesFilter ? 'battery cycles' :
+    filterType === FilterType.EventsFilter ? 'events' :
+    filterType === FilterType.MaintenanceFilter ? 'logs' :
+    filterType === FilterType.ModelsFilter ? 'models' :
     filterType === FilterType.ReportEventsFilter ? 'events' :
     filterType === FilterType.ReportMaintenanceFilter ? 'maintenance items' :
     filterType === FilterType.ReportModelScanCodesFilter ? 'models' :
@@ -52,18 +55,22 @@ const prefixes = ['$'];
 // There are a few exceptions as noted in this implementation. For example, number values
 // allow a label to appear in the 'value' array at index 1.
 export const filterStateSummary = (property: string, state: FilterState) => {
+  // This causes a one character first "word" to be forced to uppercase (e.g. cRating => C rating).
   let p = lodash.startCase(property).toLowerCase();
+  if (p[1] === ' ') {
+    p = `${p[0].toUpperCase()}${p.substring(1)}`;
+  }
   let s = `any ${p}`;
   if (state.relation !== FilterRelation.Any && state.value) {
     switch (state.relation) {
       case FilterRelation.After:
-        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('d/MM/yy')}`;
+        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('d/M/yy')}`;
         break;
       case FilterRelation.After:
-        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('d/MM/yy')}`;
+        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('d/M/yy')}`;
         break;
       case FilterRelation.Before:
-        s = `${p} is before ${DateTime.fromISO(state.value[0]).toFormat('d/MM/yy')}`;
+        s = `${p} is before ${DateTime.fromISO(state.value[0]).toFormat('d/M/yy')}`;
         break;
       case FilterRelation.Past:
         s = `${p} in past ${state.value[0]} ${state.value[1]}`; // [0] is number [1] is time span

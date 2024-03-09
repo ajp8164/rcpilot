@@ -11,6 +11,7 @@ import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/model';
+import { filterSummary } from 'lib/filter';
 import { generalModelsFilterName } from 'components/ModelFilterEditorScreen';
 import { saveSelectedModelFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -75,7 +76,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'model-filters', filter._id.toString())}
         key={index}
         title={filter.name}
-        subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
+        subtitle={filterSummary(filter)}
         position={listItemPosition(index, allModelFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
@@ -115,7 +116,8 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
       {generalModelsFilter && 
         <ListItemCheckboxInfo
           title={'General Models Filter'}
-          subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
+          subtitle={filterSummary(generalModelsFilter)}
+          // subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
           position={['first', 'last']}
           checked={generalModelsFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalModelsFilter)}

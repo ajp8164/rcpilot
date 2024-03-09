@@ -11,6 +11,7 @@ import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
+import { filterSummary } from 'lib/filter';
 import { generalEventsFilterName } from 'components/EventFilterEditorScreen';
 import { saveSelectedEventFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -77,7 +78,7 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'event-filters', filter._id.toString())}
         key={index}
         title={filter.name}
-        subtitle={`Matches events where any date, any duration, any style, any location, any battery, any propeller, any pilot, any outcome, and any notes.`}
+        subtitle={filterSummary(filter)}
         position={listItemPosition(index, allEventFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
@@ -118,7 +119,7 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
       {generalEventsFilter && 
         <ListItemCheckboxInfo
           title={`General ${eventKind(modelType).namePlural} Filter`}
-          subtitle={`Matches ${eventKind(modelType).namePlural.toLowerCase()} where any date, any duration, any style, any location, any battery, any propeller, any pilot, any outcome, and any notes.`}
+          subtitle={filterSummary(generalEventsFilter)}
           position={['first', 'last']}
           checked={generalEventsFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalEventsFilter)}

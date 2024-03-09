@@ -11,6 +11,7 @@ import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/battery';
+import { filterSummary } from 'lib/filter';
 import { generalBatteriesFilterName } from 'components/BatteryFilterEditorScreen';
 import { saveSelectedBatteryFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -75,7 +76,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'battery-filters', filter._id.toString())}
         key={index}
         title={filter.name}
-        subtitle={`Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.`}
+        subtitle={filterSummary(filter)}
         position={listItemPosition(index, allBatteryFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
@@ -113,7 +114,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
       {generalBatteriesFilter && 
         <ListItemCheckboxInfo
           title={'General Batteries Filter'}
-          subtitle={'Matches batteries where any chemistry, any total cycles, any capacity, any C rating, any S cells, and any P cells.'}
+          subtitle={filterSummary(generalBatteriesFilter)}
           position={['first', 'last']}
           checked={generalBatteriesFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalBatteriesFilter)}

@@ -6,14 +6,6 @@ import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
 import { useTheme } from 'theme';
 
-const segments = [
-  NumberRelation.Any,
-  NumberRelation.LT,
-  NumberRelation.GT,
-  NumberRelation.EQ,
-  NumberRelation.NE
-];
-
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
   numericProps?: Omit<FakeCurrencyInputProps, 'value'>;
@@ -33,8 +25,16 @@ const ListItemFilterNumber = (props: Props) => {
   } = props;
   
   const theme = useTheme();
-  const initializing = useRef(true);
 
+  const segments = [
+    NumberRelation.Any,
+    NumberRelation.LT,
+    NumberRelation.GT,
+    NumberRelation.EQ,
+    NumberRelation.NE
+  ];
+  
+  const initializing = useRef(true);
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useState<NumberFilterState>({
     relation: props.relation,

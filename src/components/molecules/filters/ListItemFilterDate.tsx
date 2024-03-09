@@ -12,6 +12,13 @@ import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';
 
+const segments = [
+  DateRelation.Any,
+  DateRelation.Before,
+  DateRelation.After,
+  DateRelation.Past,
+];
+
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: DateFilterState) => void;
   relation: DateRelation;
@@ -28,13 +35,6 @@ const ListItemFilterDate = (props: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-
-  const segments = [
-    DateRelation.Any,
-    DateRelation.Before,
-    DateRelation.After,
-    DateRelation.Past,
-  ];
 
   const initializing = useRef(true);
   const [expanded, setExpanded] = useState(props.value.length > 0);

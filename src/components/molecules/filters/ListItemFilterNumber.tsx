@@ -4,6 +4,15 @@ import { useEffect, useRef, useState } from "react";
 
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import lodash from 'lodash';
+import { useTheme } from 'theme';
+
+const segments = [
+  NumberRelation.Any,
+  NumberRelation.LT,
+  NumberRelation.GT,
+  NumberRelation.EQ,
+  NumberRelation.NE
+];
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -22,15 +31,8 @@ const ListItemFilterNumber = (props: Props) => {
     position,
     title,
   } = props;
-
-  const segments = [
-    NumberRelation.Any,
-    NumberRelation.LT,
-    NumberRelation.GT,
-    NumberRelation.EQ,
-    NumberRelation.NE
-  ];
   
+  const theme = useTheme();
   const initializing = useRef(true);
 
   const [expanded, setExpanded] = useState(props.value.length > 0);
@@ -118,6 +120,7 @@ const ListItemFilterNumber = (props: Props) => {
       ExpandableComponent={
         <ListItemInput
           title={'Value'}
+          titleStyle={filterState.value?.length === 0 ? {color: theme.colors.assertive}: {}}
           label={label}
           position={position?.includes('last') ? ['last'] : []}
           keyboardType={'number-pad'}

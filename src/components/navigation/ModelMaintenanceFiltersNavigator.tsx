@@ -33,7 +33,7 @@ const ModelMaintenanceFiltersNavigator = () => {
           name='ModelMaintenanceFilters'
           component={ModelMaintenanceFiltersScreen}
           options={{
-            title: 'Filters for Events',
+            title: 'Filters for Maintenance Log',
           }}
         />
         <ModelMaintenanceFiltersStack.Screen

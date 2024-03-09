@@ -161,9 +161,15 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
     )
   };
   
+  if (filterId && !entries.length) {
+    return (
+      <EmptyView message={`No Maintenance Logs Match Your Filter`} />
+    );
+  }
+
   if (!entries.length) {
     return (
-      <EmptyView info message={'No Maintenance History'} />
+      <EmptyView info message={'No Maintenance Logs'} />
     );
   }
 

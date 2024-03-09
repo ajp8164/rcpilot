@@ -3,7 +3,7 @@ import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
-import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
+import { batteryCycleDescription, batteryCycleTitle, useBatteryCyclesFilter } from 'lib/batteryCycle';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -11,13 +11,15 @@ import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { Button } from '@rneui/base';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
@@ -34,7 +36,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
-  
+
+  const filterId = useSelector(selectFilters).batteryCycleFilterId;
+  const batteryCycles = useBatteryCyclesFilter(batteryId);
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
   useEffect(() => {  
@@ -45,11 +49,13 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={listEditor.enabled || !battery?.cycles.length}
+              disabled={!filterId && listEditor.enabled}
               icon={
-                <Icon
-                  name={'filter'}
-                  style={[s.headerIcon, listEditor.enabled || !battery?.cycles.length ? s.headerIconDisabled : {}]}
+                <CustomIcon
+                  name={filterId ? 'filter-check' : 'filter'}
+                  style={[s.headerIcon,
+                    !filterId && listEditor.enabled ? s.headerIconDisabled : {}
+                  ]}
                 />
               }
               onPress={() => navigation.navigate('BatteryCycleFiltersNavigator', {
@@ -61,14 +67,14 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!battery?.cycles.length}
+              disabled={!batteryCycles.length}
               onPress={listEditor.onEdit}
             />
           </>
         );
       },
     });
-  }, [ listEditor.enabled ]);
+  }, [ filterId, listEditor.enabled ]);
 
   const groupCycles = (cycles?: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
     return groupItems<BatteryCycle, Section>(cycles || [], (cycle) => {
@@ -79,10 +85,10 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
 
   const deleteCycle = (cycleNumber: number) => {
     realm.write(() => {
-      const index = battery?.cycles.findIndex(c => c.cycleNumber === cycleNumber);
+      const index = batteryCycles.findIndex(c => c.cycleNumber === cycleNumber);
       if (index !== undefined && index >= 0) {
         // Make sure to decrement the battery's total cycle count.
-        battery?.cycles.splice(index, 1);
+        realm.delete(batteryCycles[index]);
         battery!.totalCycles = battery!.totalCycles! - 1;
       }
     });
@@ -149,7 +155,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
-      sections={groupCycles([...battery?.cycles].reverse())} // Most recent cycles at the top
+      sections={groupCycles([...batteryCycles].reverse())} // Most recent cycles at the top
       keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
       renderItem={renderBatteryCycle}
       renderSectionHeader={({section: {title}}) => (

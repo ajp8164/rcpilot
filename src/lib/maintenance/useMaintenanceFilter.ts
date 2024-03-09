@@ -7,10 +7,9 @@ import {
 
 import { BSON } from 'realm';
 import { ChecklistType } from 'types/checklist';
-import { DateTime } from 'luxon';
 import { Filter } from 'realmdb/Filter';
 import { Model } from 'realmdb/Model';
-import { TimeSpan } from 'types/common';
+import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useObject } from '@realm/react';
 import { useSelector } from 'react-redux';
@@ -48,18 +47,7 @@ export const useMaintenanceFilter = (modelId: string) => {
 
   if (!filter) return entries;
 
-  let date = DateTime.fromISO(filter.date.value[0]).toUnixInteger().toString();
-  if (filter.date.relation === DateRelation.Past) {
-    const num = parseInt(filter.date.value[0]);
-    const timeframe = filter.date.value[1]; 
-    let days = num;
-    switch (timeframe) {
-      case TimeSpan.Weeks: days = num * 7; break;
-      case TimeSpan.Months: days = num * 30; break;
-      case TimeSpan.Years: days = num * 365; break;
-    }
-    date = DateTime.now().minus({days}).toUnixInteger().toString();
-  }
+  let date = getDate(filter.date);
 
   entries = entries.filter(e => {
     switch (filter.date.relation) {

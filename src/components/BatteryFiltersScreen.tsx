@@ -41,14 +41,14 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
     // Lazy initialization of a general batteries filter.
     if (!generalBatteriesFilterQuery.length) {
       realm.write(() => {
-        const gmf = realm.create('Filter', {
+        const gbf = realm.create('Filter', {
           name: generalBatteriesFilterName,
           type: FilterType.BatteriesFilter,
           values: defaultFilter,
         });
 
         // @ts-ignore
-        setGeneralBatteriesFilter(gmf);
+        setGeneralBatteriesFilter(gbf);
       });
     } else {
       setGeneralBatteriesFilter(generalBatteriesFilterQuery[0]);

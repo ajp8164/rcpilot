@@ -41,14 +41,14 @@ const EventFiltersScreen = ({ navigation }: Props) => {
     // Lazy initialization of a general events filter.
     if (!generalEventsFilterQuery.length) {
       realm.write(() => {
-        const gmf = realm.create('Filter', {
+        const gef = realm.create('Filter', {
           name: generalEventsFilterName,
           type: FilterType.EventsFilter,
           values: defaultFilter,
         });
 
         // @ts-ignore
-        setGeneralEventsFilter(gmf);
+        setGeneralEventsFilter(gef);
       });
     } else {
       setGeneralEventsFilter(generalEventsFilterQuery[0]);

@@ -8,10 +8,9 @@ import {
 import { useObject, useQuery } from '@realm/react';
 
 import { BSON } from 'realm';
-import { DateTime } from 'luxon';
 import { Filter } from 'realmdb/Filter';
 import { Model } from 'realmdb/Model';
-import { TimeSpan } from 'types/common';
+import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useSelector } from 'react-redux';
 
@@ -21,20 +20,7 @@ export const useModelsFilter = () => {
   let result = useQuery(Model);
   
   if (!filter) return result;
-
-  let lastEventDate = DateTime.fromISO(filter.lastEvent.value[0]).toUnixInteger().toString();
-  if (filter.lastEvent.relation === DateRelation.Past) {
-    const num = parseInt(filter.lastEvent.value[0]);
-    const timeframe = filter.lastEvent.value[1]; 
-    let days = num;
-    switch (timeframe) {
-      case TimeSpan.Weeks: days = num * 7; break;
-      case TimeSpan.Months: days = num * 30; break;
-      case TimeSpan.Years: days = num * 365; break;
-    }
-    lastEventDate = DateTime.now().minus({days}).toUnixInteger().toString();
-   } 
-
+  
   if (filter.category.relation !== EnumRelation.Any) {
     result = result.filtered(`category.name ${RQL[filter.category.relation]} $0`, [...filter.category.value]);
   }
@@ -51,7 +37,7 @@ export const useModelsFilter = () => {
     result = result.filtered(`type ${RQL[filter.modelType.relation]} $0`, [...filter.modelType.value]);
   }
   if (filter.lastEvent.relation !== DateRelation.Any) {
-    result = result.filtered(`lastEvent ${RQL[filter.lastEvent.relation]} $0`, lastEventDate);
+    result = result.filtered(`lastEvent ${RQL[filter.lastEvent.relation]} $0`, getDate(filter.lastEvent));
   }
   if (filter.vendor.relation !== StringRelation.Any) {
     result = result.filtered(`vendor TEXT $0`, `${RQL[filter.notes.relation]}${filter.vendor.value[0]}`);

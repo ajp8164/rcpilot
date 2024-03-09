@@ -109,6 +109,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         key={index}
         title={batteryCycleTitle(cycle)}
         subtitle={batteryCycleDescription(cycle)}
+        subtitleStyle={[theme.styles.textTiny, theme.styles.textDim]}
         position={listItemPosition(index, section.data.length)}
         onPress={() => navigation.navigate('BatteryCycleEditor', {
           batteryId,

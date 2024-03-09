@@ -30,6 +30,17 @@ export type ReportFilterType = PickEnum<
 >;
 
 export type FilterValues =
+  & ModelFilterValues
+  & BatteryFilterValues
+  & BatteryCycleFilterValues
+  & EventReportFilterValues
+  & EventFilterValues
+  & MaintenanceFilterValues
+  & MaintenanceReportFilterValues
+  & ModelScanCodesReportFilterValues
+  & BatteryScanCodesReportFilterValues;
+
+export type AnyFilterValues =
   | ModelFilterValues
   | BatteryFilterValues
   | BatteryCycleFilterValues

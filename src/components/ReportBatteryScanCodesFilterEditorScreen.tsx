@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteryScanCodesReportFilterValues, FilterType } from 'types/filter';
+import { BatteryScanCodesReportFilterValues, FilterType, FilterValues } from 'types/filter';
 import { EnumRelation, FilterState, ListItemFilterEnum, ListItemFilterNumber, NumberRelation } from 'components/molecules/filters';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -56,7 +56,7 @@ const ReportBatteryScanCodesFilterEditorScreen = ({ navigation, route }: Props) 
         realm.write(() => {
           reportFilter.name = name!;
           reportFilter.type = FilterType.ReportBatteryScanCodesFilter;
-          reportFilter.values = values;
+          reportFilter.values = values as FilterValues;
         });
       } else {
         realm.write(() => {

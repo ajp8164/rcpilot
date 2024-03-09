@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFilterEnum } from 'components/molecules/filters';
-import { FilterType, ModelScanCodesReportFilterValues } from 'types/filter';
+import { FilterType, FilterValues, ModelScanCodesReportFilterValues } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
@@ -9,7 +9,6 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportFiltersNavigatorParamList } from 'types/navigation';
@@ -53,7 +52,7 @@ const ReportModelScanCodesFilterEditorScreen = ({ navigation, route }: Props) =>
         realm.write(() => {
           reportFilter.name = name!;
           reportFilter.type = FilterType.ReportModelScanCodesFilter;
-          reportFilter.values = values;
+          reportFilter.values = values as FilterValues;
         });
       } else {
         realm.write(() => {

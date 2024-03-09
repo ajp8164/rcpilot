@@ -22,6 +22,7 @@ import { Icon as RNEIcon } from "@rneui/base";
 import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
+import { batteryStatistics } from 'lib/battery';
 import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -221,9 +222,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const averageDischargeRate = () => {
-    // Compute average discharge rate over logged cycles.
     if (battery?.cycles && battery.cycles.length > 0) {
-      return '0.2A/min average, 30 cycles';
+      return `${batteryStatistics(battery).string.averageDischargeCurrent}, ${battery.cycles.length} cycles`;
     } else {
       return 'No cycles';
     }

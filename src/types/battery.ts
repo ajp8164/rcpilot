@@ -1,3 +1,8 @@
+export type Milliamps = number;
+export type MilliampsPerMinute = number;
+export type Seconds = number;
+export type Volts = number;
+
 export type ListBatteries = 'all' | 'retired' | 'in-storage';
 
 export enum BatteryChemistry {

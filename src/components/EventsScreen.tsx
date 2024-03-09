@@ -67,7 +67,10 @@ const EventsScreen = ({ navigation, route }: Props) => {
                 />
               }
               onPress={() => navigation.navigate('EventFiltersNavigator', {
-                screen: 'EventFilters'
+                screen: 'EventFilters',
+                params: {
+                  modelType: model!.type,
+                }
               })}
             />
             <Button

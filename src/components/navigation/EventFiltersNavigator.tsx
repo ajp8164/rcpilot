@@ -6,6 +6,7 @@ import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { eventKind } from 'lib/modelEvent';
 import { useTheme } from 'theme';
 
 const EventFiltersStack = createNativeStackNavigator<EventFiltersNavigatorParamList>();
@@ -32,9 +33,9 @@ const EventFiltersNavigator = () => {
         <EventFiltersStack.Screen
           name='EventFilters'
           component={EventFiltersScreen}
-          options={{
-            title: 'Filters for Events',
-          }}
+          options={({ route }) => ({
+            title: `Filters for ${eventKind(route.params.modelType).namePlural}`
+          })}
         />
         <EventFiltersStack.Screen
           name='EventFilterEditor'

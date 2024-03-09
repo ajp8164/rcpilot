@@ -11,12 +11,6 @@ import { useSetState } from '@react-native-ajp-elements/core';
 import {useTheme} from "theme";
 import { uuidv4 } from 'lib/utils';
 
-const segments = [
-  StringRelation.Any,
-  StringRelation.Contains,
-  StringRelation.Missing,
-];
-
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: StringFilterState) => void;
   relation: StringRelation;
@@ -34,9 +28,14 @@ const ListItemFilterString = (props: Props) => {
   const theme = useTheme();
   const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
   const event = useEvent();
+
+  const segments = [
+    StringRelation.Any,
+    StringRelation.Contains,
+    StringRelation.Missing,
+  ];
   
   const initializing = useRef(true);
-
   const eventName = useRef(`list-item-filter-string-${uuidv4()}`).current;
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useSetState<StringFilterState>({

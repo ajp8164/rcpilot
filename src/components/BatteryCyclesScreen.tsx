@@ -143,7 +143,13 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     return (<EmptyView error message={'Battery not found!'} />);
   }
 
-  if (!battery.cycles.length) {
+  if (filterId && !batteryCycles.length) {
+    return (
+      <EmptyView message={'No Battery Cycles Match Your Filter'} />
+    );
+  }
+
+  if (!batteryCycles.length) {
     return (
       <EmptyView info message={'No Battery Cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
     );    

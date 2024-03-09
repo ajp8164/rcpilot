@@ -82,7 +82,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ listEditor.enabled ]);
+  }, [ filterId, listEditor.enabled ]);
 
   const deleteEvent = (event: Event) => {
     realm.write(() => {
@@ -176,7 +176,13 @@ const EventsScreen = ({ navigation, route }: Props) => {
     )
   };
 
-  if (!model?.events.length) {
+  if (filterId && !events.length) {
+    return (
+      <EmptyView message={`No ${eventKind(model?.type).namePlural} Match Your Filter`} />
+    );
+  }
+
+  if (!events.length) {
     return (
       <EmptyView info message={`No ${kind.namePlural}`} />
     );

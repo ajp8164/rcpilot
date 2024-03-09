@@ -1,8 +1,9 @@
-import { FilterRelation, FilterState } from 'components/molecules/filters';
+import { DateFilterState, DateRelation, FilterRelation, FilterState } from 'components/molecules/filters';
 
 import { DateTime } from 'luxon';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
+import { TimeSpan } from 'types/common';
 import { ellipsis } from '@react-native-ajp-elements/core';
 import lodash from 'lodash';
 
@@ -116,4 +117,20 @@ export const filterStateSummary = (property: string, state: FilterState) => {
     }
   }
   return s;
+};
+
+export const getDate = (filterState: DateFilterState) => {
+  let date = DateTime.fromISO(filterState.value[0]).toUnixInteger().toString();
+  if (filterState.relation === DateRelation.Past) {
+    const num = parseInt(filterState.value[0]);
+    const timeframe = filterState.value[1]; 
+    let days = num;
+    switch (timeframe) {
+      case TimeSpan.Weeks: days = num * 7; break;
+      case TimeSpan.Months: days = num * 30; break;
+      case TimeSpan.Years: days = num * 365; break;
+    }
+    date = DateTime.now().minus({days}).toUnixInteger().toString();
+  }
+  return date;
 };

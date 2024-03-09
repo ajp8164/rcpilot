@@ -91,8 +91,8 @@ export const RQL: Record<FilterRelation, string> = {
   [FilterRelation.Any]: '', // Not used. Excluded from queries.
   [FilterRelation.Is]: '== ANY',
   [FilterRelation.IsNot]: '== NONE',
-  [FilterRelation.Before]: '<',
-  [FilterRelation.After]: '>',
+  [FilterRelation.Before]: '>',
+  [FilterRelation.After]: '<',
   [FilterRelation.Past]: '>',
   [FilterRelation.LT]: '<',
   [FilterRelation.GT]: '>',

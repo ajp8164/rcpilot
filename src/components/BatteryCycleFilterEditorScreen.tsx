@@ -1,134 +1,134 @@
 import { AppTheme, useTheme } from 'theme';
-import { DateRelation, FilterState, ListItemFilterDate, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
+import { BatteryCycleFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import { ListItemFilterDate, ListItemFilterNumber, ListItemFilterString } from 'components/molecules/filters';
 
 import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React from 'react';
 import { ScrollView } from 'react-native';
+import { defaultFilter } from 'lib/batteryCycle';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { useFilterEditor } from 'lib/useFilterEditor';
 
-enum BatteryCycleProperty {
-  DischargeDate = 'dischargeDate',
-  DischargeDuration = 'dischargeDuration',
-  ChargeDate = 'chargeDate',
-  ChargeAmount = 'chargeAmount',
-  Notes = 'notes',
-};
+export const generalBatteryCyclesFilterName = 'general-battery-cycles-filter';
+
+const filterValueLabels: Record<string, string> = {};
 
 export type Props = NativeStackScreenProps<BatteryCycleFiltersNavigatorParamList, 'BatteryCycleFilterEditor'>;
 
-const BatteryCycleFilterEditorScreen = ({ navigation: _navigation }: Props) => {
+const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
+  const { filterId } = route.params;
+  
   const theme = useTheme();
   const s = useStyles(theme);
-  const setScreenEditHeader = useScreenEditHeader();
 
-  const [createSavedFilter, setCreateSavedFilter] = useState(false);
-
-  const [filter, setFilter] = useSetState<{[key in BatteryCycleProperty] : FilterState}>({
-    [BatteryCycleProperty.DischargeDate]: {relation: DateRelation.Any, value: []},
-    [BatteryCycleProperty.DischargeDuration]: {relation: NumberRelation.Any, value: []},
-    [BatteryCycleProperty.ChargeDate]: {relation: DateRelation.Any, value: []},
-    [BatteryCycleProperty.ChargeAmount]: {relation: NumberRelation.Any, value: []},
-    [BatteryCycleProperty.Notes]: {relation: StringRelation.Any, value: []},
+  const filterEditor = useFilterEditor<BatteryCycleFilterValues>({
+    filterId,
+    filterType: FilterType.BatteryCyclesFilter,
+    defaultFilter,
+    filterValueLabels,
+    generalFilterName: generalBatteryCyclesFilterName,
   });
 
-  useEffect(() => {
-    const onDone = () => {};
-    setScreenEditHeader({enabled: true, action: onDone});
-  }, []);  
-
-  const toggleCreateSavedFilter = (value: boolean) => {
-    setCreateSavedFilter(value);
-  };
-
-  const onFilterValueChange = (property: BatteryCycleProperty, value: FilterState) => {
-    setFilter({
-      [property]: value,
-    });
-  };
+  if (!filterEditor.filter) {
+    return (
+      <EmptyView error message={'Filter Not Found!'} />
+    );
+  }
 
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
-      <ListItemSwitch
-        title={'Create a Saved Filter'}
-        position={createSavedFilter ? ['first'] : ['first', 'last']}
-        value={createSavedFilter}
-        expanded={createSavedFilter}
-        onValueChange={toggleCreateSavedFilter}
-        ExpandableComponent={
-          <ListItemInput
-            placeholder={'Filter Name'}
-            position={['last']}
-            value={''}
-            onChangeText={() => null}
-          />
+      {filterEditor.name === filterEditor.generalFilterName ?
+        <ListItemSwitch
+          title={'Create a Saved Filter'}
+          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          value={filterEditor.createSavedFilter}
+          expanded={filterEditor.createSavedFilter}
+          onValueChange={filterEditor.setCreateSavedFilter}
+          ExpandableComponent={
+            <ListItemInput
+              value={filterEditor.customName}
+              placeholder={'Filter Name'}
+              position={['last']}
+              onChangeText={filterEditor.setCustomName}
+            />
           }
         />
+      :
+        <ListItemInput
+          value={filterEditor.name}
+          placeholder={'Filter Name'}
+          position={['first', 'last']}
+          onChangeText={filterEditor.setName}
+        />
+      }
       <Divider />
       <ListItem
         title={'Reset Filter'}
         titleStyle={s.reset}
-        disabled={true}
+        disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
         disabledStyle={s.resetDisabled}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => null}
+        onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the batteries that match all of these criteria.'}/>
+      <Divider text={'This filter shows all the battery cycles that match all of these criteria.'}/>
       <ListItemFilterDate
         title={'Discharge Date'}
-        value={filter[BatteryCycleProperty.DischargeDate].value}
-        relation={DateRelation.Any}
+        value={filterEditor.values.dischargeDate.value}
+        relation={filterEditor.values.dischargeDate.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryCycleProperty.DischargeDate, filterState);
+          filterEditor.onFilterValueChange('dischargeDate', filterState);
         }}
       />
       <Divider />
       <ListItemFilterNumber
-        title={'Discharge Duration'}
+        title={'D. Duration'}
         label={'m:ss'}
-        value={filter[BatteryCycleProperty.DischargeDuration].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.dischargeDuration.value}
+        relation={filterEditor.values.dischargeDuration.relation}
+        numericProps={{prefix: '', separator: ':'}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryCycleProperty.DischargeDuration, filterState);
+          filterEditor.onFilterValueChange('dischargeDuration', filterState);
         }}
       />
       <Divider />
       <ListItemFilterDate
         title={'Charge Date'}
-        value={filter[BatteryCycleProperty.ChargeDate].value}
-        relation={DateRelation.Any}
+        value={filterEditor.values.chargeDate.value}
+        relation={filterEditor.values.chargeDate.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryCycleProperty.ChargeDate, filterState);
+          filterEditor.onFilterValueChange('chargeDate', filterState);
         }}
       />
       <Divider />
       <ListItemFilterNumber
-        title={'Charge Amount'}
+        title={'C. Amount'}
         label={'mAh'}
-        value={filter[BatteryCycleProperty.ChargeAmount].value}
-        relation={NumberRelation.Any}
+        value={filterEditor.values.chargeAmount.value}
+        relation={filterEditor.values.chargeAmount.relation}
+        numericProps={{prefix: ''}}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryCycleProperty.ChargeAmount, filterState);
+          filterEditor.onFilterValueChange('chargeAmount', filterState);
         }}
       />
       <Divider />
       <ListItemFilterString
         title={'Notes'}
-        value={filter[BatteryCycleProperty.Notes].value}
-        relation={StringRelation.Any}
+        value={filterEditor.values.notes.value}
+        relation={filterEditor.values.notes.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          onFilterValueChange(BatteryCycleProperty.Notes, filterState);
+          filterEditor.onFilterValueChange('notes', filterState);
         }}
       />
       <Divider style={{height: theme.insets.bottom}} />

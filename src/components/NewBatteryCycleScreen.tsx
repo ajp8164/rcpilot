@@ -3,7 +3,6 @@ import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { batteryCycleSummary, batteryTintIcons } from 'lib/battery';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -18,6 +17,8 @@ import { MSSToSeconds } from 'lib/formatters';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { batteryCycleSummary } from 'lib/batteryCycle';
+import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { toNumber } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';

@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, ListItemFilterString, NumberRelation, StringRelation } from 'components/molecules/filters';
-import { FilterType, MaintenanceReportFilterValues } from 'types/filter';
+import { FilterType, FilterValues, MaintenanceReportFilterValues } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { eqObject, eqString } from 'realmdb/helpers';
@@ -60,7 +60,7 @@ const ReportMaintenanceFilterEditorScreen = ({ navigation, route }: Props) => {
         realm.write(() => {
           reportFilter.name = name!;
           reportFilter.type = FilterType.ReportMaintenanceFilter;
-          reportFilter.values = values;
+          reportFilter.values = values as FilterValues;
         });
       } else {
         realm.write(() => {

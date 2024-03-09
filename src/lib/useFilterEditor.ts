@@ -1,4 +1,4 @@
-import { FilterType, FilterValues } from 'types/filter';
+import { AnyFilterValues, FilterType, FilterValues } from 'types/filter';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { eqObject, eqString } from 'realmdb/helpers';
 import { useEffect, useState } from 'react';
@@ -19,7 +19,7 @@ export interface FilterEditorInterface<T> {
   generalFilterName: string;
 }
 
-export const useFilterEditor = <T extends FilterValues>(props: FilterEditorInterface<T>
+export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorInterface<T>
 ) => {
   const {
     filterId,

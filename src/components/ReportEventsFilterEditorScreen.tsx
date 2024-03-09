@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { DateRelation, EnumRelation, FilterState, ListItemFilterDate, ListItemFilterEnum, ListItemFilterNumber, NumberRelation } from 'components/molecules/filters';
-import { EventReportFilterValues, FilterType } from 'types/filter';
+import { EventReportFilterValues, FilterType, FilterValues } from 'types/filter';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { eqObject, eqString } from 'realmdb/helpers';
@@ -62,7 +62,7 @@ const ReportEventsFilterEditorScreen = ({ navigation, route }: Props) => {
         realm.write(() => {
           reportFilter.name = name!;
           reportFilter.type = FilterType.ReportEventsFilter;
-          reportFilter.values = values;
+          reportFilter.values = values as FilterValues;
         });
       } else {
         realm.write(() => {

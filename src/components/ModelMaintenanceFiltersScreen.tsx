@@ -11,6 +11,7 @@ import { ModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/maintenance';
+import { filterSummary } from 'lib/filter';
 import { generalMaintenanceFilterName } from 'components/ModelMaintenanceFilterEditorScreen';
 import { saveSelectedMaintenanceFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -75,7 +76,7 @@ const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'maintenance-filters', filter._id.toString())}
         key={index}
         title={filter.name}
-        subtitle={`Matches logs where any date, any costs, and any notes.`}
+        subtitle={filterSummary(filter)}
         position={listItemPosition(index, allMaintenanceFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
@@ -115,7 +116,7 @@ const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
       {generalMaintenanceFilter && 
         <ListItemCheckboxInfo
           title={'General Maintenance Filter'}
-          subtitle={`Matches maintenance where any date, any costs, and any notes.`}
+          subtitle={filterSummary(generalMaintenanceFilter)}
           position={['first', 'last']}
           checked={generalMaintenanceFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalMaintenanceFilter)}

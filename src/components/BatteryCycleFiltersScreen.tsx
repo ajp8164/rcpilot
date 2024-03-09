@@ -11,6 +11,7 @@ import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/batteryCycle';
+import { filterSummary } from 'lib/filter';
 import { generalBatteryCyclesFilterName } from 'components/BatteryCycleFilterEditorScreen';
 import { saveSelectedBatteryCycleFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -75,7 +76,7 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'battery-cycle-filters', filter._id.toString())}
         key={index}
         title={filter.name}
-        subtitle={`Matches cycles where any discharge date, any discharge duration, any charge date, any charge amount, and any notes.`}
+        subtitle={filterSummary(filter)}
         position={listItemPosition(index, allBatteryCycleFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
@@ -115,7 +116,7 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
       {generalBatteryCyclesFilter && 
         <ListItemCheckboxInfo
           title={'General Battery Cycles Filter'}
-          subtitle={`Matches cycles where any discharge date, any discharge duration, any charge date, any charge amount, and any notes.`}
+          subtitle={filterSummary(generalBatteryCyclesFilter)}
           position={['first', 'last']}
           checked={generalBatteryCyclesFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalBatteryCyclesFilter)}

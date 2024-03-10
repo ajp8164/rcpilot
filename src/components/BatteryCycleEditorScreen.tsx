@@ -3,6 +3,7 @@ import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'component
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
+import { batteryCycleChargeData, batteryCycleStatisticsData } from 'lib/batteryCycle';
 import { eqArray, eqBoolean, eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
@@ -70,6 +71,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   );
   const [excludeFromPlots, setExcludeFromPlots] = useState(false);
   const [notes, setNotes] = useState<string | undefined>(undefined);
+
+  const batteryCycleCharge = batteryCycleChargeData(cycle!);
+  const batteryCycleStats = batteryCycleStatisticsData(cycle!);
 
   const [expandedDischargeDate, setExpandedDischargeDate] = useState(false);
   const [expandedChargeDate, setExpandedChargeDate] = useState(false);
@@ -327,7 +331,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
           />
           <ListItem
             title={'Percent of Capacity'}
-            value={'0.0%'}
+            value={batteryCycleCharge.string.chargeToCapacityPercentage}
             rightImage={false}
           />
           <ListItemInput
@@ -380,12 +384,8 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             title={'Energy per Minute'}
             value={
               <View style={s.valueContainer}>
-                <Text style={s.value}>
-                  {'180'}
-                </Text>
-                <Text style={s.valueLabel}>
-                  {' mAh'}
-                </Text>
+                <Text style={s.value}>{batteryCycleStats.value.averageDischargeCurrent}</Text>
+                <Text style={s.valueLabel}>{' mAh'}</Text>
               </View>
             }
             position={['first']}
@@ -396,11 +396,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             value={
               <View style={s.valueContainer}>
                 <Text style={s.value}>
-                  {'8:00'}
+                  {secondsToMSS(batteryCycleStats.value.dischargeBy80Percent, {format: 'm:ss'})}
                 </Text>
-                <Text style={s.valueLabel}>
-                  {' m:ss'}
-                </Text>
+                <Text style={s.valueLabel}>{' m:ss'}</Text>
               </View>
             }
             rightImage={false}

@@ -8,18 +8,12 @@ export interface NetworkStatusState {
     connected: boolean;
     connectionType: NetInfoStateType;
   };
-  socket: {
-    connected: boolean;
-  };
 }
 
 export const initialNetworkStatusState = Object.freeze<NetworkStatusState>({
   internet: {
     connected: false,
     connectionType: NetInfoStateType.none,
-  },
-  socket: {
-    connected: false,
   },
 });
 

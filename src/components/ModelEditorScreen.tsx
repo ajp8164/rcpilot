@@ -268,6 +268,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       header: () => (
         <ModelHeader
           modelId={route.params.modelId}
+          modelType={type}
           onChangeImage={setImage}
           onGoBack={navigation.goBack}
           scrollY={scrollY}
@@ -384,10 +385,14 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
         {!modelId &&
-          <ModelHeader
-            modelId={route.params.modelId}
-            onChangeImage={setImage}
-          />
+          <>
+            <ModelHeader
+              modelId={route.params.modelId}
+              modelType={type}
+              onChangeImage={setImage}
+            />
+            <Divider />
+          </>
         }
         <View style={theme.styles.view}>
           {!!model && <Divider />}

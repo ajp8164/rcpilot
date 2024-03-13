@@ -8,6 +8,7 @@ import { BSON } from 'realm';
 import CircleButton from 'components/atoms/CircleButton';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
+import { ModelType } from 'types/model';
 import { SvgXml } from 'react-native-svg';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
@@ -15,6 +16,7 @@ import { useObject } from '@realm/react';
 
 interface ModelHeaderInterface {
   modelId: string;
+  modelType: ModelType;
   onChangeImage?: (image?: string) => void;
   onGoBack?: () => void;
   scrollY?: SharedValue<number>;
@@ -22,6 +24,7 @@ interface ModelHeaderInterface {
 
 export const ModelHeader = ({
   modelId,
+  modelType,
   onChangeImage,
   onGoBack,
   scrollY,
@@ -110,10 +113,10 @@ export const ModelHeader = ({
             resizeMode={'cover'}
             style={s.headerImage}
           />
-          :
+          : modelType &&
           <View style={s.defaultHeaderImage}>
             <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model!.type]?.name as string)}
+              xml={getColoredSvg(modelTypeIcons[modelType]?.name as string)}
               width={s.dedaultModelImage.width}
               height={'100%'}
               color={theme.colors.brandSecondary}
@@ -145,10 +148,11 @@ export const ModelHeader = ({
             onPress={() => (!model || (scrollY && scrollY.value < 5)) && selectModelImage()}
           />
         </View>
-        {model &&
+        {/* Model type identification prevents delayed render when there is no modelType set yet. */}
+        {(model || (!model && modelType)) &&
           <View style={s.insetImageContainer}>
             <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              xml={getColoredSvg(modelTypeIcons[model?.type || modelType]?.name as string)}
               width={75}
               height={75}
               color={theme.colors.hintGray}
@@ -228,6 +232,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   itemsContainer: {
     position: 'absolute',
     width: '100%',
+    zIndex: 1,
   },
   insetImage: {
     transform: [{rotate: '-45deg'}],

@@ -1,6 +1,5 @@
 import { AuthContext, useAuthContext } from 'lib/auth';
-import { CameraContext, useCameraContext } from 'lib/camera';
-import { CameraModal, ColorModeSwitch } from '@react-native-ajp-elements/ui';
+import { CameraContext, CameraModal, ColorModeSwitch, useCameraContext } from '@react-native-ajp-elements/ui';
 import {
   DarkTheme,
   DefaultTheme,

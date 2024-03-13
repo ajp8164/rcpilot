@@ -2,7 +2,7 @@ import Animated, { Extrapolation, SharedValue, interpolate, useAnimatedStyle } f
 import { AppTheme, useTheme } from 'theme';
 import { Image, Platform, Pressable, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { getColoredSvg, selectImage } from '@react-native-ajp-elements/ui';
+import { getColoredSvg, useSelectAttachments } from '@react-native-ajp-elements/ui';
 
 import { BSON } from 'realm';
 import CircleButton from 'components/atoms/CircleButton';
@@ -28,6 +28,10 @@ export const ModelHeader = ({
 }: ModelHeaderInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const selectAttachments = useSelectAttachments({
+    selectFromCamera: true,
+    selectFromCameraRoll: true,
+  });
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const [image, setImage] = useState(model?.image || undefined);
@@ -70,13 +74,22 @@ export const ModelHeader = ({
     };
   });
 
+  const deletePhoto = () => {
+    setImage(undefined);
+    onChangeImage && onChangeImage();
+  };
+
   const selectModelImage = () => {
-    selectImage({
-      onSuccess: imageAssets => {
-        const img = imageAssets[0].uri;
+    selectAttachments({
+      customButtonDestructive: true,
+      customButtonCallback: deletePhoto,
+      customButtonLabel: image ? 'Delete Photo' : undefined,
+    }).then(attachment => {
+      if (attachment[0] && attachment[0].type === 'image') {
+        const img = attachment[0].uri;
         setImage(img)
         onChangeImage && onChangeImage(img);
-      },
+      }
     });
   };
 
@@ -91,11 +104,23 @@ export const ModelHeader = ({
       {/* Background image */}
       <Animated.View
         style={[s.backgroundContainer, backgroundTranslateY, backgroundOpacity]}>
-        <Image
-          source={{ uri: image }}
-          resizeMode={'cover'}
-          style={s.headerImage}
-        />
+        {image ?
+          <Image
+            source={{ uri: image }}
+            resizeMode={'cover'}
+            style={s.headerImage}
+          />
+          :
+          <View style={s.defaultHeaderImage}>
+            <SvgXml
+              xml={getColoredSvg(modelTypeIcons[model!.type]?.name as string)}
+              width={s.dedaultModelImage.width}
+              height={'100%'}
+              color={theme.colors.brandSecondary}
+              style={s.dedaultModelImage}
+            />
+          </View>
+        }
       </Animated.View>
       {/* Left button */}
       {onGoBack &&
@@ -182,6 +207,15 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
         backgroundColor: theme.colors.black,
       },
     }),
+  },
+  defaultHeaderImage: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  dedaultModelImage: {
+    top: 20,
+    width: 125,
+    transform: [{rotate: '-45deg'}],
   },
   title: {
     position: 'absolute',

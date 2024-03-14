@@ -58,6 +58,7 @@ const ActionBar = ({
         keyExtractor={(_item, index) => `${index}`}
         contentContainerStyle={s.contentContainer}
         showsVerticalScrollIndicator={false}
+        scrollEnabled={false}
       />
     </View>
   );

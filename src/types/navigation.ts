@@ -67,25 +67,10 @@ export type BatteriesNavigatorParamList = {
   BatteryCycleFiltersNavigator: NavigatorScreenParams<BatteryCycleFiltersNavigatorParamList>;
   BatteryPerformance: undefined;
   BatteryPerformanceComparisonPicker: undefined;
-  BatteryPerformanceNavigator: NavigatorScreenParams<BatteryPerformanceNavigatorParamList>;
   EnumPicker: EnumPickerInterface;
+  EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
   NewBatteryNavigator: NavigatorScreenParams<NewBatteryNavigatorParamList>;
   NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    text?: string;
-    extraData?: any;
-    eventName: string;
-  };
-};
-
-export type BatteryPerformanceNavigatorParamList = {
-  BatteryPerformanceFilters: undefined;
-  BatteryPerformanceFilterEditor: {
-    filterId: string;
-  }
-  EnumPicker: EnumPickerInterface;
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
@@ -199,11 +184,11 @@ export type ModelsNavigatorParamList = {
 export type EventFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   EventFilters: {
-    modelType: ModelType;
+    modelType?: ModelType;
   };
   EventFilterEditor: {
     filterId: string;
-    modelType: ModelType;
+    modelType?: ModelType;
   };
   NotesEditor: {
     title?: string;

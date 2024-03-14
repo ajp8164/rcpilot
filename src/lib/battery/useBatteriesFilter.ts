@@ -8,11 +8,12 @@ import { useObject, useQuery } from '@realm/react';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Filter } from 'realmdb/Filter';
+import { FilterType } from 'types/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useSelector } from 'react-redux';
 
 export const useBatteriesFilter = () => {
-  const filterId = useSelector(selectFilters).batteryFilterId;
+  const filterId = useSelector(selectFilters(FilterType.BatteriesFilter));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
   let result = useQuery(Battery);
   

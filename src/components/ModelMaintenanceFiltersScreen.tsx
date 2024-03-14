@@ -13,7 +13,7 @@ import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/maintenance';
 import { filterSummary } from 'lib/filter';
 import { generalMaintenanceFilterName } from 'components/ModelMaintenanceFilterEditorScreen';
-import { saveSelectedMaintenanceFilter } from 'store/slices/filters';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
@@ -36,7 +36,7 @@ const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
   });
   const [generalMaintenanceFilter, setGeneralMaintenanceFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters).maintenanceFilterId;
+  const selectedFilterId = useSelector(selectFilters(FilterType.MaintenanceFilter));
 
   useEffect(() => {
     // Lazy initialization of a general maintenance filter.
@@ -58,7 +58,8 @@ const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
   
   const setFilter = (filter?: Filter) => {
     dispatch(
-      saveSelectedMaintenanceFilter({
+      saveSelectedFilter({
+        filterType: FilterType.MaintenanceFilter,
         filterId: filter?._id?.toString(),
       }),
     );

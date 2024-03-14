@@ -1,6 +1,7 @@
 import ActionBar from 'components/atoms/ActionBar';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterType } from 'types/filter';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -27,7 +28,9 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
             ),
             onPress: () => navigation.navigate('EventFiltersNavigator', {
               screen: 'EventFilters',
-              params: {},
+              params: {
+                filterType: FilterType.EventsBatteryPerformanceFilter,
+              },
             })
           }, {
             ActionComponent: (

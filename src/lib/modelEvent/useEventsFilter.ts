@@ -1,3 +1,4 @@
+import { BSON, Results } from 'realm';
 import {
   DateRelation,
   EnumRelation,
@@ -8,20 +9,36 @@ import {
 } from 'components/molecules/filters';
 import { useObject, useQuery } from '@realm/react';
 
-import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Filter } from 'realmdb/Filter';
+import { FilterType } from 'types/filter';
 import { MSSToSeconds } from 'lib/formatters';
 import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useSelector } from 'react-redux';
 
-export const useEventsFilter = (modelId: string) => {
-  const filterId = useSelector(selectFilters).eventFilterId;
+export const useEventsFilter = (params: {
+  filterType: FilterType,
+  batteryId?: string,
+  modelId?: string
+}) => {
+  const {
+    filterType,
+    batteryId,
+    modelId,
+  } = params;
+
+  const filterId = useSelector(selectFilters(filterType));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
 
-  let result = useQuery(Event, events => { return events.filtered(`model._id == oid(${modelId})`) });
-  
+  let result;
+  if (modelId) {
+    result = useQuery(Event, events => { return events.filtered(`model._id == oid(${modelId})`) });
+  } else if (batteryId) {
+    result = useQuery(Event, events => { return events.filtered(`battery._id == oid(${batteryId})`) });
+  }
+
+  if (!result) return {} as Results<Event>;
   if (!filter) return result;
 
   if (filter.date.relation !== DateRelation.Any) {

@@ -14,6 +14,7 @@ import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
@@ -37,8 +38,8 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
-  const filterId = useSelector(selectFilters).batteryCycleFilterId;
-  const batteryCycles = useBatteryCyclesFilter(batteryId);
+  const filterId = useSelector(selectFilters(FilterType.BatteryCyclesFilter));
+  const batteryCycles = useBatteryCyclesFilter({ batteryId });
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
   useEffect(() => {  

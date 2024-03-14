@@ -12,6 +12,7 @@ import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterType } from 'types/filter';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
@@ -39,7 +40,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
-  const filterId = useSelector(selectFilters).batteryFilterId;
+  const filterId = useSelector(selectFilters(FilterType.BatteriesFilter));
 
   const batteries = useBatteriesFilter();
   const activeBatteries = batteries.filtered('retired == $0 AND inStorage == $1', false, false);

@@ -8,6 +8,7 @@ import {
 import { BSON } from 'realm';
 import { ChecklistType } from 'types/checklist';
 import { Filter } from 'realmdb/Filter';
+import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
 import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -20,8 +21,10 @@ export type HistoryEntry = {
   history: ChecklistActionHistoryEntry,
 };
 
-export const useMaintenanceFilter = (modelId: string) => {
-  const filterId = useSelector(selectFilters).maintenanceFilterId;
+export const useMaintenanceFilter = (params: { modelId: string }) => {
+  const { modelId } = params;
+  
+  const filterId = useSelector(selectFilters(FilterType.MaintenanceFilter));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
   const model = useObject(Model, new BSON.ObjectId(modelId));
 

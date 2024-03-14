@@ -17,6 +17,7 @@ import { ChecklistType } from 'types/checklist';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterType } from 'types/filter';
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -46,8 +47,8 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
-  const filterId = useSelector(selectFilters).maintenanceFilterId;
-  const entries = useMaintenanceFilter(modelId);
+  const filterId = useSelector(selectFilters(FilterType.MaintenanceFilter));
+  const entries = useMaintenanceFilter({ modelId });
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
   useEffect(() => {  

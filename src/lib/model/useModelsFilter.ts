@@ -9,13 +9,14 @@ import { useObject, useQuery } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
+import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
 import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useSelector } from 'react-redux';
 
 export const useModelsFilter = () => {
-  const filterId = useSelector(selectFilters).modelFilterId;
+  const filterId = useSelector(selectFilters(FilterType.ModelsFilter));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
   let result = useQuery(Model);
   

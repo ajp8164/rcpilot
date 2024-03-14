@@ -1,5 +1,4 @@
 import { AppTheme, useTheme } from 'theme';
-import { EventFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import {
   ListItemFilterDate,
@@ -11,6 +10,7 @@ import { defaultFilter, eventKind } from 'lib/modelEvent';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { EventFilterValues } from 'types/filter';
 import { EventFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -19,24 +19,22 @@ import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
-export const generalEventsFilterName = 'general-events-filter';
-
 const filterValueLabels: Record<string, string> = {};
 
 export type Props = NativeStackScreenProps<EventFiltersNavigatorParamList, 'EventFilterEditor'>;
 
 const EventFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, modelType } = route.params;
+  const { filterId, filterType, generalFilterName, modelType } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
   const filterEditor = useFilterEditor<EventFilterValues>({
     filterId,
-    filterType: FilterType.EventsFilter,
+    filterType,
     defaultFilter,
     filterValueLabels,
-    generalFilterName: generalEventsFilterName,
+    generalFilterName,
   });
 
   if (!filterEditor.filter) {

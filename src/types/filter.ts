@@ -11,7 +11,8 @@ import { PickEnum } from 'types/custom';
 export enum FilterType {
   BatteriesFilter = 'BatteriesFilter',
   BatteryCyclesFilter = 'BatteryCyclesFilter',
-  EventsFilter = 'EventsFilter',
+  EventsBatteryPerformanceFilter = 'EventsBatteryPerformanceFilter',
+  EventsModelFilter = 'EventsModelFilter',
   MaintenanceFilter = 'MaintenanceFilter',
   ModelsFilter = 'ModelFilter',
   ReportEventsFilter = 'ReportEventsFilter',

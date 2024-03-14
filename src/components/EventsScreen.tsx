@@ -12,6 +12,7 @@ import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
+import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
@@ -43,8 +44,11 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
-  const filterId = useSelector(selectFilters).eventFilterId;
-  const events = useEventsFilter(modelId);
+  const filterId = useSelector(selectFilters(FilterType.EventsModelFilter));
+  const events = useEventsFilter({
+    filterType: FilterType.EventsModelFilter,
+    modelId
+  });
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const [kind] = useState(eventKind(model?.type));
@@ -69,6 +73,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
               onPress={() => navigation.navigate('EventFiltersNavigator', {
                 screen: 'EventFilters',
                 params: {
+                  filterType: FilterType.EventsModelFilter,
                   modelType: model!.type,
                 }
               })}

@@ -13,7 +13,7 @@ import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/battery';
 import { filterSummary } from 'lib/filter';
 import { generalBatteriesFilterName } from 'components/BatteryFilterEditorScreen';
-import { saveSelectedBatteryFilter } from 'store/slices/filters';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
@@ -36,7 +36,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
   });
   const [generalBatteriesFilter, setGeneralBatteriesFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters).batteryFilterId;
+  const selectedFilterId = useSelector(selectFilters(FilterType.BatteriesFilter));
 
   useEffect(() => {
     // Lazy initialization of a general batteries filter.
@@ -58,7 +58,8 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
   
   const setFilter = (filter?: Filter) => {
     dispatch(
-      saveSelectedBatteryFilter({
+      saveSelectedFilter({
+        filterType: FilterType.BatteriesFilter,
         filterId: filter?._id?.toString(),
       }),
     );

@@ -184,10 +184,13 @@ export type ModelsNavigatorParamList = {
 export type EventFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
   EventFilters: {
+    filterType: FilterType;
     modelType?: ModelType;
   };
   EventFilterEditor: {
     filterId: string;
+    filterType: FilterType;
+    generalFilterName: string;
     modelType?: ModelType;
   };
   NotesEditor: {

@@ -13,7 +13,7 @@ import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/model';
 import { filterSummary } from 'lib/filter';
 import { generalModelsFilterName } from 'components/ModelFilterEditorScreen';
-import { saveSelectedModelFilter } from 'store/slices/filters';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
@@ -36,7 +36,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
   });
   const [generalModelsFilter, setGeneralModelsFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters).modelFilterId;
+  const selectedFilterId = useSelector(selectFilters(FilterType.ModelsFilter));
 
   useEffect(() => {
     // Lazy initialization of a general models filter.
@@ -58,7 +58,8 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
   
   const setFilter = (filter?: Filter) => {
     dispatch(
-      saveSelectedModelFilter({
+      saveSelectedFilter({
+        filterType: FilterType.ModelsFilter,
         filterId: filter?._id?.toString(),
       }),
     );

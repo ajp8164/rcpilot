@@ -14,6 +14,7 @@ import { ChecklistType } from 'types/checklist';
 import CustomIcon from "theme/icomoon/CustomIcon";
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterType } from 'types/filter';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -49,7 +50,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const _pilot = useSelector(selectPilot);
   const appSettings = useSelector(selectAppSettings);
-  const filterId = useSelector(selectFilters).modelFilterId;
+  const filterId = useSelector(selectFilters(FilterType.ModelsFilter));
 
   const models = useModelsFilter();
   const activeModels = models.filtered('retired == $0', false);

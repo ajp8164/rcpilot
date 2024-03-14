@@ -13,7 +13,7 @@ import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/batteryCycle';
 import { filterSummary } from 'lib/filter';
 import { generalBatteryCyclesFilterName } from 'components/BatteryCycleFilterEditorScreen';
-import { saveSelectedBatteryCycleFilter } from 'store/slices/filters';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
@@ -36,7 +36,7 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
   });
   const [generalBatteryCyclesFilter, setGeneralBatteryCyclesFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters).batteryCycleFilterId;
+  const selectedFilterId = useSelector(selectFilters(FilterType.BatteryCyclesFilter));
 
   useEffect(() => {
     // Lazy initialization of a general battery cycles filter.
@@ -58,7 +58,8 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
   
   const setFilter = (filter?: Filter) => {
     dispatch(
-      saveSelectedBatteryCycleFilter({
+      saveSelectedFilter({
+        filterType: FilterType.BatteryCyclesFilter,
         filterId: filter?._id?.toString(),
       }),
     );

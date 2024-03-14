@@ -1,70 +1,41 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
+import { FilterType } from 'types/filter';
 import { revertAll } from 'store/actions';
 
 export interface FiltersState {
-  batteryFilterId?: string;
-  batteryCycleFilterId?: string;
-  eventFilterId?: string;
-  maintenanceFilterId?: string;
-  modelFilterId?: string;
+  filterId: Record<FilterType, string | undefined>;
 }
 
 export const initialFiltersState = Object.freeze<FiltersState>({
-  batteryFilterId: undefined,
-  batteryCycleFilterId: undefined,
-  eventFilterId: undefined,
-  maintenanceFilterId: undefined,
-  modelFilterId: undefined,
+  filterId: {
+    [FilterType.BatteriesFilter]: undefined,
+    [FilterType.BatteryCyclesFilter]: undefined,
+    [FilterType.EventsBatteryPerformanceFilter]: undefined,
+    [FilterType.EventsModelFilter]: undefined,
+    [FilterType.MaintenanceFilter]: undefined,
+    [FilterType.ModelsFilter]: undefined,
+    [FilterType.ReportBatteryScanCodesFilter]: undefined,
+    [FilterType.ReportEventsFilter]: undefined,
+    [FilterType.ReportMaintenanceFilter]: undefined,
+    [FilterType.ReportModelScanCodesFilter]: undefined,
+  },
 });
 
-const handleSaveSelectedBatteryFilter: CaseReducer<FiltersState, PayloadAction<{ filterId?: string }>> = (
+const handleSaveSelectedFilter: CaseReducer<
+  FiltersState, PayloadAction<{
+    filterType: FilterType;
+    filterId?: string;
+  }>
+> = (
   state,
   { payload },
 ) => {
+  const filterId = Object.assign({}, state.filterId);
+  filterId[payload.filterType] = payload.filterId;
   return {
     ...state,
-    batteryFilterId: payload.filterId,
-  };
-};
-
-const handleSaveSelectedBatteryCycleFilter: CaseReducer<FiltersState, PayloadAction<{ filterId?: string }>> = (
-  state,
-  { payload },
-) => {
-  return {
-    ...state,
-    batteryCycleFilterId: payload.filterId,
-  };
-};
-
-const handleSaveSelectedEventFilter: CaseReducer<FiltersState, PayloadAction<{ filterId?: string }>> = (
-  state,
-  { payload },
-) => {
-  return {
-    ...state,
-    eventFilterId: payload.filterId,
-  };
-};
-
-const handleSaveSelectedMaintenanceFilter: CaseReducer<FiltersState, PayloadAction<{ filterId?: string }>> = (
-  state,
-  { payload },
-) => {
-  return {
-    ...state,
-    maintenanceFilterId: payload.filterId,
-  };
-};
-
-const handleSaveSelectedModelFilter: CaseReducer<FiltersState, PayloadAction<{ filterId?: string }>> = (
-  state,
-  { payload },
-) => {
-  return {
-    ...state,
-    modelFilterId: payload.filterId,
+    filterId,
   };
 };
 
@@ -73,17 +44,9 @@ const filtersSlice = createSlice({
   initialState: initialFiltersState,
   extraReducers: builder => builder.addCase(revertAll, () => initialFiltersState),
   reducers: {
-    saveSelectedBatteryFilter: handleSaveSelectedBatteryFilter,
-    saveSelectedBatteryCycleFilter: handleSaveSelectedBatteryCycleFilter,
-    saveSelectedEventFilter: handleSaveSelectedEventFilter,
-    saveSelectedMaintenanceFilter: handleSaveSelectedMaintenanceFilter,
-    saveSelectedModelFilter: handleSaveSelectedModelFilter,
+    saveSelectedFilter: handleSaveSelectedFilter,
   },
 });
 
 export const filtersReducer = filtersSlice.reducer;
-export const saveSelectedBatteryFilter = filtersSlice.actions.saveSelectedBatteryFilter;
-export const saveSelectedBatteryCycleFilter = filtersSlice.actions.saveSelectedBatteryCycleFilter;
-export const saveSelectedEventFilter = filtersSlice.actions.saveSelectedEventFilter;
-export const saveSelectedMaintenanceFilter = filtersSlice.actions.saveSelectedMaintenanceFilter;
-export const saveSelectedModelFilter = filtersSlice.actions.saveSelectedModelFilter;
+export const saveSelectedFilter = filtersSlice.actions.saveSelectedFilter;

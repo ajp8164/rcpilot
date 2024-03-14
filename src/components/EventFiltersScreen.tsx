@@ -8,12 +8,11 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { EventFiltersNavigatorParamList } from 'types/navigation';
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { filterSummary } from 'lib/filter';
-import { generalEventsFilterName } from 'components/EventFilterEditorScreen';
-import { saveSelectedEventFilter } from 'store/slices/filters';
+import lodash from 'lodash';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
@@ -21,7 +20,7 @@ import { useTheme } from 'theme';
 export type Props = NativeStackScreenProps<EventFiltersNavigatorParamList, 'EventFilters'>;
 
 const EventFiltersScreen = ({ navigation, route }: Props) => {
-  const {modelType} = route.params;
+  const { filterType, modelType } = route.params;
 
   const theme = useTheme();
   const listEditor = useListEditor();
@@ -29,16 +28,17 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
+  const generalEventsFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allEventFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', FilterType.EventsFilter, generalEventsFilterName);
+    return filters.filtered('type == $0 AND name != $1', filterType, generalEventsFilterName);
   });
 
   const generalEventsFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', FilterType.EventsFilter, generalEventsFilterName);
+    return filters.filtered('type == $0 AND name == $1', filterType, generalEventsFilterName);
   });
   const [generalEventsFilter, setGeneralEventsFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters).eventFilterId;
+  const selectedFilterId = useSelector(selectFilters(filterType));
 
   useEffect(() => {
     // Lazy initialization of a general events filter.
@@ -46,7 +46,7 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         const gef = realm.create('Filter', {
           name: generalEventsFilterName,
-          type: FilterType.EventsFilter,
+          type: filterType,
           values: defaultFilter,
         });
 
@@ -60,8 +60,9 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
   
   const setFilter = (filter?: Filter) => {
     dispatch(
-      saveSelectedEventFilter({
+      saveSelectedFilter({
         filterId: filter?._id?.toString(),
+        filterType,
       }),
     );
   };
@@ -84,6 +85,8 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
         onPress={() => setFilter(filter)}
         onPressInfo={() => navigation.navigate('EventFilterEditor', {
           filterId: filter._id.toString(),
+          filterType,
+          generalFilterName: generalEventsFilterName,
           modelType,
         })}
         swipeable={{
@@ -125,6 +128,8 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
           onPress={() => setFilter(generalEventsFilter)}
           onPressInfo={() => navigation.navigate('EventFilterEditor', {
             filterId: generalEventsFilter!._id.toString(),
+            filterType,
+            generalFilterName: generalEventsFilterName,
             modelType,
           })}
         />

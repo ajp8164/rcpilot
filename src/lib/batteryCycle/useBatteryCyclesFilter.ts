@@ -9,13 +9,16 @@ import { useObject, useQuery } from '@realm/react';
 import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { Filter } from 'realmdb/Filter';
+import { FilterType } from 'types/filter';
 import { MSSToSeconds } from 'lib/formatters';
 import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useSelector } from 'react-redux';
 
-export const useBatteryCyclesFilter = (batteryId: string) => {
-  const filterId = useSelector(selectFilters).batteryCycleFilterId;
+export const useBatteryCyclesFilter = (params: { batteryId: string }) => {
+  const { batteryId } = params;
+  
+  const filterId = useSelector(selectFilters(FilterType.BatteryCyclesFilter));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;  
   let result = useQuery(BatteryCycle, cycles => { return cycles.filtered(`battery._id == oid(${batteryId})`) });
 

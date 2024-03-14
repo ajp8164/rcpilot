@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { ModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
@@ -31,15 +30,15 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
 
   const generalMaintenanceFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allMaintenanceFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', FilterType.MaintenanceFilter, generalMaintenanceFilterName);
+    return filters.filtered('type == $0 AND name != $1', filterType, generalMaintenanceFilterName);
   });
 
   const generalMaintenanceFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', FilterType.MaintenanceFilter, generalMaintenanceFilterName);
+    return filters.filtered('type == $0 AND name == $1', filterType, generalMaintenanceFilterName);
   });
   const [generalMaintenanceFilter, setGeneralMaintenanceFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters(FilterType.MaintenanceFilter));
+  const selectedFilterId = useSelector(selectFilters(filterType));
 
   useEffect(() => {
     // Lazy initialization of a general maintenance filter.
@@ -47,7 +46,7 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         const gmf = realm.create('Filter', {
           name: generalMaintenanceFilterName,
-          type: FilterType.MaintenanceFilter,
+          type: filterType,
           values: defaultFilter,
         });
 
@@ -62,7 +61,7 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
-        filterType: FilterType.MaintenanceFilter,
+        filterType,
         filterId: filter?._id?.toString(),
       }),
     );

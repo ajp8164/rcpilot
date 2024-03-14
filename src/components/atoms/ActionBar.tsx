@@ -1,10 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { FlatList, LayoutChangeEvent, ListRenderItem, Pressable, Text, View } from 'react-native';
+import { FlatList, LayoutChangeEvent, ListRenderItem, Pressable, StyleSheet, Text, View } from 'react-native';
 import React, { ReactNode } from 'react';
 
 import { makeStyles } from '@rneui/themed';
 
-const buttonSize = 60;
+const buttonSize = 44;
 
 export type ActionBarItem = {
   ActionComponent?: ReactNode;
@@ -72,6 +72,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     bottom: 0,
     height: buttonSize + theme.insets.bottom,
     backgroundColor: theme.colors.white,
+    borderTopColor: theme.colors.lightGray,
+    borderTopWidth: StyleSheet.hairlineWidth,
   },
   contentContainer: {
     flexDirection: 'row',
@@ -86,6 +88,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginTop: -theme.insets.bottom,
   },
   actionButton: {
+    top: -3,
     minWidth: buttonSize,
     height: buttonSize,
     justifyContent: 'center',

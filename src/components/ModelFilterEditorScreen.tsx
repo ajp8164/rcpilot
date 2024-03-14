@@ -1,5 +1,4 @@
 import { AppTheme, useTheme } from 'theme';
-import { FilterType, ModelFilterValues } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import {
   ListItemFilterBoolean,
@@ -11,6 +10,7 @@ import {
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { ModelFilterValues } from 'types/filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -20,24 +20,22 @@ import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
-export const generalModelsFilterName = 'general-models-filter';
-
 const filterValueLabels: Record<string, string> = {};
 
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;
 
 const ModelFilterEditorScreen = ({ route }: Props) => {
-  const { filterId } = route.params;
+  const { filterId, filterType, generalFilterName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
   const filterEditor = useFilterEditor<ModelFilterValues>({
     filterId,
-    filterType: FilterType.ModelsFilter,
+    filterType,
     defaultFilter,
     filterValueLabels,
-    generalFilterName: generalModelsFilterName,
+    generalFilterName,
   });
 
   if (!filterEditor.filter) {

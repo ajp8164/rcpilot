@@ -7,7 +7,6 @@ import { useQuery, useRealm } from '@realm/react';
 
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/battery';
@@ -20,7 +19,9 @@ import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilters'>;
 
-const BatteryFiltersScreen = ({ navigation }: Props) => {
+const BatteryFiltersScreen = ({ navigation, route }: Props) => {
+  const { filterType } = route.params;
+
   const theme = useTheme();
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
@@ -28,15 +29,15 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
   const realm = useRealm();
 
   const allBatteryFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', FilterType.BatteriesFilter, generalBatteriesFilterName);
+    return filters.filtered('type == $0 AND name != $1', filterType, generalBatteriesFilterName);
   });
 
   const generalBatteriesFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', FilterType.BatteriesFilter, generalBatteriesFilterName);
+    return filters.filtered('type == $0 AND name == $1', filterType, generalBatteriesFilterName);
   });
   const [generalBatteriesFilter, setGeneralBatteriesFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters(FilterType.BatteriesFilter));
+  const selectedFilterId = useSelector(selectFilters(filterType));
 
   useEffect(() => {
     // Lazy initialization of a general batteries filter.
@@ -44,7 +45,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
       realm.write(() => {
         const gbf = realm.create('Filter', {
           name: generalBatteriesFilterName,
-          type: FilterType.BatteriesFilter,
+          type: filterType,
           values: defaultFilter,
         });
 
@@ -59,7 +60,7 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
-        filterType: FilterType.BatteriesFilter,
+        filterType,
         filterId: filter?._id?.toString(),
       }),
     );
@@ -83,6 +84,8 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
         onPress={() => setFilter(filter)}
         onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
           filterId: filter._id.toString(),
+          filterType,
+          generalFilterName: generalBatteriesFilterName,
         })}
         swipeable={{
           rightItems: [{
@@ -121,6 +124,8 @@ const BatteryFiltersScreen = ({ navigation }: Props) => {
           onPress={() => setFilter(generalBatteriesFilter)}
           onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
             filterId: generalBatteriesFilter!._id.toString(),
+            filterType,
+            generalFilterName: generalBatteriesFilterName,
           })}
         />
       }

@@ -6,13 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/model';
 import { filterSummary } from 'lib/filter';
-import { generalModelsFilterName } from 'components/ModelFilterEditorScreen';
+import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -20,23 +19,26 @@ import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilters'>;
 
-const ModelFiltersScreen = ({ navigation }: Props) => {
+const ModelFiltersScreen = ({ navigation, route }: Props) => {
+  const { filterType } = route.params;
+
   const theme = useTheme();
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const realm = useRealm();
 
+  const generalModelsFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allModelFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', FilterType.ModelsFilter, generalModelsFilterName);
+    return filters.filtered('type == $0 AND name != $1', filterType, generalModelsFilterName);
   });
 
   const generalModelsFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', FilterType.ModelsFilter, generalModelsFilterName);
+    return filters.filtered('type == $0 AND name == $1', filterType, generalModelsFilterName);
   });
   const [generalModelsFilter, setGeneralModelsFilter] = useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters(FilterType.ModelsFilter));
+  const selectedFilterId = useSelector(selectFilters(filterType));
 
   useEffect(() => {
     // Lazy initialization of a general models filter.
@@ -44,7 +46,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
       realm.write(() => {
         const gmf = realm.create('Filter', {
           name: generalModelsFilterName,
-          type: FilterType.ModelsFilter,
+          type: filterType,
           values: defaultFilter,
         });
 
@@ -59,7 +61,7 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
-        filterType: FilterType.ModelsFilter,
+        filterType,
         filterId: filter?._id?.toString(),
       }),
     );
@@ -83,6 +85,8 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
         onPress={() => setFilter(filter)}
         onPressInfo={() => navigation.navigate('ModelFilterEditor', {
           filterId: filter._id.toString(),
+          filterType,
+          generalFilterName: generalModelsFilterName,
         })}
         swipeable={{
           rightItems: [{
@@ -124,6 +128,8 @@ const ModelFiltersScreen = ({ navigation }: Props) => {
           onPress={() => setFilter(generalModelsFilter)}
           onPressInfo={() => navigation.navigate('ModelFilterEditor', {
             filterId: generalModelsFilter!._id.toString(),
+            filterType,
+            generalFilterName: generalModelsFilterName,
           })}
         />
       }

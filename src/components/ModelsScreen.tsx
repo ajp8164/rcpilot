@@ -83,12 +83,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!activeModels.length || listEditor.enabled}
+              disabled={!filterId && (!activeModels.length || listEditor.enabled)}
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
-                    !activeModels.length || listEditor.enabled ? s.headerIconDisabled : {}
+                    !filterId && (!activeModels.length || listEditor.enabled) ? s.headerIconDisabled : {}
                   ]}
                 />
               }

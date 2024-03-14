@@ -71,12 +71,12 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!activeBatteries.length || listEditor.enabled}
+              disabled={!filterId && (!activeBatteries.length || listEditor.enabled)}
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
-                    !activeBatteries.length || listEditor.enabled ? s.headerIconDisabled : {}
+                    !filterId && (!activeBatteries.length || listEditor.enabled) ? s.headerIconDisabled : {}
                   ]}
                 />
               }

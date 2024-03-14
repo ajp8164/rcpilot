@@ -1,26 +1,22 @@
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { eqBoolean, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { filterSummary } from 'lib/filter';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
 
-export type Props = CompositeScreenProps<
-  NativeStackScreenProps<SetupNavigatorParamList, 'ReportEventsMaintenanceEditor'>,
-  NativeStackScreenProps<ReportFiltersNavigatorParamList>
->;
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ReportEventsMaintenanceEditor'>;
 
 const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
@@ -177,13 +173,11 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
             title={eventsFilter ? eventsFilter.name: 'No Filter Selected'}
             subtitle={eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'}
             position={['last']}
-            onPress={() => navigation.navigate('ReportFiltersNavigator', {
-              screen: 'ReportFilters',
-              params: { 
+            onPress={() => navigation.navigate('EventFiltersNavigator', {
+              screen: 'EventFilters',
+              params: {
                 filterType: FilterType.ReportEventsFilter,
-                filterId: eventsFilter?._id.toString(),
-                eventName: 'events-report-filter-selection',
-              },
+              }
             })}
           />
         }
@@ -200,13 +194,11 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
             title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
             subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
             position={['last']}
-            onPress={() => navigation.navigate('ReportFiltersNavigator', {
-              screen: 'ReportFilters',
-              params: { 
+            onPress={() => navigation.navigate('ModelMaintenanceFiltersNavigator', {
+              screen: 'ModelMaintenanceFilters',
+              params: {
                 filterType: FilterType.ReportMaintenanceFilter,
-                filterId: maintenanceFilter?._id.toString(),
-                eventName: 'maintenance-report-filter-selection',
-              },
+              }
             })}
           />
         }

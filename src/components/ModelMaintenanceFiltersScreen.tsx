@@ -12,7 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/maintenance';
 import { filterSummary } from 'lib/filter';
-import { generalMaintenanceFilterName } from 'components/ModelMaintenanceFilterEditorScreen';
+import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -20,13 +20,16 @@ import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<ModelMaintenanceFiltersNavigatorParamList, 'ModelMaintenanceFilters'>;
 
-const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
+const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
+  const { filterType, modelType } = route.params;
+
   const theme = useTheme();
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const realm = useRealm();
 
+  const generalMaintenanceFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allMaintenanceFilters = useQuery(Filter, filters => {
     return filters.filtered('type == $0 AND name != $1', FilterType.MaintenanceFilter, generalMaintenanceFilterName);
   });
@@ -83,6 +86,9 @@ const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
         onPress={() => setFilter(filter)}
         onPressInfo={() => navigation.navigate('ModelMaintenanceFilterEditor', {
           filterId: filter._id.toString(),
+          filterType,
+          generalFilterName: generalMaintenanceFilterName,
+          modelType,
         })}
         swipeable={{
           rightItems: [{
@@ -123,6 +129,9 @@ const ModelMaintenanceFiltersScreen = ({ navigation }: Props) => {
           onPress={() => setFilter(generalMaintenanceFilter)}
           onPressInfo={() => navigation.navigate('ModelMaintenanceFilterEditor', {
             filterId: generalMaintenanceFilter!._id.toString(),
+            filterType,
+            generalFilterName: generalMaintenanceFilterName,
+            modelType,
           })}
         />
       }

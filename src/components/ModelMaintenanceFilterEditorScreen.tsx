@@ -1,5 +1,4 @@
 import { AppTheme, useTheme } from 'theme';
-import { FilterType, MaintenanceFilterValues } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import {
   ListItemFilterDate,
@@ -9,6 +8,7 @@ import {
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { MaintenanceFilterValues } from 'types/filter';
 import { ModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
@@ -18,24 +18,22 @@ import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
-export const generalMaintenanceFilterName = 'general-maintenance-filter';
-
 const filterValueLabels: Record<string, string> = {};
 
 export type Props = NativeStackScreenProps<ModelMaintenanceFiltersNavigatorParamList, 'ModelMaintenanceFilterEditor'>;
 
 const MaintenanceFilterEditorScreen = ({ route }: Props) => {
-  const { filterId } = route.params;
+  const { filterId, filterType, generalFilterName, modelType } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
   const filterEditor = useFilterEditor<MaintenanceFilterValues>({
     filterId,
-    filterType: FilterType.MaintenanceFilter,
+    filterType,
     defaultFilter,
     filterValueLabels,
-    generalFilterName: generalMaintenanceFilterName,
+    generalFilterName,
   });
 
   if (!filterEditor.filter) {

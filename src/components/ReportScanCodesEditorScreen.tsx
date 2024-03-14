@@ -1,25 +1,21 @@
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { ReportFiltersNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { eqBoolean, eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import { ScrollView } from 'react-native';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
 
-export type Props = CompositeScreenProps<
-  NativeStackScreenProps<SetupNavigatorParamList, 'ReportScanCodesEditor'>,
-  NativeStackScreenProps<ReportFiltersNavigatorParamList>
->;
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ReportScanCodesEditor'>;
 
 const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
@@ -164,13 +160,11 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
             title={modelScanCodesFilter?.name || 'No Filter Selected'}
             subtitle={'Report will include all models'}
             position={['last']}
-            onPress={() => navigation.navigate('ReportFiltersNavigator', {
-              screen: 'ReportFilters',
-              params: { 
+            onPress={() => navigation.navigate('ModelFiltersNavigator', {
+              screen: 'ModelFilters',
+              params: {
                 filterType: FilterType.ReportModelScanCodesFilter,
-                filterId: modelScanCodesFilter?._id.toString(),
-                eventName: 'model-scan-codes-report-filter-selection',
-              },
+              }
             })}
           />
         }
@@ -187,13 +181,11 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
             title={batteryScanCodesFilter?.name || 'No Filter Selected'}
             subtitle={'Report will include all batteries'}
             position={['last']}
-            onPress={() => navigation.navigate('ReportFiltersNavigator', {
-              screen: 'ReportFilters',
-              params: { 
+            onPress={() => navigation.navigate('BatteryFiltersNavigator', {
+              screen: 'BatteryFilters',
+              params: {
                 filterType: FilterType.ReportBatteryScanCodesFilter,
-                filterId: batteryScanCodesFilter?._id.toString(),
-                eventName: 'battery-scan-codes-report-filter-selection',
-              },
+              }
             })}
           />
         }

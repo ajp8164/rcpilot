@@ -6,7 +6,6 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
-import { EventReportFilterValues } from 'types/filter';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';

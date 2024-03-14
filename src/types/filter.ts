@@ -34,23 +34,15 @@ export type FilterValues =
   & ModelFilterValues
   & BatteryFilterValues
   & BatteryCycleFilterValues
-  & EventReportFilterValues
   & EventFilterValues
   & MaintenanceFilterValues
-  & MaintenanceReportFilterValues
-  & ModelScanCodesReportFilterValues
-  & BatteryScanCodesReportFilterValues;
 
 export type AnyFilterValues =
   | ModelFilterValues
   | BatteryFilterValues
   | BatteryCycleFilterValues
-  | EventReportFilterValues
   | EventFilterValues
   | MaintenanceFilterValues
-  | MaintenanceReportFilterValues
-  | ModelScanCodesReportFilterValues
-  | BatteryScanCodesReportFilterValues;
 
 // Battery filter
 //
@@ -106,52 +98,4 @@ export type MaintenanceFilterValues = {
   date: DateFilterState;
   costs: NumberFilterState;
   notes: StringFilterState;
-};
-
-// Any report filter
-//
-export type ReportFilterValues = 
-  | EventReportFilterValues
-  | MaintenanceReportFilterValues
-  | ModelScanCodesReportFilterValues
-  | BatteryScanCodesReportFilterValues;
-
-// Event report filter
-//
-export type EventReportFilterValues = {
-  model: EnumFilterState;
-  modelType: EnumFilterState;
-  category: EnumFilterState;
-  date: DateFilterState;
-  duration: NumberFilterState;
-  pilot: EnumFilterState;
-  location: EnumFilterState;
-  modelStyle: EnumFilterState;
-  outcome: EnumFilterState;
-};
-
-// Maintenance report filter
-//
-export type MaintenanceReportFilterValues = {
-  model: EnumFilterState;
-  modelType: EnumFilterState;
-  category: EnumFilterState;
-  date: DateFilterState;
-  costs: NumberFilterState;
-  notes: StringFilterState;
-};
-
-// Model scan code report filter
-//
-export type ModelScanCodesReportFilterValues = {
-  modelType: EnumFilterState;
-  category: EnumFilterState;
-  lastEvent: DateFilterState;
-};
-
-// Battery scan code report filter
-//
-export type BatteryScanCodesReportFilterValues = {
-  chemistry: EnumFilterState;
-  capacity: NumberFilterState;
 };

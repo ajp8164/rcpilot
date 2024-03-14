@@ -1,10 +1,13 @@
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 
+import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import { CompositeScreenProps } from '@react-navigation/core';
+import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
+import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
+import ModelMaintenanceFiltersNavigator from 'components/navigation/ModelMaintenanceFiltersNavigator';
 import React from 'react';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
-import ReportFiltersNavigator from 'components/navigation/ReportFiltersNavigator';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import { useTheme } from 'theme';
 
@@ -42,8 +45,32 @@ const NewReportNavigator = () => {
         }}
       />
       <NewReportStack.Screen
-        name="ReportFiltersNavigator"
-        component={ReportFiltersNavigator}
+        name='EventFiltersNavigator'
+        component={EventFiltersNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <NewReportStack.Screen
+        name='BatteryFiltersNavigator'
+        component={BatteryFiltersNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <NewReportStack.Screen
+        name='ModelFiltersNavigator'
+        component={ModelFiltersNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'modal',
+        }}
+      />
+      <NewReportStack.Screen
+        name='ModelMaintenanceFiltersNavigator'
+        component={ModelMaintenanceFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',

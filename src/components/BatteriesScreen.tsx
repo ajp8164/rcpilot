@@ -71,17 +71,20 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && listEditor.enabled}
+              disabled={!activeBatteries.length || listEditor.enabled}
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
-                    !filterId && listEditor.enabled ? s.headerIconDisabled : {}
+                    !activeBatteries.length || listEditor.enabled ? s.headerIconDisabled : {}
                   ]}
                 />
               }
               onPress={() => navigation.navigate('BatteryFiltersNavigator', {
-                screen: 'BatteryFilters'
+                screen: 'BatteryFilters',
+                params: {
+                  filterType: FilterType.BatteriesFilter,
+                }
               })}
             />
             {listBatteries !== 'all' ?

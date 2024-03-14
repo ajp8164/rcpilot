@@ -83,17 +83,20 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && listEditor.enabled}
+              disabled={!activeModels.length || listEditor.enabled}
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
                   style={[s.headerIcon,
-                    !filterId && listEditor.enabled ? s.headerIconDisabled : {}
+                    !activeModels.length || listEditor.enabled ? s.headerIconDisabled : {}
                   ]}
                 />
               }
               onPress={() => navigation.navigate('ModelFiltersNavigator', {
                 screen: 'ModelFilters',
+                params: {
+                  filterType: FilterType.ModelsFilter,
+                }
               })}
             />
             {listModels !== 'all' ?

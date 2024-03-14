@@ -231,7 +231,6 @@ export type ModelFiltersNavigatorParamList = {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
-    modelType?: ModelType;
   };
   NotesEditor: {
     title?: string;
@@ -250,7 +249,6 @@ export type BatteryFiltersNavigatorParamList = {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
-    modelType?: ModelType;
   };
   EnumPicker: EnumPickerInterface;
 };

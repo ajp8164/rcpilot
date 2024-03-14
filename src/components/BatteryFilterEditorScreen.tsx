@@ -1,8 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteryFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ListItemFilterEnum, ListItemFilterNumber } from 'components/molecules/filters';
 
+import { BatteryFilterValues } from 'types/filter';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -21,17 +21,17 @@ const filterValueLabels: Record<string, string> = {};
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilterEditor'>;
 
 const BatteryFilterEditorScreen = ({ route }: Props) => {
-  const { filterId } = route.params;
+  const { filterId, filterType, generalFilterName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
   const filterEditor = useFilterEditor<BatteryFilterValues>({
     filterId,
-    filterType: FilterType.BatteriesFilter,
+    filterType,
     defaultFilter,
     filterValueLabels,
-    generalFilterName: generalBatteriesFilterName,
+    generalFilterName,
   });
 
   if (!filterEditor.filter) {

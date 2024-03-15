@@ -26,6 +26,7 @@ import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { useEvent } from 'lib/event';
 import { useObject } from '@realm/react';
+import { usePilotSummary } from 'lib/pilot';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'Setup'>,
@@ -42,6 +43,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
   const userProfile = useSelector(selectUserProfile);
   const selectedPilotId = useSelector(selectPilot).pilotId;
   const selectedPilot = useObject(Pilot, new BSON.ObjectId(selectedPilotId));
+  const pilotSummary = usePilotSummary();
 
   const databaseAccessWith = useSelector(selectDatabaseAccessWith);
 
@@ -79,10 +81,10 @@ const SetupScreen = ({ navigation, route }: Props) => {
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'PILOTS'}/>
-      {selectedPilot &&
+      {selectedPilot && !selectedPilot.unknownPilot &&
         <ListItem
           title={selectedPilot.name}
-          subtitle={'Logged 12:35 over 7 events'}
+          subtitle={pilotSummary(selectedPilot)}
           position={['first']}
           onPress={() => navigation.navigate('Pilot', {
             pilotId: selectedPilot._id.toString(),
@@ -101,7 +103,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
       }
       <ListItem
         title={'Select or Create a Pilot...'}
-        position={selectedPilot ? ['last'] : ['first', 'last']}
+        position={selectedPilot && !selectedPilot.unknownPilot ? ['last'] : ['first', 'last']}
         onPress={() => navigation.navigate('Pilots')}
       />
       <Divider text={'GLOBALS'}/>

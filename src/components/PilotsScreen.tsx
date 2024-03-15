@@ -15,6 +15,7 @@ import { makeStyles } from '@rneui/themed';
 import { saveSelectedPilot } from 'store/slices/pilot';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { usePilotSummary } from 'lib/pilot';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilots'>;
 
@@ -25,8 +26,12 @@ const PilotsScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
-  const allPilots = useQuery(Pilot);
+  const unknownPilots = useQuery(Pilot, pilots => pilots.filtered('unknownPilot == $0', true));
+  const unknownPilot = unknownPilots[0];
+
+  const allPilots = useQuery(Pilot, pilots => pilots.filtered('unknownPilot == $0', false));
   const selectedPilotId = useSelector(selectPilot).pilotId;
+  const pilotSummary = usePilotSummary();
 
   useEffect(() => {
     navigation.setOptions({
@@ -61,6 +66,7 @@ const PilotsScreen = ({ navigation }: Props) => {
       <ListItemCheckboxInfo
         key={pilot._id.toString()}
         title={pilot.name}
+        subtitle={pilotSummary(pilot)}
         position={listItemPosition(index, allPilots.length)}
         checked={pilot._id.toString() === selectedPilotId}
         onPress={() => setPilot(pilot)}
@@ -86,12 +92,12 @@ const PilotsScreen = ({ navigation }: Props) => {
       <>
         {allPilots && <Divider />}
         <ListItemCheckboxInfo
-          title={'Unknown Pilot'}
-          subtitle={'Logged 0:04 over 1 event'}
+          title={unknownPilot.name}
+          subtitle={pilotSummary(unknownPilot)}
           position={['first', 'last']}
           hideInfo={true}
-          checked={!selectedPilotId}
-          onPress={setPilot}
+          checked={unknownPilot._id.toString() === selectedPilotId}
+          onPress={() => setPilot(unknownPilot)}
         />
         <Divider note text={'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'} />
       </>

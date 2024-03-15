@@ -5,7 +5,7 @@ import { ListItem, ListItemDate, ListItemInput, listItemPosition } from 'compone
 import { LogNavigatorParamList, ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useState } from 'react';
-import { batteryCycleDescription, batteryCycleTitle } from 'lib/battery';
+import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';

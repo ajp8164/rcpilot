@@ -1,6 +1,6 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -20,7 +20,9 @@ import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<BatteryCycleFiltersNavigatorParamList, 'BatteryCycleFilters'>;
 
-const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
+const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
+  const { useGeneralFilter } = route.params;
+
   const theme = useTheme();
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
@@ -83,6 +85,7 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
         onPress={() => setFilter(filter)}
         onPressInfo={() => navigation.navigate('BatteryCycleFilterEditor', {
           filterId: filter._id.toString(),
+          filterType: FilterType.BatteryCyclesFilter,
         })}
         swipeable={{
           rightItems: [{
@@ -114,7 +117,7 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {generalBatteryCyclesFilter && 
+      {useGeneralFilter && generalBatteryCyclesFilter ?
         <ListItemCheckboxInfo
           title={'General Battery Cycles Filter'}
           subtitle={filterSummary(generalBatteryCyclesFilter)}
@@ -123,6 +126,19 @@ const BatteryCycleFiltersScreen = ({ navigation }: Props) => {
           onPress={() => setFilter(generalBatteryCyclesFilter)}
           onPressInfo={() => navigation.navigate('BatteryCycleFilterEditor', {
             filterId: generalBatteryCyclesFilter!._id.toString(),
+            filterType: FilterType.BatteryCyclesFilter,
+          })}
+        />
+        :
+        <ListItem
+          title={'Add New Filter'}
+          titleStyle={theme.styles.listItemButtonTitle}
+          position={['first', 'last']}
+          rightImage={false}
+          onPressInfo={() => navigation.navigate('BatteryCycleFilterEditor', {
+            filterId: generalBatteryCyclesFilter!._id.toString(),
+            filterType: FilterType.BatteryCyclesFilter,
+            requireFilterName: true,
           })}
         />
       }

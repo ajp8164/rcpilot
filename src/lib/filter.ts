@@ -21,11 +21,11 @@ export const filterSummary = (filterOrFilterType: Filter | string) => {
   const kind =
     filterType === FilterType.BatteriesFilter ? 'batteries' :
     filterType === FilterType.BatteryCyclesFilter ? 'battery cycles' :
-    filterType === FilterType.EventsFilter ? 'events' :
+    filterType === FilterType.EventsModelFilter ? 'events' :
     filterType === FilterType.MaintenanceFilter ? 'logs' :
     filterType === FilterType.ModelsFilter ? 'models' :
     filterType === FilterType.ReportEventsFilter ? 'events' :
-    filterType === FilterType.ReportMaintenanceFilter ? 'maintenance items' :
+    filterType === FilterType.ReportModelMaintenanceFilter ? 'maintenance items' :
     filterType === FilterType.ReportModelScanCodesFilter ? 'models' :
     filterType === FilterType.ReportBatteryScanCodesFilter ? 'batteries' : '';
 

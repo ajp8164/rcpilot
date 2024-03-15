@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Filter } from 'realmdb/Filter';
-import { ModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { View } from 'react-native-ui-lib';
-import { defaultFilter } from 'lib/maintenance';
+import { defaultFilter } from 'lib/reportBatteryScanCodeFilter';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';
@@ -17,9 +17,9 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ModelMaintenanceFiltersNavigatorParamList, 'ModelMaintenanceFilters'>;
+export type Props = NativeStackScreenProps<ReportBatteryScanCodeFiltersNavigatorParamList, 'ReportBatteryScanCodeFilters'>;
 
-const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
+const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, modelType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
@@ -28,41 +28,41 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
-  const generalMaintenanceFilterName = `general-${lodash.kebabCase(filterType)}`;
-  const allMaintenanceFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalMaintenanceFilterName);
+  const generalReportBatteryScanCodesFilterName = `general-${lodash.kebabCase(filterType)}`;
+  const allBatteryScanCodeFilters = useQuery(Filter, filters => {
+    return filters.filtered('type == $0 AND name != $1', filterType, generalReportBatteryScanCodesFilterName);
   });
 
-  const generalMaintenanceFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalMaintenanceFilterName);
+  const generalReportBatteryScanCodesFilterQuery = useQuery(Filter, filters => {
+    return filters.filtered('type == $0 AND name == $1', filterType, generalReportBatteryScanCodesFilterName);
   });
-  const [generalMaintenanceFilter, setGeneralMaintenanceFilter] = useState<Filter>();
+  const [generalReportBatteryScanCodesFilter, setGeneralBatteryScanCodesFilter] = useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
   useEffect(() => {
-    // Lazy initialization of a general maintenance filter.
-    if (!generalMaintenanceFilterQuery.length) {
+    // Lazy initialization of a general report battery scan codes filter.
+    if (!generalReportBatteryScanCodesFilterQuery.length) {
       realm.write(() => {
-        const gmf = realm.create('Filter', {
-          name: generalMaintenanceFilterName,
+        const gef = realm.create('Filter', {
+          name: generalReportBatteryScanCodesFilterName,
           type: filterType,
           values: defaultFilter,
         });
 
         // @ts-ignore
-        setGeneralMaintenanceFilter(gmf);
+        setGeneralBatteryScanCodesFilter(gef);
       });
     } else {
-      setGeneralMaintenanceFilter(generalMaintenanceFilterQuery[0]);
+      setGeneralBatteryScanCodesFilter(generalReportBatteryScanCodesFilterQuery[0]);
     }
   }, []);
   
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
-        filterType,
         filterId: filter?._id?.toString(),
+        filterType,
       }),
     );
   };
@@ -76,17 +76,17 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'maintenance-filters', filter._id.toString())}
+        ref={ref => ref && listEditor.add(ref, 'report-battery-scan-code-filters', filter._id.toString())}
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
-        position={listItemPosition(index, allMaintenanceFilters.length)}
+        position={listItemPosition(index, allBatteryScanCodeFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('ModelMaintenanceFilterEditor', {
+        onPressInfo={() => navigation.navigate('ReportBatteryScanCodeFilterEditor', {
           filterId: filter._id.toString(),
           filterType,
-          generalFilterName: generalMaintenanceFilterName,
+          generalFilterName: generalReportBatteryScanCodesFilterName,
           modelType,
         })}
         swipeable={{
@@ -101,7 +101,7 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
             }
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('maintenance-filters', filter._id.toString())}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('report-battery-scan-code-filters', filter._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
@@ -112,30 +112,30 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemCheckboxInfo
         title={'No Filter'}
-        subtitle={'Matches all logs'}
+        subtitle={'Matches all batteries'}
         position={['first', 'last']}
         hideInfo={true}
         checked={!selectedFilterId}
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalMaintenanceFilter ?
+      {useGeneralFilter && generalReportBatteryScanCodesFilter ?
         <>
           <ListItemCheckboxInfo
-            title={'General Maintenance Filter'}
-            subtitle={filterSummary(generalMaintenanceFilter)}
+            title={`General Battery Filter`}
+            subtitle={filterSummary(generalReportBatteryScanCodesFilter)}
             position={['first', 'last']}
-            checked={generalMaintenanceFilter._id.toString() === selectedFilterId}
-            onPress={() => setFilter(generalMaintenanceFilter)}
-            onPressInfo={() => navigation.navigate('ModelMaintenanceFilterEditor', {
-              filterId: generalMaintenanceFilter!._id.toString(),
+            checked={generalReportBatteryScanCodesFilter._id.toString() === selectedFilterId}
+            onPress={() => setFilter(generalReportBatteryScanCodesFilter)}
+            onPressInfo={() => navigation.navigate('ReportBatteryScanCodeFilterEditor', {
+              filterId: generalReportBatteryScanCodesFilter!._id.toString(),
               filterType,
-              generalFilterName: generalMaintenanceFilterName,
+              generalFilterName: generalReportBatteryScanCodesFilterName,
               modelType,
             })}
           />
           <Divider note
-            text={'You can save the General Maintenance Filter to remember a specific filter configuration for later use.'}
+            text={`You can save the General Batteries Filter to remember a specific filter configuration for later use.`}
           />
         </>
         :
@@ -144,24 +144,24 @@ const ModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('ModelMaintenanceFilterEditor', {
-            filterId: generalMaintenanceFilter!._id.toString(),
+          onPress={() => navigation.navigate('ReportBatteryScanCodeFilterEditor', {
+            filterId: generalReportBatteryScanCodesFilter!._id.toString(),
             filterType,
-            generalFilterName: generalMaintenanceFilterName,
+            generalFilterName: generalReportBatteryScanCodesFilterName,
             modelType,
             requireFilterName: true,
           })}
         />
       }
       <FlatList
-        data={allMaintenanceFilters}
+        data={allBatteryScanCodeFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allMaintenanceFilters.length ? <Divider text={'SAVED MAINTENANCE FILTERS'} /> : null}
+        ListHeaderComponent={allBatteryScanCodeFilters.length ? <Divider text={'SAVED BATTERY FILTERS'} /> : null}
       />
     </View>
   );
 };
 
-export default ModelMaintenanceFiltersScreen;
+export default ReportBatteryScanCodeFiltersScreen;

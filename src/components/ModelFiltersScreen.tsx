@@ -1,6 +1,6 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -20,7 +20,7 @@ import { useTheme } from 'theme';
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilters'>;
 
 const ModelFiltersScreen = ({ navigation, route }: Props) => {
-  const { filterType } = route.params;
+  const { filterType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
   const listEditor = useListEditor();
@@ -118,24 +118,39 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {generalModelsFilter && 
-        <ListItemCheckboxInfo
-          title={'General Models Filter'}
-          subtitle={filterSummary(generalModelsFilter)}
-          // subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
+      {useGeneralFilter && generalModelsFilter ?
+        <>
+          <ListItemCheckboxInfo
+            title={'General Models Filter'}
+            subtitle={filterSummary(generalModelsFilter)}
+            // subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
+            position={['first', 'last']}
+            checked={generalModelsFilter._id.toString() === selectedFilterId}
+            onPress={() => setFilter(generalModelsFilter)}
+            onPressInfo={() => navigation.navigate('ModelFilterEditor', {
+              filterId: generalModelsFilter!._id.toString(),
+              filterType,
+              generalFilterName: generalModelsFilterName,
+            })}
+          />
+          <Divider note
+            text={'You can save the General Models Filter to remember a specific filter configuration for later use.'}
+          />      
+        </>
+        :
+        <ListItem
+          title={'Add New Filter'}
+          titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
-          checked={generalModelsFilter._id.toString() === selectedFilterId}
-          onPress={() => setFilter(generalModelsFilter)}
-          onPressInfo={() => navigation.navigate('ModelFilterEditor', {
+          rightImage={false}
+          onPress={() => navigation.navigate('ModelFilterEditor', {
             filterId: generalModelsFilter!._id.toString(),
             filterType,
             generalFilterName: generalModelsFilterName,
+            requireFilterName: true,
           })}
         />
       }
-      <Divider note
-        text={'You can save the General Models Filter to remember a specific filter configuration for later use.'}
-      />      
       <FlatList
         data={allModelFilters}
         renderItem={renderFilters}

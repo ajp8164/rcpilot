@@ -1,6 +1,6 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -20,7 +20,7 @@ import { useTheme } from 'theme';
 export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilters'>;
 
 const BatteryFiltersScreen = ({ navigation, route }: Props) => {
-  const { filterType } = route.params;
+  const { filterType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
   const listEditor = useListEditor();
@@ -115,23 +115,38 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {generalBatteriesFilter && 
-        <ListItemCheckboxInfo
-          title={'General Batteries Filter'}
-          subtitle={filterSummary(generalBatteriesFilter)}
+      {useGeneralFilter && generalBatteriesFilter ?
+        <>
+          <ListItemCheckboxInfo
+            title={'General Batteries Filter'}
+            subtitle={filterSummary(generalBatteriesFilter)}
+            position={['first', 'last']}
+            checked={generalBatteriesFilter._id.toString() === selectedFilterId}
+            onPress={() => setFilter(generalBatteriesFilter)}
+            onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
+              filterId: generalBatteriesFilter!._id.toString(),
+              filterType,
+              generalFilterName: generalBatteriesFilterName,
+            })}
+          />
+          <Divider note
+            text={'You can save the General Batteries Filter to remember a specific filter configuration for later use.'}
+          />
+        </>
+        :
+        <ListItem
+          title={'Add New Filter'}
+          titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
-          checked={generalBatteriesFilter._id.toString() === selectedFilterId}
-          onPress={() => setFilter(generalBatteriesFilter)}
-          onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
+          rightImage={false}
+          onPress={() => navigation.navigate('BatteryFilterEditor', {
             filterId: generalBatteriesFilter!._id.toString(),
             filterType,
             generalFilterName: generalBatteriesFilterName,
+            requireFilterName: true,
           })}
         />
       }
-      <Divider note
-        text={'You can save the General Batteries Filter to remember a specific filter configuration for later use.'}
-      />
       <FlatList
         data={allBatteryFilters}
         renderItem={renderFilters}

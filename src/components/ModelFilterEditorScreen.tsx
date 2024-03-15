@@ -7,13 +7,13 @@ import {
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
+import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelFilterValues } from 'types/filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/model';
 import lodash from 'lodash';
@@ -25,7 +25,7 @@ const filterValueLabels: Record<string, string> = {};
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;
 
 const ModelFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, filterType, generalFilterName } = route.params;
+  const { filterId, filterType, generalFilterName, requireFilterName} = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
@@ -38,6 +38,12 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
     generalFilterName,
   });
 
+  useEffect(() => {
+    if (requireFilterName) {
+      filterEditor.setCreateSavedFilter(true);
+    }
+  }, []);
+
   if (!filterEditor.filter) {
     return (
       <EmptyView error message={'Filter Not Found!'} />
@@ -47,11 +53,12 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName ?
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
           value={filterEditor.createSavedFilter}
+          disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
           onValueChange={filterEditor.setCreateSavedFilter}
           ExpandableComponent={

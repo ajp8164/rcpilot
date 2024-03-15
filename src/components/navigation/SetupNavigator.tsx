@@ -1,7 +1,6 @@
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
-import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
@@ -11,7 +10,6 @@ import DatabaseReportingScreen from 'components/DatabaseReportingScreen';
 import DropboxAccessScreen from 'components/DropboxAccessScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
-import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
 import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
 import EventStylesScreen from 'components/EventStylesScreen';
 import EventsScreen from 'components/EventsScreen';
@@ -19,10 +17,8 @@ import LocationNavigator from 'components/navigation/LocationNavigator';
 import LocationsScreen from 'components/LocationsScreen';
 import ModelCategoriesScreen from 'components/ModelCategoriesScreen';
 import ModelCategoryEditorScreen from 'components/ModelCategoryEditorScreen';
-import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
 import ModelFuelsScreen from 'components/ModelFuelsScreen';
-import ModelMaintenanceFiltersNavigator from 'components/navigation/ModelMaintenanceFiltersNavigator';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
@@ -43,7 +39,11 @@ import PreferencesClickTrackScreen from 'components/PreferencesClickTrackScreen'
 import PreferencesEventsScreen from 'components/PreferencesEventsScreen';
 import PreferencesVoiceCuesScreen from 'components/PreferencesVoiceCuesScreen';
 import React from 'react';
+import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
+import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
+import ReportModelMaintenanceFiltersNavigator from 'components/navigation/ReportModelMaintenanceFiltersNavigator';
+import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -341,32 +341,32 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='EventFiltersNavigator'
-        component={EventFiltersNavigator}
+        name='ReportEventFiltersNavigator'
+        component={ReportEventFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',
         }}
       />
       <SetupStack.Screen
-        name='BatteryFiltersNavigator'
-        component={BatteryFiltersNavigator}
+        name='ReportBatteryScanCodeFiltersNavigator'
+        component={ReportBatteryScanCodeFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',
         }}
       />
       <SetupStack.Screen
-        name='ModelFiltersNavigator'
-        component={ModelFiltersNavigator}
+        name='ReportModelScanCodeFiltersNavigator'
+        component={ReportModelScanCodeFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',
         }}
       />
       <SetupStack.Screen
-        name='ModelMaintenanceFiltersNavigator'
-        component={ModelMaintenanceFiltersNavigator}
+        name='ReportModelMaintenanceFiltersNavigator'
+        component={ReportModelMaintenanceFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',

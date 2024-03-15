@@ -4,9 +4,9 @@ import {
   StringRelation
 } from 'components/molecules/filters';
 
-import { MaintenanceFilterValues } from 'types/filter';
+import { ModelMaintenanceFilterValues } from 'types/filter';
 
-export const defaultFilter: MaintenanceFilterValues = {
+export const defaultFilter: ModelMaintenanceFilterValues = {
   date: { relation: DateRelation.Any, value: [] },
   costs: { relation: NumberRelation.Any, value: [] },
   notes: { relation: StringRelation.Any, value: [] },

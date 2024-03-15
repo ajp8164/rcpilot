@@ -61,6 +61,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               }
               onPress={() => navigation.navigate('BatteryCycleFiltersNavigator', {
                 screen: 'BatteryCycleFilters',
+                params: {
+                  useGeneralFilter: true,
+                }
               })}
             />
             <Button

@@ -5,13 +5,13 @@ import {
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
+import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { MaintenanceFilterValues } from 'types/filter';
+import { ModelMaintenanceFilterValues } from 'types/filter';
 import { ModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/maintenance';
 import lodash from 'lodash';
@@ -23,18 +23,24 @@ const filterValueLabels: Record<string, string> = {};
 export type Props = NativeStackScreenProps<ModelMaintenanceFiltersNavigatorParamList, 'ModelMaintenanceFilterEditor'>;
 
 const MaintenanceFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, filterType, generalFilterName, modelType } = route.params;
+  const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const filterEditor = useFilterEditor<MaintenanceFilterValues>({
+  const filterEditor = useFilterEditor<ModelMaintenanceFilterValues>({
     filterId,
     filterType,
     defaultFilter,
     filterValueLabels,
     generalFilterName,
   });
+
+  useEffect(() => {
+    if (requireFilterName) {
+      filterEditor.setCreateSavedFilter(true);
+    }
+  }, []);
 
   if (!filterEditor.filter) {
     return (
@@ -45,11 +51,12 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName ?
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
           value={filterEditor.createSavedFilter}
+          disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
           onValueChange={filterEditor.setCreateSavedFilter}
           ExpandableComponent={

@@ -1,13 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteryCycleFilterValues, FilterType } from 'types/filter';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { ListItemFilterDate, ListItemFilterNumber, ListItemFilterString } from 'components/molecules/filters';
+import React, { useEffect } from 'react';
 
+import { BatteryCycleFilterValues } from 'types/filter';
 import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/batteryCycle';
 import lodash from 'lodash';
@@ -21,18 +21,24 @@ const filterValueLabels: Record<string, string> = {};
 export type Props = NativeStackScreenProps<BatteryCycleFiltersNavigatorParamList, 'BatteryCycleFilterEditor'>;
 
 const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
-  const { filterId } = route.params;
+  const { filterId, filterType, requireFilterName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
   const filterEditor = useFilterEditor<BatteryCycleFilterValues>({
     filterId,
-    filterType: FilterType.BatteryCyclesFilter,
+    filterType,
     defaultFilter,
     filterValueLabels,
     generalFilterName: generalBatteryCyclesFilterName,
   });
+
+    useEffect(() => {
+    if (requireFilterName) {
+      filterEditor.setCreateSavedFilter(true);
+    }
+  }, []);
 
   if (!filterEditor.filter) {
     return (
@@ -43,11 +49,12 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName ?
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
           value={filterEditor.createSavedFilter}
+          disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
           onValueChange={filterEditor.setCreateSavedFilter}
           ExpandableComponent={

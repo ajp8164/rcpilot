@@ -1,6 +1,6 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { defaultFilter, eventKind } from 'lib/modelEvent';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,7 @@ import { useTheme } from 'theme';
 export type Props = NativeStackScreenProps<EventFiltersNavigatorParamList, 'EventFilters'>;
 
 const EventFiltersScreen = ({ navigation, route }: Props) => {
-  const { filterType, modelType } = route.params;
+  const { filterType, modelType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
   const listEditor = useListEditor();
@@ -119,24 +119,40 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {generalEventsFilter && 
-        <ListItemCheckboxInfo
-          title={`General ${eventKind(modelType).namePlural} Filter`}
-          subtitle={filterSummary(generalEventsFilter)}
+      {useGeneralFilter && generalEventsFilter ?
+        <>
+          <ListItemCheckboxInfo
+            title={`General ${eventKind(modelType).namePlural} Filter`}
+            subtitle={filterSummary(generalEventsFilter)}
+            position={['first', 'last']}
+            checked={generalEventsFilter._id.toString() === selectedFilterId}
+            onPress={() => setFilter(generalEventsFilter)}
+            onPressInfo={() => navigation.navigate('EventFilterEditor', {
+              filterId: generalEventsFilter!._id.toString(),
+              filterType,
+              generalFilterName: generalEventsFilterName,
+              modelType,
+            })}
+          />
+          <Divider note
+            text={`You can save the General ${eventKind(modelType).namePlural} Filter to remember a specific filter configuration for later use.`}
+          />
+        </>
+        :
+        <ListItem
+          title={'Add New Filter'}
+          titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
-          checked={generalEventsFilter._id.toString() === selectedFilterId}
-          onPress={() => setFilter(generalEventsFilter)}
-          onPressInfo={() => navigation.navigate('EventFilterEditor', {
+          rightImage={false}
+          onPress={() => navigation.navigate('EventFilterEditor', {
             filterId: generalEventsFilter!._id.toString(),
             filterType,
             generalFilterName: generalEventsFilterName,
             modelType,
+            requireFilterName: true,
           })}
         />
       }
-      <Divider note
-        text={`You can save the General ${eventKind(modelType).namePlural} Filter to remember a specific filter configuration for later use.`}
-      />      
       <FlatList
         data={allEventFilters}
         renderItem={renderFilters}

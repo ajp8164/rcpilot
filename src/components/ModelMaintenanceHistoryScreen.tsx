@@ -70,6 +70,10 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
               }
               onPress={() => navigation.navigate('ModelMaintenanceFiltersNavigator', {
                 screen: 'ModelMaintenanceFilters',
+                params: {
+                  filterType: FilterType.MaintenanceFilter,
+                  useGeneralFilter: true,
+                }
               })}
             />
             <Button

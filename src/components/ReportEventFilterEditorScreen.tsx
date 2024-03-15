@@ -27,8 +27,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
   
   const theme = useTheme();
   const s = useStyles(theme);
-console.log(filterId, filterType, generalFilterName, requireFilterName);
-console.log(defaultFilter);
+  
   const filterEditor = useFilterEditor<ReportEventFilterValues>({
     filterId,
     filterType,
@@ -36,7 +35,6 @@ console.log(defaultFilter);
     filterValueLabels,
     generalFilterName,
   });
-console.log(JSON.stringify(filterEditor));
 
   useEffect(() => {
     if (requireFilterName) {

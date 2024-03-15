@@ -147,7 +147,7 @@ export const batteryCycleDischargeData = (cycle: BatteryCycle) => {
         // dischargeBy80Percent,
       },
       string: {
-        dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat('d/M/yy'),
+        dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat('M/d/yy'),
         dischargeDuration: secondsToMSS(dischargeDuration, {format: 'm:ss'}),
         dischargeRestingVoltage: dischargeRestingVoltage ? `${dischargeRestingVoltage}V` : 'unknown',
         // averageDischargeCurrent: `${averageDischargeCurrent} mA`,
@@ -191,7 +191,7 @@ export const batteryCycleChargeData = (cycle: BatteryCycle) => {
         averageCurrent,
       },
       string: {
-        chargeDate: DateTime.fromISO(cycle.charge.date).toFormat('d/M/yy'),
+        chargeDate: DateTime.fromISO(cycle.charge.date).toFormat('M/d/yy'),
         chargeAmount: `${cycle.charge.amount}mA`,
         chargeToCapacityPercentage: `${cycle.charge.amount! / cycle.battery.capacity! * 100}%`,
         chargeToCapacity: `${chargeToCapacity}`,

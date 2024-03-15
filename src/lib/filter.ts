@@ -64,13 +64,13 @@ export const filterStateSummary = (property: string, state: FilterState) => {
   if (state.relation !== FilterRelation.Any && state.value) {
     switch (state.relation) {
       case FilterRelation.After:
-        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('d/M/yy')}`;
+        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;
         break;
       case FilterRelation.After:
-        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('d/M/yy')}`;
+        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;
         break;
       case FilterRelation.Before:
-        s = `${p} is before ${DateTime.fromISO(state.value[0]).toFormat('d/M/yy')}`;
+        s = `${p} is before ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;
         break;
       case FilterRelation.Past:
         s = `${p} in past ${state.value[0]} ${state.value[1]}`; // [0] is number [1] is time span

@@ -34,9 +34,9 @@ type Section = {
   data: JChecklistActionHistoryEntry[];
 };
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenanceHistory'>;
+export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'MaintenanceHistory'>;
 
-const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
+const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const {
     modelId,
   } = route.params;
@@ -68,8 +68,8 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
                   ]}
                 />
               }
-              onPress={() => navigation.navigate('ModelMaintenanceFiltersNavigator', {
-                screen: 'ModelMaintenanceFilters',
+              onPress={() => navigation.navigate('MaintenanceFiltersNavigator', {
+                screen: 'MaintenanceFilters',
                 params: {
                   filterType: FilterType.MaintenanceFilter,
                   useGeneralFilter: true,
@@ -132,7 +132,7 @@ const ModelMaintenanceHistoryScree = ({ navigation, route }: Props) => {
         subtitle={subtitle}
         titleNumberOfLines={1}
         position={listItemPosition(index, entries.length)}
-        onPress={() => navigation.navigate('ModelMaintenanceHistoryEntry',{
+        onPress={() => navigation.navigate('MaintenanceHistoryEntry',{
           modelId,
           checklistRefId: entry.checklist.refId,
           actionRefId: entry.action.refId,
@@ -210,4 +210,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default ModelMaintenanceHistoryScree;
+export default MaintenanceHistoryScree;

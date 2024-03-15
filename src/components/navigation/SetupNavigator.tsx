@@ -42,7 +42,7 @@ import React from 'react';
 import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
 import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
-import ReportModelMaintenanceFiltersNavigator from 'components/navigation/ReportModelMaintenanceFiltersNavigator';
+import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
 import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
@@ -365,8 +365,8 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='ReportModelMaintenanceFiltersNavigator'
-        component={ReportModelMaintenanceFiltersNavigator}
+        name='ReportMaintenanceFiltersNavigator'
+        component={ReportMaintenanceFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',

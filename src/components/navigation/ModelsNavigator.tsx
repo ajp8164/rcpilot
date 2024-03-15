@@ -13,11 +13,11 @@ import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import { ModelHeader } from 'components/molecules/ModelHeader';
-import ModelMaintenanceActionScreen from 'components/ModelMaintenanceActionScreen';
-import ModelMaintenanceFiltersNavigator from 'components/navigation/ModelMaintenanceFiltersNavigator';
-import ModelMaintenanceHistoryEntryScreen from 'components/ModelMaintenanceHistoryEntryScreen';
-import ModelMaintenanceHistoryScreen from 'components/ModelMaintenanceHistoryScreen';
-import ModelMaintenanceScreen from 'components/ModelMaintenanceScreen';
+import MaintenanceActionScreen from 'components/MaintenanceActionScreen';
+import MaintenanceFiltersNavigator from 'components/navigation/MaintenanceFiltersNavigator';
+import MaintenanceHistoryEntryScreen from 'components/MaintenanceHistoryEntryScreen';
+import MaintenanceHistoryScreen from 'components/MaintenanceHistoryScreen';
+import MaintenanceScreen from 'components/MaintenanceScreen';
 import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
@@ -130,37 +130,37 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name="ModelMaintenance"
-        component={ModelMaintenanceScreen}
+        name="Maintenance"
+        component={MaintenanceScreen}
         options={{
           title: 'Maintenance',
         }}
       />
       <ModelsStack.Screen
-        name="ModelMaintenanceHistory"
-        component={ModelMaintenanceHistoryScreen}
+        name="MaintenanceHistory"
+        component={MaintenanceHistoryScreen}
         options={{
           title: 'Maintenance Log',
         }}
       />
       <ModelsStack.Screen
-        name="ModelMaintenanceHistoryEntry"
-        component={ModelMaintenanceHistoryEntryScreen}
+        name="MaintenanceHistoryEntry"
+        component={MaintenanceHistoryEntryScreen}
         options={{
           title: 'Action',
           headerBackTitle: 'Log',
         }}
       />
       <ModelsStack.Screen
-        name="ModelMaintenanceAction"
-        component={ModelMaintenanceActionScreen}
+        name="MaintenanceAction"
+        component={MaintenanceActionScreen}
         options={{
           title: 'Action',
         }}
       />
       <ModelsStack.Screen
-        name='ModelMaintenanceFiltersNavigator'
-        component={ModelMaintenanceFiltersNavigator}
+        name='MaintenanceFiltersNavigator'
+        component={MaintenanceFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',

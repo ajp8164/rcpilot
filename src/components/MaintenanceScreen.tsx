@@ -42,9 +42,9 @@ type Section = {
   data: ChecklistActionItemData[];
 };
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenance'>;
+export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'Maintenance'>;
 
-const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
+const MaintenanceScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
@@ -270,7 +270,7 @@ const ModelMaintenanceScreen = ({ navigation, route }: Props) => {
         onPress={() => {
           togglePendMaintenanceItem(actionItem.action.refId);
         }}
-        onPressInfo={() => navigation.navigate('ModelMaintenanceAction', {
+        onPressInfo={() => navigation.navigate('MaintenanceAction', {
           modelId,
           checklistRefId: actionItem.checklist.refId,
           actionRefId: actionItem.action.refId,
@@ -354,4 +354,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default ModelMaintenanceScreen;
+export default MaintenanceScreen;

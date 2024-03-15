@@ -25,7 +25,7 @@ export const filterSummary = (filterOrFilterType: Filter | string) => {
     filterType === FilterType.MaintenanceFilter ? 'logs' :
     filterType === FilterType.ModelsFilter ? 'models' :
     filterType === FilterType.ReportEventsFilter ? 'events' :
-    filterType === FilterType.ReportModelMaintenanceFilter ? 'maintenance items' :
+    filterType === FilterType.ReportMaintenanceFilter ? 'maintenance items' :
     filterType === FilterType.ReportModelScanCodesFilter ? 'models' :
     filterType === FilterType.ReportBatteryScanCodesFilter ? 'batteries' : '';
 

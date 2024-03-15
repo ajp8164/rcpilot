@@ -532,7 +532,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               <ListItem
                 title={'Perform Maintenance'}
                 value={`${pendingMaintenanceActionsCount} pending`}
-                onPress={() => navigation.navigate('ModelMaintenance', {
+                onPress={() => navigation.navigate('Maintenance', {
                   modelId,
                 })}
               />
@@ -540,7 +540,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 title={'Maintenance Log'}
                 value={`${completedMaintenanceActionsCount} entries`}
                 position={['last']}
-                onPress={() => navigation.navigate('ModelMaintenanceHistory', {
+                onPress={() => navigation.navigate('MaintenanceHistory', {
                   modelId,
                 })}
               />

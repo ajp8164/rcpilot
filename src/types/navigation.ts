@@ -147,7 +147,7 @@ export type ModelsNavigatorParamList = {
   ModelEditor: {
     modelId: string;
   };
-  ModelMaintenanceFiltersNavigator: NavigatorScreenParams<ModelMaintenanceFiltersNavigatorParamList>;
+  MaintenanceFiltersNavigator: NavigatorScreenParams<MaintenanceFiltersNavigatorParamList>;
   ModelStatistics: {
     modelId: string;
   };
@@ -155,18 +155,18 @@ export type ModelsNavigatorParamList = {
     listModels?: ListModels;
   };
   ModelFiltersNavigator: NavigatorScreenParams<ModelFiltersNavigatorParamList>;
-  ModelMaintenance: {
+  Maintenance: {
     modelId: string;
   };
-  ModelMaintenanceHistory: {
+  MaintenanceHistory: {
     modelId: string;
   };
-  ModelMaintenanceAction: {
+  MaintenanceAction: {
     modelId: string;
     checklistRefId: string;
     actionRefId: string;
   };
-  ModelMaintenanceHistoryEntry: {
+  MaintenanceHistoryEntry: {
     modelId: string;
     checklistRefId: string;
     actionRefId: string;
@@ -203,14 +203,14 @@ export type EventFiltersNavigatorParamList = {
   };
 };
 
-export type ModelMaintenanceFiltersNavigatorParamList = {
+export type MaintenanceFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
-  ModelMaintenanceFilters: {
+  MaintenanceFilters: {
     filterType: FilterType;
     modelType?: ModelType;
     useGeneralFilter?: boolean;
   };
-  ModelMaintenanceFilterEditor: {
+  MaintenanceFilterEditor: {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
@@ -295,14 +295,14 @@ export type ReportEventFiltersNavigatorParamList = {
   };
 };
 
-export type ReportModelMaintenanceFiltersNavigatorParamList = {
+export type ReportMaintenanceFiltersNavigatorParamList = {
   EnumPicker: EnumPickerInterface;
-  ReportModelMaintenanceFilters: {
+  ReportMaintenanceFilters: {
     filterType: FilterType;
     modelType?: ModelType;
     useGeneralFilter?: boolean;
   };
-  ReportModelMaintenanceFilterEditor: {
+  ReportMaintenanceFilterEditor: {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
@@ -579,7 +579,7 @@ export type SetupNavigatorParamList = {
     subNav?: string;
   };
   ReportEventFiltersNavigator: NavigatorScreenParams<ReportEventFiltersNavigatorParamList>;
-  ReportModelMaintenanceFiltersNavigator: NavigatorScreenParams<ReportModelMaintenanceFiltersNavigatorParamList>;
+  ReportMaintenanceFiltersNavigator: NavigatorScreenParams<ReportMaintenanceFiltersNavigatorParamList>;
   ReportModelScanCodeFiltersNavigator: NavigatorScreenParams<ReportModelScanCodeFiltersNavigatorParamList>;
   ReportBatteryScanCodeFiltersNavigator: NavigatorScreenParams<ReportBatteryScanCodeFiltersNavigatorParamList>;
   EventStyles: undefined;
@@ -635,7 +635,7 @@ export type PilotNavigatorParamList = {
 
 export type NewReportNavigatorParamList = {
   ReportEventFiltersNavigator: NavigatorScreenParams<ReportEventFiltersNavigatorParamList>;
-  ReportModelMaintenanceFiltersNavigator: NavigatorScreenParams<ReportModelMaintenanceFiltersNavigatorParamList>;
+  ReportMaintenanceFiltersNavigator: NavigatorScreenParams<ReportMaintenanceFiltersNavigatorParamList>;
   ReportModelScanCodeFiltersNavigator: NavigatorScreenParams<ReportModelScanCodeFiltersNavigatorParamList>;
   ReportBatteryScanCodeFiltersNavigator: NavigatorScreenParams<ReportBatteryScanCodeFiltersNavigatorParamList>;
   ReportEventsMaintenanceEditor: {

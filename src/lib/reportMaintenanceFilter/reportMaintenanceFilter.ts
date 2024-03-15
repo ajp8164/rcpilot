@@ -5,9 +5,9 @@ import {
   StringRelation,
 } from 'components/molecules/filters';
 
-import { ReportModelMaintenanceFilterValues } from 'types/filter';
+import { ReportMaintenanceFilterValues } from 'types/filter';
 
-export const defaultFilter: ReportModelMaintenanceFilterValues = {
+export const defaultFilter: ReportMaintenanceFilterValues = {
   model: { relation: EnumRelation.Any, value: [] },
   modelType: { relation: EnumRelation.Any, value: [] },
   category: { relation: EnumRelation.Any, value: [] },

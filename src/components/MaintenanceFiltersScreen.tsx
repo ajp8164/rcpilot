@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
 
 import { Filter } from 'realmdb/Filter';
+import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ReportModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { View } from 'react-native-ui-lib';
-import { defaultFilter } from 'lib/reportModelMaintenanceFilter';
+import { defaultFilter } from 'lib/maintenance';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';
@@ -17,9 +17,9 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ReportModelMaintenanceFiltersNavigatorParamList, 'ReportModelMaintenanceFilters'>;
+export type Props = NativeStackScreenProps<MaintenanceFiltersNavigatorParamList, 'MaintenanceFilters'>;
 
-const ReportModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
+const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, modelType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
@@ -28,41 +28,41 @@ const ReportModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
-  const generalReportModelMaintenancesFilterName = `general-${lodash.kebabCase(filterType)}`;
-  const allModelMaintenanceFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalReportModelMaintenancesFilterName);
+  const generalMaintenanceFilterName = `general-${lodash.kebabCase(filterType)}`;
+  const allMaintenanceFilters = useQuery(Filter, filters => {
+    return filters.filtered('type == $0 AND name != $1', filterType, generalMaintenanceFilterName);
   });
 
-  const generalReportModelMaintenancesFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalReportModelMaintenancesFilterName);
+  const generalMaintenanceFilterQuery = useQuery(Filter, filters => {
+    return filters.filtered('type == $0 AND name == $1', filterType, generalMaintenanceFilterName);
   });
-  const [generalReportModelMaintenancesFilter, setGeneralModelMaintenanceFilter] = useState<Filter>();
+  const [generalMaintenanceFilter, setGeneralMaintenanceFilter] = useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
   useEffect(() => {
-    // Lazy initialization of a general model mointenance filter.
-    if (!generalReportModelMaintenancesFilterQuery.length) {
+    // Lazy initialization of a general maintenance filter.
+    if (!generalMaintenanceFilterQuery.length) {
       realm.write(() => {
-        const gef = realm.create('Filter', {
-          name: generalReportModelMaintenancesFilterName,
+        const gmf = realm.create('Filter', {
+          name: generalMaintenanceFilterName,
           type: filterType,
           values: defaultFilter,
         });
 
         // @ts-ignore
-        setGeneralModelMaintenanceFilter(gef);
+        setGeneralMaintenanceFilter(gmf);
       });
     } else {
-      setGeneralModelMaintenanceFilter(generalReportModelMaintenancesFilterQuery[0]);
+      setGeneralMaintenanceFilter(generalMaintenanceFilterQuery[0]);
     }
   }, []);
   
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
-        filterId: filter?._id?.toString(),
         filterType,
+        filterId: filter?._id?.toString(),
       }),
     );
   };
@@ -76,17 +76,17 @@ const ReportModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'report-model-maintenance-filters', filter._id.toString())}
+        ref={ref => ref && listEditor.add(ref, 'maintenance-filters', filter._id.toString())}
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
-        position={listItemPosition(index, allModelMaintenanceFilters.length)}
+        position={listItemPosition(index, allMaintenanceFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('ReportModelMaintenanceFilterEditor', {
+        onPressInfo={() => navigation.navigate('MaintenanceFilterEditor', {
           filterId: filter._id.toString(),
           filterType,
-          generalFilterName: generalReportModelMaintenancesFilterName,
+          generalFilterName: generalMaintenanceFilterName,
           modelType,
         })}
         swipeable={{
@@ -101,7 +101,7 @@ const ReportModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
             }
           }]
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('report-model-mantenance-filters', filter._id.toString())}
+        onSwipeableWillOpen={() => listEditor.onItemWillOpen('maintenance-filters', filter._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     )
@@ -119,23 +119,23 @@ const ReportModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalReportModelMaintenancesFilter ?
+      {useGeneralFilter && generalMaintenanceFilter ?
         <>
           <ListItemCheckboxInfo
-            title={`General Maintenance Filter`}
-            subtitle={filterSummary(generalReportModelMaintenancesFilter)}
+            title={'General Maintenance Filter'}
+            subtitle={filterSummary(generalMaintenanceFilter)}
             position={['first', 'last']}
-            checked={generalReportModelMaintenancesFilter._id.toString() === selectedFilterId}
-            onPress={() => setFilter(generalReportModelMaintenancesFilter)}
-            onPressInfo={() => navigation.navigate('ReportModelMaintenanceFilterEditor', {
-              filterId: generalReportModelMaintenancesFilter!._id.toString(),
+            checked={generalMaintenanceFilter._id.toString() === selectedFilterId}
+            onPress={() => setFilter(generalMaintenanceFilter)}
+            onPressInfo={() => navigation.navigate('MaintenanceFilterEditor', {
+              filterId: generalMaintenanceFilter!._id.toString(),
               filterType,
-              generalFilterName: generalReportModelMaintenancesFilterName,
+              generalFilterName: generalMaintenanceFilterName,
               modelType,
             })}
           />
           <Divider note
-            text={`You can save the General Maintenance Filter to remember a specific filter configuration for later use.`}
+            text={'You can save the General Maintenance Filter to remember a specific filter configuration for later use.'}
           />
         </>
         :
@@ -144,24 +144,24 @@ const ReportModelMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('ReportModelMaintenanceFilterEditor', {
-            filterId: generalReportModelMaintenancesFilter!._id.toString(),
+          onPress={() => navigation.navigate('MaintenanceFilterEditor', {
+            filterId: generalMaintenanceFilter!._id.toString(),
             filterType,
-            generalFilterName: generalReportModelMaintenancesFilterName,
+            generalFilterName: generalMaintenanceFilterName,
             modelType,
             requireFilterName: true,
           })}
         />
       }
       <FlatList
-        data={allModelMaintenanceFilters}
+        data={allMaintenanceFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allModelMaintenanceFilters.length ? <Divider text={'SAVED MAINTEANCE FILTERS'} /> : null}
+        ListHeaderComponent={allMaintenanceFilters.length ? <Divider text={'SAVED MAINTENANCE FILTERS'} /> : null}
       />
     </View>
   );
 };
 
-export default ReportModelMaintenanceFiltersScreen;
+export default MaintenanceFiltersScreen;

@@ -186,12 +186,14 @@ export type EventFiltersNavigatorParamList = {
   EventFilters: {
     filterType: FilterType;
     modelType?: ModelType;
+    useGeneralFilter?: boolean;
   };
   EventFilterEditor: {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
     modelType?: ModelType;
+    requireFilterName?: boolean;
   };
   NotesEditor: {
     title?: string;
@@ -206,12 +208,14 @@ export type ModelMaintenanceFiltersNavigatorParamList = {
   ModelMaintenanceFilters: {
     filterType: FilterType;
     modelType?: ModelType;
+    useGeneralFilter?: boolean;
   };
   ModelMaintenanceFilterEditor: {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
     modelType?: ModelType;
+    requireFilterName?: boolean;
   };
   NotesEditor: {
     title?: string;
@@ -226,11 +230,13 @@ export type ModelFiltersNavigatorParamList = {
   ModelFilters: {
     filterType: FilterType;
     modelType?: ModelType;
+    useGeneralFilter?: boolean;
   };
   ModelFilterEditor: {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
+    requireFilterName?: boolean;
   };
   NotesEditor: {
     title?: string;
@@ -244,21 +250,115 @@ export type BatteryFiltersNavigatorParamList = {
   BatteryFilters: {
     filterType: FilterType;
     modelType?: ModelType;
+    useGeneralFilter?: boolean;
   };
   BatteryFilterEditor: {
     filterId: string;
     filterType: FilterType;
     generalFilterName: string;
+    requireFilterName?: boolean;
   };
   EnumPicker: EnumPickerInterface;
 };
 
 export type BatteryCycleFiltersNavigatorParamList = {
-  BatteryCycleFilters: undefined;
+  BatteryCycleFilters: {
+    useGeneralFilter?: boolean;
+  };
   BatteryCycleFilterEditor: {
     filterId: string;
+    filterType: FilterType;
+    requireFilterName?: boolean;
   };
   EnumPicker: EnumPickerInterface;
+};
+
+export type ReportEventFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  ReportEventFilters: {
+    filterType: FilterType;
+    modelType?: ModelType;
+    useGeneralFilter?: boolean;
+  };
+  ReportEventFilterEditor: {
+    filterId: string;
+    filterType: FilterType;
+    generalFilterName: string;
+    modelType?: ModelType;
+    requireFilterName?: boolean;
+  };
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
+    eventName: string;
+  };
+};
+
+export type ReportModelMaintenanceFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  ReportModelMaintenanceFilters: {
+    filterType: FilterType;
+    modelType?: ModelType;
+    useGeneralFilter?: boolean;
+  };
+  ReportModelMaintenanceFilterEditor: {
+    filterId: string;
+    filterType: FilterType;
+    generalFilterName: string;
+    modelType?: ModelType;
+    requireFilterName?: boolean;
+  };
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
+    eventName: string;
+  };
+};
+
+export type ReportModelScanCodeFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  ReportModelScanCodeFilters: {
+    filterType: FilterType;
+    modelType?: ModelType;
+    useGeneralFilter?: boolean;
+  };
+  ReportModelScanCodeFilterEditor: {
+    filterId: string;
+    filterType: FilterType;
+    generalFilterName: string;
+    modelType?: ModelType;
+    requireFilterName?: boolean;
+  };
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
+    eventName: string;
+  };
+};
+
+export type ReportBatteryScanCodeFiltersNavigatorParamList = {
+  EnumPicker: EnumPickerInterface;
+  ReportBatteryScanCodeFilters: {
+    filterType: FilterType;
+    modelType?: ModelType;
+    useGeneralFilter?: boolean;
+  };
+  ReportBatteryScanCodeFilterEditor: {
+    filterId: string;
+    filterType: FilterType;
+    generalFilterName: string;
+    modelType?: ModelType;
+    requireFilterName?: boolean;
+  };
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
+    eventName: string;
+  };
 };
 
 export type NewBatteryNavigatorParamList = {
@@ -478,10 +578,10 @@ export type SetupNavigatorParamList = {
   Setup: {
     subNav?: string;
   };
-  EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
-  BatteryFiltersNavigator: NavigatorScreenParams<BatteryFiltersNavigatorParamList>;
-  ModelFiltersNavigator: NavigatorScreenParams<ModelFiltersNavigatorParamList>;
-  ModelMaintenanceFiltersNavigator: NavigatorScreenParams<ModelMaintenanceFiltersNavigatorParamList>;
+  ReportEventFiltersNavigator: NavigatorScreenParams<ReportEventFiltersNavigatorParamList>;
+  ReportModelMaintenanceFiltersNavigator: NavigatorScreenParams<ReportModelMaintenanceFiltersNavigatorParamList>;
+  ReportModelScanCodeFiltersNavigator: NavigatorScreenParams<ReportModelScanCodeFiltersNavigatorParamList>;
+  ReportBatteryScanCodeFiltersNavigator: NavigatorScreenParams<ReportBatteryScanCodeFiltersNavigatorParamList>;
   EventStyles: undefined;
   EventStyleEditor: {
     eventStyleId: string;
@@ -534,10 +634,10 @@ export type PilotNavigatorParamList = {
 };
 
 export type NewReportNavigatorParamList = {
-  EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
-  BatteryFiltersNavigator: NavigatorScreenParams<BatteryFiltersNavigatorParamList>;
-  ModelFiltersNavigator: NavigatorScreenParams<ModelFiltersNavigatorParamList>;
-  ModelMaintenanceFiltersNavigator: NavigatorScreenParams<ModelMaintenanceFiltersNavigatorParamList>;
+  ReportEventFiltersNavigator: NavigatorScreenParams<ReportEventFiltersNavigatorParamList>;
+  ReportModelMaintenanceFiltersNavigator: NavigatorScreenParams<ReportModelMaintenanceFiltersNavigatorParamList>;
+  ReportModelScanCodeFiltersNavigator: NavigatorScreenParams<ReportModelScanCodeFiltersNavigatorParamList>;
+  ReportBatteryScanCodeFiltersNavigator: NavigatorScreenParams<ReportBatteryScanCodeFiltersNavigatorParamList>;
   ReportEventsMaintenanceEditor: {
     reportId?: string;
   };

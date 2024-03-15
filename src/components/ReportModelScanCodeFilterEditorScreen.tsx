@@ -1,32 +1,33 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import { ListItemFilterEnum, ListItemFilterNumber } from 'components/molecules/filters';
+import {
+  ListItemFilterDate,
+  ListItemFilterEnum,
+} from 'components/molecules/filters';
 import React, { useEffect } from 'react';
 
-import { BatteryFilterValues } from 'types/filter';
-import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ReportModelScanCodeFilterValues } from 'types/filter';
+import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/battery';
+import { defaultFilter } from 'lib/reportModelScanCodeFilter';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
-export const generalBatteriesFilterName = 'general-batteries-filter';
-
 const filterValueLabels: Record<string, string> = {};
 
-export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilterEditor'>;
+export type Props = NativeStackScreenProps<ReportModelScanCodeFiltersNavigatorParamList, 'ReportModelScanCodeFilterEditor'>;
 
-const BatteryFilterEditorScreen = ({ route }: Props) => {
+const ReportModelScanCodeFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const filterEditor = useFilterEditor<BatteryFilterValues>({
+  const filterEditor = useFilterEditor<ReportModelScanCodeFilterValues>({
     filterId,
     filterType,
     defaultFilter,
@@ -84,73 +85,36 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the batteries that match all of these criteria.'}/>
+      <Divider text={`This filter shows all the models that match all of these criteria.`}/>
       <ListItemFilterEnum
-        title={'Chemistry'}
-        value={filterEditor.values.chemistry.value}
-        relation={filterEditor.values.chemistry.relation}
-        enumName={'Chemistries'}
+        title={'Model Type'}
+        value={filterEditor.values.modelType.value}
+        relation={filterEditor.values.modelType.relation}
+        enumName={'ModelTypes'}
         position={['first', 'last']}
         onValueChange={filterState => {
-          filterEditor.onFilterValueChange('chemistry', filterState);
+          filterEditor.onFilterValueChange('modelType', filterState);
         }}
       />
       <Divider />
-      <ListItemFilterNumber
-        title={'Total Time'}
-        label={'h:mm'}
-        value={filterEditor.values.totalTime.value}
-        relation={filterEditor.values.totalTime.relation}
-        numericProps={{prefix: '', separator: ':'}}
+      <ListItemFilterEnum
+        title={'Category'}
+        value={filterEditor.values.category.value}
+        relation={filterEditor.values.category.relation}
+        enumName={'Categories'}
         position={['first', 'last']}
         onValueChange={filterState => {
-          filterEditor.onFilterValueChange('totalTime', filterState);
+          filterEditor.onFilterValueChange('category', filterState);
         }}
       />
       <Divider />
-      <ListItemFilterNumber
-        title={'Capacity'}
-        label={'mAh'}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99999}}
-        value={filterEditor.values.capacity.value}
-        relation={filterEditor.values.capacity.relation}
+      <ListItemFilterDate
+        title={'Date'}
+        value={filterEditor.values.lastEvent.value}
+        relation={filterEditor.values.lastEvent.relation}
         position={['first', 'last']}
         onValueChange={filterState => {
-          filterEditor.onFilterValueChange('capacity', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterNumber
-        title={'C Rating'}
-        label={'C'}
-        value={filterEditor.values.cRating.value}
-        relation={filterEditor.values.cRating.relation}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 999}}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('cRating', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterNumber
-        title={'S Cells'}
-        value={filterEditor.values.sCells.value}
-        relation={filterEditor.values.sCells.relation}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('sCells', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterNumber
-        title={'P Cells'}
-        value={filterEditor.values.pCells.value}
-        relation={filterEditor.values.pCells.relation}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
-        position={['first', 'last']}  
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('pCells', filterState);
+          filterEditor.onFilterValueChange('lastEvent', filterState);
         }}
       />
       <Divider style={{height: theme.insets.bottom}} />
@@ -169,4 +133,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   }
 }));
 
-export default BatteryFilterEditorScreen;
+export default ReportModelScanCodeFilterEditorScreen;

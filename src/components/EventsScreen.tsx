@@ -75,6 +75,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
                 params: {
                   filterType: FilterType.EventsModelFilter,
                   modelType: model!.type,
+                  useGeneralFilter: true,
                 }
               })}
             />

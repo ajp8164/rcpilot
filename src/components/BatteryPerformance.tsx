@@ -30,6 +30,7 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
               screen: 'EventFilters',
               params: {
                 filterType: FilterType.EventsBatteryPerformanceFilter,
+                useGeneralFilter: true,
               },
             })
           }, {

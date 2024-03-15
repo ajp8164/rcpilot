@@ -15,19 +15,19 @@ export enum FilterType {
   EventsModelFilter = 'EventsModelFilter',
   MaintenanceFilter = 'MaintenanceFilter',
   ModelsFilter = 'ModelFilter',
-  ReportEventsFilter = 'ReportEventsFilter',
-  ReportMaintenanceFilter = 'ReportMaintenanceFilter',
   ReportBatteryScanCodesFilter = 'ReportBatteryScanCodesFilter',
+  ReportEventsFilter = 'ReportEventsFilter',
+  ReportModelMaintenanceFilter = 'ReportModelMaintenanceFilter',
   ReportModelScanCodesFilter = 'ReportModelScanCodesFilter',
 };
 
 // Only report filter types.
 export type ReportFilterType = PickEnum<
   FilterType,
-  | FilterType.ReportEventsFilter
-  | FilterType.ReportMaintenanceFilter
-  | FilterType.ReportModelScanCodesFilter
   | FilterType.ReportBatteryScanCodesFilter
+  | FilterType.ReportEventsFilter
+  | FilterType.ReportModelMaintenanceFilter
+  | FilterType.ReportModelScanCodesFilter
 >;
 
 export type FilterValues =
@@ -35,14 +35,22 @@ export type FilterValues =
   & BatteryFilterValues
   & BatteryCycleFilterValues
   & EventFilterValues
-  & MaintenanceFilterValues
+  & ModelMaintenanceFilterValues
+  & ReportBatteryScanCodeFilterValues
+  & ReportEventFilterValues
+  & ReportModelMaintenanceFilterValues
+  & ReportModelScanCodeFilterValues
 
 export type AnyFilterValues =
   | ModelFilterValues
   | BatteryFilterValues
   | BatteryCycleFilterValues
   | EventFilterValues
-  | MaintenanceFilterValues
+  | ModelMaintenanceFilterValues
+  | ReportBatteryScanCodeFilterValues
+  | ReportEventFilterValues
+  | ReportModelMaintenanceFilterValues
+  | ReportModelScanCodeFilterValues
 
 // Battery filter
 //
@@ -92,10 +100,49 @@ export type EventFilterValues = {
   notes: StringFilterState;
 };
 
-// Maintenace filter
+// Maintenance filter
 //
-export type MaintenanceFilterValues = {
+export type ModelMaintenanceFilterValues = {
   date: DateFilterState;
   costs: NumberFilterState;
   notes: StringFilterState;
+};
+
+// Report event filter
+//
+export type ReportEventFilterValues = {
+  model: EnumFilterState;
+  modelType: EnumFilterState;
+  category: EnumFilterState;
+  date: DateFilterState;
+  duration: NumberFilterState;
+  pilot: EnumFilterState;
+  style: EnumFilterState;
+  outcome: EnumFilterState;
+};
+
+// Report model maintenance filter
+//
+export type ReportModelMaintenanceFilterValues = {
+  model: EnumFilterState;
+  modelType: EnumFilterState;
+  category: EnumFilterState;
+  date: DateFilterState;
+  costs: NumberFilterState;
+  notes: StringFilterState;
+};
+
+// Report model scan codes filter
+//
+export type ReportModelScanCodeFilterValues = {
+  modelType: EnumFilterState;
+  category: EnumFilterState;
+  lastEvent: DateFilterState;
+};
+
+// Report battery scan codes filter
+//
+export type ReportBatteryScanCodeFilterValues = {
+  chemistry: EnumFilterState;
+  capacity: NumberFilterState;
 };

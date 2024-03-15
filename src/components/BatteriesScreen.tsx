@@ -84,6 +84,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 screen: 'BatteryFilters',
                 params: {
                   filterType: FilterType.BatteriesFilter,
+                  useGeneralFilter: true,
                 }
               })}
             />

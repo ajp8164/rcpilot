@@ -12,8 +12,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { filterSummary } from 'lib/filter';
-import { useEvent } from 'lib/event';
+import { selectFilters } from 'store/selectors/filterSelectors';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ReportEventsMaintenanceEditor'>;
@@ -22,12 +23,13 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
   
   const theme = useTheme();
-  const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
 
   const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
+  const reportEventsFilterId = useSelector(selectFilters(FilterType.ReportEventsFilter));
+  const reportMaintenanceFilterId = useSelector(selectFilters(FilterType.ReportModelMaintenanceFilter));
 
   const [name, setName] = useState<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
@@ -38,19 +40,8 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [maintenanceFilter, setMaintenanceFilter] = useState(report?.maintenanceFilter);
 
   useEffect(() => {
-    event.on('events-report-filter-selection', onChangeEventsFilterSelection);
-    event.on('maintenance-report-filter-selection', onChangeMaintenanceFilterSelection);
-    event.on('report-filter', onChangeFilter);
-    return () => {
-      event.removeListener('events-report-filter-selection', onChangeEventsFilterSelection);
-      event.removeListener('maintenance-report-filter-selection', onChangeMaintenanceFilterSelection);
-      event.removeListener('report-filter', onChangeFilter);
-    };
-  }, []);
-
-  const onChangeEventsFilterSelection = (filterId?: string) => {
     const filter = 
-      (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
+      realm.objectForPrimaryKey('Filter', new BSON.ObjectId(reportEventsFilterId)) as Filter;
     setEventsFilter(filter);
 
     // Update the exiting report immediately.
@@ -59,11 +50,11 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         report.eventsFilter = filter;
       });
     }
-  };
+  }, [ reportEventsFilterId ]);
 
-  const onChangeMaintenanceFilterSelection = (filterId?: string) => {
+  useEffect(() => {
     const filter = 
-      (filterId && realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter) || undefined;
+      realm.objectForPrimaryKey('Filter', new BSON.ObjectId(reportMaintenanceFilterId)) as Filter;
     setMaintenanceFilter(filter);
 
     // Update the exiting report immediately.
@@ -72,23 +63,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         report.maintenanceFilter = filter;
       });
     }
-  };
-
-  const onChangeFilter = (filterId: string) => {
-    // A filter change was made. Retrive the filter and if it's the selected
-    // filter for this report then update our local state to force a render of
-    // the filter summary.
-    const changedFilter = realm.objectForPrimaryKey('Filter', new BSON.ObjectId(filterId)) as Filter;
-    if (changedFilter.type === FilterType.ReportEventsFilter) {
-      if (filterId === report?.eventsFilter?._id.toString()) {
-        setEventsFilter(changedFilter);
-      }
-    } else {
-      if (filterId === report?.maintenanceFilter?._id.toString()) {
-        setMaintenanceFilter(changedFilter);
-      }
-    }
-  };
+  }, [ reportMaintenanceFilterId ]);
 
   useEffect(() => {
     const canSave = !!name && (
@@ -173,8 +148,8 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
             title={eventsFilter ? eventsFilter.name: 'No Filter Selected'}
             subtitle={eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'}
             position={['last']}
-            onPress={() => navigation.navigate('EventFiltersNavigator', {
-              screen: 'EventFilters',
+            onPress={() => navigation.navigate('ReportEventFiltersNavigator', {
+              screen: 'ReportEventFilters',
               params: {
                 filterType: FilterType.ReportEventsFilter,
               }
@@ -194,10 +169,10 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
             title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
             subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
             position={['last']}
-            onPress={() => navigation.navigate('ModelMaintenanceFiltersNavigator', {
-              screen: 'ModelMaintenanceFilters',
+            onPress={() => navigation.navigate('ReportModelMaintenanceFiltersNavigator', {
+              screen: 'ReportModelMaintenanceFilters',
               params: {
-                filterType: FilterType.ReportMaintenanceFilter,
+                filterType: FilterType.ReportModelMaintenanceFilter,
               }
             })}
           />

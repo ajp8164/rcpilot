@@ -14,6 +14,14 @@ export const fontSizes = {
 
 export const useStyles = makeStyles(
   (theme): Styles => ({
+    listItemButtonTitle: {
+      alignSelf: 'center',
+      textAlign: 'center',
+      color: theme.colors.clearButtonText,
+    },
+    listItemButtonDisabled: {
+      opacity: 0.3,
+    },
     swipeableListItemContainer: {
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,

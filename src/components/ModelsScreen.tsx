@@ -96,6 +96,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 screen: 'ModelFilters',
                 params: {
                   filterType: FilterType.ModelsFilter,
+                  useGeneralFilter: true,
                 }
               })}
             />

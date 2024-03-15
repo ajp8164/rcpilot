@@ -15,7 +15,7 @@ export type BatteryPickerInterface = {
   mode?: 'one' | 'many';
   title: string;
   backTitle?: string;
-  selected?: Battery | Battery[]; // The literal value(s)
+  selected?: Battery[]; // The literal value(s)
   query?: string; // A RQL query string
   onDone?: (batteries: Battery[]) => void;
   eventName?: string;
@@ -46,7 +46,7 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
     pickerBatteries = pickerBatteries.filtered(query);
   }
 
-  const selectedBatteries = useRef<Battery[]>([]);
+  const selectedBatteries = useRef<Battery[]>(selected || []);
 
   // This picker can send the selected batteries via an event and/or have a callback invoked
   // which provides the selected batteries as a parameter.

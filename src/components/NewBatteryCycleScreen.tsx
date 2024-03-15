@@ -52,7 +52,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
   let sumAllBatteriesCapacity = 0;
   allBatteries.forEach(b => {
-    return sumAllBatteriesCapacity + b.capacity!;
+    sumAllBatteriesCapacity += b.capacity!;
   });
 
   const batteryData = allBatteries.map(battery => {

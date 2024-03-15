@@ -188,7 +188,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             navigation.navigate('BatteryPicker', {
               title: 'Parallel Cycle',
               mode: 'many',
-              selected: battery,
+              selected: [battery],
               query: `sCells == ${battery.sCells}`,
               onDone: onPerformParallelCycle,
             });

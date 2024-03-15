@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Battery } from 'realmdb/Battery';
 import BatteryPickerView from 'components/views/BatteryPickerView';
@@ -8,6 +8,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
 
 export type BatteryPickerInterface = {
@@ -15,7 +16,9 @@ export type BatteryPickerInterface = {
   title: string;
   backTitle?: string;
   selected?: Battery | Battery[]; // The literal value(s)
-  eventName: string;
+  query?: string; // A RQL query string
+  onDone?: (batteries: Battery[]) => void;
+  eventName?: string;
 };
 
 export type BatteryPickerResult = {
@@ -30,34 +33,53 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
     title,
     backTitle,
     selected,
+    query,
+    onDone: callback,
     eventName,
   } = route.params;
   const theme = useTheme();
   const event = useEvent();
+  const setScreenEditHeader = useScreenEditHeader();
 
-  const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
+  let pickerBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
+  if (query) {
+    pickerBatteries = pickerBatteries.filtered(query);
+  }
 
+  const selectedBatteries = useRef<Battery[]>([]);
+
+  // This picker can send the selected batteries via an event and/or have a callback invoked
+  // which provides the selected batteries as a parameter.
   useEffect(() => {
-    navigation.setOptions({
-      title,
-      headerBackTitle: backTitle,
-    });
+    const onDone = () => {
+      navigation.goBack();
+      setTimeout(() => {
+        callback && callback(selectedBatteries.current);
+      });
+    };
+    
+    setScreenEditHeader(
+      {label: 'Done', action: onDone},
+      undefined,
+      {title, headerBackTitle: backTitle}
+    );
   }, []);
 
   const onSelect = (selected: Battery[]) => {
-    event.emit(eventName, {batteries: selected} as BatteryPickerResult);
+    selectedBatteries.current = selected;
+    eventName && event.emit(eventName, {batteries: selected} as BatteryPickerResult);
   };
 
-  if (!activeBatteries.length) {
+  if (!pickerBatteries.length) {
     return (
-      <EmptyView info message={'No Batteries'} details={"Add your first battery on the Batteries tab."} />
+      <EmptyView message={'No Batteries Found!'} />
     );    
   }
 
   return (
     <View style={theme.styles.view}>
       <BatteryPickerView 
-        batteries={activeBatteries}
+        batteries={pickerBatteries}
         mode={mode}
         selected={selected}
         onSelect={onSelect}

@@ -8,6 +8,7 @@ import BatteryEditorScreen from 'components/BatteryEditorScreen';
 import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import BatteryPerformanceComparisonPickerScreen from 'components/BatteryPerformanceComparisonPickerScreen';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
+import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import BatteryTemplatesScreen from 'components/BatteryTemplatesScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
@@ -106,6 +107,15 @@ const BatteriesNavigator = () => {
         options={{
           headerShown: false,
           presentation: 'modal'
+        }}
+      />
+      <BatteriesStack.Screen
+        name="BatteryPicker"
+        component={BatteryPickerScreen}
+        options={{
+          title: '',
+          headerBackTitle: '',
+          presentation: 'modal',
         }}
       />
       <BatteriesStack.Screen

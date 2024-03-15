@@ -67,6 +67,7 @@ export type BatteriesNavigatorParamList = {
   BatteryCycleFiltersNavigator: NavigatorScreenParams<BatteryCycleFiltersNavigatorParamList>;
   BatteryPerformance: undefined;
   BatteryPerformanceComparisonPicker: undefined;
+  BatteryPicker: BatteryPickerInterface;
   EnumPicker: EnumPickerInterface;
   EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
   NewBatteryNavigator: NavigatorScreenParams<NewBatteryNavigatorParamList>;
@@ -378,7 +379,7 @@ export type NewBatteryNavigatorParamList = {
 
 export type NewBatteryCycleNavigatorParamList = {
   NewBatteryCycle: {
-    batteryId: string;
+    batteryIds: string[];
   };
   BatteryCellValuesEditor: {
     config: BatteryCellValuesEditorConfig;

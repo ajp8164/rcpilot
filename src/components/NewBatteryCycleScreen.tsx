@@ -1,9 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
-import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch } from 'components/atoms/List';
+import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
+import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
-import { useObject, useRealm } from '@realm/react';
+import { useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
@@ -24,6 +24,13 @@ import { toNumber } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
+type BatteryData = {
+  battery: Battery;
+  lastCycle: BatteryCycle;
+  isCharged: boolean;
+  capacityContribution: number;
+};
+
 enum Action {
   Charge = 0,
   Discharge = 1,
@@ -32,29 +39,53 @@ enum Action {
 export type Props = NativeStackScreenProps<NewBatteryCycleNavigatorParamList, 'NewBatteryCycle'>;
 
 const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
-  const { batteryId } = route.params;
+  const { batteryIds } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
-
   const realm = useRealm();
 
-  const battery = useObject(Battery, new BSON.ObjectId(batteryId));
+  const ids = batteryIds.map(id => new BSON.ObjectId(id));
+  const allBatteries = useQuery(Battery, batteries => { return batteries.filtered('_id IN $0', ids) });
 
-  const lastCycle = battery?.cycles[battery.cycles.length - 1];
-  const mustDischarge = battery?.cycles.length === 0;
-  const shouldDischarge = !!lastCycle?.charge;
+  let sumAllBatteriesCapacity = 0;
+  allBatteries.forEach(b => {
+    return sumAllBatteriesCapacity + b.capacity!;
+  });
+
+  const batteryData = allBatteries.map(battery => {
+    return {
+      battery,
+      lastCycle: battery.cycles[battery.cycles.length - 1],
+      isCharged: battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length,
+      capacityContribution: battery.capacity! / sumAllBatteriesCapacity,
+    } as BatteryData;
+  });
+
+  // If any single battery has no cycles then force discharge.
+  const mustDischarge = allBatteries.some(b => b.cycles.length === 0);
+
+  // If any single battery has charge recommend discharge.
+  const shouldDischarge = batteryData.some(d => !!d.lastCycle?.charge);
   const initialAction = mustDischarge || shouldDischarge ? Action.Discharge : Action.Charge;
-  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
 
+  //same values for all batteries
   const [date, _setDate] = useState(DateTime.now().toISO()!);
   const [amount, setAmount] = useState<string>('0');
   const [duration, setDuration] = useState<string>('0');
   const [packVoltage, setPackVoltage] = useState<string>('0');
   const [packResistance, setPackResistance] = useState<string>('0');
+
+  // In order to use cell voltages and resistances cell configuration must match for all batteries.
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
+  const battery = batteryData[0].battery; // Choose any battery for comparison
+  const canUseCellValues = batteryData.every(d =>
+    d.battery.sCells === battery.sCells &&
+    d.battery.pCells === battery.pCells
+  );
+
   const [cellVoltages, setCellVoltages] = useState<string[]>(
     battery ? new Array(battery.sCells * battery.pCells).fill('0') : []
   );
@@ -75,85 +106,94 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
     const save = () => {
       realm.write(() => {
-        // A discharge action results in creating or updating an existing cycle with the discharge phase.
-        if (action === Action.Discharge) {
+        batteryData.forEach(d => {
+          const battery = d.battery;
+          const lastCycle = d.lastCycle;
+          const capacityContribution = d.capacityContribution;
 
-          // If the battery last cycle has a discharge phase but no charge phase then the current
-          // discharge phase updates the existing discharge phase using the following rules.
-          //  - New duration in this discharge phase is added to the last cycle discharge phase duration.
-          //  - The date of the first discharge phase is retained.
-          //  - All other values in this discharge phase overwrite last cycle discharge phase values.
-          let cycleNumber =  battery.totalCycles ? battery.totalCycles + 1 : 1;
+          // A discharge action results in creating or updating an existing cycle with the discharge phase.
+          if (action === Action.Discharge) {
 
-          let newDuration = MSSToSeconds(duration);
-          let newDate = date;
-          let updateLastDischargePhase = false;
+            // If the battery last cycle has a discharge phase but no charge phase then the current
+            // discharge phase updates the existing discharge phase using the following rules.
+            //  - New duration in this discharge phase is added to the last cycle discharge phase duration.
+            //  - The date of the first discharge phase is retained.
+            //  - All other values in this discharge phase overwrite last cycle discharge phase values.
+            let cycleNumber =  battery.totalCycles ? battery.totalCycles + 1 : 1;
 
-          if (lastCycle && lastCycle.discharge && !lastCycle.charge) {
-            newDuration = newDuration + lastCycle.discharge.duration;
-            newDate = lastCycle.discharge.date;
-            cycleNumber = lastCycle.cycleNumber;
-            updateLastDischargePhase = true;
-          }
+            let newDuration = MSSToSeconds(duration);
+            let newDate = date;
+            let updateLastDischargePhase = false;
 
-          const newCycle = realm.create('BatteryCycle', {
-            cycleNumber,
-            battery,
-            discharge: {
-              date: newDate,
-              duration: newDuration,
-              packVoltage: toNumber(packVoltage),
-              packResistance: toNumber(packResistance),
-              cellVoltage: cellVoltages?.map(v => {return parseFloat(v)}),
-              cellResistance: cellResistances?.map(r => {return parseFloat(r)}),
-            },
-            excludeFromPlots,
-            notes,
-          } as BatteryCycle);
-
-          // Update the battery with cycle data.
-          if (updateLastDischargePhase) {
-            battery.cycles[battery.cycles.length - 1] = newCycle;
-          } else {
-            battery.cycles.push(newCycle);
-          }
-
-          // Total cycles is tracked on the battery to enable a new battery to be created
-          // with some number of unlogged cycles.
-          battery.totalCycles = cycleNumber;
-        }
-
-        // A charge action results in updating an existing cycle with the charge phase.
-        if (action === Action.Charge) {
-
-          // If the battery last cycle has a charge phase then that charge phase is updated using
-          // the following rules.
-          //  - New amount in this charge phase is added to the last cycle charge phase amount.
-          //  - All other values in this charge phase overwrite last cycle charge phase values.
-          if (lastCycle) {
-            let newAmount = toNumber(amount)!;
-            if (lastCycle.charge) {
-              newAmount = newAmount + lastCycle.charge.amount!;
+            if (lastCycle && lastCycle.discharge && !lastCycle.charge) {
+              newDuration = newDuration + lastCycle.discharge.duration;
+              newDate = lastCycle.discharge.date;
+              cycleNumber = lastCycle.cycleNumber;
+              updateLastDischargePhase = true;
             }
 
-            const charge = {
-              date,
-              amount: newAmount,
-              packVoltage: toNumber(packVoltage),
-              packResistance: toNumber(packResistance),
-              cellVoltage: cellVoltages?.map(v => {return toNumber(v) || 0}),
-              cellResistance: cellResistances?.map(r => {return toNumber(r) || 0}),
-            } as BatteryCharge;
+            const newCycle = realm.create('BatteryCycle', {
+              cycleNumber,
+              battery,
+              discharge: {
+                date: newDate,
+                duration: newDuration,
+                packVoltage: toNumber(packVoltage),
+                packResistance: toNumber(packResistance),
+                cellVoltage: cellVoltages?.map(v => {return parseFloat(v)}),
+                cellResistance: cellResistances?.map(r => {return parseFloat(r)}),
+              },
+              excludeFromPlots,
+              notes,
+            } as BatteryCycle);
 
             // Update the battery with cycle data.
-            battery.cycles[battery.cycles.length - 1].charge = charge;
-            battery.cycles[battery.cycles.length - 1].excludeFromPlots = excludeFromPlots;
-            battery.cycles[battery.cycles.length - 1].notes = notes;
-          } else {
-            // This is an error (database or logic problem).
-            // There should always be a last cycle with a discharge phase.
+            if (updateLastDischargePhase) {
+              battery.cycles[battery.cycles.length - 1] = newCycle;
+            } else {
+              battery.cycles.push(newCycle);
+            }
+
+            // Total cycles is tracked on the battery to enable a new battery to be created
+            // with some number of unlogged cycles.
+            battery.totalCycles = cycleNumber;
           }
-        }
+
+          // A charge action results in updating an existing cycle with the charge phase.
+          if (action === Action.Charge) {
+
+            // In a parallel cycle the new amount added to the battery charge is in proportion
+            // to the battery's percentage contribution across all batteries in the cycle.
+            //
+            // If the battery last cycle has a charge phase then that charge phase is updated using
+            // the following rules.
+            //  - New amount in this charge phase is added to the last cycle charge phase amount.
+            //  - All other values in this charge phase overwrite last cycle charge phase values.
+            if (lastCycle) {
+              let newAmount = toNumber(amount)! * capacityContribution;
+              if (lastCycle.charge) {
+                newAmount = newAmount + lastCycle.charge.amount!;
+              }
+
+              const charge = {
+                date,
+                amount: newAmount,
+                packVoltage: toNumber(packVoltage),
+                packResistance: toNumber(packResistance),
+                cellVoltage: cellVoltages?.map(v => {return toNumber(v) || 0}),
+                cellResistance: cellResistances?.map(r => {return toNumber(r) || 0}),
+              } as BatteryCharge;
+
+              // Update the battery with cycle data.
+              battery.cycles[battery.cycles.length - 1].charge = charge;
+              battery.cycles[battery.cycles.length - 1].excludeFromPlots = excludeFromPlots;
+              battery.cycles[battery.cycles.length - 1].notes = notes;
+            } else {
+              // This is an error (database or logic problem).
+              // There should always be a last cycle with a discharge phase.
+            }
+          }
+        });
       });
     };
   
@@ -199,17 +239,14 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     setNotes(result.text);
   };
 
-  if (!battery) {
-    return (<EmptyView error message={'Battery not found!'} />);
-  };
-
-  return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-    <Divider text={'BATTERY'} />
-    <ListItem
+  const renderBatteryItem: ListRenderItem<BatteryData> = ({
+    item: batteryDataItem,
+    index,
+  }) => {
+    const battery = batteryDataItem.battery;
+    const isCharged = batteryDataItem.isCharged;
+    return (
+      <ListItem
         title={battery.name}
         subtitle={batteryCycleSummary(battery)}
         subtitleNumberOfLines={2}
@@ -219,7 +256,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
         }}
         titleStyle={s.batteryText}
         subtitleStyle={s.batteryText}
-        position={['first', 'last']}
+        position={listItemPosition(index, batteryData.length)}
         rightImage={false}
         leftImage={
           <View>
@@ -232,7 +269,25 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
             />
           </View>
         }
-     />
+     />      
+    );
+  };
+
+  if (!battery) {
+    return (<EmptyView error message={'Battery not found!'} />);
+  };
+
+  return (
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
+      contentInsetAdjustmentBehavior={'automatic'}>
+    <Divider text={batteryData.length > 1 ? 'BATTERIES' : 'BATTERY'} />
+    <FlatList 
+      data={batteryData}
+      renderItem={renderBatteryItem}
+      scrollEnabled={false}
+    />
     <Divider text={'ACTION'} />
     <ListItemSegmented
       segments={['Charge Action', 'Discharge Action']}
@@ -292,33 +347,38 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
       label={'mΩ'}
       value={packResistance.length ? packResistance : undefined}
       placeholder={'Value'}
+      position={canUseCellValues ? undefined : ['last']}
       numeric={true}
       numericProps={{prefix: '', precision: 3}}
       onChangeText={setPackResistance}
     />
-    <ListItem
-      title={'Cell Voltage'}
-      onPress={() => navigation.navigate('BatteryCellValuesEditor', {
-        config: {name: 'voltage', namePlural: 'voltages', label: 'V', precision: 2},
-        packValue: parseFloat(packVoltage),
-        cellValues: cellVoltages?.map(v => {return toNumber(v) || 0}),
-        sCells: battery.sCells,
-        pCells: battery.pCells,
-        eventName: 'battery-cycle-cell-voltages',
-      })}
-    />
-    <ListItem
-      title={'Cell Resistance'}
-      position={['last']}
-      onPress={() => navigation.navigate('BatteryCellValuesEditor', {
-        config: {name: 'resistance', namePlural: 'resistances', label: 'mΩ', precision: 3},
-        packValue: parseFloat(packResistance),
-        cellValues: cellResistances?.map(r => {return toNumber(r) || 0}),
-        sCells: battery.sCells,
-        pCells: battery.pCells,
-        eventName: 'battery-cycle-cell-resistances',
-      })}
-    />
+    {canUseCellValues &&
+      <>
+        <ListItem
+          title={'Cell Voltage'}
+          onPress={() => navigation.navigate('BatteryCellValuesEditor', {
+            config: {name: 'voltage', namePlural: 'voltages', label: 'V', precision: 2},
+            packValue: parseFloat(packVoltage),
+            cellValues: cellVoltages?.map(v => {return toNumber(v) || 0}),
+            sCells: battery.sCells,
+            pCells: battery.pCells,
+            eventName: 'battery-cycle-cell-voltages',
+          })}
+        />
+        <ListItem
+          title={'Cell Resistance'}
+          position={['last']}
+          onPress={() => navigation.navigate('BatteryCellValuesEditor', {
+            config: {name: 'resistance', namePlural: 'resistances', label: 'mΩ', precision: 3},
+            packValue: parseFloat(packResistance),
+            cellValues: cellResistances?.map(r => {return toNumber(r) || 0}),
+            sCells: battery.sCells,
+            pCells: battery.pCells,
+            eventName: 'battery-cycle-cell-resistances',
+          })}
+        />
+      </>
+    }
     <Divider />
     {action === Action.Charge ?
       <ListItemSwitch

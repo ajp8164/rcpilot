@@ -16,7 +16,7 @@ export type ScreenEditHeaderAction = {
 };
 
 /**
- * Provides a common screen edit header for the "cancel of done" pattern.
+ * Provides a common screen edit header for the "cancel or done" pattern.
  * Accepts an additional navigation screen options for convenience.
  * 
  * Left button is typically 'Cancel' and defaults to shown.

@@ -1,8 +1,8 @@
+import { Alert, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { batteryIsCharged, batteryTintIcons, useBatteriesFilter } from 'lib/battery';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
@@ -156,6 +156,67 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     });
   };
 
+  const addBatteryCycle = (battery: Battery) => {
+    const compatibleBatteries = realm.objects(Battery).filtered('_id != $0 AND sCells == $1', battery._id, battery.sCells);
+
+    // If only one battery with similar configuration the skip asking for type of cycle.
+    if (!compatibleBatteries.length) {
+      return navigation.navigate('NewBatteryCycleNavigator', {
+        screen: 'NewBatteryCycle',
+        params: {
+          batteryIds: [battery._id.toString()],
+        }
+      });
+    }
+
+    showActionSheetWithOptions(
+      {
+        options: ['Single Cycle', 'Parallel Cycle', 'Cancel'],
+        message: 'Cycle a single battery or multiple batteries in parallel. Batteries must have the same configuration to cycle in parallel.',
+        cancelButtonIndex: 2,
+      },
+      buttonIndex => {
+        switch (buttonIndex) {
+          case 0:
+            navigation.navigate('NewBatteryCycleNavigator', {
+              screen: 'NewBatteryCycle',
+              params: {
+                batteryIds: [battery._id.toString()],
+              }
+            });
+          break;
+          case 1:
+            navigation.navigate('BatteryPicker', {
+              title: 'Parallel Cycle',
+              mode: 'many',
+              selected: battery,
+              query: `sCells == ${battery.sCells}`,
+              onDone: onPerformParallelCycle,
+            });
+            break;
+          default:
+            break;
+        }
+      },
+    );
+  };
+
+  const onPerformParallelCycle = (batteries: Battery[]) => {
+    if (batteries.length) {
+      navigation.navigate('NewBatteryCycleNavigator', {
+        screen: 'NewBatteryCycle',
+        params: {
+          batteryIds: batteries.map(b => b._id.toString()),
+        }
+      });
+    } else {
+      Alert.alert(
+        'No Batteries Selected',
+        'At least one battery must be selected to perform a battery cycle.'
+      );
+    }
+  };
+
   const batterySummary = (battery: Battery) => {
     const capacity = `${battery.capacity}mAh`;
     const cells = `${battery.sCells}S/${battery.pCells}P`;
@@ -226,12 +287,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
               batteryId: battery._id.toString(),
             });
           } else {
-            navigation.navigate('NewBatteryCycleNavigator', {
-              screen: 'NewBatteryCycle',
-              params: {
-                batteryId: battery._id.toString(),
-              }
-            });
+            addBatteryCycle(battery);
           }
         }}
         showInfo={listBatteries === 'all'}

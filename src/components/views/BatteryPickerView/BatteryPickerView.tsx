@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
 import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
-import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
+import { batteryIsCharged, batterySummary, batteryTintIcons } from 'lib/battery';
 
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
@@ -70,14 +70,6 @@ const BatteryPickerView = React.forwardRef<BatteryPickerView, BatteryPickerViewP
       });
     }
     return groups;
-  };
-
-  const batterySummary = (battery: Battery) => {
-    const capacity = `${battery.capacity}mAh`;
-    const cells = `${battery.sCells}S/${battery.pCells}P`;
-    const chemistry = battery.chemistry;
-    const cycles = battery.totalCycles ? `${battery.totalCycles} cycles` : 'no cycles logged';
-    return `${capacity} ${cells} ${chemistry}\n${cycles}`;
   };
 
   const renderBattery: SectionListRenderItem<Battery, Section> = ({

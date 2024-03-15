@@ -84,12 +84,12 @@ export const batteryCycleSummary = (battery: Battery) => {
       : `${DateTime.fromISO(lastCycle.discharge!.date).toFormat('M/d/yyyy')} (discharge)`
     : 'none'
 
-  const cRating = `${battery.cRating}mAh`;
-  const configuration = `{battery.sCells}S/${battery.pCells}P`;
+  const capacity = `${battery.capacity}mAh`;
+  const configuration = `${battery.sCells}S/${battery.pCells}P`;
   const chemistry = battery.chemistry;
-  const cycles = `${battery.cycles.length} cycles`;
+  const cycles = `${battery.cycles.length} cycle${battery.cycles.length !== 1 ? 's' : ''}`;
   const last = `Last: ${lastCycleDate}`;
-  return `${cRating}, ${configuration} ${chemistry}, ${cycles}\n${last}`;
+  return `${capacity}, ${configuration} ${chemistry}, ${cycles}\n${last}`;
 };
 
 export const batteryCycleStatisticsData = (cycle: BatteryCycle) => {

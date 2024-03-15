@@ -3,14 +3,13 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { batteryIsCharged, batteryTintIcons, useBatteriesFilter } from 'lib/battery';
+import { batteryExtendedSummary, batteryIsCharged, batteryTintIcons, useBatteriesFilter } from 'lib/battery';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
 import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { FilterType } from 'types/filter';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -217,23 +216,6 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const batterySummary = (battery: Battery) => {
-    const capacity = `${battery.capacity}mAh`;
-    const cells = `${battery.sCells}S/${battery.pCells}P`;
-    const chemistry = battery.chemistry;
-    const cycles = `${battery.totalCycles ? battery.totalCycles : 'No'} cycles`;
-    const lastCycle = battery.cycles[battery.cycles.length - 1];
-    const lastCycleInfo = lastCycle ? (
-      lastCycle.charge
-        ? `Charged on ${DateTime.fromISO(lastCycle.charge.date).toFormat('M/d/yyyy')}`
-        : lastCycle.discharge
-        ? `Discharged on ${DateTime.fromISO(lastCycle.discharge.date).toFormat('M/d/yyyy')}`
-        : 'No cycles are logged'
-    ) : 'No cycles are logged';
-    
-    return `${capacity} ${cells} ${chemistry}\n${cycles}\n${lastCycleInfo}`;
-  };
-
   const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
     return groupItems<Battery, Section>(batteries, (battery) => {
       if (batteryIsCharged(battery)) {
@@ -260,7 +242,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'batteries', battery._id.toString())}
         key={battery._id.toString()}
         title={battery.name}
-        subtitle={batterySummary(battery)}
+        subtitle={batteryExtendedSummary(battery)}
         subtitleNumberOfLines={3}
         containerStyle={{
           ...s.batteryTint,

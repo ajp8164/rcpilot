@@ -16,7 +16,7 @@ import { useObject } from '@realm/react';
 
 interface ModelHeaderInterface {
   modelId: string;
-  modelType: ModelType;
+  modelType?: ModelType;
   onChangeImage?: (image?: string) => void;
   onGoBack?: () => void;
   scrollY?: SharedValue<number>;
@@ -38,6 +38,12 @@ export const ModelHeader = ({
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const [image, setImage] = useState(model?.image || undefined);
+
+  const modelTypeName = model 
+    ? modelTypeIcons[model.type]?.name as string
+    : modelType
+    ? modelTypeIcons[modelType]?.name as string
+    : 'flag-checkered';
 
   const minHeight = theme.insets.top + 39;
   const maxHeight = 150;
@@ -113,10 +119,10 @@ export const ModelHeader = ({
             resizeMode={'cover'}
             style={s.headerImage}
           />
-          : modelType &&
+          :
           <View style={s.defaultHeaderImage}>
             <SvgXml
-              xml={getColoredSvg(modelTypeIcons[modelType]?.name as string)}
+              xml={getColoredSvg(modelTypeName)}
               width={s.dedaultModelImage.width}
               height={'100%'}
               color={theme.colors.brandSecondary}
@@ -148,18 +154,15 @@ export const ModelHeader = ({
             onPress={() => (!model || (scrollY && scrollY.value < 5)) && selectModelImage()}
           />
         </View>
-        {/* Model type identification prevents delayed render when there is no modelType set yet. */}
-        {(model || (!model && modelType)) &&
-          <View style={s.insetImageContainer}>
-            <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model?.type || modelType]?.name as string)}
-              width={75}
-              height={75}
-              color={theme.colors.hintGray}
-              style={[s.insetImage]}
-            />
-          </View>
-        }
+        <View style={s.insetImageContainer}>
+          <SvgXml
+            xml={getColoredSvg(modelTypeName)}
+            width={75}
+            height={75}
+            color={theme.colors.hintGray}
+            style={[s.insetImage]}
+          />
+        </View>
       </Animated.View>
     </>
   );

@@ -1,58 +1,58 @@
 import EnumPickerScreen from 'components/EnumPickerScreen';
-import ModelMaintenanceFilterEditorScreen from 'components/ModelMaintenanceFilterEditorScreen';
-import { ModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
-import ModelMaintenanceFiltersScreen from 'components/ModelMaintenanceFiltersScreen';
+import MaintenanceFilterEditorScreen from 'components/MaintenanceFilterEditorScreen';
+import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
+import MaintenanceFiltersScreen from 'components/MaintenanceFiltersScreen';
 import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const ModelMaintenanceFiltersStack = createNativeStackNavigator<ModelMaintenanceFiltersNavigatorParamList>();
+const MaintenanceFiltersStack = createNativeStackNavigator<MaintenanceFiltersNavigatorParamList>();
 
-const ModelMaintenanceFiltersNavigator = () => {
+const MaintenanceFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
     <NavContext.Provider value={{isModal: true}}>
-      <ModelMaintenanceFiltersStack.Navigator
-        initialRouteName='ModelMaintenanceFilters'
+      <MaintenanceFiltersStack.Navigator
+        initialRouteName='MaintenanceFilters'
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
-        <ModelMaintenanceFiltersStack.Screen
+        <MaintenanceFiltersStack.Screen
           name='EnumPicker'
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
-        <ModelMaintenanceFiltersStack.Screen
-          name='ModelMaintenanceFilters'
-          component={ModelMaintenanceFiltersScreen}
+        <MaintenanceFiltersStack.Screen
+          name='MaintenanceFilters'
+          component={MaintenanceFiltersScreen}
           options={{
             title: 'Filters for Maintenance Log',
           }}
         />
-        <ModelMaintenanceFiltersStack.Screen
-          name='ModelMaintenanceFilterEditor'
-          component={ModelMaintenanceFilterEditorScreen}
+        <MaintenanceFiltersStack.Screen
+          name='MaintenanceFilterEditor'
+          component={MaintenanceFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
-        <ModelMaintenanceFiltersStack.Screen
+        <MaintenanceFiltersStack.Screen
           name='NotesEditor'
           component={NotesEditorScreen}
           options={{
             title: 'String Value',
           }}
         />
-      </ModelMaintenanceFiltersStack.Navigator>
+      </MaintenanceFiltersStack.Navigator>
     </NavContext.Provider>
   );
 };
 
-export default ModelMaintenanceFiltersNavigator;
+export default MaintenanceFiltersNavigator;

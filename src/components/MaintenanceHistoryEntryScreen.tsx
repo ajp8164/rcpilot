@@ -17,9 +17,9 @@ import { modelCostStatistics } from 'lib/analytics';
 import { useEvent } from 'lib/event';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelMaintenanceHistoryEntry'>;
+export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'MaintenanceHistoryEntry'>;
 
-const ModelMaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
+const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   const {
     modelId,
     checklistRefId,
@@ -104,4 +104,4 @@ const ModelMaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   );
 };
 
-export default ModelMaintenanceHistoryEntryScreen;
+export default MaintenanceHistoryEntryScreen;

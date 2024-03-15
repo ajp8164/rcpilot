@@ -29,7 +29,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
 
   const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
   const reportEventsFilterId = useSelector(selectFilters(FilterType.ReportEventsFilter));
-  const reportMaintenanceFilterId = useSelector(selectFilters(FilterType.ReportModelMaintenanceFilter));
+  const reportMaintenanceFilterId = useSelector(selectFilters(FilterType.ReportMaintenanceFilter));
 
   const [name, setName] = useState<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
@@ -169,10 +169,10 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
             title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
             subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
             position={['last']}
-            onPress={() => navigation.navigate('ReportModelMaintenanceFiltersNavigator', {
-              screen: 'ReportModelMaintenanceFilters',
+            onPress={() => navigation.navigate('ReportMaintenanceFiltersNavigator', {
+              screen: 'ReportMaintenanceFilters',
               params: {
-                filterType: FilterType.ReportModelMaintenanceFilter,
+                filterType: FilterType.ReportMaintenanceFilter,
               }
             })}
           />

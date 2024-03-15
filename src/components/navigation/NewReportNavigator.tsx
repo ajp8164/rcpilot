@@ -1,13 +1,13 @@
 import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 
-import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import { CompositeScreenProps } from '@react-navigation/core';
-import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
-import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
-import ModelMaintenanceFiltersNavigator from 'components/navigation/ModelMaintenanceFiltersNavigator';
 import React from 'react';
+import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
+import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
+import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
+import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import { useTheme } from 'theme';
 
@@ -45,32 +45,32 @@ const NewReportNavigator = () => {
         }}
       />
       <NewReportStack.Screen
-        name='EventFiltersNavigator'
-        component={EventFiltersNavigator}
+        name='ReportEventFiltersNavigator'
+        component={ReportEventFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',
         }}
       />
       <NewReportStack.Screen
-        name='BatteryFiltersNavigator'
-        component={BatteryFiltersNavigator}
+        name='ReportBatteryScanCodeFiltersNavigator'
+        component={ReportBatteryScanCodeFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',
         }}
       />
       <NewReportStack.Screen
-        name='ModelFiltersNavigator'
-        component={ModelFiltersNavigator}
+        name='ReportModelScanCodeFiltersNavigator'
+        component={ReportModelScanCodeFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',
         }}
       />
       <NewReportStack.Screen
-        name='ModelMaintenanceFiltersNavigator'
-        component={ModelMaintenanceFiltersNavigator}
+        name='ReportMaintenanceFiltersNavigator'
+        component={ReportMaintenanceFiltersNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',

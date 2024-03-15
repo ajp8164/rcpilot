@@ -2,7 +2,6 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import {
   ListItemFilterDate,
-  ListItemFilterEnum,
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
@@ -10,26 +9,26 @@ import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { MaintenanceFilterValues } from 'types/filter';
+import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ReportModelMaintenanceFilterValues } from 'types/filter';
-import { ReportModelMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/reportModelMaintenanceFilter';
+import { defaultFilter } from 'lib/maintenance';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
 
-export type Props = NativeStackScreenProps<ReportModelMaintenanceFiltersNavigatorParamList, 'ReportModelMaintenanceFilterEditor'>;
+export type Props = NativeStackScreenProps<MaintenanceFiltersNavigatorParamList, 'MaintenanceFilterEditor'>;
 
-const ReportModelMaintenanceFilterEditorScreen = ({ route }: Props) => {
+const MaintenanceFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
   
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const filterEditor = useFilterEditor<ReportModelMaintenanceFilterValues>({
+  const filterEditor = useFilterEditor<MaintenanceFilterValues>({
     filterId,
     filterType,
     defaultFilter,
@@ -87,40 +86,7 @@ const ReportModelMaintenanceFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={`This filter shows all the events that match all of these criteria.`}/>
-      <ListItemFilterEnum
-        title={'Model'}
-        value={filterEditor.values.model.value}
-        relation={filterEditor.values.model.relation}
-        enumName={'Models'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('model', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterEnum
-        title={'Model Type'}
-        value={filterEditor.values.modelType.value}
-        relation={filterEditor.values.modelType.relation}
-        enumName={'ModelTypes'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('modelType', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterEnum
-        title={'Category'}
-        value={filterEditor.values.category.value}
-        relation={filterEditor.values.category.relation}
-        enumName={'Categories'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('category', filterState);
-        }}
-      />
-      <Divider />
+      <Divider text={'This filter shows all the logs that match all of these criteria.'}/>
       <ListItemFilterDate
         title={'Date'}
         value={filterEditor.values.date.value}
@@ -167,4 +133,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   }
 }));
 
-export default ReportModelMaintenanceFilterEditorScreen;
+export default MaintenanceFilterEditorScreen;

@@ -41,6 +41,6 @@ export const modelCostStatistics = (
   } as ModelCostStatistics;
 };
 
-export const updateModelMaintenanceCost = (model: Model, oldValue: number, newValue: number) => {
+export const updateMaintenanceCost = (model: Model, oldValue: number, newValue: number) => {
   model.statistics.totalMaintenanceCost = model.statistics.totalMaintenanceCost - oldValue + newValue;
 };

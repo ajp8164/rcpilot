@@ -362,7 +362,6 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
           footer: 'You can manage pilots through the Globals section in the Setup tab.',
           values: pilots.map(p => { return p.name }),
           selected: pilot?.name,
-          mode: 'one-or-none',
           eventName: 'event-pilot',
         })}
       />

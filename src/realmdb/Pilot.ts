@@ -9,6 +9,7 @@ export class Pilot extends Object<Pilot> {
   createdOn!: ISODateString;
   updatedOn!: ISODateString;
   name!: string;
+  unknownPilot!: boolean;
   favoriteModels: Model[] = [];
   achievements: Achievement[] = [];
 
@@ -19,6 +20,7 @@ export class Pilot extends Object<Pilot> {
       createdOn: 'string',
       updatedOn: 'string',
       name: 'string',
+      unknownPilot: { type: 'bool', default: false },
       favoriteModels: { type: 'list', objectType: 'Model', default: [] },
       achievements: { type: 'list', objectType: 'Achievement', default: [] },
     },

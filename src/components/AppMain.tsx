@@ -28,6 +28,7 @@ import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionSchedul
 import { useColorScheme } from 'react-native';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { useSelector } from 'react-redux';
+import { useUnknownPilot } from 'lib/pilot';
 
 // See https://reactnavigation.org/docs/configuring-links
 const linking: LinkingOptions<MainNavigatorParamList> = {
@@ -49,6 +50,7 @@ const AppMain = () => {
   useDeviceShake();
   useAchievementConveyor();
   useChecklistActionScheduleUpdater();
+  useUnknownPilot();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(
     StartupScreen.None,

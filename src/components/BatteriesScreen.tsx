@@ -172,7 +172,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     showActionSheetWithOptions(
       {
         options: ['Single Cycle', 'Parallel Cycle', 'Cancel'],
-        message: 'Cycle a single battery or multiple batteries in parallel. Batteries must have the same configuration to cycle in parallel.',
+        message: 'Cycle a single battery or multiple batteries in parallel. Batteries must have the same series cell count to cycle in parallel.',
         cancelButtonIndex: 2,
       },
       buttonIndex => {

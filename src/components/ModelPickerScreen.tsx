@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
 import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { modelShortSummary, modelTypeIcons } from 'lib/model';
+import { modelSummary, modelTypeIcons } from 'lib/model';
 
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Model } from 'realmdb/Model';
@@ -98,7 +98,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       <ListItemCheckbox
         key={model._id.toString()}
         title={model.name}
-        subtitle={modelShortSummary(model)}
+        subtitle={modelSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}

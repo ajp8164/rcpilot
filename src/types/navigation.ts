@@ -124,8 +124,10 @@ export type ModelsNavigatorParamList = {
   };
   EnumPicker: EnumPickerInterface;
   Events: {
-    modelId: string;
-    modelType?: ModelType;
+    filterType: FilterType;
+    batteryId?: string;
+    modelId?: string;
+    pilotId?: string;
   };
   EventEditor: {
     eventId: string;
@@ -552,7 +554,9 @@ export type SetupNavigatorParamList = {
   DatabaseReporting: undefined;
   EnumPicker: EnumPickerInterface;
   Events: {
-    modelId: string;
+    filterType: FilterType;
+    batteryId?: string;
+    modelId?: string;
     pilotId?: string;
   };
   EventEditor: {

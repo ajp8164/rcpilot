@@ -21,22 +21,31 @@ export const useEventsFilter = (params: {
   filterType: FilterType,
   batteryId?: string,
   modelId?: string
+  pilotId?: string
 }) => {
   const {
     filterType,
     batteryId,
     modelId,
+    pilotId,
   } = params;
 
   const filterId = useSelector(selectFilters(filterType));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
 
-  let result;
+  // Form the base query.
+  let query = '';
   if (modelId) {
-    result = useQuery(Event, events => { return events.filtered(`model._id == oid(${modelId})`) });
-  } else if (batteryId) {
-    result = useQuery(Event, events => { return events.filtered(`battery._id == oid(${batteryId})`) });
+    query = `model._id == oid(${modelId})`;
   }
+  if (batteryId) {
+    query = (query.length ? `${query} AND ` : '') + `battery._id == oid(${batteryId})`;
+  }
+  if (pilotId) {
+    query = (query.length ? `${query} AND ` : '') + `pilot._id == oid(${pilotId})`;
+  }
+
+  let result = useQuery(Event, events => { return events.filtered(query) });
 
   if (!result) return {} as Results<Event>;
   if (!filter) return result;

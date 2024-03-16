@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { modelChecklistActionsPending, modelShortSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
+import { modelChecklistActionsPending, modelSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
@@ -344,7 +344,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'models', model._id.toString())}
         key={model._id.toString()}
         title={model.name}
-        subtitle={modelShortSummary(model)}
+        subtitle={modelSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}

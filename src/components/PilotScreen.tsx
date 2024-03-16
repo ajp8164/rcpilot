@@ -4,13 +4,14 @@ import { FlatList, Image, Keyboard, ListRenderItem, Platform, View } from 'react
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
 import React, { useEffect, useState } from 'react';
-import { modelPilotSummary, modelShortSummary } from 'lib/model';
+import { modelPilotSummary, modelSummary } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -145,7 +146,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
       <ListItem
         ref={ref => ref && listEditor.add(ref, 'favorite-models', model._id.toString())}
         title={model.name}
-        subtitle={modelShortSummary(model)}
+        subtitle={modelSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}
@@ -206,8 +207,9 @@ const PilotScreen = ({ navigation, route }: Props) => {
         value={modelPilotSummary(model, pilot!)}
         position={listItemPosition(index, allPilotModels.length)}
         onPress={() => navigation.navigate('Events', {
-          pilotId: pilot!._id.toString(),
+          filterType: FilterType.BypassFilter,
           modelId: model._id.toString(),
+          pilotId: pilot?._id.toString(),
         })}
       />
     );

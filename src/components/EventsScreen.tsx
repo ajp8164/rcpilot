@@ -36,7 +36,12 @@ export type Props = CompositeScreenProps<
 >;
 
 const EventsScreen = ({ navigation, route }: Props) => {
-  const { modelId } = route.params;
+  const {
+    filterType,
+    batteryId,
+    modelId,
+    pilotId,
+  } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -45,9 +50,11 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const filterId = useSelector(selectFilters(FilterType.EventsModelFilter));
-  const events = useEventsFilter({
-    filterType: FilterType.EventsModelFilter,
-    modelId
+  let events = useEventsFilter({
+    filterType: filterType || FilterType.BypassFilter,
+    batteryId,
+    modelId,
+    pilotId,
   });
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
@@ -58,27 +65,29 @@ const EventsScreen = ({ navigation, route }: Props) => {
       headerRight: ()  => {
         return (
           <>
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && listEditor.enabled}
-              icon={
-                <CustomIcon
-                  name={filterId ? 'filter-check' : 'filter'}
-                  style={[s.headerIcon,
-                    listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
-                  ]}
-                />
-              }
-              onPress={() => navigation.navigate('EventFiltersNavigator', {
-                screen: 'EventFilters',
-                params: {
-                  filterType: FilterType.EventsModelFilter,
-                  modelType: model!.type,
-                  useGeneralFilter: true,
+            {filterType !== FilterType.BypassFilter &&
+              <Button
+                buttonStyle={theme.styles.buttonScreenHeader}
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+                disabled={!filterId && listEditor.enabled}
+                icon={
+                  <CustomIcon
+                    name={filterId ? 'filter-check' : 'filter'}
+                    style={[s.headerIcon,
+                      listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
+                    ]}
+                  />
                 }
-              })}
-            />
+                onPress={() => navigation.navigate('EventFiltersNavigator', {
+                  screen: 'EventFilters',
+                  params: {
+                    filterType: FilterType.EventsModelFilter,
+                    modelType: model!.type,
+                    useGeneralFilter: true,
+                  }
+                })}
+              />
+            }
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
@@ -104,9 +113,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
     const duration = `${secondsToMSS(event.duration, {format: 'm:ss'})}`;
     const time = DateTime.fromISO(event.createdOn).toLocaleString(DateTime.TIME_SIMPLE);
     const location = `${event.location?.name || 'Unknown location'}`;
-
     return `${number}: ${duration} at ${time}, ${location}`;
   };
+
   const eventSummary = (event: Event) => {
     let battery = '';
     if (model?.logsBatteries) {
@@ -125,8 +134,8 @@ const EventsScreen = ({ navigation, route }: Props) => {
         fuel = `Fuel: ${event.fuelConsumed}oz`;
       }
     }
-    
-    return `${fuel}${fuel && battery ? ', ' : ''}${battery}`;
+    const summary = `${fuel}${fuel && battery ? ', ' : ''}${battery}`;
+    return summary.length ? summary : undefined;
   };
 
   const groupEvents = (events: Event[]): SectionListData<Event, Section>[] => {

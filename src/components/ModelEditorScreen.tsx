@@ -20,6 +20,7 @@ import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { EventStyle } from 'realmdb/EventStyle';
+import { FilterType } from 'types/filter';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelHeader } from 'components/molecules/ModelHeader';
@@ -512,8 +513,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 value={`${model?.events.length || 0} ${kind.namePlural.toLowerCase()}`}
                 position={['last']}
                 onPress={() => navigation.navigate('Events', {
+                  filterType: FilterType.EventsModelFilter,
                   modelId,
-                  modelType: model?.type,
                 })}
               />
             </>

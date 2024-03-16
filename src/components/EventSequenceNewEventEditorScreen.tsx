@@ -10,7 +10,7 @@ import { Model, ModelStatistics } from 'realmdb/Model';
 import React, { useEffect, useRef, useState } from 'react';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { modelCostStatistics, modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
-import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
+import { modelHasPropeller, modelSummary, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -382,7 +382,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       <Divider />
       <ListItem
         title={model?.name}
-        subtitle={modelShortSummary(model)}
+        subtitle={modelSummary(model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}

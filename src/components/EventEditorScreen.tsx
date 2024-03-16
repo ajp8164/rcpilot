@@ -9,7 +9,7 @@ import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
-import { modelHasPropeller, modelShortSummary, modelTypeIcons } from 'lib/model';
+import { modelHasPropeller, modelSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -105,7 +105,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         modelEvent.propeller = propeller;
         modelEvent.fuel = fuel;
         modelEvent.fuelConsumed = toNumber(fuelConsumed);
-        modelEvent.pilot = pilot;
+        modelEvent.pilot = pilot!;
         modelEvent.eventStyle = eventStyle;
         modelEvent.notes = notes;
 
@@ -236,7 +236,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItem
         title={modelEvent.model?.name}
-        subtitle={modelEvent.model && modelShortSummary(modelEvent.model)}
+        subtitle={modelEvent.model && modelSummary(modelEvent.model)}
         titleStyle={s.modelText}
         subtitleStyle={s.modelText}
         subtitleNumberOfLines={2}

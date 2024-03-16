@@ -9,6 +9,8 @@ import {
 import { PickEnum } from 'types/custom';
 
 export enum FilterType {
+  BypassFilter = 'BypassFilter',
+  //
   BatteriesFilter = 'BatteriesFilter',
   BatteryCyclesFilter = 'BatteryCyclesFilter',
   EventsBatteryPerformanceFilter = 'EventsBatteryPerformanceFilter',

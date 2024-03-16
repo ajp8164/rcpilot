@@ -1,10 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
-import { Image, Keyboard, Platform, View } from 'react-native';
+import { FlatList, Image, Keyboard, ListRenderItem, Platform, View } from 'react-native';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
 import React, { useEffect, useState } from 'react';
-import { useObject, useRealm } from '@realm/react';
+import { modelPilotSummary, modelShortSummary } from 'lib/model';
+import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
@@ -18,7 +19,6 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { SvgXml } from 'react-native-svg';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
-import { modelShortSummary } from 'lib/model';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
 
@@ -34,6 +34,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const pilot = useObject(Pilot, new BSON.ObjectId(pilotId));
+  const allPilotModels = useQuery(Model, models => models.filtered('events.pilot._id == $0', pilot?._id));
 
   const [name, setName] = useState(pilot?.name);
   const [isEditing, setIsEditing] = useState(false);
@@ -198,6 +199,20 @@ const PilotScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  const renderModel: ListRenderItem<Model> = ({ item: model, index }) => {
+    return (
+      <ListItem
+        title={model.name}
+        value={modelPilotSummary(model, pilot!)}
+        position={listItemPosition(index, allPilotModels.length)}
+        onPress={() => navigation.navigate('Events', {
+          pilotId: pilot!._id.toString(),
+          modelId: model._id.toString(),
+        })}
+      />
+    );
+  };
+
   if (!pilot) {
     return (<EmptyView error message={'Pilot not found!'} />);
   }
@@ -217,13 +232,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
         onFocus={() => setIsEditing(true)}
       /> 
       <Divider text={'MODEL USAGE'}/>
-      <ListItem
-        title={'Blade 150S'}
-        value={'0:04, 1 event'}
-        position={['first', 'last']}
-        onPress={() => navigation.navigate('Events', {
-          pilotId: pilot!._id.toString(),
-        })}
+      <FlatList 
+        data={allPilotModels}
+        renderItem={renderModel}
+        scrollEnabled={false}
       />
       <Divider note text={'Total duration (H:MM) and number of events of each style for events piloted by Andy.'}/>
       <Divider text={'EVENT STYLES'}/>

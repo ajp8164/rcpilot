@@ -7,7 +7,7 @@ export const usePilotSummary = () => {
   const events = useQuery(Event);
 
   return (pilot: Pilot) => {
-    const pilotEvents = events.filtered('pilot._id == $0', pilot._id);
+    const pilotEvents = events.filtered(`pilot._id == oid(${pilot._id})`);
     const totalTime = pilotEvents.reduce((accumulator, event) => {
       return accumulator += event.duration;
     }, 0);

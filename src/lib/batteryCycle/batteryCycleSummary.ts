@@ -128,30 +128,22 @@ export const batteryCycleDischargeData = (cycle: BatteryCycle) => {
       dischargeDate: '',
       dischargeDuration: '',
       dischargeRestingVoltage: '',
-      // averageDischargeCurrent:'',
-      // dischargeBy80Percent: '',
     }
   };
 
   if (cycle.discharge) {
     const dischargeDuration = cycle.discharge.duration; // Seconds
     const dischargeRestingVoltage = cycle.discharge.packVoltage; // Volts
-    // const averageDischargeCurrent = cycle.battery.capacity! / (cycle.discharge?.duration / 60); // mA/min
-    // const dischargeBy80Percent = cycle.discharge.duration * 0.8; // Seconds
   
     result = {
       value: {
         dischargeDuration,
         dischargeRestingVoltage,
-        // averageDischargeCurrent,
-        // dischargeBy80Percent,
       },
       string: {
         dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat('M/d/yy'),
         dischargeDuration: secondsToMSS(dischargeDuration, {format: 'm:ss'}),
         dischargeRestingVoltage: dischargeRestingVoltage ? `${dischargeRestingVoltage}V` : 'unknown',
-        // averageDischargeCurrent: `${averageDischargeCurrent} mA`,
-        // dischargeBy80Percent: secondsToMSS(dischargeBy80Percent, {format: 'm:ss'}),
       },
     }
   }

@@ -12,7 +12,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportBatteryScanCodeFilterValues } from 'types/filter';
 import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/reportBatteryScanCodeFilter';
+import { defaultFilter } from 'lib/reportBatteryScanCode';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';

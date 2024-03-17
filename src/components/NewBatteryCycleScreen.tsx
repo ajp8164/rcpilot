@@ -3,6 +3,7 @@ import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemInput, ListItemSegmented, ListItemSwitch, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
+import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 import { useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -18,7 +19,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { batteryCycleSummary } from 'lib/batteryCycle';
-import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { toNumber } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';
@@ -59,7 +59,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     return {
       battery,
       lastCycle: battery.cycles[battery.cycles.length - 1],
-      isCharged: battery.cycles[battery.cycles.length - 1]?.charge || !battery.cycles.length,
+      isCharged: batteryIsCharged(battery),
       capacityContribution: battery.capacity! / sumAllBatteriesCapacity,
     } as BatteryData;
   });

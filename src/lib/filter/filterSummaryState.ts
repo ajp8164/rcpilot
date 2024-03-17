@@ -1,51 +1,8 @@
-import { DateFilterState, DateRelation, FilterRelation, FilterState } from 'components/molecules/filters';
+import { FilterRelation, FilterState } from 'components/molecules/filters';
 
 import { DateTime } from 'luxon';
-import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
-import { TimeSpan } from 'types/common';
 import { ellipsis } from '@react-native-ajp-elements/core';
 import lodash from 'lodash';
-
-export const filterSummary = (filterOrFilterType: Filter | string) => {
-  let filterType: string;
-  let filter: Filter | undefined = undefined;
-
-  if (typeof filterOrFilterType === 'string') {
-    filterType = filterOrFilterType;
-  } else {
-    filter = filterOrFilterType;
-    filterType = filter?.type;
-  }
-
-  const kind =
-    filterType === FilterType.BatteriesFilter ? 'batteries' :
-    filterType === FilterType.BatteryCyclesFilter ? 'battery cycles' :
-    filterType === FilterType.EventsModelFilter ? 'events' :
-    filterType === FilterType.MaintenanceFilter ? 'logs' :
-    filterType === FilterType.ModelsFilter ? 'models' :
-    filterType === FilterType.ReportEventsFilter ? 'events' :
-    filterType === FilterType.ReportMaintenanceFilter ? 'maintenance items' :
-    filterType === FilterType.ReportModelScanCodesFilter ? 'models' :
-    filterType === FilterType.ReportBatteryScanCodesFilter ? 'batteries' : '';
-
-  if (!filter) {
-    return `Matches all ${kind}`;
-  } else {
-    let s = '';
-    const filterValues = Object.keys(filter.values);
-    filterValues.forEach((property, index) => {
-      s.length > 0 ? 
-        index === filterValues.length - 1 ?
-        s += ', and ' :
-        s += ', ' :
-        null;
-        // Checking filter here to satisfy the 'keyof typeof' type cast.
-      s += filter ? `${filterStateSummary(property, filter!.values[property as keyof typeof filter.values])}` : '';
-    });
-    return `Matches ${kind} where ${s}.`;
-  }
-};
 
 // Filter values with labels default as a suffix. However, if the label is in
 // this array then it will be output as a prefix instead.
@@ -54,7 +11,7 @@ const prefixes = ['$'];
 // Generally, filter values are stored in the filter state 'value' array at index 0.
 // There are a few exceptions as noted in this implementation. For example, number values
 // allow a label to appear in the 'value' array at index 1.
-export const filterStateSummary = (property: string, state: FilterState) => {
+export const filterSummaryState = (property: string, state: FilterState) => {
   // This causes a one character first "word" to be forced to uppercase (e.g. cRating => C rating).
   let p = lodash.startCase(property).toLowerCase();
   if (p[1] === ' ') {
@@ -124,20 +81,4 @@ export const filterStateSummary = (property: string, state: FilterState) => {
     }
   }
   return s;
-};
-
-export const getDate = (filterState: DateFilterState) => {
-  let date = DateTime.fromISO(filterState.value[0]).toUnixInteger().toString();
-  if (filterState.relation === DateRelation.Past) {
-    const num = parseInt(filterState.value[0]);
-    const timeframe = filterState.value[1]; 
-    let days = num;
-    switch (timeframe) {
-      case TimeSpan.Weeks: days = num * 7; break;
-      case TimeSpan.Months: days = num * 30; break;
-      case TimeSpan.Years: days = num * 365; break;
-    }
-    date = DateTime.now().minus({days}).toUnixInteger().toString();
-  }
-  return date;
 };

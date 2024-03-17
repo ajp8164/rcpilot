@@ -6,7 +6,7 @@ import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/Lis
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { TimerMode, TimerState } from 'types/timer';
 import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analytics';
-import { modelChecklistActionsPending, modelTypeIcons } from 'lib/model';
+import { modelHasChecklists, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
@@ -146,10 +146,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     }
     // Set the number of seconds.
     dispatch(eventSequence.setDuration({duration: Math.trunc(duration / 1000)}));
-
-    const checklists = modelChecklistActionsPending(model!, ChecklistType.PostEvent);
   
-    if (checklists?.length) {
+    if (modelHasChecklists(model!, ChecklistType.PostEvent)) {
       navigation.push('EventSequenceChecklist', {
         cancelable: true,
         checklistType: ChecklistType.PostEvent,

@@ -9,7 +9,7 @@ import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { View } from 'react-native-ui-lib';
-import { defaultFilter } from 'lib/reportMaintenanceFilter';
+import { defaultFilter } from 'lib/reportMaintenance';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';

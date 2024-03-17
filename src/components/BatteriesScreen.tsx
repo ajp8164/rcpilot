@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { batteryExtendedSummary, batteryIsCharged, batteryTintIcons, useBatteriesFilter } from 'lib/battery';
+import { batteryIsCharged, batterySummaryExtended, batteryTintIcons, useBatteriesFilter } from 'lib/battery';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
@@ -242,7 +242,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         ref={ref => ref && listEditor.add(ref, 'batteries', battery._id.toString())}
         key={battery._id.toString()}
         title={battery.name}
-        subtitle={batteryExtendedSummary(battery)}
+        subtitle={batterySummaryExtended(battery)}
         subtitleNumberOfLines={3}
         containerStyle={{
           ...s.batteryTint,

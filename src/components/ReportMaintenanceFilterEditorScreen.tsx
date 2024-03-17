@@ -14,7 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportMaintenanceFilterValues } from 'types/filter';
 import { ReportMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/reportMaintenanceFilter';
+import { defaultFilter } from 'lib/reportMaintenance';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';

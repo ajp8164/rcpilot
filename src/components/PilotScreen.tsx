@@ -4,7 +4,7 @@ import { FlatList, Image, Keyboard, ListRenderItem, Platform, View } from 'react
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import { NestableDraggableFlatList, NestableScrollContainer, RenderItemParams } from 'react-native-draggable-flatlist';
 import React, { useEffect, useState } from 'react';
-import { modelPilotSummary, modelSummary } from 'lib/model';
+import { modelSummary, modelSummaryPilot } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -204,7 +204,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
     return (
       <ListItem
         title={model.name}
-        value={modelPilotSummary(model, pilot!)}
+        value={modelSummaryPilot(model, pilot!)}
         position={listItemPosition(index, allPilotModels.length)}
         onPress={() => navigation.navigate('Events', {
           filterType: FilterType.BypassFilter,

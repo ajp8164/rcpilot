@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
 import WheelPicker from 'components/atoms/WheelPicker';
-import { getTimeSpanItems } from 'lib/relativeDate';
+import { getTimeSpanItems } from './wheelPickerHelpers';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';

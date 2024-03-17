@@ -13,7 +13,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportEventFilterValues } from 'types/filter';
 import { ReportEventFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/reportEventsFilter';
+import { defaultFilter } from 'lib/reportEvents';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useFilterEditor } from 'lib/useFilterEditor';

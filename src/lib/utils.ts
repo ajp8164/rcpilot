@@ -1,3 +1,18 @@
+export const hash = (text = '') => {
+  let i,
+    chr,
+    hash = 0;
+  if (text.length === 0) return hash;
+  for (i = 0; i < text.length; i++) {
+    chr = text.charCodeAt(i);
+    // eslint-disable-next-line no-bitwise
+    hash = (hash << 5) - hash + chr;
+    // eslint-disable-next-line no-bitwise
+    hash |= 0; // Convert to 32bit integer
+  }
+  return Math.abs(hash);
+};
+
 export const toArrayOrdinals = (array: string[]): number[] => {
   return array.map(str => {
     return Number(str);
@@ -12,26 +27,4 @@ export const uuidv4 = () => {
       v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
-};
-
-export const enumValuesToIds = (values: string[], enumObj: {[key in string]: string;}): string[] => {
-  const keys = [];
-  for (let i = 0; i < values.length; i++) {
-    const k = Object.keys(enumObj).find(key => enumObj[key] === values[i]);
-    if (k) {
-      keys.push(k);
-    }
-  }
-  return keys;
-};
-
-export const enumIdsToValues = (ids: string[], enumObj: {[key in string]: string;}): string[] => {
-  const values = [];
-  for (let i = 0; i < ids.length; i++) {
-    const v = enumObj[ids[i]];
-    if (v) {
-      values.push(v);
-    }
-  }
-  return values;
 };

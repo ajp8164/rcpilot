@@ -16,7 +16,7 @@ import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
-import { modelChecklistActionsPending } from 'lib/model';
+import { modelHasChecklists } from 'lib/model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
@@ -53,10 +53,10 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
         }
       },
       headerRight: () => {
-        const modelHasChecklist = modelChecklistActionsPending(model!, ChecklistType.PreEvent).length > 0;
+        const hasChecklists = modelHasChecklists(model!, ChecklistType.PreEvent);
         return (
           <Button
-            title={modelHasChecklist ? 'Checklist' : 'Timer'}
+            title={hasChecklists ? 'Checklist' : 'Timer'}
             titleStyle={theme.styles.buttonInvScreenHeaderTitle}
             buttonStyle={theme.styles.buttonInvScreenHeader}
             iconRight
@@ -69,7 +69,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
               />
             }
             onPress={() => {
-              if (modelHasChecklist) {
+              if (hasChecklists) {
                 navigation.navigate('EventSequenceChecklist', {
                   cancelable: false,
                   checklistType: ChecklistType.PreEvent,

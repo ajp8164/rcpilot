@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { modelChecklistActionsPending, modelSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
+import { modelSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
@@ -25,6 +25,7 @@ import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
+import { modelMaintenanceIsDue } from 'lib/model';
 import { secondsToMSS } from 'lib/formatters';
 import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -162,8 +163,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   };
 
   const confirmStartNewEventSequence= (model: Model) => {
-    const maintenancePending = modelChecklistActionsPending(model, ChecklistType.Maintenance).length > 0;
-    if (maintenancePending) {
+    if (modelMaintenanceIsDue(model)) {
       Alert.alert(
         'Maintenance Due',
         `This ${model.type.toLowerCase()} has one or more maintenance actions due.\n\nAre you sure you want to use it for this ${eventKind(model.type).name.toLowerCase()}?`,

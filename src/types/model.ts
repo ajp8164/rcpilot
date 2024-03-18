@@ -13,9 +13,9 @@ export enum ModelType {
   Car = 'Car',
   Boat = 'Boat',
   Robot = 'Robot',
-};
+}
 
 export enum ModelPropellerUnits {
   Inches = 'Inches',
   Centimeters = 'Centimeters',
-};
+}

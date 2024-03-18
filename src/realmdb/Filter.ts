@@ -17,7 +17,7 @@ export class Filter extends Object<Filter> {
     },
     primaryKey: '_id',
   };
-};
+}
 
 export class FilterState extends Object<FilterState> {
   relation!: string;
@@ -31,4 +31,4 @@ export class FilterState extends Object<FilterState> {
       value: 'string?[]',
     },
   };
-};
+}

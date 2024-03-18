@@ -12,16 +12,16 @@ const NewModelFuelNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewModelFuelStack.Navigator
-        initialRouteName='NewModelFuel'
+        initialRouteName="NewModelFuel"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewModelFuelStack.Screen
-          name='NewModelFuel'
+          name="NewModelFuel"
           // @ts-expect-error
           component={ModelFuelEditorScreen}
           options={{
@@ -30,7 +30,7 @@ const NewModelFuelNavigator = () => {
           }}
         />
         <NewModelFuelStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Fuel Notes',

@@ -12,4 +12,4 @@ export class ModelCategory extends Object<ModelCategory> {
     },
     primaryKey: '_id',
   };
-};
+}

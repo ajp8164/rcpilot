@@ -1,6 +1,22 @@
-import Animated, { Easing, FadeIn, FadeOut, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
+import Animated, {
+  Easing,
+  FadeIn,
+  FadeOut,
+  useAnimatedStyle,
+  useSharedValue,
+  withDelay,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { Divider, PickerItem, SwipeButton, getColoredSvg, viewport } from '@react-native-ajp-elements/ui';
+import {
+  Divider,
+  PickerItem,
+  SwipeButton,
+  getColoredSvg,
+  viewport,
+} from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, Pressable, ScrollView, Text, View } from 'react-native';
 import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/List';
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
@@ -40,7 +56,7 @@ export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'Eve
 
 const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const { cancelable } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
   const confirmAction = useConfirmAction();
@@ -76,11 +92,12 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     if (state.mode === TimerMode.Stopped) {
       stopEvent(state);
     }
-  };
+  }
 
   useEffect(() => {
     navigation.setOptions({
       headerBackVisible: timer.state.mode === TimerMode.Initial,
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (cancelable && timer.state.mode === TimerMode.Initial) {
           return (
@@ -88,16 +105,19 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={theme.styles.buttonInvScreenHeader}
-              onPressIn={() => confirmAction(cancelEvent, {
-                label: `Do Not Log ${kind.name}`,
-                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-              })}
+              onPressIn={() =>
+                confirmAction(cancelEvent, {
+                  label: `Do Not Log ${kind.name}`,
+                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                })
+              }
             />
-          )
+          );
         }
       },
     });
-  }, [ timer.state.mode ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timer.state.mode]);
 
   useEffect(() => {
     // Get all the batteries for this event.
@@ -107,26 +127,26 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       b && eventBatteries.push(b);
     });
     setBatteries(eventBatteries);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    timerMessageAnim.value =
-      withDelay(500,
-        withRepeat(
-          withSequence(
-            withTiming(0.1, { duration, easing }),
-            withTiming(1, { duration, easing }),
-          ),
-        -1
-        )
-      );
+    timerMessageAnim.value = withDelay(
+      500,
+      withRepeat(
+        withSequence(withTiming(0.1, { duration, easing }), withTiming(1, { duration, easing })),
+        -1,
+      ),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     event.on('deviceShake', onDeviceShake);
     return () => {
       event.removeListener('deviceShake', onDeviceShake);
-    }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cancelEvent = () => {
@@ -145,9 +165,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       }
     }
     // Set the number of seconds.
-    dispatch(eventSequence.setDuration({duration: Math.trunc(duration / 1000)}));
-  
-    if (modelHasChecklists(model!, ChecklistType.PostEvent)) {
+    dispatch(eventSequence.setDuration({ duration: Math.trunc(duration / 1000) }));
+
+    if (model && modelHasChecklists(model, ChecklistType.PostEvent)) {
       navigation.push('EventSequenceChecklist', {
         cancelable: true,
         checklistType: ChecklistType.PostEvent,
@@ -168,9 +188,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   };
 
   const onCountdownValueChange = (value: string[]) => {
-    const min = value[0] ? parseInt(value[0]) : 0;
-    const sec = value[1] ? parseInt(value[1]) : 0;
-    const ms = ((min * 60) + sec) * 1000;
+    const min = value[0] ? parseInt(value[0], 10) : 0;
+    const sec = value[1] ? parseInt(value[1], 10) : 0;
+    const ms = (min * 60 + sec) * 1000;
     timer.setCountdown(ms);
     countdownValue.current = ms;
   };
@@ -206,7 +226,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     } else if (timer.state.mode === TimerMode.Expired) {
       leftButton = { icon: 'circle-stop', color: theme.colors.stickyWhite, onPress: undefined };
       rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: timer.pause };
-    } else { // Stopped
+    } else {
+      // Stopped
       leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: undefined };
       rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
     }
@@ -218,7 +239,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             name={leftButton.icon}
             size={52}
             color={leftButton.color}
-            style={leftButton.onPress ? {opacity: 1} : {opacity: 0.3}}
+            style={leftButton.onPress ? {} : s.timerButtonDisabled}
           />
         </Pressable>
         <Pressable onPress={rightButton.onPress}>
@@ -226,7 +247,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             name={rightButton.icon}
             size={52}
             color={rightButton.color}
-            style={rightButton.onPress ? {opacity: 1} : {opacity: 0.3}}
+            style={rightButton.onPress ? {} : s.timerButtonDisabled}
           />
         </Pressable>
       </View>
@@ -237,9 +258,10 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     return (
       <View style={s.timerSwipeable}>
         <SwipeButton
-          trackColor={timer.state.mode === TimerMode.Running
-            ? theme.colors.blackTransparentSubtle
-            : theme.colors.assertive
+          trackColor={
+            timer.state.mode === TimerMode.Running
+              ? theme.colors.blackTransparentSubtle
+              : theme.colors.assertive
           }
           text={'Slide to arm'}
           textStyle={s.swipeText}
@@ -248,16 +270,19 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           padding={7}
           height={60}
           width={viewport.width - 45}
-          trackStartColor={timer.state.mode === TimerMode.Running
-            ? theme.colors.blackTransparentSubtle
-            : theme.colors.success
+          trackStartColor={
+            timer.state.mode === TimerMode.Running
+              ? theme.colors.blackTransparentSubtle
+              : theme.colors.success
           }
-          trackEndColor={timer.state.mode === TimerMode.Running
-            ? theme.colors.blackTransparentSubtle
-            : theme.colors.success
+          trackEndColor={
+            timer.state.mode === TimerMode.Running
+              ? theme.colors.blackTransparentSubtle
+              : theme.colors.success
           }
           thumbStyle={timer.state.mode === TimerMode.Running ? s.swipeThumbTimerRunning : {}}
-          onToggle={onSwipeArmTimer} />
+          onToggle={onSwipeArmTimer}
+        />
       </View>
     );
   };
@@ -266,49 +291,44 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     const minutes: PickerItem[] = [];
     const seconds: PickerItem[] = [];
 
-    for(let i = 0; i < 91; i++) {
+    for (let i = 0; i < 91; i++) {
       minutes[i] = {
         label: `${i} minute${i !== 1 ? 's' : ''}`,
         value: `${i}`,
-        color: theme.colors.stickyWhite
+        color: theme.colors.stickyWhite,
       };
     }
-    for(let i = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i++) {
       seconds[i] = {
         label: `${i * 5} seconds`,
         value: `${i * 5}`,
-        color: theme.colors.stickyWhite
+        color: theme.colors.stickyWhite,
       };
     }
 
     return [minutes, seconds];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderModel = () => {
     if (!model) return null;
     return (
       <>
-        <View style={{borderRadius: 10, overflow: 'hidden', marginBottom: 10, height: 100, borderWidth: 0}}>
-          {model.image ?
-            <Image
-              source={{ uri: model.image }}
-              resizeMode={'cover'}
-              style={{width: '100%', height: '100%'}}
-            />
-          :
+        <View style={s.modelContainer}>
+          {model.image ? (
+            <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+          ) : (
             <SvgXml
               xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
               width={100}
               height={110}
               color={theme.colors.brandSecondary}
-              style={[s.modelIcon, {alignSelf: 'center'}]}
+              style={s.modelIcon}
             />
-          }
+          )}
         </View>
-        <Text style={[theme.styles.textNormal, {color: theme.colors.stickyWhite, textAlign: 'center', marginBottom: 3}]}>
-          {model.name}
-        </Text>
-        <Text style={[theme.styles.textSmall, {color: theme.colors.whiteTransparentLight, textAlign: 'center', marginBottom: 10}]}>
+        <Text style={s.modelName}>{model.name}</Text>
+        <Text style={s.eventKind}>
           {`${eventKind(model.type).name} #${model.events.length + 1}`}
         </Text>
       </>
@@ -316,23 +336,23 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   };
 
   const batteryPerformance = () => {
-    const stats = batteryPerformanceWithModel(model!, batteries);
-    return stats.map(s => {
+    const stats = model && batteryPerformanceWithModel(model, batteries);
+    return stats?.map(s => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToMSS(s.seconds, {format: 'm:ss'})} (80%)`,
+        time: `${secondsToMSS(s.seconds, { format: 'm:ss' })} (80%)`,
       };
     });
   };
 
   const fuelCapacityPerformance = () => {
-    const stats = fuelCapacityPerformanceWithModel(model!);
-    return stats.map(s => {
+    const stats = model && fuelCapacityPerformanceWithModel(model);
+    return stats?.map(s => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToMSS(s.seconds, {format: 'm:ss'})} (80%)`,
+        time: `${secondsToMSS(s.seconds, { format: 'm:ss' })} (80%)`,
       };
     });
   };
@@ -345,24 +365,25 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         key={`${index}`}
         title={battery.name}
         subtitle={
-          performance.length ?
-          <View style={s.performanceContainer}>
-            {performance.map((item, index) => {
-              return (
-                <View key={index} style={s.performanceRow}>
-                  <Text style={s.performanceItem}>{item.style}</Text>
-                  <Text style={[s.performanceItem, s.performanceRowMid]}>{item.count}</Text>
-                  <Text style={s.performanceItem}>{item.time}</Text>
-              </View>
-              );
-            })}
-          </View>
-          :
-          <View style={s.performanceContainer}>
-            <View style={s.performanceRow}>
-              <Text style={s.performanceItem}>{'No recent flights with this model'}</Text>
+          performance?.length ? (
+            <View style={s.performanceContainer}>
+              {performance.map((item, index) => {
+                return (
+                  <View key={index} style={s.performanceRow}>
+                    <Text style={s.performanceItem}>{item.style}</Text>
+                    <Text style={[s.performanceItem, s.performanceRowMid]}>{item.count}</Text>
+                    <Text style={s.performanceItem}>{item.time}</Text>
+                  </View>
+                );
+              })}
             </View>
-          </View>
+          ) : (
+            <View style={s.performanceContainer}>
+              <View style={s.performanceRow}>
+                <Text style={s.performanceItem}>{'No recent flights with this model'}</Text>
+              </View>
+            </View>
+          )
         }
         containerStyle={s.listItemContainer}
         bottomDividerColor={theme.colors.whiteTransparentLight}
@@ -380,8 +401,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             />
           </View>
         }
-    />
-    )
+      />
+    );
   };
 
   const renderNoBatteries = () => {
@@ -395,11 +416,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         leftImage={
           <View>
-            <Icon
-              name={'triangle-exclamation'}
-              size={22}
-              color={theme.colors.warning}
-            />
+            <Icon name={'triangle-exclamation'} size={22} color={theme.colors.warning} />
           </View>
         }
       />
@@ -412,7 +429,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Fuel Consumption Averages'}
         subtitle={
-          performance.length ?
+          performance?.length ? (
             <View style={s.performanceContainer}>
               {performance.map((item, index) => {
                 return (
@@ -420,16 +437,17 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
                     <Text style={s.performanceItem}>{item.style}</Text>
                     <Text style={[s.performanceItem, s.performanceRowMid]}>{item.count}</Text>
                     <Text style={s.performanceItem}>{item.time}</Text>
-                </View>
+                  </View>
                 );
               })}
             </View>
-          :
+          ) : (
             <View style={s.performanceContainer}>
               <View style={s.performanceRow}>
                 <Text style={s.performanceItem}>{'No recent flights with this model'}</Text>
               </View>
             </View>
+          )
         }
         containerStyle={s.listItemContainer}
         titleStyle={[s.listItemTitle, s.fuelTitle]}
@@ -451,33 +469,33 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   };
 
   if (!model) {
-    return (
-      <EmptyView error message={'Model Not Found!'} />
-    );    
-  };
-  
+    return <EmptyView error message={'Model Not Found!'} />;
+  }
+
   return (
     <View style={s.view}>
       <View style={s.upper}>
-        {(!countdownTimerEnabled || (countdownTimerEnabled && timer.state.mode !== TimerMode.Initial)) && 
+        {(!countdownTimerEnabled ||
+          (countdownTimerEnabled && timer.state.mode !== TimerMode.Initial)) && (
           <Animated.Text
-            entering={FadeIn} exiting={FadeOut}
+            entering={FadeIn}
+            exiting={FadeOut}
             style={[
               s.timerValue,
               timer.state.mode === TimerMode.Armed ? s.timerValueArmed : {},
               timer.state.inOvertime ? s.timerOvertime : {},
             ]}>
-            {secondsToMSS(Math.abs(Math.trunc(timer.state.value / 1000)), {format: 'm:ss'})}
+            {secondsToMSS(Math.abs(Math.trunc(timer.state.value / 1000)), { format: 'm:ss' })}
           </Animated.Text>
-        }
-        {timer.state.mode === TimerMode.Armed &&
+        )}
+        {timer.state.mode === TimerMode.Armed && (
           <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
             <Text style={s.timerMessage}>
               {timerUsesButtons ? 'Tap to Start Timer...' : 'Shake to Start Timer...'}
             </Text>
           </Animated.View>
-        }
-        {(countdownTimerEnabled && timer.state.mode === TimerMode.Initial) &&
+        )}
+        {countdownTimerEnabled && timer.state.mode === TimerMode.Initial && (
           <Animated.View entering={FadeIn} exiting={FadeOut}>
             <WheelPicker
               placeholder={'none'}
@@ -488,7 +506,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               onValueChange={(_wheelIndex, value) => onCountdownValueChange(value as string[])}
             />
           </Animated.View>
-        }
+        )}
         <View style={s.timerType}>
           <ListItemSwitch
             title={'Countdown Timer'}
@@ -504,13 +522,13 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       <View style={s.lower}>
         <ScrollView style={s.summary} showsVerticalScrollIndicator={false}>
           {renderModel()}
-          {model.logsFuel &&
+          {model.logsFuel && (
             <>
               {renderFuelConsumption()}
               <Divider />
             </>
-          }
-          {model.logsBatteries &&
+          )}
+          {model.logsBatteries && (
             <FlatList
               data={batteries}
               renderItem={renderBattery}
@@ -520,7 +538,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               ListFooterComponent={<Divider />}
               ListEmptyComponent={renderNoBatteries()}
             />
-          }
+          )}
         </ScrollView>
       </View>
       {timerUsesButtons ? renderTimerButtons() : renderTimerSwipe()}
@@ -533,15 +551,39 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.view,
     backgroundColor: theme.colors.brandPrimary,
   },
+  modelContainer: {
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginBottom: 10,
+    height: 100,
+    borderWidth: 0,
+  },
+  modelImage: {
+    width: '100%',
+    height: '100%',
+  },
   modelIcon: {
-    transform: [{rotate: '-45deg'}],
+    transform: [{ rotate: '-45deg' }],
+    alignSelf: 'center',
+  },
+  modelName: {
+    ...theme.styles.textNormal,
+    color: theme.colors.stickyWhite,
+    textAlign: 'center',
+    marginBottom: 3,
+  },
+  eventKind: {
+    ...theme.styles.textSmall,
+    color: theme.colors.whiteTransparentLight,
+    textAlign: 'center',
+    marginBottom: 10,
   },
   batteryIconContainer: {
     position: 'absolute',
     top: 3,
   },
   batteryIcon: {
-    transform: [{rotate: '-90deg'}],
+    transform: [{ rotate: '-90deg' }],
     width: '100%',
     left: -8,
   },
@@ -593,7 +635,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     letterSpacing: -5,
   },
   timerValueArmed: {
-    opacity: 0.1
+    opacity: 0.1,
   },
   timerType: {
     position: 'absolute',
@@ -606,7 +648,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
     width: '100%',
   },
-  timerMessage:  {
+  timerMessage: {
     ...theme.styles.textLarge,
     color: theme.colors.stickyWhite,
   },
@@ -637,6 +679,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
+  timerButtonDisabled: {
+    opacity: 0.3,
+  },
   timerSwipeable: {
     position: 'absolute',
     bottom: theme.insets.bottom,
@@ -650,7 +695,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   swipeThumbTimerRunning: {
     opacity: 0,
     pointerEvents: 'none',
-  }
+  },
 }));
 
 export default EventSequenceTimerScreen;

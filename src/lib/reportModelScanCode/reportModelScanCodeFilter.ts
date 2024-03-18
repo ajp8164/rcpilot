@@ -1,7 +1,4 @@
-import {
-  DateRelation,
-  EnumRelation,
-} from 'components/molecules/filters';
+import { DateRelation, EnumRelation } from 'components/molecules/filters';
 
 import { ReportModelScanCodeFilterValues } from 'types/filter';
 

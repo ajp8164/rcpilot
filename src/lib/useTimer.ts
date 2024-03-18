@@ -1,4 +1,10 @@
-import { TimerEvent, TimerEventAlertPhrase, TimerMode, TimerOptions, TimerState } from 'types/timer';
+import {
+  TimerEvent,
+  TimerEventAlertPhrase,
+  TimerMode,
+  TimerOptions,
+  TimerState,
+} from 'types/timer';
 import { useEffect, useRef, useState } from 'react';
 
 import AlertService from './alertService';
@@ -54,12 +60,13 @@ export const useTimer = (onTimerTick: (state: TimerState) => void, opts?: TimerO
       inOvertime: inOvertime.current,
       tickCount: tickCount.current,
       elapsed: tickCount.current * interval.current, // Absolute elapsed timer duration in milliseconds
-      value: value.current // Timer value relative to 0 (significant with countdown timer) in milliseconds
+      value: value.current, // Timer value relative to 0 (significant with countdown timer) in milliseconds
     };
-  
+
     setState(newState);
     callback(newState);
-  }, [ isCountdown, mode, tick ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isCountdown, mode, tick]);
 
   const setCountdown = (cdValue: number) => {
     if (cdValue <= 0) {
@@ -142,9 +149,7 @@ export const useTimer = (onTimerTick: (state: TimerState) => void, opts?: TimerO
     let newMode = mode;
     if (isCountdown) {
       if (tickCount.current * interval.current > initialValue.current) {
-        newMode = allowOvertime.current
-          ? TimerMode.Running
-          : TimerMode.Expired;
+        newMode = allowOvertime.current ? TimerMode.Running : TimerMode.Expired;
         setMode(newMode);
         inOvertime.current = true;
       } else if (tickCount.current * interval.current === initialValue.current) {

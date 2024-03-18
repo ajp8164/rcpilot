@@ -40,20 +40,20 @@ export enum BooleanRelation {
   Any = 'Any',
   Yes = 'Yes',
   No = 'No',
-};
+}
 
 export enum DateRelation {
   Any = 'Any',
   Before = 'Before',
   After = 'After',
   Past = 'Past',
-};
+}
 
 export enum EnumRelation {
   Any = 'Any',
   Is = 'Is',
   IsNot = 'Is Not',
-};
+}
 
 export enum NumberRelation {
   Any = 'Any',
@@ -61,28 +61,28 @@ export enum NumberRelation {
   GT = '>',
   EQ = '=',
   NE = '!=',
-};
+}
 
 export enum StringRelation {
   Any = 'Any',
   Contains = 'Contains',
   Missing = 'Missing',
-};
+}
 
 // Type and union of all relations.
 export type FilterRelation =
-| BooleanRelation
-| DateRelation
-| EnumRelation
-| NumberRelation
-| StringRelation;
+  | BooleanRelation
+  | DateRelation
+  | EnumRelation
+  | NumberRelation
+  | StringRelation;
 
 export const FilterRelation = {
   ...BooleanRelation,
   ...DateRelation,
   ...EnumRelation,
   ...NumberRelation,
-  ...StringRelation
+  ...StringRelation,
 };
 
 // Realm Query Language relations mapping.

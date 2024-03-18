@@ -1,6 +1,4 @@
-import DateTimePicker, {
-  DateTimePickerEvent,
-} from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import React, { Key, useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
 import { fontFamily, viewport } from '@react-native-ajp-elements/ui';
@@ -20,7 +18,7 @@ type PickerInternalOnChangeValue = {
 export enum PickerMode {
   Date = 'Date',
   Custom = 'Custom',
-};
+}
 
 export type WheelPickerItem = {
   label: string;
@@ -39,11 +37,7 @@ export interface WheelPickerInterface {
   placeholder?: string | WheelPickerItem | WheelPickerItem[];
   value?: Date | string | string[];
   wheelVisible?: boolean | boolean[];
-  onValueChange: (
-    wheelIndex: number,
-    value: Date | string | string[],
-    index: number,
-  ) => void;
+  onValueChange: (wheelIndex: number, value: Date | string | string[], index: number) => void;
 }
 
 const defaultPlaceholder: WheelPickerItem = {
@@ -70,7 +64,7 @@ const WheelPicker = ({
 
   const [pickerItems, setPickerItems] = useState<WheelPickerItem[][]>(
     (Array.isArray(items && items[0]) ? items : [items]) as WheelPickerItem[][],
-  );  
+  );
 
   useEffect(() => {
     // If caller changes the items then a re-render is needed to update wheel(s).
@@ -84,29 +78,25 @@ const WheelPicker = ({
 
   useEffect(() => {
     // If caller changes wheel width then a re-render is needed to update wheel(s).
-    setPickerItemWidth((itemWidth && Array.isArray(itemWidth) ? itemWidth : [itemWidth]) as WheelPickerWidth[]);
+    setPickerItemWidth(
+      (itemWidth && Array.isArray(itemWidth) ? itemWidth : [itemWidth]) as WheelPickerWidth[],
+    );
   }, [itemWidth]);
 
   const [pickerValue, setPickerValue] = useState<PickerInternalValue[]>(
     (Array.isArray(value) ? value : [value]) as PickerInternalValue[],
   );
   const [pickerItemWidth, setPickerItemWidth] = useState<WheelPickerWidth[]>(
-    (itemWidth && Array.isArray(itemWidth)
-      ? itemWidth
-      : [itemWidth]) as WheelPickerWidth[],
+    (itemWidth && Array.isArray(itemWidth) ? itemWidth : [itemWidth]) as WheelPickerWidth[],
   );
   const [pickerWheelVisible, setPickerWheelVisible] = useState<boolean[]>(
-    (wheelVisible && Array.isArray(wheelVisible)
-      ? wheelVisible
-      : [wheelVisible]) as boolean[],
+    (wheelVisible && Array.isArray(wheelVisible) ? wheelVisible : [wheelVisible]) as boolean[],
   );
   const [pickerLabels, _setPickerLabels] = useState<string[]>(
     (labels && Array.isArray(labels) ? labels : [labels]) as string[],
   );
   const [pickerLabelWidth, _setPickerLabelWidth] = useState<WheelPickerWidth[]>(
-    (labelWidth && Array.isArray(labelWidth)
-      ? labelWidth
-      : [labelWidth]) as WheelPickerWidth[],
+    (labelWidth && Array.isArray(labelWidth) ? labelWidth : [labelWidth]) as WheelPickerWidth[],
   );
 
   // const getSelectedItem = useCallback(
@@ -163,9 +153,7 @@ const WheelPicker = ({
         if (typeof placeholder === 'string') {
           phValue = { ...defaultPlaceholder, label: placeholder };
         }
-        const ph = (
-          Array.isArray(phValue) ? phValue : [phValue]
-        ) as WheelPickerItem[];
+        const ph = (Array.isArray(phValue) ? phValue : [phValue]) as WheelPickerItem[];
 
         pi.forEach((i, idx) => {
           if (!isEqual(ph[idx], {}) && i[0].value !== 'placeholder') {
@@ -180,6 +168,7 @@ const WheelPicker = ({
       const pi = handlePlaceholder();
       setPickerItems(pi);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const renderPickerItems = (items: WheelPickerItem[]) => {
@@ -202,11 +191,7 @@ const WheelPicker = ({
     onValueChange(0, date || now, 0);
   };
 
-  const onChange = ({
-    wheelIndex,
-    value,
-    index,
-  }: PickerInternalOnChangeValue) => {
+  const onChange = ({ wheelIndex, value, index }: PickerInternalOnChangeValue) => {
     const pv = ([] as string[]).concat(pickerValue as string[]);
     pv[wheelIndex] = (value === 'placeholder' ? '' : value) as string;
     setPickerValue(pv);
@@ -227,8 +212,7 @@ const WheelPicker = ({
             if (!pickerWheelVisible[wheelIndex]) {
               return null;
             }
-            let iWidth: string | number =
-              (itemWidth && pickerItemWidth[wheelIndex]) || '100%';
+            let iWidth: string | number = (itemWidth && pickerItemWidth[wheelIndex]) || '100%';
             if (typeof iWidth === 'string') {
               iWidth = (parseFloat(iWidth) / 100) * viewport.width;
             }
@@ -238,9 +222,7 @@ const WheelPicker = ({
             }
             const tWidth = iWidth + lWidth;
             return (
-              <View
-                key={wheelIndex}
-                style={[s.wheelContainer, { width: tWidth }]}>
+              <View key={wheelIndex} style={[s.wheelContainer, { width: tWidth }]}>
                 {pickerLabels ? (
                   <View style={[s.labelContainer, { width: lWidth }]}>
                     <Text style={s.label}>{pickerLabels[wheelIndex]}</Text>
@@ -248,9 +230,7 @@ const WheelPicker = ({
                 ) : null}
                 <View style={{ width: iWidth }}>
                   <RNPicker
-                    onValueChange={(value, index) =>
-                      onChange({ wheelIndex, value, index })
-                    }
+                    onValueChange={(value, index) => onChange({ wheelIndex, value, index })}
                     selectedValue={pickerValue[wheelIndex]}>
                     {renderPickerItems(wheel)}
                   </RNPicker>

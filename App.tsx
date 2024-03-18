@@ -22,6 +22,7 @@ LogBox.ignoreLogs([
 
 const App = () => {
   return (
+    // eslint-disable-next-line react-native/no-inline-styles
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
         <SafeAreaProvider>

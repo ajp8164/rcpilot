@@ -17,18 +17,14 @@ import { useEvent } from 'lib/event';
 type AchievementModal = AchievementModalMethods;
 
 const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProps>((props, ref) => {
-  const {
-    headerTitle,
-    onDismiss: _onDismiss,
-    snapPoints = [350],
-  } = props;
+  const { headerTitle, onDismiss: _onDismiss, snapPoints = [350] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
   const [pilot, setPilot] = useState<Pilot>();
   const [model, setModel] = useState<Model>();
-  
+
   const innerRef = useRef<BottomSheetModalMethods>(null);
 
   useEffect(() => {
@@ -36,6 +32,7 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
     return () => {
       event.removeListener('achievement-awarded', onAchievementAwarded);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -55,9 +52,9 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
   };
 
   const onAchievementAwarded = () => {
-
+    return;
   };
-  
+
   const renderAchievement: ListRenderItem<Achievement> = ({ item: achievement }) => {
     return (
       <View style={s.achievementContainer}>
@@ -80,7 +77,9 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
     <Modal
       ref={innerRef}
       snapPoints={snapPoints}
-      onDismiss={() => {return}}>
+      onDismiss={() => {
+        return;
+      }}>
       {headerTitle && (
         <ModalHeader
           title={headerTitle}
@@ -96,28 +95,24 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
             solid={true}
             color={theme.colors.midGray}
             size={60}
-            style={{alignSelf: 'center', top: 5}}
+            style={s.heroIcon}
           />
         </View>
-        {pilot?.achievements.length ?
+        {pilot?.achievements.length ? (
           <>
-            <Text style={s.title}>
-              {`Achievements for ${pilot.name} with ${model?.name}`}
-            </Text>
+            <Text style={s.title}>{`Achievements for ${pilot.name} with ${model?.name}`}</Text>
             <FlatList
               data={pilot.achievements}
               renderItem={renderAchievement}
               horizontal={true}
               keyExtractor={(_item, index) => `${index}`}
               showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{width: '100%'}}
+              contentContainerStyle={s.achievementListContainer}
             />
           </>
-        :
-          <Text style={s.title}>
-            {`No achievements yet.`}
-          </Text>
-        }
+        ) : (
+          <Text style={s.title}>{`No achievements yet.`}</Text>
+        )}
       </View>
     </Modal>
   );
@@ -144,6 +139,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     backgroundColor: theme.colors.subtleGray,
     borderColor: theme.colors.white,
   },
+  heroIcon: {
+    alignSelf: 'center',
+    top: 5,
+  },
   title: {
     ...theme.styles.textSmall,
     top: 50,
@@ -162,6 +161,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   achievementDate: {
     ...theme.styles.textTiny,
     ...theme.styles.textDim,
+  },
+  achievementListContainer: {
+    width: '100%',
   },
 }));
 

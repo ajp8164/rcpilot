@@ -8,43 +8,44 @@ import ReportModelScanCodeFiltersScreen from 'components/ReportModelScanCodeFilt
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const ReportModelScanCodeFiltersStack = createNativeStackNavigator<ReportModelScanCodeFiltersNavigatorParamList>();
+const ReportModelScanCodeFiltersStack =
+  createNativeStackNavigator<ReportModelScanCodeFiltersNavigatorParamList>();
 
 const ReportModelScanCodeFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <ReportModelScanCodeFiltersStack.Navigator
-        initialRouteName='ReportModelScanCodeFilters'
+        initialRouteName="ReportModelScanCodeFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <ReportModelScanCodeFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
         <ReportModelScanCodeFiltersStack.Screen
-          name='ReportModelScanCodeFilters'
+          name="ReportModelScanCodeFilters"
           component={ReportModelScanCodeFiltersScreen}
           options={{
             title: 'Filters for Models',
           }}
         />
         <ReportModelScanCodeFiltersStack.Screen
-          name='ReportModelScanCodeFilterEditor'
+          name="ReportModelScanCodeFilterEditor"
           component={ReportModelScanCodeFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <ReportModelScanCodeFiltersStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'String Value',

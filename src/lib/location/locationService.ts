@@ -49,7 +49,7 @@ export const useLocation = (locationId?: string): LocationResponse => {
   });
 
   const allLocations: Location[] = []; //  useSelector(selectAllLocations);
-  let location: Location | undefined = undefined;  //useSelector(selectLocation(locationId || ''));
+  const location: Location | undefined = undefined; //useSelector(selectLocation(locationId || ''));
 
   useEffect(() => {
     console.log('USE GET LOCATION - USE EFFECT');
@@ -83,7 +83,7 @@ export const useLocation = (locationId?: string): LocationResponse => {
           log.warn('Could not get current geo position', error);
         });
     }
-  // }, [allLocations, location, setState]);
+    // }, [allLocations, location, setState]);
   }, []);
 
   console.log(JSON.stringify(state));
@@ -91,10 +91,7 @@ export const useLocation = (locationId?: string): LocationResponse => {
   return state;
 };
 
-export const getDistanceBetween = (
-  position1: LocationPosition,
-  position2: LocationPosition,
-) => {
+export const getDistanceBetween = (position1: LocationPosition, position2: LocationPosition) => {
   const R = 6371; //  Earth distance in km so it will return the distance in km
   const p = 0.017453292519943295; // Math.PI / 180
   const c = Math.cos;

@@ -26,4 +26,4 @@ export class EventsMaintenanceReport extends Object<EventsMaintenanceReport> {
     },
     primaryKey: '_id',
   };
-};
+}

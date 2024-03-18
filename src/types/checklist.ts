@@ -4,7 +4,7 @@ export enum ChecklistActionRepeatingScheduleFrequency {
   Days = 'Days',
   Weeks = 'Weeks',
   Months = 'Months',
-};
+}
 
 export enum ChecklistActionNonRepeatingScheduleTimeframe {
   Events = 'Events',
@@ -13,11 +13,11 @@ export enum ChecklistActionNonRepeatingScheduleTimeframe {
   Weeks = 'Weeks',
   Months = 'Months',
   Today = 'Today',
-};
+}
 
 export const ChecklistActionSchedulePeriod = {
   ...ChecklistActionRepeatingScheduleFrequency,
-  ...ChecklistActionNonRepeatingScheduleTimeframe
+  ...ChecklistActionNonRepeatingScheduleTimeframe,
 };
 
 export type ChecklistActionSchedulePeriod =
@@ -29,24 +29,24 @@ export enum ChecklistActionScheduleWhenPerform {
   Every = 'Every',
   In = 'Perform In',
   Now = 'Perform',
-};
+}
 
 export enum ChecklistActionScheduleFollowing {
   EventAtInstall = 'Model Event at Installation',
   TimeAtInstall = 'Model Time at Installation',
   InstallDate = 'Installation Date',
-};
+}
 
 export enum ChecklistType {
   PreEvent = 'Pre-Event',
   PostEvent = 'Post-Event',
   Maintenance = 'Maintenance',
   OneTimeMaintenance = 'One-Time Maintenance',
-};
+}
 
 export type EventSequenceChecklistType = ChecklistType.PreEvent | ChecklistType.PostEvent;
 
 export enum ChecklistActionScheduleType {
   NonRepeating = 'NonRepeating',
   Repeating = 'Repeating',
-};
+}

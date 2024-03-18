@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { ChimeAfterExpiring, ChimeWhileArmed, ChimeWhileRunning, TimerStartDelay } from 'types/event';
+import { ChimeAfterExpiring, ChimeWhileArmed, ChimeWhileRunning } from 'types/event';
 import React, { useState } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -7,9 +7,7 @@ import { ListItem } from 'components/atoms/List';
 import { ListItemSwitch } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { makeStyles } from '@rneui/themed';
 
@@ -35,7 +33,7 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'RELATIVE VOLUME'}/>
+      <Divider text={'RELATIVE VOLUME'} />
       <Slider
         value={0.5}
         minimumValue={0}
@@ -45,7 +43,7 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider text={'SETTINGS'}/>
+      <Divider text={'SETTINGS'} />
       <ListItemSwitch
         title={'Audible Chime'}
         value={atFieldSingleTapEnabled}
@@ -60,35 +58,41 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
       <ListItem
         title={'While Armed'}
         value={'None'}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'While Armed',
-          values: Object.values(ChimeWhileArmed),
-          selected: ChimeWhileArmed.Seconds15,
-          eventName: 'while-armed',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'While Armed',
+            values: Object.values(ChimeWhileArmed),
+            selected: ChimeWhileArmed.Seconds15,
+            eventName: 'while-armed',
+          })
+        }
       />
       <ListItem
         title={'While Running'}
         value={'None'}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'While Running',
-          values: Object.values(ChimeWhileRunning),
-          selected: ChimeWhileRunning.Minutes1,
-          eventName: 'while-running',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'While Running',
+            values: Object.values(ChimeWhileRunning),
+            selected: ChimeWhileRunning.Minutes1,
+            eventName: 'while-running',
+          })
+        }
       />
       <ListItem
         title={'After Expiring'}
         value={'None'}
         position={['last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'After Expiring',
-          values: Object.values(ChimeAfterExpiring),
-          selected: ChimeAfterExpiring.Seconds15,
-          eventName: 'after-expiring',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'After Expiring',
+            values: Object.values(ChimeAfterExpiring),
+            selected: ChimeAfterExpiring.Seconds15,
+            eventName: 'after-expiring',
+          })
+        }
       />
-      <Divider note text={'Vibration is not supported on all devices.'}/>
+      <Divider note text={'Vibration is not supported on all devices.'} />
     </ScrollView>
   );
 };

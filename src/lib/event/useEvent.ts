@@ -1,4 +1,4 @@
-import { EventContext } from'./EventProvider';
+import { EventContext } from './EventProvider';
 import { useContext } from 'react';
 
 export const useEvent = () => {

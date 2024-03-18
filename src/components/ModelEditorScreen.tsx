@@ -6,7 +6,11 @@ import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navi
 import React, { useEffect, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
-import { modelCostStatistics, modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
+import {
+  modelCostStatistics,
+  modelEventOutcomeStatistics,
+  useModelEventStyleStatistics,
+} from 'lib/analytics';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -69,7 +73,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [purchasePrice, setPurchasePrice] = useState(model?.purchasePrice?.toString() || undefined);
   const [damaged, setDamaged] = useState(model?.damaged || false);
   const [retired, setRetired] = useState(model?.retired || false);
-  const [totalEvents, setTotalEvents] = useState(model?.statistics.totalEvents?.toString() || undefined);
+  const [totalEvents, setTotalEvents] = useState(
+    model?.statistics.totalEvents?.toString() || undefined,
+  );
   const [totalTime, setTotalTime] = useState(model?.statistics.totalTime?.toString() || undefined);
   const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
   const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
@@ -96,33 +102,33 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     if (modelId) return;
 
-    const canSave = !!name && (
-      !eqString(model?.name, name) ||
-      !eqString(model?.image, image) ||
-      !eqString(model?.type, type) ||
-      !eqString(model?.vendor, vendor) ||
-      !eqObjectId(model?.category, category) ||
-      !eqNumber(model?.purchasePrice, purchasePrice) ||
-      !eqBoolean(model?.damaged, damaged) ||
-      !eqBoolean(model?.retired, retired) ||
-      !eqNumber(model?.statistics.totalEvents, totalEvents) ||
-      !eqNumber(model?.statistics.totalTime, totalTime) ||
-      !eqString(model?.lastEvent, lastEvent) ||
-      !eqBoolean(model?.logsBatteries, logsBatteries) ||
-      !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
-      !eqBoolean(model?.logsFuel, logsFuel) ||
-      !eqNumber(model?.fuelCapacity, fuelCapacity) ||
-      !eqNumber(model?.totalFuel, totalFuel) ||
-      !eqObjectId(model?.defaultFuel, defaultFuel) ||
-      !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
-      !eqObjectId(model?.defaultStyle, defaultStyle) ||
-      !eqString(model?.scanCodeSize, scanCodeSize) ||
-      !eqString(model?.notes, notes)
-    );
+    const canSave =
+      !!name &&
+      (!eqString(model?.name, name) ||
+        !eqString(model?.image, image) ||
+        !eqString(model?.type, type) ||
+        !eqString(model?.vendor, vendor) ||
+        !eqObjectId(model?.category, category) ||
+        !eqNumber(model?.purchasePrice, purchasePrice) ||
+        !eqBoolean(model?.damaged, damaged) ||
+        !eqBoolean(model?.retired, retired) ||
+        !eqNumber(model?.statistics.totalEvents, totalEvents) ||
+        !eqNumber(model?.statistics.totalTime, totalTime) ||
+        !eqString(model?.lastEvent, lastEvent) ||
+        !eqBoolean(model?.logsBatteries, logsBatteries) ||
+        !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
+        !eqBoolean(model?.logsFuel, logsFuel) ||
+        !eqNumber(model?.fuelCapacity, fuelCapacity) ||
+        !eqNumber(model?.totalFuel, totalFuel) ||
+        !eqObjectId(model?.defaultFuel, defaultFuel) ||
+        !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
+        !eqObjectId(model?.defaultStyle, defaultStyle) ||
+        !eqString(model?.scanCodeSize, scanCodeSize) ||
+        !eqString(model?.notes, notes));
 
     const save = () => {
       realm.write(() => {
-        const now = DateTime.now().toISO()!;
+        const now = DateTime.now().toISO();
         const numTotalEvents = toNumber(totalEvents) || 0;
         const numTotalTime = hmsMaskToSeconds(totalTime);
 
@@ -162,18 +168,15 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         realm.create('Model', model);
       });
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader(
-      {enabled: canSave, action: onDone},
-      undefined,
-      {title: 'New Model'},
-    );
-  }, [ 
+    setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, { title: 'New Model' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
     name,
     image,
     type,
@@ -200,30 +203,30 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     if (!modelId || !model) return;
 
-    const canSave = !!name && (
-      !eqString(model?.name, name) ||
-      !eqString(model?.image, image) ||
-      !eqString(model?.vendor, vendor) ||
-      !eqObjectId(model?.category, category) ||
-      !eqNumber(model?.purchasePrice, purchasePrice) ||
-      !eqBoolean(model?.damaged, damaged) ||
-      !eqBoolean(model?.retired, retired) ||
-      !eqBoolean(model?.logsBatteries, logsBatteries) ||
-      !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
-      !eqBoolean(model?.logsFuel, logsFuel) ||
-      !eqNumber(model?.fuelCapacity, fuelCapacity) ||
-      !eqNumber(model?.totalFuel, totalFuel) ||
-      !eqObjectId(model?.defaultFuel, defaultFuel) ||
-      !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
-      !eqObjectId(model?.defaultStyle, defaultStyle) ||
-      !eqString(model?.scanCodeSize, scanCodeSize) ||
-      !eqString(model?.notes, notes)
-    );
+    const canSave =
+      !!name &&
+      (!eqString(model?.name, name) ||
+        !eqString(model?.image, image) ||
+        !eqString(model?.vendor, vendor) ||
+        !eqObjectId(model?.category, category) ||
+        !eqNumber(model?.purchasePrice, purchasePrice) ||
+        !eqBoolean(model?.damaged, damaged) ||
+        !eqBoolean(model?.retired, retired) ||
+        !eqBoolean(model?.logsBatteries, logsBatteries) ||
+        !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
+        !eqBoolean(model?.logsFuel, logsFuel) ||
+        !eqNumber(model?.fuelCapacity, fuelCapacity) ||
+        !eqNumber(model?.totalFuel, totalFuel) ||
+        !eqObjectId(model?.defaultFuel, defaultFuel) ||
+        !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
+        !eqObjectId(model?.defaultStyle, defaultStyle) ||
+        !eqString(model?.scanCodeSize, scanCodeSize) ||
+        !eqString(model?.notes, notes));
 
     if (canSave) {
       realm.write(() => {
-        model.updatedOn = DateTime.now().toISO()!,
-        model.name = name!;
+        model.updatedOn = DateTime.now().toISO();
+        model.name = name || 'no-name';
         model.image = image;
         model.vendor = vendor;
         model.category = category;
@@ -232,7 +235,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.damaged = damaged;
         model.logsBatteries = logsBatteries;
         model.favoriteBatteries = favoriteBatteries;
-        model.logsFuel = logsFuel
+        model.logsFuel = logsFuel;
         model.fuelCapacity = toNumber(fuelCapacity);
         model.totalFuel = toNumber(totalFuel);
         model.defaultFuel = defaultFuel;
@@ -243,7 +246,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.statistics = lodash.merge(model.statistics, modelCostStatistics(model));
       });
     }
-  }, [ 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
     name,
     image,
     vendor,
@@ -266,6 +270,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     if (!modelId) return;
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       header: () => (
         <ModelHeader
           modelId={route.params.modelId}
@@ -276,13 +281,14 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         />
       ),
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFocusEffect(() => {
     let completedCount = 0;
     let pendingCount = 0;
-    const maintenanceChecklists = model?.checklists.filter(c =>
-      c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance
+    const maintenanceChecklists = model?.checklists.filter(
+      c => c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance,
     );
     maintenanceChecklists?.forEach(c => {
       c.actions.forEach(a => {
@@ -292,7 +298,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         completedCount = completedCount + a.history.length;
       });
     });
-    
+
     setCompletedMaintenanceActionsCount(completedCount);
     setPendingMaintenanceActionsCount(pendingCount);
   });
@@ -318,6 +324,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       event.removeListener('model-scan-code-size', onChangeScanCodeSize);
       event.removeListener('model-notes', onChangeNotes);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeType = (result: EnumPickerResult) => {
@@ -325,7 +332,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const onChangeCategory = (result: EnumPickerResult) => {
-    const c = modelCategories.find(c => {return c.name === result.value[0]});
+    const c = modelCategories.find(c => {
+      return c.name === result.value[0];
+    });
     setCategory(c);
   };
 
@@ -334,17 +343,23 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const onChangeDefaultPropeller = (result: EnumPickerResult) => {
-    const p = modelPropellers.find(p => {return p.name === result.value[0]});
+    const p = modelPropellers.find(p => {
+      return p.name === result.value[0];
+    });
     setDefaultPropeller(p);
   };
 
   const onChangeDefaultStyle = (result: EnumPickerResult) => {
-    const s = eventStyles.find(s => {return s.name === result.value[0]});
+    const s = eventStyles.find(s => {
+      return s.name === result.value[0];
+    });
     setDefaultStyle(s);
   };
 
   const onChangeDefaultFuel = (result: EnumPickerResult) => {
-    const f = modelFuels.find(f => {return f.name === result.value[0]});
+    const f = modelFuels.find(f => {
+      return f.name === result.value[0];
+    });
     setDefaultFuel(f);
   };
 
@@ -360,15 +375,15 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     setNotes(result.text);
   };
 
-  const scrollHandler = useAnimatedScrollHandler((event) => {
+  const scrollHandler = useAnimatedScrollHandler(event => {
     scrollY.value = event.contentOffset.y;
   });
 
-  const confirmDeleteModel =() => {
+  const confirmDeleteModel = () => {
     confirmAction(deleteModel, {
       label: `Delete ${model?.type}`,
       title: `This action cannot be undone.\nAre you sure you want to delete this ${model?.type.toLocaleLowerCase()}?`,
-      value: model
+      value: model,
     });
   };
 
@@ -385,16 +400,12 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         onScroll={scrollHandler}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
-        {!modelId &&
+        {!modelId && (
           <>
-            <ModelHeader
-              modelId={route.params.modelId}
-              modelType={type}
-              onChangeImage={setImage}
-            />
+            <ModelHeader modelId={route.params.modelId} modelType={type} onChangeImage={setImage} />
             <Divider />
           </>
-        }
+        )}
         <View style={theme.styles.view}>
           {!!model && <Divider />}
           <Divider />
@@ -417,36 +428,42 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               title={'Model Type'}
               value={type}
               position={['first']}
-              onPress={() => navigation.navigate('EnumPicker', {
-                title: 'Model Type',
-                headerBackTitle: 'Model',
-                values: Object.values(ModelType),
-                selected: type,
-                icons: modelTypeIcons,
-                eventName: 'model-type',
-              })}
+              onPress={() =>
+                navigation.navigate('EnumPicker', {
+                  title: 'Model Type',
+                  headerBackTitle: 'Model',
+                  values: Object.values(ModelType),
+                  selected: type,
+                  icons: modelTypeIcons,
+                  eventName: 'model-type',
+                })
+              }
             />
           </CollapsibleView>
           <ListItem
             title={'Category'}
             value={category?.name || 'None'}
             position={modelId ? ['first', 'last'] : ['last']}
-            onPress={() => navigation.navigate('EnumPicker', {
-              title: 'Model Category',
-              headerBackTitle: 'Model',
-              footer: 'You can manage categories through the Globals section in the Setup tab.',
-              values: modelCategories.map(c => { return c.name }),
-              selected: category?.name,
-              mode: 'one-or-none',
-              eventName: 'model-category',
-            })}
+            onPress={() =>
+              navigation.navigate('EnumPicker', {
+                title: 'Model Category',
+                headerBackTitle: 'Model',
+                footer: 'You can manage categories through the Globals section in the Setup tab.',
+                values: modelCategories.map(c => {
+                  return c.name;
+                }),
+                selected: category?.name,
+                mode: 'one-or-none',
+                eventName: 'model-category',
+              })
+            }
           />
           <CollapsibleView expanded={!modelId}>
             <Divider />
             <ListItemInput
               title={'Total Time'}
               value={totalTime}
-              label='h:mm:ss'
+              label="h:mm:ss"
               placeholder={'Unknown'}
               keyboardType={'number-pad'}
               numeric={true}
@@ -456,9 +473,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 customFormatter: maskToHMS,
               }}
               position={['first']}
-              onChangeText={value =>
-                setTotalTime(hmsMaskToSeconds(value) > 0 ? value : undefined)
-              }
+              onChangeText={value => setTotalTime(hmsMaskToSeconds(value) > 0 ? value : undefined)}
             />
             <ListItemInput
               title={`Total ${kind.namePlural}`}
@@ -467,29 +482,33 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               placeholder={'No'}
               keyboardType={'number-pad'}
               numeric={true}
-              numericProps={{precision: 0, prefix: ''}}
+              numericProps={{ precision: 0, prefix: '' }}
               onChangeText={setTotalEvents}
             />
           </CollapsibleView>
-          {!!modelId &&
+          {!!modelId && (
             <>
-              <Divider text={kind.namePlural.toUpperCase()}/>
+              <Divider text={kind.namePlural.toUpperCase()} />
               <ListItem
                 title={'Statistics'}
-                value={`${secondsToMSS(model?.statistics.totalTime, {format: 'm:ss'})} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
+                value={`${secondsToMSS(model?.statistics.totalTime, { format: 'm:ss' })} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
                 position={['first']}
-                onPress={() => navigation.navigate('ModelStatistics', {
-                  modelId,
-                })}
+                onPress={() =>
+                  navigation.navigate('ModelStatistics', {
+                    modelId,
+                  })
+                }
               />
             </>
-          }
-          {!modelId &&
+          )}
+          {!modelId && (
             <ListItemDate
               title={`Last ${kind.name}`}
-              value={lastEvent
-                ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
-                : 'Tap to Set...'}
+              value={
+                lastEvent
+                  ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
+                  : 'Tap to Set...'
+              }
               pickerValue={lastEvent}
               rightImage={false}
               expanded={expandedLastEvent}
@@ -497,14 +516,15 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               onPress={() => setExpandedLastEvent(!expandedLastEvent)}
               onDateChange={onLastEventChange}
             />
-          }
-          {!!modelId &&
+          )}
+          {!!modelId && (
             <>
               <ListItem
                 title={`Last ${kind.name}`}
-                value={lastEvent
-                  ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
-                  : 'Unknown'
+                value={
+                  lastEvent
+                    ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
+                    : 'Unknown'
                 }
                 rightImage={false}
               />
@@ -512,41 +532,49 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 title={`${kind.name} Log`}
                 value={`${model?.events.length || 0} ${kind.namePlural.toLowerCase()}`}
                 position={['last']}
-                onPress={() => navigation.navigate('Events', {
-                  filterType: FilterType.EventsModelFilter,
-                  modelId,
-                })}
+                onPress={() =>
+                  navigation.navigate('Events', {
+                    filterType: FilterType.EventsModelFilter,
+                    modelId,
+                  })
+                }
               />
             </>
-          }
-          {!!modelId &&
+          )}
+          {!!modelId && (
             <>
-              <Divider text={'MAINTENANCE'}/>
+              <Divider text={'MAINTENANCE'} />
               <ListItem
                 title={'Checklists'}
                 value={`${model?.checklists.length || 0}`}
                 position={['first']}
-                onPress={() => navigation.navigate('ModelChecklists', {
-                  modelId,
-                })}
+                onPress={() =>
+                  navigation.navigate('ModelChecklists', {
+                    modelId,
+                  })
+                }
               />
               <ListItem
                 title={'Perform Maintenance'}
                 value={`${pendingMaintenanceActionsCount} pending`}
-                onPress={() => navigation.navigate('Maintenance', {
-                  modelId,
-                })}
+                onPress={() =>
+                  navigation.navigate('Maintenance', {
+                    modelId,
+                  })
+                }
               />
               <ListItem
                 title={'Maintenance Log'}
                 value={`${completedMaintenanceActionsCount} entries`}
                 position={['last']}
-                onPress={() => navigation.navigate('MaintenanceHistory', {
-                  modelId,
-                })}
+                onPress={() =>
+                  navigation.navigate('MaintenanceHistory', {
+                    modelId,
+                  })
+                }
               />
             </>
-          }
+          )}
           <Divider />
           <ListItemSwitch
             title={'Battery Logging'}
@@ -558,13 +586,15 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               <ListItem
                 title={'Favorite Batteries'}
                 value={`${favoriteBatteries.length}`}
-                onPress={() => navigation.navigate('BatteryPicker', {
-                  title: 'Favorite Batteries',
-                  backTitle: 'Model',
-                  selected: favoriteBatteries,
-                  mode: 'many',
-                  eventName: 'model-favorite-batteries',
-                })}
+                onPress={() =>
+                  navigation.navigate('BatteryPicker', {
+                    title: 'Favorite Batteries',
+                    backTitle: 'Model',
+                    selected: favoriteBatteries,
+                    mode: 'many',
+                    eventName: 'model-favorite-batteries',
+                  })
+                }
               />
             }
           />
@@ -579,20 +609,20 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 <ListItemInput
                   title={'Fuel Capacity'}
                   value={fuelCapacity}
-                  label='oz'
+                  label="oz"
                   placeholder={'Value'}
                   numeric={true}
-                  numericProps={{precision: 2, prefix: ''}}
+                  numericProps={{ precision: 2, prefix: '' }}
                   keyboardType={'number-pad'}
                   onChangeText={setFuelCapacity}
                 />
                 <ListItemInput
                   title={'Total Fuel Consumed'}
                   value={totalFuel}
-                  label='gal'
+                  label="gal"
                   placeholder={'Amount'}
                   numeric={true}
-                  numericProps={{precision: 2, prefix: ''}}
+                  numericProps={{ precision: 2, prefix: '' }}
                   position={['last']}
                   keyboardType={'number-pad'}
                   onChangeText={setTotalFuel}
@@ -605,46 +635,58 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             title={'Default Style'}
             value={defaultStyle?.name || 'None'}
             position={!modelHasPropeller(type) && !logsFuel ? ['first', 'last'] : ['first']}
-            onPress={() => navigation.navigate('EnumPicker', {
-              title: 'Default Style',
-              headerBackTitle: 'Model',
-              footer: 'You can manage styles through the Globals section in the Setup tab.',
-              values: eventStyles.map(s => { return s.name }),
-              selected: defaultStyle?.name,
-              mode: 'one-or-none',
-              eventName: 'default-style',
-            })}
+            onPress={() =>
+              navigation.navigate('EnumPicker', {
+                title: 'Default Style',
+                headerBackTitle: 'Model',
+                footer: 'You can manage styles through the Globals section in the Setup tab.',
+                values: eventStyles.map(s => {
+                  return s.name;
+                }),
+                selected: defaultStyle?.name,
+                mode: 'one-or-none',
+                eventName: 'default-style',
+              })
+            }
           />
-          {modelHasPropeller(type) &&
+          {modelHasPropeller(type) && (
             <ListItem
               title={'Default Propeller'}
               value={defaultPropeller?.name || 'None'}
-              position={!logsFuel ? ['last']: []}
-              onPress={() => navigation.navigate('EnumPicker', {
-                title: 'Default Propeller',
-                headerBackTitle: 'Model',
-                footer: 'You can manage propellers through the Globals section in the Setup tab.',
-                values: modelPropellers.map(p => { return p.name}),
-                selected: defaultPropeller?.name,
-                mode: 'one-or-none',
-                eventName: 'default-propeller',
-              })}
+              position={!logsFuel ? ['last'] : []}
+              onPress={() =>
+                navigation.navigate('EnumPicker', {
+                  title: 'Default Propeller',
+                  headerBackTitle: 'Model',
+                  footer: 'You can manage propellers through the Globals section in the Setup tab.',
+                  values: modelPropellers.map(p => {
+                    return p.name;
+                  }),
+                  selected: defaultPropeller?.name,
+                  mode: 'one-or-none',
+                  eventName: 'default-propeller',
+                })
+              }
             />
-          }
+          )}
           <CollapsibleView expanded={logsFuel}>
             <ListItem
               title={'Default Fuel'}
               value={defaultFuel?.name || 'None'}
               position={['last']}
-              onPress={() => navigation.navigate('EnumPicker', {
-                title: 'Default Fuel',
-                headerBackTitle: 'Model',
-                footer: 'You can manage fuel through the Globals section in the Setup tab.',
-                values: modelFuels.map(f => { return f.name}),
-                selected: defaultFuel?.name,
-                mode: 'one-or-none',
-                eventName: 'default-fuel',
-              })}
+              onPress={() =>
+                navigation.navigate('EnumPicker', {
+                  title: 'Default Fuel',
+                  headerBackTitle: 'Model',
+                  footer: 'You can manage fuel through the Globals section in the Setup tab.',
+                  values: modelFuels.map(f => {
+                    return f.name;
+                  }),
+                  selected: defaultFuel?.name,
+                  mode: 'one-or-none',
+                  eventName: 'default-fuel',
+                })
+              }
             />
           </CollapsibleView>
           <Divider />
@@ -652,32 +694,34 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             title={'QR Code Size'}
             value={scanCodeSize || 'None'}
             position={['first', 'last']}
-            onPress={() => navigation.navigate('EnumPicker', {
-              title: 'QR Code Size',
-              headerBackTitle: 'Model',
-              values: Object.values(ScanCodeSize),
-              selected: scanCodeSize,
-              eventName: 'model-scan-code-size',
-            })}
+            onPress={() =>
+              navigation.navigate('EnumPicker', {
+                title: 'QR Code Size',
+                headerBackTitle: 'Model',
+                values: Object.values(ScanCodeSize),
+                selected: scanCodeSize,
+                eventName: 'model-scan-code-size',
+              })
+            }
           />
           <Divider />
           <ListItemInput
             title={'Purchase Price'}
             value={purchasePrice}
             numeric={true}
-            numericProps={{maxValue: 99999}}
+            numericProps={{ maxValue: 99999 }}
             keyboardType={'number-pad'}
             placeholder={'Unknown'}
             position={['first']}
             onChangeText={setPurchasePrice}
-          /> 
-          {!!modelId &&
+          />
+          {!!modelId && (
             <ListItemSwitch
               title={`${type} is Retired`}
               value={retired}
               onValueChange={setRetired}
             />
-          }
+          )}
           <ListItemSwitch
             title={`${type} is Damaged`}
             position={['last']}
@@ -688,11 +732,13 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           <ListItem
             title={notes || 'Notes'}
             position={['first', 'last']}
-            onPress={() => navigation.navigate('NotesEditor', {
-              title: 'Model Notes',
-              text: notes,
-              eventName: 'model-notes',
-            })}
+            onPress={() =>
+              navigation.navigate('NotesEditor', {
+                title: 'Model Notes',
+                text: notes,
+                eventName: 'model-notes',
+              })
+            }
           />
           <Divider text={'DANGER ZONE'} />
           <ListItem

@@ -1,8 +1,7 @@
 import { appConfig } from 'config';
 import { ContentItem } from 'types/content';
 
-const { businessName, businessNameShort, complianceEmail, privacyUrl } =
-  appConfig;
+const { businessName, businessNameShort, complianceEmail, privacyUrl } = appConfig;
 
 export default <ContentItem[]>[
   {

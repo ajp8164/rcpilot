@@ -35,16 +35,20 @@ export const EmptyView = ({
 
   return (
     <View style={s.container}>
-      <View style={[s.items, {bottom: bottom - height}]} onLayout={onLayout}>
-        {isLoading ?
-          <ActivityIndicator size={'large'} color={theme.colors.midGray} style={{height: 45}} />
-        :
+      <View style={[s.items, { bottom: bottom - height }]} onLayout={onLayout}>
+        {isLoading ? (
+          <ActivityIndicator
+            size={'large'}
+            color={theme.colors.midGray}
+            style={s.activityIndicator}
+          />
+        ) : (
           <Icon
             name={error ? 'triangle-exclamation' : info ? 'circle-info' : 'magnifying-glass'}
             size={45}
             color={theme.colors.midGray}
           />
-        }
+        )}
         <Text style={s.message}>{message}</Text>
         <Text style={s.details}>{details}</Text>
       </View>
@@ -57,6 +61,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: '100%',
     alignItems: 'center',
     marginHorizontal: 15,
+  },
+  activityIndicator: {
+    height: 45,
   },
   items: {
     position: 'absolute',

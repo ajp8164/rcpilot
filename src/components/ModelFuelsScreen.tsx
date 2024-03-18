@@ -27,18 +27,22 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon}/>}
-            onPress={() => navigation.navigate('NewModelFuelNavigator', {
-              screen: 'NewModelFuel',
-            })}
+            icon={<Icon name={'plus'} style={s.headerIcon} />}
+            onPress={() =>
+              navigation.navigate('NewModelFuelNavigator', {
+                screen: 'NewModelFuel',
+              })
+            }
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteFuel = (fuel: ModelFuel) => {
@@ -50,33 +54,43 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
   const renderModelFuel: ListRenderItem<ModelFuel> = ({ item: fuel, index }) => {
     return (
       <ListItem
-      ref={ref => ref && listEditor.add(ref, 'model-fuels', fuel._id.toString())}
-      key={fuel._id.toString()}
-      title={fuel.name}
-      position={listItemPosition(index, allModelFuels.length)}
-        onPress={() => navigation.navigate('ModelFuelEditor', {
-          modelFuelId: fuel._id.toString(),
-        })}
+        ref={ref => ref && listEditor.add(ref, 'model-fuels', fuel._id.toString())}
+        key={fuel._id.toString()}
+        title={fuel.name}
+        position={listItemPosition(index, allModelFuels.length)}
+        onPress={() =>
+          navigation.navigate('ModelFuelEditor', {
+            modelFuelId: fuel._id.toString(),
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteFuel, {
-              label: 'Delete Saved Filter',
-              title: 'This action cannot be undone.\nAre you sure you want to delete this fuel?',
-              value: fuel,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteFuel, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this fuel?',
+                  value: fuel,
+                }),
+            },
+          ],
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', fuel._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   if (!allModelFuels.length) {
     return (
-      <EmptyView info message={'No Model Fuels'} details={"Tap the + button to add your first model fuel."} />
-    );    
+      <EmptyView
+        info
+        message={'No Model Fuels'}
+        details={'Tap the + button to add your first model fuel.'}
+      />
+    );
   }
 
   return (

@@ -1,7 +1,16 @@
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { Location, LocationPosition, SearchCriteria, SearchScope } from 'types/location';
-import MapView, { Callout, CalloutSubview, Details, MapMarker, MapType, Marker, MarkerDragStartEndEvent, Region } from 'react-native-maps';
+import MapView, {
+  Callout,
+  CalloutSubview,
+  Details,
+  MapMarker,
+  MapType,
+  Marker,
+  MarkerDragStartEndEvent,
+  Region,
+} from 'react-native-maps';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Text, View } from 'react-native';
 import { createNewLocation, useLocation } from 'lib/location';
@@ -20,13 +29,13 @@ enum RecenterButtonState {
   Initial = 'location-arrow',
   CurrentLocation = 'location-arrow-box',
   CurrentLocationNorthUp = 'location-arrow-track-up',
-};
+}
 
 // These are icon names.
 enum MapTypeButtonState {
   Map = 'satellite',
   Satellite = 'map',
-};
+}
 
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
@@ -39,18 +48,16 @@ const LocationsScreen = ({ navigation }: Props) => {
   const currentLocation = useLocation(/*locationId || location?.id*/);
   console.log('>>>>>>>', currentLocation);
 
-  const mapViewRef = useRef<MapView>(null);  
+  const mapViewRef = useRef<MapView>(null);
   const markersRef = useRef<MapMarker[]>([]);
-  const mapLocation = useRef<LocationPosition>({latitude: 0, longitude: 0});
-  const [mapPresentation, setMapPresentation] = useState<{mapType: MapType, icon: string}>({
+  const mapLocation = useRef<LocationPosition>({ latitude: 0, longitude: 0 });
+  const [mapPresentation, setMapPresentation] = useState<{ mapType: MapType; icon: string }>({
     mapType: 'standard',
     icon: MapTypeButtonState.Map,
   });
   const [locations, setLocations] = useState<Location[]>([]);
   const [searchFocused, setSearchFocused] = useState(false);
-  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(
-    initialSearchCriteria,
-  );
+  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(initialSearchCriteria);
 
   const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
 
@@ -66,7 +73,7 @@ const LocationsScreen = ({ navigation }: Props) => {
   useEffect(() => {
     setTimeout(() => {
       // Show the callout for only the last marker added.
-      markersRef.current.forEach(marker =>  {
+      markersRef.current.forEach(marker => {
         marker.hideCallout();
       });
       markersRef.current[markersRef.current.length - 1]?.showCallout();
@@ -93,7 +100,7 @@ const LocationsScreen = ({ navigation }: Props) => {
   const recenterMap = () => {
     if (currentLocation) {
       // Set button state and heading.
-      let heading = undefined;
+      let heading;
 
       switch (recenterButtonState) {
         case RecenterButtonState.Initial:
@@ -128,7 +135,7 @@ const LocationsScreen = ({ navigation }: Props) => {
       case 'satellite':
         setMapPresentation({ mapType: 'standard', icon: MapTypeButtonState.Map });
         break;
-      }
+    }
   };
 
   const addLocation = () => {
@@ -144,7 +151,7 @@ const LocationsScreen = ({ navigation }: Props) => {
   const onRegionChangeComplete = (region: Region, _details: Details) => {
     mapLocation.current = {
       latitude: region.latitude,
-      longitude:region.longitude,
+      longitude: region.longitude,
     };
   };
 
@@ -156,53 +163,47 @@ const LocationsScreen = ({ navigation }: Props) => {
     return locations.map((location, index) => {
       return (
         <Marker
-          ref={el => el ? markersRef.current[index] = el : null} 
+          ref={el => (el ? (markersRef.current[index] = el) : null)}
           key={index}
           coordinate={location.position}
           title={location.name}
           description={location.description}
-          calloutOffset={{x: 0, y: -5}}
-          calloutAnchor={{x: 0, y: 0}}
+          calloutOffset={{ x: 0, y: -5 }}
+          calloutAnchor={{ x: 0, y: 0 }}
           draggable
           onDragEnd={(event: MarkerDragStartEndEvent) => onMarkerDragEnd(event, location)}>
           <Animated.View entering={SlideInUp.duration(400)}>
-            <Icon
-              name={'map-pin'}
-              color={'red'}
-              size={30}
-              style={s.pin}
-            />
+            <Icon name={'map-pin'} color={'red'} size={30} style={s.pin} />
           </Animated.View>
-          <Callout
-            alphaHitTest
-            tooltip
-            style={s.callout}>
+          <Callout alphaHitTest tooltip style={s.callout}>
             <MapMarkerCallout>
               <CalloutSubview
-                onPress={() => navigation.navigate('LocationDetails', {
-                  locationId: '1',
-                })}
+                onPress={() =>
+                  navigation.navigate('LocationDetails', {
+                    locationId: '1',
+                  })
+                }
                 style={s.calloutSubview}>
                 <View style={s.calloutTextContainer}>
-                  <Text numberOfLines={1} style={s.calloutText1}>{location.name}</Text>
-                  <Text numberOfLines={1} style={s.calloutText2}>{location.description}</Text>
+                  <Text numberOfLines={1} style={s.calloutText1}>
+                    {location.name}
+                  </Text>
+                  <Text numberOfLines={1} style={s.calloutText2}>
+                    {location.description}
+                  </Text>
                 </View>
-                <Icon
-                  name={'chevron-right'}
-                  color={theme.colors.midGray}
-                  size={16}
-                />
+                <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
               </CalloutSubview>
             </MapMarkerCallout>
           </Callout>
         </Marker>
-      );      
+      );
     });
   };
 
   return (
     <View>
-      {currentLocation && !currentLocation.loading &&
+      {currentLocation && !currentLocation.loading && (
         <MapView
           ref={mapViewRef}
           style={s.map}
@@ -217,7 +218,7 @@ const LocationsScreen = ({ navigation }: Props) => {
           onRegionChangeComplete={onRegionChangeComplete}>
           {renderEventMarkers()}
         </MapView>
-      }
+      )}
       <ActionBar
         actions={[
           {
@@ -228,17 +229,15 @@ const LocationsScreen = ({ navigation }: Props) => {
                 color={theme.colors.clearButtonText}
               />
             ),
-            onPress: recenterMap
-          }, {
+            onPress: recenterMap,
+          },
+          {
             ActionComponent: (
-              <Icon
-                name={'location-dot'}
-                size={28}
-                color={theme.colors.clearButtonText}
-              />
+              <Icon name={'location-dot'} size={28} color={theme.colors.clearButtonText} />
             ),
-            onPress: addLocation
-          }, {
+            onPress: addLocation,
+          },
+          {
             ActionComponent: (
               <Icon
                 solid
@@ -247,10 +246,11 @@ const LocationsScreen = ({ navigation }: Props) => {
                 color={theme.colors.clearButtonText}
               />
             ),
-            onPress: toggleMapPresenation
-          }, {
+            onPress: toggleMapPresenation,
+          },
+          {
             label: 'Done',
-            onPress: navigation.goBack
+            onPress: navigation.goBack,
           },
         ]}
       />
@@ -265,7 +265,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   pin: {
     height: 30,
-    top: -15
+    top: -15,
   },
   callout: {
     width: 180,
@@ -275,7 +275,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignSelf: 'center',
     alignItems: 'center',
     paddingVertical: 3,
-    paddingHorizontal: 5,    
+    paddingHorizontal: 5,
   },
   calloutTextContainer: {
     paddingRight: 10,
@@ -286,7 +286,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   calloutText2: {
     ...theme.styles.textTiny,
-  }
+  },
 }));
 
 export default LocationsScreen;

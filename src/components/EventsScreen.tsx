@@ -1,5 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  SectionListHeader,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
@@ -14,6 +19,7 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
 import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
+import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
@@ -36,12 +42,7 @@ export type Props = CompositeScreenProps<
 >;
 
 const EventsScreen = ({ navigation, route }: Props) => {
-  const {
-    filterType,
-    batteryId,
-    modelId,
-    pilotId,
-  } = route.params;
+  const { filterType, batteryId, modelId, pilotId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -50,7 +51,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const filterId = useSelector(selectFilters(FilterType.EventsModelFilter));
-  let events = useEventsFilter({
+  const events = useEventsFilter({
     filterType: filterType || FilterType.BypassFilter,
     batteryId,
     modelId,
@@ -62,10 +63,11 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <>
-            {filterType !== FilterType.BypassFilter &&
+            {filterType !== FilterType.BypassFilter && (
               <Button
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
@@ -73,21 +75,24 @@ const EventsScreen = ({ navigation, route }: Props) => {
                 icon={
                   <CustomIcon
                     name={filterId ? 'filter-check' : 'filter'}
-                    style={[s.headerIcon,
-                      listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
+                    style={[
+                      s.headerIcon,
+                      listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {},
                     ]}
                   />
                 }
-                onPress={() => navigation.navigate('EventFiltersNavigator', {
-                  screen: 'EventFilters',
-                  params: {
-                    filterType: FilterType.EventsModelFilter,
-                    modelType: model!.type,
-                    useGeneralFilter: true,
-                  }
-                })}
+                onPress={() =>
+                  navigation.navigate('EventFiltersNavigator', {
+                    screen: 'EventFilters',
+                    params: {
+                      filterType: FilterType.EventsModelFilter,
+                      modelType: model?.type,
+                      useGeneralFilter: true,
+                    },
+                  })
+                }
               />
-            }
+            )}
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
@@ -100,7 +105,8 @@ const EventsScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ filterId, listEditor.enabled ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterId, listEditor.enabled]);
 
   const deleteEvent = (event: Event) => {
     realm.write(() => {
@@ -110,7 +116,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   const eventTitle = (event: Event) => {
     const number = `#${event.number}`;
-    const duration = `${secondsToMSS(event.duration, {format: 'm:ss'})}`;
+    const duration = `${secondsToMSS(event.duration, { format: 'm:ss' })}`;
     const time = DateTime.fromISO(event.createdOn).toLocaleString(DateTime.TIME_SIMPLE);
     const location = `${event.location?.name || 'Unknown location'}`;
     return `${number}: ${duration} at ${time}, ${location}`;
@@ -139,7 +145,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
   };
 
   const groupEvents = (events: Event[]): SectionListData<Event, Section>[] => {
-    return groupItems<Event, Section>(events, (event) => {
+    return groupItems<Event, Section>(events, event => {
       return DateTime.fromISO(event.createdOn).toFormat('MMMM dd, yyyy').toUpperCase();
     }).sort();
   };
@@ -165,7 +171,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
         onPress={() => {
           navigation.navigate('EventEditor', {
             eventId: event._id.toString(),
-            modelType: model!.type,
+            modelType: model?.type || ModelType.Airplane,
           });
         }}
         editable={{
@@ -178,32 +184,30 @@ const EventsScreen = ({ navigation, route }: Props) => {
         }}
         showEditor={listEditor.show}
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteEvent, {
-                label: `Delete ${kind.name}`,
-                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                value: event,
-              })
-            }
-          ]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteEvent, {
+                  label: `Delete ${kind.name}`,
+                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                  value: event,
+                }),
+            },
+          ],
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('events', event._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
-     />
-    )
+      />
+    );
   };
 
   if (filterId && !events.length) {
-    return (
-      <EmptyView message={`No ${eventKind(model?.type).namePlural} Match Your Filter`} />
-    );
+    return <EmptyView message={`No ${eventKind(model?.type).namePlural} Match Your Filter`} />;
   }
 
   if (!events.length) {
-    return (
-      <EmptyView info message={`No ${kind.namePlural}`} />
-    );
+    return <EmptyView info message={`No ${kind.namePlural}`} />;
   }
 
   return (
@@ -215,9 +219,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
       sections={groupEvents([...events].reverse())}
       keyExtractor={item => item._id.toString()}
       renderItem={renderEvent}
-      renderSectionHeader={({section: {title}}) => (
-        <SectionListHeader title={title} />
-      )} 
+      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
     />
   );
 };
@@ -234,6 +236,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,
-  },}));
+  },
+}));
 
 export default EventsScreen;

@@ -1,13 +1,18 @@
-import { useActionSheet } from "@expo/react-native-action-sheet";
+import { useActionSheet } from '@expo/react-native-action-sheet';
 
 export const useConfirmAction = () => {
   const { showActionSheetWithOptions } = useActionSheet();
 
-  return (onConfirm: (value: any) => void, opts: {
-    label: string;
-    title?: string;
-    value?: any;
-  }) => {
+  return (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onConfirm: (value: any) => void,
+    opts: {
+      label: string;
+      title?: string;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value?: any;
+    },
+  ) => {
     showActionSheetWithOptions(
       {
         options: [opts.label, 'Cancel'],

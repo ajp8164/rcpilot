@@ -11,7 +11,7 @@ export class BatteryCycle extends Object<BatteryCycle> {
   discharge?: BatteryDischarge;
   charge?: BatteryCharge;
   notes?: string;
-  
+
   static schema: ObjectSchema = {
     name: 'BatteryCycle',
     properties: {
@@ -25,11 +25,11 @@ export class BatteryCycle extends Object<BatteryCycle> {
     },
     primaryKey: '_id',
   };
-};
+}
 
 export class BatteryCharge extends Object<BatteryCharge> {
   date!: ISODateString;
-  amount?: number; 
+  amount?: number;
   packVoltage?: number;
   packResistance?: number;
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
@@ -48,7 +48,7 @@ export class BatteryCharge extends Object<BatteryCharge> {
       cellResistance: 'float[]',
     },
   };
-};
+}
 
 // Plain JS object types.
 export type JBatteryDischargeValues = Omit<JBatteryDischarge, 'date' | 'duration'>;
@@ -83,4 +83,4 @@ export class BatteryDischarge extends Object<BatteryDischarge> {
       cellResistance: 'float[]',
     },
   };
-};
+}

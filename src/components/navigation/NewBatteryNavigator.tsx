@@ -13,16 +13,16 @@ const NewBatteryNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewBatteryStack.Navigator
-        initialRouteName='NewBattery'
+        initialRouteName="NewBattery"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewBatteryStack.Screen
-          name='NewBattery'
+          name="NewBattery"
           // @ts-expect-error
           component={BatteryEditorScreen}
           options={{
@@ -30,14 +30,14 @@ const NewBatteryNavigator = () => {
           }}
         />
         <NewBatteryStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Battery Notes',
           }}
         />
         <NewBatteryStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',

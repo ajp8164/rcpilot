@@ -1,5 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
-import { FlatList, LayoutChangeEvent, ListRenderItem, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  FlatList,
+  LayoutChangeEvent,
+  ListRenderItem,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, { ReactNode } from 'react';
 
 import { makeStyles } from '@rneui/themed';
@@ -11,17 +19,14 @@ export type ActionBarItem = {
   label?: string;
   visible?: boolean;
   onPress?: () => void;
-}
+};
 
 interface ActionBarInterface {
   actions: ActionBarItem[];
   onLayout?: (event: LayoutChangeEvent) => void;
 }
 
-const ActionBar = ({
-  actions,
-  onLayout,
-}: ActionBarInterface) => {
+const ActionBar = ({ actions, onLayout }: ActionBarInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -31,21 +36,17 @@ const ActionBar = ({
         key={index}
         style={[
           s.actionContainer,
-          index === 0 ? {paddingLeft: 10} : {},
-          index === actions.length - 1 ? {paddingRight: 10} : {},
+          index === 0 ? s.actionContainerStart : {},
+          index === actions.length - 1 ? s.actionContainerEnd : {},
         ]}>
-        {(action.visible === undefined ? true : action.visible) &&
+        {(action.visible === undefined ? true : action.visible) && (
           <View style={s.actionButton}>
             <Pressable onPress={action.onPress}>
               {action.ActionComponent}
-              {action.label &&
-                <Text style={s.label}>
-                  {action.label}
-                </Text>
-              }
+              {action.label && <Text style={s.label}>{action.label}</Text>}
             </Pressable>
           </View>
-        }
+        )}
       </View>
     );
   };
@@ -87,6 +88,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'center',
     marginTop: -theme.insets.bottom,
   },
+  actionContainerStart: {
+    paddingLeft: 10,
+  },
+  actionContainerEnd: {
+    paddingRight: 10,
+  },
   actionButton: {
     top: -3,
     minWidth: buttonSize,
@@ -97,7 +104,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   label: {
     ...theme.styles.textNormal,
     color: theme.colors.clearButtonText,
-  }
+  },
 }));
 
 export default ActionBar;

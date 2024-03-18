@@ -1,9 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import React, { useContext, useEffect } from 'react';
-import {
-  SetupNavigatorParamList,
-  TabNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList, TabNavigatorParamList } from 'types/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { AuthContext } from 'lib/auth';
@@ -61,6 +58,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
     return () => {
       event.removeListener('database-access-with', onChangeDatabaseAccessWith);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeDatabaseAccessWith = (result: EnumPickerResult) => {
@@ -80,62 +78,56 @@ const SetupScreen = ({ navigation, route }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'PILOTS'}/>
-      {selectedPilot && !selectedPilot.unknownPilot &&
+      <Divider text={'PILOTS'} />
+      {selectedPilot && !selectedPilot.unknownPilot && (
         <ListItem
           title={selectedPilot.name}
           subtitle={pilotSummary(selectedPilot)}
           position={['first']}
-          onPress={() => navigation.navigate('Pilot', {
-            pilotId: selectedPilot._id.toString(),
-          })}
+          onPress={() =>
+            navigation.navigate('Pilot', {
+              pilotId: selectedPilot._id.toString(),
+            })
+          }
           swipeable={{
-            rightItems: [{
-              icon: 'eye-slash',
-              iconType: 'font-awesome',
-              text: 'Clear',
-              color: theme.colors.brandPrimary,
-              x: 64,
-              onPress: clearPilot,
-            }]
+            rightItems: [
+              {
+                icon: 'eye-slash',
+                iconType: 'font-awesome',
+                text: 'Clear',
+                color: theme.colors.brandPrimary,
+                x: 64,
+                onPress: clearPilot,
+              },
+            ],
           }}
         />
-      }
+      )}
       <ListItem
         title={'Select or Create a Pilot...'}
         position={selectedPilot && !selectedPilot.unknownPilot ? ['last'] : ['first', 'last']}
         onPress={() => navigation.navigate('Pilots')}
       />
-      <Divider text={'GLOBALS'}/>
+      <Divider text={'GLOBALS'} />
       <ListItem
         title={'Event Locations'}
         position={['first']}
-        onPress={() => navigation.navigate('LocationNavigator', {
-          screen: 'Locations',
-        })}
+        onPress={() =>
+          navigation.navigate('LocationNavigator', {
+            screen: 'Locations',
+          })
+        }
       />
-      <ListItem
-        title={'Event Styles'}
-        onPress={() => navigation.navigate('EventStyles')}
-      />
-      <ListItem
-        title={'Model Categories'}
-        onPress={() => navigation.navigate('ModelCategories')}
-      />
-      <ListItem
-        title={'Model Fuels'}
-        onPress={() => navigation.navigate('ModelFuels')}
-      />
-      <ListItem
-        title={'Model Propellers'}
-        onPress={() => navigation.navigate('ModelPropellers')}
-      />
+      <ListItem title={'Event Styles'} onPress={() => navigation.navigate('EventStyles')} />
+      <ListItem title={'Model Categories'} onPress={() => navigation.navigate('ModelCategories')} />
+      <ListItem title={'Model Fuels'} onPress={() => navigation.navigate('ModelFuels')} />
+      <ListItem title={'Model Propellers'} onPress={() => navigation.navigate('ModelPropellers')} />
       <ListItem
         title={'List Templates'}
         position={['last']}
         onPress={() => navigation.navigate('ChecklistTemplates')}
       />
-      <Divider text={'DATABASE'}/>
+      <Divider text={'DATABASE'} />
       <ListItem
         title={'Information'}
         position={['first']}
@@ -144,31 +136,31 @@ const SetupScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Access With'}
         value={databaseAccessWith}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Access Database With',
-          footer: 'Specifies the method to use to access the database for backups, exports, imports, etc.',
-          values: Object.values(DatabaseAccessWith),
-          selected: databaseAccessWith,
-          eventName: 'database-access-with',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'Access Database With',
+            footer:
+              'Specifies the method to use to access the database for backups, exports, imports, etc.',
+            values: Object.values(DatabaseAccessWith),
+            selected: databaseAccessWith,
+            eventName: 'database-access-with',
+          })
+        }
       />
-      {databaseAccessWith === DatabaseAccessWith.Dropbox ?
-        <ListItem
-          title={'Dropbox Access'}
-          onPress={() => navigation.navigate('DropboxAccess')}
-        />
-      :
+      {databaseAccessWith === DatabaseAccessWith.Dropbox ? (
+        <ListItem title={'Dropbox Access'} onPress={() => navigation.navigate('DropboxAccess')} />
+      ) : (
         <ListItem
           title={'Web Server Access'}
           onPress={() => navigation.navigate('WebServerAccess')}
         />
-      }
+      )}
       <ListItem
         title={'Reporting'}
         position={['last']}
         onPress={() => navigation.navigate('DatabaseReporting')}
-        />
-      <Divider text={'PREFERENCES'}/>
+      />
+      <Divider text={'PREFERENCES'} />
       <ListItem
         title={'Basics'}
         subtitle={'Units, screen dimming, filter behavior'}
@@ -191,13 +183,11 @@ const SetupScreen = ({ navigation, route }: Props) => {
         position={['last']}
         onPress={() => navigation.navigate('PreferencesAudio')}
       />
-      <Divider text={'ACCOUNT'}/>
+      <Divider text={'ACCOUNT'} />
       {userProfile ? (
         <ListItem
           title={userProfile.name || userProfile.email || 'My Account'}
-          leftImage={
-            <ChatAvatar userProfile={userProfile} avatarStyle={s.avatar} />
-          }
+          leftImage={<ChatAvatar userProfile={userProfile} avatarStyle={s.avatar} />}
           position={['first', 'last']}
           onPress={() => navigation.navigate('UserAccount')}
         />
@@ -210,7 +200,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
           onPress={() => auth.presentSignInModal()}
         />
       )}
-      <Divider text={'MISCELLANEOUS'}/>
+      <Divider text={'MISCELLANEOUS'} />
       <ListItem
         title={'App Settings'}
         position={['first']}
@@ -225,7 +215,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
         leftImageType={'material-community'}
         onPress={() => navigation.navigate('About')}
       />
-      <Divider/>
+      <Divider />
     </ScrollView>
   );
 };

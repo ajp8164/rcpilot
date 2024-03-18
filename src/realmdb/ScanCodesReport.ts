@@ -24,4 +24,4 @@ export class ScanCodesReport extends Object<ScanCodesReport> {
     },
     primaryKey: '_id',
   };
-};
+}

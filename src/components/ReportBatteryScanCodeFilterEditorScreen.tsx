@@ -1,9 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import {
-  ListItemFilterEnum,
-  ListItemFilterNumber,
-} from 'components/molecules/filters';
+import { ListItemFilterEnum, ListItemFilterNumber } from 'components/molecules/filters';
 import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -19,11 +16,14 @@ import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
 
-export type Props = NativeStackScreenProps<ReportBatteryScanCodeFiltersNavigatorParamList, 'ReportBatteryScanCodeFilterEditor'>;
+export type Props = NativeStackScreenProps<
+  ReportBatteryScanCodeFiltersNavigatorParamList,
+  'ReportBatteryScanCodeFilterEditor'
+>;
 
 const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -39,18 +39,17 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
     if (requireFilterName) {
       filterEditor.setCreateSavedFilter(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!filterEditor.filter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
+    return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
+      <Divider text={'FILTER NAME'} />
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
@@ -67,14 +66,14 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
             />
           }
         />
-      :
+      ) : (
         <ListItemInput
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
           onChangeText={filterEditor.setName}
         />
-      }
+      )}
       <Divider />
       <ListItem
         title={'Reset Filter'}
@@ -85,7 +84,7 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={`This filter shows all the batteries that match all of these criteria.`}/>
+      <Divider text={`This filter shows all the batteries that match all of these criteria.`} />
       <ListItemFilterEnum
         title={'Chemistry'}
         value={filterEditor.values.chemistry.value}
@@ -102,13 +101,13 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
         label={'mAh'}
         value={filterEditor.values.capacity.value}
         relation={filterEditor.values.capacity.relation}
-        numericProps={{prefix: '', separator: ':'}}
+        numericProps={{ prefix: '', separator: ':' }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('capacity', filterState);
         }}
       />
-      <Divider style={{height: theme.insets.bottom}} />
+      <Divider style={{ height: theme.insets.bottom }} />
     </ScrollView>
   );
 };
@@ -121,7 +120,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   resetDisabled: {
     opacity: 0.3,
-  }
+  },
 }));
 
 export default ReportBatteryScanCodeFilterEditorScreen;

@@ -17,11 +17,14 @@ import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ReportEventsMaintenanceEditor'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'ReportEventsMaintenanceEditor'
+>;
 
 const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
-  
+
   const theme = useTheme();
   const setScreenEditHeader = useScreenEditHeader();
 
@@ -35,57 +38,67 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
   const [includesSummary, setIncludesSummary] = useState(report ? report.includesSummary : true);
   const [includesEvents, setIncludesEvents] = useState(report ? report.includesEvents : true);
-  const [includesMaintenance, setIncludesMaintenance] = useState(report ? report.includesMaintenance : true);
+  const [includesMaintenance, setIncludesMaintenance] = useState(
+    report ? report.includesMaintenance : true,
+  );
   const [eventsFilter, setEventsFilter] = useState(report?.eventsFilter);
   const [maintenanceFilter, setMaintenanceFilter] = useState(report?.maintenanceFilter);
 
   useEffect(() => {
-    const filter = 
-      realm.objectForPrimaryKey('Filter', new BSON.ObjectId(reportEventsFilterId)) as Filter;
+    const filter = realm.objectForPrimaryKey(
+      'Filter',
+      new BSON.ObjectId(reportEventsFilterId),
+    ) as Filter;
     setEventsFilter(filter);
 
     // Update the exiting report immediately.
-    if (report)  {
+    if (report) {
       realm.write(() => {
         report.eventsFilter = filter;
       });
     }
-  }, [ reportEventsFilterId ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportEventsFilterId]);
 
   useEffect(() => {
-    const filter = 
-      realm.objectForPrimaryKey('Filter', new BSON.ObjectId(reportMaintenanceFilterId)) as Filter;
+    const filter = realm.objectForPrimaryKey(
+      'Filter',
+      new BSON.ObjectId(reportMaintenanceFilterId),
+    ) as Filter;
     setMaintenanceFilter(filter);
 
     // Update the exiting report immediately.
-    if (report)  {
+    if (report) {
       realm.write(() => {
         report.maintenanceFilter = filter;
       });
     }
-  }, [ reportMaintenanceFilterId ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reportMaintenanceFilterId]);
 
   useEffect(() => {
-    const canSave = !!name && (
-      !eqString(report?.name, name) ||
-      !eqBoolean(report?.includesSummary, includesSummary) ||
-      !eqBoolean(report?.includesEvents, includesEvents) ||
-      !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
-      !eqString(report?.eventsFilter?._id.toString(), eventsFilter?._id.toString()) ||
-      !eqString(report?.maintenanceFilter?._id.toString(), maintenanceFilter?._id.toString())
-    );
+    const canSave =
+      !!name &&
+      (!eqString(report?.name, name) ||
+        !eqBoolean(report?.includesSummary, includesSummary) ||
+        !eqBoolean(report?.includesEvents, includesEvents) ||
+        !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
+        !eqString(report?.eventsFilter?._id.toString(), eventsFilter?._id.toString()) ||
+        !eqString(report?.maintenanceFilter?._id.toString(), maintenanceFilter?._id.toString()));
 
     const save = () => {
       if (reportId) {
         // Update existing report.
-        realm.write(() => {
-          report!.name = name!;
-          report!.includesSummary = includesSummary;
-          report!.includesEvents = includesEvents;
-          report!.includesMaintenance = includesMaintenance;
-          report!.eventsFilter = eventsFilter;
-          report!.maintenanceFilter = maintenanceFilter;
-        });
+        if (report) {
+          realm.write(() => {
+            report.name = name || 'no-name';
+            report.includesSummary = includesSummary;
+            report.includesEvents = includesEvents;
+            report.includesMaintenance = includesMaintenance;
+            report.eventsFilter = eventsFilter;
+            report.maintenanceFilter = maintenanceFilter;
+          });
+        }
       } else {
         // Insert new report.
         realm.write(() => {
@@ -101,35 +114,26 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         });
       }
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader(
-      {enabled: canSave, action: onDone},
-      {visible: !reportId},
-    );
-  }, [
-    name,
-    includesSummary,
-    includesEvents,
-    includesMaintenance,
-    eventsFilter,
-    maintenanceFilter,
-  ]);
+    setScreenEditHeader({ enabled: canSave, action: onDone }, { visible: !reportId });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, includesSummary, includesEvents, includesMaintenance, eventsFilter, maintenanceFilter]);
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'REPORT NAME'}/>
+      <Divider text={'REPORT NAME'} />
       <ListItemInput
         value={name}
         placeholder={'Report Name'}
         position={['first', 'last']}
         onChangeText={setName}
-      /> 
-      <Divider text={'CONTENTS'}/>
+      />
+      <Divider text={'CONTENTS'} />
       <ListItemSwitch
         title={'Includes Summary'}
         value={includesSummary}
@@ -145,15 +149,19 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         expanded={includesEvents}
         ExpandableComponent={
           <ListItem
-            title={eventsFilter ? eventsFilter.name: 'No Filter Selected'}
-            subtitle={eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'}
+            title={eventsFilter ? eventsFilter.name : 'No Filter Selected'}
+            subtitle={
+              eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'
+            }
             position={['last']}
-            onPress={() => navigation.navigate('ReportEventFiltersNavigator', {
-              screen: 'ReportEventFilters',
-              params: {
-                filterType: FilterType.ReportEventsFilter,
-              }
-            })}
+            onPress={() =>
+              navigation.navigate('ReportEventFiltersNavigator', {
+                screen: 'ReportEventFilters',
+                params: {
+                  filterType: FilterType.ReportEventsFilter,
+                },
+              })
+            }
           />
         }
       />
@@ -166,15 +174,21 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         expanded={includesMaintenance}
         ExpandableComponent={
           <ListItem
-            title={maintenanceFilter ? maintenanceFilter.name: 'No Filter Selected'}
-            subtitle={maintenanceFilter ? filterSummary(maintenanceFilter) : 'Report will include all maintenance items.'}
+            title={maintenanceFilter ? maintenanceFilter.name : 'No Filter Selected'}
+            subtitle={
+              maintenanceFilter
+                ? filterSummary(maintenanceFilter)
+                : 'Report will include all maintenance items.'
+            }
             position={['last']}
-            onPress={() => navigation.navigate('ReportMaintenanceFiltersNavigator', {
-              screen: 'ReportMaintenanceFilters',
-              params: {
-                filterType: FilterType.ReportMaintenanceFilter,
-              }
-            })}
+            onPress={() =>
+              navigation.navigate('ReportMaintenanceFiltersNavigator', {
+                screen: 'ReportMaintenanceFilters',
+                params: {
+                  filterType: FilterType.ReportMaintenanceFilter,
+                },
+              })
+            }
           />
         }
       />

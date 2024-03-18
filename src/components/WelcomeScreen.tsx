@@ -32,10 +32,7 @@ const WelcomeScreen = () => {
       StatusBar.setBarStyle('light-content');
       if (Platform.OS === 'android') {
         StatusBar.setBackgroundColor(theme.colors.brandSecondary);
-        SystemNavigationBar.setNavigationColor(
-          theme.colors.brandPrimary,
-          'light',
-        );
+        SystemNavigationBar.setNavigationColor(theme.colors.brandPrimary, 'light');
       }
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []),
@@ -68,8 +65,7 @@ const WelcomeScreen = () => {
         }
         checked={tou.accepted !== undefined}
         onPress={() => {
-          const accepted =
-            tou.accepted === undefined ? new Date().toISOString() : undefined;
+          const accepted = tou.accepted === undefined ? new Date().toISOString() : undefined;
           dispatch(saveAcceptTou({ tou: { accepted } }));
         }}
       />

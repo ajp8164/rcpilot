@@ -11,6 +11,7 @@ export const initialFiltersState = Object.freeze<FiltersState>({
   filterId: {
     [FilterType.BatteriesFilter]: undefined,
     [FilterType.BatteryCyclesFilter]: undefined,
+    [FilterType.BypassFilter]: undefined,
     [FilterType.EventsBatteryPerformanceFilter]: undefined,
     [FilterType.EventsModelFilter]: undefined,
     [FilterType.MaintenanceFilter]: undefined,
@@ -23,14 +24,12 @@ export const initialFiltersState = Object.freeze<FiltersState>({
 });
 
 const handleSaveSelectedFilter: CaseReducer<
-  FiltersState, PayloadAction<{
+  FiltersState,
+  PayloadAction<{
     filterType: FilterType;
     filterId?: string;
   }>
-> = (
-  state,
-  { payload },
-) => {
+> = (state, { payload }) => {
   const filterId = Object.assign({}, state.filterId);
   filterId[payload.filterType] = payload.filterId;
   return {

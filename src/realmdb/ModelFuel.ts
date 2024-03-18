@@ -22,4 +22,4 @@ export class ModelFuel extends Object<ModelFuel> {
     },
     primaryKey: '_id',
   };
-};
+}

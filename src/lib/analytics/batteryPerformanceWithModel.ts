@@ -1,7 +1,7 @@
 import { Battery } from 'realmdb/Battery';
 import { Model } from 'realmdb/Model';
 
-export const batteryPerformanceWithModel = (model: Model, batteries: Battery[]) => {
+export const batteryPerformanceWithModel = (_model: Model, _batteries: Battery[]) => {
   // For each battery
   //   Find all events where the battery was used with this model
   //   Group the events by event style
@@ -15,6 +15,6 @@ export const batteryPerformanceWithModel = (model: Model, batteries: Battery[]) 
       style: 'Training',
       count: 23,
       seconds: 230,
-    }
+    },
   ];
 };

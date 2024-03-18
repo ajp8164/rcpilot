@@ -5,7 +5,7 @@ import {
   ListItem,
   SectionListHeader,
   listItemPosition,
-  swipeableDeleteItem
+  swipeableDeleteItem,
 } from 'components/atoms/List';
 import { ListRenderItem, SectionList, SectionListData } from 'react-native';
 import React, { useEffect } from 'react';
@@ -37,9 +37,7 @@ type Section = {
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'MaintenanceHistory'>;
 
 const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
-  const {
-    modelId,
-  } = route.params;
+  const { modelId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -51,9 +49,10 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const entries = useMaintenanceFilter({ modelId });
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
-  useEffect(() => {  
+  useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <>
             <Button
@@ -63,18 +62,21 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
-                  style={[s.headerIcon,
-                    listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {}
+                  style={[
+                    s.headerIcon,
+                    listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {},
                   ]}
                 />
               }
-              onPress={() => navigation.navigate('MaintenanceFiltersNavigator', {
-                screen: 'MaintenanceFilters',
-                params: {
-                  filterType: FilterType.MaintenanceFilter,
-                  useGeneralFilter: true,
-                }
-              })}
+              onPress={() =>
+                navigation.navigate('MaintenanceFiltersNavigator', {
+                  screen: 'MaintenanceFilters',
+                  params: {
+                    filterType: FilterType.MaintenanceFilter,
+                    useGeneralFilter: true,
+                  },
+                })
+              }
             />
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -88,18 +90,21 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ filterId, listEditor.enabled, entries ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterId, listEditor.enabled, entries]);
 
   const groupEntries = (entries?: HistoryEntry[]): SectionListData<HistoryEntry, Section>[] => {
-    return groupItems<HistoryEntry, Section>(entries || [], (entry) => {
+    return groupItems<HistoryEntry, Section>(entries || [], entry => {
       return DateTime.fromISO(entry.history.date).toFormat('MMMM yyyy').toUpperCase();
     });
   };
 
-  const deleteEntry = (data: {index: number, entry: HistoryEntry}) => {
+  const deleteEntry = (data: { index: number; entry: HistoryEntry }) => {
     realm.write(() => {
       // Find the history entry in the action history using the refId.
-      const historyIndex = data.entry.action.history.findIndex(h => h.refId === data.entry.history.refId);
+      const historyIndex = data.entry.action.history.findIndex(
+        h => h.refId === data.entry.history.refId,
+      );
       if (historyIndex >= 0) {
         // Delete the history entry from the action and delete it from our section list data (don't hold on to the deleted object).
         data.entry.action.history.splice(historyIndex, 1);
@@ -110,16 +115,13 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
         data.entry.action.schedule.state = actionScheduleState(
           data.entry.action,
           ChecklistType.Maintenance,
-          model!
+          model || undefined,
         );
       }
     });
   };
 
-  const renderActionHistoryEntry: ListRenderItem<HistoryEntry> = ({
-    item: entry,
-    index
-  }) => {
+  const renderActionHistoryEntry: ListRenderItem<HistoryEntry> = ({ item: entry, index }) => {
     let subtitle = DateTime.fromISO(entry.history.date).toFormat('M/d/yyyy h:mm a');
     if (entry.action.notes) {
       subtitle = `${subtitle}\n\n${entry.action.notes}`;
@@ -132,12 +134,14 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
         subtitle={subtitle}
         titleNumberOfLines={1}
         position={listItemPosition(index, entries.length)}
-        onPress={() => navigation.navigate('MaintenanceHistoryEntry',{
-          modelId,
-          checklistRefId: entry.checklist.refId,
-          actionRefId: entry.action.refId,
-          historyRefId: entry.history.refId,
-        })}
+        onPress={() =>
+          navigation.navigate('MaintenanceHistoryEntry', {
+            modelId,
+            checklistRefId: entry.checklist.refId,
+            actionRefId: entry.action.refId,
+            historyRefId: entry.history.refId,
+          })
+        }
         editable={{
           item: {
             icon: 'remove-circle',
@@ -148,34 +152,36 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
         }}
         showEditor={listEditor.show}
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteEntry, {
-              label: 'Delete Log Item',
-              title: 'This action cannot be undone.\nAre you sure you want to delete this maintenance log item?',
-              value: {
-                index,
-                entry,
-              }
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteEntry, {
+                  label: 'Delete Log Item',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this maintenance log item?',
+                  value: {
+                    index,
+                    entry,
+                  },
+                }),
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-maintenance-history', entry.action.refId)}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('model-maintenance-history', entry.action.refId)
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
-  };
-  
-  if (filterId && !entries.length) {
-    return (
-      <EmptyView message={`No Maintenance Logs Match Your Filter`} />
     );
+  };
+
+  if (filterId && !entries.length) {
+    return <EmptyView message={`No Maintenance Logs Match Your Filter`} />;
   }
 
   if (!entries.length) {
-    return (
-      <EmptyView info message={'No Maintenance Logs'} />
-    );
+    return <EmptyView info message={'No Maintenance Logs'} />;
   }
 
   return (
@@ -185,11 +191,9 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
       sections={groupEntries(entries)}
-      keyExtractor={(item, index)=> `${index}${item.action.refId}`}
+      keyExtractor={(item, index) => `${index}${item.action.refId}`}
       renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({section: {title}}) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
       ListFooterComponent={<Divider />}
     />
   );

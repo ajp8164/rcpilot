@@ -1,9 +1,18 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, SectionListHeader, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  SectionListHeader,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
-import { batteryCycleDescription, batteryCycleTitle, useBatteryCyclesFilter } from 'lib/batteryCycle';
+import {
+  batteryCycleDescription,
+  batteryCycleTitle,
+  useBatteryCyclesFilter,
+} from 'lib/batteryCycle';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -31,7 +40,7 @@ export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'Battery
 
 const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const { batteryId } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
@@ -42,9 +51,10 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const batteryCycles = useBatteryCyclesFilter({ batteryId });
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
-  useEffect(() => {  
+  useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <>
             <Button
@@ -54,17 +64,20 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
-                  style={[s.headerIcon,
-                    !filterId && listEditor.enabled ? s.headerIconDisabled : {}
+                  style={[
+                    s.headerIcon,
+                    !filterId && listEditor.enabled ? s.headerIconDisabled : {},
                   ]}
                 />
               }
-              onPress={() => navigation.navigate('BatteryCycleFiltersNavigator', {
-                screen: 'BatteryCycleFilters',
-                params: {
-                  useGeneralFilter: true,
-                }
-              })}
+              onPress={() =>
+                navigation.navigate('BatteryCycleFiltersNavigator', {
+                  screen: 'BatteryCycleFilters',
+                  params: {
+                    useGeneralFilter: true,
+                  },
+                })
+              }
             />
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -78,24 +91,27 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         );
       },
     });
-  }, [ filterId, listEditor.enabled ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filterId, listEditor.enabled]);
 
   const groupCycles = (cycles?: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
-    return groupItems<BatteryCycle, Section>(cycles || [], (cycle) => {
+    return groupItems<BatteryCycle, Section>(cycles || [], cycle => {
       const date = cycle.charge?.date || cycle.discharge?.date;
       return date ? DateTime.fromISO(date).toFormat('MMMM yyyy').toUpperCase() : '';
     });
   };
 
   const deleteCycle = (cycleNumber: number) => {
-    realm.write(() => {
-      const index = batteryCycles.findIndex(c => c.cycleNumber === cycleNumber);
-      if (index !== undefined && index >= 0) {
-        // Make sure to decrement the battery's total cycle count.
-        realm.delete(batteryCycles[index]);
-        battery!.totalCycles = battery!.totalCycles! - 1;
-      }
-    });
+    if (battery) {
+      realm.write(() => {
+        const index = batteryCycles.findIndex(c => c.cycleNumber === cycleNumber);
+        if (index !== undefined && index >= 0) {
+          // Make sure to decrement the battery's total cycle count.
+          realm.delete(batteryCycles[index]);
+          battery.totalCycles ? (battery.totalCycles = battery.totalCycles - 1) : null;
+        }
+      });
+    }
   };
 
   const renderBatteryCycle: SectionListRenderItem<BatteryCycle, Section> = ({
@@ -115,10 +131,12 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         subtitle={batteryCycleDescription(cycle)}
         subtitleStyle={[theme.styles.textTiny, theme.styles.textDim]}
         position={listItemPosition(index, section.data.length)}
-        onPress={() => navigation.navigate('BatteryCycleEditor', {
-          batteryId,
-          cycleNumber: cycle.cycleNumber,
-        })}
+        onPress={() =>
+          navigation.navigate('BatteryCycleEditor', {
+            batteryId,
+            cycleNumber: cycle.cycleNumber,
+          })
+        }
         editable={{
           item: {
             icon: 'remove-circle',
@@ -129,35 +147,43 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         }}
         showEditor={listEditor.show}
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteCycle, {
-              label: 'Delete Cycle',
-              title: 'This action cannot be undone.\nAre you sure you want to delete this battery cycle?',
-              value: cycle.cycleNumber,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteCycle, {
+                  label: 'Delete Cycle',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this battery cycle?',
+                  value: cycle.cycleNumber,
+                }),
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycles', cycle._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('battery-cycles', cycle._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   if (!battery) {
-    return (<EmptyView error message={'Battery not found!'} />);
+    return <EmptyView error message={'Battery not found!'} />;
   }
 
   if (filterId && !batteryCycles.length) {
-    return (
-      <EmptyView message={'No Battery Cycles Match Your Filter'} />
-    );
+    return <EmptyView message={'No Battery Cycles Match Your Filter'} />;
   }
 
   if (!batteryCycles.length) {
     return (
-      <EmptyView info message={'No Battery Cycles'} details={'Tap the battery on the Batteries tab to add a new cycle.'} />
-    );    
+      <EmptyView
+        info
+        message={'No Battery Cycles'}
+        details={'Tap the battery on the Batteries tab to add a new cycle.'}
+      />
+    );
   }
 
   return (
@@ -167,11 +193,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
       sections={groupCycles([...batteryCycles].reverse())} // Most recent cycles at the top
-      keyExtractor={(item, index)=> `${index}${item.cycleNumber}`}
+      keyExtractor={(item, index) => `${index}${item.cycleNumber}`}
       renderItem={renderBatteryCycle}
-      renderSectionHeader={({section: {title}}) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
       ListFooterComponent={<Divider />}
     />
   );
@@ -191,6 +215,5 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexGrow: 1,
   },
 }));
-
 
 export default BatteryCyclesScreen;

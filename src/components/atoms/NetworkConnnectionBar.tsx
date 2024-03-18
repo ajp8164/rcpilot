@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 
 import { Incubator } from 'react-native-ui-lib';
 import { NetworkContext } from 'lib/network';
+import React from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
 const NetworkConnectionBar = () => {

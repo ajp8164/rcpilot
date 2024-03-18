@@ -20,14 +20,17 @@ import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
 
-export type Props = NativeStackScreenProps<ReportEventFiltersNavigatorParamList, 'ReportEventFilterEditor'>;
+export type Props = NativeStackScreenProps<
+  ReportEventFiltersNavigatorParamList,
+  'ReportEventFilterEditor'
+>;
 
 const ReportEventFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
-  
+
   const filterEditor = useFilterEditor<ReportEventFilterValues>({
     filterId,
     filterType,
@@ -40,18 +43,17 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
     if (requireFilterName) {
       filterEditor.setCreateSavedFilter(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!filterEditor.filter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
+    return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
+      <Divider text={'FILTER NAME'} />
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
@@ -68,14 +70,14 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
             />
           }
         />
-      :
+      ) : (
         <ListItemInput
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
           onChangeText={filterEditor.setName}
         />
-      }
+      )}
       <Divider />
       <ListItem
         title={'Reset Filter'}
@@ -86,7 +88,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={`This filter shows all the events that match all of these criteria.`}/>
+      <Divider text={`This filter shows all the events that match all of these criteria.`} />
       <ListItemFilterEnum
         title={'Model'}
         value={filterEditor.values.model.value}
@@ -135,7 +137,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         label={'m:ss'}
         value={filterEditor.values.duration.value}
         relation={filterEditor.values.duration.relation}
-        numericProps={{prefix: '', separator: ':'}}
+        numericProps={{ prefix: '', separator: ':' }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('duration', filterState);
@@ -174,7 +176,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
           filterEditor.onFilterValueChange('outcome', filterState);
         }}
       />
-      <Divider style={{height: theme.insets.bottom}} />
+      <Divider style={{ height: theme.insets.bottom }} />
     </ScrollView>
   );
 };
@@ -187,7 +189,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   resetDisabled: {
     opacity: 0.3,
-  }
+  },
 }));
 
 export default ReportEventFilterEditorScreen;

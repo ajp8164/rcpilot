@@ -1,6 +1,11 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -17,7 +22,10 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ReportEventFiltersNavigatorParamList, 'ReportEventFilters'>;
+export type Props = NativeStackScreenProps<
+  ReportEventFiltersNavigatorParamList,
+  'ReportEventFilters'
+>;
 
 const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, modelType, useGeneralFilter } = route.params;
@@ -56,8 +64,9 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
     } else {
       setGeneralEventsFilter(generalReportEventsFilterQuery[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
@@ -83,28 +92,35 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
         position={listItemPosition(index, allEventFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('ReportEventFilterEditor', {
-          filterId: filter._id.toString(),
-          filterType,
-          generalFilterName: generalReportEventsFilterName,
-          modelType,
-        })}
+        onPressInfo={() =>
+          navigation.navigate('ReportEventFilterEditor', {
+            filterId: filter._id.toString(),
+            filterType,
+            generalFilterName: generalReportEventsFilterName,
+            modelType,
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => {
-              confirmAction(deleteFilter, {
-                label: 'Delete Saved Filter',
-                title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                value: filter,
-              });
-            }
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () => {
+                confirmAction(deleteFilter, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+                  value: filter,
+                });
+              },
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('report-event-filters', filter._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('report-event-filters', filter._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   return (
@@ -119,7 +135,7 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalReportEventsFilter ?
+      {useGeneralFilter && generalReportEventsFilter ? (
         <>
           <ListItemCheckboxInfo
             title={`General Events Filter`}
@@ -127,38 +143,46 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
             position={['first', 'last']}
             checked={generalReportEventsFilter._id.toString() === selectedFilterId}
             onPress={() => setFilter(generalReportEventsFilter)}
-            onPressInfo={() => navigation.navigate('ReportEventFilterEditor', {
-              filterId: generalReportEventsFilter!._id.toString(),
-              filterType,
-              generalFilterName: generalReportEventsFilterName,
-              modelType,
-            })}
+            onPressInfo={() =>
+              navigation.navigate('ReportEventFilterEditor', {
+                filterId: generalReportEventsFilter._id.toString(),
+                filterType,
+                generalFilterName: generalReportEventsFilterName,
+                modelType,
+              })
+            }
           />
-          <Divider note
+          <Divider
+            note
             text={`You can save the General Events Filter to remember a specific filter configuration for later use.`}
           />
         </>
-        :
+      ) : (
         <ListItem
           title={'Add New Filter'}
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('ReportEventFilterEditor', {
-            filterId: generalReportEventsFilter!._id.toString(),
-            filterType,
-            generalFilterName: generalReportEventsFilterName,
-            modelType,
-            requireFilterName: true,
-          })}
+          onPress={() =>
+            generalReportEventsFilter &&
+            navigation.navigate('ReportEventFilterEditor', {
+              filterId: generalReportEventsFilter._id.toString(),
+              filterType,
+              generalFilterName: generalReportEventsFilterName,
+              modelType,
+              requireFilterName: true,
+            })
+          }
         />
-      }
+      )}
       <FlatList
         data={allEventFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allEventFilters.length ? <Divider text={'SAVED EVENT FILTERS'} /> : null}
+        ListHeaderComponent={
+          allEventFilters.length ? <Divider text={'SAVED EVENT FILTERS'} /> : null
+        }
       />
     </View>
   );

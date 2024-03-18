@@ -20,12 +20,7 @@ import { useTheme } from 'theme';
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'MaintenanceHistoryEntry'>;
 
 const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
-  const {
-    modelId,
-    checklistRefId,
-    actionRefId,
-    historyRefId,
-  } = route.params;
+  const { modelId, checklistRefId, actionRefId, historyRefId } = route.params;
 
   const theme = useTheme();
   const event = useEvent();
@@ -42,63 +37,67 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
 
     return () => {
       event.removeListener('maintenance-action-notes', onChangeNotes);
-      
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
-  const onChangeCost = (value: number) => {
-    realm.write(() => {
-      // Update the model with maintenance cost change.
-      model!.statistics = lodash.merge(
-        model!.statistics,
-        modelCostStatistics(model!, {oldValue: history!.cost, newValue: value})
-      );
 
-      history!.cost = value;
-    });
+  const onChangeCost = (value: number) => {
+    if (model && history) {
+      realm.write(() => {
+        // Update the model with maintenance cost change.
+        model.statistics = lodash.merge(
+          model.statistics,
+          modelCostStatistics(model, { oldValue: history.cost, newValue: value }),
+        );
+
+        history.cost = value;
+      });
+    }
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
-    realm.write(() => {
-      action!.notes = result.text;
-    });
+    if (action) {
+      realm.write(() => {
+        action.notes = result.text;
+      });
+    }
   };
 
   if (!action || !history) {
-    return (
-      <EmptyView error message={'Maintenance Action Not Found!'} />
-    );    
+    return <EmptyView error message={'Maintenance Action Not Found!'} />;
   }
 
   return (
     <View style={theme.styles.view}>
-      <Divider text={'COMPLETED MAINTENANCE'}/>
+      <Divider text={'COMPLETED MAINTENANCE'} />
       <ListItem
         title={action?.description}
         subtitle={`${DateTime.fromISO(history.date).toFormat("M/d/yyyy 'at' h:mm a")}, following ${eventKind(model?.type).name.toLowerCase()} #${history.eventNumber}`}
         position={['first', 'last']}
         rightImage={false}
       />
-      <Divider text={'MAINTENANCE COSTS'}/>
+      <Divider text={'MAINTENANCE COSTS'} />
       <ListItemInput
         title={'Total Costs'}
         value={`${history.cost || 0}`}
         numeric={true}
-        numericProps={{maxValue: 99999}}
+        numericProps={{ maxValue: 99999 }}
         keyboardType={'number-pad'}
         placeholder={'None'}
         position={['first', 'last']}
         onChangeText={value => onChangeCost(parseFloat(value))}
-        />
-      <Divider text={'NOTES'}/>
+      />
+      <Divider text={'NOTES'} />
       <ListItem
         title={action.notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('NotesEditor', {
-          title: 'Action Notes',
-          text: action.notes,
-          eventName: 'maintenance-action-notes',
-        })}
+        onPress={() =>
+          navigation.navigate('NotesEditor', {
+            title: 'Action Notes',
+            text: action.notes,
+            eventName: 'maintenance-action-notes',
+          })
+        }
       />
     </View>
   );

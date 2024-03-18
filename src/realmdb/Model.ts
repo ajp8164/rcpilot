@@ -47,7 +47,7 @@ export class Model extends Object<Model> {
       name: 'string',
       image: 'string?',
       type: { type: 'string', default: ModelType.Airplane },
-      vendor: {type: 'string', optional: true, indexed: 'full-text'},
+      vendor: { type: 'string', optional: true, indexed: 'full-text' },
       category: 'ModelCategory?',
       checklists: { type: 'list', objectType: 'Checklist', default: [] },
       purchasePrice: 'float?',
@@ -65,12 +65,12 @@ export class Model extends Object<Model> {
       defaultPropeller: 'ModelPropeller?',
       defaultStyle: 'EventStyle?',
       scanCodeSize: 'string?',
-      notes: {type: 'string', optional: true, indexed: 'full-text'},
+      notes: { type: 'string', optional: true, indexed: 'full-text' },
       statistics: 'ModelStatistics',
     },
     primaryKey: '_id',
   };
-};
+}
 
 export class ModelStatistics extends Object<ModelStatistics> {
   crashCount!: number;
@@ -94,7 +94,7 @@ export class ModelStatistics extends Object<ModelStatistics> {
       uncertainCost: 'bool',
     },
   };
-};
+}
 
 export class ModelEventStyleData extends Object<ModelEventStyleData> {
   eventStyleId!: string;
@@ -110,4 +110,4 @@ export class ModelEventStyleData extends Object<ModelEventStyleData> {
       eventStyleDuration: 'int',
     },
   };
-};
+}

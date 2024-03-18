@@ -12,7 +12,7 @@ export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Location
 
 const LocationDetailsScreen = ({ navigation, route }: Props) => {
   const { locationId } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -21,24 +21,26 @@ const LocationDetailsScreen = ({ navigation, route }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'INFORMATION'}/>
+      <Divider text={'INFORMATION'} />
       <ListItemInput
         placeholder={'Location Name'}
         value={'Nickajack Elementary School'}
         position={['first', 'last']}
         onChangeText={() => null}
-      /> 
+      />
       <Divider />
       <ListItem
         title={'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('NotesEditor', {
-          title: 'Fuel Notes',
-          text: 'notes', // mock
-          eventName: 'fuel-notes',  
-        })}
+        onPress={() =>
+          navigation.navigate('NotesEditor', {
+            title: 'Fuel Notes',
+            text: 'notes', // mock
+            eventName: 'fuel-notes',
+          })
+        }
       />
-      <Divider text={'COORDINATES'}/>
+      <Divider text={'COORDINATES'} />
       <ListItem
         title={'Latitude'}
         position={['first']}
@@ -53,7 +55,7 @@ const LocationDetailsScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         onPress={() => null}
       />
-      <Divider text={'EVENTS'}/>
+      <Divider text={'EVENTS'} />
       <ListItem
         title={'Last On'}
         position={['first']}
@@ -61,10 +63,7 @@ const LocationDetailsScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         onPress={() => null}
       />
-      <ListItem
-        title={'Details'}
-        position={['last']}
-      />
+      <ListItem title={'Details'} position={['last']} />
       <Divider />
       <ListItem
         title={'Delete Location'}

@@ -24,22 +24,23 @@ const NewPilotScreen = ({ navigation }: Props) => {
     const canSave = name !== undefined;
 
     const save = () => {
-      const now = DateTime.now().toISO()!;
+      const now = DateTime.now().toISO();
       realm.write(() => {
         realm.create('Pilot', {
           createdOn: now,
           updatedOn: now,
-          name
+          name,
         });
       });
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader({enabled: canSave, action: onDone});
+    setScreenEditHeader({ enabled: canSave, action: onDone });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
   return (
@@ -50,7 +51,7 @@ const NewPilotScreen = ({ navigation }: Props) => {
         placeholder={"New Pilot's Name"}
         position={['first', 'last']}
         onChangeText={setName}
-      /> 
+      />
     </View>
   );
 };

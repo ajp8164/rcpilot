@@ -3,7 +3,7 @@ import {
   DateFilterState,
   EnumFilterState,
   NumberFilterState,
-  StringFilterState
+  StringFilterState,
 } from 'components/molecules/filters';
 
 import { PickEnum } from 'types/custom';
@@ -21,7 +21,7 @@ export enum FilterType {
   ReportEventsFilter = 'ReportEventsFilter',
   ReportMaintenanceFilter = 'ReportMaintenanceFilter',
   ReportModelScanCodesFilter = 'ReportModelScanCodesFilter',
-};
+}
 
 // Only report filter types.
 export type ReportFilterType = PickEnum<
@@ -32,16 +32,15 @@ export type ReportFilterType = PickEnum<
   | FilterType.ReportModelScanCodesFilter
 >;
 
-export type FilterValues =
-  & ModelFilterValues
-  & BatteryFilterValues
-  & BatteryCycleFilterValues
-  & EventFilterValues
-  & MaintenanceFilterValues
-  & ReportBatteryScanCodeFilterValues
-  & ReportEventFilterValues
-  & ReportMaintenanceFilterValues
-  & ReportModelScanCodeFilterValues
+export type FilterValues = ModelFilterValues &
+  BatteryFilterValues &
+  BatteryCycleFilterValues &
+  EventFilterValues &
+  MaintenanceFilterValues &
+  ReportBatteryScanCodeFilterValues &
+  ReportEventFilterValues &
+  ReportMaintenanceFilterValues &
+  ReportModelScanCodeFilterValues;
 
 export type AnyFilterValues =
   | ModelFilterValues
@@ -52,7 +51,7 @@ export type AnyFilterValues =
   | ReportBatteryScanCodeFilterValues
   | ReportEventFilterValues
   | ReportMaintenanceFilterValues
-  | ReportModelScanCodeFilterValues
+  | ReportModelScanCodeFilterValues;
 
 // Battery filter
 //

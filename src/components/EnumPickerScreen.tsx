@@ -1,3 +1,4 @@
+import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemCheckbox } from 'components/atoms/List';
@@ -8,17 +9,18 @@ import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
+import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
-import { useTheme } from 'theme';
 
 export type EnumPickerIconProps = {
   type?: 'icon' | 'svg';
   name: string | string[];
   color?: string;
   size?: number;
-  // @ts-ignore: should be typed StyleProp<TextStyle>, not working
+  // Should be typed StyleProp<TextStyle>, not working
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   style?: any;
   hideTitle?: boolean;
 } | null;
@@ -27,7 +29,7 @@ export type EnumPickerInterface = {
   mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none' | 'many-with-actions';
   title: string;
   headerBackTitle?: string;
-  icons?: {[key in string]: EnumPickerIconProps}; // Key is a enum value
+  icons?: { [key in string]: EnumPickerIconProps }; // Key is a enum value
   sectionName?: string;
   footer?: string;
   values: string[];
@@ -37,11 +39,11 @@ export type EnumPickerInterface = {
 
 export type EnumPickerResult = {
   value: string[];
-}
+};
 
 export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'EnumPicker'>;
 
-const EnumPickerScreen = ({ route,  navigation }: Props) => {
+const EnumPickerScreen = ({ route, navigation }: Props) => {
   const {
     mode = 'one',
     title,
@@ -54,53 +56,55 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
     eventName,
   } = route.params;
   const theme = useTheme();
+  const s = useStyles(theme);
 
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
-  const [list, setList] = useSetState<{ values: string[]; selected: string[]; initial: string[]; }>({
+  const [list, setList] = useSetState<{ values: string[]; selected: string[]; initial: string[] }>({
     values,
-     // Use an empty array if empty string is set.
+    // Use an empty array if empty string is set.
     selected: lodash.isString(selected) ? [selected] : selected ? selected : [],
     initial: lodash.isString(selected) ? [selected] : selected ? selected : [],
   });
 
   useEffect(() => {
-      // Check if arrays contain the same elements.
-      const canSave = !lodash.isEmpty(lodash.xor(list.selected, list.initial));
+    // Check if arrays contain the same elements.
+    const canSave = !lodash.isEmpty(lodash.xor(list.selected, list.initial));
 
     const onDone = () => {
       // For multi-selection mode we send the selected values only when done.
       if (mode.includes('many')) {
-        event.emit(eventName, {value: list.selected} as EnumPickerResult);
+        event.emit(eventName, { value: list.selected } as EnumPickerResult);
         navigation.goBack();
       }
     };
-  
+
     navigation.setOptions({
       title,
       headerBackTitle,
     });
 
     if (mode === 'many-or-none' || mode === 'many-with-actions') {
-      setScreenEditHeader({enabled: canSave, action: onDone});
-      }
-  }, [ list ]);
+      setScreenEditHeader({ enabled: canSave, action: onDone });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list]);
 
   const toggleSelect = (value?: string) => {
     if (mode === 'one' || mode === 'one-or-none') {
-      value ? setList({ selected: [value] }) : setList({ selected: [] }, {assign: true});
+      value ? setList({ selected: [value] }) : setList({ selected: [] }, { assign: true });
     } else if (value) {
       if (list.selected.includes(value)) {
-        setList({ selected: list.selected.filter(v => v !== value) }, {assign: true});
+        setList({ selected: list.selected.filter(v => v !== value) }, { assign: true });
       } else {
-        setList({ selected: list.selected.concat(value) }, {assign: true});
+        setList({ selected: list.selected.concat(value) }, { assign: true });
       }
     }
 
     // For single selection mode we send the selected value immediately.
     if (mode === 'one' || mode === 'one-or-none') {
-      event.emit(eventName, {value: [value]} as EnumPickerResult);
+      event.emit(eventName, { value: [value] } as EnumPickerResult);
     }
   };
 
@@ -118,10 +122,9 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
 
   const getIconEl = (value: string) => {
     // If icons are specified then create an array of icon elements.
-    let iconArr: JSX.Element[] | undefined  = undefined;
+    const iconArr: JSX.Element[] = [];
     if (icons && icons[value]) {
-      iconArr = [];
-      let name = icons[value]!.name;
+      let name = icons[value]?.name || '';
       let el;
       name = lodash.isArray(name) ? name : [name]; // Icon names must be an array.
       name.forEach((n, index) => {
@@ -147,10 +150,10 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
             />
           );
         }
-        iconArr!.push(el);
+        iconArr.push(el);
       });
     }
-    return iconArr ? <View style={{flexDirection: 'row'}}>{iconArr}</View> : undefined;
+    return iconArr.length ? <View style={s.iconArr}>{iconArr}</View> : undefined;
   };
 
   const renderValue: ListRenderItem<string> = ({ item: value, index }) => {
@@ -161,19 +164,21 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
         leftImage={getIconEl(value)}
         position={
           mode === 'one-or-none'
-            ? index === 0 ? ['first'] : []
-              : list.values.length === 1
-              ? ['first', 'last']
-                : index === 0
+            ? index === 0
               ? ['first']
+              : []
+            : list.values.length === 1
+              ? ['first', 'last']
+              : index === 0
+                ? ['first']
                 : index === list.values.length - 1
-              ? ['last']
-                : []        
+                  ? ['last']
+                  : []
         }
         checked={list.selected?.includes(value)}
         onPress={() => toggleSelect(value)}
       />
-    )
+    );
   };
 
   return (
@@ -181,7 +186,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      {(mode === 'many-with-actions' || mode === 'many-or-none') &&
+      {(mode === 'many-with-actions' || mode === 'many-or-none') && (
         <>
           <Divider text={'ACTIONS'} />
           <ListItem
@@ -197,7 +202,7 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
             onPress={selectNone}
           />
         </>
-      }
+      )}
       <Divider text={sectionName} />
       <FlatList
         data={list.values}
@@ -206,15 +211,15 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
       />
-      {mode === 'one-or-none' &&
+      {mode === 'one-or-none' && (
         <ListItemCheckbox
           title={'None'}
           position={list.values.length === 0 ? ['first', 'last'] : ['last']}
           checked={!list.selected.length}
           onPress={() => toggleSelect()}
         />
-      }
-      {mode === 'many-or-none' &&
+      )}
+      {mode === 'many-or-none' && (
         <>
           <Divider />
           <ListItemCheckbox
@@ -224,10 +229,16 @@ const EnumPickerScreen = ({ route,  navigation }: Props) => {
             onPress={selectUnspecified}
           />
         </>
-      }
+      )}
       <Divider note text={footer} />
     </ScrollView>
   );
 };
+
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+  iconArr: {
+    flexDirection: 'row',
+  },
+}));
 
 export default EnumPickerScreen;

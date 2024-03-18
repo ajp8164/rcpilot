@@ -18,9 +18,7 @@ const TabNavigator = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    StatusBar.setBarStyle(
-      theme.mode === 'light' ? 'dark-content' : 'light-content',
-    );
+    StatusBar.setBarStyle(theme.mode === 'light' ? 'dark-content' : 'light-content');
 
     if (Platform.OS === 'android') {
       StatusBar.setBackgroundColor(theme.colors.white);
@@ -54,14 +52,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Log',
           // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon
-              solid
-              name={'file-lines'}
-              color={color}
-              size={28}
-            />
-          ),
+          tabBarIcon: ({ color }) => <Icon solid name={'file-lines'} color={color} size={28} />,
         }}
       />
       <Tab.Screen
@@ -70,13 +61,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Models',
           // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon
-              name={'plane-up'}
-              color={color}
-              size={28}
-            />
-          ),
+          tabBarIcon: ({ color }) => <Icon name={'plane-up'} color={color} size={28} />,
         }}
       />
       <Tab.Screen
@@ -90,7 +75,7 @@ const TabNavigator = () => {
               name={'battery-full'}
               color={color}
               size={28}
-              style={{transform: [{rotate: '-90deg'}]}}
+              style={{ transform: [{ rotate: '-90deg' }] }}
             />
           ),
         }}
@@ -101,13 +86,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Setup',
           // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon
-              name={'gear'}
-              color={color}
-              size={28}
-            />
-          ),
+          tabBarIcon: ({ color }) => <Icon name={'gear'} color={color} size={28} />,
         }}
       />
       <Tab.Screen
@@ -116,13 +95,7 @@ const TabNavigator = () => {
         options={{
           tabBarLabel: 'Scan',
           // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon
-              name={'qrcode'}
-              color={color}
-              size={28}
-            />
-          ),
+          tabBarIcon: ({ color }) => <Icon name={'qrcode'} color={color} size={28} />,
         }}
       />
     </Tab.Navigator>

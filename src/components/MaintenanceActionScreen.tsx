@@ -26,43 +26,43 @@ const MaintenanceActionScreen = ({ route }: Props) => {
 
   const lastTimePerformed = (action: ChecklistAction) => {
     if (action.history.length) {
-      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat('MMM d, yyyy');
+      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat(
+        'MMM d, yyyy',
+      );
     }
     return 'never';
   };
 
   if (!action) {
-    return (
-      <EmptyView error message={'Maintenance Action Not Found!'} />
-    );    
+    return <EmptyView error message={'Maintenance Action Not Found!'} />;
   }
 
   return (
     <View style={theme.styles.view}>
-      <Divider text={'PERFORM'}/>
+      <Divider text={'PERFORM'} />
       <ListItem
         title={action?.description}
         subtitle={`From maintenance list '${checklist?.name}'`}
         position={['first', 'last']}
         rightImage={false}
       />
-      <Divider text={'ON SCHEDULE'}/>
+      <Divider text={'ON SCHEDULE'} />
       <ListItem
         title={action.schedule.state.text}
         subtitle={`Last time was ${lastTimePerformed(action)}`}
         position={['first', 'last']}
         rightImage={false}
       />
-      <Divider text={'MAINTENANCE COSTS'}/>
+      <Divider text={'MAINTENANCE COSTS'} />
       <ListItemInput
         title={'Total Costs'}
         value={`${action.cost || 0}`}
         numeric={true}
-        numericProps={{maxValue: 99999}}
+        numericProps={{ maxValue: 99999 }}
         position={['first', 'last']}
         inputDisabled={true}
-      /> 
-      <Divider text={'NOTES'}/>
+      />
+      <Divider text={'NOTES'} />
       <ListItem
         title={action.notes || 'No notes'}
         position={['first', 'last']}

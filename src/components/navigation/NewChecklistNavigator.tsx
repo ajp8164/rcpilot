@@ -14,9 +14,9 @@ const NewChecklistNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewChecklistStack.Navigator
-        initialRouteName='NewChecklist'
+        initialRouteName="NewChecklist"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
@@ -38,7 +38,7 @@ const NewChecklistNavigator = () => {
           }}
         />
         <NewChecklistStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
@@ -46,7 +46,7 @@ const NewChecklistNavigator = () => {
           }}
         />
         <NewChecklistStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Action Notes',

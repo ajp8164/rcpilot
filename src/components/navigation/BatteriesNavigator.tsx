@@ -36,13 +36,14 @@ const BatteriesNavigator = () => {
       <BatteriesStack.Screen
         name="Batteries"
         component={BatteriesScreen}
-        initialParams={{listBatteries: 'all'}}
+        initialParams={{ listBatteries: 'all' }}
         options={({ route }) => ({
-          title: route.params.listBatteries === 'retired' ?
-            'Retired'
-            : route.params.listBatteries === 'in-storage' ?
-            'In Storage'
-            : 'Batteries',
+          title:
+            route.params.listBatteries === 'retired'
+              ? 'Retired'
+              : route.params.listBatteries === 'in-storage'
+                ? 'In Storage'
+                : 'Batteries',
           headerLeft: () => null,
           headerLargeTitle: route.params.listBatteries === 'all' ? true : false,
           headerLargeTitleShadowVisible: false,
@@ -50,7 +51,7 @@ const BatteriesNavigator = () => {
         })}
       />
       <BatteriesStack.Screen
-        name='BatteryTemplates'
+        name="BatteryTemplates"
         component={BatteryTemplatesScreen}
         options={{
           title: 'Battery Templates',
@@ -58,55 +59,55 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryEditor'
+        name="BatteryEditor"
         component={BatteryEditorScreen}
         options={{
           title: 'Battery',
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryCellValuesEditor'
+        name="BatteryCellValuesEditor"
         component={BatteryCellValuesEditorScreen}
         options={({ route }) => ({
           title: `Cell ${lodash.startCase(route.params.config.namePlural)}`,
         })}
       />
       <BatteriesStack.Screen
-        name='BatteryCycles'
+        name="BatteryCycles"
         component={BatteryCyclesScreen}
         options={{
           title: 'Cycles',
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryCycleEditor'
+        name="BatteryCycleEditor"
         component={BatteryCycleEditorScreen}
         options={{
           title: 'Edit Cycle',
         }}
       />
       <BatteriesStack.Screen
-        name='NewBatteryCycleNavigator'
+        name="NewBatteryCycleNavigator"
         component={NewBatteryCycleNavigator}
         options={{
           headerShown: false,
-          presentation: 'fullScreenModal'
+          presentation: 'fullScreenModal',
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryFiltersNavigator'
+        name="BatteryFiltersNavigator"
         component={BatteryFiltersNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal'
+          presentation: 'modal',
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryCycleFiltersNavigator'
+        name="BatteryCycleFiltersNavigator"
         component={BatteryCycleFiltersNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal'
+          presentation: 'modal',
         }}
       />
       <BatteriesStack.Screen
@@ -119,7 +120,7 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryPerformance'
+        name="BatteryPerformance"
         component={BatteryPerformanceScreen}
         options={{
           title: 'Battery Performance',
@@ -127,7 +128,7 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='BatteryPerformanceComparisonPicker'
+        name="BatteryPerformanceComparisonPicker"
         component={BatteryPerformanceComparisonPickerScreen}
         options={{
           title: 'Batteries',
@@ -135,7 +136,7 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='EventFiltersNavigator'
+        name="EventFiltersNavigator"
         component={EventFiltersNavigator}
         options={{
           headerShown: false,
@@ -143,15 +144,15 @@ const BatteriesNavigator = () => {
         }}
       />
       <BatteriesStack.Screen
-        name='NewBatteryNavigator'
+        name="NewBatteryNavigator"
         component={NewBatteryNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal'
+          presentation: 'modal',
         }}
       />
       <BatteriesStack.Screen
-        name='NotesEditor'
+        name="NotesEditor"
         component={NotesEditorScreen}
         options={{
           title: 'Battery Notes',

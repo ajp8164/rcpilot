@@ -15,7 +15,10 @@ export type EnumName = keyof typeof enumFilterConfigs;
 type EnumPickerProps = Omit<EnumPickerInterface, 'selected' | 'eventName'>;
 
 // See https://stackoverflow.com/a/70994696
-const satisfiesRecord = <T,>() => <K extends PropertyKey>(rec: Record<K, T>) => rec;
+const satisfiesRecord =
+  <T>() =>
+  <K extends PropertyKey>(rec: Record<K, T>) =>
+    rec;
 
 const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
   Batteries: {
@@ -78,33 +81,42 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
 export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) => {
   const realm = useRealm();
 
-  let config = Object.assign({}, enumFilterConfigs[enumName]);
-  config.sectionName = config.sectionName?.replace('{0}', relation === EnumRelation.Is ? 'INCLUDE IN' : 'EXCLUDE FROM');
-  
+  const config = Object.assign({}, enumFilterConfigs[enumName]);
+  config.sectionName = config.sectionName?.replace(
+    '{0}',
+    relation === EnumRelation.Is ? 'INCLUDE IN' : 'EXCLUDE FROM',
+  );
+
   // Dynamic list of values. These enum names capture a user entered list of values.
   // Use a database selector to fill values dynamically; use enumName
+  let batteries;
+  let categories;
+  let locations;
+  let styles;
+  let pilots;
+
   switch (enumName) {
     case 'Batteries':
-      const batteries = realm.objects(Battery);
+      batteries = realm.objects(Battery);
       config.values = batteries.map(b => b.name).sort();
       break;
     case 'Categories':
-      const categories = realm.objects(ModelCategory);
+      categories = realm.objects(ModelCategory);
       config.values = categories.map(c => c.name).sort();
       break;
     case 'Locations':
-      const locations = realm.objects(Location);
+      locations = realm.objects(Location);
       config.values = locations.map(l => l.name).sort();
       break;
     case 'EventStyles':
-      const styles = realm.objects(EventStyle);
+      styles = realm.objects(EventStyle);
       config.values = styles.map(s => s.name).sort();
       break;
     case 'Pilots':
-      const pilots = realm.objects(Pilot);
+      pilots = realm.objects(Pilot);
       config.values = pilots.map(p => p.name).sort();
       break;
-    }
+  }
 
   return config;
 };

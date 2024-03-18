@@ -15,12 +15,15 @@ const ScanScreen = () => {
   };
 
   const logEvent = () => {
+    return;
   };
 
   const undoLastScan = () => {
+    return;
   };
 
   const startEvent = () => {
+    return;
   };
 
   return (
@@ -31,16 +34,15 @@ const ScanScreen = () => {
           <Text style={[s.text, s.title]}>
             {'Scan a model or battery QR code\nto log an event'}
           </Text>
-          <Text style={[s.text, s.scannedNames]}>
-            {'Event for Goblin Buddy'}
-          </Text>
+          <Text style={[s.text, s.scannedNames]}>{'Event for Goblin Buddy'}</Text>
           <View style={s.buttonContainer}>
-            <CircleButton icon={'share'} text={'Undo scan'} style={s.flip} onPress={undoLastScan}/>
-            <CircleButton icon={'file-lines'} text={'Log event'} onPress={logEvent}/>
-            <CircleButton icon={'plane-up'} text={'Start event'} onPress={startEvent}/>
+            <CircleButton icon={'share'} text={'Undo scan'} style={s.flip} onPress={undoLastScan} />
+            <CircleButton icon={'file-lines'} text={'Log event'} onPress={logEvent} />
+            <CircleButton icon={'plane-up'} text={'Start event'} onPress={startEvent} />
           </View>
         </View>
-      }/>
+      }
+    />
   );
 };
 
@@ -53,7 +55,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'space-around',
   },
   flip: {
-    transform: [{rotate: '180deg'}],
+    transform: [{ rotate: '180deg' }],
   },
   overlay: {
     position: 'absolute',

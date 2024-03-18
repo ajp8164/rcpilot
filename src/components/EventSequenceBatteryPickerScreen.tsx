@@ -20,7 +20,10 @@ import { modelHasChecklists } from 'lib/model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
-export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceBatteryPicker'>;
+export type Props = NativeStackScreenProps<
+  EventSequenceNavigatorParamList,
+  'EventSequenceBatteryPicker'
+>;
 
 const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   const { cancelable } = route.params;
@@ -30,13 +33,20 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
 
-  const activeBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
+  const activeBatteries = useQuery(
+    Battery,
+    batteries => {
+      return batteries.filtered('retired == $0', false);
+    },
+    [],
+  );
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
   const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (cancelable) {
           return (
@@ -44,16 +54,19 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={theme.styles.buttonInvScreenHeader}
-              onPress={() => confirmAction(cancelEvent, {
-                label: `Do Not Log ${kind.name}`,
-                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-              })}
+              onPress={() =>
+                confirmAction(cancelEvent, {
+                  label: `Do Not Log ${kind.name}`,
+                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                })
+              }
             />
-          )
+          );
         }
       },
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
-        const hasChecklists = modelHasChecklists(model!, ChecklistType.PreEvent);
+        const hasChecklists = model && modelHasChecklists(model, ChecklistType.PreEvent);
         return (
           <Button
             title={hasChecklists ? 'Checklist' : 'Timer'}
@@ -79,9 +92,10 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
               }
             }}
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cancelEvent = () => {
@@ -90,12 +104,12 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   };
 
   const onSelect = (selected: Battery[]) => {
-    dispatch(eventSequence.setBatteries({batteryIds: selected.map(b => b._id.toString())}));
+    dispatch(eventSequence.setBatteries({ batteryIds: selected.map(b => b._id.toString()) }));
   };
 
   return (
     <View style={theme.styles.view}>
-      <BatteryPickerView 
+      <BatteryPickerView
         batteries={activeBatteries}
         favoriteBatteries={model?.favoriteBatteries}
         mode={'many'}
@@ -107,7 +121,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   headerIcon: {
-    paddingLeft: 5
+    paddingLeft: 5,
   },
 }));
 

@@ -3,7 +3,7 @@ import {
   DateRelation,
   EnumRelation,
   NumberRelation,
-  StringRelation
+  StringRelation,
 } from 'components/molecules/filters';
 
 import { ModelFilterValues } from 'types/filter';

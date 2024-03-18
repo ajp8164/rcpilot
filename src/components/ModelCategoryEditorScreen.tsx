@@ -15,8 +15,8 @@ import { useTheme } from 'theme';
 // CompositeScreenProps not working here since NewModelCategory is also in the SetupNavigator
 // just using a different presentation (didn't create a new navigator for a single screen).
 export type Props =
-  NativeStackScreenProps<SetupNavigatorParamList, 'ModelCategoryEditor'> |
-  NativeStackScreenProps<SetupNavigatorParamList, 'NewModelCategory'>;
+  | NativeStackScreenProps<SetupNavigatorParamList, 'ModelCategoryEditor'>
+  | NativeStackScreenProps<SetupNavigatorParamList, 'NewModelCategory'>;
 
 const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const { modelCategoryId } = route.params || {};
@@ -29,30 +29,29 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const [name, setName] = useState(modelCategory?.name || undefined);
 
   useEffect(() => {
-    const canSave = !!name && (
-      !eqString(modelCategory?.name, name)
-    );
+    const canSave = !!name && !eqString(modelCategory?.name, name);
 
     const save = () => {
       if (modelCategory) {
         realm.write(() => {
-          modelCategory.name = name!;
+          modelCategory.name = name || 'no-name';
         });
       } else {
         realm.write(() => {
           realm.create('ModelCategory', {
-            name
+            name,
           });
         });
       }
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader({enabled: canSave, action: onDone});
+    setScreenEditHeader({ enabled: canSave, action: onDone });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
   return (

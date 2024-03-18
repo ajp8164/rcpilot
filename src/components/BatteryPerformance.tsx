@@ -20,31 +20,26 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
         actions={[
           {
             ActionComponent: (
-              <Icon
-                name={'filter'}
-                size={28}
-                color={theme.colors.clearButtonText}
-              />
+              <Icon name={'filter'} size={28} color={theme.colors.clearButtonText} />
             ),
-            onPress: () => navigation.navigate('EventFiltersNavigator', {
-              screen: 'EventFilters',
-              params: {
-                filterType: FilterType.EventsBatteryPerformanceFilter,
-                useGeneralFilter: true,
-              },
-            })
-          }, {
+            onPress: () =>
+              navigation.navigate('EventFiltersNavigator', {
+                screen: 'EventFilters',
+                params: {
+                  filterType: FilterType.EventsBatteryPerformanceFilter,
+                  useGeneralFilter: true,
+                },
+              }),
+          },
+          {
             ActionComponent: (
-              <Icon
-                name={'scale-unbalanced-flip'}
-                size={28}
-                color={theme.colors.clearButtonText}
-              />
+              <Icon name={'scale-unbalanced-flip'} size={28} color={theme.colors.clearButtonText} />
             ),
-            onPress: () => navigation.navigate('BatteryPerformanceComparisonPicker')
-          }, {
+            onPress: () => navigation.navigate('BatteryPerformanceComparisonPicker'),
+          },
+          {
             label: 'Done',
-            onPress: navigation.goBack
+            onPress: navigation.goBack,
           },
         ]}
       />

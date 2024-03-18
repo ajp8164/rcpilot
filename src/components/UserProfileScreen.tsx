@@ -1,8 +1,5 @@
 import { ActivityIndicator, ScrollView, View } from 'react-native';
-import {
-  MainNavigatorParamList,
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { MainNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useState } from 'react';
 import UserProfileView, { EditorState } from 'components/views/UserProfileView';
 
@@ -39,13 +36,8 @@ const UserProfileScreen = ({ navigation, route }: Props) => {
 
   return (
     <View>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
-        <UserProfileView
-          userProfile={userProfile}
-          onEditorStateChange={setEditorState}
-        />
+      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior={'automatic'}>
+        <UserProfileView userProfile={userProfile} onEditorStateChange={setEditorState} />
       </ScrollView>
     </View>
   );

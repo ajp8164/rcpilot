@@ -34,28 +34,32 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
 
   const [name, setName] = useState(modelPropeller?.name || undefined);
   const [vendor, setVendor] = useState(modelPropeller?.vendor || undefined);
-  const [numberOfBlades, setNumberOfBlades] = useState(modelPropeller?.numberOfBlades?.toString() || undefined);
+  const [numberOfBlades, setNumberOfBlades] = useState(
+    modelPropeller?.numberOfBlades?.toString() || undefined,
+  );
   const [diameter, setDiameter] = useState(modelPropeller?.diameter?.toString() || undefined);
   const [pitch, setPitch] = useState(modelPropeller?.pitch?.toString() || undefined);
-  const [measurementUnits, setMeasurementUnits] = useState<MeasurementUnits>(modelPropeller?.measurementUnits || MeasurementUnits.Inches);
+  const [measurementUnits, setMeasurementUnits] = useState<MeasurementUnits>(
+    modelPropeller?.measurementUnits || MeasurementUnits.Inches,
+  );
   const [notes, setNotes] = useState(modelPropeller?.notes || undefined);
 
   useEffect(() => {
-    const canSave = !!name && (
-      !eqString(modelPropeller?.name, name) ||
-      !eqString(modelPropeller?.vendor, vendor) ||
-      !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades) ||
-      !eqNumber(modelPropeller?.diameter, diameter) ||
-      !eqNumber(modelPropeller?.pitch, pitch) ||
-      !eqString(modelPropeller?.measurementUnits, measurementUnits) ||
-      !eqString(modelPropeller?.notes, notes)
-    );
+    const canSave =
+      !!name &&
+      (!eqString(modelPropeller?.name, name) ||
+        !eqString(modelPropeller?.vendor, vendor) ||
+        !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades) ||
+        !eqNumber(modelPropeller?.diameter, diameter) ||
+        !eqNumber(modelPropeller?.pitch, pitch) ||
+        !eqString(modelPropeller?.measurementUnits, measurementUnits) ||
+        !eqString(modelPropeller?.notes, notes));
 
     const save = () => {
       if (modelPropeller) {
         realm.write(() => {
-          modelPropeller.updatedOn = DateTime.now().toISO()!,
-          modelPropeller.name = name!;
+          modelPropeller.updatedOn = DateTime.now().toISO();
+          modelPropeller.name = name || 'no-name';
           modelPropeller.vendor = vendor;
           modelPropeller.numberOfBlades = toNumber(numberOfBlades);
           modelPropeller.diameter = toNumber(diameter);
@@ -65,7 +69,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         });
       } else {
         realm.write(() => {
-          const now = DateTime.now().toISO()!;
+          const now = DateTime.now().toISO();
           realm.create('ModelPropeller', {
             createdOn: now,
             updatedOn: now,
@@ -80,13 +84,14 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         });
       }
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader({enabled: canSave, action: onDone});
+    setScreenEditHeader({ enabled: canSave, action: onDone });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, vendor, diameter, pitch, measurementUnits, numberOfBlades, notes]);
 
   useEffect(() => {
@@ -96,6 +101,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       event.removeListener('propeller-measurement-units', onChangeMeasurementUnits);
       event.removeListener('propeller-notes', onChangeNotes);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeMeasurementUnits = (result: EnumPickerResult) => {
@@ -117,20 +123,20 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         placeholder={'Unnamed Propeller'}
         position={['first', 'last']}
         onChangeText={setName}
-      /> 
+      />
       <Divider />
       <ListItemInput
         value={vendor}
         placeholder={'Unnamed Vendor'}
         position={['first']}
         onChangeText={setVendor}
-      /> 
+      />
       <ListItemInput
         title={'Number of Blades'}
         value={numberOfBlades}
         placeholder={'Unknown'}
         numeric={true}
-        numericProps={{prefix: '', precision: 0}}
+        numericProps={{ prefix: '', precision: 0 }}
         keyboardType={'number-pad'}
         onChangeText={setNumberOfBlades}
       />
@@ -140,7 +146,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         value={diameter}
         placeholder={'Unknown'}
         numeric={true}
-        numericProps={{prefix: ''}}
+        numericProps={{ prefix: '' }}
         keyboardType={'number-pad'}
         onChangeText={setDiameter}
       />
@@ -150,7 +156,7 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         value={pitch}
         placeholder={'Unknown'}
         numeric={true}
-        numericProps={{prefix: ''}}
+        numericProps={{ prefix: '' }}
         keyboardType={'number-pad'}
         position={['last']}
         onChangeText={setPitch}
@@ -160,23 +166,27 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         title={'Measurement Units'}
         value={measurementUnits}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Measurement Units',
-          headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
-          values: Object.values(MeasurementUnits),
-          selected: measurementUnits,
-          eventName: 'propeller-measurement-units',
-        })}
-        /> 
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'Measurement Units',
+            headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
+            values: Object.values(MeasurementUnits),
+            selected: measurementUnits,
+            eventName: 'propeller-measurement-units',
+          })
+        }
+      />
       <Divider text={'NOTES'} />
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('NotesEditor', {
-          title: 'Propeller Notes',
-          text: notes,
-          eventName: 'propeller-notes',
-        })}
+        onPress={() =>
+          navigation.navigate('NotesEditor', {
+            title: 'Propeller Notes',
+            text: notes,
+            eventName: 'propeller-notes',
+          })
+        }
       />
     </ScrollView>
   );

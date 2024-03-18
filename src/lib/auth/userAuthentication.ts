@@ -22,10 +22,7 @@ export const signInWithApple = async () => {
       throw new Error('No identify token returned');
     }
     const { identityToken, nonce } = appleAuthRequestResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(
-      identityToken,
-      nonce,
-    );
+    const appleCredential = auth.AppleAuthProvider.credential(identityToken, nonce);
     const userCredential = await auth().signInWithCredential(appleCredential);
     const name = appleAuthRequestResponse.fullName;
     userCredential.user = {
@@ -39,23 +36,16 @@ export const signInWithApple = async () => {
     // com.apple.AuthenticationServices.AuthorizationError is likely due to the user not being
     // signed into their iOS device via the Settings app or they auth'd with an incorrect
     // password.
-    if (
-      !e.message.includes('com.apple.AuthenticationServices.AuthorizationError')
-    ) {
+    if (!e.message.includes('com.apple.AuthenticationServices.AuthorizationError')) {
       log.error(`Apple sign in error: ${e.message}`);
-      throw new Error(
-        'An internal error occurred while trying to sign in. Please try again.',
-      );
+      throw new Error('An internal error occurred while trying to sign in. Please try again.');
     }
   }
 };
 
 export const signInWithFacebook = async () => {
   try {
-    const result = await LoginManager.logInWithPermissions([
-      'public_profile',
-      'email',
-    ]);
+    const result = await LoginManager.logInWithPermissions(['public_profile', 'email']);
     if (result.isCancelled) {
       throw new Error('User canceled the login process');
     }
@@ -63,17 +53,13 @@ export const signInWithFacebook = async () => {
     if (!data) {
       throw new Error('Something went wrong obtaining access token');
     }
-    const facebookCredential = auth.FacebookAuthProvider.credential(
-      data.accessToken,
-    );
+    const facebookCredential = auth.FacebookAuthProvider.credential(data.accessToken);
     return await auth().signInWithCredential(facebookCredential);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (!e.message.includes('canceled')) {
       log.error(`Facebook sign in error: ${e.message}`);
-      throw new Error(
-        'An internal error occurred while trying to sign in. Please try again.',
-      );
+      throw new Error('An internal error occurred while trying to sign in. Please try again.');
     }
   }
 };
@@ -93,9 +79,7 @@ export const signInWithGoogle = async () => {
   } catch (e: any) {
     if (!e.message.includes('canceled')) {
       log.error(`Google sign in error: ${e.message}`);
-      throw new Error(
-        'An internal error occurred while trying to sign in. Please try again.',
-      );
+      throw new Error('An internal error occurred while trying to sign in. Please try again.');
     }
   }
 };
@@ -111,26 +95,18 @@ export const signInWithTwitter = async () => {
     // });
 
     const { authToken, authTokenSecret } = await RNTwitterSignIn.logIn();
-    const twitterCredential = auth.TwitterAuthProvider.credential(
-      authToken,
-      authTokenSecret,
-    );
+    const twitterCredential = auth.TwitterAuthProvider.credential(authToken, authTokenSecret);
     return await auth().signInWithCredential(twitterCredential);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (!e.message.includes('canceled')) {
       log.error(`Twitter sign in error: ${e.message}`);
-      throw new Error(
-        'An internal error occurred while trying to sign in. Please try again.',
-      );
+      throw new Error('An internal error occurred while trying to sign in. Please try again.');
     }
   }
 };
 
-export const signInwithEmailAndPassword = async (
-  email: string,
-  password: string,
-) => {
+export const signInwithEmailAndPassword = async (email: string, password: string) => {
   return await auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
@@ -145,9 +121,7 @@ export const signInwithEmailAndPassword = async (
         throw new Error('This email address is invalid.');
       }
       log.error(`Email/password sign in error: ${e.message}`);
-      throw new Error(
-        'An internal error occurred while trying to sign in. Please try again.',
-      );
+      throw new Error('An internal error occurred while trying to sign in. Please try again.');
     });
 };
 
@@ -201,13 +175,9 @@ export const createUserWithEmailAndPassword = async (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.message.includes('auth/email-already-exists')) {
-      throw new Error(
-        'The provided email is already in use by an existing user.',
-      );
+      throw new Error('The provided email is already in use by an existing user.');
     }
     log.error(`Create account error: ${e.message}`);
-    throw new Error(
-      'An internal error occurred while creating your account. Please try again.',
-    );
+    throw new Error('An internal error occurred while creating your account. Please try again.');
   }
 };

@@ -29,29 +29,29 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const modelFuel = useObject(ModelFuel, new BSON.ObjectId(modelFuelId));
-  
+
   const [name, setName] = useState(modelFuel?.name || undefined);
   const [cost, setCost] = useState(modelFuel?.cost?.toFixed(2) || undefined);
   const [notes, setNotes] = useState(modelFuel?.notes || undefined);
 
   useEffect(() => {
-    const canSave = !!name && (
-      !eqString(modelFuel?.name, name) ||
-      !eqNumber(modelFuel?.cost, cost) ||
-      !eqString(modelFuel?.notes, notes)
-    );
+    const canSave =
+      !!name &&
+      (!eqString(modelFuel?.name, name) ||
+        !eqNumber(modelFuel?.cost, cost) ||
+        !eqString(modelFuel?.notes, notes));
 
     const save = () => {
       if (modelFuel) {
         realm.write(() => {
-          modelFuel.updatedOn = DateTime.now().toISO()!,
-          modelFuel.name = name!;
+          modelFuel.updatedOn = DateTime.now().toISO();
+          modelFuel.name = name || 'no-name';
           modelFuel.cost = toNumber(cost);
           modelFuel.notes = notes;
         });
       } else {
         realm.write(() => {
-          const now = DateTime.now().toISO()!;
+          const now = DateTime.now().toISO();
           realm.create('ModelFuel', {
             createdOn: now,
             updatedOn: now,
@@ -62,13 +62,14 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
         });
       }
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader({enabled: canSave, action: onDone});
+    setScreenEditHeader({ enabled: canSave, action: onDone });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, cost, notes]);
 
   useEffect(() => {
@@ -76,6 +77,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
     return () => {
       event.removeListener('fuel-notes', onChangeNotes);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeNotes = (result: NotesEditorResult) => {
@@ -83,9 +85,9 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-  <ScrollView
-    style={theme.styles.view}
-    showsVerticalScrollIndicator={false}
+    <ScrollView
+      style={theme.styles.view}
+      showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'DETAILS'} />
       <ListItemInput
@@ -93,7 +95,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
         placeholder={'Name for the fuel'}
         position={['first', 'last']}
         onChangeText={setName}
-      /> 
+      />
       <Divider />
       <ListItemInput
         title={'Fuel Cost'}
@@ -109,11 +111,13 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('NotesEditor', {
-          title: 'Fuel Notes',
-          text: notes,
-          eventName: 'fuel-notes',
-        })}
+        onPress={() =>
+          navigation.navigate('NotesEditor', {
+            title: 'Fuel Notes',
+            text: notes,
+            eventName: 'fuel-notes',
+          })
+        }
       />
     </ScrollView>
   );

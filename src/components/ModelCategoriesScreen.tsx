@@ -27,16 +27,18 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon}/>}
+            icon={<Icon name={'plus'} style={s.headerIcon} />}
             onPress={() => navigation.navigate('NewModelCategory')}
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteCategory = (category: ModelCategory) => {
@@ -52,28 +54,40 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         key={category._id.toString()}
         title={category.name}
         position={listItemPosition(index, allModelCategories.length)}
-        onPress={() => navigation.navigate('ModelCategoryEditor', {
-          modelCategoryId: category._id.toString(),
-        })}
+        onPress={() =>
+          navigation.navigate('ModelCategoryEditor', {
+            modelCategoryId: category._id.toString(),
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteCategory, {
-              label: 'Delete Category',
-              title: "This action cannot be undone.\nAre you sure you don't want to log this model category?",
-              value: category,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteCategory, {
+                  label: 'Delete Category',
+                  title:
+                    "This action cannot be undone.\nAre you sure you don't want to log this model category?",
+                  value: category,
+                }),
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-categories', category._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('model-categories', category._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   if (!allModelCategories.length) {
     return (
-      <EmptyView info message={'No Model Categories'} details={"Tap the + button to add your first model category."} />
+      <EmptyView
+        info
+        message={'No Model Categories'}
+        details={'Tap the + button to add your first model category.'}
+      />
     );
   }
 

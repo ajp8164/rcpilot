@@ -35,16 +35,18 @@ const PilotsScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon}/>}
+            icon={<Icon name={'plus'} style={s.headerIcon} />}
             onPress={() => navigation.navigate('NewPilot')}
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setPilot = (pilot?: Pilot) => {
@@ -70,21 +72,27 @@ const PilotsScreen = ({ navigation }: Props) => {
         position={listItemPosition(index, allPilots.length)}
         checked={pilot._id.toString() === selectedPilotId}
         onPress={() => setPilot(pilot)}
-        onPressInfo={() => navigation.navigate('Pilot', {
-          pilotId: pilot._id.toString(),
-        })}
+        onPressInfo={() =>
+          navigation.navigate('Pilot', {
+            pilotId: pilot._id.toString(),
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deletePilot, {
-              label: 'Delete Pilot',
-              title: 'This action cannot be undone.\nAre you sure you want to delete this pilot?',
-              value: pilot,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deletePilot, {
+                  label: 'Delete Pilot',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this pilot?',
+                  value: pilot,
+                }),
+            },
+          ],
         }}
       />
-    )
+    );
   };
 
   const renderFooter = () => {
@@ -99,7 +107,12 @@ const PilotsScreen = ({ navigation }: Props) => {
           checked={unknownPilot._id.toString() === selectedPilotId}
           onPress={() => setPilot(unknownPilot)}
         />
-        <Divider note text={'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'} />
+        <Divider
+          note
+          text={
+            'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'
+          }
+        />
       </>
     );
   };

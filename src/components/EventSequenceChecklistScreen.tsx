@@ -25,13 +25,16 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import { useObject } from '@realm/react';
 import { uuidv4 } from 'lib/utils';
 
-type ChecklistActionItemData = {checklist: Checklist, action: ChecklistAction};
+type ChecklistActionItemData = { checklist: Checklist; action: ChecklistAction };
 type Section = {
   title?: string;
   data: ChecklistActionItemData[];
 };
 
-export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceChecklist'>;
+export type Props = NativeStackScreenProps<
+  EventSequenceNavigatorParamList,
+  'EventSequenceChecklist'
+>;
 
 const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   const { cancelable, checklistType } = route.params;
@@ -45,9 +48,11 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
   const [kind] = useState(eventKind(model?.type));
 
-  const checklists = useRef(model?.checklists.filter(c => {
-    return c.type === checklistType;
-  })).current;
+  const checklists = useRef(
+    model?.checklists.filter(c => {
+      return c.type === checklistType;
+    }),
+  ).current;
 
   const actionsToDo = useRef(groupChecklistActions(checklists || []));
 
@@ -55,13 +60,14 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   // event number at which the checklist action is performed.
   const [newChecklistActionHistoryEntry] = useState<JChecklistActionHistoryEntry>({
     refId: '',
-    date: DateTime.now().toISO()!,
+    date: DateTime.now().toISO(),
     modelTime: model ? model.statistics.totalTime : 0,
     eventNumber: model ? model.statistics.totalEvents : 0,
   });
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (cancelable) {
           return (
@@ -69,14 +75,17 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
               title={'Cancel'}
               titleStyle={theme.styles.buttonInvScreenHeaderTitle}
               buttonStyle={theme.styles.buttonInvScreenHeader}
-              onPressIn={() => confirmAction(cancelEvent, {
-                label: `Do Not Log ${kind.name}`,
-                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-              })}
+              onPressIn={() =>
+                confirmAction(cancelEvent, {
+                  label: `Do Not Log ${kind.name}`,
+                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                })
+              }
             />
-          )
+          );
         }
       },
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
@@ -100,9 +109,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
               }
             }}
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const cancelEvent = () => {
@@ -110,8 +120,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     navigation.getParent()?.goBack();
   };
 
-  function groupChecklistActions(checklists: Checklist[]): SectionListData<ChecklistActionItemData, Section>[] {
-    let actionItemData: ChecklistActionItemData[] = [];
+  function groupChecklistActions(
+    checklists: Checklist[],
+  ): SectionListData<ChecklistActionItemData, Section>[] {
+    const actionItemData: ChecklistActionItemData[] = [];
     let actions: ChecklistAction[] = [];
 
     checklists.forEach(c => {
@@ -121,25 +133,25 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
           checklist: c,
           action: a,
         });
-      });  
+      });
     });
 
-    return groupItems<ChecklistActionItemData, Section>(actionItemData, (actionItem) => {
+    return groupItems<ChecklistActionItemData, Section>(actionItemData, actionItem => {
       return actionItem.checklist.name.toUpperCase();
     });
-  };
+  }
 
   const allActionsComplete = () => {
     const entries = Object.keys(currentEventSequence.checklistActionHistoryEntries[checklistType]);
     if (!entries.length) return false;
-    return entries.every(key =>
-      !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date,
+    return entries.every(
+      key => !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date,
     );
   };
 
   const someActionsComplete = () => {
-    return Object.keys(currentEventSequence.checklistActionHistoryEntries).some(key =>
-      !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date
+    return Object.keys(currentEventSequence.checklistActionHistoryEntries).some(
+      key => !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date,
     );
   };
 
@@ -147,29 +159,35 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     actionsToDo.current.forEach(section => {
       section.data.forEach(actionItem => {
         const action = actionItem.action;
-        if (!currentEventSequence.checklistActionHistoryEntries[checklistType][action.refId]?.date) {
-          dispatch(eventSequence.setChecklistActionComplete({
-            checklistActionRefId: action.refId,
-            checklistActionHistoryEntry: {
-              ...newChecklistActionHistoryEntry,
-              refId: uuidv4(), // Create a unique reference
-            },
-            checklistType,
-          }))
+        if (
+          !currentEventSequence.checklistActionHistoryEntries[checklistType][action.refId]?.date
+        ) {
+          dispatch(
+            eventSequence.setChecklistActionComplete({
+              checklistActionRefId: action.refId,
+              checklistActionHistoryEntry: {
+                ...newChecklistActionHistoryEntry,
+                refId: uuidv4(), // Create a unique reference
+              },
+              checklistType,
+            }),
+          );
         }
-      })
-    })
+      });
+    });
   };
 
   const pendAllActions = () => {
     Object.keys(currentEventSequence.checklistActionHistoryEntries[checklistType]).forEach(key => {
       if (currentEventSequence.checklistActionHistoryEntries[checklistType][key].date) {
-        dispatch(eventSequence.setChecklistActionNotComplete({
-          checklistActionRefId: key,
-          checklistType,
-        }))
-      }}
-    );
+        dispatch(
+          eventSequence.setChecklistActionNotComplete({
+            checklistActionRefId: key,
+            checklistType,
+          }),
+        );
+      }
+    });
   };
 
   const renderChecklistAction: SectionListRenderItem<ChecklistActionItemData, Section> = ({
@@ -190,37 +208,49 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         iconUnchecked={'square'}
         iconSize={26}
         iconColor={theme.colors.clearButtonText}
-        checked={!!currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date}
+        checked={
+          !!currentEventSequence.checklistActionHistoryEntries[checklistType][
+            actionItem.action.refId
+          ]?.date
+        }
         position={listItemPosition(index, section.data.length)}
         onPress={() => {
-          if (currentEventSequence.checklistActionHistoryEntries[checklistType][actionItem.action.refId]?.date) {
-            dispatch(eventSequence.setChecklistActionNotComplete({
-              checklistActionRefId: actionItem.action.refId,
-              checklistType,
-            }));
+          if (
+            currentEventSequence.checklistActionHistoryEntries[checklistType][
+              actionItem.action.refId
+            ]?.date
+          ) {
+            dispatch(
+              eventSequence.setChecklistActionNotComplete({
+                checklistActionRefId: actionItem.action.refId,
+                checklistType,
+              }),
+            );
           } else {
-            dispatch(eventSequence.setChecklistActionComplete({
-              checklistActionRefId: actionItem.action.refId,
-              checklistActionHistoryEntry: {
-                ...newChecklistActionHistoryEntry,
-                refId: uuidv4(), // Create a unique reference
-              },
-              checklistType,
-            }));
+            dispatch(
+              eventSequence.setChecklistActionComplete({
+                checklistActionRefId: actionItem.action.refId,
+                checklistActionHistoryEntry: {
+                  ...newChecklistActionHistoryEntry,
+                  refId: uuidv4(), // Create a unique reference
+                },
+                checklistType,
+              }),
+            );
           }
         }}
-        onPressInfo={() => navigation.navigate('EventSequenceChecklistItem', {
-          checklistRefId: actionItem.checklist.refId,
-          actionRefId: actionItem.action.refId,
-        })}
-       /> 
+        onPressInfo={() =>
+          navigation.navigate('EventSequenceChecklistItem', {
+            checklistRefId: actionItem.checklist.refId,
+            actionRefId: actionItem.action.refId,
+          })
+        }
+      />
     );
   };
 
   if (!actionsToDo.current.length) {
-    return (
-      <EmptyView info message={'No Checklist Actions Pending'} />
-    );    
+    return <EmptyView info message={'No Checklist Actions Pending'} />;
   }
 
   const allComplete = allActionsComplete();
@@ -234,11 +264,9 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         stickySectionHeadersEnabled={true}
         style={[theme.styles.view, s.sectionList]}
         sections={actionsToDo.current}
-        keyExtractor={(item, index)=> `${index}${item.action.refId}`}
+        keyExtractor={(item, index) => `${index}${item.action.refId}`}
         renderItem={renderChecklistAction}
-        renderSectionHeader={({section: {title}}) => (
-          <SectionListHeader title={title} />
-        )}
+        renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
         ListFooterComponent={<Divider />}
       />
       <ActionBar
@@ -247,7 +275,8 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
             label: 'Uncheck All Items',
             visible: someComplete || allComplete,
             onPress: pendAllActions,
-          }, {
+          },
+          {
             label: 'Check All Items',
             visible: !allComplete || (someComplete && !allComplete),
             onPress: completeAllActions,
@@ -264,7 +293,7 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     flexGrow: 1,
   },
   headerIcon: {
-    paddingLeft: 5
+    paddingLeft: 5,
   },
 }));
 

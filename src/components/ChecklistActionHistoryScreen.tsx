@@ -25,35 +25,34 @@ type Section = {
 export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistActionHistory'>;
 
 const ChecklistActionHistoryScreen = ({ route }: Props) => {
-  const {
-    action,
-    modelId,
-  } = route.params;
+  const { action, modelId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
-  const groupEntries = (entries?: JChecklistActionHistoryEntry[]): SectionListData<JChecklistActionHistoryEntry, Section>[] => {
-    return groupItems<JChecklistActionHistoryEntry, Section>(entries || [], (entry) => {
+  const groupEntries = (
+    entries?: JChecklistActionHistoryEntry[],
+  ): SectionListData<JChecklistActionHistoryEntry, Section>[] => {
+    return groupItems<JChecklistActionHistoryEntry, Section>(entries || [], entry => {
       return DateTime.fromISO(entry.date).toFormat('MMMM yyyy').toUpperCase();
     });
   };
 
   const renderActionHistoryEntry: ListRenderItem<JChecklistActionHistoryEntry> = ({
     item: historyEntry,
-    index
+    index,
   }) => {
     return (
       <ListItem
         key={`${index}`}
         title={`${eventKind(model?.type).name} #${historyEntry.eventNumber}`}
-        subtitle={`${DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}\nModel Time ${secondsToMSS(historyEntry.modelTime, {format: 'm:ss'})}`}
-        position={listItemPosition(index, action!.history.length)}
+        subtitle={`${DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}\nModel Time ${secondsToMSS(historyEntry.modelTime, { format: 'm:ss' })}`}
+        position={listItemPosition(index, action.history.length)}
         rightImage={false}
       />
-    )
+    );
   };
 
   if (!action.history.length) {
@@ -61,7 +60,7 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       <EmptyView
         info
         message={'No Checklist Actions Logged'}
-        details={`This action has not yet been performed on ${model!.type.toLowerCase()} ${model!.name}.`}
+        details={`This action has not yet been performed on ${model?.type.toLowerCase()} ${model?.name}.`}
       />
     );
   }
@@ -72,12 +71,12 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
-      sections={groupEntries(([] as JChecklistActionHistoryEntry[]).concat([], action.history).reverse())}
-      keyExtractor={(item, index)=> `${index}${item.eventNumber}`}
-      renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({section: {title}}) => (
-        <SectionListHeader title={title} />
+      sections={groupEntries(
+        ([] as JChecklistActionHistoryEntry[]).concat([], action.history).reverse(),
       )}
+      keyExtractor={(item, index) => `${index}${item.eventNumber}`}
+      renderItem={renderActionHistoryEntry}
+      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
       ListFooterComponent={<Divider />}
     />
   );

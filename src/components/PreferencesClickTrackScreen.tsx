@@ -6,9 +6,7 @@ import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { makeStyles } from '@rneui/themed';
 
@@ -23,7 +21,7 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'RELATIVE VOLUME'}/>
+      <Divider text={'RELATIVE VOLUME'} />
       <Slider
         value={0.5}
         minimumValue={0}
@@ -33,30 +31,37 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider text={'SETTINGS'}/>
+      <Divider text={'SETTINGS'} />
       <ListItem
         title={'While Running'}
         value={'None'}
         position={['first']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'While Running',
-          values: Object.values(ClickTrackWhileRunning),
-          selected: ClickTrackWhileRunning.BPM30,
-          eventName: 'while-running',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'While Running',
+            values: Object.values(ClickTrackWhileRunning),
+            selected: ClickTrackWhileRunning.BPM30,
+            eventName: 'while-running',
+          })
+        }
       />
       <ListItem
         title={'After Expiring'}
         value={'None'}
         position={['last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'After Expiring',
-          values: Object.values(ClickTrackAfterExpiring),
-          selected: ClickTrackAfterExpiring.BPM30,
-          eventName: 'after-expiring',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'After Expiring',
+            values: Object.values(ClickTrackAfterExpiring),
+            selected: ClickTrackAfterExpiring.BPM30,
+            eventName: 'after-expiring',
+          })
+        }
       />
-      <Divider note text={'Higher BPM values may not aloways operate smoothly  on older devices.'}/>
+      <Divider
+        note
+        text={'Higher BPM values may not aloways operate smoothly  on older devices.'}
+      />
     </ScrollView>
   );
 };

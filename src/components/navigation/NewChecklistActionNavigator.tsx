@@ -13,9 +13,9 @@ const NewChecklistActionNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewChecklistActionStack.Navigator
-        initialRouteName='NewChecklistAction'
+        initialRouteName="NewChecklistAction"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
@@ -30,7 +30,7 @@ const NewChecklistActionNavigator = () => {
           }}
         />
         <NewChecklistActionStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Action Notes',

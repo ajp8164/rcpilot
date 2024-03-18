@@ -77,7 +77,7 @@ const SetupNavigator = () => {
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
-          }}
+        }}
       />
       <SetupStack.Screen
         name="Pilot"
@@ -86,10 +86,7 @@ const SetupNavigator = () => {
           title: '',
         }}
       />
-      <SetupStack.Screen
-        name="Pilots"
-        component={PilotsScreen}
-      />
+      <SetupStack.Screen name="Pilots" component={PilotsScreen} />
       <SetupStack.Screen
         name="NewPilot"
         component={NewPilotScreen}
@@ -106,10 +103,7 @@ const SetupNavigator = () => {
           presentation: 'modal',
         }}
       />
-      <SetupStack.Screen
-        name="Events"
-        component={EventsScreen}
-      />
+      <SetupStack.Screen name="Events" component={EventsScreen} />
       <SetupStack.Screen
         name="EventEditor"
         component={EventEditorScreen}
@@ -118,7 +112,7 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='BatteryCycleEditor'
+        name="BatteryCycleEditor"
         component={BatteryCycleEditorScreen}
         options={{
           title: 'Cycle Details',
@@ -245,7 +239,7 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='NotesEditor'
+        name="NotesEditor"
         component={NotesEditorScreen}
         options={{
           title: '',
@@ -341,7 +335,7 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='ReportEventFiltersNavigator'
+        name="ReportEventFiltersNavigator"
         component={ReportEventFiltersNavigator}
         options={{
           headerShown: false,
@@ -349,7 +343,7 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='ReportBatteryScanCodeFiltersNavigator'
+        name="ReportBatteryScanCodeFiltersNavigator"
         component={ReportBatteryScanCodeFiltersNavigator}
         options={{
           headerShown: false,
@@ -357,7 +351,7 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='ReportModelScanCodeFiltersNavigator'
+        name="ReportModelScanCodeFiltersNavigator"
         component={ReportModelScanCodeFiltersNavigator}
         options={{
           headerShown: false,
@@ -365,7 +359,7 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name='ReportMaintenanceFiltersNavigator'
+        name="ReportMaintenanceFiltersNavigator"
         component={ReportMaintenanceFiltersNavigator}
         options={{
           headerShown: false,

@@ -27,18 +27,22 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: ()  => {
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon}/>}
-            onPress={() => navigation.navigate('NewModelPropellerNavigator', {
-              screen: 'NewModelPropeller',
-            })}
+            icon={<Icon name={'plus'} style={s.headerIcon} />}
+            onPress={() =>
+              navigation.navigate('NewModelPropellerNavigator', {
+                screen: 'NewModelPropeller',
+              })
+            }
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deletePropeller = (propeller: ModelPropeller) => {
@@ -54,29 +58,41 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
         key={propeller._id.toString()}
         title={propeller.name}
         position={listItemPosition(index, allModelPropellers.length)}
-        onPress={() => navigation.navigate('ModelPropellerEditor', {
-          modelPropellerId: propeller._id.toString(),
-        })}
+        onPress={() =>
+          navigation.navigate('ModelPropellerEditor', {
+            modelPropellerId: propeller._id.toString(),
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deletePropeller, {
-              label: 'Delete Saved Filter',
-              title: 'This action cannot be undone.\nAre you sure you want to delete this propeller?',
-              value: propeller,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deletePropeller, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this propeller?',
+                  value: propeller,
+                }),
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-propellers', propeller._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('model-propellers', propeller._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   if (!allModelPropellers.length) {
     return (
-      <EmptyView info message={'No Model Propellers'} details={"Tap the + button to add your first model propeller."} />
-    );    
+      <EmptyView
+        info
+        message={'No Model Propellers'}
+        details={'Tap the + button to add your first model propeller.'}
+      />
+    );
   }
 
   return (

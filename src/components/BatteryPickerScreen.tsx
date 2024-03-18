@@ -23,7 +23,7 @@ export type BatteryPickerInterface = {
 
 export type BatteryPickerResult = {
   batteries: Battery[];
-}
+};
 
 export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'BatteryPicker'>;
 
@@ -41,7 +41,13 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
-  let pickerBatteries = useQuery(Battery, batteries => { return batteries.filtered('retired == $0', false) }, []);
+  let pickerBatteries = useQuery(
+    Battery,
+    batteries => {
+      return batteries.filtered('retired == $0', false);
+    },
+    [],
+  );
   if (query) {
     pickerBatteries = pickerBatteries.filtered(query);
   }
@@ -57,28 +63,26 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
         callback && callback(selectedBatteries.current);
       });
     };
-    
-    setScreenEditHeader(
-      {label: 'Done', action: onDone},
-      undefined,
-      {title, headerBackTitle: backTitle}
-    );
+
+    setScreenEditHeader({ label: 'Done', action: onDone }, undefined, {
+      title,
+      headerBackTitle: backTitle,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSelect = (selected: Battery[]) => {
     selectedBatteries.current = selected;
-    eventName && event.emit(eventName, {batteries: selected} as BatteryPickerResult);
+    eventName && event.emit(eventName, { batteries: selected } as BatteryPickerResult);
   };
 
   if (!pickerBatteries.length) {
-    return (
-      <EmptyView message={'No Batteries Found!'} />
-    );    
+    return <EmptyView message={'No Batteries Found!'} />;
   }
 
   return (
     <View style={theme.styles.view}>
-      <BatteryPickerView 
+      <BatteryPickerView
         batteries={pickerBatteries}
         mode={mode}
         selected={selected}

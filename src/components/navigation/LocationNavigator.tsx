@@ -13,9 +13,9 @@ const LocationNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <LocationStack.Navigator
-        initialRouteName='Locations'
+        initialRouteName="Locations"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
@@ -38,7 +38,7 @@ const LocationNavigator = () => {
           }}
         />
         <LocationStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Fuel Notes',

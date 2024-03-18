@@ -15,8 +15,8 @@ import { useTheme } from 'theme';
 // CompositeScreenProps not working here since NewEventStyle is also in the SetupNavigator
 // just using a different presentation (didn't create a new navigator for a single screen).
 export type Props =
-  NativeStackScreenProps<SetupNavigatorParamList, 'EventStyleEditor'> |
-  NativeStackScreenProps<SetupNavigatorParamList, 'NewEventStyle'>;
+  | NativeStackScreenProps<SetupNavigatorParamList, 'EventStyleEditor'>
+  | NativeStackScreenProps<SetupNavigatorParamList, 'NewEventStyle'>;
 
 const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   const { eventStyleId } = route.params || {};
@@ -29,30 +29,29 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   const [name, setName] = useState(eventStyle?.name || undefined);
 
   useEffect(() => {
-    const canSave = !!name && (
-      !eqString(eventStyle?.name, name)
-    );
+    const canSave = !!name && !eqString(eventStyle?.name, name);
 
     const save = () => {
       if (eventStyle) {
         realm.write(() => {
-          eventStyle.name = name!;
+          eventStyle.name = name || 'no-name';
         });
       } else {
         realm.write(() => {
           realm.create('EventStyle', {
-            name
+            name,
           });
         });
       }
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
-    setScreenEditHeader({enabled: canSave, action: onDone});
+    setScreenEditHeader({ enabled: canSave, action: onDone });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name]);
 
   return (

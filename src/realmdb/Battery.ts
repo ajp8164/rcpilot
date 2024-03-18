@@ -48,4 +48,4 @@ export class Battery extends Object<Battery> {
     },
     primaryKey: '_id',
   };
-};
+}

@@ -1,12 +1,12 @@
-import { AppTheme, useTheme } from "theme";
-import { ColorValue, Pressable } from "react-native";
-import React, { useImperativeHandle, useRef } from "react";
+import { AppTheme, useTheme } from 'theme';
+import { ColorValue, Pressable } from 'react-native';
+import React, { useImperativeHandle, useRef } from 'react';
 
-import CollapsibleView from "@eliav2/react-native-collapsible-view";
-import CustomIcon from "theme/icomoon/CustomIcon";
+import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
-import { makeStyles } from "@rneui/themed";
+import { ListItem as _ListItem } from '@react-native-ajp-elements/ui';
+import { makeStyles } from '@rneui/themed';
 
 interface Props extends _ListItem {
   checked: boolean;
@@ -18,14 +18,14 @@ interface Props extends _ListItem {
   iconUnchecked?: string;
   iconSize?: number;
   iconColor?: ColorValue;
-};
+}
 
 export interface ListItemCheckboxInfoMethods {
   resetEditor: () => void;
 }
 
 const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props>((props, ref) => {
-  const { 
+  const {
     checked,
     expanded = false,
     ExpandableComponent,
@@ -59,8 +59,8 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
         ref={liRef}
         {...props}
         containerStyle={[
-          {...props.containerStyle, ...s.container},
-          props.swipeable ? theme.styles.swipeableListItemContainer : {}
+          { ...props.containerStyle, ...s.container },
+          props.swipeable ? theme.styles.swipeableListItemContainer : {},
         ]}
         leftImage={
           <Icon
@@ -70,9 +70,9 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
             solid={checked}
             style={[
               s.icon,
-              (checked && (iconChecked === iconUnchecked)) || (iconChecked !== iconUnchecked)
+              (checked && iconChecked === iconUnchecked) || iconChecked !== iconUnchecked
                 ? {}
-                : s.uncheckedIcon
+                : s.uncheckedIcon,
             ]}
           />
         }
@@ -82,7 +82,7 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
               name={'circle-info'}
               size={22}
               color={theme.colors.clearButtonText}
-              style={hideInfo ? {opacity: 0} : {opacity: 1}}
+              style={hideInfo ? s.infoIconHidden : {}}
             />
           </Pressable>
         }
@@ -91,7 +91,7 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
         initExpanded={sectionInitiallyExpanded.current}
         expanded={expanded}
         noArrow
-        style={s.collapsible} 
+        style={s.collapsible}
         titleStyle={s.collapsibleTitle}>
         {ExpandableComponent}
       </CollapsibleView>
@@ -110,12 +110,15 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     height: 0,
   },
   container: {
-    minHeight: 48
+    minHeight: 48,
   },
   icon: {
     paddingRight: 5,
   },
   uncheckedIcon: {
+    opacity: 0,
+  },
+  infoIconHidden: {
     opacity: 0,
   },
 }));

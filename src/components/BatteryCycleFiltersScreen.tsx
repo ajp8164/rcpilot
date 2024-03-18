@@ -1,6 +1,11 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -18,7 +23,10 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<BatteryCycleFiltersNavigatorParamList, 'BatteryCycleFilters'>;
+export type Props = NativeStackScreenProps<
+  BatteryCycleFiltersNavigatorParamList,
+  'BatteryCycleFilters'
+>;
 
 const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
   const { useGeneralFilter } = route.params;
@@ -30,11 +38,19 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const allBatteryCycleFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', FilterType.BatteryCyclesFilter, generalBatteryCyclesFilterName);
+    return filters.filtered(
+      'type == $0 AND name != $1',
+      FilterType.BatteryCyclesFilter,
+      generalBatteryCyclesFilterName,
+    );
   });
 
   const generalBatteryCyclesFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', FilterType.BatteryCyclesFilter, generalBatteryCyclesFilterName);
+    return filters.filtered(
+      'type == $0 AND name == $1',
+      FilterType.BatteryCyclesFilter,
+      generalBatteryCyclesFilterName,
+    );
   });
   const [generalBatteryCyclesFilter, setGeneralBatteryCyclesFilter] = useState<Filter>();
 
@@ -56,8 +72,9 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
     } else {
       setGeneralBatteryCyclesFilter(generalBatteryCyclesFilterQuery[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
@@ -83,26 +100,33 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
         position={listItemPosition(index, allBatteryCycleFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('BatteryCycleFilterEditor', {
-          filterId: filter._id.toString(),
-          filterType: FilterType.BatteryCyclesFilter,
-        })}
+        onPressInfo={() =>
+          navigation.navigate('BatteryCycleFilterEditor', {
+            filterId: filter._id.toString(),
+            filterType: FilterType.BatteryCyclesFilter,
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => {
-              confirmAction(deleteFilter, {
-                label: 'Delete Saved Filter',
-                title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                value: filter,
-              });
-            }
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () => {
+                confirmAction(deleteFilter, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+                  value: filter,
+                });
+              },
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-cycle-filters', filter._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('battery-cycle-filters', filter._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   return (
@@ -117,40 +141,50 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalBatteryCyclesFilter ?
+      {useGeneralFilter && generalBatteryCyclesFilter ? (
         <ListItemCheckboxInfo
           title={'General Battery Cycles Filter'}
           subtitle={filterSummary(generalBatteryCyclesFilter)}
           position={['first', 'last']}
           checked={generalBatteryCyclesFilter._id.toString() === selectedFilterId}
           onPress={() => setFilter(generalBatteryCyclesFilter)}
-          onPressInfo={() => navigation.navigate('BatteryCycleFilterEditor', {
-            filterId: generalBatteryCyclesFilter!._id.toString(),
-            filterType: FilterType.BatteryCyclesFilter,
-          })}
+          onPressInfo={() =>
+            navigation.navigate('BatteryCycleFilterEditor', {
+              filterId: generalBatteryCyclesFilter._id.toString(),
+              filterType: FilterType.BatteryCyclesFilter,
+            })
+          }
         />
-        :
+      ) : (
         <ListItem
           title={'Add New Filter'}
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPressInfo={() => navigation.navigate('BatteryCycleFilterEditor', {
-            filterId: generalBatteryCyclesFilter!._id.toString(),
-            filterType: FilterType.BatteryCyclesFilter,
-            requireFilterName: true,
-          })}
+          onPressInfo={() =>
+            generalBatteryCyclesFilter &&
+            navigation.navigate('BatteryCycleFilterEditor', {
+              filterId: generalBatteryCyclesFilter._id.toString(),
+              filterType: FilterType.BatteryCyclesFilter,
+              requireFilterName: true,
+            })
+          }
         />
-      }
-      <Divider note
-        text={'You can save the General Battery Cycles Filter to remember a specific filter configuration for later use.'}
-      />      
+      )}
+      <Divider
+        note
+        text={
+          'You can save the General Battery Cycles Filter to remember a specific filter configuration for later use.'
+        }
+      />
       <FlatList
         data={allBatteryCycleFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allBatteryCycleFilters.length ? <Divider text={'SAVED BATTERY CYCLE FILTERS'} /> : null}
+        ListHeaderComponent={
+          allBatteryCycleFilters.length ? <Divider text={'SAVED BATTERY CYCLE FILTERS'} /> : null
+        }
       />
     </View>
   );

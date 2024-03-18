@@ -19,4 +19,4 @@ export class ChecklistTemplate extends Object<ChecklistTemplate> {
     },
     primaryKey: '_id',
   };
-};
+}

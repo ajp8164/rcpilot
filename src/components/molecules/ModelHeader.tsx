@@ -1,4 +1,9 @@
-import Animated, { Extrapolation, SharedValue, interpolate, useAnimatedStyle } from 'react-native-reanimated';
+import Animated, {
+  Extrapolation,
+  SharedValue,
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { Image, Platform, Pressable, Text, View } from 'react-native';
 import React, { useState } from 'react';
@@ -39,11 +44,11 @@ export const ModelHeader = ({
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const [image, setImage] = useState(model?.image || undefined);
 
-  const modelTypeName = model 
-    ? modelTypeIcons[model.type]?.name as string
+  const modelTypeName = model
+    ? (modelTypeIcons[model.type]?.name as string)
     : modelType
-    ? modelTypeIcons[modelType]?.name as string
-    : 'flag-checkered';
+      ? (modelTypeIcons[modelType]?.name as string)
+      : 'flag-checkered';
 
   const minHeight = theme.insets.top + 39;
   const maxHeight = 150;
@@ -72,7 +77,9 @@ export const ModelHeader = ({
   const itemsTranslateY = useAnimatedStyle(() => {
     if (!scrollY) return {};
     return {
-      transform: [{translateY: interpolate(scrollY.value, [0, maxHeight], [0, -300], Extrapolation.CLAMP)}],
+      transform: [
+        { translateY: interpolate(scrollY.value, [0, maxHeight], [0, -300], Extrapolation.CLAMP) },
+      ],
     };
   });
 
@@ -96,7 +103,7 @@ export const ModelHeader = ({
     }).then(attachment => {
       if (attachment[0] && attachment[0].type === 'image') {
         const img = attachment[0].uri;
-        setImage(img)
+        setImage(img);
         onChangeImage && onChangeImage(img);
       }
     });
@@ -105,21 +112,14 @@ export const ModelHeader = ({
   return (
     <>
       {/* Collapsed header */}
-      <Animated.View style={[s.collapsedHeader, {height: minHeight}, collapsedHeaderOpacity]}>
-          <Text style={s.title}>
-            {model?.name}
-          </Text>
+      <Animated.View style={[s.collapsedHeader, { height: minHeight }, collapsedHeaderOpacity]}>
+        <Text style={s.title}>{model?.name}</Text>
       </Animated.View>
       {/* Background image */}
-      <Animated.View
-        style={[s.backgroundContainer, backgroundTranslateY, backgroundOpacity]}>
-        {image ?
-          <Image
-            source={{ uri: image }}
-            resizeMode={'cover'}
-            style={s.headerImage}
-          />
-          :
+      <Animated.View style={[s.backgroundContainer, backgroundTranslateY, backgroundOpacity]}>
+        {image ? (
+          <Image source={{ uri: image }} resizeMode={'cover'} style={s.headerImage} />
+        ) : (
           <View style={s.defaultHeaderImage}>
             <SvgXml
               xml={getColoredSvg(modelTypeName)}
@@ -129,13 +129,11 @@ export const ModelHeader = ({
               style={s.dedaultModelImage}
             />
           </View>
-        }
+        )}
       </Animated.View>
       {/* Left button */}
-      {onGoBack &&
-        <Pressable
-          onPress={onGoBack}
-          style={s.buttonLeftContainer}>
+      {onGoBack && (
+        <Pressable onPress={onGoBack} style={s.buttonLeftContainer}>
           <Animated.View style={collapsedHeaderOpacity}>
             <Icon name={'chevron-left'} style={[s.buttonLeft, s.buttonLeftCollapsed]} />
           </Animated.View>
@@ -143,10 +141,9 @@ export const ModelHeader = ({
             <Icon name={'chevron-left'} style={[s.buttonLeft]} />
           </Animated.View>
         </Pressable>
-      }
+      )}
       {/* Items */}
-      <Animated.View
-        style={[s.itemsContainer, itemsTranslateY, itemsOpacity]}>
+      <Animated.View style={[s.itemsContainer, itemsTranslateY, itemsOpacity]}>
         <View style={s.buttonRightContainer}>
           <CircleButton
             size={30}
@@ -177,7 +174,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: -22,
     fontSize: 22,
     width: 50,
-    color: theme.colors.whiteTransparentMid
+    color: theme.colors.whiteTransparentMid,
   },
   buttonLeftContainer: {
     position: 'absolute',
@@ -198,7 +195,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     backgroundColor: theme.colors.white,
     position: 'absolute',
     width: '100%',
-    alignItems: 'center', 
+    alignItems: 'center',
     shadowColor: theme.colors.stickyBlack,
     ...Platform.select({
       ios: {
@@ -222,7 +219,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   dedaultModelImage: {
     top: 20,
     width: 125,
-    transform: [{rotate: '-45deg'}],
+    transform: [{ rotate: '-45deg' }],
   },
   title: {
     position: 'absolute',
@@ -238,9 +235,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     zIndex: 1,
   },
   insetImage: {
-    transform: [{rotate: '-45deg'}],
+    transform: [{ rotate: '-45deg' }],
     left: -3,
-    top: -1,    
+    top: -1,
   },
   insetImageContainer: {
     width: 70,

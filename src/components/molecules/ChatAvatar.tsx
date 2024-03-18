@@ -29,38 +29,39 @@ export const ChatAvatar = ({
     size === 'tiny'
       ? s.avatarTiny
       : size === 'small'
-      ? s.avatarSmall
-      : size === 'medium'
-      ? s.avatarMedium
-      : size === 'large'
-      ? s.avatarLarge
-      : s.avatarGiant;
+        ? s.avatarSmall
+        : size === 'medium'
+          ? s.avatarMedium
+          : size === 'large'
+            ? s.avatarLarge
+            : s.avatarGiant;
 
   const _titleStyle =
     size === 'tiny'
       ? s.avatarTitleTiny
       : size === 'small'
-      ? s.avatarTitleSmall
-      : size === 'medium'
-      ? s.avatarTitleMedium
-      : size === 'large'
-      ? s.avatarTitleLarge
-      : s.avatarTitleGiant;
+        ? s.avatarTitleSmall
+        : size === 'medium'
+          ? s.avatarTitleMedium
+          : size === 'large'
+            ? s.avatarTitleLarge
+            : s.avatarTitleGiant;
 
   const _iconSize =
     size === 'tiny'
       ? 20
       : size === 'small'
-      ? 24
-      : size === 'medium'
-      ? 28
-      : size === 'large'
-      ? 36
-      : 60;
+        ? 24
+        : size === 'medium'
+          ? 28
+          : size === 'large'
+            ? 36
+            : 60;
 
   const renderUserAvatar = (userProfile?: UserProfile) => {
     if (!userProfile) {
       return (
+        // eslint-disable-next-line react/react-in-jsx-scope
         <Avatar
           icon={{
             name: 'account-outline',
@@ -79,6 +80,7 @@ export const ChatAvatar = ({
       );
     } else if (userProfile?.photoUrl.length) {
       return (
+        // eslint-disable-next-line react/react-in-jsx-scope
         <Avatar
           source={{ uri: userProfile.photoUrl }}
           imageProps={{ resizeMode: 'cover' }}
@@ -88,13 +90,13 @@ export const ChatAvatar = ({
       );
     } else {
       return (
+        // eslint-disable-next-line react/react-in-jsx-scope
         <Avatar
           title={userProfile?.avatar.title}
           titleStyle={[_titleStyle, titleStyle]}
           containerStyle={{
             ..._avatarStyle,
-            backgroundColor:
-              userProfile?.avatar.color || theme.colors.subtleGray,
+            backgroundColor: userProfile?.avatar.color || theme.colors.subtleGray,
             ...avatarStyle,
           }}
           onPress={onPress}
@@ -109,6 +111,7 @@ export const ChatAvatar = ({
     // Seems to be a bug which allows the previous avatar image to remain
     // displayed. Use an icon to avoid.
     return (
+      // eslint-disable-next-line react/react-in-jsx-scope
       <Icon
         name={'account-circle'}
         type={'material-community'}

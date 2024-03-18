@@ -13,9 +13,9 @@ const NewModelPropellerNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewModelPropellerStack.Navigator
-        initialRouteName='NewModelPropeller'
+        initialRouteName="NewModelPropeller"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
@@ -31,14 +31,14 @@ const NewModelPropellerNavigator = () => {
           }}
         />
         <NewModelPropellerStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
         <NewModelPropellerStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Propeller Notes',

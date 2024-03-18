@@ -1,12 +1,21 @@
 import { AppTheme, useTheme } from 'theme';
 import { Checklist, ChecklistAction, JChecklistAction } from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, ListItemInput, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
-import { ModelsNavigatorParamList, NewChecklistNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import {
+  ListItem,
+  ListItemInput,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
+import {
+  ModelsNavigatorParamList,
+  NewChecklistNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
 import {
   NestableDraggableFlatList,
   NestableScrollContainer,
-  RenderItemParams
+  RenderItemParams,
 } from 'react-native-draggable-flatlist';
 import { Platform, View } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
@@ -30,7 +39,7 @@ export type Props = CompositeScreenProps<
   CompositeScreenProps<
     NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistEditor'>,
     NativeStackScreenProps<NewChecklistNavigatorParamList, 'NewChecklist'>
-  >  
+  >
 >;
 
 const ChecklistEditorScreen = ({ navigation, route }: Props) => {
@@ -54,24 +63,25 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   const eventNameId = useRef(uuidv4()).current; // Used for unique action change event name.
 
   const [name, setName] = useState(checklistTemplate?.name || modelChecklist?.name || undefined);
-  const [type, setType] = useState(checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent);
+  const [type, setType] = useState(
+    checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent,
+  );
   const [actions, setActions] = useState<JChecklistAction[]>(
     checklistTemplate?.actions.toJSON() ||
-    (modelChecklist !== undefined ? JSON.parse(JSON.stringify(modelChecklist.actions)) : [])
+      (modelChecklist !== undefined ? JSON.parse(JSON.stringify(modelChecklist.actions)) : []),
   ); // Need to convert the model checklist actions into a plain object to decouple from the realm array instance.
 
   useEffect(() => {
-    const canSave = !!name && (
-      !eqString(workingChecklist?.name, name) ||
-      !eqString(workingChecklist?.type, type)
-    );
+    const canSave =
+      !!name &&
+      (!eqString(workingChecklist?.name, name) || !eqString(workingChecklist?.type, type));
 
     const save = () => {
       if (editingTemplate) {
         // Not a model checklist, handle saving a checklist template.
         if (checklistTemplate) {
           realm.write(() => {
-            checklistTemplate.name = name!;
+            checklistTemplate.name = name || 'no-name';
             checklistTemplate.type = type;
             // Existing actions are saved inline with edits/adds.
           });
@@ -90,9 +100,9 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           // Update an existing model checklist.
           realm.write(() => {
             const index = model?.checklists.findIndex(c => c.refId === modelChecklistRefId);
-            model.checklists[index].name = name!;
+            model.checklists[index].name = name || 'no-name';
             model.checklists[index].type = type;
-            // Existing actions are saved inline with edits/adds.          
+            // Existing actions are saved inline with edits/adds.
           });
         } else {
           // Create a new checklist on the model.
@@ -109,13 +119,14 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         }
       }
     };
-  
+
     const onDone = () => {
       save();
       navigation.goBack();
     };
 
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (!checklistTemplateId && !modelChecklistRefId) {
           return (
@@ -125,9 +136,10 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               onPress={navigation.goBack}
             />
-          )
+          );
         }
       },
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         if (canSave) {
           return (
@@ -137,22 +149,23 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               onPress={onDone}
             />
-          )
+          );
         } else {
           if (actions.length > 0) {
             return (
               <Button
-              title={listEditor.enabled ? 'Done' : 'Edit'}
+                title={listEditor.enabled ? 'Done' : 'Edit'}
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={theme.styles.buttonScreenHeader}
                 onPress={listEditor.onEdit}
               />
-            )
+            );
           }
         }
       },
     });
-  }, [ name, type, actions, listEditor.enabled ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, type, actions, listEditor.enabled]);
 
   useEffect(() => {
     event.on(`checklist-type-${eventNameId}`, onChangeType);
@@ -161,6 +174,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       event.removeListener(`checklist-type-${eventNameId}`, onChangeType);
       event.removeListener(`checklist-action-${eventNameId}`, upsertAction);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -180,7 +194,8 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         });
       }
     }
-  }, [ actions ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actions]);
 
   const onChangeType = (result: EnumPickerResult) => {
     setType(result.value[0] as ChecklistType);
@@ -194,7 +209,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         const index = actns.findIndex(a => a.refId === newOrChangedAction.refId);
         actns[index] = newOrChangedAction;
         return actns;
-      });  
+      });
     } else {
       // Insert a new action.
       newOrChangedAction.refId = uuidv4();
@@ -225,14 +240,12 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     const index = getIndex();
     if (index === undefined) return null;
     return (
-      <View
-        key={index}
-        style={[isActive ? s.shadow : {}]}>
+      <View key={index} style={[isActive ? s.shadow : {}]}>
         <ListItem
           ref={ref => ref && action.refId && listEditor.add(ref, 'checklist-actions', action.refId)}
           title={action.description}
           subtitle={action.schedule.state.text}
-          position={listItemPosition(index, actions!.length)}
+          position={listItemPosition(index, actions.length)}
           titleNumberOfLines={1}
           drag={drag}
           editable={{
@@ -245,24 +258,30 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           }}
           showEditor={listEditor.show}
           swipeable={{
-            rightItems: [{
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () => deleteAction(index),
-            }]
+            rightItems: [
+              {
+                ...swipeableDeleteItem[theme.mode],
+                onPress: () => deleteAction(index),
+              },
+            ],
           }}
-          onSwipeableWillOpen={() => action.refId && listEditor.onItemWillOpen('checklist-actions', action.refId)}
+          onSwipeableWillOpen={() =>
+            action.refId && listEditor.onItemWillOpen('checklist-actions', action.refId)
+          }
           onSwipeableWillClose={listEditor.onItemWillClose}
-          onPress={() => navigation.navigate('ChecklistActionEditor', {
-            checklistAction: action,
-            checklistType: type,
-            modelId,
-            eventName: `checklist-action-${eventNameId}`,
-          })}
+          onPress={() =>
+            navigation.navigate('ChecklistActionEditor', {
+              checklistAction: action,
+              checklistType: type,
+              modelId,
+              eventName: `checklist-action-${eventNameId}`,
+            })
+          }
         />
       </View>
     );
   };
-  
+
   return (
     <NestableScrollContainer
       style={theme.styles.view}
@@ -275,20 +294,24 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         position={['first']}
         disabled={type === ChecklistType.OneTimeMaintenance}
         onChangeText={setName}
-      /> 
+      />
       <ListItem
         title={editingTemplate ? 'Template for List Type' : 'List Type'}
         value={type}
         position={['last']}
         rightImage={type !== ChecklistType.OneTimeMaintenance}
         disabled={type === ChecklistType.OneTimeMaintenance}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: editingTemplate ? 'Template Type' : 'Checklist Type',
-          headerBackTitle: 'Back',
-          values: Object.values(ChecklistType).filter(t => t !== ChecklistType.OneTimeMaintenance),
-          selected: type,
-          eventName: `checklist-type-${eventNameId}`,
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: editingTemplate ? 'Template Type' : 'Checklist Type',
+            headerBackTitle: 'Back',
+            values: Object.values(ChecklistType).filter(
+              t => t !== ChecklistType.OneTimeMaintenance,
+            ),
+            selected: type,
+            eventName: `checklist-type-${eventNameId}`,
+          })
+        }
       />
       {actions.length > 0 && <Divider text={'ACTIONS'} />}
       <NestableDraggableFlatList
@@ -314,14 +337,16 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         titleStyle={s.actionTitle}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => navigation.navigate('NewChecklistActionNavigator', {
-          screen: 'NewChecklistAction',
-          params: { 
-            checklistType: type,
-            modelId,
-            eventName: `checklist-action-${eventNameId}`
-          },
-        })}
+        onPress={() =>
+          navigation.navigate('NewChecklistActionNavigator', {
+            screen: 'NewChecklistAction',
+            params: {
+              checklistType: type,
+              modelId,
+              eventName: `checklist-action-${eventNameId}`,
+            },
+          })
+        }
       />
       <Divider />
     </NestableScrollContainer>

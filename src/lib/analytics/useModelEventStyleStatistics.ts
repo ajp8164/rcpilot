@@ -32,13 +32,13 @@ export const useModelEventStyleStatistics = () => {
             oldEventStyle,
             newEventStyle,
             style,
-          )
+          ),
         );
       });
     }
     // Unspecified style.
     eventStyleData.push(
-      computeEventDurationData(mode, model, newEventDuration, oldEventStyle, newEventStyle)
+      computeEventDurationData(mode, model, newEventDuration, oldEventStyle, newEventStyle),
     );
 
     return eventStyleData;
@@ -58,8 +58,8 @@ const computeEventDurationData = (
   style?: EventStyle,
 ) => {
   // Find existing duration data for the specified style.
-  let previousDurationData = model.statistics.eventStyleData?.find(d =>
-    d.eventStyleId === (style?._id.toString() || '')
+  let previousDurationData = model.statistics.eventStyleData?.find(
+    d => d.eventStyleId === (style?._id.toString() || ''),
   );
 
   if (!previousDurationData) {

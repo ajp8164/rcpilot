@@ -1,8 +1,4 @@
-import {
-  batteryCycleChargeData,
-  batteryCycleDischargeData,
-  batteryCycleStatisticsData
-} from '.';
+import { batteryCycleChargeData, batteryCycleDischargeData, batteryCycleStatisticsData } from '.';
 
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 

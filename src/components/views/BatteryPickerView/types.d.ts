@@ -1,5 +1,3 @@
-import { DimensionValue, ViewStyle } from 'react-native/types';
-
 import { Battery } from 'realmdb/Battery';
 import React from 'react';
 
@@ -19,4 +17,5 @@ export interface BatteryPickerViewProps {
   onSelect: (batteries: Battery[]) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface BatteryPickerViewMethods {}

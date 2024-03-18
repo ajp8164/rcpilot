@@ -4,9 +4,7 @@ import React, { useState } from 'react';
 import { ListItemSwitch } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { UnitSystem } from 'types/common';
 import { useTheme } from 'theme';
 
@@ -36,12 +34,14 @@ const PreferencesBasicsScreen = ({ navigation }: Props) => {
         title={'Units'}
         value={'US Customary'}
         position={['first']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Units',
-          values: Object.values(UnitSystem),
-          selected: UnitSystem.USCustomary,
-          eventName: 'unit-system',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'Units',
+            values: Object.values(UnitSystem),
+            selected: UnitSystem.USCustomary,
+            eventName: 'unit-system',
+          })
+        }
       />
       <ListItemSwitch
         title={'Timer Dims Screen'}
@@ -54,7 +54,7 @@ const PreferencesBasicsScreen = ({ navigation }: Props) => {
         position={['last']}
         onValueChange={toggleResetFilterSystem}
       />
-      <Divider/>
+      <Divider />
     </ScrollView>
   );
 };

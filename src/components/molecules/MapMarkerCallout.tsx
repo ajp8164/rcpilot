@@ -9,18 +9,14 @@ interface MapMarkerCalloutInterface {
   children: ReactNode;
 }
 
-export const MapMarkerCallout = ({
-  children,
-}: MapMarkerCalloutInterface) => {
+export const MapMarkerCallout = ({ children }: MapMarkerCalloutInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   return (
     <>
-    <View style={s.bubble}>
-      {children}
-    </View>
-    <View style={s.arrow} />
+      <View style={s.bubble}>{children}</View>
+      <View style={s.arrow} />
     </>
   );
 };
@@ -30,7 +26,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     backgroundColor: theme.colors.whiteTransparentDark,
     borderRadius: 10,
     justifyContent: 'center',
-    paddingHorizontal: 5
+    paddingHorizontal: 5,
   },
   arrow: {
     width: 0,
@@ -44,6 +40,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderRightColor: theme.colors.transparent,
     borderBottomColor: theme.colors.whiteTransparentDark,
     backgroundColor: theme.colors.transparent,
-    transform: [{ rotate: "180deg" }],
+    transform: [{ rotate: '180deg' }],
   },
 }));

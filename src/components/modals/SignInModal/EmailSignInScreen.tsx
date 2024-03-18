@@ -1,13 +1,6 @@
 import * as Yup from 'yup';
 
-import {
-  Alert,
-  Keyboard,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, Keyboard, ScrollView, Text, TextInput, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { useRef, useState } from 'react';
@@ -37,10 +30,7 @@ export interface EditorState {
   fieldCount: number;
 }
 
-export type Props = NativeStackScreenProps<
-  SignInNavigatorParamList,
-  'EmailSignInScreen'
->;
+export type Props = NativeStackScreenProps<SignInNavigatorParamList, 'EmailSignInScreen'>;
 
 const EmailSignInScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -74,10 +64,7 @@ const EmailSignInScreen = ({ navigation }: Props) => {
   //   setEditorState({ focusedField: nextField });
   // };
 
-  const signIn = (
-    values: FormValues,
-    { resetForm }: FormikHelpers<FormValues>,
-  ) => {
+  const signIn = (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
     Keyboard.dismiss();
     setEditorState({ isSubmitting: true });
     signInwithEmailAndPassword(values.email, values.password)
@@ -110,10 +97,8 @@ const EmailSignInScreen = ({ navigation }: Props) => {
 
   return (
     <>
-      <AvoidSoftInputView style={{ flex: 1 }}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ height: '100%' }}>
+      <AvoidSoftInputView style={s.avoidContainer}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.container}>
           <Formik
             innerRef={formikRef}
             initialValues={{
@@ -209,6 +194,12 @@ const EmailSignInScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  avoidContainer: {
+    flex: 1,
+  },
+  container: {
+    height: '100%',
+  },
   view: {
     paddingTop: 30,
   },

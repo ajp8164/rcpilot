@@ -29,4 +29,4 @@ export class ModelPropeller extends Object<ModelPropeller> {
     },
     primaryKey: '_id',
   };
-};
+}

@@ -1,10 +1,10 @@
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
-  ChecklistActionScheduleType
-} from "types/checklist";
+  ChecklistActionScheduleType,
+} from 'types/checklist';
 
-import { WheelPickerItem } from "components/atoms/WheelPicker";
+import { WheelPickerItem } from 'components/atoms/WheelPicker';
 
 // Fill values from numbers and enumeration values.
 // Wheel picker array indexes as [wheel][item index in wheel]
@@ -12,29 +12,30 @@ import { WheelPickerItem } from "components/atoms/WheelPicker";
 // Second wheel [1] = schedule period (e.g. Events).
 
 const checklistActionRepeatingScheduleItems: WheelPickerItem[][] = [
-  new Array(730).fill(null).map((_, index)=> ({label: `${index+1}`, value: `${index+1}`})),
-  new Array(Object.values(ChecklistActionRepeatingScheduleFrequency).length).fill(null).map((_, index) => (
-    {
+  new Array(730).fill(null).map((_, index) => ({ label: `${index + 1}`, value: `${index + 1}` })),
+  new Array(Object.values(ChecklistActionRepeatingScheduleFrequency).length)
+    .fill(null)
+    .map((_, index) => ({
       label: Object.values(ChecklistActionRepeatingScheduleFrequency)[index],
-      value: Object.values(ChecklistActionRepeatingScheduleFrequency)[index]
-    }
-  )),
+      value: Object.values(ChecklistActionRepeatingScheduleFrequency)[index],
+    })),
 ];
 
 const checklistActionNonRepeatingScheduleItems: WheelPickerItem[][] = [
-  new Array(730).fill(null).map((_, index)=> ({label: `${index+1}`, value: `${index+1}`})),
-  new Array(Object.values(ChecklistActionNonRepeatingScheduleTimeframe).length).fill(null).map((_, index) => (
-    {
+  new Array(730).fill(null).map((_, index) => ({ label: `${index + 1}`, value: `${index + 1}` })),
+  new Array(Object.values(ChecklistActionNonRepeatingScheduleTimeframe).length)
+    .fill(null)
+    .map((_, index) => ({
       label: Object.values(ChecklistActionNonRepeatingScheduleTimeframe)[index],
-      value: Object.values(ChecklistActionNonRepeatingScheduleTimeframe)[index]
-    }
-  )),
+      value: Object.values(ChecklistActionNonRepeatingScheduleTimeframe)[index],
+    })),
 ];
 
 export const getChecklistActionScheduleItems = (type?: ChecklistActionScheduleType) => {
-  const items = type && type === ChecklistActionScheduleType.NonRepeating
-    ? checklistActionNonRepeatingScheduleItems
-    : checklistActionRepeatingScheduleItems;
+  const items =
+    type && type === ChecklistActionScheduleType.NonRepeating
+      ? checklistActionNonRepeatingScheduleItems
+      : checklistActionRepeatingScheduleItems;
   return {
     items,
     default: {
@@ -42,7 +43,7 @@ export const getChecklistActionScheduleItems = (type?: ChecklistActionScheduleTy
       frequency: items[1][1].value as ChecklistActionRepeatingScheduleFrequency,
       timeframe: items[1][1].value as ChecklistActionNonRepeatingScheduleTimeframe,
       value: items[0][0].value as string,
-      items: [ items[0][0].value as string, items[1][1].value as string ],
-    }
+      items: [items[0][0].value as string, items[1][1].value as string],
+    },
   };
 };

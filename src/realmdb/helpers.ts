@@ -2,8 +2,8 @@
 // with a possibly changed form value 'formAttr' where the value is expected to be a
 // specific type. The 'formAttr' is always a string; by convention UI components interact
 
-import { Object } from 'realm';
-import lodash from "lodash";
+import Realm from 'realm';
+import lodash from 'lodash';
 
 // with strings so we don't require a conversion prior to calling these functions.
 export const eqNumber = (schemaAttr?: number, formAttr?: string) => {
@@ -22,6 +22,7 @@ export const eqString = (schemaAttr?: string, formAttr?: string) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const eqArray = (schemaArr?: ArrayLike<any>, otherFormArr?: ArrayLike<any>) => {
   return lodash.isEqual(schemaArr, otherFormArr);
 };
@@ -31,7 +32,7 @@ export const eqObject = (schemaObj?: object, otherFormObj?: object) => {
   return lodash.isEqual(JSON.parse(JSON.stringify(schemaObj)), otherFormObj);
 };
 
-export const eqObjectId = <T>(schemaObj?: Object<T>, otherObj?: Object<T>) => {
+export const eqObjectId = <T>(schemaObj?: Realm.Object<T>, otherObj?: Realm.Object<T>) => {
   // Test for the exact same Realm object.
   return schemaObj?._objectKey() === otherObj?._objectKey();
 };
@@ -48,4 +49,4 @@ export const eqBoolean = (schemaAttr?: boolean, formAttr?: boolean) => {
 // value to a number or undefined. Avoids possible NaN.
 export const toNumber = (value?: string) => {
   return value !== undefined ? Number(value) : undefined;
-}
+};

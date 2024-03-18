@@ -5,7 +5,7 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    'prettier',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
@@ -22,14 +22,11 @@ module.exports = {
         varsIgnorePattern: '^_',
       },
     ],
-    'react-native/no-inline-styles': 'off',
     'prettier/prettier': 'warn',
     'prefer-const': 'error',
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': ['off'],
     '@typescript-eslint/ban-ts-comment': 'off',
-    'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
   },
   plugins: ['@typescript-eslint', 'prettier'],
   overrides: [

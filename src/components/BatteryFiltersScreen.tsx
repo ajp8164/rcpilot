@@ -1,6 +1,11 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -55,8 +60,9 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
     } else {
       setGeneralBatteriesFilter(generalBatteriesFilterQuery[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
@@ -82,25 +88,33 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
         position={listItemPosition(index, allBatteryFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
-          filterId: filter._id.toString(),
-          filterType,
-          generalFilterName: generalBatteriesFilterName,
-        })}
+        onPressInfo={() =>
+          navigation.navigate('BatteryFilterEditor', {
+            filterId: filter._id.toString(),
+            filterType,
+            generalFilterName: generalBatteriesFilterName,
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteFilter, {
-              label: 'Delete Saved Filter',
-              title: 'This action cannot be undone.\nAre you sure you want to delete this filter?',
-              value: filter,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteFilter, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this filter?',
+                  value: filter,
+                }),
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('battery-filters', filter._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('battery-filters', filter._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   return (
@@ -115,7 +129,7 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalBatteriesFilter ?
+      {useGeneralFilter && generalBatteriesFilter ? (
         <>
           <ListItemCheckboxInfo
             title={'General Batteries Filter'}
@@ -123,36 +137,46 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
             position={['first', 'last']}
             checked={generalBatteriesFilter._id.toString() === selectedFilterId}
             onPress={() => setFilter(generalBatteriesFilter)}
-            onPressInfo={() => navigation.navigate('BatteryFilterEditor', {
-              filterId: generalBatteriesFilter!._id.toString(),
-              filterType,
-              generalFilterName: generalBatteriesFilterName,
-            })}
+            onPressInfo={() =>
+              navigation.navigate('BatteryFilterEditor', {
+                filterId: generalBatteriesFilter._id.toString(),
+                filterType,
+                generalFilterName: generalBatteriesFilterName,
+              })
+            }
           />
-          <Divider note
-            text={'You can save the General Batteries Filter to remember a specific filter configuration for later use.'}
+          <Divider
+            note
+            text={
+              'You can save the General Batteries Filter to remember a specific filter configuration for later use.'
+            }
           />
         </>
-        :
+      ) : (
         <ListItem
           title={'Add New Filter'}
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('BatteryFilterEditor', {
-            filterId: generalBatteriesFilter!._id.toString(),
-            filterType,
-            generalFilterName: generalBatteriesFilterName,
-            requireFilterName: true,
-          })}
+          onPress={() =>
+            generalBatteriesFilter &&
+            navigation.navigate('BatteryFilterEditor', {
+              filterId: generalBatteriesFilter._id.toString(),
+              filterType,
+              generalFilterName: generalBatteriesFilterName,
+              requireFilterName: true,
+            })
+          }
         />
-      }
+      )}
       <FlatList
         data={allBatteryFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allBatteryFilters.length ? <Divider text={'SAVED BATTERY FILTERS'} /> : null}
+        ListHeaderComponent={
+          allBatteryFilters.length ? <Divider text={'SAVED BATTERY FILTERS'} /> : null
+        }
       />
     </View>
   );

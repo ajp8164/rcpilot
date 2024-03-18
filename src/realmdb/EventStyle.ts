@@ -12,4 +12,4 @@ export class EventStyle extends Object<EventStyle> {
     },
     primaryKey: '_id',
   };
-};
+}

@@ -1,7 +1,4 @@
-import {
-  EnumRelation,
-  NumberRelation,
-} from 'components/molecules/filters';
+import { EnumRelation, NumberRelation } from 'components/molecules/filters';
 
 import { ReportBatteryScanCodeFilterValues } from 'types/filter';
 

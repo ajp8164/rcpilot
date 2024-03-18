@@ -15,37 +15,37 @@ const EventFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <EventFiltersStack.Navigator
-        initialRouteName='EventFilters'
+        initialRouteName="EventFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <EventFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
         <EventFiltersStack.Screen
-          name='EventFilters'
+          name="EventFilters"
           component={EventFiltersScreen}
           options={({ route }) => ({
-            title: `Filters for ${eventKind(route.params.modelType).namePlural}`
+            title: `Filters for ${eventKind(route.params.modelType).namePlural}`,
           })}
         />
         <EventFiltersStack.Screen
-          name='EventFilterEditor'
+          name="EventFilterEditor"
           component={EventFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <EventFiltersStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'String Value',

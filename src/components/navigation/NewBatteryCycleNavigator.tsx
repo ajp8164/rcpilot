@@ -14,30 +14,30 @@ const NewBatteryCycleNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewBatteryCycleStack.Navigator
-        initialRouteName='NewBatteryCycle'
+        initialRouteName="NewBatteryCycle"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewBatteryCycleStack.Screen
-          name='NewBatteryCycle'
+          name="NewBatteryCycle"
           component={NewBatteryCycleScreen}
           options={{
             title: 'Cycle',
           }}
         />
         <NewBatteryCycleStack.Screen
-          name='BatteryCellValuesEditor'
+          name="BatteryCellValuesEditor"
           component={BatteryCellValuesEditorScreen}
           options={({ route }) => ({
             title: `Cell ${lodash.startCase(route.params.config.namePlural)}`,
           })}
         />
         <NewBatteryCycleStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Action Notes',

@@ -30,7 +30,11 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
   const templateCount = useRef(0);
   const templateRenderIndex = useRef(-1);
 
-  const [list, setList] = useSetState<{ value?: BatteryTemplate; selected: number; initial: number; }>({
+  const [list, setList] = useSetState<{
+    value?: BatteryTemplate;
+    selected: number;
+    initial: number;
+  }>({
     value: undefined,
     selected: 0,
     initial: 0,
@@ -45,11 +49,12 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
           params: {
             batteryTemplate: list.value,
           },
-        });  
+        });
       });
     };
 
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         return (
           <Button
@@ -58,8 +63,9 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
             buttonStyle={theme.styles.buttonScreenHeader}
             onPress={navigation.goBack}
           />
-        )
+        );
       },
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
@@ -68,31 +74,34 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
             buttonStyle={theme.styles.buttonScreenHeader}
             onPress={onCreate}
           />
-        )
+        );
       },
     });
-  }, [ list ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list]);
 
   const nameSuggestion = (battery: Battery) => {
-    const matches =  battery.name.trim().split(/(\W|\w)(\d+)$/);
+    const matches = battery.name.trim().split(/(\W|\w)(\d+)$/);
     const name = `${matches[0]}${matches[1] || ''}`;
     let number = matches[2];
 
     if (number) {
-      number = (parseInt(number) + 1).toString();
+      number = (parseInt(number, 10) + 1).toString();
     } else {
       number = '1';
     }
     return `${name}${number}`;
   };
 
-  const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
-    const sections = groupItems<Battery, Section>(batteries, (battery) => {
+  const groupBatteries = (
+    batteries: Realm.Results<Battery>,
+  ): SectionListData<Battery, Section>[] => {
+    const sections = groupItems<Battery, Section>(batteries, battery => {
       const c = battery.capacity ? `${battery.capacity}mAh - ` : '';
       const p = battery.pCells > 1 ? `/${battery.pCells}P` : '';
       return `${c}${battery.sCells}S${p} PACKS`;
     }).sort();
-    
+
     templateCount.current = sections.length;
 
     // Only need one item per group.
@@ -103,14 +112,14 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
         title: section.title,
         data: [section.data[0]],
         nameSuggestion: nameSuggestion(section.data[section.data.length - 1]),
-      }
+      };
     });
 
     // Need to inialize the default value if not set (first execution).
     if (!list.value) {
       setSelected(0, templates[0].data[0], templates[0].nameSuggestion);
     }
-    
+
     return templates;
   };
 
@@ -125,7 +134,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
       tint: battery.tint,
       vendor: battery.vendor,
     };
-    setList({ selected: index, value: template }, {assign: true});
+    setList({ selected: index, value: template }, { assign: true });
   };
 
   const templateSummary = (battery: Battery) => {
@@ -142,12 +151,12 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
     index: _index,
   }: {
     item: Battery;
-    section: Section; 
+    section: Section;
     index: number;
   }) => {
     // Keep an index over all the sections for the list item position.
     templateRenderIndex.current + 1 === templateCount.current
-      ? templateRenderIndex.current = 0
+      ? (templateRenderIndex.current = 0)
       : templateRenderIndex.current++;
 
     const index = templateRenderIndex.current;
@@ -160,7 +169,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
         checked={list.selected === index}
         onPress={() => setSelected(index, battery, section.nameSuggestion)}
       />
-    )
+    );
   };
 
   return (
@@ -169,7 +178,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
         stickySectionHeadersEnabled={true}
         style={s.sectionList}
         sections={groupBatteries(allBatteries)}
-        keyExtractor={(_item, index )=> `${index}`}
+        keyExtractor={(_item, index) => `${index}`}
         renderItem={renderBatteryTemplate}
         renderSectionHeader={() => <></>}
         ListHeaderComponent={allBatteries.length ? <Divider /> : null}

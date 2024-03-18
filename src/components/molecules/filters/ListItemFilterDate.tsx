@@ -1,11 +1,17 @@
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import { DateFilterState, DateRelation } from 'components/molecules/filters';
-import { ListItem, ListItemDate, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
-import { useEffect, useRef, useState } from "react";
+import {
+  ListItem,
+  ListItemDate,
+  ListItemSegmented,
+  ListItemSegmentedInterface,
+} from 'components/atoms/List';
+import { useEffect, useRef, useState } from 'react';
 
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
+import React from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { getTimeSpanItems } from './wheelPickerHelpers';
 import lodash from 'lodash';
@@ -17,25 +23,16 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   relation: DateRelation;
   title: string;
   value: ISODateString[];
-};
+}
 
-const ListItemFilterDate = (props: Props) => {  
-  const {
-    onValueChange,
-    position,
-    title,
-  } = props;
+const ListItemFilterDate = (props: Props) => {
+  const { onValueChange, position, title } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const segments = [
-    DateRelation.Any,
-    DateRelation.Before,
-    DateRelation.After,
-    DateRelation.Past,
-  ];
-  
+  const segments = [DateRelation.Any, DateRelation.Before, DateRelation.After, DateRelation.Past];
+
   const initializing = useRef(true);
   const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useSetState<DateFilterState>({
@@ -43,14 +40,16 @@ const ListItemFilterDate = (props: Props) => {
     value: props.value.length ? props.value : [],
   });
   const [index, setIndex] = useState(() =>
-    segments.findIndex(seg => { return seg === props.relation })
+    segments.findIndex(seg => {
+      return seg === props.relation;
+    }),
   );
 
   const [pickerExpanded, setPickerExpanded] = useState(false);
   const initialInThePastItems = useRef(getTimeSpanItems()).current;
   const inThePastPickerItems = useRef(initialInThePastItems.items);
   const inThePastPickerValue = useRef<string[]>(
-    props.value.length > 0 ? props.value : initialInThePastItems.default.items
+    props.value.length > 0 ? props.value : initialInThePastItems.default.items,
   );
 
   // Controlled component state changes.
@@ -59,46 +58,49 @@ const ListItemFilterDate = (props: Props) => {
       initializing.current = false;
       return;
     }
-    const newIndex = segments.findIndex(seg => { return seg === props.relation });
+    const newIndex = segments.findIndex(seg => {
+      return seg === props.relation;
+    });
     setIndex(newIndex);
 
     if (props.relation !== filterState.relation && props.relation === DateRelation.Any) {
       // Closing
       setExpanded(false);
       setTimeout(() => {
-        setFilterState({relation: props.relation, value: props.value});
+        setFilterState({ relation: props.relation, value: props.value });
         setPickerExpanded(false);
       }, 300);
     } else if (props.relation !== filterState.relation && props.relation !== DateRelation.Any) {
       // Opening
-      setFilterState({relation: props.relation, value: props.value});
+      setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
         setExpanded(true);
       }, 300);
     } else {
-      setFilterState({relation: props.relation, value: props.value});
+      setFilterState({ relation: props.relation, value: props.value });
     }
-  }, [ props.relation, props.value ]);
-  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.relation, props.value]);
+
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(DateRelation)[index] as DateRelation;
     let newValue: string[];
-    
+
     if (newRelation === DateRelation.Any) {
       newValue = [] as string[];
     } else if (newRelation === DateRelation.Past) {
       newValue = initialInThePastItems.default.items;
       inThePastPickerValue.current = newValue;
     } else if (filterState.value.length === 0 || !DateTime.isDateTime(filterState.value[0])) {
-      newValue = [DateTime.now().toISO()!];
+      newValue = [DateTime.now().toISO()];
     } else {
       newValue = filterState.value;
     }
 
     if (newRelation !== DateRelation.Any) {
       // Opening
-      setFilterState({relation: newRelation, value: newValue});
-      onValueChange({relation: newRelation, value: newValue});
+      setFilterState({ relation: newRelation, value: newValue });
+      onValueChange({ relation: newRelation, value: newValue });
       setTimeout(() => {
         setExpanded(true);
       });
@@ -106,8 +108,8 @@ const ListItemFilterDate = (props: Props) => {
       // Closing
       setExpanded(false);
       setTimeout(() => {
-        setFilterState({relation: newRelation, value: newValue});
-        onValueChange({relation: newRelation, value: newValue});
+        setFilterState({ relation: newRelation, value: newValue });
+        onValueChange({ relation: newRelation, value: newValue });
         setPickerExpanded(false);
       }, 300);
     }
@@ -115,17 +117,17 @@ const ListItemFilterDate = (props: Props) => {
 
   const onDateChange = (date?: Date | undefined) => {
     // Set our local state and pass the entire state back to the caller.
-    const value = date && DateTime.fromJSDate(date).toISO() || '';
-    setFilterState({value: [value]});
-    onValueChange({relation: filterState.relation, value: [value]});
+    const value = (date && DateTime.fromJSDate(date).toISO()) || '';
+    setFilterState({ value: [value] });
+    onValueChange({ relation: filterState.relation, value: [value] });
   };
-  
+
   const onInThePastChange = (itpValue: string[]) => {
     // Set our local state and pass the entire state back to the caller.
     inThePastPickerValue.current = itpValue;
-    setFilterState({value: itpValue});
-    onValueChange({relation: filterState.relation, value: itpValue});
-  };    
+    setFilterState({ value: itpValue });
+    onValueChange({ relation: filterState.relation, value: itpValue });
+  };
 
   return (
     <ListItemSegmented
@@ -138,8 +140,8 @@ const ListItemFilterDate = (props: Props) => {
       onChangeIndex={onRelationSelect}
       expanded={expanded}
       ExpandableComponent={
-        filterState.relation === DateRelation.After || filterState.relation === DateRelation.Before
-        ?
+        filterState.relation === DateRelation.After ||
+        filterState.relation === DateRelation.Before ? (
           <ListItemDate
             title={'Date'}
             value={DateTime.fromISO(filterState.value[0]).toFormat("MMM d, yyyy 'at' h:mm a")}
@@ -152,24 +154,26 @@ const ListItemFilterDate = (props: Props) => {
             onDateChange={onDateChange}
             pickerValue={filterState.value[0]}
           />
-        : filterState.relation === DateRelation.Past
-        ?
+        ) : filterState.relation === DateRelation.Past ? (
           <ListItem
             title={'In Past'}
             value={
-              parseInt(inThePastPickerValue.current[0]) === 1 ?
-                inThePastPickerValue.current.join(' ').slice(0, -1) :
-                inThePastPickerValue.current.join(' ')
+              parseInt(inThePastPickerValue.current[0], 10) === 1
+                ? inThePastPickerValue.current.join(' ').slice(0, -1)
+                : inThePastPickerValue.current.join(' ')
             }
             position={pickerExpanded ? [] : ['last']}
             rightImage={false}
             onPress={() => setPickerExpanded(!pickerExpanded)}
             expanded={pickerExpanded}
             ExpandableComponent={
-              <Animated.View entering={FadeIn} exiting={FadeOut} style={[
-                s.pastPicker,
-                props.position?.includes('last') ? s.pastExpandableContainer : {},
-              ]}>
+              <Animated.View
+                entering={FadeIn}
+                exiting={FadeOut}
+                style={[
+                  s.pastPicker,
+                  props.position?.includes('last') ? s.pastExpandableContainer : {},
+                ]}>
                 {/* Wheel index 0 is value, wheel index 1 is time span. */}
                 <WheelPicker
                   placeholder={'none'}
@@ -184,11 +188,13 @@ const ListItemFilterDate = (props: Props) => {
               </Animated.View>
             }
           />
-        : <></>
+        ) : (
+          <></>
+        )
       }
     />
   );
-}
+};
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   datePickerContainer: {

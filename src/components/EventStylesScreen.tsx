@@ -27,16 +27,18 @@ const EventStylesScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon}/>}
+            icon={<Icon name={'plus'} style={s.headerIcon} />}
             onPress={() => navigation.navigate('NewEventStyle', {})}
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const deleteStyle = (style: EventStyle) => {
@@ -52,29 +54,39 @@ const EventStylesScreen = ({ navigation }: Props) => {
         key={style._id.toString()}
         title={style.name}
         position={listItemPosition(index, allEventStyles.length)}
-        onPress={() => navigation.navigate('EventStyleEditor', {
-          eventStyleId: style._id.toString(),
-        })}
+        onPress={() =>
+          navigation.navigate('EventStyleEditor', {
+            eventStyleId: style._id.toString(),
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmAction(deleteStyle, {
-              label: 'Delete Style',
-              title: "This action cannot be undone.\nAre you sure you don't want to log this event style?",
-              value: style,
-            })
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () =>
+                confirmAction(deleteStyle, {
+                  label: 'Delete Style',
+                  title:
+                    "This action cannot be undone.\nAre you sure you don't want to log this event style?",
+                  value: style,
+                }),
+            },
+          ],
         }}
         onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', style._id.toString())}
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   if (!allEventStyles.length) {
     return (
-      <EmptyView info message={'No Event Styles'} details={"Tap the + button to add your first event style."} />
-    )
+      <EmptyView
+        info
+        message={'No Event Styles'}
+        details={'Tap the + button to add your first event style.'}
+      />
+    );
   }
 
   return (

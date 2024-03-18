@@ -9,9 +9,9 @@ export type ModelCostStatistics = {
 export const modelCostStatistics = (
   model: Model,
   maintenance?: {
-    oldValue?: number,
-    newValue?: number,
-  }
+    oldValue?: number;
+    newValue?: number;
+  },
 ) => {
   // Operating costs.
   // Can only compute per event cost here.
@@ -22,7 +22,9 @@ export const modelCostStatistics = (
 
   // Maintenance cost.
   let totalMaintenanceCost =
-    model.statistics.totalMaintenanceCost - (maintenance?.oldValue || 0) + (maintenance?.newValue || 0);
+    model.statistics.totalMaintenanceCost -
+    (maintenance?.oldValue || 0) +
+    (maintenance?.newValue || 0);
   totalMaintenanceCost = totalMaintenanceCost || 0;
 
   // Per-event cost.
@@ -33,7 +35,7 @@ export const modelCostStatistics = (
   } else {
     perEventCost = (model.purchasePrice || 0) + totalMaintenanceCost;
   }
-  
+
   return {
     perEventCost,
     totalMaintenanceCost,
@@ -42,5 +44,6 @@ export const modelCostStatistics = (
 };
 
 export const updateMaintenanceCost = (model: Model, oldValue: number, newValue: number) => {
-  model.statistics.totalMaintenanceCost = model.statistics.totalMaintenanceCost - oldValue + newValue;
+  model.statistics.totalMaintenanceCost =
+    model.statistics.totalMaintenanceCost - oldValue + newValue;
 };

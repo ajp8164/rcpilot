@@ -1,7 +1,4 @@
-import {
-  fontSizes as defaultFontSizes,
-  fontFamily,
-} from '@react-native-ajp-elements/ui';
+import { fontSizes as defaultFontSizes, fontFamily } from '@react-native-ajp-elements/ui';
 
 import { Styles } from 'theme/types/Styles';
 import { makeStyles } from '@rneui/themed';
@@ -27,7 +24,7 @@ export const useStyles = makeStyles(
       borderBottomRightRadius: 0,
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
-    },  
+    },
     textGiant: {
       color: theme.colors.text,
       fontSize: fontSizes.giant,

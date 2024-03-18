@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 export const useUnknownPilot = () => {
   const dispatch = useDispatch();
   const realm = useRealm();
-  
+
   const pilot = useQuery(Pilot, pilots => pilots.filtered('name == "Unknown Pilot"'));
 
   if (!pilot.length) {
@@ -23,7 +23,7 @@ export const useUnknownPilot = () => {
       } as Pilot);
 
       // Set unknown pilot as the default selection.
-      dispatch(saveSelectedPilot({pilotId: unknownPilot._id.toString()}));
+      dispatch(saveSelectedPilot({ pilotId: unknownPilot._id.toString() }));
     });
   }
 };

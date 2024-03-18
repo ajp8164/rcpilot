@@ -1,9 +1,5 @@
 import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import {
-  DateRelation,
-  NumberRelation,
-  StringRelation
-} from 'components/molecules/filters';
+import { DateRelation, NumberRelation, StringRelation } from 'components/molecules/filters';
 
 import { BSON } from 'realm';
 import { ChecklistType } from 'types/checklist';
@@ -17,20 +13,20 @@ import { useSelector } from 'react-redux';
 
 export type HistoryEntry = {
   checklist: Checklist;
-  action: ChecklistAction,
-  history: ChecklistActionHistoryEntry,
+  action: ChecklistAction;
+  history: ChecklistActionHistoryEntry;
 };
 
 export const useMaintenanceFilter = (params: { modelId: string }) => {
   const { modelId } = params;
-  
+
   const filterId = useSelector(selectFilters(FilterType.MaintenanceFilter));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
   let entries: HistoryEntry[] = [];
-  const maintenanceChecklists = model?.checklists.filter(c =>
-    c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance
+  const maintenanceChecklists = model?.checklists.filter(
+    c => c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance,
   );
   maintenanceChecklists?.forEach(c => {
     c.actions.forEach(a => {
@@ -45,12 +41,12 @@ export const useMaintenanceFilter = (params: { modelId: string }) => {
   });
 
   entries.sort((a, b) => {
-    return (a.history.date > b.history.date) ? -1 : ((a.history.date < b.history.date) ? 1 : 0)
-  })
+    return a.history.date > b.history.date ? -1 : a.history.date < b.history.date ? 1 : 0;
+  });
 
   if (!filter) return entries;
 
-  let date = getDate(filter.date);
+  const date = getDate(filter.date);
 
   entries = entries.filter(e => {
     switch (filter.date.relation) {

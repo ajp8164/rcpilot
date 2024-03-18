@@ -1,6 +1,11 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -17,7 +22,10 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<MaintenanceFiltersNavigatorParamList, 'MaintenanceFilters'>;
+export type Props = NativeStackScreenProps<
+  MaintenanceFiltersNavigatorParamList,
+  'MaintenanceFilters'
+>;
 
 const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, modelType, useGeneralFilter } = route.params;
@@ -56,8 +64,9 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
     } else {
       setGeneralMaintenanceFilter(generalMaintenanceFilterQuery[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
@@ -83,28 +92,35 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
         position={listItemPosition(index, allMaintenanceFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('MaintenanceFilterEditor', {
-          filterId: filter._id.toString(),
-          filterType,
-          generalFilterName: generalMaintenanceFilterName,
-          modelType,
-        })}
+        onPressInfo={() =>
+          navigation.navigate('MaintenanceFilterEditor', {
+            filterId: filter._id.toString(),
+            filterType,
+            generalFilterName: generalMaintenanceFilterName,
+            modelType,
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => {
-              confirmAction(deleteFilter, {
-                label: 'Delete Saved Filter',
-                title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                value: filter,
-              });
-            }
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () => {
+                confirmAction(deleteFilter, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+                  value: filter,
+                });
+              },
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('maintenance-filters', filter._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('maintenance-filters', filter._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   return (
@@ -119,7 +135,7 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalMaintenanceFilter ?
+      {useGeneralFilter && generalMaintenanceFilter ? (
         <>
           <ListItemCheckboxInfo
             title={'General Maintenance Filter'}
@@ -127,38 +143,48 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
             position={['first', 'last']}
             checked={generalMaintenanceFilter._id.toString() === selectedFilterId}
             onPress={() => setFilter(generalMaintenanceFilter)}
-            onPressInfo={() => navigation.navigate('MaintenanceFilterEditor', {
-              filterId: generalMaintenanceFilter!._id.toString(),
-              filterType,
-              generalFilterName: generalMaintenanceFilterName,
-              modelType,
-            })}
+            onPressInfo={() =>
+              navigation.navigate('MaintenanceFilterEditor', {
+                filterId: generalMaintenanceFilter._id.toString(),
+                filterType,
+                generalFilterName: generalMaintenanceFilterName,
+                modelType,
+              })
+            }
           />
-          <Divider note
-            text={'You can save the General Maintenance Filter to remember a specific filter configuration for later use.'}
+          <Divider
+            note
+            text={
+              'You can save the General Maintenance Filter to remember a specific filter configuration for later use.'
+            }
           />
         </>
-        :
+      ) : (
         <ListItem
           title={'Add New Filter'}
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('MaintenanceFilterEditor', {
-            filterId: generalMaintenanceFilter!._id.toString(),
-            filterType,
-            generalFilterName: generalMaintenanceFilterName,
-            modelType,
-            requireFilterName: true,
-          })}
+          onPress={() =>
+            generalMaintenanceFilter &&
+            navigation.navigate('MaintenanceFilterEditor', {
+              filterId: generalMaintenanceFilter._id.toString(),
+              filterType,
+              generalFilterName: generalMaintenanceFilterName,
+              modelType,
+              requireFilterName: true,
+            })
+          }
         />
-      }
+      )}
       <FlatList
         data={allMaintenanceFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allMaintenanceFilters.length ? <Divider text={'SAVED MAINTENANCE FILTERS'} /> : null}
+        ListHeaderComponent={
+          allMaintenanceFilters.length ? <Divider text={'SAVED MAINTENANCE FILTERS'} /> : null
+        }
       />
     </View>
   );

@@ -1,6 +1,6 @@
 import { log } from '@react-native-ajp-elements/core';
 import storage from '@react-native-firebase/storage';
-import { uuidv4 } from 'lib/uuid';
+import { uuidv4 } from 'lib/utils';
 
 export type Video = {
   mimeType: string;
@@ -31,9 +31,7 @@ export const uploadVideo = async (args: {
   const { video, storagePath, oldVideo, onSuccess, onError } = args;
   try {
     const videoType = video.mimeType.split('/')[1];
-    const destFilename = `${storagePath}${uuidv4()}.${
-      videoTypeMap[videoType] || videoType
-    }`;
+    const destFilename = `${storagePath}${uuidv4()}.${videoTypeMap[videoType] || videoType}`;
     const sourceFilename = video.uri.replace('file://', '');
     const storageRef = storage().ref(destFilename);
 

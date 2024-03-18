@@ -9,11 +9,11 @@ export const usePilotSummary = () => {
   return (pilot: Pilot) => {
     const pilotEvents = events.filtered(`pilot._id == oid(${pilot._id})`);
     const totalTime = pilotEvents.reduce((accumulator, event) => {
-      return accumulator += event.duration;
+      return (accumulator += event.duration);
     }, 0);
 
-    const time = secondsToMSS(totalTime, {format: 'm:ss'});
+    const time = secondsToMSS(totalTime, { format: 'm:ss' });
     const eventCount = `${pilotEvents.length} event${pilotEvents.length !== 1 ? 's' : ''}`;
     return `Logged ${time} over ${eventCount}`;
-  }
+  };
 };

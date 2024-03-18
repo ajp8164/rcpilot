@@ -9,6 +9,7 @@ import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type NotesEditorResult = {
   text: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any;
 };
 
@@ -21,7 +22,7 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
   const setScreenEditHeader = useScreenEditHeader();
 
   const [newText, setNewText] = useState<string | undefined>(text);
-  
+
   useEffect(() => {
     const canSave = !eqString(text, newText);
 
@@ -34,10 +35,11 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {enabled: canSave, action: onDone, style: headerButtonStyle},
-      {style: headerButtonStyle},
-      title ? {title} : {},
+      { enabled: canSave, action: onDone, style: headerButtonStyle },
+      { style: headerButtonStyle },
+      title ? { title } : {},
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newText]);
 
   return (

@@ -31,6 +31,7 @@ export type MultipleNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -39,7 +40,7 @@ export type MultipleNavigatorParamList = {
 export type BatteriesNavigatorParamList = {
   Batteries: {
     listBatteries?: ListBatteries;
-  },
+  };
   Battery: {
     batteryId: string;
   };
@@ -76,6 +77,7 @@ export type BatteriesNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -127,6 +129,7 @@ export type ModelsNavigatorParamList = {
     filterType: FilterType;
     batteryId?: string;
     modelId?: string;
+    modelType?: ModelType;
     pilotId?: string;
   };
   EventEditor: {
@@ -179,6 +182,7 @@ export type ModelsNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -374,6 +378,7 @@ export type NewBatteryNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -395,6 +400,7 @@ export type NewBatteryCycleNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -409,6 +415,7 @@ export type NewModelNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -427,8 +434,8 @@ export type EventSequenceNavigatorParamList = {
   EventSequenceChecklistItem: {
     checklistRefId: string;
     actionRefId: string;
-  }
-  EventSequenceTimer:  {
+  };
+  EventSequenceTimer: {
     cancelable?: boolean;
   };
   BatteryCellValuesEditor: {
@@ -443,9 +450,10 @@ export type EventSequenceNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
-  }
+  };
 };
 
 export type LocationNavigatorParamList = {
@@ -457,6 +465,7 @@ export type LocationNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -468,6 +477,7 @@ export type NewModelFuelNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -480,6 +490,7 @@ export type NewModelPropellerNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -493,15 +504,16 @@ export type NewChecklistNavigatorParamList = {
     eventName: string;
   };
   EnumPicker: EnumPickerInterface;
-  NewChecklist:{
+  NewChecklist: {
     checklistTemplateId?: string;
     modelId?: string;
     modelChecklistRefId?: string;
-  },
+  };
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -522,6 +534,7 @@ export type NewChecklistActionNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -557,6 +570,7 @@ export type SetupNavigatorParamList = {
     filterType: FilterType;
     batteryId?: string;
     modelId?: string;
+    modelType?: ModelType;
     pilotId?: string;
   };
   EventEditor: {
@@ -603,7 +617,7 @@ export type SetupNavigatorParamList = {
   ModelPropellers: undefined;
   ModelPropellerEditor: {
     modelPropellerId: string;
-  }
+  };
   NewChecklistNavigator: NavigatorScreenParams<NewChecklistNavigatorParamList>;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewEventStyle: {
@@ -617,6 +631,7 @@ export type SetupNavigatorParamList = {
     title?: string;
     headerButtonStyle?: TextStyle;
     text?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
     eventName: string;
   };
@@ -654,10 +669,10 @@ export type NewReportNavigatorParamList = {
 export type ReportViewerNavigatorParamList = {
   ReportEventsMaintenanceViewer: {
     reportId: string;
-  }
+  };
   ReportScanCodesViewer: {
     reportId: string;
-  }
+  };
 };
 
 export type ScanNavigatorParamList = {

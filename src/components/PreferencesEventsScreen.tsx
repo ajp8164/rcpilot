@@ -6,9 +6,7 @@ import { ListItem } from 'components/atoms/List';
 import { ListItemSwitch } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { TimerStartDelay } from 'types/event';
 import { makeStyles } from '@rneui/themed';
@@ -65,12 +63,14 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Timer Start Delay'}
         value={'None'}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Timer Start Delay',
-          values: Object.values(TimerStartDelay),
-          selected: TimerStartDelay.Seconds15,
-          eventName: 'timer-start-delay',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'Timer Start Delay',
+            values: Object.values(TimerStartDelay),
+            selected: TimerStartDelay.Seconds15,
+            eventName: 'timer-start-delay',
+          })
+        }
       />
       <ListItemSwitch
         title={'Default from Last Event'}
@@ -78,8 +78,11 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
         position={['last']}
         onValueChange={toggleDefaultFromLastEvent}
       />
-      <Divider note text={'Default from last event will only apply when you are not using the event timer.'}/>
-      <Divider text={'EVENT TIMER SHAKE SENSITIVITY'}/>
+      <Divider
+        note
+        text={'Default from last event will only apply when you are not using the event timer.'}
+      />
+      <Divider text={'EVENT TIMER SHAKE SENSITIVITY'} />
       <Slider
         value={0.5}
         minimumValue={0}
@@ -89,8 +92,11 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider note text={'Adjusts the sensitivity of the application to shake gestures to operate the timer.'}/>
-      <Divider text={'EVENT LOCATION SENSITIVITY'}/>
+      <Divider
+        note
+        text={'Adjusts the sensitivity of the application to shake gestures to operate the timer.'}
+      />
+      <Divider text={'EVENT LOCATION SENSITIVITY'} />
       <Slider
         value={0.5}
         minimumValue={0}
@@ -100,7 +106,12 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider note text={'Adjusts the sensitivity of database locations. Lower implies locations cover a larger area.'}/>
+      <Divider
+        note
+        text={
+          'Adjusts the sensitivity of database locations. Lower implies locations cover a larger area.'
+        }
+      />
     </ScrollView>
   );
 };

@@ -21,11 +21,14 @@ import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
 
-export type Props = NativeStackScreenProps<ReportMaintenanceFiltersNavigatorParamList, 'ReportMaintenanceFilterEditor'>;
+export type Props = NativeStackScreenProps<
+  ReportMaintenanceFiltersNavigatorParamList,
+  'ReportMaintenanceFilterEditor'
+>;
 
 const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -41,18 +44,17 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
     if (requireFilterName) {
       filterEditor.setCreateSavedFilter(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!filterEditor.filter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
+    return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
+      <Divider text={'FILTER NAME'} />
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
@@ -69,14 +71,14 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
             />
           }
         />
-      :
+      ) : (
         <ListItemInput
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
           onChangeText={filterEditor.setName}
         />
-      }
+      )}
       <Divider />
       <ListItem
         title={'Reset Filter'}
@@ -87,7 +89,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={`This filter shows all the events that match all of these criteria.`}/>
+      <Divider text={`This filter shows all the events that match all of these criteria.`} />
       <ListItemFilterEnum
         title={'Model'}
         value={filterEditor.values.model.value}
@@ -135,7 +137,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
         title={'Costs'}
         value={filterEditor.values.costs.value}
         relation={filterEditor.values.costs.relation}
-        numericProps={{maxValue: 99999}}
+        numericProps={{ maxValue: 99999 }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('costs', filterState);
@@ -151,7 +153,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
           filterEditor.onFilterValueChange('notes', filterState);
         }}
       />
-      <Divider style={{height: theme.insets.bottom}} />
+      <Divider style={{ height: theme.insets.bottom }} />
     </ScrollView>
   );
 };
@@ -164,7 +166,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   resetDisabled: {
     opacity: 0.3,
-  }
+  },
 }));
 
 export default ReportMaintenanceFilterEditorScreen;

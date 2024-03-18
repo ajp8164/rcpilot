@@ -1,14 +1,12 @@
-import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItemSwitch } from 'components/atoms/List';
 import { ScrollView } from 'react-native';
-import { makeStyles } from '@rneui/themed';
+import { useTheme } from 'theme';
 
 const PreferencesBatteriesScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
 
   const [defaultToFullChargeEnabled, setAtFieldSingleTapEnabled] = useState(false);
   const [hideStoredPacksEnabled, setHideStoredPacksEnabled] = useState(false);
@@ -62,11 +60,5 @@ const PreferencesBatteriesScreen = () => {
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  sliderContainer: {
-    paddingHorizontal: 5,
-  },
-}));
 
 export default PreferencesBatteriesScreen;

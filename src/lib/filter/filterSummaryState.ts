@@ -23,9 +23,6 @@ export const filterSummaryState = (property: string, state: FilterState) => {
       case FilterRelation.After:
         s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;
         break;
-      case FilterRelation.After:
-        s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;
-        break;
       case FilterRelation.Before:
         s = `${p} is before ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;
         break;

@@ -50,4 +50,4 @@ export class Event extends Object<Event> {
     },
     primaryKey: '_id',
   };
-};
+}

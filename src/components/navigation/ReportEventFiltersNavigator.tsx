@@ -15,37 +15,37 @@ const ReportEventFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <ReportEventFiltersStack.Navigator
-        initialRouteName='ReportEventFilters'
+        initialRouteName="ReportEventFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <ReportEventFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
         <ReportEventFiltersStack.Screen
-          name='ReportEventFilters'
+          name="ReportEventFilters"
           component={ReportEventFiltersScreen}
           options={({ route }) => ({
-            title: `Filters for ${eventKind(route.params.modelType).namePlural}`
+            title: `Filters for ${eventKind(route.params.modelType).namePlural}`,
           })}
         />
         <ReportEventFiltersStack.Screen
-          name='ReportEventFilterEditor'
+          name="ReportEventFilterEditor"
           component={ReportEventFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <ReportEventFiltersStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'String Value',

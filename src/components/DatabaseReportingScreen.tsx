@@ -4,7 +4,7 @@ import {
   DragEndParams,
   NestableDraggableFlatList,
   NestableScrollContainer,
-  RenderItemParams
+  RenderItemParams,
 } from 'react-native-draggable-flatlist';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
@@ -36,12 +36,14 @@ export type Props = CompositeScreenProps<
 type Report = EventsMaintenanceReport | ScanCodesReport;
 
 // Destination report editor based on report type.
-const reportEditor: {[key in ReportType]: any} = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const reportEditor: { [key in ReportType]: any } = {
   [ReportType.EventsMaintenance]: 'ReportEventsMaintenanceEditor',
   [ReportType.ScanCodes]: 'ReportScanCodesEditor',
 };
 
-const reportViewer: {[key in ReportType]: any} = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const reportViewer: { [key in ReportType]: any } = {
   [ReportType.EventsMaintenance]: 'ReportEventsMaintenanceViewer',
   [ReportType.ScanCodes]: 'ReportScanCodesViewer',
 };
@@ -63,6 +65,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         if (!emReports.length && !scReports.length) {
           return null;
@@ -74,10 +77,11 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
             buttonStyle={theme.styles.buttonScreenHeader}
             onPress={listEditor.onEdit}
           />
-        )
+        );
       },
     });
-  }, [ listEditor.enabled, emReports, scReports ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listEditor.enabled, emReports, scReports]);
 
   useEffect(() => {
     event.on('output-report-to', setOutputReportTo);
@@ -88,10 +92,11 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
       // event.removeListener('events-maintenace-report', );
       // event.removeListener('scan-codes-report', );
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const setOutputReportTo = (result: EnumPickerResult) => {
-    dispatch(saveOutputReportTo({ value: result.value[0] as OutputReportTo}));
+    dispatch(saveOutputReportTo({ value: result.value[0] as OutputReportTo }));
   };
 
   const reorderReports = (params: DragEndParams<Report>) => {
@@ -105,7 +110,9 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
 
   const emReportSummary = (report: EventsMaintenanceReport) => {
     const whichEvents = report.eventsFilter ? `"${report.eventsFilter.name}" filter` : 'All';
-    const whichMaintenance = report.maintenanceFilter ? `"${report.maintenanceFilter.name}" filter` : 'All';
+    const whichMaintenance = report.maintenanceFilter
+      ? `"${report.maintenanceFilter.name}" filter`
+      : 'All';
     const summary = report.includesSummary ? 'Summary, ' : '';
     const events = report.includesEvents ? `Events: ${whichEvents}, ` : '';
     const maintenance = report.includesMaintenance ? `Maintenance: ${whichMaintenance}` : '';
@@ -113,8 +120,12 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   };
 
   const scReportSummary = (report: ScanCodesReport) => {
-    const whichEvents = report.batteryScanCodesFilter ? `"${report.batteryScanCodesFilter.name}" filter` : 'All';
-    const whichMaintenance = report.modelScanCodesFilter ? `"${report.modelScanCodesFilter.name}" filter` : 'All';
+    const whichEvents = report.batteryScanCodesFilter
+      ? `"${report.batteryScanCodesFilter.name}" filter`
+      : 'All';
+    const whichMaintenance = report.modelScanCodesFilter
+      ? `"${report.modelScanCodesFilter.name}" filter`
+      : 'All';
     const events = report.includesBatteries ? `Batteries: ${whichEvents}, ` : '';
     const maintenance = report.includesModels ? `Models: ${whichMaintenance}` : '';
     return `${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
@@ -133,13 +144,13 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               screen: 'ReportEventsMaintenanceEditor',
               params: {},
             });
-          break;
+            break;
           case 1:
             navigation.navigate('NewReportNavigator', {
               screen: 'ReportScanCodesEditor',
               params: {},
             });
-          break;
+            break;
           default:
             break;
         }
@@ -154,27 +165,17 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   };
 
   const renderReport = (props: {
-    report: Report,
-    reportType: ReportType,
-    reportCount: number,
+    report: Report;
+    reportType: ReportType;
+    reportCount: number;
     reportSummary: string;
-    index: number,
-    drag: () => void,
-    isActive: boolean,
+    index: number;
+    drag: () => void;
+    isActive: boolean;
   }) => {
-    const {
-      report,
-      reportType,
-      reportCount,
-      reportSummary,
-      index,
-      drag,
-      isActive
-    } = props;
+    const { report, reportType, reportCount, reportSummary, index, drag, isActive } = props;
     return (
-      <View
-        key={index}
-        style={[isActive ? s.shadow : {}]}>
+      <View key={index} style={[isActive ? s.shadow : {}]}>
         <ListItem
           ref={ref => ref && listEditor.add(ref, reportType, report._id.toString())}
           title={report.name}
@@ -193,39 +194,43 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
           }}
           showEditor={listEditor.show}
           swipeable={{
-            rightItems: [{
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () => confirmAction(deleteReport, {
-                label: 'Delete Report',
-                title: 'This action cannot be undone.\nAre you sure you want to delete this report?',
-                value: report,
-              })
-            }]
+            rightItems: [
+              {
+                ...swipeableDeleteItem[theme.mode],
+                onPress: () =>
+                  confirmAction(deleteReport, {
+                    label: 'Delete Report',
+                    title:
+                      'This action cannot be undone.\nAre you sure you want to delete this report?',
+                    value: report,
+                  }),
+              },
+            ],
           }}
           onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, report._id.toString())}
           onSwipeableWillClose={listEditor.onItemWillClose}
           rightImage={
             <Pressable
-              style={{flexDirection: 'row'}}
-              onPress={() => navigation.navigate(reportEditor[reportType], {
-                reportId: report._id.toString(),
-              })}>
-              <CustomIcon
-                name={'circle-info'}
-                size={22}
-                color={theme.colors.clearButtonText}
-              />
+              style={s.reportInfoButton}
+              onPress={() =>
+                navigation.navigate(reportEditor[reportType], {
+                  reportId: report._id.toString(),
+                })
+              }>
+              <CustomIcon name={'circle-info'} size={22} color={theme.colors.clearButtonText} />
             </Pressable>
           }
-          onPress={() => navigation.navigate('ReportViewerNavigator', {
-            screen: reportViewer[reportType],
-            params: {
-              reportId: report._id.toString(),
-            }
-          })}
+          onPress={() =>
+            navigation.navigate('ReportViewerNavigator', {
+              screen: reportViewer[reportType],
+              params: {
+                reportId: report._id.toString(),
+              },
+            })
+          }
         />
       </View>
-    );    
+    );
   };
 
   const renderEMReport = ({
@@ -243,7 +248,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
       reportSummary: emReportSummary(report),
       index,
       drag,
-      isActive
+      isActive,
     });
   };
 
@@ -262,7 +267,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
       reportSummary: scReportSummary(report),
       index,
       drag,
-      isActive
+      isActive,
     });
   };
 
@@ -271,24 +276,31 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'DESTINATION'}/>
+      <Divider text={'DESTINATION'} />
       <ListItem
         title={'Output Report To'}
         value={outputReportTo}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Output To',
-          footer: 'Specifies the destination for database report output.',
-          values: Object.values(OutputReportTo),
-          selected: outputReportTo,
-          eventName: 'output-report-to',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'Output To',
+            footer: 'Specifies the destination for database report output.',
+            values: Object.values(OutputReportTo),
+            selected: outputReportTo,
+            eventName: 'output-report-to',
+          })
+        }
       />
-      <Divider note text={
-        OutputReportToDescription[
-          Object.keys(OutputReportTo)[Object.values(OutputReportTo).indexOf(outputReportTo)] as keyof typeof OutputReportToDescription
-        ]
-      }/>
+      <Divider
+        note
+        text={
+          OutputReportToDescription[
+            Object.keys(OutputReportTo)[
+              Object.values(OutputReportTo).indexOf(outputReportTo)
+            ] as keyof typeof OutputReportToDescription
+          ]
+        }
+      />
       <ListItem
         title={'Add a New Report'}
         titleStyle={s.newReport}
@@ -296,10 +308,10 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         rightImage={false}
         onPress={addReport}
       />
-      {emReports.length ?
+      {emReports.length ? (
         <>
-          <Divider text={'EVENT/MAINTENANCE LOG REPORTS'}/>
-          <View style={{flex:1}}>
+          <Divider text={'EVENT/MAINTENANCE LOG REPORTS'} />
+          <View style={s.reportsContainer}>
             <NestableDraggableFlatList
               // @ts-expect-error: typing seems incorrect on renderItem
               data={emReports.sorted('ordinal')}
@@ -319,14 +331,18 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               onDragEnd={reorderReports}
             />
           </View>
-          <Divider note text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+          <Divider
+            note
+            text={
+              'Tapping a row generates the corresponding report and outputs it to the selected destination.'
+            }
+          />
         </>
-        : null
-      }
-      {scReports.length ?
+      ) : null}
+      {scReports.length ? (
         <>
-          <Divider text={'QR CODE REPORTS'}/>
-          <View style={{flex:1}}>
+          <Divider text={'QR CODE REPORTS'} />
+          <View style={s.reportsContainer}>
             <NestableDraggableFlatList
               // @ts-expect-error: typing seems incorrect on renderItem
               data={scReports.sorted('ordinal')}
@@ -346,19 +362,29 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               onDragEnd={reorderReports}
             />
           </View>
-          <Divider note text={'Tapping a row generates the corresponding report and outputs it to the selected destination.'}/>
+          <Divider
+            note
+            text={
+              'Tapping a row generates the corresponding report and outputs it to the selected destination.'
+            }
+          />
         </>
-        : null
-      }
+      ) : null}
     </NestableScrollContainer>
   );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  reportsContainer: {
+    flex: 1,
+  },
   newReport: {
     alignSelf: 'center',
     textAlign: 'center',
     color: theme.colors.clearButtonText,
+  },
+  reportInfoButton: {
+    flexDirection: 'row',
   },
   reportsList: {
     overflow: 'visible',

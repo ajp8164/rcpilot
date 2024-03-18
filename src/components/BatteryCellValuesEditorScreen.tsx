@@ -18,12 +18,14 @@ export type BatteryCellValuesEditorConfig = {
   label: string;
   precision: number;
   headerButtonStyle?: TextStyle;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any; // Caller data that is simply passed through the editor.
 };
 
 export type BatteryCellValuesEditorResult = {
   cellValues: number[];
   packValue: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any;
 };
 
@@ -49,18 +51,28 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
 
   const [packValue, setPackValue] = useState(_packValue.toString());
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
-  const [cellValues, setCellValues] = useState(_cellValues.map(v => {return v.toString()}));
+  const [cellValues, setCellValues] = useState(
+    _cellValues.map(v => {
+      return v.toString();
+    }),
+  );
   const initializing = useRef(true);
 
   useEffect(() => {
     const canSave = !lodash.isEqual(
-      _cellValues.map(v => {return v.toString()}),
-      cellValues.map(v => {return v.toString()}),
+      _cellValues.map(v => {
+        return v.toString();
+      }),
+      cellValues.map(v => {
+        return v.toString();
+      }),
     );
 
     const onDone = () => {
       event.emit(eventName, {
-        cellValues: cellValues.map(v => {return v.length > 0 ? parseFloat(v) : 0}),
+        cellValues: cellValues.map(v => {
+          return v.length > 0 ? parseFloat(v) : 0;
+        }),
         packValue: parseFloat(packValue),
         extraData: config.extraData,
       } as BatteryCellValuesEditorResult);
@@ -69,10 +81,11 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      {enabled: canSave, action: onDone, style: config.headerButtonStyle},
-      {visible: false},
+      { enabled: canSave, action: onDone, style: config.headerButtonStyle },
+      { visible: false },
     );
-  }, [ cellValues, packValue ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cellValues, packValue]);
 
   useEffect(() => {
     if (initializing.current) {
@@ -87,14 +100,17 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
     });
     setPackValue(newPackValue);
-  }, [ cellValues ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cellValues]);
 
   const autoFill = (index: number, value: string) => {
     // Convenience auto-fill.
     // When entering into the first value, if the rest of the values are zero then fill.
-    const r = ([] as (string)[]).concat(cellValues);
+    const r = ([] as string[]).concat(cellValues);
     if (index === 0) {
-      const notFilled = r.slice(1).every(v => {return parseFloat(v) === 0});
+      const notFilled = r.slice(1).every(v => {
+        return parseFloat(v) === 0;
+      });
       if (notFilled) {
         r.fill(value);
       }
@@ -115,7 +131,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
         placeholder={'Value'}
         keyboardType={'decimal-pad'}
         numeric={true}
-        numericProps={{prefix: '', precision: config.precision}}
+        numericProps={{ prefix: '', precision: config.precision }}
         position={listItemPosition(index, cellValues.length)}
         onChangeText={value => {
           setCellValues(prevState => {
@@ -127,13 +143,12 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
         onBlur={() => {
           autoFill(index, cellValues[index]);
         }}
-      /> 
+      />
     );
   };
 
   return (
-    <View
-      style={theme.styles.view}>
+    <View style={theme.styles.view}>
       <FlatList
         data={cellValues}
         renderItem={renderValue}
@@ -146,18 +161,14 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
               title={'Total Pack'}
               value={
                 <View style={s.valueContainer}>
-                  <Text style={s.value}>
-                    {parseFloat(packValue) === 0 ? 'Unknown' : packValue}
-                  </Text>
-                  <Text style={s.valueLabel}>
-                    {` ${config.label}`}
-                  </Text>
+                  <Text style={s.value}>{parseFloat(packValue) === 0 ? 'Unknown' : packValue}</Text>
+                  <Text style={s.valueLabel}>{` ${config.label}`}</Text>
                 </View>
               }
               position={['first', 'last']}
               rightImage={false}
             />
-            <Divider text={`PER-CELL ${config.namePlural.toUpperCase()}`}/>
+            <Divider text={`PER-CELL ${config.namePlural.toUpperCase()}`} />
           </>
         }
         ListFooterComponent={
@@ -173,7 +184,8 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   valueContainer: {
-    flexDirection: 'row', left: -25
+    flexDirection: 'row',
+    left: -25,
   },
   value: {
     ...theme.styles.textNormal,

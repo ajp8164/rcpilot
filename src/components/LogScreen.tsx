@@ -1,10 +1,15 @@
-import {AgendaList, CalendarProvider, ExpandableCalendar, WeekCalendar} from 'react-native-calendars';
+import {
+  AgendaList,
+  CalendarProvider,
+  ExpandableCalendar,
+  WeekCalendar,
+} from 'react-native-calendars';
 import { AppTheme, useTheme } from 'theme';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
 import { SectionListData, Text, TouchableOpacity, View } from 'react-native';
-import {getTheme, themeColor} from '../mocks/calendarTheme';
+import { getTheme, themeColor } from '../mocks/calendarTheme';
 
 import { DateTime } from 'luxon';
 import { DayProps } from 'react-native-calendars/src/calendar/day';
@@ -25,9 +30,9 @@ import { makeStyles } from '@rneui/themed';
 interface ExtendedMarkingProps extends MarkingProps {
   hasEvent?: boolean;
   hasBatteryCycle?: boolean;
-};
+}
 
-type ExtendedMarkedDates =  {
+type ExtendedMarkedDates = {
   [key: string]: ExtendedMarkingProps;
 };
 
@@ -208,7 +213,7 @@ const LogScreen = ({ navigation }: Props) => {
   const marked = useRef<ExtendedMarkedDates>({});
   const calendarTheme = useRef(getTheme());
   const todayBtnTheme = useRef({
-    todayButtonTextColor: themeColor
+    todayButtonTextColor: themeColor,
   });
 
   useEffect(() => {
@@ -244,12 +249,14 @@ const LogScreen = ({ navigation }: Props) => {
       if (event.data && event.data.length > 0 && !isEmpty(event.data[0])) {
         // Check for flights and/or battery cycles on this day. Return an indication
         // fpr each in the marked data.
-        const hasEvent = event.data.findIndex(e => {
-          return e && e.modelId === '1'; // test is temp for testing
-        }) >= 0;
-        const hasBatteryCycle = event.data.findIndex(e => {
-          return e && e.batteryCycleId === '1'; // test is temp for testing
-        }) >= 0;
+        const hasEvent =
+          event.data.findIndex(e => {
+            return e && e.modelId === '1'; // test is temp for testing
+          }) >= 0;
+        const hasBatteryCycle =
+          event.data.findIndex(e => {
+            return e && e.batteryCycleId === '1'; // test is temp for testing
+          }) >= 0;
 
         const d = event.data[0].date.split('T')[0];
         marked[d] = { marked: true, hasEvent, hasBatteryCycle };
@@ -260,42 +267,47 @@ const LogScreen = ({ navigation }: Props) => {
 
   // Render a day on the calendar with flight/battery icons as required.
   // For onPress see https://github.com/wix/react-native-calendars/issues/1147
-  const renderDay = ({date, state, marking: m, onPress}: DayProps & { date?: DateData; }) => {
+  const renderDay = ({ date, state, marking: m, onPress }: DayProps & { date?: DateData }) => {
     const marking = m as ExtendedMarkingProps | undefined;
     return (
       <TouchableOpacity onPress={() => onPress && onPress(date)}>
-      <View style={s.eventDayContainer}>
-        <View style={[
-          s.eventDayNumberContainer,
-          {backgroundColor: state === 'selected' ? theme.colors.brandPrimary : theme.colors.transparent}]}>
-          <Text style={[
-            s.eventDayNumber,
-            {color: state === 'disabled' ? theme.colors.textDim : state === 'selected' ? theme.colors.stickyWhite : theme.colors.text,
-          }]}>
-            {date?.day}
-          </Text>
+        <View style={s.eventDayContainer}>
+          <View
+            style={[
+              s.eventDayNumberContainer,
+              {
+                backgroundColor:
+                  state === 'selected' ? theme.colors.brandPrimary : theme.colors.transparent,
+              },
+            ]}>
+            <Text
+              style={[
+                s.eventDayNumber,
+                {
+                  color:
+                    state === 'disabled'
+                      ? theme.colors.textDim
+                      : state === 'selected'
+                        ? theme.colors.stickyWhite
+                        : theme.colors.text,
+                },
+              ]}>
+              {date?.day}
+            </Text>
+          </View>
+          <View style={s.eventIcons}>
+            {marking?.hasEvent && (
+              <View style={s.eventFlightIcon}>
+                <Icon name={'plane-up'} size={8} color={theme.colors.stickyWhite} />
+              </View>
+            )}
+            {marking?.hasBatteryCycle && (
+              <View style={s.eventBatteryIcon}>
+                <Icon name={'battery-full'} size={8} color={theme.colors.stickyWhite} />
+              </View>
+            )}
+          </View>
         </View>
-        <View style={s.eventIcons}>
-          {marking?.hasEvent &&
-            <View style={s.eventFlightIcon}>
-              <Icon
-                name={'plane-up'}
-                size={8}
-                color={theme.colors.stickyWhite}
-              />
-            </View>
-          }
-          {marking?.hasBatteryCycle &&
-            <View style={s.eventBatteryIcon}>
-              <Icon
-                name={'battery-full'}
-                size={8}
-                color={theme.colors.stickyWhite}
-              />
-            </View>
-          }
-        </View>
-      </View>
       </TouchableOpacity>
     );
   };
@@ -312,7 +324,7 @@ const LogScreen = ({ navigation }: Props) => {
       todayBottomMargin={30}
       theme={todayBtnTheme.current}>
       {weekView ? (
-        <WeekCalendar firstDay={1} markedDates={marked.current as MarkedDates}/>
+        <WeekCalendar firstDay={1} markedDates={marked.current as MarkedDates} />
       ) : (
         <ExpandableCalendar
           // horizontal={false}
@@ -346,26 +358,26 @@ const LogScreen = ({ navigation }: Props) => {
             title={logEntry.modelId}
             subtitle={logEntry.locationId}
             position={listItemPosition(index, section.data.length)}
-            containerStyle={{marginHorizontal: 15}}
+            containerStyle={{ marginHorizontal: 15 }}
             onPress={() => {
               logEntry.modelId
-              ? navigation.navigate('EventEditor', {
-                eventId: logEntry.eventId,
-                modelType: ModelType.Car,
-              })
-              : navigation.navigate('BatteryCycleEditor', {
-                batteryId: logEntry.batteryId,
-                cycleNumber: logEntry.batteryCycleNumber,
-              });
+                ? navigation.navigate('EventEditor', {
+                    eventId: logEntry.eventId,
+                    modelType: ModelType.Car,
+                  })
+                : navigation.navigate('BatteryCycleEditor', {
+                    batteryId: logEntry.batteryId,
+                    cycleNumber: logEntry.batteryCycleNumber,
+                  });
             }}
           />
         )}
         // scrollToNextEvent
         // sectionStyle={s.section}
         // dayFormat={'yyyy-MM-d'}
-        renderSectionHeader={(title: string | any) => (  // Lib typing is incorrect
-          <SectionListHeader title={DateTime.fromISO(title).toFormat('MMMM d, yyyy')} />
-        )}
+        renderSectionHeader={(
+          title: string | any, // Lib typing is incorrect
+        ) => <SectionListHeader title={DateTime.fromISO(title).toFormat('MMMM d, yyyy')} />}
       />
       <Divider />
     </CalendarProvider>
@@ -375,7 +387,7 @@ const LogScreen = ({ navigation }: Props) => {
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   calendar: {
     paddingLeft: 20,
-    paddingRight: 20
+    paddingRight: 20,
   },
   eventDayContainer: {
     alignItems: 'center',
@@ -391,7 +403,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textSmall,
     textAlign: 'center',
   },
-  eventIcons:  {
+  eventIcons: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: 26,
@@ -411,7 +423,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: 12,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 }));
 
 export default LogScreen;

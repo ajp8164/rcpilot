@@ -25,8 +25,8 @@ const filterValueLabels: Record<string, string> = {};
 export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;
 
 const ModelFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, filterType, generalFilterName, requireFilterName} = route.params;
-  
+  const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
+
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -42,18 +42,17 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
     if (requireFilterName) {
       filterEditor.setCreateSavedFilter(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!filterEditor.filter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
+    return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
+      <Divider text={'FILTER NAME'} />
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
@@ -70,14 +69,14 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
             />
           }
         />
-      :
+      ) : (
         <ListItemInput
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
           onChangeText={filterEditor.setName}
         />
-      }
+      )}
       <Divider />
       <ListItem
         title={'Reset Filter'}
@@ -88,7 +87,7 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the models that match all of these criteria.'}/>
+      <Divider text={'This filter shows all the models that match all of these criteria.'} />
       <ListItemFilterEnum
         title={'Model Type'}
         value={filterEditor.values.modelType.value}
@@ -126,7 +125,7 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
         label={'h:mm'}
         value={filterEditor.values.totalTime.value}
         relation={filterEditor.values.totalTime.relation}
-        numericProps={{prefix: '', separator: ':'}}
+        numericProps={{ prefix: '', separator: ':' }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('totalTime', filterState);
@@ -179,7 +178,7 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
           filterEditor.onFilterValueChange('notes', filterState);
         }}
       />
-      <Divider style={{height: theme.insets.bottom}} />
+      <Divider style={{ height: theme.insets.bottom }} />
     </ScrollView>
   );
 };
@@ -192,7 +191,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   resetDisabled: {
     opacity: 0.3,
-  }
+  },
 }));
 
 export default ModelFilterEditorScreen;

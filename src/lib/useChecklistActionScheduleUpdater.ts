@@ -14,14 +14,11 @@ export const useChecklistActionScheduleUpdater = () => {
         model.checklists.forEach(checklist => {
           const checklistType = checklist.type;
           checklist.actions.forEach(action => {
-            action.schedule.state = actionScheduleState(
-              action,
-              checklistType,
-              model
-            );
+            action.schedule.state = actionScheduleState(action, checklistType, model);
           });
         });
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

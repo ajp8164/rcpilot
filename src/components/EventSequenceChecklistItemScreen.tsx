@@ -17,7 +17,10 @@ import { useEvent } from 'lib/event';
 import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceChecklistItem'>;
+export type Props = NativeStackScreenProps<
+  EventSequenceNavigatorParamList,
+  'EventSequenceChecklistItem'
+>;
 
 const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
   const { checklistRefId, actionRefId } = route.params;
@@ -36,6 +39,7 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
     return () => {
       event.removeListener('event-checklist-item-notes', onChangeNotes);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onChangeNotes = (result: NotesEditorResult) => {
@@ -44,48 +48,52 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
 
   const lastTimePerformed = (action: ChecklistAction) => {
     if (action.history.length) {
-      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat('MMM d, yyyy');
+      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat(
+        'MMM d, yyyy',
+      );
     }
     return 'never';
   };
 
   const setNotes = (text: string) => {
-    realm.write(() => {
-      action!.notes = text;
-    });
+    if (action) {
+      realm.write(() => {
+        action.notes = text;
+      });
+    }
   };
 
   if (!action) {
-    return (
-      <EmptyView error message={'Checklist Action Not Found!'} />
-    );    
+    return <EmptyView error message={'Checklist Action Not Found!'} />;
   }
 
   return (
     <View style={theme.styles.view}>
-      <Divider text={'ACTION'}/>
+      <Divider text={'ACTION'} />
       <ListItem
         title={action?.description}
         subtitle={`From checklist '${checklist?.name}'`}
         position={['first', 'last']}
         rightImage={false}
       />
-      <Divider text={'FREQUENCY'}/>
+      <Divider text={'FREQUENCY'} />
       <ListItem
         title={action.schedule.state.text}
         subtitle={`Last time was ${lastTimePerformed(action)}`}
         position={['first', 'last']}
         rightImage={false}
       />
-      <Divider text={'NOTES'}/>
+      <Divider text={'NOTES'} />
       <ListItem
         title={action.notes || 'Notes'}
         position={['first', 'last']}
-        onPress={() => navigation.navigate('NotesEditor', {
-          text: action.notes,
-          headerButtonStyle: {color: theme.colors.screenHeaderInvButtonText},
-          eventName: 'event-checklist-item-notes',
-        })}
+        onPress={() =>
+          navigation.navigate('NotesEditor', {
+            text: action.notes,
+            headerButtonStyle: { color: theme.colors.screenHeaderInvButtonText },
+            eventName: 'event-checklist-item-notes',
+          })
+        }
       />
     </View>
   );

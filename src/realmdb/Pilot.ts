@@ -26,7 +26,7 @@ export class Pilot extends Object<Pilot> {
     },
     primaryKey: '_id',
   };
-};
+}
 
 export class Achievement extends Object<Achievement> {
   date!: ISODateString;
@@ -42,4 +42,4 @@ export class Achievement extends Object<Achievement> {
       event: 'Event',
     },
   };
-};
+}

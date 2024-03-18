@@ -1,40 +1,26 @@
 import { AppTheme, useTheme } from 'theme';
-import { Pressable, Text } from 'react-native';
+import React, { Pressable, Text } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import React from 'react';
 import { makeStyles } from '@rneui/themed';
 
 interface CircleButtonInterface {
   icon: string;
   onPress: () => void;
   size?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   style?: any;
   text?: string;
 }
 
-const CircleButton = ({
-  icon,
-  onPress,
-  size = 50,
-  style,
-  text,
-}: CircleButtonInterface) => {
+const CircleButton = ({ icon, onPress, size = 50, style, text }: CircleButtonInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   return (
-    <Pressable
-      style={s.buttonWrapper}
-      onPress={onPress}>
-      <Icon
-        name={'circle'}
-        style={[s.buttonOutline, {fontSize: size}]}
-      />
-      <Icon
-        name={icon}
-        style={[s.buttonIcon, {fontSize: size * 0.6}, style]}
-      />
+    <Pressable style={s.buttonWrapper} onPress={onPress}>
+      <Icon name={'circle'} style={[s.buttonOutline, { fontSize: size }]} />
+      <Icon name={icon} style={[s.buttonIcon, { fontSize: size * 0.6 }, style]} />
       <Text style={s.buttonText}>{text}</Text>
     </Pressable>
   );
@@ -55,7 +41,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     position: 'absolute',
     bottom: -20,
     textAlign: 'center',
-    width: '100%',    
+    width: '100%',
   },
   buttonWrapper: {
     justifyContent: 'center',

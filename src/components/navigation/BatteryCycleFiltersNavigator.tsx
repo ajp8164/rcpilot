@@ -7,36 +7,37 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const BatteryCycleFiltersStack = createNativeStackNavigator<BatteryCycleFiltersNavigatorParamList>();
+const BatteryCycleFiltersStack =
+  createNativeStackNavigator<BatteryCycleFiltersNavigatorParamList>();
 
 const BatteryCycleFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <BatteryCycleFiltersStack.Navigator
-        initialRouteName='BatteryCycleFilters'
+        initialRouteName="BatteryCycleFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <BatteryCycleFiltersStack.Screen
-          name='BatteryCycleFilters'
+          name="BatteryCycleFilters"
           component={BatteryCycleFiltersScreen}
           options={{
             title: 'Filters for Cycles',
           }}
         />
         <BatteryCycleFiltersStack.Screen
-          name='BatteryCycleFilterEditor'
+          name="BatteryCycleFilterEditor"
           component={BatteryCycleFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <BatteryCycleFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',

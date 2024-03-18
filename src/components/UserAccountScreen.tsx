@@ -1,9 +1,6 @@
 import { Alert, ScrollView, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import {
-  MainNavigatorParamList,
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { MainNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
 import React, { useEffect } from 'react';
 
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
@@ -66,17 +63,9 @@ const UserAccountScreen = ({ navigation }: Props) => {
         style={theme.styles.view}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
-        <ChatAvatar
-          userProfile={userProfile}
-          size={'giant'}
-          avatarStyle={s.avatar}
-        />
-        {userProfile?.name && (
-          <Text style={s.profileName}>{userProfile.name}</Text>
-        )}
-        {userProfile?.email && (
-          <Text style={s.profileEmail}>{userProfile.email}</Text>
-        )}
+        <ChatAvatar userProfile={userProfile} size={'giant'} avatarStyle={s.avatar} />
+        {userProfile?.name && <Text style={s.profileName}>{userProfile.name}</Text>}
+        {userProfile?.email && <Text style={s.profileEmail}>{userProfile.email}</Text>}
         <Divider />
         <ListItem
           title={'Edit Profile'}

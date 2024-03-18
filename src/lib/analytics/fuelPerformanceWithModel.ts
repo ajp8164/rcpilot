@@ -1,6 +1,6 @@
 import { Model } from 'realmdb/Model';
 
-export const fuelCapacityPerformanceWithModel = (model: Model) => {
+export const fuelCapacityPerformanceWithModel = (_model: Model) => {
   //   Find all events where fuel was used with this model
   //   Group the events by event style
   //   For each event style

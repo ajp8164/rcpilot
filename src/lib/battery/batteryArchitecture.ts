@@ -1,7 +1,7 @@
-import { BatteryCellArchitecture, BatteryChemistry } from "types/battery";
+import { BatteryCellArchitecture, BatteryChemistry } from 'types/battery';
 
-import { ExtendedWheelPickerItem } from "types/wheelPicker";
-import { WheelPickerItem } from "components/atoms/WheelPicker";
+import { ExtendedWheelPickerItem } from 'types/wheelPicker';
+import { WheelPickerItem } from 'components/atoms/WheelPicker';
 
 export const batterySCellConfigurationItems: WheelPickerItem[] = [
   { label: '1 Cell', value: '1' },
@@ -50,10 +50,7 @@ export const batterySPCellConfigurationItems: ExtendedWheelPickerItem[][] = [
 ];
 
 const getBatteryCellArchitecture = (chemistry: BatteryChemistry): BatteryCellArchitecture => {
-  if (
-    chemistry.includes(BatteryChemistry.NiCd) ||
-    chemistry.includes(BatteryChemistry.NiMH)
-  ) {
+  if (chemistry.includes(BatteryChemistry.NiCd) || chemistry.includes(BatteryChemistry.NiMH)) {
     return BatteryCellArchitecture.SeriesCells;
   } else {
     return BatteryCellArchitecture.SeriesParallelCells;
@@ -64,17 +61,19 @@ export const batteryCellConfigurationToString = (
   chemistry: BatteryChemistry,
   cellConfiguration: string[] | number[],
 ) => {
-  const sCells = typeof cellConfiguration[0] === 'string' ? parseInt(cellConfiguration[0]) : cellConfiguration[0];
-  const pCells = typeof cellConfiguration[1] === 'string' ? parseInt(cellConfiguration[1]) : cellConfiguration[1];
+  const sCells =
+    typeof cellConfiguration[0] === 'string'
+      ? parseInt(cellConfiguration[0], 10)
+      : cellConfiguration[0];
+  const pCells =
+    typeof cellConfiguration[1] === 'string'
+      ? parseInt(cellConfiguration[1], 10)
+      : cellConfiguration[1];
   if (getBatteryCellArchitecture(chemistry) === BatteryCellArchitecture.SeriesParallelCells) {
     const series =
-      sCells > 0
-        ? batterySPCellConfigurationItems[0][Number(sCells) - 1].labelShort || ''
-        : '';
+      sCells > 0 ? batterySPCellConfigurationItems[0][Number(sCells) - 1].labelShort || '' : '';
     const parallel =
-      pCells > 0
-        ? batterySPCellConfigurationItems[1][Number(pCells) - 1].labelShort || ''
-        : '';
+      pCells > 0 ? batterySPCellConfigurationItems[1][Number(pCells) - 1].labelShort || '' : '';
 
     return `${series}${parallel.length > 0 ? ' / ' : ''}${parallel}`;
   } else {

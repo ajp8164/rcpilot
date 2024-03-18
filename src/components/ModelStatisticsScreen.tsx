@@ -23,7 +23,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
 
   const theme = useTheme();
   const realm = useRealm();
-  
+
   const formatCurrency = useCurrencyFormatter();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
@@ -34,26 +34,24 @@ const ModelStatisticsScreen = ({ route }: Props) => {
   }) => {
     let eventStyle;
     if (data.eventStyleId.length) {
-      eventStyle = realm.objectForPrimaryKey(EventStyle ,new BSON.ObjectId(data.eventStyleId));
+      eventStyle = realm.objectForPrimaryKey(EventStyle, new BSON.ObjectId(data.eventStyleId));
     }
     const average = data.eventStyleCount > 0 ? data.eventStyleDuration / data.eventStyleCount : 0;
-    const percentage = (data.eventStyleDuration / model!.statistics.totalTime * 100) || 0;
+    const percentage = model ? (data.eventStyleDuration / model.statistics.totalTime) * 100 : 0;
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}
-        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToMSS(data.eventStyleDuration, {format: 'm:ss'})}`}
-        value={`${Math.round(percentage)}%, ${secondsToMSS(average, {format: 'm:ss'})}`}
-        position={listItemPosition(index, model!.statistics.eventStyleData.length)}
+        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToMSS(data.eventStyleDuration, { format: 'm:ss' })}`}
+        value={`${Math.round(percentage)}%, ${secondsToMSS(average, { format: 'm:ss' })}`}
+        position={listItemPosition(index, model?.statistics.eventStyleData.length || 0)}
         rightImage={false}
       />
     );
   };
 
   if (!model) {
-    return (
-      <EmptyView error message={'Model Not Found!'} />
-    );    
-  };
+    return <EmptyView error message={'Model Not Found!'} />;
+  }
 
   return (
     <ScrollView style={theme.styles.view}>
@@ -64,19 +62,26 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          model.statistics.eventStyleData.length ?
-            <Divider text={`${eventKind(model.type).name.toUpperCase()} DURATION AVERAGE BY STYLE`} />
-            : null
+          model.statistics.eventStyleData.length ? (
+            <Divider
+              text={`${eventKind(model.type).name.toUpperCase()} DURATION AVERAGE BY STYLE`}
+            />
+          ) : null
         }
         ListFooterComponent={
-          model.statistics.eventStyleData.length
-            ? <Divider note text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`} />
-            : <Divider />
+          model.statistics.eventStyleData.length ? (
+            <Divider
+              note
+              text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`}
+            />
+          ) : (
+            <Divider />
+          )
         }
       />
       <ListItem
         title={'Total Time'}
-        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToMSS(model.statistics.totalTime, {format: 'm:ss'})}`}
+        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToMSS(model.statistics.totalTime, { format: 'm:ss' })}`}
         position={['first', 'last']}
         rightImage={false}
       />
@@ -105,9 +110,12 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         position={['last']}
         rightImage={false}
       />
-      {(!model.purchasePrice || model.statistics.uncertainCost) &&
-        <Divider note text={'Costs are uncertain due to gaps in the underlying pricing or cost data.'} />
-      }
+      {(!model.purchasePrice || model.statistics.uncertainCost) && (
+        <Divider
+          note
+          text={'Costs are uncertain due to gaps in the underlying pricing or cost data.'}
+        />
+      )}
     </ScrollView>
   );
 };

@@ -103,19 +103,14 @@ export const useAuthContext = (
   };
 };
 
-const isReAuthenticationRequired = (
-  credentials?: FirebaseAuthTypes.User | null,
-) => {
+const isReAuthenticationRequired = (credentials?: FirebaseAuthTypes.User | null) => {
   const lastSignInTime = credentials?.metadata.lastSignInTime;
   if (appConfig.requireReAuthDays > 0 && lastSignInTime) {
     const daysSinceLastSignIn = DateTime.fromISO(lastSignInTime)
       .diffNow()
       .shiftTo('days')
       .toObject().days;
-    if (
-      daysSinceLastSignIn &&
-      Math.abs(daysSinceLastSignIn) < appConfig.requireReAuthDays
-    ) {
+    if (daysSinceLastSignIn && Math.abs(daysSinceLastSignIn) < appConfig.requireReAuthDays) {
       return true;
     }
   }

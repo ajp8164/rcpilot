@@ -45,7 +45,7 @@ const NewReportNavigator = () => {
         }}
       />
       <NewReportStack.Screen
-        name='ReportEventFiltersNavigator'
+        name="ReportEventFiltersNavigator"
         component={ReportEventFiltersNavigator}
         options={{
           headerShown: false,
@@ -53,7 +53,7 @@ const NewReportNavigator = () => {
         }}
       />
       <NewReportStack.Screen
-        name='ReportBatteryScanCodeFiltersNavigator'
+        name="ReportBatteryScanCodeFiltersNavigator"
         component={ReportBatteryScanCodeFiltersNavigator}
         options={{
           headerShown: false,
@@ -61,7 +61,7 @@ const NewReportNavigator = () => {
         }}
       />
       <NewReportStack.Screen
-        name='ReportModelScanCodeFiltersNavigator'
+        name="ReportModelScanCodeFiltersNavigator"
         component={ReportModelScanCodeFiltersNavigator}
         options={{
           headerShown: false,
@@ -69,7 +69,7 @@ const NewReportNavigator = () => {
         }}
       />
       <NewReportStack.Screen
-        name='ReportMaintenanceFiltersNavigator'
+        name="ReportMaintenanceFiltersNavigator"
         component={ReportMaintenanceFiltersNavigator}
         options={{
           headerShown: false,

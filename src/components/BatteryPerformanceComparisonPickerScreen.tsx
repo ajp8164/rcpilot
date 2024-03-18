@@ -5,10 +5,10 @@ import { SectionList, SectionListData } from 'react-native';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
-import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
+import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { useQuery } from '@realm/react';
@@ -19,7 +19,10 @@ type Section = {
   data: Battery[];
 };
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryPerformanceComparisonPicker'>;
+export type Props = NativeStackScreenProps<
+  BatteriesNavigatorParamList,
+  'BatteryPerformanceComparisonPicker'
+>;
 
 const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: Props) => {
   const theme = useTheme();
@@ -29,11 +32,16 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
   const batteries = useQuery<Battery>(Battery);
 
   useEffect(() => {
-    const onDone = () => {};
-    setScreenEditHeader({enabled: true, action: onDone});
+    const onDone = () => {
+      return;
+    };
+    setScreenEditHeader({ enabled: true, action: onDone });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const groupBatteries = (batteries: Realm.Results<Battery>): SectionListData<Battery, Section>[] => {
+  const groupBatteries = (
+    batteries: Realm.Results<Battery>,
+  ): SectionListData<Battery, Section>[] => {
     return groupItems<Battery, Section>(batteries, (battery, index) => {
       let groupTitle = 'Baseline Battery';
       if (index > 0) {
@@ -55,20 +63,18 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
       style={s.sectionList}
       sections={groupBatteries(batteries)}
       keyExtractor={item => item._id.toString()}
-      renderItem={({item: battery, index, section}) => (
+      renderItem={({ item: battery, index, section }) => (
         <ListItemCheckbox
           key={index}
           title={battery.name}
-          subtitle={`${battery.capacity}mAh ${battery.sCells}S/${battery.pCells}P ${battery.chemistry}, ${battery.totalCycles} cycles, ${battery.lastCycle ? DateTime.fromISO(battery.lastCycle).toFormat("MM/d/yy"): 'No'} last`}
-          containerStyle={{marginHorizontal: 15}}
+          subtitle={batterySummaryExtended(battery)}
+          containerStyle={s.batteryCheckbox}
           position={listItemPosition(index, section.data.length)}
           checked={true}
           onPress={() => null}
         />
       )}
-      renderSectionHeader={({section: {title}}) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
       ListHeaderComponent={
         <View style={s.listHeader}>
           <Divider note text={'Choose up to four batteries to compare.'} />
@@ -86,6 +92,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   listHeader: {
     ...theme.styles.view,
     height: undefined,
+  },
+  batteryCheckbox: {
+    marginHorizontal: 15,
   },
 }));
 

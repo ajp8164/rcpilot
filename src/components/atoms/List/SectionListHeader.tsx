@@ -9,17 +9,13 @@ interface SectionListHeaderInterface {
   title?: string;
 }
 
-const SectionListHeader = ({
-  title,
-}: SectionListHeaderInterface) => {
+const SectionListHeader = ({ title }: SectionListHeaderInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   return (
     <View style={s.sectionHeaderContainer}>
-      <Text style={s.sectionHeader}>
-        {title}
-      </Text>
+      <Text style={s.sectionHeader}>{title}</Text>
     </View>
   );
 };

@@ -2,7 +2,7 @@ import {
   DateRelation,
   EnumRelation,
   NumberRelation,
-  StringRelation
+  StringRelation,
 } from 'components/molecules/filters';
 
 import { EventFilterValues } from 'types/filter';

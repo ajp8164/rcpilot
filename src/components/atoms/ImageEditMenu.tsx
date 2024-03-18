@@ -2,6 +2,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu';
 
 import { AppTheme, useTheme } from 'theme';
 
+import React from 'react-native';
 import { ReactNode } from 'react';
 import { makeStyles } from '@rneui/themed';
 
@@ -80,10 +81,7 @@ const ImageEditMenu = ({
         </DropdownMenu.Sub>
         <DropdownMenu.Separator />
         <DropdownMenu.Group>
-          <DropdownMenu.Item
-            key={'remove-image'}
-            destructive
-            onSelect={onRemoveImage}>
+          <DropdownMenu.Item key={'remove-image'} destructive onSelect={onRemoveImage}>
             <DropdownMenu.ItemTitle>{'Remove Image'}</DropdownMenu.ItemTitle>
           </DropdownMenu.Item>
         </DropdownMenu.Group>

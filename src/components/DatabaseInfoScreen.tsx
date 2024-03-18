@@ -5,9 +5,7 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseInfo'>;
@@ -17,6 +15,7 @@ const DatabaseInfoScreen = () => {
   const s = useStyles(theme);
 
   const resetDatabase = () => {
+    return;
   };
 
   return (
@@ -24,23 +23,10 @@ const DatabaseInfoScreen = () => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'INFORMATION'}/>
-      <ListItem
-        title={'Version'}
-        value={'1'}
-        position={['first']}
-        rightImage={false}
-      />
-      <ListItem
-        title={'Total Records'}
-        value={'1'}
-        rightImage={false}
-      />
-      <ListItem
-        title={'Total Size'}
-        value={'1'}
-        rightImage={false}
-      />
+      <Divider text={'INFORMATION'} />
+      <ListItem title={'Version'} value={'1'} position={['first']} rightImage={false} />
+      <ListItem title={'Total Records'} value={'1'} rightImage={false} />
+      <ListItem title={'Total Size'} value={'1'} rightImage={false} />
       <ListItem
         title={'Last Modified'}
         value={'Jan 13, 2024 at 6:23PM'}
@@ -63,7 +49,7 @@ const DatabaseInfoScreen = () => {
             ],
             { cancelable: false },
           );
-          }}
+        }}
       />
     </ScrollView>
   );

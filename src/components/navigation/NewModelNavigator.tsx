@@ -13,9 +13,9 @@ const NewModelNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <NewModelStack.Navigator
-        initialRouteName='NewModel'
+        initialRouteName="NewModel"
         screenOptions={{
           headerBackTitle: 'Model',
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
@@ -23,7 +23,7 @@ const NewModelNavigator = () => {
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewModelStack.Screen
-          name='NewModel'
+          name="NewModel"
           // @ts-expect-error
           component={ModelEditorScreen}
           options={{
@@ -31,7 +31,7 @@ const NewModelNavigator = () => {
           }}
         />
         <NewModelStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'Model Notes',

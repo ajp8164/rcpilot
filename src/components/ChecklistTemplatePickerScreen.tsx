@@ -1,4 +1,3 @@
-import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
@@ -10,9 +9,9 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
+import { useTheme } from 'theme';
 
 export type ChecklistTemplatePickerResult = {
   checklistTemplateId: string;
@@ -22,14 +21,15 @@ export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistT
 
 const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
   const { eventName } = route.params;
-  
+
   const theme = useTheme();
-  const s = useStyles(theme);
   const event = useEvent();
 
   const checklistTemplates = useQuery(ChecklistTemplate);
 
-  const [allChecklistTemplates, setAllChecklistTemplates] = useState<{[key in ChecklistType]: ChecklistTemplate[]}>({
+  const [allChecklistTemplates, setAllChecklistTemplates] = useState<{
+    [key in ChecklistType]: ChecklistTemplate[];
+  }>({
     [ChecklistType.PreEvent]: [],
     [ChecklistType.PostEvent]: [],
     [ChecklistType.Maintenance]: [],
@@ -38,6 +38,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         return (
           <Button
@@ -46,9 +47,10 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
             buttonStyle={theme.styles.buttonScreenHeader}
             onPress={navigation.goBack}
           />
-        )
+        );
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
 
   const renderPreEventChecklistTemplate: ListRenderItem<ChecklistTemplate> = ({
     item: checklistTemplate,
-    index
+    index,
   }) => {
     return (
       <ListItem
@@ -74,16 +76,18 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
         position={listItemPosition(index, allChecklistTemplates[ChecklistType.PreEvent].length)}
         rightImage={false}
-        onPress={() => event.emit(eventName, {
-          checklistTemplateId: checklistTemplate._id.toString()
-        } as ChecklistTemplatePickerResult)}
+        onPress={() =>
+          event.emit(eventName, {
+            checklistTemplateId: checklistTemplate._id.toString(),
+          } as ChecklistTemplatePickerResult)
+        }
       />
-    )
+    );
   };
 
   const renderPostEventChecklistTemplate: ListRenderItem<ChecklistTemplate> = ({
     item: checklistTemplate,
-    index
+    index,
   }) => {
     return (
       <ListItem
@@ -92,16 +96,18 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
         position={listItemPosition(index, allChecklistTemplates[ChecklistType.PostEvent].length)}
         rightImage={false}
-        onPress={() => event.emit(eventName, {
-          checklistTemplateId: checklistTemplate._id.toString()
-        } as ChecklistTemplatePickerResult)}
+        onPress={() =>
+          event.emit(eventName, {
+            checklistTemplateId: checklistTemplate._id.toString(),
+          } as ChecklistTemplatePickerResult)
+        }
       />
-    )
+    );
   };
 
   const renderMaintenanceChecklistTemplate: ListRenderItem<ChecklistTemplate> = ({
     item: checklistTemplate,
-    index
+    index,
   }) => {
     return (
       <ListItem
@@ -110,15 +116,23 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
         position={listItemPosition(index, allChecklistTemplates[ChecklistType.Maintenance].length)}
         rightImage={false}
-        onPress={() => event.emit(eventName, {
-          checklistTemplateId: checklistTemplate._id.toString()
-        } as ChecklistTemplatePickerResult)}
+        onPress={() =>
+          event.emit(eventName, {
+            checklistTemplateId: checklistTemplate._id.toString(),
+          } as ChecklistTemplatePickerResult)
+        }
       />
-    )
+    );
   };
 
   if (!checklistTemplates.length) {
-    return (<EmptyView info message={'No List Templates'} details={"Tap the + button to add your first list template."} />);
+    return (
+      <EmptyView
+        info
+        message={'No List Templates'}
+        details={'Tap the + button to add your first list template.'}
+      />
+    );
   }
 
   return (
@@ -133,9 +147,11 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          allChecklistTemplates[ChecklistType.PreEvent].length > 0
-            ? <Divider text={'PRE-FLIGHT'}/>
-            : <></>            
+          allChecklistTemplates[ChecklistType.PreEvent].length > 0 ? (
+            <Divider text={'PRE-FLIGHT'} />
+          ) : (
+            <></>
+          )
         }
       />
       <FlatList
@@ -145,9 +161,11 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          allChecklistTemplates[ChecklistType.PostEvent].length > 0
-            ? <Divider text={'POST-FLIGHT'}/>
-            : <></>            
+          allChecklistTemplates[ChecklistType.PostEvent].length > 0 ? (
+            <Divider text={'POST-FLIGHT'} />
+          ) : (
+            <></>
+          )
         }
       />
       <FlatList
@@ -157,21 +175,16 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          allChecklistTemplates[ChecklistType.Maintenance].length > 0
-            ? <Divider text={'MAINTENANCE'}/>
-            : <></>            
+          allChecklistTemplates[ChecklistType.Maintenance].length > 0 ? (
+            <Divider text={'MAINTENANCE'} />
+          ) : (
+            <></>
+          )
         }
       />
       <Divider />
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-  },
-}));
 
 export default ChecklistTemplatePickerScreen;

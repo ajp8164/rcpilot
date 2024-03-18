@@ -7,9 +7,11 @@ export const batteryCycleSummary = (battery: Battery) => {
 
   const lastCycleDate = lastCycle
     ? isCharged
-      ? `${DateTime.fromISO(lastCycle.charge!.date).toFormat('M/d/yyyy')} (charge)`
-      : `${DateTime.fromISO(lastCycle.discharge!.date).toFormat('M/d/yyyy')} (discharge)`
-    : 'none'
+      ? lastCycle.charge &&
+        `${DateTime.fromISO(lastCycle.charge.date).toFormat('M/d/yyyy')} (charge)`
+      : lastCycle.discharge &&
+        `${DateTime.fromISO(lastCycle.discharge.date).toFormat('M/d/yyyy')} (discharge)`
+    : 'none';
 
   const capacity = `${battery.capacity}mAh`;
   const configuration = `${battery.sCells}S/${battery.pCells}P`;

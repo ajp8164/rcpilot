@@ -5,7 +5,7 @@ import {
   ChecklistActionHistoryEntry,
   ChecklistActionSchedule,
   ChecklistActionScheduleDue,
-  ChecklistActionScheduleState
+  ChecklistActionScheduleState,
 } from './Checklist';
 import { Filter, FilterState } from './Filter';
 import { Location, LocationPosition } from './Location';
@@ -37,7 +37,7 @@ const Schema = [
   Model,
   Pilot,
   ScanCodesReport,
-  
+
   // Embedded objects
   Achievement,
   BatteryCharge,

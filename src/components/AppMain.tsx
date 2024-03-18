@@ -1,10 +1,11 @@
 import { AuthContext, useAuthContext } from 'lib/auth';
-import { CameraContext, CameraModal, ColorModeSwitch, useCameraContext } from '@react-native-ajp-elements/ui';
 import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-} from '@react-navigation/native';
+  CameraContext,
+  CameraModal,
+  ColorModeSwitch,
+  useCameraContext,
+} from '@react-native-ajp-elements/ui';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { InitStatus, initApp } from 'app';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 import { NetworkContext, useNetworkContext } from 'lib/network';
@@ -14,11 +15,12 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { AppError } from 'lib/errors';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import ErrorBoundary from 'react-native-error-boundary';
-import {EventProvider} from 'lib/event';
+import { EventProvider } from 'lib/event';
 import { LinkingOptions } from '@react-navigation/native';
 import MainNavigator from 'components/navigation/MainNavigator';
 import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
 import RNBootSplash from 'react-native-bootsplash';
+import React from 'react-native';
 import { SignInModal } from 'components/modals/SignInModal';
 import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
@@ -52,9 +54,7 @@ const AppMain = () => {
   useChecklistActionScheduleUpdater();
   useUnknownPilot();
 
-  const [startupScreen, setStartupScreen] = useState<StartupScreen>(
-    StartupScreen.None,
-  );
+  const [startupScreen, setStartupScreen] = useState<StartupScreen>(StartupScreen.None);
   const [fatal, setFatal] = useState<string | undefined>(undefined);
 
   useEffect(() => {

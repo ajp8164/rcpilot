@@ -19,8 +19,7 @@ const AboutScreen = ({ navigation }: Props) => {
 
   const tabBarHeight = useBottomTabBarHeight();
   const headerBarLargeHeight = theme.styles.headerBarLarge.height as number;
-  const visibleViewHeight =
-    viewport.height - tabBarHeight - headerBarLargeHeight;
+  const visibleViewHeight = viewport.height - tabBarHeight - headerBarLargeHeight;
 
   return (
     <ScrollView
@@ -47,7 +46,8 @@ const AboutScreen = ({ navigation }: Props) => {
           })
         }
       />
-      <Divider note
+      <Divider
+        note
         text={'This log shows the activity of the application and can be useful for app support.'}
       />
       <Text style={s.version}>

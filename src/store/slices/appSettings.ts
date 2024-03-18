@@ -28,10 +28,10 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   },
 });
 
-const handleSaveBiometrics: CaseReducer<
-  AppSettingsState,
-  PayloadAction<{ value: boolean }>
-> = (state, { payload }) => {
+const handleSaveBiometrics: CaseReducer<AppSettingsState, PayloadAction<{ value: boolean }>> = (
+  state,
+  { payload },
+) => {
   return {
     ...state,
     biometrics: payload.value,
@@ -58,10 +58,10 @@ const handleSaveOutputReportTo: CaseReducer<
   };
 };
 
-const handleSaveShowModelCards: CaseReducer<
-  AppSettingsState,
-  PayloadAction<{ value: boolean }>
-> = (state, { payload }) => {
+const handleSaveShowModelCards: CaseReducer<AppSettingsState, PayloadAction<{ value: boolean }>> = (
+  state,
+  { payload },
+) => {
   return {
     ...state,
     showModelCards: payload.value,
@@ -78,10 +78,10 @@ const handleSaveThemeSettings: CaseReducer<
   };
 };
 
-const handleSaveAcceptTou: CaseReducer<
-  AppSettingsState,
-  PayloadAction<{ tou: Tou }>
-> = (state, { payload }) => {
+const handleSaveAcceptTou: CaseReducer<AppSettingsState, PayloadAction<{ tou: Tou }>> = (
+  state,
+  { payload },
+) => {
   return {
     ...state,
     tou: payload.tou,
@@ -91,8 +91,7 @@ const handleSaveAcceptTou: CaseReducer<
 const appSettingsSlice = createSlice({
   name: 'appSettings',
   initialState: initialAppSettingsState,
-  extraReducers: builder =>
-    builder.addCase(revertAll, () => initialAppSettingsState),
+  extraReducers: builder => builder.addCase(revertAll, () => initialAppSettingsState),
   reducers: {
     saveAcceptTou: handleSaveAcceptTou,
     saveBiometrics: handleSaveBiometrics,

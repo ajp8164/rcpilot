@@ -9,15 +9,15 @@ import EventEditorScreen from 'components/EventEditorScreen';
 import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
 import EventSequenceNavigator from 'components/navigation/EventSequenceNavigator';
 import EventsScreen from 'components/EventsScreen';
-import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
-import ModelEditorScreen from 'components/ModelEditorScreen';
-import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
-import { ModelHeader } from 'components/molecules/ModelHeader';
 import MaintenanceActionScreen from 'components/MaintenanceActionScreen';
 import MaintenanceFiltersNavigator from 'components/navigation/MaintenanceFiltersNavigator';
 import MaintenanceHistoryEntryScreen from 'components/MaintenanceHistoryEntryScreen';
 import MaintenanceHistoryScreen from 'components/MaintenanceHistoryScreen';
 import MaintenanceScreen from 'components/MaintenanceScreen';
+import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
+import ModelEditorScreen from 'components/ModelEditorScreen';
+import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
+import { ModelHeader } from 'components/molecules/ModelHeader';
 import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
@@ -37,16 +37,16 @@ const ModelsNavigator = () => {
 
   return (
     <ModelsStack.Navigator
-    initialRouteName='Models'
-    screenOptions={{
-      headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
-      headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-      headerTintColor: theme.colors.screenHeaderButtonText,
-    }}>
+      initialRouteName="Models"
+      screenOptions={{
+        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+        headerTintColor: theme.colors.screenHeaderButtonText,
+      }}>
       <ModelsStack.Screen
-        name='Models'
+        name="Models"
         component={ModelsScreen}
-        initialParams={{listModels: 'all'}}
+        initialParams={{ listModels: 'all' }}
         options={({ route }) => ({
           title: route.params.listModels === 'retired' ? 'Retired' : 'Models',
           headerLargeTitle: route.params.listModels === 'all' ? true : false,
@@ -55,15 +55,16 @@ const ModelsNavigator = () => {
         })}
       />
       <ModelsStack.Screen
-        name='ModelEditor'
+        name="ModelEditor"
         component={ModelEditorScreen}
         options={({ route }) => ({
-          header: () => <ModelHeader modelId={route.params.modelId}/>,
+          // eslint-disable-next-line react/no-unstable-nested-components
+          header: () => <ModelHeader modelId={route.params.modelId} />,
           title: 'Model',
         })}
       />
       <ModelsStack.Screen
-        name='BatteryCycleEditor'
+        name="BatteryCycleEditor"
         component={BatteryCycleEditorScreen}
         options={{
           title: 'Cycle Details',
@@ -123,7 +124,7 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='ModelStatistics'
+        name="ModelStatistics"
         component={ModelStatisticsScreen}
         options={{
           title: 'Model Statistics',
@@ -159,7 +160,7 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='MaintenanceFiltersNavigator'
+        name="MaintenanceFiltersNavigator"
         component={MaintenanceFiltersNavigator}
         options={{
           headerShown: false,
@@ -167,7 +168,7 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='ModelFiltersNavigator'
+        name="ModelFiltersNavigator"
         component={ModelFiltersNavigator}
         options={{
           headerShown: false,
@@ -175,7 +176,7 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='EventFiltersNavigator'
+        name="EventFiltersNavigator"
         component={EventFiltersNavigator}
         options={{
           headerShown: false,
@@ -183,7 +184,7 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='EventSequenceNavigator'
+        name="EventSequenceNavigator"
         component={EventSequenceNavigator}
         options={{
           headerShown: false,
@@ -191,7 +192,7 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='NotesEditor'
+        name="NotesEditor"
         component={NotesEditorScreen}
         options={{
           title: 'Model Notes',
@@ -212,7 +213,7 @@ const ModelsNavigator = () => {
         })}
       />
       <ModelsStack.Screen
-        name='ModelChecklists'
+        name="ModelChecklists"
         component={ModelChecklistsScreen}
         options={{
           title: 'Checklists',
@@ -226,11 +227,11 @@ const ModelsNavigator = () => {
         }}
       />
       <ModelsStack.Screen
-        name='NewModelNavigator'
+        name="NewModelNavigator"
         component={NewModelNavigator}
         options={{
           headerShown: false,
-          presentation: 'modal'
+          presentation: 'modal',
         }}
       />
     </ModelsStack.Navigator>

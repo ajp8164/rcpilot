@@ -25,9 +25,7 @@ export const initialEventSequenceState = Object.freeze<EventSequenceState>({
   duration: 0,
 });
 
-const handleReset: CaseReducer<
-  EventSequenceState
-> = (_state) => {
+const handleReset: CaseReducer<EventSequenceState> = _state => {
   return initialEventSequenceState;
 };
 
@@ -41,20 +39,20 @@ const handleSetBatteries: CaseReducer<
   };
 };
 
-const handleSetDuration: CaseReducer<
-  EventSequenceState,
-  PayloadAction<{ duration: number }>
-> = (state, { payload }) => {
+const handleSetDuration: CaseReducer<EventSequenceState, PayloadAction<{ duration: number }>> = (
+  state,
+  { payload },
+) => {
   return {
     ...state,
     duration: payload.duration,
   };
 };
 
-const handleSetModel: CaseReducer<
-  EventSequenceState,
-  PayloadAction<{ modelId: string }>
-> = (state, { payload }) => {
+const handleSetModel: CaseReducer<EventSequenceState, PayloadAction<{ modelId: string }>> = (
+  state,
+  { payload },
+) => {
   return {
     ...state,
     modelId: payload.modelId,
@@ -64,9 +62,9 @@ const handleSetModel: CaseReducer<
 const handleSetChecklistActionComplete: CaseReducer<
   EventSequenceState,
   PayloadAction<{
-    checklistActionRefId: string,
-    checklistActionHistoryEntry: JChecklistActionHistoryEntry,
-    checklistType: EventSequenceChecklistType,
+    checklistActionRefId: string;
+    checklistActionHistoryEntry: JChecklistActionHistoryEntry;
+    checklistType: EventSequenceChecklistType;
   }>
 > = (state, { payload }) => {
   return {
@@ -84,8 +82,8 @@ const handleSetChecklistActionComplete: CaseReducer<
 const handleSetChecklistActionNotComplete: CaseReducer<
   EventSequenceState,
   PayloadAction<{
-    checklistActionRefId: string,
-    checklistType: EventSequenceChecklistType,
+    checklistActionRefId: string;
+    checklistType: EventSequenceChecklistType;
   }>
 > = (state, { payload }) => {
   const entries = Object.assign({}, state.checklistActionHistoryEntries[payload.checklistType]);
@@ -102,8 +100,7 @@ const handleSetChecklistActionNotComplete: CaseReducer<
 const eventSequenceSlice = createSlice({
   name: 'eventSequence',
   initialState: initialEventSequenceState,
-  extraReducers: builder =>
-    builder.addCase(revertAll, () => initialEventSequenceState),
+  extraReducers: builder => builder.addCase(revertAll, () => initialEventSequenceState),
   reducers: {
     reset: handleReset,
     setBatteries: handleSetBatteries,

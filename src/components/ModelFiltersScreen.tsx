@@ -1,6 +1,11 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -56,8 +61,9 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
     } else {
       setGeneralModelsFilter(generalModelsFilterQuery[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
@@ -83,27 +89,34 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
         position={listItemPosition(index, allModelFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('ModelFilterEditor', {
-          filterId: filter._id.toString(),
-          filterType,
-          generalFilterName: generalModelsFilterName,
-        })}
+        onPressInfo={() =>
+          navigation.navigate('ModelFilterEditor', {
+            filterId: filter._id.toString(),
+            filterType,
+            generalFilterName: generalModelsFilterName,
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => {
-              confirmAction(deleteFilter, {
-                label: 'Delete Saved Filter',
-                title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                value: filter,
-              });
-            }
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () => {
+                confirmAction(deleteFilter, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+                  value: filter,
+                });
+              },
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-filters', filter._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('model-filters', filter._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   return (
@@ -118,7 +131,7 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalModelsFilter ?
+      {useGeneralFilter && generalModelsFilter ? (
         <>
           <ListItemCheckboxInfo
             title={'General Models Filter'}
@@ -127,36 +140,46 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
             position={['first', 'last']}
             checked={generalModelsFilter._id.toString() === selectedFilterId}
             onPress={() => setFilter(generalModelsFilter)}
-            onPressInfo={() => navigation.navigate('ModelFilterEditor', {
-              filterId: generalModelsFilter!._id.toString(),
-              filterType,
-              generalFilterName: generalModelsFilterName,
-            })}
+            onPressInfo={() =>
+              navigation.navigate('ModelFilterEditor', {
+                filterId: generalModelsFilter._id.toString(),
+                filterType,
+                generalFilterName: generalModelsFilterName,
+              })
+            }
           />
-          <Divider note
-            text={'You can save the General Models Filter to remember a specific filter configuration for later use.'}
-          />      
+          <Divider
+            note
+            text={
+              'You can save the General Models Filter to remember a specific filter configuration for later use.'
+            }
+          />
         </>
-        :
+      ) : (
         <ListItem
           title={'Add New Filter'}
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('ModelFilterEditor', {
-            filterId: generalModelsFilter!._id.toString(),
-            filterType,
-            generalFilterName: generalModelsFilterName,
-            requireFilterName: true,
-          })}
+          onPress={() =>
+            generalModelsFilter &&
+            navigation.navigate('ModelFilterEditor', {
+              filterId: generalModelsFilter._id.toString(),
+              filterType,
+              generalFilterName: generalModelsFilterName,
+              requireFilterName: true,
+            })
+          }
         />
-      }
+      )}
       <FlatList
         data={allModelFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allModelFilters.length ? <Divider text={'SAVED MODEL FILTERS'} /> : null}
+        ListHeaderComponent={
+          allModelFilters.length ? <Divider text={'SAVED MODEL FILTERS'} /> : null
+        }
       />
     </View>
   );

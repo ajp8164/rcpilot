@@ -3,9 +3,7 @@ import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesAudio'>;
@@ -24,10 +22,7 @@ const PreferencesAudioScreen = ({ navigation }: Props) => {
         position={['first']}
         onPress={() => navigation.navigate('PreferencesChimeCues')}
       />
-      <ListItem
-        title={'Voice Cues'}
-        onPress={() => navigation.navigate('PreferencesVoiceCues')}
-      />
+      <ListItem title={'Voice Cues'} onPress={() => navigation.navigate('PreferencesVoiceCues')} />
       <ListItem
         title={'Click Track'}
         position={['last']}

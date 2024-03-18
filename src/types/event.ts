@@ -5,7 +5,7 @@ export enum EventOutcome {
   Star3 = '3',
   Star4 = '4',
   Crashed = 'Crashed',
-};
+}
 
 export enum TimerStartDelay {
   None = 'None',
@@ -15,7 +15,7 @@ export enum TimerStartDelay {
   Seconds20 = '20 seconds',
   Seconds25 = '25 seconds',
   Seconds30 = '30 seconds',
-};
+}
 
 export enum ChimeWhileArmed {
   None = 'None',
@@ -25,7 +25,7 @@ export enum ChimeWhileArmed {
   Seconds30 = '30 seconds',
   Minutes1 = '1 minute',
   Minutes2 = '2 minutes',
-};
+}
 
 export enum ChimeWhileRunning {
   None = 'None',
@@ -41,7 +41,7 @@ export enum ChimeWhileRunning {
   Minutes8 = '8 minutes',
   Minutes9 = '9 minutes',
   Minutes10 = '10 minutes',
-};
+}
 
 export enum ChimeAfterExpiring {
   None = 'None',
@@ -54,12 +54,12 @@ export enum ChimeAfterExpiring {
   Minutes3 = '3 minutes',
   Minutes4 = '4 minutes',
   Minutes5 = '5 minutes',
-};
+}
 
 export enum AudioVoice {
   Alex = 'Alex',
   Fiona = 'Fiona',
-};
+}
 
 export enum VoiceWhileRunning {
   None = 'None',
@@ -73,7 +73,7 @@ export enum VoiceWhileRunning {
   Minutes8 = '8 minutes',
   Minutes9 = '9 minutes',
   Minutes10 = '10 minutes',
-};
+}
 
 export enum VoiceAfterExpiring {
   None = 'None',
@@ -82,7 +82,7 @@ export enum VoiceAfterExpiring {
   Minutes3 = '3 minutes',
   Minutes4 = '4 minutes',
   Minutes5 = '5 minutes',
-};
+}
 
 export enum ClickTrackWhileRunning {
   None = 'None',
@@ -101,7 +101,7 @@ export enum ClickTrackWhileRunning {
   BPM180 = '180 BPM',
   BPM200 = '200 BPM',
   BPM240 = '240 BPM',
-};
+}
 
 export enum ClickTrackAfterExpiring {
   None = 'None',
@@ -120,4 +120,4 @@ export enum ClickTrackAfterExpiring {
   BPM180 = '180 BPM',
   BPM200 = '200 BPM',
   BPM240 = '240 BPM',
-};
+}

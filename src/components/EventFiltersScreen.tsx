@@ -1,6 +1,11 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { defaultFilter, eventKind } from 'lib/modelEvent';
 import { useDispatch, useSelector } from 'react-redux';
@@ -56,8 +61,9 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
     } else {
       setGeneralEventsFilter(generalEventsFilterQuery[0]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   const setFilter = (filter?: Filter) => {
     dispatch(
       saveSelectedFilter({
@@ -83,28 +89,35 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
         position={listItemPosition(index, allEventFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
-        onPressInfo={() => navigation.navigate('EventFilterEditor', {
-          filterId: filter._id.toString(),
-          filterType,
-          generalFilterName: generalEventsFilterName,
-          modelType,
-        })}
+        onPressInfo={() =>
+          navigation.navigate('EventFilterEditor', {
+            filterId: filter._id.toString(),
+            filterType,
+            generalFilterName: generalEventsFilterName,
+            modelType,
+          })
+        }
         swipeable={{
-          rightItems: [{
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => {
-              confirmAction(deleteFilter, {
-                label: 'Delete Saved Filter',
-                title: 'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                value: filter,
-              });
-            }
-          }]
+          rightItems: [
+            {
+              ...swipeableDeleteItem[theme.mode],
+              onPress: () => {
+                confirmAction(deleteFilter, {
+                  label: 'Delete Saved Filter',
+                  title:
+                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+                  value: filter,
+                });
+              },
+            },
+          ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-filters', filter._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('event-filters', filter._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
-    )
+    );
   };
 
   return (
@@ -119,7 +132,7 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
         onPress={setFilter}
       />
       <Divider />
-      {useGeneralFilter && generalEventsFilter ?
+      {useGeneralFilter && generalEventsFilter ? (
         <>
           <ListItemCheckboxInfo
             title={`General ${eventKind(modelType).namePlural} Filter`}
@@ -127,38 +140,46 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
             position={['first', 'last']}
             checked={generalEventsFilter._id.toString() === selectedFilterId}
             onPress={() => setFilter(generalEventsFilter)}
-            onPressInfo={() => navigation.navigate('EventFilterEditor', {
-              filterId: generalEventsFilter!._id.toString(),
-              filterType,
-              generalFilterName: generalEventsFilterName,
-              modelType,
-            })}
+            onPressInfo={() =>
+              navigation.navigate('EventFilterEditor', {
+                filterId: generalEventsFilter._id.toString(),
+                filterType,
+                generalFilterName: generalEventsFilterName,
+                modelType,
+              })
+            }
           />
-          <Divider note
+          <Divider
+            note
             text={`You can save the General ${eventKind(modelType).namePlural} Filter to remember a specific filter configuration for later use.`}
           />
         </>
-        :
+      ) : (
         <ListItem
           title={'Add New Filter'}
           titleStyle={theme.styles.listItemButtonTitle}
           position={['first', 'last']}
           rightImage={false}
-          onPress={() => navigation.navigate('EventFilterEditor', {
-            filterId: generalEventsFilter!._id.toString(),
-            filterType,
-            generalFilterName: generalEventsFilterName,
-            modelType,
-            requireFilterName: true,
-          })}
+          onPress={() =>
+            generalEventsFilter &&
+            navigation.navigate('EventFilterEditor', {
+              filterId: generalEventsFilter._id.toString(),
+              filterType,
+              generalFilterName: generalEventsFilterName,
+              modelType,
+              requireFilterName: true,
+            })
+          }
         />
-      }
+      )}
       <FlatList
         data={allEventFilters}
         renderItem={renderFilters}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={allEventFilters.length ? <Divider text={'SAVED EVENT FILTERS'} /> : null}
+        ListHeaderComponent={
+          allEventFilters.length ? <Divider text={'SAVED EVENT FILTERS'} /> : null
+        }
       />
     </View>
   );

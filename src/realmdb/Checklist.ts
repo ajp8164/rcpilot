@@ -1,7 +1,7 @@
 import {
   ChecklistActionSchedulePeriod,
   ChecklistActionScheduleType,
-  ChecklistType
+  ChecklistType,
 } from 'types/checklist';
 import { Object, ObjectSchema } from 'realm';
 
@@ -23,9 +23,9 @@ export class Checklist extends Object<Checklist> {
       actions: 'ChecklistAction[]',
     },
   };
-};
+}
 
-export type JChecklistAction =  {
+export type JChecklistAction = {
   refId?: string;
   description: string;
   schedule: JChecklistActionSchedule;
@@ -54,7 +54,7 @@ export class ChecklistAction extends Object<ChecklistAction> {
       history: { type: 'list', objectType: 'ChecklistActionHistoryEntry', default: [] },
     },
   };
-};
+}
 
 // Plain JS object type.
 export type JChecklistActionSchedule = Omit<ChecklistActionSchedule, keyof Realm.Object>;
@@ -77,7 +77,7 @@ export class ChecklistActionSchedule extends Object<ChecklistActionSchedule> {
       state: 'ChecklistActionScheduleState',
     },
   };
-};
+}
 
 export class ChecklistActionScheduleState extends Object<ChecklistActionScheduleState> {
   text!: string;
@@ -91,7 +91,7 @@ export class ChecklistActionScheduleState extends Object<ChecklistActionSchedule
       due: 'ChecklistActionScheduleDue',
     },
   };
-};
+}
 
 // Plain JS object type.
 export type JChecklistActionScheduleDue = Omit<ChecklistActionScheduleDue, keyof Realm.Object>;
@@ -110,7 +110,7 @@ export class ChecklistActionScheduleDue extends Object<ChecklistActionScheduleDu
       units: 'string',
     },
   };
-};
+}
 
 // Plain JS object type.
 export type JChecklistActionHistoryEntry = Omit<ChecklistActionHistoryEntry, keyof Realm.Object>;
@@ -133,4 +133,4 @@ export class ChecklistActionHistoryEntry extends Object<ChecklistActionHistoryEn
       cost: 'float?',
     },
   };
-};
+}

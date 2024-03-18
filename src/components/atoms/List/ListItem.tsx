@@ -1,13 +1,16 @@
-import { AppTheme, useTheme } from "theme";
-import React, { useImperativeHandle } from "react";
-import { ListItem as _ListItem, ListItemMethods as _ListItemMethods } from "@react-native-ajp-elements/ui";
+import { AppTheme, useTheme } from 'theme';
+import React, { useImperativeHandle } from 'react';
+import {
+  ListItem as _ListItem,
+  ListItemMethods as _ListItemMethods,
+} from '@react-native-ajp-elements/ui';
 
-import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import CollapsibleView from '@eliav2/react-native-collapsible-view';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { Icon } from "@rneui/base";
-import { Pressable } from "react-native";
-import { makeStyles } from "@rneui/themed";
-import { useRef } from  'react';
+import { Icon } from '@rneui/base';
+import { Pressable } from 'react-native';
+import { makeStyles } from '@rneui/themed';
+import { useRef } from 'react';
 
 interface Props extends _ListItem {
   expanded?: boolean;
@@ -15,20 +18,14 @@ interface Props extends _ListItem {
   onPressInfo?: () => void;
   showInfo?: boolean;
   visible?: boolean;
-};
+}
 
 export interface ListItemMethods {
   resetEditor: () => void;
 }
 
 const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
-  const {
-    expanded = false,
-    ExpandableComponent,
-    onPressInfo,
-    showInfo,
-    visible = true,
-  } = props;
+  const { expanded = false, ExpandableComponent, onPressInfo, showInfo, visible = true } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -38,7 +35,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
   const isCollapsible = useRef(visible !== undefined);
   const itemInitiallyExpanded = useRef(visible);
   const sectionInitiallyExpanded = useRef(expanded);
-  const first = props.position?.includes('first') ?  'first' : undefined;
+  const first = props.position?.includes('first') ? 'first' : undefined;
 
   const liRef = useRef<_ListItemMethods>(null);
 
@@ -58,27 +55,27 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
           ref={liRef}
           {...props}
           containerStyle={[
-            {...props.containerStyle, ...s.container},
-            props.swipeable ? theme.styles.swipeableListItemContainer : {}
+            { ...props.containerStyle, ...s.container },
+            props.swipeable ? theme.styles.swipeableListItemContainer : {},
           ]}
           valueStyle={[
-            {...props.valueStyle, ...s.value},
+            { ...props.valueStyle, ...s.value },
             props.disabled ? s.valuePosition : {},
-            (props.rightImage === undefined || props.rightImage === true) && props.value ? {} : s.valuePosition
+            (props.rightImage === undefined || props.rightImage === true) && props.value
+              ? {}
+              : s.valuePosition,
           ]}
           position={expanded ? [first] : props.position}
           disabled={props.disabled}
-          disabledStyle={{...s.disabled, ...props.disabledStyle}}
+          disabledStyle={{ ...s.disabled, ...props.disabledStyle }}
           rightImage={
-            showInfo && onPressInfo ?
-              <Pressable
-                style={s.infoPressable}
-                onPress={onPressInfo}>
+            showInfo && onPressInfo ? (
+              <Pressable style={s.infoPressable} onPress={onPressInfo}>
                 <CustomIcon
                   name={'circle-info'}
                   size={20}
                   color={theme.colors.clearButtonText}
-                  style={{right: 5}}
+                  style={s.infoIcon}
                 />
                 <Icon
                   name={'chevron-forward'}
@@ -86,16 +83,17 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
                   size={20}
                   color={theme.colors.midGray}
                 />
-              </Pressable>            
-            : 
+              </Pressable>
+            ) : (
               props.rightImage
+            )
           }
         />
         <CollapsibleView
           initExpanded={sectionInitiallyExpanded.current}
           expanded={expanded}
           noArrow
-          style={s.collapsible} 
+          style={s.collapsible}
           titleStyle={s.collapsibleTitle}>
           {ExpandableComponent}
         </CollapsibleView>
@@ -109,7 +107,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
         initExpanded={itemInitiallyExpanded.current}
         expanded={visible}
         noArrow
-        style={s.collapsible} 
+        style={s.collapsible}
         titleStyle={s.collapsibleTitle}>
         {renderListItem()}
       </CollapsibleView>
@@ -140,12 +138,15 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: '100%',
     alignItems: 'center',
   },
+  infoIcon: {
+    right: 5,
+  },
   value: {
     ...theme.styles.textDim,
   },
   valuePosition: {
     paddingRight: 25,
-  }
+  },
 }));
 
 export { ListItem };

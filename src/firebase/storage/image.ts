@@ -1,6 +1,6 @@
 import { log } from '@react-native-ajp-elements/core';
 import storage from '@react-native-firebase/storage';
-import { uuidv4 } from 'lib/uuid';
+import { uuidv4 } from 'lib/utils';
 
 export type Image = {
   mimeType: string;

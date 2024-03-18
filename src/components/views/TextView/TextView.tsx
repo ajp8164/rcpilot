@@ -25,7 +25,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const {isModal} = useContext(NavContext);
+  const { isModal } = useContext(NavContext);
 
   const refInput = useRef<BaseInput & TextInput>(null);
   const [text, setText] = useState(value);
@@ -37,13 +37,14 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
   const [visibleHeight, setVisibleHeight] = useState(0);
 
   useEffect(() => {
-    if (visibleHeight === 0 && kbHeight > 0)  {
+    if (visibleHeight === 0 && kbHeight > 0) {
       if (isModal) {
         setVisibleHeight(viewHeight.current - kbHeight);
       } else {
         setVisibleHeight(viewHeight.current + tabBarHeight - kbHeight);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [kbHeight, viewHeight.current]);
 
   // Open the keyboard after the view has animated in.
@@ -53,9 +54,13 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         refInput.current.focus();
       }
     }, 600);
-    return () => { 
-      refInput.current?.blur();
-    }
+
+    // The ref may be cleaned up by the time the following function runs.
+    // Make a copy for the ?check.
+    const refInputCurrent = refInput.current;
+    return () => {
+      refInputCurrent?.blur();
+    };
   }, []);
 
   useImperativeHandle(ref, () => ({
@@ -72,7 +77,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
       style={[
         s.view,
         // View will initially open to 100% to get the layout height followed by sizing to the visible height.
-        { height: visibleHeight || '100%'},
+        { height: visibleHeight || '100%' },
         containerStyle,
       ]}
       onLayout={(event: LayoutChangeEvent) => {
@@ -82,14 +87,14 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         <Input
           ref={refInput}
           style={[s.text]}
-          inputContainerStyle={{ borderBottomWidth: 0 }}
+          inputContainerStyle={s.inputContainer}
           // containerStyle={{borderWidth: 1}}
           multiline={true}
           placeholder={placeholder}
-           // Positions the error message inside the text area.
-           // Needed to remove space taken up by the error message (we don't need it).
+          // Positions the error message inside the text area.
+          // Needed to remove space taken up by the error message (we don't need it).
           //  Allows to accurately position the bottom of the text input view.
-          errorStyle={{marginTop: -10}}
+          errorStyle={s.inputError}
           inputAccessoryViewID={'inputAccessoryViewID'}
           value={text}
           onChangeText={t => {
@@ -99,14 +104,11 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
           }}
         />
         {characterLimit ? (
-        <InputAccessoryView
-          nativeID={'inputAccessoryViewID'}>
-          <View style={s.remainingView}>
-            <Text style={s.remaining}>
-              {`Characters left: ${countRemaining}`}
-            </Text>
-          </View>
-        </InputAccessoryView>
+          <InputAccessoryView nativeID={'inputAccessoryViewID'}>
+            <View style={s.remainingView}>
+              <Text style={s.remaining}>{`Characters left: ${countRemaining}`}</Text>
+            </View>
+          </InputAccessoryView>
         ) : null}
       </View>
     </View>
@@ -120,6 +122,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   text: {
     ...theme.styles.textNormal,
     textAlignVertical: 'top',
+  },
+  inputContainer: {
+    borderBottomWidth: 0,
+  },
+  inputError: {
+    marginTop: -10,
   },
   remainingView: {
     justifyContent: 'center',

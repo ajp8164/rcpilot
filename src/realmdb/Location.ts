@@ -22,7 +22,7 @@ export class Location extends Object<Location> {
     },
     primaryKey: '_id',
   };
-};
+}
 
 export class LocationPosition extends Object<LocationPosition> {
   latitude!: number;
@@ -36,4 +36,4 @@ export class LocationPosition extends Object<LocationPosition> {
       longitude: 'float',
     },
   };
-};
+}

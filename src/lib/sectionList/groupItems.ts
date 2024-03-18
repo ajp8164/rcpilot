@@ -1,14 +1,10 @@
-import { SectionListData } from "react-native";
+import { SectionListData } from 'react-native';
 
 // Creates groups of items for a SectionList.
 export const groupItems = <T, S>(
   items: T[] | Realm.Results<T>,
-  groupTitle: (
-    item: T,
-    index: number,
-    array: readonly T[]) => string)
-: SectionListData<T, S>[] => {
-
+  groupTitle: (item: T, index: number, array: readonly T[]) => string,
+): SectionListData<T, S>[] => {
   const groupedItems: {
     [key in string]: T[];
   } = {};

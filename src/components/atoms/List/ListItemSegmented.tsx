@@ -1,11 +1,11 @@
-import { AppTheme, useTheme } from "theme";
+import { AppTheme, useTheme } from 'theme';
+import React, { useRef } from 'react';
 
-import CollapsibleView from "@eliav2/react-native-collapsible-view";
+import CollapsibleView from '@eliav2/react-native-collapsible-view';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { View } from "react-native";
-import { ListItem as _ListItem } from "@react-native-ajp-elements/ui";
-import { makeStyles } from "@rneui/themed";
-import { useRef } from 'react';
+import { View } from 'react-native';
+import { ListItem as _ListItem } from '@react-native-ajp-elements/ui';
+import { makeStyles } from '@rneui/themed';
 
 export interface ListItemSegmentedInterface extends _ListItem {
   expanded?: boolean;
@@ -16,7 +16,7 @@ export interface ListItemSegmentedInterface extends _ListItem {
   segments: string[];
   segmentBackgroundColor?: string;
   segmentTintColor?: string;
-};
+}
 
 const ListItemSegmented = (props: ListItemSegmentedInterface) => {
   const {
@@ -32,53 +32,55 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-  
+
   const sectionInitiallyExpanded = useRef(expanded);
-  const first = props.position?.includes('first') ?  'first' : undefined;
+  const first = props.position?.includes('first') ? 'first' : undefined;
 
   return (
     <>
       <_ListItem
         {...props}
         containerStyle={[
-          fullWidth ? {paddingLeft: 0} : {},
-          {...props.containerStyle, ...s.container},
-          props.swipeable ? theme.styles.swipeableListItemContainer : {}
+          fullWidth ? s.containerFullWidth : {},
+          { ...props.containerStyle, ...s.container },
+          props.swipeable ? theme.styles.swipeableListItemContainer : {},
         ]}
-        leftContainerStyle={{flex: 0}}
+        leftContainerStyle={s.containerLeft}
         position={expanded ? [first] : props.position}
         rightImage={false}
         extraContentComponent={
-          <View style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : s.segmentedViewRight]}>
+          <View
+            style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : s.segmentedViewRight]}>
             <SegmentedControl
               values={segments}
-              style={[{width: fullWidth ? '100%' : segments.length * 50}]}
+              // eslint-disable-next-line react-native/no-inline-styles
+              style={[{ width: fullWidth ? '100%' : segments.length * 50 }]}
               tintColor={segmentTintColor || theme.colors.viewAltBackground}
               backgroundColor={segmentBackgroundColor || theme.colors.wispGray}
-              fontStyle={{fontSize: 12, color: theme.colors.text}}
-              activeFontStyle={{fontSize: 12, fontWeight: 'bold', color: theme.colors.text}}
+              fontStyle={s.segmentedFont}
+              activeFontStyle={s.segmentedActiveFont}
               enabled={props.disabled !== true}
               selectedIndex={index}
-              onChange={(event) => {
+              onChange={event => {
                 onChangeIndex(event.nativeEvent.selectedSegmentIndex);
               }}
             />
-        </View>
+          </View>
         }
       />
       <CollapsibleView
         initExpanded={sectionInitiallyExpanded.current}
         expanded={expanded}
         noArrow
-        style={s.collapsible} 
+        style={s.collapsible}
         titleStyle={s.collapsibleTitle}>
         {ExpandableComponent}
       </CollapsibleView>
     </>
   );
-}
+};
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   collapsible: {
     padding: 0,
     marginVertical: 0,
@@ -90,6 +92,12 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   },
   container: {
     minHeight: 48,
+  },
+  containerFullWidth: {
+    paddingLeft: 0,
+  },
+  containerLeft: {
+    flex: 0,
   },
   segmentedView: {
     position: 'absolute',
@@ -103,6 +111,15 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   },
   segmentedViewRight: {
     paddingRight: 10,
+  },
+  segmentedFont: {
+    fontSize: 12,
+    color: theme.colors.text,
+  },
+  segmentedActiveFont: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: theme.colors.text,
   },
 }));
 

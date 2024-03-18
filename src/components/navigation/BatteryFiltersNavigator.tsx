@@ -13,30 +13,30 @@ const BatteryFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <BatteryFiltersStack.Navigator
-        initialRouteName='BatteryFilters'
+        initialRouteName="BatteryFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <BatteryFiltersStack.Screen
-          name='BatteryFilters'
+          name="BatteryFilters"
           component={BatteryFiltersScreen}
           options={{
             title: 'Filters for Batteries',
           }}
         />
         <BatteryFiltersStack.Screen
-          name='BatteryFilterEditor'
+          name="BatteryFilterEditor"
           component={BatteryFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <BatteryFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',

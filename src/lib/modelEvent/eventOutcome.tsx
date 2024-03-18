@@ -7,9 +7,9 @@ const icon: EnumPickerIconProps = {
 
 export const eventOutcomeIcons: { [key in EventOutcome]: EnumPickerIconProps } = {
   [EventOutcome.Unspecified]: null,
-  [EventOutcome.Star1]: {...icon, hideTitle: true, name: ['star']},
-  [EventOutcome.Star2]: {...icon, hideTitle: true, name: ['star', 'star']},
-  [EventOutcome.Star3]: {...icon, hideTitle: true, name: ['star', 'star', 'star']},
-  [EventOutcome.Star4]: {...icon, hideTitle: true, name: ['star', 'star', 'star', 'star']},
+  [EventOutcome.Star1]: { ...icon, hideTitle: true, name: ['star'] },
+  [EventOutcome.Star2]: { ...icon, hideTitle: true, name: ['star', 'star'] },
+  [EventOutcome.Star3]: { ...icon, hideTitle: true, name: ['star', 'star', 'star'] },
+  [EventOutcome.Star4]: { ...icon, hideTitle: true, name: ['star', 'star', 'star', 'star'] },
   [EventOutcome.Crashed]: null,
-}
+};

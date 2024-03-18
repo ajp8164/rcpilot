@@ -1,26 +1,23 @@
-import { AppTheme, useTheme } from "theme";
+import { AppTheme, useTheme } from 'theme';
+import React, { useRef } from 'react';
 
-import CollapsibleView from "@eliav2/react-native-collapsible-view";
-import { ListItemSwitch as _ListItemSwitch } from "@react-native-ajp-elements/ui";
-import { makeStyles } from "@rneui/themed";
-import { useRef } from  'react';
+import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import { ListItemSwitch as _ListItemSwitch } from '@react-native-ajp-elements/ui';
+import { makeStyles } from '@rneui/themed';
 
 interface Props extends _ListItemSwitch {
   expanded?: boolean;
   ExpandableComponent?: JSX.Element;
-};
+}
 
 const ListItemSwitch = (props: Props) => {
-  const { 
-    expanded = false,
-    ExpandableComponent,
-  } = props;
+  const { expanded = false, ExpandableComponent } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
 
   const sectionInitiallyExpanded = useRef(expanded);
-  const first = props.position?.includes('first') ?  'first' : undefined;
+  const first = props.position?.includes('first') ? 'first' : undefined;
 
   return (
     <>
@@ -28,20 +25,20 @@ const ListItemSwitch = (props: Props) => {
         titleStyle={s.title}
         subtitleStyle={s.subtitle}
         {...props}
-        containerStyle={{...props.containerStyle, ...s.container}}
+        containerStyle={{ ...props.containerStyle, ...s.container }}
         position={expanded ? [first] : props.position}
       />
       <CollapsibleView
         initExpanded={sectionInitiallyExpanded.current}
         expanded={expanded}
         noArrow
-        style={s.collapsible} 
+        style={s.collapsible}
         titleStyle={s.collapsibleTitle}>
         {ExpandableComponent}
       </CollapsibleView>
     </>
   );
-}
+};
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   collapsible: {
@@ -61,7 +58,7 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   },
   subtitle: {
     width: '120%',
-  }
+  },
 }));
 
 export { ListItemSwitch };

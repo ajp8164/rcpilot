@@ -22,7 +22,7 @@ export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'Ba
 
 const BatteryFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
-  
+
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -38,18 +38,17 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
     if (requireFilterName) {
       filterEditor.setCreateSavedFilter(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!filterEditor.filter) {
-    return (
-      <EmptyView error message={'Filter Not Found!'} />
-    );
+    return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'}/>
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ?
+      <Divider text={'FILTER NAME'} />
+      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
           position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
@@ -66,14 +65,14 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
             />
           }
         />
-      :
+      ) : (
         <ListItemInput
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
           onChangeText={filterEditor.setName}
         />
-      }
+      )}
       <Divider />
       <ListItem
         title={'Reset Filter'}
@@ -84,7 +83,7 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the batteries that match all of these criteria.'}/>
+      <Divider text={'This filter shows all the batteries that match all of these criteria.'} />
       <ListItemFilterEnum
         title={'Chemistry'}
         value={filterEditor.values.chemistry.value}
@@ -101,7 +100,7 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         label={'h:mm'}
         value={filterEditor.values.totalTime.value}
         relation={filterEditor.values.totalTime.relation}
-        numericProps={{prefix: '', separator: ':'}}
+        numericProps={{ prefix: '', separator: ':' }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('totalTime', filterState);
@@ -111,7 +110,7 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
       <ListItemFilterNumber
         title={'Capacity'}
         label={'mAh'}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99999}}
+        numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 99999 }}
         value={filterEditor.values.capacity.value}
         relation={filterEditor.values.capacity.relation}
         position={['first', 'last']}
@@ -125,7 +124,7 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         label={'C'}
         value={filterEditor.values.cRating.value}
         relation={filterEditor.values.cRating.relation}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 999}}
+        numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 999 }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('cRating', filterState);
@@ -136,7 +135,7 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         title={'S Cells'}
         value={filterEditor.values.sCells.value}
         relation={filterEditor.values.sCells.relation}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
+        numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 99 }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('sCells', filterState);
@@ -147,13 +146,13 @@ const BatteryFilterEditorScreen = ({ route }: Props) => {
         title={'P Cells'}
         value={filterEditor.values.pCells.value}
         relation={filterEditor.values.pCells.relation}
-        numericProps={{prefix: '', delimiter: '', precision: 0, maxValue: 99}}
-        position={['first', 'last']}  
+        numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 99 }}
+        position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('pCells', filterState);
         }}
       />
-      <Divider style={{height: theme.insets.bottom}} />
+      <Divider style={{ height: theme.insets.bottom }} />
     </ScrollView>
   );
 };
@@ -166,7 +165,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   resetDisabled: {
     opacity: 0.3,
-  }
+  },
 }));
 
 export default BatteryFilterEditorScreen;

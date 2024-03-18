@@ -19,15 +19,8 @@ export interface FilterEditorInterface<T> {
   generalFilterName: string;
 }
 
-export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorInterface<T>
-) => {
-  const {
-    filterId,
-    filterType,
-    defaultFilter,
-    filterValueLabels,
-    generalFilterName,
-  } = props;
+export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorInterface<T>) => {
+  const { filterId, filterType, defaultFilter, filterValueLabels, generalFilterName } = props;
 
   const realm = useRealm();
   const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
@@ -37,15 +30,17 @@ export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorIn
 
   const [name, setName] = useState(filter?.name);
   const [customName, setCustomName] = useState<string>();
-  const [values, setValues] = useSetState(filter?.toJSON().values as FilterValues || defaultFilter);
+  const [values, setValues] = useSetState(
+    (filter?.toJSON().values as FilterValues) || defaultFilter,
+  );
 
   const [createSavedFilter, setCreateSavedFilter] = useState(false);
-    
+
   useEffect(() => {
     if (!filter) return;
 
     const canSave =
-    createSavedFilter && customName && customName.length > 0 ||
+      (createSavedFilter && customName && customName.length > 0) ||
       !eqString(filter.name, name) ||
       !eqObject(filter.values, values);
 
@@ -59,11 +54,10 @@ export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorIn
             values,
           });
         });
-
       } else {
         // Update the filter.
         realm.write(() => {
-          filter.name = customName || name!;
+          filter.name = customName || name || 'no-name';
           filter.type = filterType;
           filter.values = values;
         });
@@ -74,20 +68,23 @@ export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorIn
     setScreenEditHeader({
       enabled: canSave,
       visible: !createSavedFilter || (createSavedFilter && !!customName),
-      label: (createSavedFilter && customName?.length) || name !== generalFilterName ? 'Save' : 'Update',
-      action: onDone});
-  }, [ name, customName, values, createSavedFilter ]);
+      label:
+        (createSavedFilter && customName?.length) || name !== generalFilterName ? 'Save' : 'Update',
+      action: onDone,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, customName, values, createSavedFilter]);
 
   const onFilterValueChange = (property: keyof T, filterState: FilterState) => {
     // If there is a value label then add it to the filter state value as position [1].
     filterValueLabels[property] && filterState.value
-      ? filterState.value[1] = filterValueLabels[property]
+      ? (filterState.value[1] = filterValueLabels[property])
       : null;
-    setValues({ [property]: filterState }, {assign: true});
+    setValues({ [property]: filterState }, { assign: true });
   };
 
   const resetFilter = () => {
-    setValues(defaultFilter, {assign: true});
+    setValues(defaultFilter, { assign: true });
   };
 
   return {
@@ -98,9 +95,9 @@ export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorIn
     customName,
     createSavedFilter,
     setName,
-    setCustomName,  
+    setCustomName,
     setCreateSavedFilter,
     resetFilter,
     onFilterValueChange,
-  }
+  };
 };

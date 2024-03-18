@@ -14,37 +14,37 @@ const ModelFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <ModelFiltersStack.Navigator
-        initialRouteName='ModelFilters'
+        initialRouteName="ModelFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <ModelFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
         <ModelFiltersStack.Screen
-          name='ModelFilters'
+          name="ModelFilters"
           component={ModelFiltersScreen}
           options={{
             title: 'Filters for Models',
           }}
         />
         <ModelFiltersStack.Screen
-          name='ModelFilterEditor'
+          name="ModelFilterEditor"
           component={ModelFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <ModelFiltersStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'String Value',

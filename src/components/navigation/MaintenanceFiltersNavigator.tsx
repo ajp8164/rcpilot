@@ -14,37 +14,37 @@ const MaintenanceFiltersNavigator = () => {
   const theme = useTheme();
 
   return (
-    <NavContext.Provider value={{isModal: true}}>
+    <NavContext.Provider value={{ isModal: true }}>
       <MaintenanceFiltersStack.Navigator
-        initialRouteName='MaintenanceFilters'
+        initialRouteName="MaintenanceFilters"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <MaintenanceFiltersStack.Screen
-          name='EnumPicker'
+          name="EnumPicker"
           component={EnumPickerScreen}
           options={{
             title: '',
           }}
         />
         <MaintenanceFiltersStack.Screen
-          name='MaintenanceFilters'
+          name="MaintenanceFilters"
           component={MaintenanceFiltersScreen}
           options={{
             title: 'Filters for Maintenance Log',
           }}
         />
         <MaintenanceFiltersStack.Screen
-          name='MaintenanceFilterEditor'
+          name="MaintenanceFilterEditor"
           component={MaintenanceFilterEditorScreen}
           options={{
             title: 'Filter Editor',
           }}
         />
         <MaintenanceFiltersStack.Screen
-          name='NotesEditor'
+          name="NotesEditor"
           component={NotesEditorScreen}
           options={{
             title: 'String Value',

@@ -6,9 +6,7 @@ import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import {
-  SetupNavigatorParamList,
-} from 'types/navigation';
+import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { makeStyles } from '@rneui/themed';
 
@@ -23,7 +21,7 @@ const PreferencesVoiceCuesScreen = ({ navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'RELATIVE VOLUME'}/>
+      <Divider text={'RELATIVE VOLUME'} />
       <Slider
         value={0.5}
         minimumValue={0}
@@ -33,38 +31,44 @@ const PreferencesVoiceCuesScreen = ({ navigation }: Props) => {
         containerStyle={s.sliderContainer}
         onValueChange={() => null}
       />
-      <Divider text={'SETTINGS'}/>
+      <Divider text={'SETTINGS'} />
       <ListItem
         title={'Voice'}
         value={'Alex'}
         position={['first']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'Voice',
-          values: Object.values(AudioVoice),
-          selected: AudioVoice.Alex,
-          eventName: 'audio-voice',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'Voice',
+            values: Object.values(AudioVoice),
+            selected: AudioVoice.Alex,
+            eventName: 'audio-voice',
+          })
+        }
       />
       <ListItem
         title={'While Running'}
         value={'None'}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'While Running',
-          values: Object.values(VoiceWhileRunning),
-          selected: VoiceWhileRunning.Minutes1,
-          eventName: 'while-running',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'While Running',
+            values: Object.values(VoiceWhileRunning),
+            selected: VoiceWhileRunning.Minutes1,
+            eventName: 'while-running',
+          })
+        }
       />
       <ListItem
         title={'After Expiring'}
         value={'None'}
         position={['last']}
-        onPress={() => navigation.navigate('EnumPicker', {
-          title: 'After Expiring',
-          values: Object.values(VoiceAfterExpiring),
-          selected: VoiceAfterExpiring.Minutes1,
-          eventName: 'after-expiring',
-        })}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            title: 'After Expiring',
+            values: Object.values(VoiceAfterExpiring),
+            selected: VoiceAfterExpiring.Minutes1,
+            eventName: 'after-expiring',
+          })
+        }
       />
     </ScrollView>
   );

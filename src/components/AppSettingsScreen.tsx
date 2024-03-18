@@ -1,10 +1,4 @@
-import {
-  AppState,
-  Linking,
-  ScrollView,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { AppState, Linking, ScrollView, View, useColorScheme } from 'react-native';
 import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { saveBiometrics, saveShowModelCards, saveThemeSettings } from 'store/slices/appSettings';
@@ -86,16 +80,12 @@ const AppSettings = () => {
   };
 
   const toggleShowModelCards = (value: boolean) => {
-    dispatch(
-      saveShowModelCards({value}),
-    );
+    dispatch(saveShowModelCards({ value }));
   };
 
   return (
     <View style={theme.styles.view}>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}>
+      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'NOTIFICATIONS'} />
         <ListItem
           title={'Push Notifications'}
@@ -110,8 +100,11 @@ const AppSettings = () => {
           position={['first', 'last']}
           onValueChange={toggleBiometrics}
         />
-        <Divider note
-          text={'Biometrics enable face recognition or fingerprint. When enabled biometrics protects changes to your information.'}
+        <Divider
+          note
+          text={
+            'Biometrics enable face recognition or fingerprint. When enabled biometrics protects changes to your information.'
+          }
         />
         <Divider text={'APPEARANCE'} />
         <ListItemSwitch

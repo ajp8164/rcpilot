@@ -20,10 +20,11 @@ import { useSelector } from 'react-redux';
 export const useEventsFilter = (params: {
   filterType: FilterType;
   batteryId?: string;
+  eventStyleId?: string;
   modelId?: string;
   pilotId?: string;
 }) => {
-  const { filterType, batteryId, modelId, pilotId } = params;
+  const { filterType, batteryId, eventStyleId, modelId, pilotId } = params;
 
   const filterId = useSelector(selectFilters(filterType));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
@@ -35,6 +36,13 @@ export const useEventsFilter = (params: {
   }
   if (batteryId) {
     query = (query.length ? `${query} AND ` : '') + `battery._id == oid(${batteryId})`;
+  }
+  if (eventStyleId) {
+    console.log(eventStyleId);
+    eventStyleId !== 'unspecified' &&
+      (query = (query.length ? `${query} AND ` : '') + `eventStyle._id == oid(${eventStyleId})`);
+    eventStyleId === 'unspecified' &&
+      (query = (query.length ? `${query} AND ` : '') + `eventStyle == null`);
   }
   if (pilotId) {
     query = (query.length ? `${query} AND ` : '') + `pilot._id == oid(${pilotId})`;

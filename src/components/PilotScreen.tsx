@@ -1,5 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
+import { EventStyleStatistics, eventStyleSummaryPilot } from 'lib/modelEvent';
 import { FlatList, Image, Keyboard, ListRenderItem, Platform, View } from 'react-native';
 import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
 import {
@@ -15,6 +16,7 @@ import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { Event } from 'realmdb/Event';
 import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
@@ -23,6 +25,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { SvgXml } from 'react-native-svg';
 import { eqString } from 'realmdb/helpers';
+import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useEvent } from 'lib/event';
@@ -40,8 +43,25 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   const pilot = useObject(Pilot, new BSON.ObjectId(pilotId));
   const allPilotModels = useQuery(Model, models =>
-    models.filtered('events.pilot._id == $0', pilot?._id),
+    models.filtered(`events.pilot._id == oid(${pilot?._id})`),
   );
+  const allPilotEventStyles = useQuery(Event, events =>
+    events.filtered(`pilot._id == oid(${pilot?._id})`),
+  );
+
+  // Compute event count and event duration stats for each event involving the pilot.
+  const eventStyleStatistics: Record<string, EventStyleStatistics> = {};
+  const groupedPilotEventStyles = lodash.groupBy(
+    allPilotEventStyles,
+    s => s.eventStyle?.name || 'Unspecified',
+  );
+  Object.keys(groupedPilotEventStyles).forEach(eventStyleName => {
+    const count = groupedPilotEventStyles[eventStyleName].length;
+    const duration = groupedPilotEventStyles[eventStyleName].reduce((accumulator, event) => {
+      return (accumulator += event.duration);
+    }, 0);
+    eventStyleStatistics[eventStyleName] = { eventStyleName, count, duration };
+  });
 
   const [name, setName] = useState(pilot?.name);
   const [isEditing, setIsEditing] = useState(false);
@@ -229,6 +249,24 @@ const PilotScreen = ({ navigation, route }: Props) => {
     );
   };
 
+  const renderEventStyle: ListRenderItem<string> = ({ item: eventStyleName, index }) => {
+    const event = groupedPilotEventStyles[eventStyleName][0];
+    return (
+      <ListItem
+        title={eventStyleName || 'Unspecified'}
+        value={eventStyleSummaryPilot(eventStyleStatistics[eventStyleName])}
+        position={listItemPosition(index, allPilotEventStyles.length)}
+        onPress={() =>
+          navigation.navigate('Events', {
+            filterType: FilterType.BypassFilter,
+            eventStyleId: event.eventStyle?._id.toString() || 'unspecified',
+            pilotId: pilot?._id.toString(),
+          })
+        }
+      />
+    );
+  };
+
   if (!pilot) {
     return <EmptyView error message={'Pilot not found!'} />;
   }
@@ -247,27 +285,34 @@ const PilotScreen = ({ navigation, route }: Props) => {
         onBlur={() => setIsEditing(false)}
         onFocus={() => setIsEditing(true)}
       />
-      <Divider text={'MODEL USAGE'} />
-      <FlatList data={allPilotModels} renderItem={renderModel} scrollEnabled={false} />
-      <Divider
-        note
-        text={
-          'Total duration (H:MM) and number of events of each style for events piloted by Andy.'
-        }
-      />
-      <Divider text={'EVENT STYLES'} />
-      <ListItem
-        title={'Sport'}
-        value={'0:04, 1 event'}
-        position={['first', 'last']}
-        onPress={() => null}
-      />
-      <Divider
-        note
-        text={
-          'Total duration (H:MM) and number of events of each style for events piloted by Andy.'
-        }
-      />
+      {allPilotModels.length ? (
+        <>
+          <Divider text={'MODEL USAGE'} />
+          <FlatList data={allPilotModels} renderItem={renderModel} scrollEnabled={false} />
+          <Divider
+            note
+            text={
+              'Total duration (H:MM) and number of events of each style for events piloted by Andy.'
+            }
+          />
+        </>
+      ) : null}
+      {allPilotModels.length ? (
+        <>
+          <Divider text={'EVENT STYLES'} />
+          <FlatList
+            data={Object.keys(groupedPilotEventStyles).sort()}
+            renderItem={renderEventStyle}
+            scrollEnabled={false}
+          />
+          <Divider
+            note
+            text={
+              'Total duration (H:MM) and number of events of each style for events piloted by Andy.'
+            }
+          />
+        </>
+      ) : null}
       {pilot?.favoriteModels && pilot.favoriteModels.length > 0 && (
         <>
           <Divider text={'FAVORITE MODELS'} />

@@ -128,6 +128,7 @@ export type ModelsNavigatorParamList = {
   Events: {
     filterType: FilterType;
     batteryId?: string;
+    eventStyleId?: string;
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;
@@ -569,6 +570,7 @@ export type SetupNavigatorParamList = {
   Events: {
     filterType: FilterType;
     batteryId?: string;
+    eventStyleId?: string;
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;

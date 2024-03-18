@@ -164,18 +164,17 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const groupModels = (models: Realm.Results<Model>): SectionListData<Model, Section>[] => {
     const groups = groupItems<Model, Section>(models, model => {
+      if (pilot && pilot.favoriteModels.find(m => m._id.toString() === model._id.toString())) {
+        return `FAVORITE MODELS FOR ${pilot.name.toUpperCase()}`;
+      }
       if (model.category) {
         return `${model.type.toUpperCase()} - ${model.category.name.toUpperCase()}`;
       }
       return `${model.type.toUpperCase()}S`;
-    }).sort();
+    }).sort((a, b) => {
+      return a.title?.includes('FAVORITE') ? -1 : b.title?.includes('FAVORITE') ? 1 : 0;
+    });
 
-    if (pilot && pilot.favoriteModels.length > 0) {
-      groups.splice(0, 0, {
-        title: `FAVORITES MODELS FOR ${pilot.name.toUpperCase()}`,
-        data: pilot.favoriteModels,
-      });
-    }
     return groups;
   };
 

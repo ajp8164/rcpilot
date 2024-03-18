@@ -23,7 +23,6 @@ export class Model extends Object<Model> {
   purchasePrice?: number;
   retired!: boolean;
   damaged!: boolean;
-  requiresMaintenance!: boolean;
   lastEvent?: ISODateString;
   events: Event[] = [];
   logsBatteries!: boolean;
@@ -53,7 +52,6 @@ export class Model extends Object<Model> {
       purchasePrice: 'float?',
       retired: { type: 'bool', default: false },
       damaged: { type: 'bool', default: false },
-      requiresMaintenance: { type: 'bool', default: false },
       lastEvent: 'string?',
       events: { type: 'list', objectType: 'Event', default: [] },
       logsBatteries: { type: 'bool', default: false },

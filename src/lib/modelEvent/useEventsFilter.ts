@@ -38,7 +38,6 @@ export const useEventsFilter = (params: {
     query = (query.length ? `${query} AND ` : '') + `battery._id == oid(${batteryId})`;
   }
   if (eventStyleId) {
-    console.log(eventStyleId);
     eventStyleId !== 'unspecified' &&
       (query = (query.length ? `${query} AND ` : '') + `eventStyle._id == oid(${eventStyleId})`);
     eventStyleId === 'unspecified' &&

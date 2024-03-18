@@ -5,6 +5,7 @@ import { EnumRelation } from 'components/molecules/filters';
 import { EventOutcome } from 'types/event';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
+import { Model } from 'realmdb/Model';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { ModelType } from 'types/model';
 import { Pilot } from 'realmdb/Pilot';
@@ -92,8 +93,9 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
   let batteries;
   let categories;
   let locations;
-  let styles;
+  let models;
   let pilots;
+  let styles;
 
   switch (enumName) {
     case 'Batteries':
@@ -104,13 +106,17 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
       categories = realm.objects(ModelCategory);
       config.values = categories.map(c => c.name).sort();
       break;
+    case 'EventStyles':
+      styles = realm.objects(EventStyle);
+      config.values = styles.map(s => s.name).sort();
+      break;
     case 'Locations':
       locations = realm.objects(Location);
       config.values = locations.map(l => l.name).sort();
       break;
-    case 'EventStyles':
-      styles = realm.objects(EventStyle);
-      config.values = styles.map(s => s.name).sort();
+    case 'Models':
+      models = realm.objects(Model);
+      config.values = models.map(m => m.name).sort();
       break;
     case 'Pilots':
       pilots = realm.objects(Pilot);

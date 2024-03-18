@@ -1,4 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
+import { BatteryCharge, BatteryDischarge } from 'realmdb/BatteryCycle';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
 import React, { useEffect, useState } from 'react';
@@ -11,7 +12,6 @@ import { BSON } from 'realm';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
-import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { BatteryTint } from 'types/battery';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -94,10 +94,11 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     if (!battery || !cycle) return;
 
     const canSave =
-      !!dischargeDuration &&
-      !!chargeAmount &&
+      !(cycle.discharge && !dischargeDuration) &&
+      !(cycle.charge && !chargeAmount) &&
       (!eqString(cycle.discharge?.date, dischargeDate) ||
-        !eqNumber(cycle.discharge?.duration, MSSToSeconds(dischargeDuration).toString()) ||
+        (dischargeDuration &&
+          !eqNumber(cycle.discharge?.duration, MSSToSeconds(dischargeDuration).toString())) ||
         !eqNumber(cycle.discharge?.packVoltage, dischargePackVoltage) ||
         !eqNumber(cycle.discharge?.packResistance, dischargePackResistance) ||
         !eqArray(cycle.discharge?.cellVoltage, dischargeCellVoltages) ||
@@ -106,28 +107,27 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         !eqNumber(cycle.charge?.amount, chargeAmount) ||
         !eqNumber(cycle.charge?.packVoltage, chargePackVoltage) ||
         !eqNumber(cycle.charge?.packResistance, chargePackResistance) ||
-        !eqArray(cycle.charge?.cellVoltage, chargeCellVoltages) ||
-        !eqArray(cycle.charge?.cellResistance, chargeCellResistances) ||
+        (cycle.charge && !eqArray(cycle.charge?.cellVoltage, chargeCellVoltages)) ||
+        (cycle.charge && !eqArray(cycle.charge?.cellResistance, chargeCellResistances)) ||
         !eqBoolean(cycle.excludeFromPlots, excludeFromPlots) ||
         !eqString(cycle.notes, notes));
 
     const save = () => {
       realm.write(() => {
-        const newCycle = realm.create('BatteryCycle', {
-          cycleNumber,
-          discharge: {
-            date: dischargeDate,
-            duration: dischargeDuration ? MSSToSeconds(dischargeDuration) : 0,
-            packVoltage: toNumber(dischargePackVoltage),
-            packResistance: toNumber(dischargePackResistance),
-            cellVoltage: dischargeCellVoltages?.map(v => {
-              return parseFloat(v);
-            }),
-            cellResistance: dischargeCellResistances?.map(r => {
-              return parseFloat(r);
-            }),
-          },
-          charge: {
+        cycle.discharge = {
+          date: dischargeDate,
+          duration: dischargeDuration ? MSSToSeconds(dischargeDuration) : 0,
+          packVoltage: toNumber(dischargePackVoltage),
+          packResistance: toNumber(dischargePackResistance),
+          cellVoltage: dischargeCellVoltages?.map(v => {
+            return parseFloat(v);
+          }),
+          cellResistance: dischargeCellResistances?.map(r => {
+            return parseFloat(r);
+          }),
+        } as BatteryDischarge;
+        if (cycle.charge) {
+          cycle.charge = {
             date: chargeDate,
             amount: toNumber(chargeAmount),
             packVoltage: toNumber(chargePackVoltage),
@@ -138,13 +138,10 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             cellResistance: chargeCellResistances?.map(r => {
               return toNumber(r) || 0;
             }),
-          },
-          excludeFromPlots,
-          notes,
-        } as BatteryCycle);
-
-        // Update the battery with changed cycle data.
-        battery.cycles[battery.cycles.length - 1] = newCycle;
+          } as BatteryCharge;
+        }
+        cycle.excludeFromPlots = excludeFromPlots;
+        cycle.notes = notes;
       });
     };
 
@@ -284,7 +281,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             : 'Tap to Set...'
         }
         pickerValue={dischargeDate}
-        rightImage={false}
         expanded={expandedDischargeDate}
         position={['first']}
         onPress={() => setExpandedDischargeDate(!expandedDischargeDate)}
@@ -372,7 +368,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
                 : 'Tap to Set...'
             }
             pickerValue={chargeDate}
-            rightImage={false}
             expanded={expandedChargeDate}
             position={['first']}
             onPress={() => setExpandedChargeDate(!expandedChargeDate)}

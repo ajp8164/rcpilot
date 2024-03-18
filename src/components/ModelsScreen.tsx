@@ -240,6 +240,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
+    const maintenanceIsDue = modelMaintenanceIsDue(model);
     return (
       <View style={s.modelCard}>
         <View style={s.modelCardHeader}>
@@ -291,10 +292,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             />
           </View>
         )}
-        {(model.damaged || model.requiresMaintenance) && (
+        {(model.damaged || maintenanceIsDue) && (
           <View style={s.modelTagContainer}>
             {model.damaged && <Text style={s.modelTag}>{'Damaged'}</Text>}
-            {model.requiresMaintenance && <Text style={s.modelTag}>{'Maintenance Due'}</Text>}
+            {maintenanceIsDue && <Text style={s.modelTag}>{'Maintenance Due'}</Text>}
           </View>
         )}
         <View style={s.modelCardFooter}>
@@ -352,6 +353,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
+    const maintenanceIsDue = modelMaintenanceIsDue(model);
     return (
       <ListItem
         ref={ref => ref && listEditor.add(ref, 'models', model._id.toString())}
@@ -378,7 +380,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 />
               </View>
             )}
-            {(model.damaged || model.requiresMaintenance) && (
+            {(model.damaged || maintenanceIsDue) && (
               <View style={s.modelStatusContainer}>
                 {model.damaged && (
                   <Icon
@@ -388,7 +390,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                     style={s.modelStatusIcon}
                   />
                 )}
-                {model.requiresMaintenance && (
+                {maintenanceIsDue && (
                   <Icon
                     name={'wrench'}
                     size={10}

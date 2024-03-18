@@ -6,7 +6,7 @@ import {
   useCameraContext,
 } from '@react-native-ajp-elements/ui';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { InitStatus, initApp } from 'app';
+import { InitStatus, useInitApp } from 'app';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 import { NetworkContext, useNetworkContext } from 'lib/network';
 import { useEffect, useRef, useState } from 'react';
@@ -25,12 +25,8 @@ import { SignInModal } from 'components/modals/SignInModal';
 import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
 import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
-import { useAchievementConveyor } from 'lib/achievement';
-import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useColorScheme } from 'react-native';
-import { useDeviceShake } from 'lib/useDeviceShake';
 import { useSelector } from 'react-redux';
-import { useUnknownPilot } from 'lib/pilot';
 
 // See https://reactnavigation.org/docs/configuring-links
 const linking: LinkingOptions<MainNavigatorParamList> = {
@@ -49,10 +45,7 @@ const AppMain = () => {
   const auth = useAuthContext(signInModalRef);
   const camera = useCameraContext(cameraModalRef);
   const network = useNetworkContext();
-  useDeviceShake();
-  useAchievementConveyor();
-  useChecklistActionScheduleUpdater();
-  useUnknownPilot();
+  const initApp = useInitApp();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(StartupScreen.None);
   const [fatal, setFatal] = useState<string | undefined>(undefined);
@@ -95,6 +88,7 @@ const AppMain = () => {
         hideSplashScreen();
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (fatal) {

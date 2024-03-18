@@ -17,7 +17,7 @@ export const batteryStatistics = (battery: Battery) => {
   let sumDischargeCurrent = 0;
   battery.cycles.forEach(cycle => {
     const data = batteryCycleStatisticsData(cycle);
-    if (cycle.charge && cycle.discharge) {
+    if (cycle.discharge) {
       count++;
       sumDischargeCurrent =
         sumDischargeCurrent +

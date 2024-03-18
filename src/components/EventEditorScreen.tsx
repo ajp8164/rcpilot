@@ -115,6 +115,16 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         modelEvent.eventStyle = eventStyle;
         modelEvent.notes = notes;
 
+        // Update battery cycle duration if event duration is changed.
+        // Model events do not affect battery charge phase.
+        if (previous.duration !== modelEvent.duration) {
+          modelEvent.batteryCycles.forEach(c => {
+            if (c.discharge) {
+              c.discharge.duration = modelEvent.duration;
+            }
+          });
+        }
+
         // Update model statistics with changes made here.
         // Recompute event duration data only when inputs change.
         if (

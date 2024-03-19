@@ -1,3 +1,4 @@
+import EventsScreen from 'components/EventsScreen';
 import LocationEditorScreen from 'components/LocationEditorScreen';
 import { LocationNavigatorParamList } from 'types/navigation';
 import LocationsScreen from 'components/LocationsScreen';
@@ -37,6 +38,7 @@ const LocationNavigator = () => {
             headerBackTitle: 'Map',
           }}
         />
+        <LocationStack.Screen name="Events" component={EventsScreen} />
         <LocationStack.Screen
           name="NotesEditor"
           component={NotesEditorScreen}

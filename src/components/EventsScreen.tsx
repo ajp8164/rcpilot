@@ -42,7 +42,7 @@ export type Props = CompositeScreenProps<
 >;
 
 const EventsScreen = ({ navigation, route }: Props) => {
-  const { filterType, batteryId, eventStyleId, modelId, pilotId } = route.params;
+  const { filterType, batteryId, eventStyleId, locationId, modelId, pilotId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -55,6 +55,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
     filterType: filterType || FilterType.BypassFilter,
     batteryId,
     eventStyleId,
+    locationId,
     modelId,
     pilotId,
   });

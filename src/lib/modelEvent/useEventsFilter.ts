@@ -21,10 +21,11 @@ export const useEventsFilter = (params: {
   filterType: FilterType;
   batteryId?: string;
   eventStyleId?: string;
+  locationId?: string;
   modelId?: string;
   pilotId?: string;
 }) => {
-  const { filterType, batteryId, eventStyleId, modelId, pilotId } = params;
+  const { filterType, batteryId, eventStyleId, locationId, modelId, pilotId } = params;
 
   const filterId = useSelector(selectFilters(filterType));
   const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
@@ -45,6 +46,9 @@ export const useEventsFilter = (params: {
   }
   if (pilotId) {
     query = (query.length ? `${query} AND ` : '') + `pilot._id == oid(${pilotId})`;
+  }
+  if (locationId) {
+    query = (query.length ? `${query} AND ` : '') + `location._id == oid(${locationId})`;
   }
 
   let result = useQuery(Event, events => {

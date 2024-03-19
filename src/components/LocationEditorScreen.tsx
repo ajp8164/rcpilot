@@ -1,18 +1,21 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
+import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { FilterType } from 'types/filter';
 import { Location } from 'realmdb';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
+import { eqString } from 'realmdb/helpers';
 import formatcoords from 'formatcoords';
 import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
-import { useObject } from '@realm/react';
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationEditor'>;
 
@@ -22,6 +25,7 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
+  const realm = useRealm();
 
   const location = useObject(Location, new BSON.ObjectId(locationId));
 
@@ -35,6 +39,22 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
 
   const [name, setName] = useState(location?.name || undefined);
   const [notes, setNotes] = useState(location?.notes);
+
+  useEffect(() => {
+    if (!locationId || !location) return;
+
+    const canSave =
+      !!name && (!eqString(location?.name, name) || !eqString(location?.notes, notes));
+
+    if (canSave) {
+      realm.write(() => {
+        location.updatedOn = DateTime.now().toISO();
+        location.name = name || 'no-name';
+        location.notes = notes;
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, notes]);
 
   useEffect(() => {
     event.on('location-notes', onChangeNotes);
@@ -78,14 +98,12 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
         position={['first']}
         value={coords ? coords[0] : ''}
         rightImage={false}
-        onPress={() => null}
       />
       <ListItem
         title={'Longitude'}
         position={['last']}
         value={coords ? coords[1] : ''}
         rightImage={false}
-        onPress={() => null}
       />
       <Divider text={'EVENTS'} />
       <ListItem
@@ -93,14 +111,16 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
         position={['first']}
         value={'Nov 4, 2023 at 11:49PM'}
         rightImage={false}
-        onPress={() => null}
       />
       <ListItem
         title={'Details'}
         position={['last']}
-        onPress={() => {
-          // navigation.navigate('');
-        }}
+        onPress={() =>
+          navigation.navigate('Events', {
+            filterType: FilterType.BypassFilter,
+            locationId: location?._id.toString(),
+          })
+        }
       />
       <Divider />
       <ListItem

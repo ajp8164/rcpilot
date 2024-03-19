@@ -26,8 +26,8 @@ export const useInitApp = () => {
 
   // Order is important here.
   useUnknownPilot();
-  useChecklistActionScheduleUpdater();
   useAchievementConveyor();
+  useChecklistActionScheduleUpdater();
 
   return async (): Promise<InitStatus> => {
     try {

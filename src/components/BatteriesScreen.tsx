@@ -8,6 +8,7 @@ import {
   swipeableDeleteItem,
 } from 'components/atoms/List';
 import React, { useEffect } from 'react';
+import { Realm, useRealm } from '@realm/react';
 import {
   batteryIsCharged,
   batterySummaryExtended,
@@ -29,7 +30,6 @@ import { makeStyles } from '@rneui/themed';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useConfirmAction } from 'lib/useConfirmAction';
-import { useRealm } from '@realm/react';
 import { useSelector } from 'react-redux';
 
 type Section = {

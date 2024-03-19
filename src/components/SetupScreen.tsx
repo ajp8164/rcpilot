@@ -2,6 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useContext, useEffect } from 'react';
 import { SetupNavigatorParamList, TabNavigatorParamList } from 'types/navigation';
 import { useDispatch, useSelector } from 'react-redux';
+import { useObject, useRealm } from '@realm/react';
 
 import { AuthContext } from 'lib/auth';
 import { BSON } from 'realm';
@@ -22,7 +23,6 @@ import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { useEvent } from 'lib/event';
-import { useObject } from '@realm/react';
 import { usePilotSummary } from 'lib/pilot';
 
 export type Props = CompositeScreenProps<
@@ -35,6 +35,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const dispatch = useDispatch();
   const event = useEvent();
+  const realm = useRealm();
 
   const auth = useContext(AuthContext);
   const userProfile = useSelector(selectUserProfile);
@@ -66,9 +67,11 @@ const SetupScreen = ({ navigation, route }: Props) => {
   };
 
   const clearPilot = () => {
+    // Replace current pilot with unknown pilot.
+    const unknownPilot = realm.objects(Pilot).filtered('unknownPilot == true')[0];
     dispatch(
       saveSelectedPilot({
-        pilotId: undefined,
+        pilotId: unknownPilot._id.toString(),
       }),
     );
   };

@@ -7,7 +7,7 @@ export class Location extends Object<Location> {
   createdOn!: ISODateString;
   updatedOn!: ISODateString;
   name!: string;
-  position!: LocationPosition;
+  coords!: LocationCoords;
   notes?: string;
 
   static schema: ObjectSchema = {
@@ -17,19 +17,19 @@ export class Location extends Object<Location> {
       createdOn: 'string',
       updatedOn: 'string',
       name: 'string',
-      position: 'LocationPosition',
+      coords: 'LocationCoords',
       notes: 'string?',
     },
     primaryKey: '_id',
   };
 }
 
-export class LocationPosition extends Object<LocationPosition> {
+export class LocationCoords extends Object<LocationCoords> {
   latitude!: number;
   longitude!: number;
 
   static schema: ObjectSchema = {
-    name: 'LocationPosition',
+    name: 'LocationCoords',
     embedded: true,
     properties: {
       latitude: 'float',

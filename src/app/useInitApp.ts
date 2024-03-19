@@ -12,6 +12,7 @@ import { initPushNotifications } from 'lib/notifications';
 import { svgImages } from 'theme';
 import { useAchievementConveyor } from 'lib/achievement';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
+import { useCurrentLocation } from 'lib/location';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { useUnknownPilot } from 'lib/pilot';
 
@@ -25,6 +26,7 @@ export const useInitApp = () => {
   useDeviceShake();
 
   // Order is important here.
+  useCurrentLocation();
   useUnknownPilot();
   useAchievementConveyor();
   useChecklistActionScheduleUpdater();

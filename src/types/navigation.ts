@@ -143,9 +143,7 @@ export type ModelsNavigatorParamList = {
     eventOutcome: EventOutcome;
   };
   EventSequenceNavigator: NavigatorScreenParams<EventSequenceNavigatorParamList>;
-  LocationEditor: {
-    locationId: string;
-  };
+  LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
   NewChecklistNavigator: NavigatorScreenParams<NewChecklistNavigatorParamList>;
   NewChecklistActionNavigator: NavigatorScreenParams<NewChecklistActionNavigatorParamList>;
   NewModelNavigator: NavigatorScreenParams<NewModelNavigatorParamList>;
@@ -448,6 +446,7 @@ export type EventSequenceNavigatorParamList = {
     pCells: number;
     eventName: string;
   };
+  LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
@@ -619,7 +618,6 @@ export type SetupNavigatorParamList = {
   EventStyleEditor: {
     eventStyleId: string;
   };
-  LocationsMap: undefined;
   ModelCategories: undefined;
   ModelCategoryEditor: {
     modelCategoryId: string;

@@ -6,7 +6,7 @@ import {
   swipeableDeleteItem,
 } from 'components/atoms/List';
 import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
@@ -61,7 +61,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
   });
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
-  const [kind] = useState(eventKind(model?.type));
+  const kind = eventKind(model?.type);
 
   useEffect(() => {
     navigation.setOptions({

@@ -468,6 +468,7 @@ export type LocationNavigatorParamList = {
     modelType?: ModelType;
     pilotId?: string;
   };
+  Locations: undefined;
   LocationsMap: undefined;
   LocationEditor: {
     locationId: string;

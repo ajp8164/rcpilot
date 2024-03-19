@@ -117,7 +117,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
         position={['first']}
         onPress={() =>
           navigation.navigate('LocationNavigator', {
-            screen: 'Locations',
+            screen: 'LocationsMap',
           })
         }
       />

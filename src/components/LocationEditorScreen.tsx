@@ -122,7 +122,7 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
           })
         }
       />
-      <Divider />
+      <Divider text={'DANGER ZONE'} />
       <ListItem
         title={'Delete Location'}
         titleStyle={s.delete}
@@ -138,7 +138,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   delete: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.clearButtonText,
+    color: theme.colors.assertive,
   },
 }));
 

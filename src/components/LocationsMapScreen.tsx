@@ -18,9 +18,9 @@ import { SearchCriteria, SearchScope } from 'types/location';
 import { useQuery, useRealm } from '@realm/react';
 
 import ActionBar from 'components/atoms/ActionBar';
+import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
-// import {default as Icon} from 'react-native-vector-icons/FontAwesome6';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
@@ -103,9 +103,18 @@ const LocationsMapScreen = ({ navigation }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
+        return (
+          <Button
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={<Icon name={'book-open'} style={s.headerIcon} />}
+            onPress={() => navigation.navigate('Locations')}
+          />
+        );
+      },
       headerSearchBarOptions: {
         autoCapitalize: 'none',
-        hideNavigationBar: true,
         onChangeText: event =>
           setSearchCriteria({
             text: event.nativeEvent.text,
@@ -116,6 +125,7 @@ const LocationsMapScreen = ({ navigation }: Props) => {
         onFocus: () => setSearchFocused(true),
       },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigation]);
 
   const recenterMap = () => {
@@ -292,6 +302,10 @@ const LocationsMapScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  headerIcon: {
+    color: theme.colors.screenHeaderButtonText,
+    fontSize: 22,
+  },
   map: {
     width: '100%',
     height: '100%',

@@ -2,6 +2,7 @@ import EventsScreen from 'components/EventsScreen';
 import LocationEditorScreen from 'components/LocationEditorScreen';
 import { LocationNavigatorParamList } from 'types/navigation';
 import LocationsMapScreen from 'components/LocationsMapScreen';
+import LocationsScreen from 'components/LocationsScreen';
 import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
@@ -28,6 +29,14 @@ const LocationNavigator = () => {
           options={{
             title: 'Map',
             presentation: 'fullScreenModal',
+          }}
+        />
+        <LocationStack.Screen
+          name="Locations"
+          component={LocationsScreen}
+          options={{
+            title: 'Locations',
+            presentation: 'modal',
           }}
         />
         <LocationStack.Screen

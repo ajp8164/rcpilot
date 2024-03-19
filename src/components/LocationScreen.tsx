@@ -8,9 +8,9 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import { makeStyles } from '@rneui/themed';
 
-export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationDetails'>;
+export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Location'>;
 
-const LocationDetailsScreen = ({ navigation, route }: Props) => {
+const LocationScreen = ({ navigation, route }: Props) => {
   const { locationId } = route.params;
 
   const theme = useTheme();
@@ -84,4 +84,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default LocationDetailsScreen;
+export default LocationScreen;

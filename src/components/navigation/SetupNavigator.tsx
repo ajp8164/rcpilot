@@ -14,7 +14,7 @@ import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
 import EventStylesScreen from 'components/EventStylesScreen';
 import EventsScreen from 'components/EventsScreen';
 import LocationNavigator from 'components/navigation/LocationNavigator';
-import LocationsScreen from 'components/LocationsScreen';
+import LocationsMapScreen from 'components/LocationsMapScreen';
 import ModelCategoriesScreen from 'components/ModelCategoriesScreen';
 import ModelCategoryEditorScreen from 'components/ModelCategoryEditorScreen';
 import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
@@ -119,8 +119,8 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="Locations"
-        component={LocationsScreen}
+        name="LocationsMap"
+        component={LocationsMapScreen}
         options={{
           title: 'Locations',
           presentation: 'fullScreenModal',

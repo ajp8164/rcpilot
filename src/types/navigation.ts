@@ -468,7 +468,7 @@ export type LocationNavigatorParamList = {
     modelType?: ModelType;
     pilotId?: string;
   };
-  Locations: undefined;
+  LocationsMap: undefined;
   LocationEditor: {
     locationId: string;
   };
@@ -618,7 +618,7 @@ export type SetupNavigatorParamList = {
   EventStyleEditor: {
     eventStyleId: string;
   };
-  Locations: undefined;
+  LocationsMap: undefined;
   ModelCategories: undefined;
   ModelCategoryEditor: {
     modelCategoryId: string;

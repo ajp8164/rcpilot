@@ -1,7 +1,7 @@
 import EventsScreen from 'components/EventsScreen';
 import LocationEditorScreen from 'components/LocationEditorScreen';
 import { LocationNavigatorParamList } from 'types/navigation';
-import LocationsScreen from 'components/LocationsScreen';
+import LocationsMapScreen from 'components/LocationsMapScreen';
 import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
@@ -16,15 +16,15 @@ const LocationNavigator = () => {
   return (
     <NavContext.Provider value={{ isModal: true }}>
       <LocationStack.Navigator
-        initialRouteName="Locations"
+        initialRouteName="LocationsMap"
         screenOptions={{
           headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <LocationStack.Screen
-          name="Locations"
-          component={LocationsScreen}
+          name="LocationsMap"
+          component={LocationsMapScreen}
           options={{
             title: 'Map',
             presentation: 'fullScreenModal',

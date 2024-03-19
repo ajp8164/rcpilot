@@ -44,9 +44,9 @@ enum MapTypeButtonState {
 
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
-export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Locations'>;
+export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationsMap'>;
 
-const LocationsScreen = ({ navigation }: Props) => {
+const LocationsMapScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const realm = useRealm();
@@ -322,4 +322,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default LocationsScreen;
+export default LocationsMapScreen;

@@ -7,7 +7,10 @@ export interface AppConfig
   buildEnvironment: string;
   businessName: string;
   businessNameShort: string;
+  databaseDate: string;
+  databaseVersion: string;
   deepLinkScheme: string;
+  deleteRealmIfMigrationNeeded: string;
   dropboxBackupPath: string;
   dropboxReportsPath: string;
   environment: string;
@@ -31,7 +34,10 @@ export const appConfig: AppConfig = {
   buildEnvironment: Config.BUILD_ENVIRONMENT || '',
   businessName: Config.BUSINESS_NAME || '',
   businessNameShort: Config.BUSINESS_NAME_SHORT || '',
+  databaseDate: Config.DATABASE_VERSION || '',
+  databaseVersion: Config.DATABASE_DATE || '',
   deepLinkScheme: Config.DEEP_LINK_SCHEME || '',
+  deleteRealmIfMigrationNeeded: Config.DELETE_REALM_IF_MIGRATION_NEEDED || '',
   dropboxBackupPath: Config.DROPBOX_BACKUP_PATH || '',
   dropboxReportsPath: Config.DROPBOX_REPORTS_PATH || '',
   environment: Config.ENVIRONMENT || '',

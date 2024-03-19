@@ -20,7 +20,7 @@ export const useAchievementConveyor = () => {
   const pilotEvents = useQuery(
     Event,
     events => {
-      return events.filtered(`pilot._id == oid(${pilot?._id})`).sorted('createdOn', true);
+      return events.filtered(`pilot._id == $0`, pilot?._id).sorted('createdOn', true);
     },
     [pilot],
   );

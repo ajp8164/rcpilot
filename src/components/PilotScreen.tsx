@@ -43,10 +43,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   const pilot = useObject(Pilot, new BSON.ObjectId(pilotId));
   const allPilotModels = useQuery(Model, models =>
-    models.filtered(`events.pilot._id == oid(${pilot?._id})`),
+    models.filtered(`events.pilot._id == $0`, pilot?._id),
   );
   const allPilotEventStyles = useQuery(Event, events =>
-    events.filtered(`pilot._id == oid(${pilot?._id})`),
+    events.filtered(`pilot._id == $0`, pilot?._id),
   );
 
   // Compute event count and event duration stats for each event involving the pilot.

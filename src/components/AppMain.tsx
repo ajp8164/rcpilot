@@ -6,6 +6,7 @@ import {
   useCameraContext,
 } from '@react-native-ajp-elements/ui';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { DatabaseInfoContext, useDatabaseInfo } from 'lib/database';
 import { InitStatus, useInitApp } from 'app';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 import { NetworkContext, useNetworkContext } from 'lib/network';
@@ -45,6 +46,7 @@ const AppMain = () => {
   const auth = useAuthContext(signInModalRef);
   const camera = useCameraContext(cameraModalRef);
   const network = useNetworkContext();
+  const databaseInfo = useDatabaseInfo();
   const initApp = useInitApp();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(StartupScreen.None);
@@ -100,31 +102,33 @@ const AppMain = () => {
   };
 
   return (
-    <NavigationContainer
-      linking={linking}
-      // Removes default background (white) flash on tab change when in dark mode.
-      theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ActionSheetProvider>
-        <BottomSheetModalProvider>
-          <ColorModeSwitch themeSettings={themeSettings}>
-            <ErrorBoundary onError={onError}>
-              <NetworkContext.Provider value={network}>
-                <NetworkConnectionBar />
-                <AuthContext.Provider value={auth}>
-                  <CameraContext.Provider value={camera}>
-                    <EventProvider>
-                      <MainNavigator startupScreen={startupScreen} />
-                      <SignInModal ref={signInModalRef} />
-                      <CameraModal ref={cameraModalRef} />
-                    </EventProvider>
-                  </CameraContext.Provider>
-                </AuthContext.Provider>
-              </NetworkContext.Provider>
-            </ErrorBoundary>
-          </ColorModeSwitch>
-        </BottomSheetModalProvider>
-      </ActionSheetProvider>
-    </NavigationContainer>
+    <DatabaseInfoContext.Provider value={databaseInfo}>
+      <NavigationContainer
+        linking={linking}
+        // Removes default background (white) flash on tab change when in dark mode.
+        theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ActionSheetProvider>
+          <BottomSheetModalProvider>
+            <ColorModeSwitch themeSettings={themeSettings}>
+              <ErrorBoundary onError={onError}>
+                <NetworkContext.Provider value={network}>
+                  <NetworkConnectionBar />
+                  <AuthContext.Provider value={auth}>
+                    <CameraContext.Provider value={camera}>
+                      <EventProvider>
+                        <MainNavigator startupScreen={startupScreen} />
+                        <SignInModal ref={signInModalRef} />
+                        <CameraModal ref={cameraModalRef} />
+                      </EventProvider>
+                    </CameraContext.Provider>
+                  </AuthContext.Provider>
+                </NetworkContext.Provider>
+              </ErrorBoundary>
+            </ColorModeSwitch>
+          </BottomSheetModalProvider>
+        </ActionSheetProvider>
+      </NavigationContainer>
+    </DatabaseInfoContext.Provider>
   );
 };
 

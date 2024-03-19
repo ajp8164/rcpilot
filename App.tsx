@@ -12,6 +12,8 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Schema from 'realmdb/Schema';
 import { ThemeProvider } from '@rneui/themed';
+import { appConfig } from 'config';
+import { migrateRealm } from 'app';
 import { theme } from 'theme';
 
 LogBox.ignoreLogs([
@@ -28,7 +30,11 @@ const App = () => {
         <SafeAreaProvider>
           <ReduxProvider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <RealmProvider schema={Schema} schemaVersion={1} deleteRealmIfMigrationNeeded={true}>
+              <RealmProvider
+                schema={Schema}
+                schemaVersion={parseInt(appConfig.databaseVersion, 10)}
+                onMigration={migrateRealm}
+                deleteRealmIfMigrationNeeded={appConfig.databaseVersion === 'true'}>
                 <AppMain />
               </RealmProvider>
             </PersistGate>

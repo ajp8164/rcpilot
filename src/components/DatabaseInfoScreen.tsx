@@ -1,21 +1,29 @@
 import { Alert, ScrollView } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
+import React, { useContext } from 'react';
 
+import { DatabaseInfoContext } from 'lib/database';
+import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
+import { useRealm } from '@realm/react';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseInfo'>;
 
 const DatabaseInfoScreen = () => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const realm = useRealm();
+
+  const databaseInfo = useContext(DatabaseInfoContext);
 
   const resetDatabase = () => {
-    return;
+    realm.write(() => {
+      realm.deleteAll();
+    });
   };
 
   return (
@@ -24,16 +32,29 @@ const DatabaseInfoScreen = () => {
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'INFORMATION'} />
-      <ListItem title={'Version'} value={'1'} position={['first']} rightImage={false} />
-      <ListItem title={'Total Records'} value={'1'} rightImage={false} />
-      <ListItem title={'Total Size'} value={'1'} rightImage={false} />
+      <ListItem
+        title={'Version'}
+        value={`v${databaseInfo.databaseVersion}, ${DateTime.fromISO(databaseInfo.databaseVersionDate).toFormat('M/d/yyyy')}`}
+        position={['first']}
+        rightImage={false}
+      />
+      <ListItem
+        title={'Total Records'}
+        value={`${databaseInfo.databaseObjects}`}
+        rightImage={false}
+      />
+      <ListItem
+        title={'Total Size'}
+        value={`${(databaseInfo.databaseSize / 1000).toFixed(2)} KB`}
+        rightImage={false}
+      />
       <ListItem
         title={'Last Modified'}
-        value={'Jan 13, 2024 at 6:23PM'}
+        value={DateTime.fromISO(databaseInfo.databaseLastUpdate).toFormat('M/d/yyyy')}
         position={['last']}
         rightImage={false}
       />
-      <Divider />
+      <Divider text={'DANGER ZONE'} />
       <ListItem
         title={'Reset Database'}
         titleStyle={s.reset}
@@ -59,7 +80,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   reset: {
     alignSelf: 'center',
     textAlign: 'center',
-    color: theme.colors.clearButtonText,
+    color: theme.colors.assertive,
   },
 }));
 

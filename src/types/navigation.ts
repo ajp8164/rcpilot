@@ -129,6 +129,7 @@ export type ModelsNavigatorParamList = {
     filterType: FilterType;
     batteryId?: string;
     eventStyleId?: string;
+    locationId?: string;
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;
@@ -458,6 +459,15 @@ export type EventSequenceNavigatorParamList = {
 };
 
 export type LocationNavigatorParamList = {
+  Events: {
+    filterType: FilterType;
+    batteryId?: string;
+    eventStyleId?: string;
+    locationId?: string;
+    modelId?: string;
+    modelType?: ModelType;
+    pilotId?: string;
+  };
   Locations: undefined;
   LocationEditor: {
     locationId: string;
@@ -571,6 +581,7 @@ export type SetupNavigatorParamList = {
     filterType: FilterType;
     batteryId?: string;
     eventStyleId?: string;
+    locationId?: string;
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;

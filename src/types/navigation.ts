@@ -142,7 +142,7 @@ export type ModelsNavigatorParamList = {
     eventOutcome: EventOutcome;
   };
   EventSequenceNavigator: NavigatorScreenParams<EventSequenceNavigatorParamList>;
-  LocationDetails: {
+  Location: {
     locationId: string;
   };
   NewChecklistNavigator: NavigatorScreenParams<NewChecklistNavigatorParamList>;
@@ -459,7 +459,7 @@ export type EventSequenceNavigatorParamList = {
 
 export type LocationNavigatorParamList = {
   Locations: undefined;
-  LocationDetails: {
+  Location: {
     locationId: string;
   };
   NotesEditor: {

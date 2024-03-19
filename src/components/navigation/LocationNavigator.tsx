@@ -1,5 +1,5 @@
+import LocationEditorScreen from 'components/LocationEditorScreen';
 import { LocationNavigatorParamList } from 'types/navigation';
-import LocationScreen from 'components/LocationScreen';
 import LocationsScreen from 'components/LocationsScreen';
 import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
@@ -30,10 +30,10 @@ const LocationNavigator = () => {
           }}
         />
         <LocationStack.Screen
-          name="Location"
-          component={LocationScreen}
+          name="LocationEditor"
+          component={LocationEditorScreen}
           options={{
-            title: 'Location Details',
+            title: 'Location',
             headerBackTitle: 'Map',
           }}
         />

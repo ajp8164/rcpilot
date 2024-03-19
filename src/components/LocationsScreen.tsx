@@ -214,7 +214,7 @@ const LocationsScreen = ({ navigation }: Props) => {
             <MapMarkerCallout>
               <CalloutSubview
                 onPress={() =>
-                  navigation.navigate('Location', {
+                  navigation.navigate('LocationEditor', {
                     locationId: location._id.toString(),
                   })
                 }

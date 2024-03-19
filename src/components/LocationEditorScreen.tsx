@@ -1,20 +1,52 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
+import React, { useEffect, useState } from 'react';
 
+import { BSON } from 'realm';
 import { Divider } from '@react-native-ajp-elements/ui';
+import { Location } from 'realmdb';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
+import formatcoords from 'formatcoords';
 import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
+import { useObject } from '@realm/react';
 
-export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Location'>;
+export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationEditor'>;
 
-const LocationScreen = ({ navigation, route }: Props) => {
+const LocationEditorScreen = ({ navigation, route }: Props) => {
   const { locationId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const event = useEvent();
+
+  const location = useObject(Location, new BSON.ObjectId(locationId));
+
+  const coords =
+    location &&
+    formatcoords(location?.coords.latitude, location?.coords.longitude)
+      .format({
+        latLonSeparator: '|',
+      })
+      .split('|');
+
+  const [name, setName] = useState(location?.name || undefined);
+  const [notes, setNotes] = useState(location?.notes);
+
+  useEffect(() => {
+    event.on('location-notes', onChangeNotes);
+    return () => {
+      event.removeListener('location-notes', onChangeNotes);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    setNotes(result.text);
+  };
 
   return (
     <ScrollView
@@ -23,20 +55,20 @@ const LocationScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'INFORMATION'} />
       <ListItemInput
+        value={name}
         placeholder={'Location Name'}
-        value={'Nickajack Elementary School'}
         position={['first', 'last']}
-        onChangeText={() => null}
+        onChangeText={setName}
       />
       <Divider />
       <ListItem
-        title={'Notes'}
+        title={notes || 'Notes'}
         position={['first', 'last']}
         onPress={() =>
           navigation.navigate('NotesEditor', {
-            title: 'Fuel Notes',
-            text: 'notes', // mock
-            eventName: 'fuel-notes',
+            title: 'Action Notes',
+            text: notes,
+            eventName: 'checklist-action-notes',
           })
         }
       />
@@ -44,14 +76,14 @@ const LocationScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Latitude'}
         position={['first']}
-        value={'33 50 31.61 N'}
+        value={coords ? coords[0] : ''}
         rightImage={false}
         onPress={() => null}
       />
       <ListItem
         title={'Longitude'}
         position={['last']}
-        value={'84 30 58.67 W'}
+        value={coords ? coords[1] : ''}
         rightImage={false}
         onPress={() => null}
       />
@@ -63,7 +95,13 @@ const LocationScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         onPress={() => null}
       />
-      <ListItem title={'Details'} position={['last']} />
+      <ListItem
+        title={'Details'}
+        position={['last']}
+        onPress={() => {
+          // navigation.navigate('');
+        }}
+      />
       <Divider />
       <ListItem
         title={'Delete Location'}
@@ -84,4 +122,4 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
 }));
 
-export default LocationScreen;
+export default LocationEditorScreen;

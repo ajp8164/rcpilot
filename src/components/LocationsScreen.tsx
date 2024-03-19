@@ -1,6 +1,8 @@
+import { Alert, Text, View } from 'react-native';
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { Location, LocationPosition, SearchCriteria, SearchScope } from 'types/location';
+import { GeoPositionContext, locationSummary } from 'lib/location';
+import { Location, LocationCoords } from 'realmdb/Location';
 import MapView, {
   Callout,
   CalloutSubview,
@@ -11,18 +13,21 @@ import MapView, {
   MarkerDragStartEndEvent,
   Region,
 } from 'react-native-maps';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Text, View } from 'react-native';
-import { createNewLocation, useLocation } from 'lib/location';
+import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { SearchCriteria, SearchScope } from 'types/location';
+import { useQuery, useRealm } from '@realm/react';
 
 import ActionBar from 'components/atoms/ActionBar';
 import CustomIcon from 'theme/icomoon/CustomIcon';
+import { DateTime } from 'luxon';
 // import {default as Icon} from 'react-native-vector-icons/FontAwesome6';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
+import { uuidv4 } from 'lib/utils';
 
 // These are icon names.
 enum RecenterButtonState {
@@ -44,31 +49,47 @@ export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Location
 const LocationsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const realm = useRealm();
 
-  const currentLocation = useLocation(/*locationId || location?.id*/);
-  console.log('>>>>>>>', currentLocation);
+  const locations = useQuery(Location);
+  const currentPosition = useContext(GeoPositionContext);
 
   const mapViewRef = useRef<MapView>(null);
   const markersRef = useRef<MapMarker[]>([]);
-  const mapLocation = useRef<LocationPosition>({ latitude: 0, longitude: 0 });
+  const mapLocation = useRef({ latitude: 0, longitude: 0 } as LocationCoords);
   const [mapPresentation, setMapPresentation] = useState<{ mapType: MapType; icon: string }>({
     mapType: 'standard',
     icon: MapTypeButtonState.Map,
   });
-  const [locations, setLocations] = useState<Location[]>([]);
   const [searchFocused, setSearchFocused] = useState(false);
   const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(initialSearchCriteria);
 
   const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
 
   useEffect(() => {
-    if (!currentLocation.loading) {
-      mapLocation.current = {
-        latitude: currentLocation.data.position.latitude,
-        longitude: currentLocation.data.position.longitude,
-      };
+    if (currentPosition.error) {
+      const error = currentPosition.error;
+      const title =
+        error.code === 'PERMISSION_DENIED'
+          ? 'Permission Denied'
+          : error.code === 'POSITION_UNAVAILABLE'
+            ? 'Position Unavailable'
+            : 'Timeout';
+      const message =
+        error.code === 'PERMISSION_DENIED'
+          ? `${error.message}\n\nLocation information is not available. Go to the Settings app to enable location services for ${appConfig.appName}.`
+          : error.message;
+      Alert.alert(title, message);
     }
-  }, [currentLocation.loading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    mapLocation.current = {
+      latitude: currentPosition.coords.latitude,
+      longitude: currentPosition.coords.longitude,
+    } as LocationCoords;
+  }, [currentPosition]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -90,15 +111,15 @@ const LocationsScreen = ({ navigation }: Props) => {
             text: event.nativeEvent.text,
             scope: SearchScope.FullText,
           }),
-        onBlur: () => setSearchFocused(false),
         onCancelButtonPress: resetSearch,
+        onBlur: () => setSearchFocused(false),
         onFocus: () => setSearchFocused(true),
       },
     });
   }, [navigation]);
 
   const recenterMap = () => {
-    if (currentLocation) {
+    if (currentPosition) {
       // Set button state and heading.
       let heading;
 
@@ -117,8 +138,8 @@ const LocationsScreen = ({ navigation }: Props) => {
 
       const partialCamera = {
         center: {
-          latitude: currentLocation.data.position.latitude,
-          longitude: currentLocation.data.position.longitude,
+          latitude: currentPosition.coords.latitude,
+          longitude: currentPosition.coords.longitude,
         },
         heading,
         zoom: 100,
@@ -139,8 +160,17 @@ const LocationsScreen = ({ navigation }: Props) => {
   };
 
   const addLocation = () => {
-    const newLocation = createNewLocation(mapLocation.current);
-    setLocations(locations.concat(newLocation));
+    const now = DateTime.now().toISO();
+    const id = uuidv4();
+    realm.write(() => {
+      realm.create(Location, {
+        createdOn: now,
+        updatedOn: now,
+        name: 'Location-' + id.substring(id.length - 5),
+        coords: mapLocation.current,
+        notes: '',
+      });
+    });
   };
 
   const resetSearch = () => {
@@ -152,11 +182,14 @@ const LocationsScreen = ({ navigation }: Props) => {
     mapLocation.current = {
       latitude: region.latitude,
       longitude: region.longitude,
-    };
+    } as LocationCoords;
   };
 
   const onMarkerDragEnd = (event: MarkerDragStartEndEvent, location: Location) => {
-    console.log(JSON.stringify(event.nativeEvent), JSON.stringify(location));
+    realm.write(() => {
+      location.coords.latitude = event.nativeEvent.coordinate.latitude;
+      location.coords.longitude = event.nativeEvent.coordinate.longitude;
+    });
   };
 
   const renderEventMarkers = (): JSX.Element[] => {
@@ -165,9 +198,11 @@ const LocationsScreen = ({ navigation }: Props) => {
         <Marker
           ref={el => (el ? (markersRef.current[index] = el) : null)}
           key={index}
-          coordinate={location.position}
+          coordinate={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }}
           title={location.name}
-          description={location.description}
           calloutOffset={{ x: 0, y: -5 }}
           calloutAnchor={{ x: 0, y: 0 }}
           draggable
@@ -180,7 +215,7 @@ const LocationsScreen = ({ navigation }: Props) => {
               <CalloutSubview
                 onPress={() =>
                   navigation.navigate('LocationDetails', {
-                    locationId: '1',
+                    locationId: location._id.toString(),
                   })
                 }
                 style={s.calloutSubview}>
@@ -189,7 +224,7 @@ const LocationsScreen = ({ navigation }: Props) => {
                     {location.name}
                   </Text>
                   <Text numberOfLines={1} style={s.calloutText2}>
-                    {location.description}
+                    {locationSummary(location)}
                   </Text>
                 </View>
                 <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
@@ -203,22 +238,20 @@ const LocationsScreen = ({ navigation }: Props) => {
 
   return (
     <View>
-      {currentLocation && !currentLocation.loading && (
-        <MapView
-          ref={mapViewRef}
-          style={s.map}
-          showsUserLocation={true}
-          mapType={mapPresentation.mapType}
-          initialRegion={{
-            latitude: currentLocation.data.position.latitude,
-            longitude: currentLocation.data.position.longitude,
-            latitudeDelta: 0.005,
-            longitudeDelta: 0.005,
-          }}
-          onRegionChangeComplete={onRegionChangeComplete}>
-          {renderEventMarkers()}
-        </MapView>
-      )}
+      <MapView
+        ref={mapViewRef}
+        style={s.map}
+        showsUserLocation={true}
+        mapType={mapPresentation.mapType}
+        region={{
+          latitude: currentPosition.coords.latitude,
+          longitude: currentPosition.coords.longitude,
+          latitudeDelta: currentPosition.error ? 10 : 0.005,
+          longitudeDelta: currentPosition.error ? 10 : 0.005,
+        }}
+        onRegionChangeComplete={onRegionChangeComplete}>
+        {renderEventMarkers()}
+      </MapView>
       <ActionBar
         actions={[
           {

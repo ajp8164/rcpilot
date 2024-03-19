@@ -8,7 +8,7 @@ import {
   ChecklistActionScheduleState,
 } from './Checklist';
 import { Filter, FilterState } from './Filter';
-import { Location, LocationPosition } from './Location';
+import { Location, LocationCoords } from './Location';
 import { Model, ModelEventStyleData, ModelStatistics } from './Model';
 
 import { Battery } from './Battery';
@@ -49,7 +49,7 @@ const Schema = [
   ChecklistActionScheduleDue,
   ChecklistActionScheduleState,
   FilterState,
-  LocationPosition,
+  LocationCoords,
   ModelEventStyleData,
   ModelStatistics,
 ];

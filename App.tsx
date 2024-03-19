@@ -13,7 +13,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Schema from 'realmdb/Schema';
 import { ThemeProvider } from '@rneui/themed';
 import { appConfig } from 'config';
-import { migrateRealm } from 'app';
+// import { migrateRealm } from 'app';
 import { theme } from 'theme';
 
 LogBox.ignoreLogs([
@@ -33,8 +33,8 @@ const App = () => {
               <RealmProvider
                 schema={Schema}
                 schemaVersion={parseInt(appConfig.databaseVersion, 10)}
-                onMigration={migrateRealm}
-                deleteRealmIfMigrationNeeded={appConfig.databaseVersion === 'true'}>
+                // onMigration={migrateRealm}
+                deleteRealmIfMigrationNeeded={true}>
                 <AppMain />
               </RealmProvider>
             </PersistGate>

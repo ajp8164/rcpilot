@@ -9,6 +9,7 @@ import EventEditorScreen from 'components/EventEditorScreen';
 import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
 import EventSequenceNavigator from 'components/navigation/EventSequenceNavigator';
 import EventsScreen from 'components/EventsScreen';
+import LocationNavigator from 'components/navigation/LocationNavigator';
 import MaintenanceActionScreen from 'components/MaintenanceActionScreen';
 import MaintenanceFiltersNavigator from 'components/navigation/MaintenanceFiltersNavigator';
 import MaintenanceHistoryEntryScreen from 'components/MaintenanceHistoryEntryScreen';
@@ -105,6 +106,14 @@ const ModelsNavigator = () => {
         component={ChecklistActionHistoryScreen}
         options={{
           title: 'Action Log',
+        }}
+      />
+      <ModelsStack.Screen
+        name="LocationNavigator"
+        component={LocationNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
         }}
       />
       <ModelsStack.Screen

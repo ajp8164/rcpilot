@@ -469,8 +469,11 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Location'}
         value={location?.name || 'Unknown'}
-        // onPress={() => navigation.navigate('Location', {
-        // })}
+        onPress={() =>
+          navigation.navigate('LocationNavigator', {
+            screen: 'LocationsMap',
+          })
+        }
       />
       <ListItem
         title={'Outcome'}

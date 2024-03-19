@@ -36,7 +36,6 @@ export const useCurrentLocation = () => {
       allLocations.forEach(location => {
         const dist = distanceBetweenLocations(coords, location.coords);
         if (dist.mi < 0.5) {
-          console.log('current location: ', location.name);
           dispatch(saveCurrentLocation({ locationId: location._id.toString() }));
           return;
         }

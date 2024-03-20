@@ -3,7 +3,7 @@ import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
-import { revertAll } from 'store/actions';
+import { revertSettings } from 'store/actions';
 
 export interface AppSettingsState {
   biometrics: boolean;
@@ -91,7 +91,7 @@ const handleSaveAcceptTou: CaseReducer<AppSettingsState, PayloadAction<{ tou: To
 const appSettingsSlice = createSlice({
   name: 'appSettings',
   initialState: initialAppSettingsState,
-  extraReducers: builder => builder.addCase(revertAll, () => initialAppSettingsState),
+  extraReducers: builder => builder.addCase(revertSettings, () => initialAppSettingsState),
   reducers: {
     saveAcceptTou: handleSaveAcceptTou,
     saveBiometrics: handleSaveBiometrics,

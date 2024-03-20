@@ -1,6 +1,6 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { revertAll } from 'store/actions';
+import { revertSettings } from 'store/actions';
 
 export interface PilotState {
   pilotId?: string;
@@ -23,7 +23,7 @@ const handleSaveSelectedPilot: CaseReducer<PilotState, PayloadAction<{ pilotId?:
 const pilotSlice = createSlice({
   name: 'pilot',
   initialState: initialPilotState,
-  extraReducers: builder => builder.addCase(revertAll, () => initialPilotState),
+  extraReducers: builder => builder.addCase(revertSettings, () => initialPilotState),
   reducers: {
     saveSelectedPilot: handleSaveSelectedPilot,
   },

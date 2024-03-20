@@ -7,7 +7,7 @@ import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { listenForChangesToMyUserProfile } from 'lib/listeners';
 import lodash from 'lodash';
 import { log } from '@react-native-ajp-elements/core';
-// import { revertAll } from 'store/actions';
+import { revertCredentials } from 'store/actions';
 import { saveUser } from 'store/slices/user';
 import { signOut } from 'lib/auth';
 import { store } from 'store';
@@ -162,7 +162,7 @@ export const preSignOutActions = async (): Promise<UserProfile | undefined> => {
   userProfile && (await removePushNotificationsFromUser(userProfile));
 
   // Clear our redux store.
-  // store.dispatch(revertAll()); // TODO - do we need to remove credentials only (not whole store)
+  store.dispatch(revertCredentials());
 
   return userProfile;
 };

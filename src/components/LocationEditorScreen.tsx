@@ -15,6 +15,7 @@ import { ScrollView } from 'react-native';
 import { eqString } from 'realmdb/helpers';
 import formatcoords from 'formatcoords';
 import { makeStyles } from '@rneui/themed';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationEditor'>;
@@ -24,6 +25,7 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const confirmAction = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
 
@@ -66,6 +68,13 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
 
   const onChangeNotes = (result: NotesEditorResult) => {
     setNotes(result.text);
+  };
+
+  const deleteLocation = () => {
+    realm.write(() => {
+      realm.delete(location);
+    });
+    navigation.goBack();
   };
 
   return (
@@ -128,7 +137,12 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
         titleStyle={s.delete}
         position={['first', 'last']}
         rightImage={false}
-        onPress={() => null}
+        onPress={() => {
+          confirmAction(deleteLocation, {
+            label: 'Delete Location',
+            title: 'This action cannot be undone.\nAre you sure you want to delete this location?',
+          });
+        }}
       />
     </ScrollView>
   );

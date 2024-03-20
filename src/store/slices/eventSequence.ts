@@ -2,7 +2,7 @@ import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import { revertAll } from 'store/actions';
+import { revertSettings } from 'store/actions';
 
 type EventSequenceChecklistActionHistoryEntries = {
   [key in EventSequenceChecklistType]: Record<string, JChecklistActionHistoryEntry>;
@@ -100,7 +100,7 @@ const handleSetChecklistActionNotComplete: CaseReducer<
 const eventSequenceSlice = createSlice({
   name: 'eventSequence',
   initialState: initialEventSequenceState,
-  extraReducers: builder => builder.addCase(revertAll, () => initialEventSequenceState),
+  extraReducers: builder => builder.addCase(revertSettings, () => initialEventSequenceState),
   reducers: {
     reset: handleReset,
     setBatteries: handleSetBatteries,

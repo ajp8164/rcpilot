@@ -1,6 +1,6 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-import { revertAll } from 'store/actions';
+import { revertSettings } from 'store/actions';
 
 export interface LocationState {
   locationId?: string;
@@ -23,7 +23,7 @@ const handleSaveCurrentLocation: CaseReducer<
 const locationSlice = createSlice({
   name: 'location',
   initialState: initialLocationState,
-  extraReducers: builder => builder.addCase(revertAll, () => initialLocationState),
+  extraReducers: builder => builder.addCase(revertSettings, () => initialLocationState),
   reducers: {
     saveCurrentLocation: handleSaveCurrentLocation,
   },

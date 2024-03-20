@@ -1,7 +1,7 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { NetInfoStateType } from '@react-native-community/netinfo';
-import { revertAll } from 'store/actions';
+import { revertSettings } from 'store/actions';
 
 export interface NetworkStatusState {
   internet: {
@@ -30,7 +30,7 @@ const handleSaveInternetStatus: CaseReducer<
 const networkStatusSlice = createSlice({
   name: 'networkStatus',
   initialState: initialNetworkStatusState,
-  extraReducers: builder => builder.addCase(revertAll, () => initialNetworkStatusState),
+  extraReducers: builder => builder.addCase(revertSettings, () => initialNetworkStatusState),
   reducers: {
     saveInternetStatus: handleSaveInternetStatus,
   },

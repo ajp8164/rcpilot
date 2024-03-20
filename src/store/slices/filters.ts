@@ -1,7 +1,7 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { FilterType } from 'types/filter';
-import { revertAll } from 'store/actions';
+import { revertSettings } from 'store/actions';
 
 export interface FiltersState {
   filterId: Record<FilterType, string | undefined>;
@@ -41,7 +41,7 @@ const handleSaveSelectedFilter: CaseReducer<
 const filtersSlice = createSlice({
   name: 'filters',
   initialState: initialFiltersState,
-  extraReducers: builder => builder.addCase(revertAll, () => initialFiltersState),
+  extraReducers: builder => builder.addCase(revertSettings, () => initialFiltersState),
   reducers: {
     saveSelectedFilter: handleSaveSelectedFilter,
   },

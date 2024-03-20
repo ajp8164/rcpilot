@@ -30,6 +30,7 @@ import { EventRating } from 'components/molecules/EventRating';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
+import { LocationsMapResult } from 'components/LocationsMapScreen';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -250,6 +251,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     event.on('event-notes', onChangeNotes);
     event.on(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
     event.on(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
+    event.on('event-location', onChangeLocation);
 
     return () => {
       event.removeListener('event-model-fuel', onChangeModelFuel);
@@ -261,6 +263,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       event.removeListener('event-notes', onChangeNotes);
       event.removeListener(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
       event.removeListener(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
+      event.removeListener('event-location', onChangeLocation);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -291,9 +294,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     setEventStyle(s);
   };
 
-  const onChangeLocation = (result: EnumPickerResult) => {
+  const onChangeLocation = (result: LocationsMapResult) => {
     const l = locations.find(l => {
-      return l.name === result.value[0];
+      return l._id.toString() === result.locationId;
     });
     setLocation(l);
   };
@@ -472,6 +475,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         onPress={() =>
           navigation.navigate('LocationNavigator', {
             screen: 'LocationsMap',
+            params: {
+              eventName: 'event-location',
+            },
           })
         }
       />

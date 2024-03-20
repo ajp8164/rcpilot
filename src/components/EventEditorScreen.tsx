@@ -27,6 +27,7 @@ import { EventOutcome } from 'types/event';
 import { EventRating } from 'components/molecules/EventRating';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
+import { LocationsMapResult } from 'components/LocationsMapScreen';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -203,9 +204,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     setEventStyle(s);
   };
 
-  const onChangeLocation = (result: EnumPickerResult) => {
+  const onChangeLocation = (result: LocationsMapResult) => {
     const l = locations.find(l => {
-      return l.name === result.value[0];
+      return l._id.toString() === result.locationId;
     });
     setLocation(l);
   };
@@ -313,6 +314,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         onPress={() =>
           navigation.navigate('LocationNavigator', {
             screen: 'LocationsMap',
+            params: {
+              eventName: 'event-location',
+            },
           })
         }
       />

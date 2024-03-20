@@ -1,6 +1,6 @@
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { NewModelFuelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
@@ -12,6 +12,7 @@ import { ModelFuel } from 'realmdb/ModelFuel';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
@@ -25,28 +26,29 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   const { modelFuelId } = route.params || {};
   const theme = useTheme();
   const event = useEvent();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const modelFuel = useObject(ModelFuel, new BSON.ObjectId(modelFuelId));
 
-  const [name, setName] = useState(modelFuel?.name || undefined);
-  const [cost, setCost] = useState(modelFuel?.cost?.toFixed(2) || undefined);
+  const name = useRef(modelFuel?.name || undefined);
+  const cost = useRef(modelFuel?.cost?.toFixed(2) || undefined);
   const [notes, setNotes] = useState(modelFuel?.notes || undefined);
 
   useEffect(() => {
     const canSave =
-      !!name &&
-      (!eqString(modelFuel?.name, name) ||
-        !eqNumber(modelFuel?.cost, cost) ||
+      !!name.current &&
+      (!eqString(modelFuel?.name, name.current) ||
+        !eqNumber(modelFuel?.cost, cost.current) ||
         !eqString(modelFuel?.notes, notes));
 
     const save = () => {
       if (modelFuel) {
         realm.write(() => {
           modelFuel.updatedOn = DateTime.now().toISO();
-          modelFuel.name = name || 'no-name';
-          modelFuel.cost = toNumber(cost);
+          modelFuel.name = name.current || 'no-name';
+          modelFuel.cost = toNumber(cost.current);
           modelFuel.notes = notes;
         });
       } else {
@@ -55,8 +57,8 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
           realm.create('ModelFuel', {
             createdOn: now,
             updatedOn: now,
-            name,
-            cost: toNumber(cost),
+            name: name.current,
+            cost: toNumber(cost.current),
             notes,
           });
         });
@@ -70,7 +72,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader({ enabled: canSave, action: onDone });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, cost, notes]);
+  }, [name.current, cost.current, notes]);
 
   useEffect(() => {
     event.on('fuel-notes', onChangeNotes);
@@ -91,21 +93,21 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'DETAILS'} />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Name for the fuel'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       <Divider />
       <ListItemInput
         title={'Fuel Cost'}
         label={'per gal'}
-        value={cost}
+        value={cost.current}
         placeholder={'Amount'}
         numeric={true}
         keyboardType={'number-pad'}
         position={['first', 'last']}
-        onChangeText={setCost}
+        onChangeText={value => setDebounced(() => (cost.current = value))}
       />
       <Divider text={'NOTES'} />
       <ListItem

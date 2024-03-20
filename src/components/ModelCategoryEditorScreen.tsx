@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -9,6 +9,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { eqString } from 'realmdb/helpers';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
 
@@ -22,24 +23,25 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const { modelCategoryId } = route.params || {};
   const theme = useTheme();
   const setScreenEditHeader = useScreenEditHeader();
+  const setDebounced = useDebouncedRender();
 
   const realm = useRealm();
   const modelCategory = useObject(ModelCategory, new BSON.ObjectId(modelCategoryId));
 
-  const [name, setName] = useState(modelCategory?.name || undefined);
+  const name = useRef(modelCategory?.name || undefined);
 
   useEffect(() => {
-    const canSave = !!name && !eqString(modelCategory?.name, name);
+    const canSave = !!name.current && !eqString(modelCategory?.name, name.current);
 
     const save = () => {
       if (modelCategory) {
         realm.write(() => {
-          modelCategory.name = name || 'no-name';
+          modelCategory.name = name.current || 'no-name';
         });
       } else {
         realm.write(() => {
           realm.create('ModelCategory', {
-            name,
+            name: name.current,
           });
         });
       }
@@ -52,7 +54,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader({ enabled: canSave, action: onDone });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
+  }, [name.current]);
 
   return (
     <ScrollView
@@ -61,10 +63,10 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Name for the category'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
     </ScrollView>
   );

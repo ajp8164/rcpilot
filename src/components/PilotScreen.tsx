@@ -8,7 +8,7 @@ import {
   NestableScrollContainer,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { modelSummary, modelSummaryPilot } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -28,6 +28,7 @@ import { eqString } from 'realmdb/helpers';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { modelTypeIcons } from 'lib/model';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilot'>;
@@ -37,6 +38,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const setDebounced = useDebouncedRender();
   const listEditor = useListEditor();
   const event = useEvent();
   const realm = useRealm();
@@ -63,17 +65,17 @@ const PilotScreen = ({ navigation, route }: Props) => {
     eventStyleStatistics[eventStyleName] = { eventStyleName, count, duration };
   });
 
-  const [name, setName] = useState(pilot?.name);
+  const name = useRef(pilot?.name);
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    const canSave = name && !eqString(pilot?.name, name);
+    const canSave = name.current && !eqString(pilot?.name, name.current);
 
     const save = () => {
       if (pilot) {
         realm.write(() => {
           pilot.updatedOn = DateTime.now().toISO();
-          pilot.name = name || 'no-name';
+          pilot.name = name.current || 'no-name';
         });
       }
     };
@@ -126,7 +128,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditing, listEditor.enabled, name, pilot?.favoriteModels]);
+  }, [isEditing, listEditor.enabled, name.current, pilot?.favoriteModels]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -278,12 +280,12 @@ const PilotScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={"PILOT'S NAME"} />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Pilot Name'}
         position={['first', 'last']}
-        onChangeText={setName}
         onBlur={() => setIsEditing(false)}
         onFocus={() => setIsEditing(true)}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       {allPilotModels.length ? (
         <>

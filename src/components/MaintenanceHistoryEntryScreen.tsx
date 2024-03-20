@@ -14,6 +14,7 @@ import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { modelCostStatistics } from 'lib/analytics';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useTheme } from 'theme';
 
@@ -23,6 +24,7 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   const { modelId, checklistRefId, actionRefId, historyRefId } = route.params;
 
   const theme = useTheme();
+  const setDebounced = useDebouncedRender();
   const event = useEvent();
   const realm = useRealm();
 
@@ -85,7 +87,7 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
         keyboardType={'number-pad'}
         placeholder={'None'}
         position={['first', 'last']}
-        onChangeText={value => onChangeCost(parseFloat(value))}
+        onChangeText={value => setDebounced(() => onChangeCost(parseFloat(value)))}
       />
       <Divider text={'NOTES'} />
       <ListItem

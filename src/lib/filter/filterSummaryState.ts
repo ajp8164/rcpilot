@@ -18,7 +18,7 @@ export const filterSummaryState = (property: string, state: FilterState) => {
     p = `${p[0].toUpperCase()}${p.substring(1)}`;
   }
   let s = `any ${p}`;
-  if (state.relation !== FilterRelation.Any && state.value) {
+  if (state.relation !== FilterRelation.Any && state.value[0]) {
     switch (state.relation) {
       case FilterRelation.After:
         s = `${p} is after ${DateTime.fromISO(state.value[0]).toFormat('M/d/yy')}`;

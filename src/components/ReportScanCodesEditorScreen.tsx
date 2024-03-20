@@ -1,5 +1,5 @@
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { eqBoolean, eqObject, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
@@ -13,6 +13,7 @@ import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { filterSummary } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
@@ -23,6 +24,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
 
   const theme = useTheme();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
@@ -33,7 +35,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
     selectFilters(FilterType.ReportBatteryScanCodesFilter),
   );
 
-  const [name, setName] = useState<string | undefined>(report?.name);
+  const name = useRef<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
   const [includesModels, setIncludesModels] = useState(report ? report.includesModels : true);
   const [includesBatteries, setIncludesBatteries] = useState(
@@ -78,8 +80,8 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave =
-      !!name &&
-      (!eqString(report?.name, name) ||
+      !!name.current &&
+      (!eqString(report?.name, name.current) ||
         !eqBoolean(report?.includesModels, includesModels) ||
         !eqBoolean(report?.includesBatteries, includesBatteries) ||
         !eqObject(report?.modelScanCodesFilter, modelScanCodesFilter) ||
@@ -90,7 +92,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         // Update existing report.
         if (report) {
           realm.write(() => {
-            report.name = name || 'no-name';
+            report.name = name.current || 'no-name';
             report.includesModels = includesModels;
             report.includesBatteries = includesBatteries;
             report.modelScanCodesFilter = modelScanCodesFilter;
@@ -101,7 +103,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
         // Insert new report.
         realm.write(() => {
           realm.create('ScanCodesReport', {
-            name,
+            name: name.current,
             ordinal,
             includesModels,
             includesBatteries,
@@ -125,10 +127,10 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
     <ScrollView style={theme.styles.view}>
       <Divider text={'REPORT NAME'} />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Report Name'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       <Divider text={'CONTENTS'} />
       <ListItemSwitch

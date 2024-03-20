@@ -17,6 +17,7 @@ import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/reportMaintenance';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
@@ -31,6 +32,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const setDebounced = useDebouncedRender();
 
   const filterEditor = useFilterEditor<ReportMaintenanceFilterValues>({
     filterId,
@@ -67,7 +69,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
               value={filterEditor.customName}
               placeholder={'Filter Name'}
               position={['last']}
-              onChangeText={filterEditor.setCustomName}
+              onChangeText={value => setDebounced(() => filterEditor.setCustomName(value))}
             />
           }
         />
@@ -76,7 +78,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
-          onChangeText={filterEditor.setName}
+          onChangeText={value => setDebounced(() => filterEditor.setName(value))}
         />
       )}
       <Divider />

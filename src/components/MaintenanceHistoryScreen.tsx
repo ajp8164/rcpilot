@@ -58,13 +58,15 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && listEditor.enabled}
+              disabled={!filterId && (!entries.length || listEditor.enabled)}
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
                   style={[
                     s.headerIcon,
-                    listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {},
+                    !filterId && (!entries.length || listEditor.enabled)
+                      ? s.headerIconDisabled
+                      : {},
                   ]}
                 />
               }

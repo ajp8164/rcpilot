@@ -1,6 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -16,6 +16,7 @@ import { eqString } from 'realmdb/helpers';
 import formatcoords from 'formatcoords';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationEditor'>;
@@ -26,6 +27,7 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const confirmAction = useConfirmAction();
+  const setDebounced = useDebouncedRender();
   const event = useEvent();
   const realm = useRealm();
 
@@ -39,24 +41,24 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
       })
       .split('|');
 
-  const [name, setName] = useState(location?.name || undefined);
+  const name = useRef(location?.name || undefined);
   const [notes, setNotes] = useState(location?.notes);
 
   useEffect(() => {
     if (!locationId || !location) return;
 
     const canSave =
-      !!name && (!eqString(location?.name, name) || !eqString(location?.notes, notes));
+      !!name && (!eqString(location?.name, name.current) || !eqString(location?.notes, notes));
 
     if (canSave) {
       realm.write(() => {
         location.updatedOn = DateTime.now().toISO();
-        location.name = name || 'no-name';
+        location.name = name.current || 'no-name';
         location.notes = notes;
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, notes]);
+  }, [name.current, notes]);
 
   useEffect(() => {
     event.on('location-notes', onChangeNotes);
@@ -84,10 +86,10 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'INFORMATION'} />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Location Name'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       <Divider />
       <ListItem

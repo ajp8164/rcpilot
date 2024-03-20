@@ -1,5 +1,6 @@
 import {
   ListItemInput,
+  ListItemInputMethods,
   ListItemSegmented,
   ListItemSegmentedInterface,
 } from 'components/atoms/List';
@@ -9,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import React from 'react-native';
 import lodash from 'lodash';
-import { useTheme } from 'theme';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -23,7 +24,7 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
 const ListItemFilterNumber = (props: Props) => {
   const { label, numericProps, onValueChange, position, title } = props;
 
-  const theme = useTheme();
+  const setDebounced = useDebouncedRender();
 
   const segments = [
     NumberRelation.Any,
@@ -44,6 +45,8 @@ const ListItemFilterNumber = (props: Props) => {
       return seg === props.relation;
     }),
   );
+
+  const liRef = useRef<ListItemInputMethods>(null);
 
   // Controlled component state changes.
   useEffect(() => {
@@ -77,8 +80,10 @@ const ListItemFilterNumber = (props: Props) => {
   const onRelationSelect = (index: number) => {
     const newRelation = Object.values(NumberRelation)[index] as NumberRelation;
 
+    // Provide an initial default value.
+    let newValue = filterState.value.length ? filterState.value : ['0', `${label}`];
+
     // Reset the value of the filter if choosing Any.
-    let newValue = filterState.value;
     if (newRelation === NumberRelation.Any) {
       newValue = [];
     }
@@ -100,14 +105,18 @@ const ListItemFilterNumber = (props: Props) => {
     }
   };
 
-  const onChangedFilter = (value: string) => {
+  const onChangedFilter = (value?: string) => {
     // Set our local state and pass the entire state back to the caller only if
     // the input is visible - this prevents the text-input from bubbling events up
     // when the caller of this list item has controlled this component without
     // interacting with the text-input (e.g. a filter reset).
     if (expanded) {
-      setFilterState({ relation: filterState.relation, value: [value] });
-      onValueChange({ relation: filterState.relation, value: [value] });
+      if (value === undefined) {
+        liRef.current?.setValue('0');
+      }
+      const newValue = [value || '0', `${label}`];
+      setFilterState({ relation: filterState.relation, value: newValue });
+      onValueChange({ relation: filterState.relation, value: newValue });
     }
   };
 
@@ -123,16 +132,16 @@ const ListItemFilterNumber = (props: Props) => {
       expanded={expanded}
       ExpandableComponent={
         <ListItemInput
+          ref={liRef}
           title={'Value'}
-          titleStyle={filterState.value?.length === 0 ? { color: theme.colors.assertive } : {}}
           label={label}
           position={position?.includes('last') ? ['last'] : []}
           keyboardType={'number-pad'}
           numeric={true}
           numericProps={numericProps}
-          value={filterState.value[0]}
+          value={filterState.value[0]?.length ? filterState.value[0] : undefined}
           placeholder={'0'}
-          onChangeText={onChangedFilter}
+          onChangeText={value => setDebounced(() => onChangedFilter(value))}
         />
       }
     />

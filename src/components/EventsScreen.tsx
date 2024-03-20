@@ -73,13 +73,15 @@ const EventsScreen = ({ navigation, route }: Props) => {
               <Button
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                disabled={!filterId && listEditor.enabled}
+                disabled={!filterId && (!model?.events.length || listEditor.enabled)}
                 icon={
                   <CustomIcon
                     name={filterId ? 'filter-check' : 'filter'}
                     style={[
                       s.headerIcon,
-                      listEditor.enabled || !model?.events.length ? s.headerIconDisabled : {},
+                      !filterId && (!model?.events.length || listEditor.enabled)
+                        ? s.headerIconDisabled
+                        : {},
                     ]}
                   />
                 }

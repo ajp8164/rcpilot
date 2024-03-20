@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import { Model, ModelStatistics } from 'realmdb/Model';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
 import {
@@ -38,6 +38,7 @@ import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useFocusEffect } from '@react-navigation/native';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -53,6 +54,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const confirmAction = useConfirmAction();
+  const setDebounced = useDebouncedRender();
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
   const modelEventStyleStatistics = useModelEventStyleStatistics();
@@ -65,24 +67,22 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const modelFuels = useQuery(ModelFuel);
   const [kind, setKind] = useState(eventKind(model?.type));
 
-  const [name, setName] = useState(model?.name || undefined);
+  const name = useRef(model?.name || undefined);
   const [image, setImage] = useState(model?.image || undefined);
   const [type, setType] = useState(model?.type || ModelType.Airplane);
-  const [vendor, setVendor] = useState(model?.vendor || undefined);
+  const vendor = useRef(model?.vendor || undefined);
   const [category, setCategory] = useState(model?.category || undefined);
-  const [purchasePrice, setPurchasePrice] = useState(model?.purchasePrice?.toString() || undefined);
+  const purchasePrice = useRef(model?.purchasePrice?.toString() || undefined);
   const [damaged, setDamaged] = useState(model?.damaged || false);
   const [retired, setRetired] = useState(model?.retired || false);
-  const [totalEvents, setTotalEvents] = useState(
-    model?.statistics.totalEvents?.toString() || undefined,
-  );
-  const [totalTime, setTotalTime] = useState(model?.statistics.totalTime?.toString() || undefined);
+  const totalEvents = useRef(model?.statistics.totalEvents?.toString() || undefined);
+  const totalTime = useRef(model?.statistics.totalTime?.toString() || undefined);
   const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
   const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
   const [favoriteBatteries, setFavoriteBatteries] = useState(model?.favoriteBatteries || []);
   const [logsFuel, setLogsFuel] = useState(model?.logsFuel || false);
-  const [fuelCapacity, setFuelCapacity] = useState(model?.fuelCapacity?.toString() || undefined);
-  const [totalFuel, setTotalFuel] = useState(model?.totalFuel?.toString() || undefined);
+  const fuelCapacity = useRef(model?.fuelCapacity?.toString() || undefined);
+  const totalFuel = useRef(model?.totalFuel?.toString() || undefined);
   const [defaultFuel, setDefaultFuel] = useState(model?.defaultFuel || undefined);
   const [defaultPropeller, setDefaultPropeller] = useState(model?.defaultPropeller || undefined);
   const [defaultStyle, setDefaultStyle] = useState(model?.defaultStyle || undefined);
@@ -103,23 +103,23 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     if (modelId) return;
 
     const canSave =
-      !!name &&
-      (!eqString(model?.name, name) ||
+      !!name.current &&
+      (!eqString(model?.name, name.current) ||
         !eqString(model?.image, image) ||
         !eqString(model?.type, type) ||
-        !eqString(model?.vendor, vendor) ||
+        !eqString(model?.vendor, vendor.current) ||
         !eqObjectId(model?.category, category) ||
-        !eqNumber(model?.purchasePrice, purchasePrice) ||
+        !eqNumber(model?.purchasePrice, purchasePrice.current) ||
         !eqBoolean(model?.damaged, damaged) ||
         !eqBoolean(model?.retired, retired) ||
-        !eqNumber(model?.statistics.totalEvents, totalEvents) ||
-        !eqNumber(model?.statistics.totalTime, totalTime) ||
+        !eqNumber(model?.statistics.totalEvents, totalEvents.current) ||
+        !eqNumber(model?.statistics.totalTime, totalTime.current) ||
         !eqString(model?.lastEvent, lastEvent) ||
         !eqBoolean(model?.logsBatteries, logsBatteries) ||
         !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
         !eqBoolean(model?.logsFuel, logsFuel) ||
-        !eqNumber(model?.fuelCapacity, fuelCapacity) ||
-        !eqNumber(model?.totalFuel, totalFuel) ||
+        !eqNumber(model?.fuelCapacity, fuelCapacity.current) ||
+        !eqNumber(model?.totalFuel, totalFuel.current) ||
         !eqObjectId(model?.defaultFuel, defaultFuel) ||
         !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
         !eqObjectId(model?.defaultStyle, defaultStyle) ||
@@ -129,26 +129,26 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     const save = () => {
       realm.write(() => {
         const now = DateTime.now().toISO();
-        const numTotalEvents = toNumber(totalEvents) || 0;
-        const numTotalTime = hmsMaskToSeconds(totalTime);
+        const numTotalEvents = toNumber(totalEvents.current) || 0;
+        const numTotalTime = hmsMaskToSeconds(totalTime.current);
 
         const model = {
           createdOn: now,
           updatedOn: now,
-          name,
+          name: name.current,
           image,
           type,
-          vendor,
+          vendor: vendor.current,
           category,
-          purchasePrice: toNumber(purchasePrice),
+          purchasePrice: toNumber(purchasePrice.current),
           retired,
           damaged,
           lastEvent,
           logsBatteries,
           favoriteBatteries,
           logsFuel,
-          fuelCapacity: toNumber(fuelCapacity),
-          totalFuel: toNumber(totalFuel),
+          fuelCapacity: toNumber(fuelCapacity.current),
+          totalFuel: toNumber(totalFuel.current),
           defaultFuel,
           defaultPropeller,
           defaultStyle,
@@ -177,22 +177,22 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, { title: 'New Model' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    name,
+    name.current,
     image,
     type,
-    vendor,
+    vendor.current,
     category,
-    purchasePrice,
+    purchasePrice.current,
     retired,
     damaged,
-    totalEvents,
-    totalTime,
+    totalEvents.current,
+    totalTime.current,
     lastEvent,
     logsBatteries,
     favoriteBatteries,
     logsFuel,
-    fuelCapacity,
-    totalFuel,
+    fuelCapacity.current,
+    totalFuel.current,
     defaultFuel,
     defaultPropeller,
     defaultStyle,
@@ -204,19 +204,19 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     if (!modelId || !model) return;
 
     const canSave =
-      !!name &&
-      (!eqString(model?.name, name) ||
+      !!name.current &&
+      (!eqString(model?.name, name.current) ||
         !eqString(model?.image, image) ||
-        !eqString(model?.vendor, vendor) ||
+        !eqString(model?.vendor, vendor.current) ||
         !eqObjectId(model?.category, category) ||
-        !eqNumber(model?.purchasePrice, purchasePrice) ||
+        !eqNumber(model?.purchasePrice, purchasePrice.current) ||
         !eqBoolean(model?.damaged, damaged) ||
         !eqBoolean(model?.retired, retired) ||
         !eqBoolean(model?.logsBatteries, logsBatteries) ||
         !eqArray(model?.favoriteBatteries, favoriteBatteries) ||
         !eqBoolean(model?.logsFuel, logsFuel) ||
-        !eqNumber(model?.fuelCapacity, fuelCapacity) ||
-        !eqNumber(model?.totalFuel, totalFuel) ||
+        !eqNumber(model?.fuelCapacity, fuelCapacity.current) ||
+        !eqNumber(model?.totalFuel, totalFuel.current) ||
         !eqObjectId(model?.defaultFuel, defaultFuel) ||
         !eqObjectId(model?.defaultPropeller, defaultPropeller) ||
         !eqObjectId(model?.defaultStyle, defaultStyle) ||
@@ -226,18 +226,18 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     if (canSave) {
       realm.write(() => {
         model.updatedOn = DateTime.now().toISO();
-        model.name = name || 'no-name';
+        model.name = name.current || 'no-name';
         model.image = image;
-        model.vendor = vendor;
+        model.vendor = vendor.current;
         model.category = category;
-        model.purchasePrice = toNumber(purchasePrice);
+        model.purchasePrice = toNumber(purchasePrice.current);
         model.retired = retired;
         model.damaged = damaged;
         model.logsBatteries = logsBatteries;
         model.favoriteBatteries = favoriteBatteries;
         model.logsFuel = logsFuel;
-        model.fuelCapacity = toNumber(fuelCapacity);
-        model.totalFuel = toNumber(totalFuel);
+        model.fuelCapacity = toNumber(fuelCapacity.current);
+        model.totalFuel = toNumber(totalFuel.current);
         model.defaultFuel = defaultFuel;
         model.defaultPropeller = defaultPropeller;
         model.defaultStyle = defaultStyle;
@@ -248,18 +248,18 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    name,
+    name.current,
     image,
-    vendor,
+    vendor.current,
     category,
-    purchasePrice,
+    purchasePrice.current,
     retired,
     damaged,
     logsBatteries,
     favoriteBatteries,
     logsFuel,
-    fuelCapacity,
-    totalFuel,
+    fuelCapacity.current,
+    totalFuel.current,
     defaultFuel,
     defaultPropeller,
     defaultStyle,
@@ -413,14 +413,14 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             placeholder={'New Model'}
             placeholderTextColor={theme.colors.assertive}
             position={['first']}
-            value={name}
-            onChangeText={setName}
+            value={name.current}
+            onChangeText={value => setDebounced(() => (name.current = value))}
           />
           <ListItemInput
             placeholder={'Vendor'}
             position={['last']}
-            value={vendor}
-            onChangeText={setVendor}
+            value={vendor.current}
+            onChangeText={value => setDebounced(() => (vendor.current = value))}
           />
           <Divider />
           <CollapsibleView expanded={!modelId}>
@@ -462,7 +462,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             <Divider />
             <ListItemInput
               title={'Total Time'}
-              value={totalTime}
+              value={totalTime.current}
               label="h:mm:ss"
               placeholder={'Unknown'}
               keyboardType={'number-pad'}
@@ -473,17 +473,21 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 customFormatter: maskToHMS,
               }}
               position={['first']}
-              onChangeText={value => setTotalTime(hmsMaskToSeconds(value) > 0 ? value : undefined)}
+              onChangeText={value =>
+                setDebounced(
+                  () => (totalTime.current = hmsMaskToSeconds(value) > 0 ? value : undefined),
+                )
+              }
             />
             <ListItemInput
               title={`Total ${kind.namePlural}`}
-              value={totalEvents}
+              value={totalEvents.current}
               label={`${kind.namePlural}`}
               placeholder={'No'}
               keyboardType={'number-pad'}
               numeric={true}
               numericProps={{ precision: 0, prefix: '' }}
-              onChangeText={setTotalEvents}
+              onChangeText={value => setDebounced(() => (totalEvents.current = value))}
             />
           </CollapsibleView>
           {!!modelId && (
@@ -608,24 +612,24 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               <>
                 <ListItemInput
                   title={'Fuel Capacity'}
-                  value={fuelCapacity}
+                  value={fuelCapacity.current}
                   label="oz"
                   placeholder={'Value'}
                   numeric={true}
                   numericProps={{ precision: 2, prefix: '' }}
                   keyboardType={'number-pad'}
-                  onChangeText={setFuelCapacity}
+                  onChangeText={value => setDebounced(() => (fuelCapacity.current = value))}
                 />
                 <ListItemInput
                   title={'Total Fuel Consumed'}
-                  value={totalFuel}
+                  value={totalFuel.current}
                   label="gal"
                   placeholder={'Amount'}
                   numeric={true}
                   numericProps={{ precision: 2, prefix: '' }}
                   position={['last']}
                   keyboardType={'number-pad'}
-                  onChangeText={setTotalFuel}
+                  onChangeText={value => setDebounced(() => (totalFuel.current = value))}
                 />
               </>
             }
@@ -707,13 +711,13 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           <Divider />
           <ListItemInput
             title={'Purchase Price'}
-            value={purchasePrice}
+            value={purchasePrice.current}
             numeric={true}
             numericProps={{ maxValue: 99999 }}
             keyboardType={'number-pad'}
             placeholder={'Unknown'}
             position={['first']}
-            onChangeText={setPurchasePrice}
+            onChangeText={value => setDebounced(() => (purchasePrice.current = value))}
           />
           {!!modelId && (
             <ListItemSwitch

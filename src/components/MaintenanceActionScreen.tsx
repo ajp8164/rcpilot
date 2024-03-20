@@ -61,6 +61,9 @@ const MaintenanceActionScreen = ({ route }: Props) => {
         numericProps={{ maxValue: 99999 }}
         position={['first', 'last']}
         inputDisabled={true}
+        onChangeText={() => {
+          return;
+        }}
       />
       <Divider text={'NOTES'} />
       <ListItem

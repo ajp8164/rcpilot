@@ -4,11 +4,12 @@ import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import {
   ListItem,
   ListItemInput,
+  ListItemInputMethods,
   ListItemSegmented,
   ListItemSwitch,
   listItemPosition,
 } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -27,6 +28,7 @@ import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { batteryCycleSummary } from 'lib/batteryCycle';
 import { makeStyles } from '@rneui/themed';
 import { toNumber } from 'realmdb/helpers';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
@@ -50,6 +52,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
   const realm = useRealm();
 
@@ -81,10 +84,10 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
   //same values for all batteries
   const [date, _setDate] = useState(DateTime.now().toISO());
-  const [amount, setAmount] = useState<string>('0');
-  const [duration, setDuration] = useState<string>('0');
-  const [packVoltage, setPackVoltage] = useState<string>('0');
-  const [packResistance, setPackResistance] = useState<string>('0');
+  const amount = useRef<string>('0');
+  const duration = useRef<string>('0');
+  const packVoltage = useRef<string>('0');
+  const packResistance = useRef<string>('0');
 
   // In order to use cell voltages and resistances cell configuration must match for all batteries.
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
@@ -106,10 +109,16 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
   const [action, setAction] = useState<Action>(initialAction);
 
+  const packVoltageRef = useRef<ListItemInputMethods>(null);
+  const packResistanceRef = useRef<ListItemInputMethods>(null);
+
   useEffect(() => {
     if (!battery) return;
 
-    const canSave = action === Action.Discharge ? parseFloat(duration) > 0 : parseFloat(amount) > 0;
+    const canSave =
+      action === Action.Discharge
+        ? parseFloat(duration.current) > 0
+        : parseFloat(amount.current) > 0;
 
     const save = () => {
       realm.write(() => {
@@ -127,7 +136,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
             //  - All other values in this discharge phase overwrite last cycle discharge phase values.
             let cycleNumber = battery.totalCycles ? battery.totalCycles + 1 : 1;
 
-            let newDuration = MSSToSeconds(duration);
+            let newDuration = MSSToSeconds(duration.current);
             let newDate = date;
             let updateLastDischargePhase = false;
 
@@ -144,8 +153,8 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
               discharge: {
                 date: newDate,
                 duration: newDuration,
-                packVoltage: toNumber(packVoltage),
-                packResistance: toNumber(packResistance),
+                packVoltage: toNumber(packVoltage.current),
+                packResistance: toNumber(packResistance.current),
                 cellVoltage: cellVoltages?.map(v => {
                   return parseFloat(v);
                 }),
@@ -179,7 +188,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
             //  - New amount in this charge phase is added to the last cycle charge phase amount.
             //  - All other values in this charge phase overwrite last cycle charge phase values.
             if (lastCycle) {
-              let newAmount = (toNumber(amount) || 0) * capacityContribution;
+              let newAmount = (toNumber(amount.current) || 0) * capacityContribution;
               if (lastCycle.charge) {
                 newAmount = newAmount + (lastCycle.charge.amount || 0);
               }
@@ -187,8 +196,8 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
               const charge = {
                 date,
                 amount: newAmount,
-                packVoltage: toNumber(packVoltage),
-                packResistance: toNumber(packResistance),
+                packVoltage: toNumber(packVoltage.current),
+                packResistance: toNumber(packResistance.current),
                 cellVoltage: cellVoltages?.map(v => {
                   return toNumber(v) || 0;
                 }),
@@ -218,13 +227,13 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     setScreenEditHeader({ enabled: canSave, action: onDone });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    amount,
+    amount.current,
     cellVoltages,
     cellResistances,
     excludeFromPlots,
-    duration,
-    packResistance,
-    packVoltage,
+    duration.current,
+    packResistance.current,
+    packVoltage.current,
     notes,
   ]);
 
@@ -246,7 +255,8 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
         return v.toString();
       }),
     );
-    setPackResistance(result.packValue.toString());
+    packResistance.current = result.packValue.toString();
+    packResistanceRef.current?.setValue(result.packValue.toString());
   };
 
   const onChangeCellVoltages = (result: BatteryCellValuesEditorResult) => {
@@ -255,7 +265,8 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
         return v.toString();
       }),
     );
-    setPackVoltage(result.packValue.toString());
+    packVoltage.current = result.packValue.toString();
+    packVoltageRef.current?.setValue(result.packValue.toString());
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
@@ -322,18 +333,18 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
         <>
           <ListItemInput
             title={'Amount'}
-            value={parseFloat(amount) > 0 ? amount : undefined}
-            titleStyle={parseFloat(amount) === 0 ? s.required : {}}
+            value={parseFloat(amount.current) > 0 ? amount.current : undefined}
+            titleStyle={parseFloat(amount.current) === 0 ? s.required : {}}
             placeholder={'Value'}
             label={'mAh'}
             numeric={true}
             numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 99999 }}
             position={['first']}
-            onChangeText={setAmount}
+            onChangeText={value => setDebounced(() => (amount.current = value))}
           />
           <ListItem
             title={'Percent of Capacity'}
-            value={`${battery.capacity ? ((parseFloat(amount) / battery.capacity) * 100).toFixed(1) : '0.0'}%`}
+            value={`${battery.capacity ? ((parseFloat(amount.current) / battery.capacity) * 100).toFixed(1) : '0.0'}%`}
             rightImage={false}
           />
         </>
@@ -341,35 +352,37 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
       {action === Action.Discharge && (
         <ListItemInput
           title={'Duration'}
-          value={parseFloat(duration) > 0 ? duration : undefined}
-          titleStyle={parseFloat(duration) === 0 ? s.required : {}}
+          value={parseFloat(duration.current) > 0 ? duration.current : undefined}
+          titleStyle={parseFloat(duration.current) === 0 ? s.required : {}}
           placeholder={'Value'}
           label="m:ss"
           numeric={true}
           numericProps={{ prefix: '', separator: ':' }}
           keyboardType={'number-pad'}
           position={['first']}
-          onChangeText={setDuration}
+          onChangeText={value => setDebounced(() => (duration.current = value))}
         />
       )}
       <ListItemInput
+        ref={packVoltageRef}
         title={'Pack Voltage'}
         label={'V'}
-        value={parseFloat(packVoltage) > 0 ? packVoltage : undefined}
+        value={parseFloat(packVoltage.current) > 0 ? packVoltage.current : undefined}
         placeholder={'Value'}
         numeric={true}
         numericProps={{ prefix: '' }}
-        onChangeText={setPackVoltage}
+        onChangeText={value => setDebounced(() => (packVoltage.current = value))}
       />
       <ListItemInput
+        ref={packResistanceRef}
         title={'Pack Resistance'}
         label={'mΩ'}
-        value={packResistance.length ? packResistance : undefined}
+        value={packResistance.current.length ? packResistance.current : undefined}
         placeholder={'Value'}
         position={canUseCellValues ? undefined : ['last']}
         numeric={true}
         numericProps={{ prefix: '', precision: 3 }}
-        onChangeText={setPackResistance}
+        onChangeText={value => setDebounced(() => (packResistance.current = value))}
       />
       {canUseCellValues && (
         <>
@@ -378,7 +391,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
             onPress={() =>
               navigation.navigate('BatteryCellValuesEditor', {
                 config: { name: 'voltage', namePlural: 'voltages', label: 'V', precision: 2 },
-                packValue: parseFloat(packVoltage),
+                packValue: parseFloat(packVoltage.current),
                 cellValues: cellVoltages?.map(v => {
                   return toNumber(v) || 0;
                 }),
@@ -399,7 +412,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
                   label: 'mΩ',
                   precision: 3,
                 },
-                packValue: parseFloat(packResistance),
+                packValue: parseFloat(packResistance.current),
                 cellValues: cellResistances?.map(r => {
                   return toNumber(r) || 0;
                 }),

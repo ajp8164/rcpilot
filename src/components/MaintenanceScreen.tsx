@@ -33,6 +33,7 @@ import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { modelCostStatistics } from 'lib/analytics';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
@@ -51,6 +52,7 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
+  const setDebounced = useDebouncedRender();
   const event = useEvent();
   const realm = useRealm();
 
@@ -305,7 +307,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
               numericProps={{ maxValue: 99999 }}
               keyboardType={'number-pad'}
               placeholder={'Unknown'}
-              onChangeText={value => onChangeCost(parseFloat(value), actionItem.action)}
+              onChangeText={value =>
+                setDebounced(() => onChangeCost(parseFloat(value), actionItem.action))
+              }
             />
             <ListItem
               title={actionItem.action.notes || 'No notes'}

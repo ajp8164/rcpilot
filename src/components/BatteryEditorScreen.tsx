@@ -31,6 +31,7 @@ import { batteryTintIcons } from 'lib/battery';
 import { makeStyles } from '@rneui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
@@ -46,6 +47,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const s = useStyles(theme);
   const confirmAction = useConfirmAction();
   const event = useEvent();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
   const formatCurrency = useCurrencyFormatter();
 
@@ -53,22 +55,20 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
   const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
 
-  const [name, setName] = useState(battery?.name || batteryTemplate?.name || undefined);
+  const name = useRef(battery?.name || batteryTemplate?.name || undefined);
   const [chemistry, setChemistry] = useState<BatteryChemistry>(
     battery?.chemistry || batteryTemplate?.chemistry || BatteryChemistry.LiPo,
   );
-  const [vendor, setVendor] = useState(battery?.vendor || batteryTemplate?.vendor || undefined);
-  const [purchasePrice, setPurchasePrice] = useState(
-    battery?.purchasePrice?.toString() || undefined,
-  );
+  const vendor = useRef(battery?.vendor || batteryTemplate?.vendor || undefined);
+  const purchasePrice = useRef(battery?.purchasePrice?.toString() || undefined);
   const [retired, setRetired] = useState(battery?.retired || false);
-  const [cRating, setCRating] = useState(
+  const cRating = useRef(
     battery?.cRating?.toString() || batteryTemplate?.cRating?.toString() || undefined,
   );
-  const [capacity, setCapacity] = useState(
+  const capacity = useRef(
     battery?.capacity?.toString() || batteryTemplate?.capacity?.toString() || '1000',
   );
-  const [totalCycles, setTotalCycles] = useState(battery?.totalCycles?.toString() || undefined);
+  const totalCycles = useRef(battery?.totalCycles?.toString() || undefined);
   const [sCells, setSCells] = useState(
     battery?.sCells?.toString() || batteryTemplate?.sCells?.toString() || '3',
   );
@@ -90,16 +90,16 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     const canSave =
       !!name &&
       !!capacity &&
-      (!eqString(battery?.name, name) ||
+      (!eqString(battery?.name, name.current) ||
         !eqString(battery?.chemistry, chemistry) ||
-        !eqString(battery?.vendor, vendor) ||
-        !eqNumber(battery?.purchasePrice, purchasePrice) ||
+        !eqString(battery?.vendor, vendor.current) ||
+        !eqNumber(battery?.purchasePrice, purchasePrice.current) ||
         !eqBoolean(battery?.retired, retired) ||
-        !eqNumber(battery?.cRating, cRating) ||
-        !eqNumber(battery?.capacity, capacity) ||
+        !eqNumber(battery?.cRating, cRating.current) ||
+        !eqNumber(battery?.capacity, capacity.current) ||
         !eqNumber(battery?.sCells, sCells) ||
         !eqNumber(battery?.pCells, pCells) ||
-        !eqNumber(battery?.totalCycles, totalCycles) ||
+        !eqNumber(battery?.totalCycles, totalCycles.current) ||
         !eqString(battery?.tint, tint) ||
         !eqString(battery?.scanCodeSize, scanCodeSize) ||
         !eqString(battery?.notes, notes));
@@ -113,13 +113,13 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           name,
           chemistry,
           vendor,
-          purchasePrice: toNumber(purchasePrice),
+          purchasePrice: toNumber(purchasePrice.current),
           retired,
-          cRating: toNumber(cRating),
-          capacity: toNumber(capacity),
+          cRating: toNumber(cRating.current),
+          capacity: toNumber(capacity.current),
           sCells: toNumber(sCells),
           pCells: toNumber(pCells),
-          totalCycles: toNumber(totalCycles),
+          totalCycles: toNumber(totalCycles.current),
           tint,
           scanCodeSize,
           notes,
@@ -135,16 +135,16 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, { title: 'New Battery' });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    name,
+    name.current,
     chemistry,
-    vendor,
-    purchasePrice,
+    vendor.current,
+    purchasePrice.current,
     retired,
-    cRating,
-    capacity,
+    cRating.current,
+    capacity.current,
     sCells,
     pCells,
-    totalCycles,
+    totalCycles.current,
     tint,
     scanCodeSize,
     notes,
@@ -155,12 +155,12 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
     const canSave =
       !!name &&
-      (!eqString(battery?.name, name) ||
-        !eqString(battery?.vendor, vendor) ||
-        !eqNumber(battery?.purchasePrice, purchasePrice) ||
+      (!eqString(battery?.name, name.current) ||
+        !eqString(battery?.vendor, vendor.current) ||
+        !eqNumber(battery?.purchasePrice, purchasePrice.current) ||
         !eqBoolean(battery?.retired, retired) ||
-        !eqNumber(battery?.cRating, cRating) ||
-        !eqNumber(battery?.capacity, capacity) ||
+        !eqNumber(battery?.cRating, cRating.current) ||
+        !eqNumber(battery?.capacity, capacity.current) ||
         !eqNumber(battery?.sCells, sCells) ||
         !eqNumber(battery?.pCells, pCells) ||
         !eqString(battery?.tint, tint) ||
@@ -170,12 +170,12 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     if (canSave) {
       realm.write(() => {
         battery.updatedOn = DateTime.now().toISO();
-        battery.name = name || 'no-name';
-        battery.vendor = vendor;
-        battery.purchasePrice = toNumber(purchasePrice);
+        battery.name = name.current || 'no-name';
+        battery.vendor = vendor.current;
+        battery.purchasePrice = toNumber(purchasePrice.current);
         battery.retired = retired;
-        battery.cRating = toNumber(cRating);
-        battery.capacity = toNumber(capacity) || toNumber(originalCapacity);
+        battery.cRating = toNumber(cRating.current);
+        battery.capacity = toNumber(capacity.current) || toNumber(originalCapacity.current);
         battery.sCells = toNumber(sCells) || 1;
         battery.pCells = toNumber(pCells) || 0;
         battery.tint = tint;
@@ -185,12 +185,12 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    name,
-    vendor,
-    purchasePrice,
+    name.current,
+    vendor.current,
+    purchasePrice.current,
     retired,
-    cRating,
-    capacity,
+    cRating.current,
+    capacity.current,
     sCells,
     pCells,
     tint,
@@ -275,7 +275,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior={'automatic'}>
         <Divider />
         <ListItem
-          title={battery ? battery.name : name || 'New Battery'}
+          title={battery ? battery.name : name.current || 'New Battery'}
           subtitle={battery ? batterySummary(battery) : undefined}
           subtitleNumberOfLines={2}
           containerStyle={{
@@ -303,29 +303,29 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         />
         <Divider />
         <ListItemInput
-          value={name}
+          value={name.current}
           placeholder={'New Battery'}
           placeholderTextColor={theme.colors.assertive}
           position={['first']}
-          onChangeText={setName}
+          onChangeText={value => setDebounced(() => (name.current = value))}
         />
         <ListItemInput
-          value={vendor}
+          value={vendor.current}
           placeholder={'Vendor'}
           position={['last']}
-          onChangeText={setVendor}
+          onChangeText={value => setDebounced(() => (vendor.current = value))}
         />
         <Divider />
         <ListItemInput
           title={'Capacity'}
-          value={capacity}
+          value={capacity.current}
           label="mAh"
           placeholder={'Value'}
-          titleStyle={!capacity.length ? { color: theme.colors.assertive } : {}}
+          titleStyle={!capacity.current.length ? { color: theme.colors.assertive } : {}}
           keyboardType={'number-pad'}
           position={['first']}
           onBlur={validateCapacity}
-          onChangeText={setCapacity}
+          onChangeText={value => setDebounced(() => (capacity.current = value))}
         />
         <ListItem
           title={'Chemistry'}
@@ -364,12 +364,12 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         />
         <ListItemInput
           title={'Discharge Rate'}
-          value={cRating}
+          value={cRating.current}
           label={'C'}
           placeholder={'Unknown'}
           keyboardType={'number-pad'}
           position={['last']}
-          onChangeText={setCRating}
+          onChangeText={value => setDebounced(() => (cRating.current = value))}
         />
         {!batteryId && <Divider />}
         {batteryId && (
@@ -400,11 +400,11 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         {!batteryId && (
           <ListItemInput
             title={'Total Cycles'}
-            value={totalCycles}
+            value={totalCycles.current}
             placeholder={'None'}
             keyboardType={'number-pad'}
             position={['first', 'last']}
-            onChangeText={setTotalCycles}
+            onChangeText={value => setDebounced(() => (totalCycles.current = value))}
           />
         )}
         <Divider />
@@ -456,12 +456,12 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         <Divider />
         <ListItemInput
           title={'Purchase Price'}
-          value={purchasePrice}
+          value={purchasePrice.current}
           placeholder={'Unknown'}
           keyboardType={'number-pad'}
           numeric={true}
           position={batteryId ? ['first'] : ['first', 'last']}
-          onChangeText={setPurchasePrice}
+          onChangeText={value => setDebounced(() => (purchasePrice.current = value))}
         />
         {batteryId && (
           <>

@@ -1,5 +1,5 @@
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { eqBoolean, eqString } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
@@ -13,6 +13,7 @@ import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { filterSummary } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
@@ -26,6 +27,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
 
   const theme = useTheme();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
@@ -34,7 +36,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const reportEventsFilterId = useSelector(selectFilters(FilterType.ReportEventsFilter));
   const reportMaintenanceFilterId = useSelector(selectFilters(FilterType.ReportMaintenanceFilter));
 
-  const [name, setName] = useState<string | undefined>(report?.name);
+  const name = useRef<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
   const [includesSummary, setIncludesSummary] = useState(report ? report.includesSummary : true);
   const [includesEvents, setIncludesEvents] = useState(report ? report.includesEvents : true);
@@ -78,8 +80,8 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave =
-      !!name &&
-      (!eqString(report?.name, name) ||
+      !!name.current &&
+      (!eqString(report?.name, name.current) ||
         !eqBoolean(report?.includesSummary, includesSummary) ||
         !eqBoolean(report?.includesEvents, includesEvents) ||
         !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
@@ -91,7 +93,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         // Update existing report.
         if (report) {
           realm.write(() => {
-            report.name = name || 'no-name';
+            report.name = name.current || 'no-name';
             report.includesSummary = includesSummary;
             report.includesEvents = includesEvents;
             report.includesMaintenance = includesMaintenance;
@@ -103,7 +105,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         // Insert new report.
         realm.write(() => {
           realm.create('EventsMaintenanceReport', {
-            name,
+            name: name.current,
             ordinal,
             includesSummary,
             includesEvents,
@@ -122,16 +124,23 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader({ enabled: canSave, action: onDone }, { visible: !reportId });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, includesSummary, includesEvents, includesMaintenance, eventsFilter, maintenanceFilter]);
+  }, [
+    name.current,
+    includesSummary,
+    includesEvents,
+    includesMaintenance,
+    eventsFilter,
+    maintenanceFilter,
+  ]);
 
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'REPORT NAME'} />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Report Name'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       <Divider text={'CONTENTS'} />
       <ListItemSwitch

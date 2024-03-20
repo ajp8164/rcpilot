@@ -477,6 +477,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             screen: 'LocationsMap',
             params: {
               eventName: 'event-location',
+              locationId: location?._id.toString(),
             },
           })
         }

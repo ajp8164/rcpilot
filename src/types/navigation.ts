@@ -470,6 +470,7 @@ export type LocationNavigatorParamList = {
   Locations: undefined;
   LocationsMap: {
     eventName?: string;
+    locationId?: string;
   };
   LocationEditor: {
     locationId: string;

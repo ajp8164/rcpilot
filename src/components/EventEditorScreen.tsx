@@ -316,6 +316,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
             screen: 'LocationsMap',
             params: {
               eventName: 'event-location',
+              locationId: location?._id.toString(),
             },
           })
         }

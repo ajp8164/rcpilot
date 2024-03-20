@@ -53,7 +53,7 @@ const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationsMap'>;
 
 const LocationsMapScreen = ({ navigation, route }: Props) => {
-  const { eventName } = route.params;
+  const { eventName, locationId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -61,6 +61,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const locations = useQuery(Location);
+  const initialLocation = locations.find(location => location._id.toString() === locationId);
   const currentPosition = useContext(GeoPositionContext);
 
   const mapViewRef = useRef<MapView>(null);
@@ -274,6 +275,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         region={{
           latitude: currentPosition.coords.latitude,
           longitude: currentPosition.coords.longitude,
+          latitudeDelta: currentPosition.error ? 10 : 0.005,
+          longitudeDelta: currentPosition.error ? 10 : 0.005,
+        }}
+        initialRegion={{
+          latitude: initialLocation?.coords.latitude || currentPosition.coords.latitude,
+          longitude: initialLocation?.coords.longitude || currentPosition.coords.longitude,
           latitudeDelta: currentPosition.error ? 10 : 0.005,
           longitudeDelta: currentPosition.error ? 10 : 0.005,
         }}

@@ -2,12 +2,12 @@ import { Achievement, Pilot } from 'realmdb/Pilot';
 import { AchievementModalMethods, AchievementModalProps } from './types';
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem, Text, View } from 'react-native';
-import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { DateTime } from 'luxon';
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { Modal } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb/Model';
 import { achievementConfig } from 'lib/achievement';
 import { eventKind } from 'lib/modelEvent';
@@ -17,7 +17,7 @@ import { useEvent } from 'lib/event';
 type AchievementModal = AchievementModalMethods;
 
 const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProps>((props, ref) => {
-  const { headerTitle, onDismiss: _onDismiss, snapPoints = [350] } = props;
+  const { onDismiss, snapPoints = [350] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -67,26 +67,23 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
           {achievement.name.replace('{Event}', eventKind(model?.type).name)}
         </Text>
         <Text style={s.achievementDate}>
-          {DateTime.fromISO(achievement.date).toFormat('M/dd/yyyy')}
+          {DateTime.fromISO(achievement.date).toFormat('M/dd/yy')}
         </Text>
       </View>
     );
   };
 
   return (
-    <Modal
-      ref={innerRef}
-      snapPoints={snapPoints}
-      onDismiss={() => {
-        return;
-      }}>
-      {headerTitle && (
-        <ModalHeader
-          title={headerTitle}
-          rightButtonIcon={'close'}
-          size={'small'}
-          onRightButtonPress={dismiss}
-        />
+    <Modal ref={innerRef} snapPoints={snapPoints} onDismiss={onDismiss}>
+      {pilot && (
+        <View style={s.header}>
+          <Text style={theme.styles.textSmall}>{`${pilot.name}`}</Text>
+          <Text
+            style={[
+              theme.styles.textSmall,
+              theme.styles.textDim,
+            ]}>{`Since: ${DateTime.fromISO(pilot.createdOn).toFormat('M/d/yy')}`}</Text>
+        </View>
       )}
       <View style={s.container}>
         <View style={s.hero}>
@@ -119,6 +116,14 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
 });
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  header: {
+    position: 'absolute',
+    width: '100%',
+    paddingHorizontal: 15,
+    top: 25,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   container: {
     top: 50,
     margin: 10,

@@ -11,9 +11,7 @@ declare const LegalModal: React.MemoExoticComponent<
 >;
 
 export interface AchievementModalProps {
-  headerTitle?: string;
   onDismiss?: (text: string) => void;
-  placeholder?: string;
   snapPoints?: (string | number)[];
 }
 

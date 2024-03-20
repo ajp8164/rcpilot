@@ -11,6 +11,7 @@ import MapView, {
   MapType,
   Marker,
   MarkerDragStartEndEvent,
+  MarkerPressEvent,
   Region,
 } from 'react-native-maps';
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -27,6 +28,7 @@ import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
+import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
 // These are icon names.
@@ -42,13 +44,20 @@ enum MapTypeButtonState {
   Satellite = 'map',
 }
 
+export type LocationsMapResult = {
+  locationId: string;
+};
+
 const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationsMap'>;
 
-const LocationsMapScreen = ({ navigation }: Props) => {
+const LocationsMapScreen = ({ navigation, route }: Props) => {
+  const { eventName } = route.params;
+
   const theme = useTheme();
   const s = useStyles(theme);
+  const event = useEvent();
   const realm = useRealm();
 
   const locations = useQuery(Location);
@@ -202,12 +211,21 @@ const LocationsMapScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderEventMarkers = (): JSX.Element[] => {
+  const onMarkerPress = (markerEvent: MarkerPressEvent) => {
+    if (eventName) {
+      event.emit(eventName, { locationId: markerEvent.nativeEvent.id } as LocationsMapResult);
+      navigation.goBack();
+    }
+  };
+
+  const renderMapMarkers = (): JSX.Element[] => {
     return locations.map((location, index) => {
+      console.log(location);
       return (
         <Marker
           ref={el => (el ? (markersRef.current[index] = el) : null)}
           key={index}
+          identifier={location._id.toString()}
           coordinate={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -259,8 +277,9 @@ const LocationsMapScreen = ({ navigation }: Props) => {
           latitudeDelta: currentPosition.error ? 10 : 0.005,
           longitudeDelta: currentPosition.error ? 10 : 0.005,
         }}
-        onRegionChangeComplete={onRegionChangeComplete}>
-        {renderEventMarkers()}
+        onRegionChangeComplete={onRegionChangeComplete}
+        onMarkerPress={onMarkerPress}>
+        {renderMapMarkers()}
       </MapView>
       <ActionBar
         actions={[

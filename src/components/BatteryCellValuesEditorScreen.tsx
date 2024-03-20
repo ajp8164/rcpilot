@@ -1,7 +1,12 @@
 import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList, NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { FlatList, ListRenderItem, Text, TextStyle, View } from 'react-native';
-import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemInput,
+  ListItemInputMethods,
+  listItemPosition,
+} from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
 
 import { CompositeScreenProps } from '@react-navigation/core';
@@ -49,7 +54,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
-  const [packValue, setPackValue] = useState(_packValue.toString());
+  const [packValue, setPackValue] = useState(_packValue.toFixed(3));
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
   const [cellValues, setCellValues] = useState(
     _cellValues.map(v => {
@@ -57,6 +62,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     }),
   );
   const initializing = useRef(true);
+  const liRef = useRef<ListItemInputMethods[]>([]);
 
   useEffect(() => {
     const canSave = !lodash.isEqual(
@@ -113,6 +119,10 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       });
       if (notFilled) {
         r.fill(value);
+        // Set input component values.
+        for (let i = 1; i < _cellValues.length; i++) {
+          liRef.current[i].setValue(value);
+        }
       }
     } else {
       r[index] = value;
@@ -125,6 +135,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     const p = Math.trunc(index / sCells) + 1;
     return (
       <ListItemInput
+        ref={ref => ref && (liRef.current[index] = ref)}
         title={`S Cell ${s} in P Leg ${p}`}
         label={config.label}
         value={parseFloat(value) === 0 || value === '' ? undefined : value}
@@ -134,6 +145,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
         numericProps={{ prefix: '', precision: config.precision }}
         position={listItemPosition(index, cellValues.length)}
         onChangeText={value => {
+          // Cause a re-render to update total pack value.
           setCellValues(prevState => {
             const r = ([] as string[]).concat(prevState);
             r[index] = value;

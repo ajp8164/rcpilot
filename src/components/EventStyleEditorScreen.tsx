@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -9,6 +9,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { eqString } from 'realmdb/helpers';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
 
@@ -21,25 +22,26 @@ export type Props =
 const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   const { eventStyleId } = route.params || {};
   const theme = useTheme();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const eventStyle = useObject(EventStyle, new BSON.ObjectId(eventStyleId));
 
-  const [name, setName] = useState(eventStyle?.name || undefined);
+  const name = useRef(eventStyle?.name || undefined);
 
   useEffect(() => {
-    const canSave = !!name && !eqString(eventStyle?.name, name);
+    const canSave = !!name.current && !eqString(eventStyle?.name, name.current);
 
     const save = () => {
       if (eventStyle) {
         realm.write(() => {
-          eventStyle.name = name || 'no-name';
+          eventStyle.name = name.current || 'no-name';
         });
       } else {
         realm.write(() => {
           realm.create('EventStyle', {
-            name,
+            name: name.current,
           });
         });
       }
@@ -52,7 +54,7 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader({ enabled: canSave, action: onDone });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name]);
+  }, [name.current]);
 
   return (
     <ScrollView
@@ -61,10 +63,10 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Name for the style'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
     </ScrollView>
   );

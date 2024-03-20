@@ -8,7 +8,7 @@ import {
   SetupNavigatorParamList,
 } from 'types/navigation';
 import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
@@ -36,6 +36,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
@@ -54,6 +55,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
+  const setDebounced = useDebouncedRender();
   const modelEventStyleStatistics = useModelEventStyleStatistics();
   const realm = useRealm();
 
@@ -66,11 +68,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const pilots = useQuery(Pilot);
 
   const [date, setDate] = useState(modelEvent?.createdOn);
-  const [duration, setDuration] = useState(secondsToMSS(modelEvent?.duration) || undefined);
+  const duration = useRef(secondsToMSS(modelEvent?.duration) || undefined);
   const [fuel, setFuel] = useState(modelEvent?.fuel || undefined);
-  const [fuelConsumed, setFuelConsumed] = useState(
-    modelEvent?.fuelConsumed?.toString() || undefined,
-  );
+  const fuelConsumed = useRef(modelEvent?.fuelConsumed?.toString() || undefined);
   const [propeller, setPropeller] = useState(modelEvent?.propeller || undefined);
   const [eventStyle, setEventStyle] = useState(modelEvent?.eventStyle || undefined);
   const [location, setLocation] = useState(modelEvent?.location || undefined);
@@ -85,14 +85,14 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     if (!eventId || !modelEvent) return;
 
     const canSave =
-      !!duration &&
+      !!duration.current &&
       (!eqString(modelEvent.date, date) ||
-        !eqNumber(modelEvent.duration, MSSToSeconds(duration).toString()) ||
+        !eqNumber(modelEvent.duration, MSSToSeconds(duration.current).toString()) ||
         !eqObjectId(modelEvent.location, location) ||
         !eqString(modelEvent.outcome, outcome) ||
         !eqObjectId(modelEvent.propeller, propeller) ||
         !eqObjectId(modelEvent.fuel, fuel) ||
-        !eqNumber(modelEvent.fuelConsumed, fuelConsumed) ||
+        !eqNumber(modelEvent.fuelConsumed, fuelConsumed.current) ||
         !eqObjectId(modelEvent.pilot, pilot) ||
         !eqObjectId(modelEvent.eventStyle, eventStyle) ||
         !eqString(modelEvent.notes, notes));
@@ -107,11 +107,11 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         modelEvent.updatedOn = DateTime.now().toISO();
         modelEvent.date = date || DateTime.now().toISO();
-        modelEvent.duration = MSSToSeconds(duration);
+        modelEvent.duration = MSSToSeconds(duration.current || 0);
         modelEvent.outcome = outcome;
         modelEvent.propeller = propeller;
         modelEvent.fuel = fuel;
-        modelEvent.fuelConsumed = toNumber(fuelConsumed);
+        modelEvent.fuelConsumed = toNumber(fuelConsumed.current);
         pilot ? (modelEvent.pilot = pilot) : null;
         modelEvent.eventStyle = eventStyle;
         modelEvent.notes = notes;
@@ -155,7 +155,17 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date, duration, outcome, propeller, fuel, fuelConsumed, pilot, eventStyle, notes]);
+  }, [
+    date,
+    duration.current,
+    outcome,
+    propeller,
+    fuel,
+    fuelConsumed.current,
+    pilot,
+    eventStyle,
+    notes,
+  ]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -300,13 +310,13 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       <ListItemInput
         title={'Duration'}
         label={'m:ss'}
-        value={duration}
-        titleStyle={!duration ? s.required : {}}
+        value={duration.current}
+        titleStyle={!duration.current ? s.required : {}}
         placeholder={'Value'}
         numeric={true}
         numericProps={{ prefix: '', separator: ':' }}
         keyboardType={'number-pad'}
-        onChangeText={setDuration}
+        onChangeText={value => setDebounced(() => (duration.current = value))}
       />
       <ListItem
         title={'Location'}
@@ -378,14 +388,14 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       />
       <ListItemInput
         title={'Fuel Consumed'}
-        value={fuelConsumed}
+        value={fuelConsumed.current}
         label="oz"
         placeholder={'Value'}
         numeric={true}
         numericProps={{ precision: 2, prefix: '' }}
         position={['last']}
         keyboardType={'number-pad'}
-        onChangeText={setFuelConsumed}
+        onChangeText={value => setDebounced(() => (fuelConsumed.current = value))}
       />
       <Divider />
       <ListItem

@@ -29,6 +29,7 @@ import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { eventKind } from 'lib/modelEvent';
 import { secondsToMSS } from 'lib/formatters';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useObject } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
@@ -48,6 +49,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const event = useEvent();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
 
   // If a model id is provided then this action is attached to a checklist on the model, not a checklist template.
@@ -66,8 +68,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     ),
   ).current;
 
-  const [description, setDescription] = useState(action?.description);
-  const [cost, setTotalCost] = useState(action?.cost?.toFixed(2));
+  const description = useRef(action?.description);
+  const cost = useRef(action?.cost?.toFixed(2));
   const [notes, setNotes] = useState(action?.notes);
   const [selectedSchedule, setSelectedSchedule] =
     useSetState<Omit<ChecklistActionSchedule, keyof Realm.Object>>();
@@ -120,21 +122,21 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave =
-      !!description &&
-      (!eqString(action?.description, description) ||
+      !!description.current &&
+      (!eqString(action?.description, description.current) ||
         !eqString(action?.schedule?.period, selectedSchedule.period) ||
         !eqNumber(action?.schedule?.value, selectedSchedule.value?.toString()) ||
         !eqString(action?.schedule?.type, selectedSchedule.type) ||
-        !eqNumber(action?.cost, cost) ||
+        !eqNumber(action?.cost, cost.current) ||
         !eqString(action?.notes, notes));
 
     const onDone = () => {
       const result: JChecklistAction = {
         history: [],
         ...action,
-        description: description || '',
+        description: description.current || '',
         schedule: selectedSchedule,
-        cost: Number(cost) || undefined,
+        cost: Number(cost.current) || undefined,
         notes,
       };
 
@@ -146,7 +148,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader({ enabled: canSave, action: onDone }, { visible: isNewAction });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [description, selectedSchedule, cost, notes]);
+  }, [description.current, selectedSchedule, cost.current, notes]);
 
   useEffect(() => {
     event.on('checklist-action-notes', onChangeNotes);
@@ -292,10 +294,10 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'PERFORM'} />
       <ListItemInput
-        value={description}
+        value={description.current}
         placeholder={'Brief action description'}
         position={['first', 'last']}
-        onChangeText={setDescription}
+        onChangeText={value => setDebounced(() => (description.current = value))}
       />
       <Divider text={'ON SCHEDULE'} />
       <ListItem
@@ -369,12 +371,12 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
           <Divider text={'MAINTENANCE COSTS'} />
           <ListItemInput
             title={'Total Costs'}
-            value={cost}
+            value={cost.current}
             numeric={true}
             keyboardType={'number-pad'}
             placeholder={'None'}
             position={['first', 'last']}
-            onChangeText={setTotalCost}
+            onChangeText={value => setDebounced(() => (cost.current = value))}
           />
         </>
       )}

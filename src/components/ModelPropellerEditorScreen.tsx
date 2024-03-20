@@ -1,7 +1,7 @@
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MeasurementUnits, MeasurementUnitsAbbr } from 'types/common';
 import { NewModelPropellerNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
@@ -14,6 +14,7 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useTheme } from 'theme';
@@ -27,18 +28,17 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const { modelPropellerId } = route.params || {};
   const theme = useTheme();
   const event = useEvent();
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const modelPropeller = useObject(ModelPropeller, new BSON.ObjectId(modelPropellerId));
 
-  const [name, setName] = useState(modelPropeller?.name || undefined);
-  const [vendor, setVendor] = useState(modelPropeller?.vendor || undefined);
-  const [numberOfBlades, setNumberOfBlades] = useState(
-    modelPropeller?.numberOfBlades?.toString() || undefined,
-  );
-  const [diameter, setDiameter] = useState(modelPropeller?.diameter?.toString() || undefined);
-  const [pitch, setPitch] = useState(modelPropeller?.pitch?.toString() || undefined);
+  const name = useRef(modelPropeller?.name || undefined);
+  const vendor = useRef(modelPropeller?.vendor || undefined);
+  const numberOfBlades = useRef(modelPropeller?.numberOfBlades?.toString() || undefined);
+  const diameter = useRef(modelPropeller?.diameter?.toString() || undefined);
+  const pitch = useRef(modelPropeller?.pitch?.toString() || undefined);
   const [measurementUnits, setMeasurementUnits] = useState<MeasurementUnits>(
     modelPropeller?.measurementUnits || MeasurementUnits.Inches,
   );
@@ -46,12 +46,12 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave =
-      !!name &&
-      (!eqString(modelPropeller?.name, name) ||
-        !eqString(modelPropeller?.vendor, vendor) ||
-        !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades) ||
-        !eqNumber(modelPropeller?.diameter, diameter) ||
-        !eqNumber(modelPropeller?.pitch, pitch) ||
+      !!name.current &&
+      (!eqString(modelPropeller?.name, name.current) ||
+        !eqString(modelPropeller?.vendor, vendor.current) ||
+        !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades.current) ||
+        !eqNumber(modelPropeller?.diameter, diameter.current) ||
+        !eqNumber(modelPropeller?.pitch, pitch.current) ||
         !eqString(modelPropeller?.measurementUnits, measurementUnits) ||
         !eqString(modelPropeller?.notes, notes));
 
@@ -59,11 +59,11 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       if (modelPropeller) {
         realm.write(() => {
           modelPropeller.updatedOn = DateTime.now().toISO();
-          modelPropeller.name = name || 'no-name';
-          modelPropeller.vendor = vendor;
-          modelPropeller.numberOfBlades = toNumber(numberOfBlades);
-          modelPropeller.diameter = toNumber(diameter);
-          modelPropeller.pitch = toNumber(pitch);
+          modelPropeller.name = name.current || 'no-name';
+          modelPropeller.vendor = vendor.current;
+          modelPropeller.numberOfBlades = toNumber(numberOfBlades.current);
+          modelPropeller.diameter = toNumber(diameter.current);
+          modelPropeller.pitch = toNumber(pitch.current);
           modelPropeller.measurementUnits = measurementUnits;
           modelPropeller.notes = notes;
         });
@@ -73,11 +73,11 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
           realm.create('ModelPropeller', {
             createdOn: now,
             updatedOn: now,
-            name,
-            vendor,
-            numberOfBlades: toNumber(numberOfBlades),
-            diameter: toNumber(diameter),
-            pitch: toNumber(pitch),
+            name: name.current,
+            vendor: vendor.current,
+            numberOfBlades: toNumber(numberOfBlades.current),
+            diameter: toNumber(diameter.current),
+            pitch: toNumber(pitch.current),
             measurementUnits,
             notes,
           });
@@ -92,7 +92,15 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
 
     setScreenEditHeader({ enabled: canSave, action: onDone });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, vendor, diameter, pitch, measurementUnits, numberOfBlades, notes]);
+  }, [
+    name.current,
+    vendor.current,
+    diameter.current,
+    pitch.current,
+    measurementUnits,
+    numberOfBlades.current,
+    notes,
+  ]);
 
   useEffect(() => {
     event.on('propeller-measurement-units', onChangeMeasurementUnits);
@@ -119,47 +127,47 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={'Unnamed Propeller'}
         position={['first', 'last']}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       <Divider />
       <ListItemInput
-        value={vendor}
+        value={vendor.current}
         placeholder={'Unnamed Vendor'}
         position={['first']}
-        onChangeText={setVendor}
+        onChangeText={value => setDebounced(() => (vendor.current = value))}
       />
       <ListItemInput
         title={'Number of Blades'}
-        value={numberOfBlades}
+        value={numberOfBlades.current}
         placeholder={'Unknown'}
         numeric={true}
         numericProps={{ prefix: '', precision: 0 }}
         keyboardType={'number-pad'}
-        onChangeText={setNumberOfBlades}
+        onChangeText={value => setDebounced(() => (numberOfBlades.current = value))}
       />
       <ListItemInput
         title={'Diameter'}
         label={MeasurementUnitsAbbr[measurementUnits]}
-        value={diameter}
+        value={diameter.current}
         placeholder={'Unknown'}
         numeric={true}
         numericProps={{ prefix: '' }}
         keyboardType={'number-pad'}
-        onChangeText={setDiameter}
+        onChangeText={value => setDebounced(() => (diameter.current = value))}
       />
       <ListItemInput
         title={'Pitch'}
         label={MeasurementUnitsAbbr[measurementUnits]}
-        value={pitch}
+        value={pitch.current}
         placeholder={'Unknown'}
         numeric={true}
         numericProps={{ prefix: '' }}
         keyboardType={'number-pad'}
         position={['last']}
-        onChangeText={setPitch}
+        onChangeText={value => setDebounced(() => (pitch.current = value))}
       />
       <Divider />
       <ListItem

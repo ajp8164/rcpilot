@@ -1,20 +1,54 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { Text, View } from 'react-native';
+import React, { useImperativeHandle } from 'react';
+import { Text, View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItemInput as _ListItemInput } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rneui/themed';
+import { useState } from 'react';
 
-interface Props extends _ListItemInput {
+// Uncontrolled component. The `value` property acts as an initial value only.
+// To change the value from outside this component create a ref on the component
+// instance and call setValue(value: string).
+//
+// This prevents typing from causing parent re-renders on every key press.
+
+interface Props extends Omit<_ListItemInput, 'value'> {
   inputDisabled?: boolean;
   label?: string;
+  onChangeText: (value?: string) => void;
+  value?: string;
 }
 
-const ListItemInput = (props: Props) => {
-  const { inputDisabled, label, placeholder, title } = props;
+export interface ListItemInputMethods {
+  setValue: (value: string) => void;
+}
+
+const ListItemInput = React.forwardRef<ListItemInputMethods, Props>((props, ref) => {
+  const {
+    inputDisabled,
+    label,
+    onChangeText: onUpdate,
+    placeholder,
+    title,
+    value: initialValue,
+  } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
+
+  const [value, setValue] = useState<string | undefined>(initialValue);
+
+  useImperativeHandle(ref, () => ({
+    //  These functions exposed to the parent component through the ref.
+    setValue,
+  }));
+
+  const handleChange = (text: string) => {
+    setValue(text.length ? text : undefined);
+    onUpdate(text.length ? text : undefined);
+    // onUpdate(text);
+  };
 
   const ts = Array.isArray(props.titleStyle)
     ? props.titleStyle.concat([s.title])
@@ -29,6 +63,8 @@ const ListItemInput = (props: Props) => {
       contentStyle={s.inputContent}
       inputTextStyle={s.inputText}
       titleStyle={ts}
+      value={value}
+      onChangeText={handleChange}
       extraContentComponentRight={
         <View style={s.extraComponentContainer}>
           {label && <Text style={s.inputLabel}>{label}</Text>}
@@ -45,7 +81,7 @@ const ListItemInput = (props: Props) => {
       }
     />
   );
-};
+});
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   containerStyle: {

@@ -43,6 +43,7 @@ import { makeStyles } from '@rneui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
@@ -54,6 +55,7 @@ export type Props = NativeStackScreenProps<
 const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
+  const setDebounced = useDebouncedRender();
   const setScreenEditHeader = useScreenEditHeader();
   const confirmAction = useConfirmAction();
   const modelEventStyleStatistics = useModelEventStyleStatistics();
@@ -80,9 +82,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const currentPilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
   const [date] = useState(DateTime.now());
-  const [duration, setDuration] = useState(secondsToMSS(currentEventSequence.duration));
+  const duration = useRef(secondsToMSS(currentEventSequence.duration));
   const [fuel, setFuel] = useState<ModelFuel | undefined>(model?.defaultFuel);
-  const [fuelConsumed, setFuelConsumed] = useState<string>();
+  const fuelConsumed = useRef<string>();
   const [propeller, setPropeller] = useState<ModelPropeller | undefined>(model?.defaultPropeller);
   const [eventStyle, setEventStyle] = useState<EventStyle | undefined>(model?.defaultStyle);
   const [location, setLocation] = useState<Location>();
@@ -129,7 +131,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           // Update model attributes according to the event.
           // Note - update model before the checklist schedule since the scheduling relies
           // on current model state.
-          const eventDuration = MSSToSeconds(duration);
+          const eventDuration = MSSToSeconds(duration.current);
 
           model.lastEvent = date.toISO();
           model.statistics.totalEvents = model.statistics.totalEvents + 1;
@@ -180,7 +182,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             pilot,
             location,
             fuel,
-            fuelConsumed,
+            fuelConsumed: fuelConsumed.current,
             propeller,
             eventStyle,
             batteryCycles: eventBatteryCycles,
@@ -204,12 +206,12 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   }, [
     allBatteryDischarges,
     batteries,
-    duration,
+    duration.current,
     outcome,
     pilot,
     location,
     fuel,
-    fuelConsumed,
+    fuelConsumed.current,
     propeller,
     eventStyle,
     notes,
@@ -229,7 +231,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     eventBatteries.forEach(battery => {
       initialBatteryDischarges.push({
         date: date.toISO(),
-        duration: MSSToSeconds(duration),
+        duration: MSSToSeconds(duration.current),
         packVoltage: 0,
         packResistance: 0,
         cellVoltage: new Array(battery.sCells).fill(0),
@@ -355,7 +357,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           placeholder={'Value'}
           numeric={true}
           numericProps={{ prefix: '' }}
-          onChangeText={value => setDischargeValue('packVoltage', parseFloat(value), index)}
+          onChangeText={value =>
+            setDebounced(() => setDischargeValue('packVoltage', parseFloat(value), index))
+          }
         />
         <ListItemInput
           title={'Pack Resistance'}
@@ -364,7 +368,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           placeholder={'Value'}
           numeric={true}
           numericProps={{ prefix: '', precision: 3 }}
-          onChangeText={value => setDischargeValue('packResistance', parseFloat(value), index)}
+          onChangeText={value =>
+            setDebounced(() => setDischargeValue('packResistance', parseFloat(value), index))
+          }
         />
         <ListItem
           title={'Cell Voltage'}
@@ -462,12 +468,12 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       <ListItemInput
         title={'Duration'}
         label={'m:ss'}
-        value={duration}
+        value={duration.current}
         placeholder={'Value'}
         numeric={true}
         numericProps={{ prefix: '', separator: ':' }}
         keyboardType={'number-pad'}
-        onChangeText={setDuration}
+        onChangeText={value => setDebounced(() => (duration.current = value))}
       />
       <ListItem
         title={'Location'}
@@ -539,13 +545,13 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       />
       <ListItemInput
         title={'Fuel Consumed'}
-        value={fuelConsumed}
+        value={fuelConsumed.current}
         label="oz"
         placeholder={'Value'}
         numeric={true}
         numericProps={{ precision: 2, prefix: '' }}
         keyboardType={'number-pad'}
-        onChangeText={setFuelConsumed}
+        onChangeText={value => setDebounced(() => (fuelConsumed.current = value))}
       />
       <Divider />
       <ListItem

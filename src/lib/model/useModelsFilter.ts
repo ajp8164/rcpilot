@@ -2,6 +2,7 @@ import {
   BooleanRelation,
   DateRelation,
   EnumRelation,
+  NumberRelation,
   RQL,
   StringRelation,
 } from 'components/molecules/filters';
@@ -10,6 +11,7 @@ import { useObject, useQuery } from '@realm/react';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
+import { HMMToSeconds } from 'lib/formatters';
 import { Model } from 'realmdb/Model';
 import { getDate } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -26,6 +28,12 @@ export const useModelsFilter = () => {
     result = result.filtered(`category.name ${RQL[filter.category.relation]} $0`, [
       ...filter.category.value,
     ]);
+  }
+  if (filter.totalTime.relation !== NumberRelation.Any) {
+    result = result.filtered(
+      `statistics.totalTime ${RQL[filter.totalTime.relation]} $0`,
+      HMMToSeconds(filter.totalTime.value[0] || 0),
+    );
   }
   if (filter.damaged.relation !== BooleanRelation.Any) {
     result = result.filtered(`damaged ${RQL[filter.damaged.relation]}`);

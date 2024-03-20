@@ -31,6 +31,7 @@ import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eqString } from 'realmdb/helpers';
 import { makeStyles } from '@rneui/themed';
+import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
@@ -47,6 +48,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const setDebounced = useDebouncedRender();
   const listEditor = useListEditor();
   const event = useEvent();
   const realm = useRealm();
@@ -62,7 +64,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   const editingTemplate = useRef(!modelId).current; // This is a template editor if no modelId.
   const eventNameId = useRef(uuidv4()).current; // Used for unique action change event name.
 
-  const [name, setName] = useState(checklistTemplate?.name || modelChecklist?.name || undefined);
+  const name = useRef(checklistTemplate?.name || modelChecklist?.name || undefined);
   const [type, setType] = useState(
     checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent,
   );
@@ -73,22 +75,22 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     const canSave =
-      !!name &&
-      (!eqString(workingChecklist?.name, name) || !eqString(workingChecklist?.type, type));
+      !!name.current &&
+      (!eqString(workingChecklist?.name, name.current) || !eqString(workingChecklist?.type, type));
 
     const save = () => {
       if (editingTemplate) {
         // Not a model checklist, handle saving a checklist template.
         if (checklistTemplate) {
           realm.write(() => {
-            checklistTemplate.name = name || 'no-name';
+            checklistTemplate.name = name.current || 'no-name';
             checklistTemplate.type = type;
             // Existing actions are saved inline with edits/adds.
           });
         } else {
           realm.write(() => {
             realm.create('ChecklistTemplate', {
-              name,
+              name: name.current,
               type,
               actions,
             });
@@ -100,7 +102,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           // Update an existing model checklist.
           realm.write(() => {
             const index = model?.checklists.findIndex(c => c.refId === modelChecklistRefId);
-            model.checklists[index].name = name || 'no-name';
+            model.checklists[index].name = name.current || 'no-name';
             model.checklists[index].type = type;
             // Existing actions are saved inline with edits/adds.
           });
@@ -109,7 +111,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           realm.write(() => {
             const newModelChecklist = {
               refId: uuidv4(),
-              name,
+              name: name.current,
               type,
               actions,
             } as Checklist;
@@ -165,7 +167,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, type, actions, listEditor.enabled]);
+  }, [name.current, type, actions, listEditor.enabled]);
 
   useEffect(() => {
     event.on(`checklist-type-${eventNameId}`, onChangeType);
@@ -289,11 +291,11 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'NAME & TYPE'} />
       <ListItemInput
-        value={name}
+        value={name.current}
         placeholder={editingTemplate ? 'Checklist Template Name' : 'Checklist Name'}
         position={['first']}
         disabled={type === ChecklistType.OneTimeMaintenance}
-        onChangeText={setName}
+        onChangeText={value => setDebounced(() => (name.current = value))}
       />
       <ListItem
         title={editingTemplate ? 'Template for List Type' : 'List Type'}

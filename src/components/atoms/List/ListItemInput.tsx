@@ -21,7 +21,7 @@ interface Props extends Omit<_ListItemInput, 'value'> {
 }
 
 export interface ListItemInputMethods {
-  setValue: (value: string) => void;
+  setValue: (value?: string) => void;
 }
 
 const ListItemInput = React.forwardRef<ListItemInputMethods, Props>((props, ref) => {

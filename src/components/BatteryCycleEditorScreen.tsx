@@ -312,7 +312,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         numeric={true}
         numericProps={{ prefix: '', separator: ':' }}
         keyboardType={'number-pad'}
-        position={['first']}
         onChangeText={value => setDebounced(() => (dischargeDuration.current = value))}
       />
       <ListItemInput
@@ -321,7 +320,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         label={'V'}
         value={
           dischargePackVoltage.current && parseFloat(dischargePackVoltage.current) > 0
-            ? parseFloat(dischargePackVoltage.current).toFixed(3)
+            ? parseFloat(dischargePackVoltage.current).toFixed(1)
             : undefined
         }
         placeholder={'Value'}
@@ -403,7 +402,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             label={'mAh'}
             numeric={true}
             numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 99999 }}
-            position={['first']}
             onChangeText={value => setDebounced(() => (chargeAmount.current = value))}
           />
           <ListItem
@@ -417,7 +415,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             label={'V'}
             value={
               chargePackVoltage.current && parseFloat(chargePackVoltage.current) > 0
-                ? parseFloat(chargePackVoltage.current).toFixed(3)
+                ? parseFloat(chargePackVoltage.current).toFixed(1)
                 : undefined
             }
             placeholder={'Value'}
@@ -427,7 +425,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
           />
           <ListItemInput
             ref={chargePackResistanceRef}
-            title={'Pack Resistance' + chargePackResistance.current}
+            title={'Pack Resistance'}
             label={'mΩ'}
             value={
               chargePackResistance.current && parseFloat(chargePackResistance.current) > 0

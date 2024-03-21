@@ -148,7 +148,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
           // Cause a re-render to update total pack value.
           setCellValues(prevState => {
             const r = ([] as string[]).concat(prevState);
-            r[index] = value;
+            r[index] = value || '0';
             return r;
           });
         }}

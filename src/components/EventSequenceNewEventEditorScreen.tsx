@@ -352,7 +352,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         <ListItemInput
           title={'Pack Voltage'}
           label={'V'}
-          value={packVoltage && packVoltage > 0 ? packVoltage.toString() : undefined}
+          value={packVoltage && packVoltage > 0 ? packVoltage.toFixed(1) : undefined}
           position={['first']}
           placeholder={'Value'}
           numeric={true}

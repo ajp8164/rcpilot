@@ -105,7 +105,7 @@ export const batteryCycleDischargeData = (cycle: BatteryCycle) => {
         dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat('M/d/yy'),
         dischargeDuration: secondsToMSS(dischargeDuration, { format: 'm:ss' }),
         dischargeRestingVoltage: dischargeRestingVoltage
-          ? `${dischargeRestingVoltage.toFixed(3)}V`
+          ? `${dischargeRestingVoltage.toFixed(1)}V`
           : 'unknown',
       },
     };

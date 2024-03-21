@@ -320,20 +320,20 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
 
   const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
     // extraData is the battery index.
-    setDischargeValue('cellVoltage', result.cellValues, result.extraData);
-    setDischargeValue('packVoltage', result.packValue, result.extraData);
+    setDischargeValue('cellVoltage', result.extraData, result.cellValues);
+    setDischargeValue('packVoltage', result.extraData, result.packValue);
   };
 
   const onChangeDischargeCellResistances = (result: BatteryCellValuesEditorResult) => {
     // extraData is the battery index.
-    setDischargeValue('cellResistance', result.cellValues, result.extraData);
-    setDischargeValue('packResistance', result.packValue, result.extraData);
+    setDischargeValue('cellResistance', result.extraData, result.cellValues);
+    setDischargeValue('packResistance', result.extraData, result.packValue);
   };
 
   const setDischargeValue = (
     property: keyof JBatteryDischargeValues,
-    value: number | number[],
     index: number,
+    value?: number | number[],
   ) => {
     const batteryDischarges = ([] as JBatteryDischarge[]).concat(allBatteryDischarges);
     batteryDischarges[index][property] = value as number & number[];
@@ -358,7 +358,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           numeric={true}
           numericProps={{ prefix: '' }}
           onChangeText={value =>
-            setDebounced(() => setDischargeValue('packVoltage', parseFloat(value), index))
+            setDebounced(() =>
+              setDischargeValue('packVoltage', index, value ? parseFloat(value) : undefined),
+            )
           }
         />
         <ListItemInput
@@ -369,7 +371,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           numeric={true}
           numericProps={{ prefix: '', precision: 3 }}
           onChangeText={value =>
-            setDebounced(() => setDischargeValue('packResistance', parseFloat(value), index))
+            setDebounced(() =>
+              setDischargeValue('packResistance', index, value ? parseFloat(value) : undefined),
+            )
           }
         />
         <ListItem
@@ -473,7 +477,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         numeric={true}
         numericProps={{ prefix: '', separator: ':' }}
         keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (duration.current = value))}
+        onChangeText={value => value && setDebounced(() => (duration.current = value))}
       />
       <ListItem
         title={'Location'}

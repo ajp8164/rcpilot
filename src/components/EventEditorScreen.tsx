@@ -108,6 +108,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         modelEvent.updatedOn = DateTime.now().toISO();
         modelEvent.date = date || DateTime.now().toISO();
         modelEvent.duration = MSSToSeconds(duration.current || 0);
+        modelEvent.location = location;
         modelEvent.outcome = outcome;
         modelEvent.propeller = propeller;
         modelEvent.fuel = fuel;
@@ -162,6 +163,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     propeller,
     fuel,
     fuelConsumed.current,
+    location,
     pilot,
     eventStyle,
     notes,

@@ -65,9 +65,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const cRating = useRef(
     battery?.cRating?.toString() || batteryTemplate?.cRating?.toString() || undefined,
   );
-  const capacity = useRef(
-    battery?.capacity?.toString() || batteryTemplate?.capacity?.toString() || '1000',
-  );
+  const capacity = useRef(battery?.capacity?.toString() || batteryTemplate?.capacity?.toString());
   const totalCycles = useRef(battery?.totalCycles?.toString() || undefined);
   const [sCells, setSCells] = useState(
     battery?.sCells?.toString() || batteryTemplate?.sCells?.toString() || '3',
@@ -154,7 +152,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     if (!batteryId || !battery) return;
 
     const canSave =
-      !!name &&
+      !!name.current &&
+      !!capacity.current &&
       (!eqString(battery?.name, name.current) ||
         !eqString(battery?.vendor, vendor.current) ||
         !eqNumber(battery?.purchasePrice, purchasePrice.current) ||
@@ -321,7 +320,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           value={capacity.current}
           label="mAh"
           placeholder={'Value'}
-          titleStyle={!capacity.current.length ? { color: theme.colors.assertive } : {}}
+          titleStyle={!capacity.current ? { color: theme.colors.assertive } : {}}
           keyboardType={'number-pad'}
           position={['first']}
           onBlur={validateCapacity}

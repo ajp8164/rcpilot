@@ -137,7 +137,7 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     setSelectedMaintenanceActions([]);
   };
 
-  const onChangeCost = (value: number, action: ChecklistAction) => {
+  const onChangeCost = (action: ChecklistAction, value?: number) => {
     // The action will always have the last updated cost (even though the actual cost
     // is stored with the history entry).
     realm.write(() => {
@@ -308,7 +308,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
               keyboardType={'number-pad'}
               placeholder={'Unknown'}
               onChangeText={value =>
-                setDebounced(() => onChangeCost(parseFloat(value), actionItem.action))
+                setDebounced(() =>
+                  onChangeCost(actionItem.action, value ? parseFloat(value) : undefined),
+                )
               }
             />
             <ListItem

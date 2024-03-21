@@ -43,7 +43,7 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChangeCost = (value: number) => {
+  const onChangeCost = (value?: number) => {
     if (model && history) {
       realm.write(() => {
         // Update the model with maintenance cost change.
@@ -81,13 +81,15 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
       <Divider text={'MAINTENANCE COSTS'} />
       <ListItemInput
         title={'Total Costs'}
-        value={`${history.cost || 0}`}
+        value={`${history.cost}`}
         numeric={true}
         numericProps={{ maxValue: 99999 }}
         keyboardType={'number-pad'}
         placeholder={'None'}
         position={['first', 'last']}
-        onChangeText={value => setDebounced(() => onChangeCost(parseFloat(value)))}
+        onChangeText={value =>
+          setDebounced(() => onChangeCost(value ? parseFloat(value) : undefined))
+        }
       />
       <Divider text={'NOTES'} />
       <ListItem

@@ -1,16 +1,16 @@
 // Used to test a possible previously saved model object attribute value 'schemaAttr'
 // with a possibly changed form value 'formAttr' where the value is expected to be a
 // specific type. The 'formAttr' is always a string; by convention UI components interact
+// with strings so we don't require a conversion prior to calling these functions.
 
 import Realm from 'realm';
 import lodash from 'lodash';
 
-// with strings so we don't require a conversion prior to calling these functions.
 export const eqNumber = (schemaAttr?: number, formAttr?: string) => {
   if (lodash.isNumber(schemaAttr) && lodash.isString(formAttr)) {
     return schemaAttr === Number(formAttr);
   } else {
-    return !!schemaAttr === !!formAttr;
+    return schemaAttr === formAttr;
   }
 };
 

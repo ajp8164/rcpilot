@@ -7,6 +7,7 @@ import {
 } from '@react-native-ajp-elements/ui';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { DatabaseInfoContext, useDatabaseInfo } from 'lib/database';
+import { GeoPositionContext, useCurrentLocation } from 'lib/location';
 import { InitStatus, useInitApp } from 'app';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 import { NetworkContext, useNetworkContext } from 'lib/network';
@@ -17,7 +18,6 @@ import { AppError } from 'lib/errors';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import ErrorBoundary from 'react-native-error-boundary';
 import { EventProvider } from 'lib/event';
-import { GeoPositionContext } from 'lib/location';
 import { LinkingOptions } from '@react-navigation/native';
 import MainNavigator from 'components/navigation/MainNavigator';
 import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
@@ -28,7 +28,6 @@ import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
 import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
 import { useColorScheme } from 'react-native';
-import { useCurrentLocation } from 'lib/location';
 import { useSelector } from 'react-redux';
 
 // See https://reactnavigation.org/docs/configuring-links

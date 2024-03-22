@@ -16,7 +16,7 @@ const handleSaveCurrentLocation: CaseReducer<
 > = (state, { payload }) => {
   return {
     ...state,
-    pilotId: payload.locationId,
+    locationId: payload.locationId,
   };
 };
 

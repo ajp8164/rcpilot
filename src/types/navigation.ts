@@ -467,7 +467,9 @@ export type LocationNavigatorParamList = {
     modelType?: ModelType;
     pilotId?: string;
   };
-  Locations: undefined;
+  Locations: {
+    eventName: string;
+  };
   LocationsMap: {
     eventName?: string;
     locationId?: string;

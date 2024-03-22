@@ -1,15 +1,10 @@
-import { Alert, Text, View } from 'react-native';
-import Animated, { SlideInUp } from 'react-native-reanimated';
+import { Alert, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { GeoPositionContext, locationSummary } from 'lib/location';
 import { Location, LocationCoords } from 'realmdb/Location';
 import MapView, {
-  Callout,
-  CalloutSubview,
   Details,
   MapMarker,
   MapType,
-  Marker,
   MarkerDragStartEndEvent,
   MarkerPressEvent,
   Region,
@@ -22,13 +17,17 @@ import ActionBar from 'components/atoms/ActionBar';
 import { Button } from '@rneui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
+import { GeoPositionContext } from 'lib/location';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { LocationNavigatorParamList } from 'types/navigation';
+import { LocationPickerResult } from 'components/LocationsScreen';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
+import { selectLocation } from 'store/selectors/locationSelectors';
 import { useEvent } from 'lib/event';
+import { useSelector } from 'react-redux';
 import { uuidv4 } from 'lib/utils';
 
 // These are icon names.
@@ -61,20 +60,65 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const locations = useQuery(Location);
-  const initialLocation = locations.find(location => location._id.toString() === locationId);
+
+  // If an initial location is specified from the caller then use that location. If no initial
+  // location is specified then use an available closest location to our current position. Failing
+  // to get any location record just set the map to our current position.
   const currentPosition = useContext(GeoPositionContext);
+  let initialLocation = locations.find(location => location._id.toString() === locationId);
+
+  const currentLocationId = useSelector(selectLocation).locationId;
+  console.log('locationId', currentPosition.coords);
+  console.log('locationId', locationId);
+  console.log('currentLocationId', currentLocationId);
+  if (!initialLocation) {
+    // Get closest the location closest to our current position.
+    initialLocation = locations.find(l => l._id.toString() === currentLocationId);
+  }
+  console.log('initialLocation', initialLocation?.name);
 
   const mapViewRef = useRef<MapView>(null);
   const markersRef = useRef<MapMarker[]>([]);
-  const mapLocation = useRef({ latitude: 0, longitude: 0 } as LocationCoords);
+  const mapLocation = useRef({
+    latitude: currentPosition.coords.latitude,
+    longitude: currentPosition.coords.longitude,
+  } as LocationCoords);
+
   const [mapPresentation, setMapPresentation] = useState<{ mapType: MapType; icon: string }>({
     mapType: 'standard',
     icon: MapTypeButtonState.Map,
   });
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [searchCriteria, setSearchCriteria] = useState<SearchCriteria>(initialSearchCriteria);
+  const [_searchFocused, setSearchFocused] = useState(false);
+  const [_searchCriteria, setSearchCriteria] = useState<SearchCriteria>(initialSearchCriteria);
 
   const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      // eslint-disable-next-line react/no-unstable-nested-components
+      headerRight: () => {
+        return (
+          <Button
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={<Icon name={'book-open'} style={s.headerIcon} />}
+            onPress={() => navigation.navigate('Locations', { eventName: 'map-location' })}
+          />
+        );
+      },
+      headerSearchBarOptions: {
+        autoCapitalize: 'none',
+        onChangeText: event =>
+          setSearchCriteria({
+            text: event.nativeEvent.text,
+            scope: SearchScope.FullText,
+          }),
+        onCancelButtonPress: resetSearch,
+        onBlur: () => setSearchFocused(false),
+        onFocus: () => setSearchFocused(true),
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigation]);
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -95,51 +139,27 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    mapLocation.current = {
-      latitude: currentPosition.coords.latitude,
-      longitude: currentPosition.coords.longitude,
-    } as LocationCoords;
-  }, [currentPosition]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      // Show the callout for only the last marker added.
-      markersRef.current.forEach(marker => {
-        marker.hideCallout();
-      });
-      markersRef.current[markersRef.current.length - 1]?.showCallout();
-    }, 500); // Slight delay for ux.
-  }, [locations]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'book-open'} style={s.headerIcon} />}
-            onPress={() => navigation.navigate('Locations')}
-          />
-        );
-      },
-      headerSearchBarOptions: {
-        autoCapitalize: 'none',
-        onChangeText: event =>
-          setSearchCriteria({
-            text: event.nativeEvent.text,
-            scope: SearchScope.FullText,
-          }),
-        onCancelButtonPress: resetSearch,
-        onBlur: () => setSearchFocused(false),
-        onFocus: () => setSearchFocused(true),
-      },
-    });
+    event.on('map-location', onChangeMapLocation);
+    return () => {
+      event.removeListener('map-location', onChangeMapLocation);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation]);
+  }, []);
+
+  const onChangeMapLocation = (result: LocationPickerResult) => {
+    const newLocation = locations.find(l => l._id.toString() === result.locationId);
+    if (newLocation) {
+      mapViewRef.current?.animateToRegion({
+        latitude: newLocation.coords.latitude,
+        longitude: newLocation?.coords.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }
+  };
 
   const recenterMap = () => {
-    if (currentPosition) {
+    if (currentPosition.coords) {
       // Set button state and heading.
       let heading;
 
@@ -183,14 +203,27 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     const now = DateTime.now().toISO();
     const id = uuidv4();
     realm.write(() => {
-      realm.create(Location, {
+      const newLocation = realm.create(Location, {
         createdOn: now,
         updatedOn: now,
         name: 'Location-' + id.substring(id.length - 5),
         coords: mapLocation.current,
         notes: '',
       });
+
+      if (eventName) {
+        event.emit(eventName, { locationId: newLocation._id.toString() } as LocationsMapResult);
+      }
     });
+
+    // When a new location is added by dropping a pin the markerRef array length changes.
+    // Show the callout for only the new location.
+    setTimeout(() => {
+      markersRef.current.forEach(marker => {
+        marker.hideCallout();
+      });
+      markersRef.current[markersRef.current.length - 1]?.showCallout();
+    }, 500); // Add for UX.
   };
 
   const resetSearch = () => {
@@ -221,46 +254,19 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const renderMapMarkers = (): JSX.Element[] => {
     return locations.map((location, index) => {
-      console.log(location);
       return (
-        <Marker
+        <MapMarkerCallout
           ref={el => (el ? (markersRef.current[index] = el) : null)}
           key={index}
-          identifier={location._id.toString()}
-          coordinate={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-          }}
-          title={location.name}
-          calloutOffset={{ x: 0, y: -5 }}
-          calloutAnchor={{ x: 0, y: 0 }}
-          draggable
-          onDragEnd={(event: MarkerDragStartEndEvent) => onMarkerDragEnd(event, location)}>
-          <Animated.View entering={SlideInUp.duration(400)}>
-            <Icon name={'map-pin'} color={'red'} size={30} style={s.pin} />
-          </Animated.View>
-          <Callout alphaHitTest tooltip style={s.callout}>
-            <MapMarkerCallout>
-              <CalloutSubview
-                onPress={() =>
-                  navigation.navigate('LocationEditor', {
-                    locationId: location._id.toString(),
-                  })
-                }
-                style={s.calloutSubview}>
-                <View style={s.calloutTextContainer}>
-                  <Text numberOfLines={1} style={s.calloutText1}>
-                    {location.name}
-                  </Text>
-                  <Text numberOfLines={1} style={s.calloutText2}>
-                    {locationSummary(location)}
-                  </Text>
-                </View>
-                <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
-              </CalloutSubview>
-            </MapMarkerCallout>
-          </Callout>
-        </Marker>
+          index={index}
+          location={location}
+          onMarkerDragEnd={onMarkerDragEnd}
+          onPress={() =>
+            navigation.navigate('LocationEditor', {
+              locationId: location._id.toString(),
+            })
+          }
+        />
       );
     });
   };
@@ -273,16 +279,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         showsUserLocation={true}
         mapType={mapPresentation.mapType}
         region={{
-          latitude: currentPosition.coords.latitude,
-          longitude: currentPosition.coords.longitude,
-          latitudeDelta: currentPosition.error ? 10 : 0.005,
-          longitudeDelta: currentPosition.error ? 10 : 0.005,
-        }}
-        initialRegion={{
           latitude: initialLocation?.coords.latitude || currentPosition.coords.latitude,
           longitude: initialLocation?.coords.longitude || currentPosition.coords.longitude,
-          latitudeDelta: currentPosition.error ? 10 : 0.005,
-          longitudeDelta: currentPosition.error ? 10 : 0.005,
+          latitudeDelta: currentPosition.error ? 10 : 0.01,
+          longitudeDelta: currentPosition.error ? 10 : 0.01,
         }}
         onRegionChangeComplete={onRegionChangeComplete}
         onMarkerPress={onMarkerPress}>
@@ -335,30 +335,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   map: {
     width: '100%',
     height: '100%',
-  },
-  pin: {
-    height: 30,
-    top: -15,
-  },
-  callout: {
-    width: 180,
-  },
-  calloutSubview: {
-    flexDirection: 'row',
-    alignSelf: 'center',
-    alignItems: 'center',
-    paddingVertical: 3,
-    paddingHorizontal: 5,
-  },
-  calloutTextContainer: {
-    paddingRight: 10,
-  },
-  calloutText1: {
-    ...theme.styles.textSmall,
-    ...theme.styles.textBold,
-  },
-  calloutText2: {
-    ...theme.styles.textTiny,
   },
 }));
 

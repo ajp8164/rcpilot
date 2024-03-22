@@ -4,8 +4,8 @@ import { createContext } from 'react';
 
 export const defaultGeoPosition = {
   coords: {
-    latitude: 33.78,
-    longitude: -84.33,
+    latitude: 0,
+    longitude: 0,
   } as LocationCoords,
 };
 

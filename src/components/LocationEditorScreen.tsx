@@ -1,6 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -15,6 +16,8 @@ import { ScrollView } from 'react-native';
 import { eqString } from 'realmdb/helpers';
 import formatcoords from 'formatcoords';
 import { makeStyles } from '@rneui/themed';
+import { saveCurrentLocation } from 'store/slices/location';
+import { selectLocation } from 'store/selectors/locationSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
@@ -29,9 +32,11 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
   const confirmAction = useConfirmAction();
   const setDebounced = useDebouncedRender();
   const event = useEvent();
+  const dispatch = useDispatch();
   const realm = useRealm();
 
   const location = useObject(Location, new BSON.ObjectId(locationId));
+  const currentLocationId = useSelector(selectLocation).locationId;
 
   const coords =
     location &&
@@ -73,6 +78,12 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const deleteLocation = () => {
+    // If deleting the current location object then clear the current location.
+    // Delete this before the location object to prevent referencing a deleted object.
+    if (location?._id.toString() === currentLocationId) {
+      dispatch(saveCurrentLocation({}));
+    }
+
     realm.write(() => {
       realm.delete(location);
     });

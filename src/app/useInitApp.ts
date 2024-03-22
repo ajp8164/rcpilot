@@ -12,7 +12,6 @@ import { initPushNotifications } from 'lib/notifications';
 import { svgImages } from 'theme';
 import { useAchievementConveyor } from 'lib/achievement';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
-import { useCurrentLocation } from 'lib/location';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { useUnknownPilot } from 'lib/pilot';
 
@@ -23,10 +22,10 @@ export enum InitStatus {
 }
 
 export const useInitApp = () => {
+  console.log('INIT ***');
   useDeviceShake();
 
   // Order is important here.
-  useCurrentLocation();
   useUnknownPilot();
   useAchievementConveyor();
   useChecklistActionScheduleUpdater();

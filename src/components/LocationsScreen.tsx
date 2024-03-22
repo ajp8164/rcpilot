@@ -8,13 +8,21 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { Location } from 'realmdb';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
 import { useTheme } from 'theme';
 
+export type LocationPickerResult = {
+  locationId: string;
+};
+
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Locations'>;
 
-const LocationsScreen = ({ navigation }: Props) => {
+const LocationsScreen = ({ navigation, route }: Props) => {
+  const { eventName } = route.params;
+
   const theme = useTheme();
+  const event = useEvent();
 
   const allLocations = useQuery(Location);
 
@@ -42,13 +50,16 @@ const LocationsScreen = ({ navigation }: Props) => {
         title={location.name}
         position={listItemPosition(index, allLocations.length)}
         rightImage={false}
-        // onPress={() =>
-        //   navigation.navigate('EventStyleEditor', {
-        //     eventStyleId: style._id.toString(),
-        //   })
-        // }
+        onPress={() => selectLocation(location)}
       />
     );
+  };
+
+  const selectLocation = (location: Location) => {
+    event.emit(eventName, {
+      locationId: location._id.toString(),
+    } as LocationPickerResult);
+    navigation.goBack();
   };
 
   if (!allLocations.length) {

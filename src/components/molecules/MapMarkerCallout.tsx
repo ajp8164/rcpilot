@@ -19,33 +19,28 @@ interface MapMarkerCalloutInterface {
   index: number;
   location: Location;
   onMarkerDragEnd: (event: MarkerDragStartEndEvent, location: Location) => void;
-  onPress: () => void;
+  onPressCallout: () => void;
 }
 
 export const MapMarkerCallout = forwardRef(
   (
-    { index, location, onMarkerDragEnd, onPress }: MapMarkerCalloutInterface,
+    { index, location, onMarkerDragEnd, onPressCallout }: MapMarkerCalloutInterface,
     ref: React.LegacyRef<MapMarker> | undefined,
   ) => {
     const theme = useTheme();
     const s = useStyles(theme);
 
     const [width, setWidth] = useState(0);
-
     const onLayout = (event: LayoutChangeEvent) => {
       setWidth(event.nativeEvent.layout.width);
     };
 
     return (
       <>
-        <View>
-          <Text
-            numberOfLines={1}
-            style={[s.calloutText1, s.calloutText1Hidden]}
-            onLayout={onLayout}>
-            {location.name}
-          </Text>
-        </View>
+        {/* This text is used to measure the location name width. */}
+        <Text numberOfLines={1} style={[s.calloutText1, s.calloutText1Hidden]} onLayout={onLayout}>
+          {location.name}
+        </Text>
         <Marker
           ref={ref}
           key={index}
@@ -54,29 +49,26 @@ export const MapMarkerCallout = forwardRef(
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           }}
-          title={location.name}
-          calloutOffset={{ x: 0, y: -5 }}
-          calloutAnchor={{ x: 0, y: 0 }}
+          style={s.marker}
+          calloutOffset={{ x: 0, y: -7 }}
+          calloutAnchor={{ x: 0, y: 10 }}
           draggable
           onDragEnd={event => onMarkerDragEnd(event, location)}>
           <Animated.View entering={SlideInUp.duration(400)}>
             <Icon name={'map-pin'} color={'red'} size={30} style={s.pin} />
           </Animated.View>
-          <Callout alphaHitTest tooltip>
-            <View style={[s.bubble, { width: width + 46 }]}>
-              <CalloutSubview style={s.calloutSubview} onPress={onPress}>
-                <View style={s.calloutTextContainer}>
-                  <Text numberOfLines={1} style={s.calloutText1}>
-                    {location.name}
-                  </Text>
-                  <Text numberOfLines={1} style={s.calloutText2}>
-                    {locationSummary(location)}
-                  </Text>
-                </View>
-                <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
-              </CalloutSubview>
-            </View>
-            <View style={s.arrow} />
+          <Callout style={s.callout}>
+            <CalloutSubview style={[s.calloutSubview, { width }]} onPress={onPressCallout}>
+              <View style={s.calloutTextContainer}>
+                <Text numberOfLines={1} style={s.calloutText1}>
+                  {location.name}
+                </Text>
+                <Text numberOfLines={1} style={s.calloutText2}>
+                  {locationSummary(location)}
+                </Text>
+              </View>
+              <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
+            </CalloutSubview>
           </Callout>
         </Marker>
       </>
@@ -85,47 +77,37 @@ export const MapMarkerCallout = forwardRef(
 );
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  bubble: {
-    backgroundColor: theme.colors.whiteTransparentDarker,
-    borderRadius: 10,
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-    minWidth: 150,
-    maxWidth: 300,
+  marker: {
+    padding: 5,
   },
-  arrow: {
-    width: 0,
-    height: 0,
-    alignSelf: 'center',
-    borderLeftWidth: 12,
-    borderRightWidth: 12,
-    borderBottomWidth: 12,
-    borderStyle: 'solid',
-    borderLeftColor: theme.colors.transparent,
-    borderRightColor: theme.colors.transparent,
-    borderBottomColor: theme.colors.whiteTransparentDarker,
-    backgroundColor: theme.colors.transparent,
-    transform: [{ rotate: '180deg' }],
+  callout: {
+    height: 24,
   },
   calloutSubview: {
+    width: '100%',
+    height: 48,
+    minWidth: 150,
+    maxWidth: 250,
+    marginVertical: -12,
+    paddingRight: 10,
     flexDirection: 'row',
-    alignSelf: 'center',
     alignItems: 'center',
-    paddingVertical: 3,
+    justifyContent: 'space-between',
   },
   calloutTextContainer: {
-    paddingRight: 10,
-  },
-  calloutText1: {
-    ...theme.styles.textSmall,
-    ...theme.styles.textBold,
+    width: '100%',
   },
   calloutText1Hidden: {
     position: 'absolute',
     opacity: 0,
   },
+  calloutText1: {
+    ...theme.styles.textNormal,
+    paddingRight: 10,
+  },
   calloutText2: {
-    ...theme.styles.textTiny,
+    ...theme.styles.textSmall,
+    ...theme.styles.textDim,
   },
   pin: {
     height: 30,

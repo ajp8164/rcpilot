@@ -27,6 +27,7 @@ import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { useEvent } from 'lib/event';
+import { useFocusEffect } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { uuidv4 } from 'lib/utils';
 
@@ -68,17 +69,16 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   let initialLocation = locations.find(location => location._id.toString() === locationId);
 
   const currentLocationId = useSelector(selectLocation).locationId;
-  console.log('locationId', currentPosition.coords);
-  console.log('locationId', locationId);
-  console.log('currentLocationId', currentLocationId);
   if (!initialLocation) {
     // Get closest the location closest to our current position.
+    // Note: Current location is set using a radius around our current position.
     initialLocation = locations.find(l => l._id.toString() === currentLocationId);
   }
-  console.log('initialLocation', initialLocation?.name);
+
+  type MapMarkerLocation = { mapMarker: MapMarker; location: Location; edit: boolean };
 
   const mapViewRef = useRef<MapView>(null);
-  const markersRef = useRef<MapMarker[]>([]);
+  const markersRef = useRef<MapMarkerLocation[]>([]);
   const mapLocation = useRef({
     latitude: currentPosition.coords.latitude,
     longitude: currentPosition.coords.longitude,
@@ -216,13 +216,13 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       }
     });
 
-    // When a new location is added by dropping a pin the markerRef array length changes.
+    // When a new location is added by dropping a pin the markersRef array length changes.
     // Show the callout for only the new location.
     setTimeout(() => {
       markersRef.current.forEach(marker => {
-        marker.hideCallout();
+        marker.mapMarker.hideCallout();
       });
-      markersRef.current[markersRef.current.length - 1]?.showCallout();
+      markersRef.current[markersRef.current.length - 1]?.mapMarker.showCallout();
     }, 500); // Add for UX.
   };
 
@@ -246,26 +246,45 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onMarkerPress = (markerEvent: MarkerPressEvent) => {
+    console.log(markerEvent.nativeEvent.id);
+    const x = markersRef.current.find(
+      m => m.location?._id.toString() === markerEvent.nativeEvent.id,
+    );
+    x?.mapMarker.hideCallout();
+
     if (eventName) {
       event.emit(eventName, { locationId: markerEvent.nativeEvent.id } as LocationsMapResult);
       navigation.goBack();
     }
   };
 
+  useFocusEffect(() => {
+    const marker = markersRef.current.find(m => m.edit);
+    if (marker) {
+      marker.mapMarker.showCallout();
+      marker.edit = false;
+    }
+  });
+
   const renderMapMarkers = (): JSX.Element[] => {
     return locations.map((location, index) => {
+      if (!markersRef.current[index]) {
+        markersRef.current[index] = {} as MapMarkerLocation;
+      }
       return (
         <MapMarkerCallout
-          ref={el => (el ? (markersRef.current[index] = el) : null)}
+          ref={el => (el ? (markersRef.current[index].mapMarker = el) : null)}
           key={index}
           index={index}
           location={location}
           onMarkerDragEnd={onMarkerDragEnd}
-          onPress={() =>
+          onPressCallout={() => {
             navigation.navigate('LocationEditor', {
               locationId: location._id.toString(),
-            })
-          }
+            });
+            markersRef.current[index].mapMarker.hideCallout();
+            markersRef.current[index].edit = true;
+          }}
         />
       );
     });
@@ -278,7 +297,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         style={s.map}
         showsUserLocation={true}
         mapType={mapPresentation.mapType}
-        region={{
+        initialRegion={{
           latitude: initialLocation?.coords.latitude || currentPosition.coords.latitude,
           longitude: initialLocation?.coords.longitude || currentPosition.coords.longitude,
           latitudeDelta: currentPosition.error ? 10 : 0.01,

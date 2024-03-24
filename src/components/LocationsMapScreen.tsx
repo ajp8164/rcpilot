@@ -10,7 +10,6 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { SearchCriteria, SearchScope } from 'types/location';
 import { useQuery, useRealm } from '@realm/react';
 
 import ActionBar from 'components/atoms/ActionBar';
@@ -44,11 +43,15 @@ enum MapTypeButtonState {
   Satellite = 'map',
 }
 
+type MapMarkerLocation = {
+  mapMarker: MapMarker;
+  location: Location;
+  edit: boolean;
+};
+
 export type LocationsMapResult = {
   locationId: string;
 };
-
-const initialSearchCriteria = { text: '', scope: SearchScope.FullText };
 
 export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationsMap'>;
 
@@ -75,8 +78,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     initialLocation = locations.find(l => l._id.toString() === currentLocationId);
   }
 
-  type MapMarkerLocation = { mapMarker: MapMarker; location: Location; edit: boolean };
-
   const mapViewRef = useRef<MapView>(null);
   const markersRef = useRef<MapMarkerLocation[]>([]);
   const mapLocation = useRef({
@@ -88,8 +89,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     mapType: 'standard',
     icon: MapTypeButtonState.Map,
   });
-  const [_searchFocused, setSearchFocused] = useState(false);
-  const [_searchCriteria, setSearchCriteria] = useState<SearchCriteria>(initialSearchCriteria);
 
   const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
 
@@ -104,17 +103,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
             onPress={() => navigation.navigate('Locations', { eventName: 'map-location' })}
           />
         );
-      },
-      headerSearchBarOptions: {
-        autoCapitalize: 'none',
-        onChangeText: event =>
-          setSearchCriteria({
-            text: event.nativeEvent.text,
-            scope: SearchScope.FullText,
-          }),
-        onCancelButtonPress: resetSearch,
-        onBlur: () => setSearchFocused(false),
-        onFocus: () => setSearchFocused(true),
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -224,11 +212,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       });
       markersRef.current[markersRef.current.length - 1]?.mapMarker.showCallout();
     }, 500); // Add for UX.
-  };
-
-  const resetSearch = () => {
-    setSearchFocused(false);
-    setSearchCriteria(initialSearchCriteria);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {

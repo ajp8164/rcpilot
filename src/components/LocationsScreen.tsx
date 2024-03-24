@@ -5,11 +5,14 @@ import React, { useEffect } from 'react';
 import { Button } from '@rneui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Location } from 'realmdb';
 import { LocationNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
+import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
 
 export type LocationPickerResult = {
@@ -24,6 +27,7 @@ const LocationsScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const event = useEvent();
 
+  const currentLocationId = useSelector(_selectLocation).locationId;
   const allLocations = useQuery(Location);
 
   useEffect(() => {
@@ -48,8 +52,17 @@ const LocationsScreen = ({ navigation, route }: Props) => {
       <ListItem
         key={location._id.toString()}
         title={location.name}
+        rightImage={
+          location._id.toString() === currentLocationId && (
+            <Icon
+              name={'location-dot'}
+              solid={true}
+              size={22}
+              color={theme.colors.clearButtonText}
+            />
+          )
+        }
         position={listItemPosition(index, allLocations.length)}
-        rightImage={false}
         onPress={() => selectLocation(location)}
       />
     );

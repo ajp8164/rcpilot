@@ -12,8 +12,8 @@ import React, { forwardRef, useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Location } from 'realmdb';
-import { locationSummary } from 'lib/location';
 import { makeStyles } from '@rneui/themed';
+import { useLocationSummary } from 'lib/location';
 
 interface MapMarkerCalloutInterface {
   index: number;
@@ -29,6 +29,7 @@ export const MapMarkerCallout = forwardRef(
   ) => {
     const theme = useTheme();
     const s = useStyles(theme);
+    const locationSummary = useLocationSummary(location);
 
     const [width, setWidth] = useState(0);
     const onLayout = (event: LayoutChangeEvent) => {
@@ -64,7 +65,7 @@ export const MapMarkerCallout = forwardRef(
                   {location.name}
                 </Text>
                 <Text numberOfLines={1} style={s.calloutText2}>
-                  {locationSummary(location)}
+                  {locationSummary}
                 </Text>
               </View>
               <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />

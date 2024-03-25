@@ -1,12 +1,6 @@
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import {
-  Callout,
-  CalloutSubview,
-  MapMarker,
-  Marker,
-  MarkerDragStartEndEvent,
-} from 'react-native-maps';
+import { Callout, MapMarker, Marker, MarkerDragStartEndEvent } from 'react-native-maps';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 import React, { forwardRef, useState } from 'react';
 
@@ -58,18 +52,16 @@ export const MapMarkerCallout = forwardRef(
           <Animated.View entering={SlideInUp.duration(400)}>
             <Icon name={'map-pin'} color={'red'} size={30} style={s.pin} />
           </Animated.View>
-          <Callout style={s.callout}>
-            <CalloutSubview style={[s.calloutSubview, { width }]} onPress={onPressCallout}>
-              <View style={s.calloutTextContainer}>
-                <Text numberOfLines={1} style={s.calloutText1}>
-                  {location.name}
-                </Text>
-                <Text numberOfLines={1} style={s.calloutText2}>
-                  {locationSummary}
-                </Text>
-              </View>
-              <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
-            </CalloutSubview>
+          <Callout style={[s.callout, { width }]} onPress={onPressCallout}>
+            <View style={s.calloutTextContainer}>
+              <Text numberOfLines={1} style={s.calloutText1}>
+                {location.name}
+              </Text>
+              <Text numberOfLines={1} style={s.calloutText2}>
+                {locationSummary}
+              </Text>
+            </View>
+            <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
           </Callout>
         </Marker>
       </>
@@ -82,11 +74,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     padding: 5,
   },
   callout: {
-    height: 24,
-  },
-  calloutSubview: {
+    height: 26,
     width: '100%',
-    height: 48,
     minWidth: 150,
     maxWidth: 250,
     marginVertical: -12,

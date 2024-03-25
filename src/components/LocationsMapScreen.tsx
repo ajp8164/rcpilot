@@ -229,7 +229,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onMarkerPress = (markerEvent: MarkerPressEvent) => {
-    console.log(markerEvent.nativeEvent.id);
     const x = markersRef.current.find(
       m => m.location?._id.toString() === markerEvent.nativeEvent.id,
     );

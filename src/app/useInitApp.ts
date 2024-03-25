@@ -22,7 +22,6 @@ export enum InitStatus {
 }
 
 export const useInitApp = () => {
-  console.log('INIT ***');
   useDeviceShake();
 
   // Order is important here.

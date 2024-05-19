@@ -82,7 +82,7 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RCPilot/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8517157F3F1148EB891AD68E /* SFUIText-BoldG3.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-BoldG3.otf"; path = "../assets/fonts/SFUIText/SFUIText-BoldG3.otf"; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-RCPilot-RCPilotTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RCPilot-RCPilotTests.release.xcconfig"; path = "Target Support Files/Pods-RCPilot-RCPilotTests/Pods-RCPilot-RCPilotTests.release.xcconfig"; sourceTree = "<group>"; };
-		964EBB7787C74B538761A150 /* RCPilot.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = RCPilot.ttf; path = ../assets/fonts/RCPilot.ttf; sourceTree = "<group>"; };
+		964EBB7787C74B538761A150 /* RCPilot.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = RCPilot.ttf; path = ../assets/fonts/RCPilot.ttf; sourceTree = "<group>"; };
 		9D58B861FD37424CBDFE6EB2 /* SFUIText-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-LightItalic.otf"; path = "../assets/fonts/SFUIText/SFUIText-LightItalic.otf"; sourceTree = "<group>"; };
 		A10986D729A95C4900B3FBEC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "RCPilot/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A13A5BE5287C8137006FAF4A /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -658,8 +658,9 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RCPilot/RCPilot.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = PVM4X2UBQ9;
+				DEVELOPMENT_TEAM = 3983F2B9PL;
 				ENABLE_BITCODE = NO;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				INFOPLIST_FILE = RCPilot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "RC Pilot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -690,7 +691,8 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RCPilot/RCPilot.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = PVM4X2UBQ9;
+				DEVELOPMENT_TEAM = 3983F2B9PL;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				INFOPLIST_FILE = RCPilot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "RC Pilot";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";

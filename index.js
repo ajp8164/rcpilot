@@ -1,4 +1,9 @@
 // import './wdyr';
+
+if (__DEV__) {
+  import('./ReactotronConfig').then(() => console.log('Reactotron Configured'));
+}
+
 import 'react-native-gesture-handler';
 import './shim.js';
 import 'react-native-get-random-values'; // Polyfill for realm

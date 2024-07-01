@@ -1414,7 +1414,7 @@ PODS:
     - React-Core
   - RNOS (1.2.6):
     - React
-  - RNReanimated (3.8.0):
+  - RNReanimated (3.12.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - ReactCommon/turbomodule/core
@@ -1896,7 +1896,7 @@ SPEC CHECKSUMS:
   RNGoogleSignin: c15bdaa7e8a9e190b6169d9c96a4e8380a740f22
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNOS: 6f2f9a70895bbbfbdad7196abd952e7b01d45027
-  RNReanimated: ed89354870e2581e88d074f2305a9443f5c9e1a1
+  RNReanimated: d89ed5320138257b8ebcd0252ed581b25698845b
   RNScreens: a79430706d7d993b1e5c0dde8b51fd1af41ad432
   RNSensors: 117ba71c7eeeea0407ea0c0bb79e3495d602049b
   RNSentry: 4ea90ea061624364637e8077d965bf2e50478066
@@ -1911,6 +1911,6 @@ SPEC CHECKSUMS:
   VisionCamera: fe093403c5753a37a9f7c703249d603b1069308c
   Yoga: 87e59f6d458e5061d2421086c5de994b3f7cd151
 
-PODFILE CHECKSUM: edf50a802dfeb2ce33cfa36861f5b9a324234403
+PODFILE CHECKSUM: f1e5a790b14ec7d461fdaa536c67595f1ee5bde4
 
 COCOAPODS: 1.15.2

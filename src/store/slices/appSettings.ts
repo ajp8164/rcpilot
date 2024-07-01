@@ -4,12 +4,13 @@ import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
 import { revertSettings } from 'store/actions';
+import { ModelsLayout } from 'types/preferences';
 
 export interface AppSettingsState {
   biometrics: boolean;
   databaseAccessWith: DatabaseAccessWith;
   outputReportTo: OutputReportTo;
-  showModelCards: boolean;
+  modelsLayout: ModelsLayout;
   themeSettings: ThemeSettings;
   tou: Tou;
 }
@@ -18,7 +19,7 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   biometrics: true,
   databaseAccessWith: DatabaseAccessWith.WebServer,
   outputReportTo: OutputReportTo.WebServer,
-  showModelCards: true,
+  modelsLayout: ModelsLayout.Carousel,
   themeSettings: {
     followDevice: true,
     app: 'light',
@@ -58,13 +59,13 @@ const handleSaveOutputReportTo: CaseReducer<
   };
 };
 
-const handleSaveShowModelCards: CaseReducer<AppSettingsState, PayloadAction<{ value: boolean }>> = (
-  state,
-  { payload },
-) => {
+const handleSaveModelsLayout: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ presentation: ModelsLayout }>
+> = (state, { payload }) => {
   return {
     ...state,
-    showModelCards: payload.value,
+    modelsLayout: payload.presentation,
   };
 };
 
@@ -97,7 +98,7 @@ const appSettingsSlice = createSlice({
     saveBiometrics: handleSaveBiometrics,
     saveDatabaseAccessWith: handleSaveDatabaseAccessWith,
     saveOutputReportTo: handleSaveOutputReportTo,
-    saveShowModelCards: handleSaveShowModelCards,
+    saveModelsLayout: handleSaveModelsLayout,
     saveThemeSettings: handleSaveThemeSettings,
   },
 });
@@ -107,5 +108,5 @@ export const saveAcceptTou = appSettingsSlice.actions.saveAcceptTou;
 export const saveBiometrics = appSettingsSlice.actions.saveBiometrics;
 export const saveDatabaseAccessWith = appSettingsSlice.actions.saveDatabaseAccessWith;
 export const saveOutputReportTo = appSettingsSlice.actions.saveOutputReportTo;
-export const saveShowModelCards = appSettingsSlice.actions.saveShowModelCards;
+export const saveModelsLayout = appSettingsSlice.actions.saveModelsLayout;
 export const saveThemeSettings = appSettingsSlice.actions.saveThemeSettings;

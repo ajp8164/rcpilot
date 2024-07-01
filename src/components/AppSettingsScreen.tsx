@@ -1,7 +1,7 @@
 import { AppState, Linking, ScrollView, View, useColorScheme } from 'react-native';
 import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { saveBiometrics, saveShowModelCards, saveThemeSettings } from 'store/slices/appSettings';
+import { saveBiometrics, saveModelsLayout, saveThemeSettings } from 'store/slices/appSettings';
 import {
   selectAppSettings,
   selectBiometrics,
@@ -13,8 +13,15 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
 import { hasPushNotificationsPermission } from 'lib/notifications';
 import { useTheme } from 'theme';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SetupNavigatorParamList } from 'types/navigation';
+import { ModelsLayout } from 'types/preferences';
+import { useEvent } from 'lib/event';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
 
-const AppSettings = () => {
+export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'AppSettings'>;
+
+const AppSettings = ({ navigation }: Props) => {
   const theme = useTheme();
   const colorScheme = useColorScheme();
 
@@ -22,9 +29,20 @@ const AppSettings = () => {
   const themeSettings = useSelector(selectThemeSettings);
   const biometrics = useSelector(selectBiometrics);
   const appSettings = useSelector(selectAppSettings);
+  const event = useEvent();
 
   const [biometricsValue, setBiometricsValue] = useState(biometrics);
   const [hasPNPermission, setHasPNPermission] = useState(false);
+
+  useEffect(() => {
+    // Event handlers for EnumPicker
+    event.on('models-layout', onChangeModelsLayout);
+
+    return () => {
+      event.removeListener('models-layout', onChangeModelsLayout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     hasPushNotificationsPermission().then(permission => {
@@ -43,6 +61,10 @@ const AppSettings = () => {
       listener.remove();
     };
   }, []);
+
+  const onChangeModelsLayout = (result: EnumPickerResult) => {
+    dispatch(saveModelsLayout({ presentation: result.value[0] as ModelsLayout }));
+  };
 
   const toggleAppearance = (value: boolean) => {
     dispatch(
@@ -77,10 +99,6 @@ const AppSettings = () => {
     );
     const control = value ? colorScheme : themeSettings.app;
     theme.updateTheme({ mode: control === 'dark' ? 'dark' : 'light' });
-  };
-
-  const toggleShowModelCards = (value: boolean) => {
-    dispatch(saveShowModelCards({ value }));
   };
 
   return (
@@ -121,12 +139,18 @@ const AppSettings = () => {
           onValueChange={toggleUseDevice}
         />
         <Divider text={'VIEW OPTIONS'} />
-        <ListItemSwitch
-          title={'Show Models As Cards'}
-          subtitle={'Show model cards on the Models tab'}
-          value={appSettings.showModelCards}
+        <ListItem
+          title={'Models Screen Layout'}
           position={['first', 'last']}
-          onValueChange={toggleShowModelCards}
+          value={appSettings.modelsLayout}
+          onPress={() =>
+            navigation.navigate('EnumPicker', {
+              title: 'Models Layout',
+              values: Object.values(ModelsLayout),
+              selected: appSettings.modelsLayout,
+              eventName: 'models-layout',
+            })
+          }
         />
       </ScrollView>
     </View>

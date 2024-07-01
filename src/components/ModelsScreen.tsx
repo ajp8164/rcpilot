@@ -1,31 +1,17 @@
-import {
-  Alert,
-  Image,
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-  Text,
-  View,
-} from 'react-native';
+import { Alert, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
-import {
-  ListItem,
-  SectionListHeader,
-  listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
+import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
+import { ListItem, SectionListHeader } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { modelSummary, modelTypeIcons, useModelsFilter } from 'lib/model';
+import { useModelsFilter } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
-import { useObject, useRealm } from '@realm/react';
+import { useObject } from '@realm/react';
 
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { BSON } from 'realm';
 import { Button } from '@rneui/base';
 import { ChecklistType } from 'types/checklist';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { FilterType } from 'types/filter';
 import Icon from 'react-native-vector-icons/FontAwesome6';
@@ -33,17 +19,18 @@ import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
-import { SvgXml } from 'react-native-svg';
 import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { modelMaintenanceIsDue } from 'lib/model';
-import { secondsToMSS } from 'lib/formatters';
 import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
-import { useConfirmAction } from 'lib/useConfirmAction';
+import { ModelCardDeck } from 'components/molecules/ModelCardDeck';
+import { ModelCard } from 'components/molecules/ModelCard';
+import { ModelListItem } from 'components/molecules/ModelListItem';
+import { ModelsLayout } from 'types/preferences';
 
 type Section = {
   title?: string;
@@ -58,9 +45,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const listEditor = useListEditor();
-  const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
-  const realm = useRealm();
 
   const _pilot = useSelector(selectPilot);
   const appSettings = useSelector(selectAppSettings);
@@ -69,7 +54,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const models = useModelsFilter();
   const activeModels = models.filtered('retired == $0', false);
   const retiredModels = models.filtered('retired == $0', true);
-  const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
+  const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId)) || undefined;
 
   const achievementModalRef = useRef<AchievementModal>(null);
 
@@ -77,7 +62,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
-        if (listModels === 'all' && !appSettings.showModelCards) {
+        if (listModels === 'all' && appSettings.modelsLayout === ModelsLayout.List) {
           return (
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -154,13 +139,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeModels, appSettings, filterId, listEditor.enabled, retiredModels]);
-
-  const deleteModel = (model: Model) => {
-    realm.write(() => {
-      realm.delete(model);
-    });
-  };
+  }, [activeModels, appSettings.modelsLayout, filterId, listEditor.enabled, retiredModels]);
 
   const groupModels = (models: Realm.Results<Model>): SectionListData<Model, Section>[] => {
     const groups = groupItems<Model, Section>(models, model => {
@@ -239,107 +218,26 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
-    const maintenanceIsDue = modelMaintenanceIsDue(model);
     return (
-      <View style={s.modelCard}>
-        <View style={s.modelCardHeader}>
-          {pilot && (
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              icon={
-                <Icon
-                  name={'certificate'}
-                  color={theme.colors.subtleGray}
-                  size={30}
-                  style={s.achievementButtonIcon}
-                />
-              }
-              titleStyle={s.achievementButtonTitle}
-              title={pilot ? `${pilot.achievements.length}` : '0'}
-              onPress={() => achievementModalRef.current?.present(pilot, model)}
-            />
-          )}
-          <View style={s.modelCardHeaderTextContainer}>
-            <View style={s.modelCardTitleContainer}>
-              <Text style={s.modelCardTitleLeft}>{model.name}</Text>
-              <Text style={s.modelCardTitleRight}>
-                {model.lastEvent
-                  ? `Last ${DateTime.fromISO(model.lastEvent).toFormat('M/d/yyyy')}`
-                  : `No ${eventKind(model.type).namePlural}`}
-              </Text>
-            </View>
-            <View style={s.modelCardSubtitleContainer}>
-              <Text style={s.modelCardSubtitle}>
-                {`${model.statistics.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
-              </Text>
-              <Text style={s.modelCardSubtitle}>
-                {`${secondsToMSS(model.statistics.totalTime, { format: 'm:ss' })} total time`}
-              </Text>
-            </View>
-          </View>
-        </View>
-        {model.image ? (
-          <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelCardImage} />
-        ) : (
-          <View style={s.modelCardSvg}>
-            <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
-              width={s.modelImage.width}
-              height={'100%'}
-              color={theme.colors.brandSecondary}
-              style={s.modelIcon}
-            />
-          </View>
-        )}
-        {(model.damaged || maintenanceIsDue) && (
-          <View style={s.modelTagContainer}>
-            {model.damaged && <Text style={s.modelTag}>{'Damaged'}</Text>}
-            {maintenanceIsDue && <Text style={s.modelTag}>{'Maintenance Due'}</Text>}
-          </View>
-        )}
-        <View style={s.modelCardFooter}>
-          <Button
-            title={'Details'}
-            titleStyle={s.modelCardButtonTitle}
-            buttonStyle={s.modelCardButton}
-            icon={
-              <CustomIcon
-                name={'circle-info'}
-                size={20}
-                color={theme.colors.clearButtonText}
-                style={s.modelCardButtonIcon}
-              />
-            }
-            onPress={() =>
-              navigation.navigate('ModelEditor', {
-                modelId: model._id.toString(),
-              })
-            }
-          />
-          <Button
-            title={`New ${eventKind(model.type).name}`}
-            titleStyle={s.modelCardButtonTitle}
-            buttonStyle={s.modelCardButton}
-            icon={
-              <Icon
-                name={'circle-play'}
-                size={20}
-                color={theme.colors.clearButtonText}
-                style={s.modelCardButtonIcon}
-              />
-            }
-            onPress={() => {
-              if (listModels !== 'all') {
-                navigation.navigate('ModelEditor', {
-                  modelId: model._id.toString(),
-                });
-              } else {
-                confirmStartNewEventSequence(model);
-              }
-            }}
-          />
-        </View>
-      </View>
+      <ModelCard
+        model={model}
+        onPressAchievements={(pilot, model) => achievementModalRef.current?.present(pilot, model)}
+        onPressEditModel={() =>
+          navigation.navigate('ModelEditor', {
+            modelId: model._id.toString(),
+          })
+        }
+        onPressNewEvent={() => {
+          if (listModels !== 'all') {
+            navigation.navigate('ModelEditor', {
+              modelId: model._id.toString(),
+            });
+          } else {
+            confirmStartNewEventSequence(model);
+          }
+        }}
+        pilot={pilot}
+      />
     );
   };
 
@@ -352,55 +250,13 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
-    const maintenanceIsDue = modelMaintenanceIsDue(model);
     return (
-      <ListItem
-        ref={ref => ref && listEditor.add(ref, 'models', model._id.toString())}
-        key={model._id.toString()}
-        title={model.name}
-        subtitle={modelSummary(model)}
-        titleStyle={s.modelText}
-        subtitleStyle={s.modelText}
-        subtitleNumberOfLines={2}
-        bottomDividerLeft={s.modelImage.width + 15}
-        position={listItemPosition(index, section.data.length)}
-        leftImage={
-          <View style={s.modelIconContainer}>
-            {model.image ? (
-              <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
-            ) : (
-              <View style={s.modelSvgContainer}>
-                <SvgXml
-                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
-                  width={s.modelImage.width}
-                  height={s.modelImage.height}
-                  color={theme.colors.brandSecondary}
-                  style={s.modelIcon}
-                />
-              </View>
-            )}
-            {(model.damaged || maintenanceIsDue) && (
-              <View style={s.modelStatusContainer}>
-                {model.damaged && (
-                  <Icon
-                    name={'bandage'}
-                    size={12}
-                    color={theme.colors.stickyWhite}
-                    style={s.modelStatusIcon}
-                  />
-                )}
-                {maintenanceIsDue && (
-                  <Icon
-                    name={'wrench'}
-                    size={10}
-                    color={theme.colors.stickyWhite}
-                    style={s.modelStatusIcon}
-                  />
-                )}
-              </View>
-            )}
-          </View>
-        }
+      <ModelListItem
+        array={section.data}
+        index={index}
+        model={model}
+        listEditor={listEditor}
+        showInfo={listModels === 'all'}
         onPress={() => {
           if (listModels !== 'all') {
             navigation.navigate('ModelEditor', {
@@ -410,42 +266,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             confirmStartNewEventSequence(model);
           }
         }}
-        showInfo={listModels === 'all'}
-        onPressInfo={() =>
+        onPressInfo={() => {
           navigation.navigate('ModelEditor', {
             modelId: model._id.toString(),
-          })
-        }
-        zeroEdgeContent={true}
-        editable={{
-          item: {
-            icon: 'remove-circle',
-            color: theme.colors.assertive,
-            action: 'open-swipeable',
-          },
-          reorder: true,
+          });
         }}
-        showEditor={listEditor.show}
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () => {
-                const label =
-                  listModels === 'retired'
-                    ? `Delete Retired ${model.type}`
-                    : `Delete ${model.type}`;
-                confirmAction(deleteModel, {
-                  label,
-                  title: `This action cannot be undone.\nAre you sure you want to delete this ${model.type.toLocaleLowerCase()}?`,
-                  value: model,
-                });
-              },
-            },
-          ],
-        }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', model._id.toString())}
-        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );
   };
@@ -490,21 +315,25 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   return (
     <>
-      <SectionList
-        showsVerticalScrollIndicator={false}
-        contentInsetAdjustmentBehavior={'automatic'}
-        stickySectionHeadersEnabled={true}
-        style={[theme.styles.view, s.sectionList]}
-        sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
-        keyExtractor={item => item._id.toString()}
-        renderItem={section =>
-          appSettings.showModelCards && listModels !== 'retired'
-            ? renderModelCard(section)
-            : renderModelListItem(section)
-        }
-        renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
-        ListFooterComponent={renderInactive()}
-      />
+      {appSettings.modelsLayout === ModelsLayout.CardDeck ? (
+        <ModelCardDeck models={activeModels} />
+      ) : (
+        <SectionList
+          showsVerticalScrollIndicator={false}
+          contentInsetAdjustmentBehavior={'automatic'}
+          stickySectionHeadersEnabled={true}
+          style={[theme.styles.view, s.sectionList]}
+          sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
+          keyExtractor={item => item._id.toString()}
+          renderItem={section =>
+            appSettings.modelsLayout === ModelsLayout.Cards && listModels !== 'retired'
+              ? renderModelCard(section)
+              : renderModelListItem(section)
+          }
+          renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+          ListFooterComponent={renderInactive()}
+        />
+      )}
       <AchievementModal ref={achievementModalRef} />
     </>
   );
@@ -518,139 +347,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   headerIconDisabled: {
     color: theme.colors.disabled,
-  },
-  achievementButtonIcon: {
-    top: -2,
-    height: 30,
-  },
-  achievementButtonTitle: {
-    ...theme.styles.textTiny,
-    ...theme.styles.textBold,
-    marginLeft: -30,
-    color: theme.colors.lightGray,
-    top: -2,
-    marginRight: 10,
-    borderWidth: 0,
-    width: 30,
-  },
-  modelCard: {
-    width: '100%',
-    paddingVertical: 10,
-    marginBottom: 15,
-    borderRadius: 10,
-    overflow: 'hidden',
-    backgroundColor: theme.colors.listItem,
-  },
-  modelCardHeader: {
-    flexDirection: 'row',
-    width: '100%',
-    height: 50,
-    paddingHorizontal: 15,
-  },
-  modelCardHeaderTextContainer: {
-    flex: 1,
-  },
-  modelCardTitleLeft: {
-    ...theme.styles.textNormal,
-    ...theme.styles.textBold,
-  },
-  modelCardTitleRight: {
-    ...theme.styles.textSmall,
-    flex: 1,
-    top: 2,
-    textAlign: 'right',
-  },
-  modelCardTitleContainer: {
-    flexDirection: 'row',
-  },
-  modelCardSubtitleContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modelCardSubtitle: {
-    ...theme.styles.textSmall,
-    ...theme.styles.textDim,
-    paddingBottom: 5,
-  },
-  modelCardImage: {
-    flex: 1,
-    minHeight: 132,
-  },
-  modelCardSvg: {
-    flex: 1,
-    minHeight: 132,
-    alignItems: 'center',
-    backgroundColor: '#E3F2FD',
-  },
-  modelCardFooter: {
-    flexDirection: 'row',
-    height: 48,
-    paddingTop: 10,
-    paddingHorizontal: 15,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  modelCardButtonTitle: {
-    ...theme.styles.buttonScreenHeaderTitle,
-    ...theme.styles.textSmall,
-    ...theme.styles.textBold,
-    color: theme.colors.clearButtonText,
-  },
-  modelCardButton: {
-    ...theme.styles.buttonScreenHeader,
-  },
-  modelCardButtonIcon: {
-    paddingRight: 5,
-  },
-  modelIcon: {
-    transform: [{ rotate: '-45deg' }],
-  },
-  modelIconContainer: {
-    position: 'absolute',
-    left: -15,
-    overflow: 'hidden',
-  },
-  modelImage: {
-    width: 150,
-    height: 85,
-  },
-  modelStatusContainer: {
-    position: 'absolute',
-    bottom: 0,
-    flexDirection: 'row',
-    width: '100%',
-    height: 16,
-    paddingTop: 1,
-    justifyContent: 'center',
-    backgroundColor: theme.colors.blackTransparentLight,
-  },
-  modelStatusIcon: {
-    paddingHorizontal: 10,
-  },
-  modelSvgContainer: {
-    backgroundColor: theme.colors.subtleGray,
-  },
-  modelTagContainer: {
-    flexDirection: 'row',
-    padding: 5,
-    paddingTop: 10,
-    marginHorizontal: 10,
-  },
-  modelTag: {
-    ...theme.styles.textTiny,
-    ...theme.styles.textBold,
-    paddingVertical: 2,
-    paddingHorizontal: 10,
-    marginRight: 5,
-    borderRadius: 10,
-    overflow: 'hidden',
-    textAlign: 'center',
-    backgroundColor: theme.colors.lightGray,
-    color: theme.colors.stickyWhite,
-  },
-  modelText: {
-    left: 140,
-    maxWidth: '48%',
   },
   sectionList: {
     flex: 1,

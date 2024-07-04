@@ -1,12 +1,15 @@
+import { makeStyles } from '@rneui/themed';
 import React from 'react';
-import { StyleSheet, View, ViewProps } from 'react-native';
+import { View, ViewProps } from 'react-native';
 import Animated, {
   AnimatedProps,
+  FadeIn,
   interpolate,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { AppTheme, useTheme } from 'theme';
 
 const AnimatedView = Animated.createAnimatedComponent(View);
 
@@ -19,6 +22,9 @@ export const FlipCard = ({
   frontItem?: React.ReactNode;
   backItem?: React.ReactNode;
 }) => {
+  const theme = useTheme();
+  const s = useStyles(theme);
+
   const spin = useSharedValue<number>(0);
 
   const rStyle = useAnimatedStyle(() => {
@@ -45,21 +51,24 @@ export const FlipCard = ({
 
   return (
     <AnimatedView
-      // pos={'relative'}
+      entering={FadeIn}
       {...containerProps}
-      onTouchEnd={() => {
-        spin.value = spin.value ? 0 : 1;
-        console.log('pressed');
+      onTouchEnd={event => {
+        if (spin.value === 0) {
+          event.stopPropagation();
+          spin.value = spin.value ? 0 : 1;
+        }
+        console.log('pressed ', event.nativeEvent);
       }}>
-      <AnimatedView style={[Styles.front, rStyle]}>{frontItem}</AnimatedView>
-      <AnimatedView style={[Styles.back, bStyle]}>{backItem}</AnimatedView>
+      <AnimatedView style={[s.front, rStyle]}>{frontItem}</AnimatedView>
+      <AnimatedView style={[s.back, bStyle]}>{backItem}</AnimatedView>
     </AnimatedView>
   );
 };
 
 export default FlipCard;
 
-const Styles = StyleSheet.create({
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   front: {
     flex: 1,
     position: 'absolute',
@@ -73,4 +82,4 @@ const Styles = StyleSheet.create({
     backfaceVisibility: 'hidden',
     zIndex: 10,
   },
-});
+}));

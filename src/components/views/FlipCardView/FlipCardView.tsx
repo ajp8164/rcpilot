@@ -26,14 +26,13 @@ const FlipCardView = React.forwardRef<FlipCardView, FlipCardViewProps>((props, r
   }));
 
   const flip = () => {
-    console.log('FLIP');
     isFlipped.value = !isFlipped.value;
   };
 
   const frontCardAnimatedStyle = useAnimatedStyle(() => {
     const spinValue = interpolate(Number(isFlipped.value), [0, 1], [0, 180]);
     const rotateValue = withTiming(`${spinValue}deg`, { duration });
-    console.log(spinValue);
+
     return {
       ...(spinValue === 0 ? { zIndex: 2 } : { zIndex: 1, backfaceVisibility: 'hidden' }),
       transform: [isDirectionX ? { rotateX: rotateValue } : { rotateY: rotateValue }],

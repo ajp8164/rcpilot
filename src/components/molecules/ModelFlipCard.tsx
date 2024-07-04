@@ -4,8 +4,7 @@ import React from 'react';
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
 import FlipCardView from 'components/views/FlipCardView';
-import { Front as DinnFront } from 'components/molecules/card-deck/dinn/Front';
-import { Back as DinnBack } from 'components/molecules/card-deck/dinn/Back';
+import { Back as DinnBack, Front as DinnFront } from 'components/molecules/card-deck/dinn';
 
 interface ModelCardDeckCardInterface {
   model: Model;

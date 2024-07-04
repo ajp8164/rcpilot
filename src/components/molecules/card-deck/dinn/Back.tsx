@@ -5,10 +5,10 @@ import React, { useState } from 'react';
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
 import { Button } from '@rneui/base';
+import type FlipCardView from 'components/views/FlipCardView';
 
-interface DinnCardInterface {
+interface DinnCardInterface extends FlipCardView {
   model: Model;
-  flip?: () => void;
 }
 
 export const Back = ({ model, flip }: DinnCardInterface) => {

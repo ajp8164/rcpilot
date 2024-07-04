@@ -9,10 +9,10 @@ import { SvgXml } from 'react-native-svg';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { modelMaintenanceIsDue } from 'lib/model';
 import { DateTime, Duration } from 'luxon';
+import type FlipCardView from 'components/views/FlipCardView';
 
-interface DinnCardInterface {
+interface DinnCardInterface extends FlipCardView {
   model: Model;
-  flip?: () => void;
 }
 
 export const Front = ({ model, flip }: DinnCardInterface) => {

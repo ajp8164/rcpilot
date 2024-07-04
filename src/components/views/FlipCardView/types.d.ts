@@ -20,5 +20,5 @@ export interface FlipCardViewProps {
 }
 
 export interface FlipCardViewMethods {
-  flip: () => void;
+  flip?: () => void;
 }

@@ -43,7 +43,7 @@ export const ModelCardDeck = ({ models }: ModelCardDeckInterface) => {
         stackInterval: 15,
         rotateZDeg: 10,
       }}
-      customConfig={() => ({ type: 'negative', viewCount: 5 })}
+      customConfig={() => ({ type: 'negative', viewCount: models.length > 3 ? 3 : models.length })}
       renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => {
         return <ModelFlipCard key={index} model={model} />;
       }}

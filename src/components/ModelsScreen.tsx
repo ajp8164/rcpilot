@@ -28,7 +28,7 @@ import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
-import { ModelCard } from 'components/molecules/ModelCard';
+import { ModelPostCard } from 'components/molecules/ModelPostCard';
 import { ModelListItem } from 'components/molecules/ModelListItem';
 import { ModelsLayout } from 'types/preferences';
 
@@ -209,7 +209,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const renderModelCard: SectionListRenderItem<Model, Section> = ({
+  const renderModelPostCard: SectionListRenderItem<Model, Section> = ({
     item: model,
     section: _model,
     index: _index,
@@ -219,7 +219,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     index: number;
   }) => {
     return (
-      <ModelCard
+      <ModelPostCard
         model={model}
         onPressAchievements={(pilot, model) => achievementModalRef.current?.present(pilot, model)}
         onPressEditModel={() =>
@@ -326,8 +326,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
           keyExtractor={item => item._id.toString()}
           renderItem={section =>
-            appSettings.modelsLayout === ModelsLayout.Cards && listModels !== 'retired'
-              ? renderModelCard(section)
+            appSettings.modelsLayout === ModelsLayout.PostCards && listModels !== 'retired'
+              ? renderModelPostCard(section)
               : renderModelListItem(section)
           }
           renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}

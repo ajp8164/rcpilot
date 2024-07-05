@@ -6,12 +6,18 @@ import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
 import { Button } from '@rneui/base';
 import type FlipCardView from 'components/views/FlipCardView';
+import { ListItem } from 'components/atoms/List';
+import { Divider } from '@react-native-ajp-elements/ui';
+import FAIcon from 'react-native-vector-icons/FontAwesome6';
+import CustomIcon from 'theme/icomoon/CustomIcon';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
+  onPressEditModel: () => void;
+  onPressNewEvent: () => void;
 }
 
-export const Back = ({ model, flip }: DinnCardInterface) => {
+export const Back = ({ flip, model, onPressEditModel, onPressNewEvent }: DinnCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -19,7 +25,7 @@ export const Back = ({ model, flip }: DinnCardInterface) => {
 
   const primaryColor = '#102013';
   const accent1Color = '#777A15';
-  // const accent2Color = '#4B5C21';
+  const accent2Color = '#4B5C21';
 
   const onLayout = (event: LayoutChangeEvent) => {
     setCardLayout(event.nativeEvent.layout);
@@ -39,12 +45,44 @@ export const Back = ({ model, flip }: DinnCardInterface) => {
           }}
         />
       </View>
-      <Button
-        title={'test'}
-        titleStyle={theme.styles.buttonScreenHeaderTitle}
-        buttonStyle={theme.styles.buttonScreenHeader}
-        onPress={flip}
-      />
+      <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }}>
+        <ListItem
+          title={'New Flight'}
+          titleStyle={{ color: primaryColor }}
+          containerStyle={{
+            backgroundColor: accent2Color,
+          }}
+          rightImage={<FAIcon name={'play-circle'} size={20} color={primaryColor} />}
+          position={['first', 'last']}
+          onPress={onPressNewEvent}
+        />
+        <Divider />
+        <ListItem
+          title={'Model Details'}
+          titleStyle={{ color: primaryColor }}
+          containerStyle={{
+            backgroundColor: accent2Color,
+          }}
+          rightImage={<CustomIcon name={'circle-info'} size={20} color={primaryColor} />}
+          position={['first', 'last']}
+          onPress={onPressEditModel}
+        />
+        <Button
+          buttonStyle={theme.styles.buttonScreenHeader}
+          containerStyle={{ alignItems: 'flex-end', marginTop: 15 }}
+          icon={
+            <FAIcon
+              name={'rotate'}
+              style={{
+                color: accent2Color,
+                fontSize: 22,
+                marginHorizontal: 10,
+              }}
+            />
+          }
+          onPress={flip && flip}
+        />
+      </View>
     </View>
   );
 };
@@ -54,7 +92,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: '100%',
     width: '100%',
     backgroundColor: theme.colors.stickyWhite,
-    padding: 30,
+    padding: 15,
   },
   background: {
     width: '100%',

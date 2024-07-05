@@ -14,7 +14,7 @@ import CustomIcon from 'theme/icomoon/CustomIcon';
 import { secondsToMSS } from 'lib/formatters';
 import { DateTime } from 'luxon';
 
-interface ModelCardInterface {
+interface ModelPostCardInterface {
   model: Model;
   onPressAchievements: (pilot: Pilot, model: Model) => void;
   onPressEditModel: (model: Model) => void;
@@ -22,13 +22,13 @@ interface ModelCardInterface {
   pilot?: Pilot;
 }
 
-export const ModelCard = ({
+export const ModelPostCard = ({
   model,
   onPressEditModel,
   onPressNewEvent,
   onPressAchievements,
   pilot,
-}: ModelCardInterface) => {
+}: ModelPostCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 

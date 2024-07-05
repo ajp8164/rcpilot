@@ -27,7 +27,7 @@ import { modelMaintenanceIsDue } from 'lib/model';
 import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
-import { ModelCardDeck } from 'components/molecules/ModelCardDeck';
+import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
 import { ModelCard } from 'components/molecules/ModelCard';
 import { ModelListItem } from 'components/molecules/ModelListItem';
 import { ModelsLayout } from 'types/preferences';
@@ -316,7 +316,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   return (
     <>
       {appSettings.modelsLayout === ModelsLayout.CardDeck ? (
-        <ModelCardDeck models={activeModels} />
+        <ModelCardDeck models={activeModels} startNewEventSequence={confirmStartNewEventSequence} />
       ) : (
         <SectionList
           showsVerticalScrollIndicator={false}

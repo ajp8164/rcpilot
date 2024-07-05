@@ -13,9 +13,10 @@ import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
+  startNewEventSequence: (model: Model) => void;
 }
 
-export const ModelCardDeck = ({ models }: ModelCardDeckInterface) => {
+export const ModelCardDeck = ({ models, startNewEventSequence }: ModelCardDeckInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -45,7 +46,9 @@ export const ModelCardDeck = ({ models }: ModelCardDeckInterface) => {
       }}
       customConfig={() => ({ type: 'negative', viewCount: models.length > 3 ? 3 : models.length })}
       renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => {
-        return <ModelFlipCard key={index} model={model} />;
+        return (
+          <ModelFlipCard key={index} model={model} startNewEventSequence={startNewEventSequence} />
+        );
       }}
     />
   );

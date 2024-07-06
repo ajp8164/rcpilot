@@ -7,17 +7,21 @@ import { Model } from 'realmdb';
 import { Button } from '@rneui/base';
 import type FlipCardView from 'components/views/FlipCardView';
 import { ListItem } from 'components/atoms/List';
-import { Divider } from '@react-native-ajp-elements/ui';
-import FAIcon from 'react-native-vector-icons/FontAwesome6';
+import Icon from 'react-native-vector-icons/FontAwesome6';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
-  onPressEditModel: () => void;
-  onPressNewEvent: () => void;
+  onPressEditModel?: () => void;
+  onPressNewEventSequence?: () => void;
 }
 
-export const Back = ({ flip, model, onPressEditModel, onPressNewEvent }: DinnCardInterface) => {
+export const Back = ({
+  flip,
+  model,
+  onPressEditModel,
+  onPressNewEventSequence,
+}: DinnCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -52,11 +56,11 @@ export const Back = ({ flip, model, onPressEditModel, onPressNewEvent }: DinnCar
           containerStyle={{
             backgroundColor: accent2Color,
           }}
-          rightImage={<FAIcon name={'play-circle'} size={20} color={primaryColor} />}
-          position={['first', 'last']}
-          onPress={onPressNewEvent}
+          bottomDividerColor={primaryColor}
+          rightImage={<Icon name={'play-circle'} size={20} color={primaryColor} />}
+          position={['first']}
+          onPress={onPressNewEventSequence}
         />
-        <Divider />
         <ListItem
           title={'Model Details'}
           titleStyle={{ color: primaryColor }}
@@ -64,14 +68,14 @@ export const Back = ({ flip, model, onPressEditModel, onPressNewEvent }: DinnCar
             backgroundColor: accent2Color,
           }}
           rightImage={<CustomIcon name={'circle-info'} size={20} color={primaryColor} />}
-          position={['first', 'last']}
+          position={['last']}
           onPress={onPressEditModel}
         />
         <Button
           buttonStyle={theme.styles.buttonScreenHeader}
           containerStyle={{ alignItems: 'flex-end', marginTop: 15 }}
           icon={
-            <FAIcon
+            <Icon
               name={'rotate'}
               style={{
                 color: accent2Color,

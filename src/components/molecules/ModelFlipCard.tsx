@@ -19,21 +19,31 @@ export const ModelFlipCard = ({ model, startNewEventSequence }: ModelCardDeckCar
 
   const navigation: NavigationProp<ModelsNavigatorParamList> = useNavigation();
 
+  const editModel = () => {
+    navigation.navigate('ModelEditor', {
+      modelId: model._id.toString(),
+    });
+  };
+
+  const newEventSequence = () => {
+    startNewEventSequence(model);
+  };
+
   return (
     <FlipCardView
       cardStyle={s.flipCardContainer}
-      FrontContent={<DinnFront model={model} />}
+      FrontContent={
+        <DinnFront
+          model={model}
+          onPressEditModel={editModel}
+          onPressNewEventSequence={newEventSequence}
+        />
+      }
       BackContent={
         <DinnBack
           model={model}
-          onPressEditModel={() =>
-            navigation.navigate('ModelEditor', {
-              modelId: model._id.toString(),
-            })
-          }
-          onPressNewEvent={() => {
-            startNewEventSequence(model);
-          }}
+          onPressEditModel={editModel}
+          onPressNewEventSequence={newEventSequence}
         />
       }
     />

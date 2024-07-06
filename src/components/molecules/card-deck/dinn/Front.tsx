@@ -1,21 +1,28 @@
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, LayoutChangeEvent, LayoutRectangle, Pressable, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import React from 'react';
+import React, { useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
-import { SvgXml } from 'react-native-svg';
-import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { modelMaintenanceIsDue } from 'lib/model';
 import { DateTime, Duration } from 'luxon';
 import type FlipCardView from 'components/views/FlipCardView';
+import { ellipsis } from '@react-native-ajp-elements/core';
+import { getVendorImage } from 'theme/images';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
+  onPressEditModel?: () => void;
+  onPressNewEventSequence?: () => void;
 }
 
-export const Front = ({ model, flip }: DinnCardInterface) => {
+export const Front = ({
+  flip,
+  model,
+  onPressEditModel,
+  onPressNewEventSequence,
+}: DinnCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -31,8 +38,20 @@ export const Front = ({ model, flip }: DinnCardInterface) => {
     flip && flip();
   };
 
+  const vendorImage = getVendorImage(model.vendor);
+
+  const [cardLayout, setCardLayout] = useState<LayoutRectangle>({
+    width: 0,
+    height: 0,
+    x: 0,
+    y: 0,
+  });
+  const onLayout = (event: LayoutChangeEvent) => {
+    setCardLayout(event.nativeEvent.layout);
+  };
+
   return (
-    <View style={s.container}>
+    <View style={s.container} onLayout={onLayout}>
       <Pressable onPress={handlePress}>
         <Image
           source={require('theme/img/buddy.png')}
@@ -41,7 +60,7 @@ export const Front = ({ model, flip }: DinnCardInterface) => {
         />
         <View style={[s.background, { backgroundColor: primaryColor, borderColor: accent1Color }]}>
           <View style={s.textContainer}>
-            <Text style={[s.title, { color: accent1Color }]}>{model.name}</Text>
+            <Text style={[s.title, { color: accent1Color }]}>{ellipsis(model.name, 13)}</Text>
             <Text
               style={[
                 s.text,
@@ -51,30 +70,14 @@ export const Front = ({ model, flip }: DinnCardInterface) => {
             {lastFlight && <Text style={s.text}>{`${lastFlight} Last Flight`}</Text>}
           </View>
           <View style={s.attributesContainer}>
-            <View
+            <Pressable
               style={[
-                s.modelIconContainer,
+                s.mainIconContainer,
                 { backgroundColor: accent2Color, borderColor: accent1Color },
-              ]}>
-              <SvgXml
-                xml={getColoredSvg(model.type.toLocaleLowerCase())}
-                width={69}
-                height={69}
-                color={primaryColor}
-                style={s.modelIcon}
-              />
-            </View>
-            <View style={[s.attributeIconContainer, { borderColor: accent1Color }]}>
-              <Icon
-                name={model.logsFuel ? 'gas-pump' : 'battery-full'}
-                size={20}
-                style={[
-                  s.attributeIcon,
-                  { color: accent2Color },
-                  model.logsFuel ? s.fuelIcon : s.batteryIcon,
-                ]}
-              />
-            </View>
+              ]}
+              onPress={onPressNewEventSequence}>
+              <Icon name={'play'} size={28} style={[s.newEventIcon, { color: primaryColor }]} />
+            </Pressable>
             {maintenanceIsDue && (
               <View style={[s.attributeIconContainer, { borderColor: accent1Color }]}>
                 <Icon
@@ -97,8 +100,28 @@ export const Front = ({ model, flip }: DinnCardInterface) => {
                 />
               </View>
             )}
+            <Pressable
+              style={[s.attributeIconContainer, { borderColor: accent1Color }]}
+              onPress={onPressEditModel}>
+              <Icon name={'info'} size={20} style={[s.attributeIcon, { color: accent2Color }]} />
+            </Pressable>
           </View>
         </View>
+        {vendorImage && (
+          <Image
+            source={vendorImage.src}
+            resizeMode={'contain'}
+            tintColor={accent1Color}
+            style={[
+              s.vendorImage,
+              {
+                width: cardLayout.width * 0.2,
+                height:
+                  (cardLayout.width * 0.2) / (vendorImage.size.width / vendorImage.size.height),
+              },
+            ]}
+          />
+        )}
       </Pressable>
     </View>
   );
@@ -112,7 +135,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   background: {
     width: '100%',
-    height: '35%',
+    height: '35.2%',
     backgroundColor: theme.colors.stickyBlack,
     position: 'absolute',
     bottom: 0,
@@ -126,11 +149,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: 40,
   },
   attributeIconContainer: {
-    width: 34,
-    height: 34,
+    width: 33,
+    height: 33,
     borderColor: theme.colors.darkGray,
-    borderWidth: 2.9,
-    marginTop: 9,
+    borderWidth: 2.5,
+    marginBottom: 4,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -153,28 +176,35 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.darkGray,
     marginBottom: 5,
   },
-  modelIconContainer: {
-    width: 62,
-    height: 62,
+  mainIconContainer: {
+    width: 60,
+    height: undefined, //59,
+    aspectRatio: 1,
     borderColor: theme.colors.darkGray,
     borderWidth: 5.5,
     borderRadius: 50,
     backgroundColor: theme.colors.lightGray,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  modelIcon: {
-    top: 1,
-    transform: [{ rotate: '-30deg' }],
+    top: -1,
+    marginBottom: 9.5,
   },
   modelImageFront: {
     width: '100%',
     height: '100%',
+  },
+  newEventIcon: {
+    left: 2,
   },
   fuelIcon: {
     left: 2,
   },
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
+  },
+  vendorImage: {
+    position: 'absolute',
+    bottom: 15,
+    right: 15,
   },
 }));

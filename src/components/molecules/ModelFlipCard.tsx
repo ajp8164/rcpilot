@@ -52,10 +52,10 @@ export const ModelFlipCard = ({ model, startNewEventSequence }: ModelCardDeckCar
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   flipCardContainer: {
-    marginTop: '10%',
-    height: '90%',
+    marginTop: '7%',
+    height: '93%',
     width: '100%',
-    borderRadius: 12,
+    borderRadius: 15,
     overflow: 'hidden',
   },
 }));

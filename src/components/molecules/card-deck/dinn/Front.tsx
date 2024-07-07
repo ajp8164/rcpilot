@@ -5,11 +5,13 @@ import React, { useState } from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
-import { modelMaintenanceIsDue } from 'lib/model';
+import { modelMaintenanceIsDue, modelTypeIcons } from 'lib/model';
 import { DateTime, Duration } from 'luxon';
 import type FlipCardView from 'components/views/FlipCardView';
 import { ellipsis } from '@react-native-ajp-elements/core';
 import { getVendorImage } from 'theme/images';
+import { SvgXml } from 'react-native-svg';
+import { getColoredSvg } from '@react-native-ajp-elements/ui';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -53,11 +55,26 @@ export const Front = ({
   return (
     <View style={s.container} onLayout={onLayout}>
       <Pressable onPress={handlePress}>
-        <Image
-          source={require('theme/img/buddy.png')}
-          resizeMode={'cover'}
-          style={s.modelImageFront}
-        />
+        {model.image ? (
+          <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImageFront} />
+        ) : (
+          <View
+            style={{
+              width: '100%',
+              height: '100%',
+              backgroundColor: '#bbddff',
+            }}>
+            <SvgXml
+              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              width={'100%'}
+              height={'65%'}
+              color={theme.colors.brandSecondary}
+              style={{
+                transform: [{ rotate: '-45deg' }],
+              }}
+            />
+          </View>
+        )}
         <View style={[s.background, { backgroundColor: primaryColor, borderColor: accent1Color }]}>
           <View style={s.textContainer}>
             <Text style={[s.title, { color: accent1Color }]}>{ellipsis(model.name, 13)}</Text>
@@ -106,22 +123,22 @@ export const Front = ({
               <Icon name={'info'} size={20} style={[s.attributeIcon, { color: accent2Color }]} />
             </Pressable>
           </View>
+          {vendorImage && (
+            <Image
+              source={vendorImage.src}
+              resizeMode={'contain'}
+              tintColor={accent1Color}
+              style={[
+                s.vendorImage,
+                {
+                  width: cardLayout.width * 0.2,
+                  height:
+                    (cardLayout.width * 0.2) / (vendorImage.size.width / vendorImage.size.height),
+                },
+              ]}
+            />
+          )}
         </View>
-        {vendorImage && (
-          <Image
-            source={vendorImage.src}
-            resizeMode={'contain'}
-            tintColor={accent1Color}
-            style={[
-              s.vendorImage,
-              {
-                width: cardLayout.width * 0.2,
-                height:
-                  (cardLayout.width * 0.2) / (vendorImage.size.width / vendorImage.size.height),
-              },
-            ]}
-          />
-        )}
       </Pressable>
     </View>
   );
@@ -149,11 +166,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: 40,
   },
   attributeIconContainer: {
-    width: 33,
-    height: 33,
+    width: 34,
+    height: 34,
     borderColor: theme.colors.darkGray,
     borderWidth: 2.5,
-    marginBottom: 4,
+    marginBottom: 5,
     borderRadius: 50,
     alignItems: 'center',
     justifyContent: 'center',
@@ -178,7 +195,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   mainIconContainer: {
     width: 60,
-    height: undefined, //59,
+    // height: undefined, //59,
     aspectRatio: 1,
     borderColor: theme.colors.darkGray,
     borderWidth: 5.5,
@@ -187,7 +204,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     top: -1,
-    marginBottom: 9.5,
+    marginBottom: 11,
   },
   modelImageFront: {
     width: '100%',

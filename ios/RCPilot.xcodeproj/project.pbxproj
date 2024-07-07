@@ -658,7 +658,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RCPilot/RCPilot.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = 3983F2B9PL;
+				DEVELOPMENT_TEAM = PVM4X2UBQ9;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				INFOPLIST_FILE = RCPilot/Info.plist;
@@ -691,7 +691,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = RCPilot/RCPilot.entitlements;
 				CURRENT_PROJECT_VERSION = 9;
-				DEVELOPMENT_TEAM = 3983F2B9PL;
+				DEVELOPMENT_TEAM = PVM4X2UBQ9;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "i386 arm64";
 				INFOPLIST_FILE = RCPilot/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "RC Pilot";

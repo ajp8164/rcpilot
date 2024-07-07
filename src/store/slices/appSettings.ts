@@ -19,7 +19,7 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   biometrics: true,
   databaseAccessWith: DatabaseAccessWith.WebServer,
   outputReportTo: OutputReportTo.WebServer,
-  modelsLayout: ModelsLayout.Carousel,
+  modelsLayout: ModelsLayout.List,
   themeSettings: {
     followDevice: true,
     app: 'light',

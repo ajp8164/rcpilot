@@ -40,7 +40,7 @@ export const Back = ({
       <Text style={[s.title, { textAlign: 'left', color: accent1Color }]}>{model.name}</Text>
       <View style={{ alignItems: 'flex-end' }}>
         <Image
-          source={require('theme/img/buddy.png')}
+          source={{ uri: model.image }}
           resizeMode={'cover'}
           // eslint-disable-next-line react-native/no-inline-styles
           style={{
@@ -71,21 +71,42 @@ export const Back = ({
           position={['last']}
           onPress={onPressEditModel}
         />
-        <Button
-          buttonStyle={theme.styles.buttonScreenHeader}
-          containerStyle={{ alignItems: 'flex-end', marginTop: 15 }}
-          icon={
-            <Icon
-              name={'rotate'}
-              style={{
-                color: accent2Color,
-                fontSize: 22,
-                marginHorizontal: 10,
-              }}
-            />
-          }
-          onPress={flip && flip}
-        />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            width: '100%',
+            marginTop: 15,
+          }}>
+          <Button
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={
+              <Icon
+                name={'palette'}
+                style={{
+                  color: accent2Color,
+                  fontSize: 22,
+                  marginHorizontal: 10,
+                }}
+              />
+            }
+            onPress={flip && flip}
+          />
+          <Button
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={
+              <Icon
+                name={'rotate'}
+                style={{
+                  color: accent2Color,
+                  fontSize: 22,
+                  marginHorizontal: 10,
+                }}
+              />
+            }
+            onPress={flip && flip}
+          />
+        </View>
       </View>
     </View>
   );

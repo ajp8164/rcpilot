@@ -126,6 +126,7 @@
     "reactotron-react-native": "^5.1.7",
     "readable-stream": "^4.2.0",
     "realm": "^12.5.0",
+    "reanimated-color-picker": "^3.0.4",
     "redux": "^5.0.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^3.1.0",

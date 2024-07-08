@@ -4,13 +4,14 @@ import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
 import { revertSettings } from 'store/actions';
-import { ModelsLayout } from 'types/preferences';
+import { ModelsDeckCardProperties, ModelsLayout } from 'types/preferences';
 
 export interface AppSettingsState {
   biometrics: boolean;
   databaseAccessWith: DatabaseAccessWith;
   outputReportTo: OutputReportTo;
   modelsLayout: ModelsLayout;
+  modelsDeckCardProperties: ModelsDeckCardProperties;
   themeSettings: ThemeSettings;
   tou: Tou;
 }
@@ -20,6 +21,7 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   databaseAccessWith: DatabaseAccessWith.WebServer,
   outputReportTo: OutputReportTo.WebServer,
   modelsLayout: ModelsLayout.List,
+  modelsDeckCardProperties: {},
   themeSettings: {
     followDevice: true,
     app: 'light',

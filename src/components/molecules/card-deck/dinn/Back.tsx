@@ -1,6 +1,6 @@
 import { Image, LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
@@ -9,6 +9,7 @@ import type FlipCardView from 'components/views/FlipCardView';
 import { ListItem } from 'components/atoms/List';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import CustomIcon from 'theme/icomoon/CustomIcon';
+import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -27,6 +28,8 @@ export const Back = ({
 
   const [cardLayout, setCardLayout] = useState<LayoutRectangle>();
 
+  const deckCardPropertiesModalRef = useRef<DeckCardPropertiesModal>(null);
+
   const primaryColor = '#102013';
   const accent1Color = '#777A15';
   const accent2Color = '#4B5C21';
@@ -36,79 +39,92 @@ export const Back = ({
   };
 
   return (
-    <View style={[s.container, { backgroundColor: primaryColor }]} onLayout={onLayout}>
-      <Text style={[s.title, { textAlign: 'left', color: accent1Color }]}>{model.name}</Text>
-      <View style={{ alignItems: 'flex-end' }}>
-        <Image
-          source={{ uri: model.image }}
-          resizeMode={'cover'}
-          // eslint-disable-next-line react-native/no-inline-styles
-          style={{
-            width: cardLayout ? cardLayout.width * 0.33 : 0,
-            height: cardLayout ? cardLayout?.width * 0.33 : 0,
-          }}
-        />
-      </View>
-      <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }}>
-        <ListItem
-          title={'New Flight'}
-          titleStyle={{ color: primaryColor }}
-          containerStyle={{
-            backgroundColor: accent2Color,
-          }}
-          bottomDividerColor={primaryColor}
-          rightImage={<Icon name={'play-circle'} size={20} color={primaryColor} />}
-          position={['first']}
-          onPress={onPressNewEventSequence}
-        />
-        <ListItem
-          title={'Model Details'}
-          titleStyle={{ color: primaryColor }}
-          containerStyle={{
-            backgroundColor: accent2Color,
-          }}
-          rightImage={<CustomIcon name={'circle-info'} size={20} color={primaryColor} />}
-          position={['last']}
-          onPress={onPressEditModel}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-            marginTop: 15,
-          }}>
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={
-              <Icon
-                name={'palette'}
-                style={{
-                  color: accent2Color,
-                  fontSize: 22,
-                  marginHorizontal: 10,
-                }}
-              />
-            }
-            onPress={flip && flip}
-          />
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={
-              <Icon
-                name={'rotate'}
-                style={{
-                  color: accent2Color,
-                  fontSize: 22,
-                  marginHorizontal: 10,
-                }}
-              />
-            }
-            onPress={flip && flip}
+    <>
+      <View style={[s.container, { backgroundColor: primaryColor }]} onLayout={onLayout}>
+        <Text style={[s.title, { textAlign: 'left', color: accent1Color }]}>{model.name}</Text>
+        <View style={{ alignItems: 'flex-end' }}>
+          <Image
+            source={{ uri: model.image }}
+            resizeMode={'cover'}
+            // eslint-disable-next-line react-native/no-inline-styles
+            style={{
+              width: cardLayout ? cardLayout.width * 0.33 : 0,
+              height: cardLayout ? cardLayout?.width * 0.33 : 0,
+            }}
           />
         </View>
+        <View style={{ flex: 1, justifyContent: 'flex-end', width: '100%' }}>
+          <ListItem
+            title={'New Flight'}
+            titleStyle={{ color: primaryColor }}
+            containerStyle={{
+              backgroundColor: accent2Color,
+            }}
+            bottomDividerColor={primaryColor}
+            rightImage={<Icon name={'play-circle'} size={20} color={primaryColor} />}
+            position={['first']}
+            onPress={onPressNewEventSequence}
+          />
+          <ListItem
+            title={'Model Details'}
+            titleStyle={{ color: primaryColor }}
+            containerStyle={{
+              backgroundColor: accent2Color,
+            }}
+            rightImage={<CustomIcon name={'circle-info'} size={20} color={primaryColor} />}
+            position={['last']}
+            onPress={onPressEditModel}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              width: '100%',
+              marginTop: 15,
+            }}>
+            <Button
+              buttonStyle={theme.styles.buttonScreenHeader}
+              icon={
+                <Icon
+                  name={'palette'}
+                  style={{
+                    color: accent2Color,
+                    fontSize: 22,
+                    marginHorizontal: 10,
+                  }}
+                />
+              }
+              onPress={() => {
+                flip && flip();
+                deckCardPropertiesModalRef.current?.present();
+              }}
+            />
+            <Button
+              buttonStyle={theme.styles.buttonScreenHeader}
+              icon={
+                <Icon
+                  name={'rotate'}
+                  style={{
+                    color: accent2Color,
+                    fontSize: 22,
+                    marginHorizontal: 10,
+                  }}
+                />
+              }
+              onPress={flip && flip}
+            />
+          </View>
+        </View>
       </View>
-    </View>
+      <DeckCardPropertiesModal
+        ref={deckCardPropertiesModalRef}
+        colors={{
+          primary: '#ffffff',
+          accent1: '#00ff00',
+          accent2: '#0000ff',
+        }}
+      />
+    </>
   );
 };
 

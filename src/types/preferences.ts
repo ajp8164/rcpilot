@@ -10,8 +10,9 @@ export type DeckCardColors = {
   accent2: string;
 };
 
-export type DeckCardProperties = {
-  colors: DeckCardColors;
+export type ModelPreferences = {
+  deckCardColors: DeckCardColors;
 };
 
-export type ModelsDeckCardProperties = Record<string, DeckCardProperties>;
+// Key is model id.
+export type ModelsPreferences = Record<string, ModelPreferences>;

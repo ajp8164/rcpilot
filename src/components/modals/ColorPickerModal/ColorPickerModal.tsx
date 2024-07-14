@@ -1,11 +1,11 @@
-import { ColorPickerModalMethods, ColorPickerModalProps } from './types';
+import { ColorPickerModalMethods, ColorPickerModalProps, PresentOptions } from './types';
 import { AppTheme, useTheme } from 'theme';
 import React, { useImperativeHandle, useRef, useState } from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader, viewport } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rneui/themed';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Animated, { SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Text, View } from 'react-native';
 import ColorPicker, {
   Panel5,
@@ -20,15 +20,20 @@ import SegmentedControl from '@react-native-segmented-control/segmented-control'
 type ColorPickerModal = ColorPickerModalMethods;
 
 const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProps>((props, ref) => {
-  const { onSelectColor, snapPoints = ['70%'] } = props;
+  const { onDismiss, snapPoints = ['70%'] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
 
-  const selectedColor = useSharedValue(theme.colors.stickyBlack);
-  const backgroundColorStyle = useAnimatedStyle(() => ({ backgroundColor: selectedColor.value }));
+  const defaultColor = theme.colors.stickyBlack;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const extraData = useRef<any>();
+  const externalColor = useRef<SharedValue<string>>();
+  const internalSharedColor = useSharedValue(defaultColor);
+  const [internalColor, setInternalColor] = useState(defaultColor);
+  const previewStyle = useAnimatedStyle(() => ({ backgroundColor: internalSharedColor.value }));
 
   const colorPickers = {
     grid: { label: 'Grid', index: 0 },
@@ -51,16 +56,27 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
     innerRef.current?.dismiss();
   };
 
-  const present = (initialColor?: string) => {
-    if (initialColor) {
-      selectedColor.value = initialColor;
+  const present = (opts?: PresentOptions) => {
+    // Can optionally pass in a shared color value for animation of color in callers components.
+    if (opts?.color) {
+      // Initialize color if provided.
+      internalSharedColor.value = opts.color.value;
+      setInternalColor(opts.color.value); // Needed to force the grid to re-render with this initial color.
+
+      // Hold on to the callers shared value so it can be updated when the color chnages.
+      externalColor.current = opts.color;
     }
+
+    extraData.current = opts?.extraData;
+    setSelectedColorPicker(colorPickers.grid.index);
     innerRef.current?.present();
   };
 
-  const onColorSelect = (color: returnedResults) => {
-    selectedColor.value = color.hex;
-    onSelectColor(color.hex);
+  const onChangeColor = (color: returnedResults) => {
+    internalSharedColor.value = color.hex;
+    if (externalColor.current) {
+      externalColor.current.value = color.hex;
+    }
   };
 
   return (
@@ -68,7 +84,8 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
       ref={innerRef}
       snapPoints={snapPoints}
       scrollEnabled={false}
-      enableGestureBehavior={true}>
+      enableGestureBehavior={true}
+      onDismiss={() => onDismiss({ color: internalSharedColor.value })}>
       <ModalHeader
         title={'Colors'}
         size={'small'}
@@ -93,29 +110,29 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
         />
         <View style={s.pickerContainer}>
           {selectedColorPicker === colorPickers.grid.index && (
-            <ColorPicker value={selectedColor.value} onChange={onColorSelect}>
+            <ColorPicker value={internalColor} onChange={onChangeColor}>
               <Panel5 style={s.panelGrid} />
             </ColorPicker>
           )}
           {selectedColorPicker === colorPickers.spectrum.index && (
             <ColorPicker
-              value={selectedColor.value}
+              value={internalSharedColor.value}
               thumbSize={24}
               thumbShape={'circle'}
-              onChange={onColorSelect}>
+              onChange={onChangeColor}>
               <Panel4 style={s.panelSpectrum} />
             </ColorPicker>
           )}
           {selectedColorPicker === colorPickers.sliders.index && (
             <ColorPicker
-              value={selectedColor.value}
+              value={internalSharedColor.value}
               sliderThickness={30}
               thumbSize={30}
               thumbShape={'circle'}
               thumbAnimationDuration={100}
               adaptSpectrum
               boundedThumb
-              onChange={onColorSelect}>
+              onChange={onChangeColor}>
               <Text style={s.sliderTitle}>{'RED'}</Text>
               <RedSlider style={s.slider} />
               <Text style={s.sliderTitle}>{'GREEN'}</Text>
@@ -124,7 +141,7 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
               <BlueSlider style={s.slider} />
             </ColorPicker>
           )}
-          <Animated.View style={[s.preview, backgroundColorStyle]} />
+          <Animated.View style={[s.preview, previewStyle]} />
         </View>
       </View>
     </Modal>

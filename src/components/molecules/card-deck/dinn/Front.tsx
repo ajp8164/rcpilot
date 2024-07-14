@@ -12,6 +12,9 @@ import { ellipsis } from '@react-native-ajp-elements/core';
 import { getVendorImage } from 'theme/images';
 import { SvgXml } from 'react-native-svg';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
+import { useSelector } from 'react-redux';
+import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
+import { defaultDinnCardColors } from './index';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -31,10 +34,8 @@ export const Front = ({
   const totalTime = Duration.fromMillis(model.statistics.totalTime * 1000).toFormat('h:mm:ss');
   const lastFlight = model.lastEvent && DateTime.fromISO(model.lastEvent).toFormat('M/dd/yyyy');
   const maintenanceIsDue = modelMaintenanceIsDue(model);
-
-  const primaryColor = '#102013';
-  const accent1Color = '#777A15';
-  const accent2Color = '#4B5C21';
+  const modelPreferences = useSelector(selectModelPreferences(model._id.toString()));
+  const cardColors = modelPreferences?.deckCardColors || defaultDinnCardColors;
 
   const handlePress = () => {
     flip && flip();
@@ -56,14 +57,9 @@ export const Front = ({
     <View style={s.container} onLayout={onLayout}>
       <Pressable onPress={handlePress}>
         {model.image ? (
-          <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImageFront} />
+          <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
         ) : (
-          <View
-            style={{
-              width: '100%',
-              height: '100%',
-              backgroundColor: '#bbddff',
-            }}>
+          <View style={s.defaultImage}>
             <SvgXml
               xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
               width={'100%'}
@@ -75,59 +71,71 @@ export const Front = ({
             />
           </View>
         )}
-        <View style={[s.background, { backgroundColor: primaryColor, borderColor: accent1Color }]}>
+        <View
+          style={[
+            s.background,
+            { backgroundColor: cardColors.primary, borderColor: cardColors.accent1 },
+          ]}>
           <View style={s.textContainer}>
-            <Text style={[s.title, { color: accent1Color }]}>{ellipsis(model.name, 13)}</Text>
+            <Text style={[s.title, { color: cardColors.accent1 }]}>{ellipsis(model.name, 13)}</Text>
             <Text
               style={[
                 s.text,
-                { color: accent1Color },
+                { color: cardColors.accent1 },
               ]}>{`${model.statistics.totalEvents} Flights`}</Text>
-            <Text style={[s.text, { color: accent1Color }]}>{`${totalTime} Total Time`}</Text>
+            <Text style={[s.text, { color: cardColors.accent1 }]}>{`${totalTime} Total Time`}</Text>
             {lastFlight && <Text style={s.text}>{`${lastFlight} Last Flight`}</Text>}
           </View>
           <View style={s.attributesContainer}>
             <Pressable
               style={[
                 s.mainIconContainer,
-                { backgroundColor: accent2Color, borderColor: accent1Color },
+                { backgroundColor: cardColors.accent2, borderColor: cardColors.accent1 },
               ]}
               onPress={onPressNewEventSequence}>
-              <Icon name={'play'} size={28} style={[s.newEventIcon, { color: primaryColor }]} />
+              <Icon
+                name={'play'}
+                size={28}
+                style={[s.newEventIcon, { color: cardColors.primary }]}
+              />
             </Pressable>
             {maintenanceIsDue && (
-              <View style={[s.attributeIconContainer, { borderColor: accent1Color }]}>
+              <View style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}>
                 <Icon
                   name={'wrench'}
                   size={20}
-                  style={[s.attributeIcon, { color: accent2Color }]}
+                  style={[s.attributeIcon, { color: cardColors.accent2 }]}
                 />
               </View>
             )}
             {model.damaged && (
-              <View style={[s.attributeIconContainer, { borderColor: accent1Color }]}>
+              <View style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}>
                 <Icon
                   name={'bandage'}
                   size={18}
                   color={theme.colors.stickyWhite}
                   style={[
                     s.attributeIcon,
-                    { color: accent2Color, transform: [{ rotate: '30deg' }] },
+                    { color: cardColors.accent2, transform: [{ rotate: '30deg' }] },
                   ]}
                 />
               </View>
             )}
             <Pressable
-              style={[s.attributeIconContainer, { borderColor: accent1Color }]}
+              style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}
               onPress={onPressEditModel}>
-              <Icon name={'info'} size={20} style={[s.attributeIcon, { color: accent2Color }]} />
+              <Icon
+                name={'info'}
+                size={20}
+                style={[s.attributeIcon, { color: cardColors.accent2 }]}
+              />
             </Pressable>
           </View>
           {vendorImage && (
             <Image
               source={vendorImage.src}
               resizeMode={'contain'}
-              tintColor={accent1Color}
+              tintColor={cardColors.accent1}
               style={[
                 s.vendorImage,
                 {
@@ -159,6 +167,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderTopWidth: 10,
     borderColor: theme.colors.darkGray,
   },
+  defaultImage: {
+    width: '100%',
+    height: '100%',
+    backgroundColor: '#bbddff',
+  },
   attributesContainer: {
     alignItems: 'center',
     position: 'absolute',
@@ -183,10 +196,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: 12,
   },
   title: {
-    ...theme.styles.textXL,
-    ...theme.styles.textBold,
+    ...theme.styles.textHeading2,
     color: theme.colors.darkGray,
-    marginBottom: 13,
+    marginTop: -2,
+    marginBottom: 7,
   },
   text: {
     ...theme.styles.textSmall,
@@ -195,7 +208,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   mainIconContainer: {
     width: 60,
-    // height: undefined, //59,
     aspectRatio: 1,
     borderColor: theme.colors.darkGray,
     borderWidth: 5.5,
@@ -206,18 +218,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: -1,
     marginBottom: 11,
   },
-  modelImageFront: {
+  modelImage: {
     width: '100%',
     height: '100%',
   },
   newEventIcon: {
     left: 2,
-  },
-  fuelIcon: {
-    left: 2,
-  },
-  batteryIcon: {
-    transform: [{ rotate: '-90deg' }],
   },
   vendorImage: {
     position: 'absolute',

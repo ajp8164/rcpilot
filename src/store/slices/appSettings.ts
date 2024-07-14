@@ -4,14 +4,14 @@ import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
 import { revertSettings } from 'store/actions';
-import { ModelsDeckCardProperties, ModelsLayout } from 'types/preferences';
+import { ModelPreferences, ModelsPreferences, ModelsLayout } from 'types/preferences';
 
 export interface AppSettingsState {
   biometrics: boolean;
   databaseAccessWith: DatabaseAccessWith;
   outputReportTo: OutputReportTo;
   modelsLayout: ModelsLayout;
-  modelsDeckCardProperties: ModelsDeckCardProperties;
+  modelsPreferences: ModelsPreferences;
   themeSettings: ThemeSettings;
   tou: Tou;
 }
@@ -21,7 +21,7 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   databaseAccessWith: DatabaseAccessWith.WebServer,
   outputReportTo: OutputReportTo.WebServer,
   modelsLayout: ModelsLayout.List,
-  modelsDeckCardProperties: {},
+  modelsPreferences: {},
   themeSettings: {
     followDevice: true,
     app: 'light',
@@ -71,6 +71,30 @@ const handleSaveModelsLayout: CaseReducer<
   };
 };
 
+const handleDeleteModelPreferences: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ modelId: string }>
+> = (state, { payload }) => {
+  const updatedModelsPreferences = Object.assign({}, state.modelsPreferences);
+  delete updatedModelsPreferences[payload.modelId];
+  return {
+    ...state,
+    modelsPreferences: updatedModelsPreferences,
+  };
+};
+
+const handleSaveModelPreferences: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ modelId: string; props: ModelPreferences }>
+> = (state, { payload }) => {
+  const updatedModelsPreferences = Object.assign({}, state.modelsPreferences);
+  updatedModelsPreferences[payload.modelId] = payload.props;
+  return {
+    ...state,
+    modelsPreferences: updatedModelsPreferences,
+  };
+};
+
 const handleSaveThemeSettings: CaseReducer<
   AppSettingsState,
   PayloadAction<{ themeSettings: ThemeSettings }>
@@ -96,19 +120,23 @@ const appSettingsSlice = createSlice({
   initialState: initialAppSettingsState,
   extraReducers: builder => builder.addCase(revertSettings, () => initialAppSettingsState),
   reducers: {
+    deleteModelPreferences: handleDeleteModelPreferences,
     saveAcceptTou: handleSaveAcceptTou,
     saveBiometrics: handleSaveBiometrics,
     saveDatabaseAccessWith: handleSaveDatabaseAccessWith,
     saveOutputReportTo: handleSaveOutputReportTo,
     saveModelsLayout: handleSaveModelsLayout,
+    saveModelPreferences: handleSaveModelPreferences,
     saveThemeSettings: handleSaveThemeSettings,
   },
 });
 
 export const appSettingsReducer = appSettingsSlice.reducer;
+export const deleteModelPreferences = appSettingsSlice.actions.deleteModelPreferences;
 export const saveAcceptTou = appSettingsSlice.actions.saveAcceptTou;
 export const saveBiometrics = appSettingsSlice.actions.saveBiometrics;
 export const saveDatabaseAccessWith = appSettingsSlice.actions.saveDatabaseAccessWith;
 export const saveOutputReportTo = appSettingsSlice.actions.saveOutputReportTo;
 export const saveModelsLayout = appSettingsSlice.actions.saveModelsLayout;
+export const saveModelPreferences = appSettingsSlice.actions.saveModelPreferences;
 export const saveThemeSettings = appSettingsSlice.actions.saveThemeSettings;

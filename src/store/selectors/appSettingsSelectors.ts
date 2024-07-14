@@ -15,6 +15,15 @@ export const selectDatabaseAccessWith = createSelector(selectAppState, appState 
   return appState.appSettings.databaseAccessWith;
 });
 
+export const selectModelPreferences = (modelId: string) =>
+  createSelector(selectAppState, appState => {
+    return appState.appSettings.modelsPreferences[modelId];
+  });
+
+export const selectModelsPreferences = createSelector(selectAppState, appState => {
+  return appState.appSettings.modelsPreferences;
+});
+
 export const selectOutputReportTo = createSelector(selectAppState, appState => {
   return appState.appSettings.outputReportTo;
 });

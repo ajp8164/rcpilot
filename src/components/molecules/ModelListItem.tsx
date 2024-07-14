@@ -11,6 +11,8 @@ import { SvgXml } from 'react-native-svg';
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useRealm } from '@realm/react';
+import { useDispatch } from 'react-redux';
+import { deleteModelPreferences } from 'store/slices/appSettings';
 
 interface ModelListItemInterface {
   array: Model[];
@@ -36,6 +38,7 @@ export const ModelListItem = ({
   const s = useStyles(theme);
   const confirmAction = useConfirmAction();
   const realm = useRealm();
+  const dispatch = useDispatch();
 
   const maintenanceIsDue = modelMaintenanceIsDue(model);
 
@@ -43,6 +46,9 @@ export const ModelListItem = ({
     realm.write(() => {
       realm.delete(model);
     });
+
+    // Cleanup any model preferences.
+    dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
   };
 
   return (

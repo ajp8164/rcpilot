@@ -1,2 +1,7 @@
 export * from './ColorPickerModal';
-export type { ColorPickerModalProps, ColorPickerModalMethods } from './types';
+export type {
+  ColorPickerModalProps,
+  ColorPickerModalMethods,
+  PresentOptions,
+  Result,
+} from './types';

@@ -391,12 +391,13 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const deleteModel = () => {
+    // Cleanup model preferences.
+    model && dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
+
     realm.write(() => {
       realm.delete(model);
     });
 
-    // Cleanup model preferences.
-    model && dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
     navigation.goBack();
   };
 

@@ -43,12 +43,12 @@ export const ModelListItem = ({
   const maintenanceIsDue = modelMaintenanceIsDue(model);
 
   const deleteModel = (model: Model) => {
+    // Cleanup model preferences.
+    dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
+
     realm.write(() => {
       realm.delete(model);
     });
-
-    // Cleanup model preferences.
-    dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
   };
 
   return (

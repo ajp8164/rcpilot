@@ -47,7 +47,7 @@ export const ModelListItem = ({
       realm.delete(model);
     });
 
-    // Cleanup any model preferences.
+    // Cleanup model preferences.
     dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
   };
 

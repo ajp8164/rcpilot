@@ -42,6 +42,8 @@ import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useFocusEffect } from '@react-navigation/native';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useDispatch } from 'react-redux';
+import { deleteModelPreferences } from 'store/slices/appSettings';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'ModelEditor'>,
@@ -53,6 +55,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const dispatch = useDispatch();
   const confirmAction = useConfirmAction();
   const setDebounced = useDebouncedRender();
   const event = useEvent();
@@ -391,6 +394,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     realm.write(() => {
       realm.delete(model);
     });
+
+    // Cleanup model preferences.
+    model && dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
     navigation.goBack();
   };
 

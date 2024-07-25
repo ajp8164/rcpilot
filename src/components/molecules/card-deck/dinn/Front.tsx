@@ -49,6 +49,7 @@ export const Front = ({
     x: 0,
     y: 0,
   });
+
   const onLayout = (event: LayoutChangeEvent) => {
     setCardLayout(event.nativeEvent.layout);
   };

@@ -1,6 +1,6 @@
 import { ColorPickerModalMethods, ColorPickerModalProps, PresentOptions } from './types';
 import { AppTheme, useTheme } from 'theme';
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import React, { useCallback, useContext, useImperativeHandle, useRef, useState } from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader, viewport } from '@react-native-ajp-elements/ui';
@@ -16,24 +16,32 @@ import ColorPicker, {
   BlueSlider,
 } from 'reanimated-color-picker';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
+import { Eyedropper } from './Eyedropper';
+import { ColorPickerContext } from 'components/modals/ColorPickerModal';
+import { log } from '@react-native-ajp-elements/core';
+import ModalHandle from 'components/atoms/ModalHandle';
 
 type ColorPickerModal = ColorPickerModalMethods;
 
 const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProps>((props, ref) => {
-  const { onDismiss, snapPoints = ['70%'] } = props;
+  const { eyedropperViewRef, snapPoints = ['70%'] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const { extraData, onDismiss } = useContext(ColorPickerContext);
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
 
   const defaultColor = theme.colors.stickyBlack;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extraData = useRef<any>();
+
   const externalColor = useRef<SharedValue<string>>();
   const internalSharedColor = useSharedValue(defaultColor);
   const [internalColor, setInternalColor] = useState(defaultColor);
   const previewStyle = useAnimatedStyle(() => ({ backgroundColor: internalSharedColor.value }));
+
+  const eyedropperActive = useRef(false);
+  const [eyedropperImage, setEyedropperImage] = useState<SkImage | null>(null);
 
   const colorPickers = {
     grid: { label: 'Grid', index: 0 },
@@ -67,84 +75,133 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
       externalColor.current = opts.color;
     }
 
-    extraData.current = opts?.extraData;
+    // Can optionally provide data that will pass through from present to dismiss.
+    if (opts?.extraData) {
+      extraData.current = opts.extraData;
+    }
+
     setSelectedColorPicker(colorPickers.grid.index);
     innerRef.current?.present();
   };
 
-  const onChangeColor = (color: returnedResults) => {
-    internalSharedColor.value = color.hex;
+  const openEyedropper = useCallback(() => {
+    // Dismiss (hide) modal while using the eyedropper.
+    eyedropperActive.current = true;
+    dismiss();
+
+    if (!eyedropperViewRef) return;
+    makeImageFromView(eyedropperViewRef)
+      .then(snapshot => {
+        setEyedropperImage(snapshot);
+      })
+      .catch(() => log.debug('No image for color picker eyedropper'));
+  }, [eyedropperViewRef]);
+
+  const onChangeColor = (color: returnedResults | string) => {
+    let selectedColor;
+    if (typeof color === 'string') {
+      selectedColor = color;
+    } else {
+      selectedColor = color.hex;
+    }
+
+    internalSharedColor.value = selectedColor;
     if (externalColor.current) {
-      externalColor.current.value = color.hex;
+      externalColor.current.value = selectedColor;
+    }
+
+    // If the eyedropper was in use then re-present the modal.
+    if (eyedropperActive.current) {
+      eyedropperActive.current = false;
+      present();
     }
   };
 
+  const returnResult = () => {
+    !eyedropperActive.current &&
+      onDismiss({
+        color: internalSharedColor.value,
+        extraData: extraData.current,
+      });
+  };
+
   return (
-    <Modal
-      ref={innerRef}
-      snapPoints={snapPoints}
-      scrollEnabled={false}
-      enableGestureBehavior={true}
-      onDismiss={() => onDismiss({ color: internalSharedColor.value })}>
-      <ModalHeader
-        title={'Colors'}
-        size={'small'}
-        leftButtonIcon={'eyedropper'}
-        leftButtonIconColor={theme.colors.screenHeaderButtonText}
-        rightButtonIcon={'close-circle'}
-        rightButtonIconColor={theme.colors.midGray}
-        onRightButtonPress={dismiss}
-      />
-      <View style={s.container}>
-        <SegmentedControl
-          values={colorPickerSegments}
-          style={s.segmentedControl}
-          tintColor={theme.colors.viewAltBackground}
-          backgroundColor={theme.colors.wispGray}
-          fontStyle={s.segmentedFont}
-          activeFontStyle={s.segmentedActiveFont}
-          selectedIndex={selectedColorPicker}
-          onChange={event => {
-            setSelectedColorPicker(event.nativeEvent.selectedSegmentIndex);
-          }}
+    <>
+      <Modal
+        ref={innerRef}
+        snapPoints={snapPoints}
+        scrollEnabled={false}
+        enableGestureBehavior={true}
+        handleComponent={ModalHandle}
+        onDismiss={returnResult}>
+        <ModalHeader
+          title={'Colors'}
+          size={'small'}
+          leftButtonIcon={'eyedropper'}
+          leftButtonIconColor={theme.colors.screenHeaderButtonText}
+          onLeftButtonPress={openEyedropper}
+          rightButtonIcon={'close-circle'}
+          rightButtonIconColor={theme.colors.lightGray}
+          onRightButtonPress={dismiss}
         />
-        <View style={s.pickerContainer}>
-          {selectedColorPicker === colorPickers.grid.index && (
-            <ColorPicker value={internalColor} onChange={onChangeColor}>
-              <Panel5 style={s.panelGrid} />
-            </ColorPicker>
-          )}
-          {selectedColorPicker === colorPickers.spectrum.index && (
-            <ColorPicker
-              value={internalSharedColor.value}
-              thumbSize={24}
-              thumbShape={'circle'}
-              onChange={onChangeColor}>
-              <Panel4 style={s.panelSpectrum} />
-            </ColorPicker>
-          )}
-          {selectedColorPicker === colorPickers.sliders.index && (
-            <ColorPicker
-              value={internalSharedColor.value}
-              sliderThickness={30}
-              thumbSize={30}
-              thumbShape={'circle'}
-              thumbAnimationDuration={100}
-              adaptSpectrum
-              boundedThumb
-              onChange={onChangeColor}>
-              <Text style={s.sliderTitle}>{'RED'}</Text>
-              <RedSlider style={s.slider} />
-              <Text style={s.sliderTitle}>{'GREEN'}</Text>
-              <GreenSlider style={s.slider} />
-              <Text style={s.sliderTitle}>{'BLUE'}</Text>
-              <BlueSlider style={s.slider} />
-            </ColorPicker>
-          )}
-          <Animated.View style={[s.preview, previewStyle]} />
+        <View style={s.container}>
+          <SegmentedControl
+            values={colorPickerSegments}
+            style={s.segmentedControl}
+            tintColor={theme.colors.viewAltBackground}
+            backgroundColor={theme.colors.wispGray}
+            fontStyle={s.segmentedFont}
+            activeFontStyle={s.segmentedActiveFont}
+            selectedIndex={selectedColorPicker}
+            onChange={event => {
+              setSelectedColorPicker(event.nativeEvent.selectedSegmentIndex);
+            }}
+          />
+          <View style={s.pickerContainer}>
+            {selectedColorPicker === colorPickers.grid.index && (
+              <ColorPicker value={internalColor} onChange={onChangeColor}>
+                <Panel5 style={s.panelGrid} />
+              </ColorPicker>
+            )}
+            {selectedColorPicker === colorPickers.spectrum.index && (
+              <ColorPicker
+                value={internalSharedColor.value}
+                thumbSize={24}
+                thumbShape={'circle'}
+                onChange={onChangeColor}>
+                <Panel4 style={s.panelSpectrum} />
+              </ColorPicker>
+            )}
+            {selectedColorPicker === colorPickers.sliders.index && (
+              <ColorPicker
+                value={internalSharedColor.value}
+                sliderThickness={30}
+                thumbSize={30}
+                thumbShape={'circle'}
+                thumbAnimationDuration={100}
+                adaptSpectrum
+                boundedThumb
+                onChange={onChangeColor}>
+                <Text style={s.sliderTitle}>{'RED'}</Text>
+                <RedSlider style={s.slider} />
+                <Text style={s.sliderTitle}>{'GREEN'}</Text>
+                <GreenSlider style={s.slider} />
+                <Text style={s.sliderTitle}>{'BLUE'}</Text>
+                <BlueSlider style={s.slider} />
+              </ColorPicker>
+            )}
+            <Animated.View style={[s.preview, previewStyle]} />
+          </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+      {eyedropperImage !== null ? (
+        <Eyedropper
+          image={eyedropperImage}
+          setImage={setEyedropperImage}
+          onSelectColor={onChangeColor}
+        />
+      ) : null}
+    </>
   );
 });
 

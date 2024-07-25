@@ -58,7 +58,6 @@ export const FlipCard = ({
           event.stopPropagation();
           spin.value = spin.value ? 0 : 1;
         }
-        console.log('pressed ', event.nativeEvent);
       }}>
       <AnimatedView style={[s.front, rStyle]}>{frontItem}</AnimatedView>
       <AnimatedView style={[s.back, bStyle]}>{backItem}</AnimatedView>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
 
 export type PresentOptions = {
@@ -8,7 +9,7 @@ export type PresentOptions = {
 };
 
 export type Result = {
-  color?: string;
+  color: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any;
 };
@@ -22,8 +23,8 @@ declare const LegalModal: React.MemoExoticComponent<
 >;
 
 export interface ColorPickerModalProps {
+  eyedropperViewRef: React.RefObject<View>;
   snapPoints?: (string | number)[];
-  onDismiss: (result: Result) => void;
 }
 
 export interface ColorPickerModalMethods {

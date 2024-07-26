@@ -86,8 +86,8 @@ const Eyedropper = ({ image, onSelectColor, setImage }: EyedropperInterface) => 
 
   const pan = Gesture.Pan()
     .onStart(e => {
-      offset.x.value = e.x - width / 2;
-      offset.y.value = e.y - height / 2;
+      offset.x.value = e.x - width / 2 - 50; // Offset position to see the target center
+      offset.y.value = e.y - height / 2 - 50;
     })
     .onUpdate(e => {
       translate.x.value = offset.x.value + e.translationX;

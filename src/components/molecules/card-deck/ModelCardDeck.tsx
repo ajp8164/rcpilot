@@ -29,7 +29,7 @@ export const ModelCardDeck = ({ models, startNewEventSequence }: ModelCardDeckIn
   return (
     <Carousel
       style={s.carousel}
-      width={viewport.width * 0.85}
+      width={viewport.width}
       height={visibleViewHeight}
       pagingEnabled={true}
       snapEnabled={true}
@@ -41,7 +41,7 @@ export const ModelCardDeck = ({ models, startNewEventSequence }: ModelCardDeckIn
       modeConfig={{
         moveSize: viewport.width * 2,
         snapDirection: 'left',
-        stackInterval: 15,
+        stackInterval: 0,
         rotateZDeg: 10,
       }}
       customConfig={() => ({ type: 'negative', viewCount: models.length > 3 ? 3 : models.length })}
@@ -56,7 +56,6 @@ export const ModelCardDeck = ({ models, startNewEventSequence }: ModelCardDeckIn
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   carousel: {
-    width: '100%',
     justifyContent: 'center',
     marginTop:
       Number(theme.styles.headerBarLarge.height) +

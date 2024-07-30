@@ -7,7 +7,7 @@ import Animated, {
 import { AppTheme, useTheme } from 'theme';
 import { Image, Platform, Pressable, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { getColoredSvg, useSelectAttachments } from '@react-native-ajp-elements/ui';
+import { getColoredSvg, useSelectAttachments, viewport } from '@react-native-ajp-elements/ui';
 
 import { BSON } from 'realm';
 import CircleButton from 'components/atoms/CircleButton';
@@ -97,6 +97,7 @@ export const ModelHeader = ({
 
   const selectModelImage = () => {
     selectAttachments({
+      cropRect: { width: viewport.width * 5 * 1.3, height: viewport.width * 5 },
       customButtonDestructive: true,
       customButtonCallback: deletePhoto,
       customButtonLabel: image ? 'Delete Photo' : undefined,

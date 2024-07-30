@@ -1217,9 +1217,6 @@ PODS:
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
     - React-Core
-  - react-native-image-picker (7.1.0):
-    - RCT-Folly (= 2021.07.22.00)
-    - React-Core
   - react-native-maps (1.11.3):
     - React-Core
   - react-native-netinfo (9.5.0):
@@ -1412,6 +1409,15 @@ PODS:
   - RNGoogleSignin (9.1.0):
     - GoogleSignIn (~> 6.2)
     - React-Core
+  - RNImageCropPicker (0.41.2):
+    - React-Core
+    - React-RCTImage
+    - RNImageCropPicker/QBImagePickerController (= 0.41.2)
+    - TOCropViewController (~> 2.7.4)
+  - RNImageCropPicker/QBImagePickerController (0.41.2):
+    - React-Core
+    - React-RCTImage
+    - TOCropViewController (~> 2.7.4)
   - RNNotifee (7.8.2):
     - React-Core
     - RNNotifee/NotifeeCore (= 7.8.2)
@@ -1442,6 +1448,7 @@ PODS:
   - SocketRocket (0.6.1)
   - TextToSpeech (4.1.0):
     - React
+  - TOCropViewController (2.7.4)
   - TwitterCore (3.2.0)
   - TwitterKit5 (5.2.0):
     - TwitterCore (>= 3.1.0)
@@ -1486,7 +1493,6 @@ DEPENDENCIES:
   - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
-  - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
@@ -1535,6 +1541,7 @@ DEPENDENCIES:
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNOS (from `../node_modules/react-native-os`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -1591,6 +1598,7 @@ SPEC REPOS:
     - RecaptchaInterop
     - Sentry
     - SocketRocket
+    - TOCropViewController
     - TwitterCore
     - TwitterKit5
 
@@ -1659,8 +1667,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-get-random-values"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
-  react-native-image-picker:
-    :path: "../node_modules/react-native-image-picker"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
   react-native-netinfo:
@@ -1757,6 +1763,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-gesture-handler"
   RNGoogleSignin:
     :path: "../node_modules/@react-native-google-signin/google-signin"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   RNNotifee:
     :path: "../node_modules/@notifee/react-native"
   RNOS:
@@ -1853,7 +1861,6 @@ SPEC CHECKSUMS:
   react-native-geolocation: c22ae462142e49699437dc21b8c46a701374bc06
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-google-maps: b80d3947411fcf462ec420c3e6122b7fa24beb9a
-  react-native-image-picker: e9cda49f0f2bb925453cb6d0ed38bea5f1e9231a
   react-native-maps: 79610ffcd0ec2ca8e0cefb48aa8ae7c62a75d7cc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
@@ -1903,6 +1910,7 @@ SPEC CHECKSUMS:
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: e8136f17f433457f317408580c27491a49f77a4c
   RNGoogleSignin: c15bdaa7e8a9e190b6169d9c96a4e8380a740f22
+  RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
   RNNotifee: 8e2d3df3f0e9ce8f5d1fe4c967431138190b6175
   RNOS: 6f2f9a70895bbbfbdad7196abd952e7b01d45027
   RNReanimated: d89ed5320138257b8ebcd0252ed581b25698845b
@@ -1915,6 +1923,7 @@ SPEC CHECKSUMS:
   Sentry: 4c9babff9034785067c896fd580b1f7de44da020
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TextToSpeech: b3aa777ff5585705f179c0a2436bfd0926d1716e
+  TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
   TwitterCore: 8cbc9ad34d91c63a0035ea05bfbfc0d7ca72a28c
   TwitterKit5: 64095dfefcf39be2355711ef27112d55e340d90e
   VisionCamera: fe093403c5753a37a9f7c703249d603b1069308c

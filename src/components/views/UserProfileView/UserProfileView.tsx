@@ -1,9 +1,7 @@
-import * as ImagePicker from 'react-native-image-picker';
-
 import { Alert, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Button, Icon } from '@rneui/base';
-import { Divider, ListItem, selectImage } from '@react-native-ajp-elements/ui';
+import { Asset, Divider, ListItem, selectImage } from '@react-native-ajp-elements/ui';
 import { EditorState, UserProfileViewMethods, UserProfileViewProps } from './types';
 import { Image as ImageUpload, deleteImage, uploadImage } from 'firebase/storage';
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
@@ -31,7 +29,7 @@ const UserProfileView = React.forwardRef<UserProfileView, UserProfileViewProps>(
   const myUserProfile = useSelector(selectUserProfile);
   const isMyUserProfile = useRef(userProfileProp.id === myUserProfile?.id);
 
-  const userProfileImageAsset = useRef<ImagePicker.Asset>();
+  const userProfileImageAsset = useRef<Asset>();
   const userProfileImageUrl = useRef(userProfile.photoUrl);
 
   const [editorState, setEditorState] = useSetState<EditorState>({

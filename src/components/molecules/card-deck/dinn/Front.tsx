@@ -161,7 +161,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   background: {
     width: '100%',
-    height: '35.2%',
+    height: '35%',
     backgroundColor: theme.colors.stickyBlack,
     position: 'absolute',
     bottom: 0,
@@ -222,6 +222,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelImage: {
     width: '100%',
     height: '100%',
+    top: '-17.5%', // Half of background height
   },
   newEventIcon: {
     left: 2,

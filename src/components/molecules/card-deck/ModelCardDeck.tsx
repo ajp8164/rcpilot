@@ -10,13 +10,13 @@ import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typ
 import { Realm } from '@realm/react';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
+import { ModelCardDeckProvider } from './ModelCardDeckProvider';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
-  startNewEventSequence: (model: Model) => void;
+  onStartNewEventSequence: (model: Model) => void;
 }
-
-export const ModelCardDeck = ({ models, startNewEventSequence }: ModelCardDeckInterface) => {
+export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeckInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -26,31 +26,44 @@ export const ModelCardDeck = ({ models, startNewEventSequence }: ModelCardDeckIn
     Platform.OS === 'android' ? StatusBar.currentHeight || 0 : theme.insets.top;
   const visibleViewHeight = viewport.height - tabBarHeight - headerBarLargeHeight - statusBarHeight;
 
+  // The ModelCardDeckProvider manages card state outside of the carousel. When the carousel
+  // has less than 3 cards it auto fills (see carousel autoFillData) the list so that at least
+  // three cards are in the data collection. This causes a problem for cards that may otherwise
+  // manage their own state (like isFlipped). Duplcation of cards by the carousel creates new
+  // instances with their own state. The context provides shared state for the duplicated cards
+  // in the carousel.
   return (
-    <Carousel
-      style={s.carousel}
-      width={viewport.width}
-      height={visibleViewHeight}
-      pagingEnabled={true}
-      snapEnabled={true}
-      mode={'horizontal-stack'}
-      loop={true}
-      autoPlay={false}
-      autoPlayReverse={false}
-      data={[...models]}
-      modeConfig={{
-        moveSize: viewport.width * 2,
-        snapDirection: 'left',
-        stackInterval: 0,
-        rotateZDeg: 10,
-      }}
-      customConfig={() => ({ type: 'negative', viewCount: models.length > 3 ? 3 : models.length })}
-      renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => {
-        return (
-          <ModelFlipCard key={index} model={model} startNewEventSequence={startNewEventSequence} />
-        );
-      }}
-    />
+    <ModelCardDeckProvider>
+      <Carousel
+        style={s.carousel}
+        width={viewport.width}
+        height={visibleViewHeight}
+        pagingEnabled={true}
+        snapEnabled={true}
+        mode={'horizontal-stack'}
+        loop={true}
+        autoPlay={false}
+        autoPlayReverse={false}
+        data={[...models]}
+        modeConfig={{
+          moveSize: viewport.width * 2,
+          snapDirection: 'left',
+          stackInterval: 0,
+          rotateZDeg: 10,
+        }}
+        onSnapToItem={x => console.log(x)}
+        customConfig={() => ({ type: 'negative' })}
+        renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => {
+          return (
+            <ModelFlipCard
+              key={index}
+              model={model}
+              onStartNewEventSequence={onStartNewEventSequence}
+            />
+          );
+        }}
+      />
+    </ModelCardDeckProvider>
   );
 };
 

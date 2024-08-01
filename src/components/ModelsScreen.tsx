@@ -316,7 +316,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   return (
     <>
       {appSettings.modelsLayout === ModelsLayout.CardDeck ? (
-        <ModelCardDeck models={activeModels} startNewEventSequence={confirmStartNewEventSequence} />
+        <ModelCardDeck
+          models={activeModels}
+          onStartNewEventSequence={confirmStartNewEventSequence}
+        />
       ) : (
         <SectionList
           showsVerticalScrollIndicator={false}

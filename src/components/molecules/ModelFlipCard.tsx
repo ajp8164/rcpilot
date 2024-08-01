@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
@@ -8,17 +8,29 @@ import { Back as DinnBack, Front as DinnFront } from 'components/molecules/card-
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { viewport } from '@react-native-ajp-elements/ui';
+import { useSharedValue } from 'react-native-reanimated';
+import { ModelCardDeckContext } from 'components/molecules/card-deck/ModelCardDeckContext';
 
 interface ModelCardDeckCardInterface {
   model: Model;
-  startNewEventSequence: (model: Model) => void;
+  onStartNewEventSequence: (model: Model) => void;
 }
 
-export const ModelFlipCard = ({ model, startNewEventSequence }: ModelCardDeckCardInterface) => {
+export const ModelFlipCard = ({ model, onStartNewEventSequence }: ModelCardDeckCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   const navigation: NavigationProp<ModelsNavigatorParamList> = useNavigation();
+  const { cardState } = useContext(ModelCardDeckContext);
+  const sv = useSharedValue(false);
+
+  // Lazy initialization of card state.
+  const id = model._id.toString();
+  if (!cardState[id]) {
+    cardState[id] = {
+      isFlipped: sv,
+    };
+  }
 
   const editModel = () => {
     navigation.navigate('ModelEditor', {
@@ -26,25 +38,26 @@ export const ModelFlipCard = ({ model, startNewEventSequence }: ModelCardDeckCar
     });
   };
 
-  const newEventSequence = () => {
-    startNewEventSequence(model);
+  const onNewEventSequence = () => {
+    onStartNewEventSequence(model);
   };
 
   return (
     <FlipCardView
+      isFlipped={cardState[id].isFlipped}
       cardStyle={s.flipCardContainer}
       FrontContent={
         <DinnFront
           model={model}
           onPressEditModel={editModel}
-          onPressNewEventSequence={newEventSequence}
+          onPressNewEventSequence={onNewEventSequence}
         />
       }
       BackContent={
         <DinnBack
           model={model}
           onPressEditModel={editModel}
-          onPressNewEventSequence={newEventSequence}
+          onPressNewEventSequence={onNewEventSequence}
         />
       }
     />

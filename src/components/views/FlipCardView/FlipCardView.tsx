@@ -5,7 +5,6 @@ import Animated, {
   FadeIn,
   interpolate,
   useAnimatedStyle,
-  useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import { makeStyles } from '@rneui/themed';
@@ -13,11 +12,17 @@ import { makeStyles } from '@rneui/themed';
 type FlipCardView = FlipCardViewMethods;
 
 const FlipCardView = React.forwardRef<FlipCardView, FlipCardViewProps>((props, ref) => {
-  const { cardStyle, direction = 'y', duration = 500, FrontContent, BackContent } = props;
+  const {
+    cardStyle,
+    direction = 'y',
+    duration = 500,
+    isFlipped,
+    FrontContent,
+    BackContent,
+  } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const isFlipped = useSharedValue(false);
   const isDirectionX = direction === 'x';
 
   useImperativeHandle(ref, () => ({

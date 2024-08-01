@@ -1,5 +1,5 @@
 import React from 'react';
-import { AnimatedStyle } from 'react-native-reanimated';
+import { AnimatedStyle, SharedValue } from 'react-native-reanimated';
 import { StyleProp, ViewStyle } from 'react-native';
 
 export declare type FlipCardView = FlipCardViewMethods;
@@ -13,6 +13,7 @@ export interface FlipCardViewProps {
   containerStyle?: ViewStyle;
   direction?: 'x' | 'y';
   duration?: number;
+  isFlipped: SharedValue<boolean>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   FrontContent: ReactElement<any, string | JSXElementConstructor<any>>; //ReactNode;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

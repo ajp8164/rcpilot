@@ -11,11 +11,10 @@ declare const LegalModal: React.MemoExoticComponent<
 
 export interface DeckCardPropertiesModalProps {
   snapPoints?: (string | number)[];
-  colors: DeckCardColors;
   onChangeColors: (colors: DeckCardColors) => void;
 }
 
 export interface DeckCardPropertiesModalMethods {
   dismiss: () => void;
-  present: () => void;
+  present: ({ colors }: { colors: DeckCardColors }) => void;
 }

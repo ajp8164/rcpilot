@@ -51,7 +51,6 @@ export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeck
           stackInterval: 0,
           rotateZDeg: 10,
         }}
-        onSnapToItem={x => console.log(x)}
         customConfig={() => ({ type: 'negative' })}
         renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => {
           return (

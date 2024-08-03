@@ -1,6 +1,6 @@
 import { Image, LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@rneui/themed';
 import { Model } from 'realmdb';
@@ -9,18 +9,16 @@ import type FlipCardView from 'components/views/FlipCardView';
 import { ListItem } from 'components/atoms/List';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
 import { defaultDinnCardColors } from './index';
-import { DeckCardColors } from 'types/preferences';
-import { saveModelPreferences } from 'store/slices/appSettings';
 import { SvgXml } from 'react-native-svg';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { modelTypeIcons } from 'lib/model';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
+  onPressEditCardProperties?: () => void;
   onPressEditModel?: () => void;
   onPressNewEventSequence?: () => void;
 }
@@ -28,33 +26,20 @@ interface DinnCardInterface extends FlipCardView {
 export const Back = ({
   flip,
   model,
+  onPressEditCardProperties,
   onPressEditModel,
   onPressNewEventSequence,
 }: DinnCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
-  const dispatch = useDispatch();
 
   const [cardLayout, setCardLayout] = useState<LayoutRectangle>();
-  const deckCardPropertiesModalRef = useRef<DeckCardPropertiesModal>(null);
-  const modelPreferences = useSelector(selectModelPreferences(model._id.toString()));
 
+  const modelPreferences = useSelector(selectModelPreferences(model._id.toString()));
   const cardColors = modelPreferences?.deckCardColors || defaultDinnCardColors;
 
   const onLayout = (event: LayoutChangeEvent) => {
     setCardLayout(event.nativeEvent.layout);
-  };
-
-  const onChangeColors = (colors: DeckCardColors) => {
-    dispatch(
-      saveModelPreferences({
-        modelId: model._id.toString(),
-        props: {
-          ...modelPreferences,
-          deckCardColors: colors,
-        },
-      }),
-    );
   };
 
   return (
@@ -116,7 +101,7 @@ export const Back = ({
               }
               onPress={() => {
                 flip && flip();
-                deckCardPropertiesModalRef.current?.present();
+                onPressEditCardProperties && onPressEditCardProperties();
               }}
             />
             <Button
@@ -127,11 +112,6 @@ export const Back = ({
           </View>
         </View>
       </View>
-      <DeckCardPropertiesModal
-        ref={deckCardPropertiesModalRef}
-        colors={cardColors}
-        onChangeColors={onChangeColors}
-      />
     </>
   );
 };

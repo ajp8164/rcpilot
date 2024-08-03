@@ -1,6 +1,6 @@
 import { DeckCardPropertiesModalMethods, DeckCardPropertiesModalProps } from './types';
 import { AppTheme, useTheme } from 'theme';
-import React, { useCallback, useContext, useImperativeHandle, useRef, useState } from 'react';
+import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
@@ -19,7 +19,7 @@ const DeckCardPropertiesModal = React.forwardRef<
   DeckCardPropertiesModal,
   DeckCardPropertiesModalProps
 >((props, ref) => {
-  const { colors: initialColors, onChangeColors, snapPoints = [200] } = props;
+  const { onChangeColors, snapPoints = [200] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -28,15 +28,15 @@ const DeckCardPropertiesModal = React.forwardRef<
   const colorPicker = useContext(ColorPickerContext);
 
   // Create state for returning result. The shared values cannot be returned to the caller.
-  const [deckCardColors, setDeckCardColors] = useState<DeckCardColors>({
-    primary: initialColors.primary,
-    accent1: initialColors.accent1,
-    accent2: initialColors.accent2,
-  });
+  const sharedPrimary = useSharedValue('#000000'); // Any valid color, overwritten in present()
+  const sharedAccent1 = useSharedValue('#000000');
+  const sharedAccent2 = useSharedValue('#000000');
 
-  const sharedPrimary = useSharedValue(initialColors.primary);
-  const sharedAccent1 = useSharedValue(initialColors.accent1);
-  const sharedAccent2 = useSharedValue(initialColors.accent2);
+  const [deckCardColors, setDeckCardColors] = useState<DeckCardColors>({
+    primary: sharedPrimary.value,
+    accent1: sharedAccent1.value,
+    accent2: sharedAccent2.value,
+  });
 
   const primaryStyle = useAnimatedStyle(() => {
     return { backgroundColor: sharedPrimary.value };
@@ -58,79 +58,77 @@ const DeckCardPropertiesModal = React.forwardRef<
     innerRef.current?.dismiss();
   };
 
-  const present = () => {
+  const present = ({ colors }: { colors: DeckCardColors }) => {
+    setDeckCardColors(colors);
+    sharedPrimary.value = colors.primary;
+    sharedAccent1.value = colors.accent1;
+    sharedAccent2.value = colors.accent2;
     innerRef.current?.present();
   };
 
-  colorPicker.onDismiss = useCallback(
-    (result: Result) => {
-      const updated = {
-        ...deckCardColors,
-        [result.extraData.name]: result.color,
-      };
-
-      setDeckCardColors(updated);
-      onChangeColors(updated);
-    },
-    [deckCardColors, onChangeColors],
-  );
+  colorPicker.onDismiss = (result: Result) => {
+    const updated = {
+      ...deckCardColors,
+      [result.extraData.name]: result.color,
+    };
+    setDeckCardColors(updated);
+    onChangeColors(updated);
+  };
 
   return (
-    <>
-      <Modal
-        ref={innerRef}
-        snapPoints={snapPoints}
-        scrollEnabled={false}
-        enableGestureBehavior={true}
-        backdrop={false}
-        handleComponent={ModalHandle}>
-        <ModalHeader
-          title={'Card Colors'}
-          size={'small'}
-          rightButtonIcon={'close-circle'}
-          rightButtonIconColor={theme.colors.lightGray}
-          onRightButtonPress={dismiss}
-        />
-        <View style={s.container}>
-          <View style={s.colorContainer}>
-            <Text style={s.colorText}>{'Primary'}</Text>
-            <AnimatedPressable
-              style={[s.colorSwatch, primaryStyle]}
-              onPress={() =>
-                colorPicker.modal.current?.present({
-                  color: sharedPrimary,
-                  extraData: { name: 'primary' },
-                })
-              }
-            />
-          </View>
-          <View style={s.colorContainer}>
-            <Text style={s.colorText}>{'Accent 1'}</Text>
-            <AnimatedPressable
-              style={[s.colorSwatch, accent1Style]}
-              onPress={() =>
-                colorPicker.modal.current?.present({
-                  color: sharedAccent1,
-                  extraData: { name: 'accent1' },
-                })
-              }
-            />
-          </View>
-          <View style={s.colorContainer}>
-            <Text style={s.colorText}>{'Accent 2'}</Text>
-            <AnimatedPressable
-              style={[s.colorSwatch, accent2Style]}
-              onPress={() =>
-                colorPicker.modal.current?.present({
-                  color: sharedAccent2,
-                  extraData: { name: 'accent2' },
-                })
-              }
-            />
-          </View>
+    <Modal
+      ref={innerRef}
+      snapPoints={snapPoints}
+      scrollEnabled={false}
+      enableGestureBehavior={true}
+      backdrop={false}
+      handleComponent={ModalHandle}>
+      <ModalHeader
+        title={'Card Colors'}
+        size={'small'}
+        rightButtonIcon={'close-circle'}
+        rightButtonIconColor={theme.colors.lightGray}
+        onRightButtonPress={dismiss}
+      />
+      <View style={s.container}>
+        <View style={s.colorContainer}>
+          <Text style={s.colorText}>{'Primary'}</Text>
+          <AnimatedPressable
+            style={[s.colorSwatch, primaryStyle]}
+            onPress={() =>
+              colorPicker.modal.current?.present({
+                color: sharedPrimary,
+                extraData: { name: 'primary' },
+              })
+            }
+          />
         </View>
-      </Modal>
-    </>
+        <View style={s.colorContainer}>
+          <Text style={s.colorText}>{'Accent 1'}</Text>
+          <AnimatedPressable
+            style={[s.colorSwatch, accent1Style]}
+            onPress={() =>
+              colorPicker.modal.current?.present({
+                color: sharedAccent1,
+                extraData: { name: 'accent1' },
+              })
+            }
+          />
+        </View>
+        <View style={s.colorContainer}>
+          <Text style={s.colorText}>{'Accent 2'}</Text>
+          <AnimatedPressable
+            style={[s.colorSwatch, accent2Style]}
+            onPress={() =>
+              colorPicker.modal.current?.present({
+                color: sharedAccent2,
+                extraData: { name: 'accent2' },
+              })
+            }
+          />
+        </View>
+      </View>
+    </Modal>
   );
 });
 

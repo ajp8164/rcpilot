@@ -18,6 +18,7 @@ import { defaultDinnCardColors } from './index';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
+  onPressEditCardProperties?: () => void;
   onPressEditModel?: () => void;
   onPressNewEventSequence?: () => void;
 }
@@ -25,6 +26,7 @@ interface DinnCardInterface extends FlipCardView {
 export const Front = ({
   flip,
   model,
+  onPressEditCardProperties: _onPressEditCardProperties,
   onPressEditModel,
   onPressNewEventSequence,
 }: DinnCardInterface) => {

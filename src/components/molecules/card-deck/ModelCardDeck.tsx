@@ -1,6 +1,6 @@
 import { Platform, StatusBar } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { makeStyles } from '@rneui/themed';
 import { viewport } from '@react-native-ajp-elements/ui';
@@ -11,6 +11,7 @@ import { Realm } from '@realm/react';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
 import { ModelCardDeckProvider } from './ModelCardDeckProvider';
+import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
@@ -19,6 +20,8 @@ interface ModelCardDeckInterface {
 export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeckInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
+
+  const cardPropertiesModalRef = useRef<DeckCardPropertiesModal>(null);
 
   const tabBarHeight = useBottomTabBarHeight();
   const headerBarLargeHeight = theme.styles.headerBarLarge.height as number;
@@ -38,6 +41,7 @@ export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeck
         style={s.carousel}
         width={viewport.width}
         height={visibleViewHeight}
+        windowSize={3} // Render performance
         pagingEnabled={true}
         snapEnabled={true}
         mode={'horizontal-stack'}
@@ -52,16 +56,16 @@ export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeck
           rotateZDeg: 10,
         }}
         customConfig={() => ({ type: 'negative' })}
-        renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => {
-          return (
-            <ModelFlipCard
-              key={index}
-              model={model}
-              onStartNewEventSequence={onStartNewEventSequence}
-            />
-          );
-        }}
+        renderItem={({ item: model, index }: CarouselRenderItemInfo<Model>) => (
+          <ModelFlipCard
+            key={index}
+            model={model}
+            propertiesModal={cardPropertiesModalRef}
+            onStartNewEventSequence={onStartNewEventSequence}
+          />
+        )}
       />
+      <DeckCardPropertiesModal ref={cardPropertiesModalRef} />
     </ModelCardDeckProvider>
   );
 };

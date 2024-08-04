@@ -3,8 +3,8 @@ import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 import { saveBiometrics, saveModelsLayout, saveThemeSettings } from 'store/slices/appSettings';
 import {
-  selectAppSettings,
   selectBiometrics,
+  selectModelsLayout,
   selectThemeSettings,
 } from 'store/selectors/appSettingsSelectors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,7 +28,7 @@ const AppSettings = ({ navigation }: Props) => {
   const dispatch = useDispatch();
   const themeSettings = useSelector(selectThemeSettings);
   const biometrics = useSelector(selectBiometrics);
-  const appSettings = useSelector(selectAppSettings);
+  const modelsLayout = useSelector(selectModelsLayout);
   const event = useEvent();
 
   const [biometricsValue, setBiometricsValue] = useState(biometrics);
@@ -142,12 +142,12 @@ const AppSettings = ({ navigation }: Props) => {
         <ListItem
           title={'Models Screen Layout'}
           position={['first', 'last']}
-          value={appSettings.modelsLayout}
+          value={modelsLayout}
           onPress={() =>
             navigation.navigate('EnumPicker', {
               title: 'Models Layout',
               values: Object.values(ModelsLayout),
-              selected: appSettings.modelsLayout,
+              selected: modelsLayout,
               eventName: 'models-layout',
             })
           }

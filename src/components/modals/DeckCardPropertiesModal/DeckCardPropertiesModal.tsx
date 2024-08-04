@@ -10,6 +10,10 @@ import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import ModalHandle from 'components/atoms/ModalHandle';
 import { DeckCardColors } from 'types/preferences';
+import { useDispatch } from 'react-redux';
+import { saveModelPreferences } from 'store/slices/appSettings';
+import { store } from 'store';
+import { defaultDinnCardColors } from 'components/molecules/card-deck/dinn';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -19,10 +23,11 @@ const DeckCardPropertiesModal = React.forwardRef<
   DeckCardPropertiesModal,
   DeckCardPropertiesModalProps
 >((props, ref) => {
-  const { onChangeColors, snapPoints = [200] } = props;
+  const { snapPoints = [200] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
+  const dispatch = useDispatch();
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
   const colorPicker = useContext(ColorPickerContext);
@@ -58,7 +63,13 @@ const DeckCardPropertiesModal = React.forwardRef<
     innerRef.current?.dismiss();
   };
 
-  const present = ({ colors }: { colors: DeckCardColors }) => {
+  const [modelId, setModelId] = useState<string>();
+
+  const present = (modelId: string) => {
+    setModelId(modelId);
+    const modelPreferences = store.getState().appSettings.modelsPreferences[modelId];
+
+    const colors = modelPreferences?.deckCardColors || defaultDinnCardColors;
     setDeckCardColors(colors);
     sharedPrimary.value = colors.primary;
     sharedAccent1.value = colors.accent1;
@@ -73,6 +84,20 @@ const DeckCardPropertiesModal = React.forwardRef<
     };
     setDeckCardColors(updated);
     onChangeColors(updated);
+  };
+
+  const onChangeColors = (colors: DeckCardColors) => {
+    if (!modelId) return;
+    const modelPreferences = store.getState().appSettings.modelsPreferences[modelId];
+    dispatch(
+      saveModelPreferences({
+        modelId: modelId,
+        props: {
+          ...modelPreferences,
+          deckCardColors: colors,
+        },
+      }),
+    );
   };
 
   return (

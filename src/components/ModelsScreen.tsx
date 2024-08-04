@@ -24,7 +24,7 @@ import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
 import { modelMaintenanceIsDue } from 'lib/model';
-import { selectAppSettings } from 'store/selectors/appSettingsSelectors';
+import { selectModelsLayout } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
@@ -48,7 +48,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
 
   const _pilot = useSelector(selectPilot);
-  const appSettings = useSelector(selectAppSettings);
+  const modelsLayout = useSelector(selectModelsLayout);
   const filterId = useSelector(selectFilters(FilterType.ModelsFilter));
 
   const models = useModelsFilter();
@@ -62,7 +62,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     navigation.setOptions({
       // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
-        if (listModels === 'all' && appSettings.modelsLayout === ModelsLayout.List) {
+        if (listModels === 'all' && modelsLayout === ModelsLayout.List) {
           return (
             <Button
               title={listEditor.enabled ? 'Done' : 'Edit'}
@@ -139,7 +139,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeModels, appSettings.modelsLayout, filterId, listEditor.enabled, retiredModels]);
+  }, [activeModels, modelsLayout, filterId, listEditor.enabled, retiredModels]);
 
   const groupModels = (models: Realm.Results<Model>): SectionListData<Model, Section>[] => {
     const groups = groupItems<Model, Section>(models, model => {
@@ -315,7 +315,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   return (
     <>
-      {appSettings.modelsLayout === ModelsLayout.CardDeck ? (
+      {modelsLayout === ModelsLayout.CardDeck ? (
         <ModelCardDeck
           models={activeModels}
           onStartNewEventSequence={confirmStartNewEventSequence}
@@ -329,7 +329,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
           keyExtractor={item => item._id.toString()}
           renderItem={section =>
-            appSettings.modelsLayout === ModelsLayout.PostCards && listModels !== 'retired'
+            modelsLayout === ModelsLayout.PostCards && listModels !== 'retired'
               ? renderModelPostCard(section)
               : renderModelListItem(section)
           }

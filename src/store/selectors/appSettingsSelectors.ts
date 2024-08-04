@@ -20,6 +20,10 @@ export const selectModelPreferences = (modelId: string) =>
     return appState.appSettings.modelsPreferences[modelId];
   });
 
+export const selectModelsLayout = createSelector(selectAppState, appState => {
+  return appState.appSettings.modelsLayout;
+});
+
 export const selectModelsPreferences = createSelector(selectAppState, appState => {
   return appState.appSettings.modelsPreferences;
 });

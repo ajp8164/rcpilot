@@ -175,9 +175,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   colorSwatch: {
     width: 30,
     height: 30,
-    borderWidth: 1,
     borderRadius: 30,
-    borderColor: theme.colors.lightGray,
   },
 }));
 

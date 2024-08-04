@@ -5,7 +5,7 @@ import React, { useContext, useImperativeHandle, useRef, useState } from 'react'
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rneui/themed';
-import { Pressable, Text, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import ModalHandle from 'components/atoms/ModalHandle';
@@ -23,7 +23,7 @@ const DeckCardPropertiesModal = React.forwardRef<
   DeckCardPropertiesModal,
   DeckCardPropertiesModalProps
 >((props, ref) => {
-  const { snapPoints = [200] } = props;
+  const { snapPoints = [150] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -109,7 +109,7 @@ const DeckCardPropertiesModal = React.forwardRef<
       backdrop={false}
       handleComponent={ModalHandle}>
       <ModalHeader
-        title={'Card Colors'}
+        title={'Card Preferences'}
         size={'small'}
         rightButtonIcon={'close-circle'}
         rightButtonIconColor={theme.colors.lightGray}
@@ -117,7 +117,6 @@ const DeckCardPropertiesModal = React.forwardRef<
       />
       <View style={s.container}>
         <View style={s.colorContainer}>
-          <Text style={s.colorText}>{'Primary'}</Text>
           <AnimatedPressable
             style={[s.colorSwatch, primaryStyle]}
             onPress={() =>
@@ -129,7 +128,6 @@ const DeckCardPropertiesModal = React.forwardRef<
           />
         </View>
         <View style={s.colorContainer}>
-          <Text style={s.colorText}>{'Accent 1'}</Text>
           <AnimatedPressable
             style={[s.colorSwatch, accent1Style]}
             onPress={() =>
@@ -141,7 +139,6 @@ const DeckCardPropertiesModal = React.forwardRef<
           />
         </View>
         <View style={s.colorContainer}>
-          <Text style={s.colorText}>{'Accent 2'}</Text>
           <AnimatedPressable
             style={[s.colorSwatch, accent2Style]}
             onPress={() =>
@@ -159,16 +156,17 @@ const DeckCardPropertiesModal = React.forwardRef<
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   container: {
-    justifyContent: 'space-between',
-    alignContent: 'center',
+    alignSelf: 'flex-start',
     marginTop: 10,
     marginHorizontal: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
     flexDirection: 'row',
+    backgroundColor: theme.colors.hintGray,
   },
   colorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
+    marginHorizontal: 5,
   },
   colorText: {
     ...theme.styles.textNormal,

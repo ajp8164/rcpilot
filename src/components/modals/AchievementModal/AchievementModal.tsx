@@ -17,7 +17,7 @@ import { useEvent } from 'lib/event';
 type AchievementModal = AchievementModalMethods;
 
 const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProps>((props, ref) => {
-  const { onDismiss, snapPoints = [350] } = props;
+  const { onDismiss, snapPoints = [290] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -77,12 +77,18 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
     <Modal ref={innerRef} snapPoints={snapPoints} onDismiss={onDismiss}>
       {pilot && (
         <View style={s.header}>
-          <Text style={theme.styles.textSmall}>{`${pilot.name}`}</Text>
-          <Text
-            style={[
-              theme.styles.textSmall,
-              theme.styles.textDim,
-            ]}>{`Since: ${DateTime.fromISO(pilot.createdOn).toFormat('M/d/yy')}`}</Text>
+          <View>
+            <Text style={s.headerLeft}>{`${pilot.name}`}</Text>
+            <Text style={s.headerLeft}>{`${model?.name}`}</Text>
+          </View>
+          <View>
+            <Text style={s.headerRight}>
+              {`${pilot.achievements.length} award ${pilot.achievements.length > 1 ? 's' : ''}`}
+            </Text>
+            <Text style={s.headerRight}>
+              {`Since: ${DateTime.fromISO(pilot.createdOn).toFormat('M/d/yy')}`}
+            </Text>
+          </View>
         </View>
       )}
       <View style={s.container}>
@@ -96,17 +102,14 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
           />
         </View>
         {pilot?.achievements.length ? (
-          <>
-            <Text style={s.title}>{`Achievements for ${pilot.name} with ${model?.name}`}</Text>
-            <FlatList
-              data={pilot.achievements}
-              renderItem={renderAchievement}
-              horizontal={true}
-              keyExtractor={(_item, index) => `${index}`}
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={s.achievementListContainer}
-            />
-          </>
+          <FlatList
+            data={pilot.achievements}
+            renderItem={renderAchievement}
+            horizontal={true}
+            keyExtractor={(_item, index) => `${index}`}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={s.achievementListContainer}
+          />
         ) : (
           <Text style={s.title}>{`No achievements yet.`}</Text>
         )}
@@ -120,16 +123,23 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     position: 'absolute',
     width: '100%',
     paddingHorizontal: 15,
-    top: 25,
+    top: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  headerLeft: {
+    ...theme.styles.textSmall,
+  },
+  headerRight: {
+    ...theme.styles.textSmall,
+    textAlign: 'right',
   },
   container: {
     top: 50,
     margin: 10,
     padding: 10,
     borderRadius: 10,
-    height: 200,
+    height: 165,
     backgroundColor: theme.colors.subtleGray,
   },
   hero: {

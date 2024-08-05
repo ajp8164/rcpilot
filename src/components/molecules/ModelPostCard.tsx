@@ -34,13 +34,6 @@ export const ModelPostCard = ({
 
   const maintenanceIsDue = modelMaintenanceIsDue(model);
 
-  let achievementCount = 0;
-  pilot?.achievements.forEach(a => {
-    if (a.event.model._id.toString() === model._id.toString()) {
-      achievementCount++;
-    }
-  });
-
   return (
     <View style={s.modelCard}>
       <View style={s.modelCardHeader}>
@@ -88,14 +81,12 @@ export const ModelPostCard = ({
             buttonStyle={s.modelCardButton}
             icon={
               <Icon
-                name={'certificate'}
+                name={'medal'}
                 color={theme.colors.clearButtonText}
-                size={30}
+                size={26}
                 style={s.achievementButtonIcon}
               />
             }
-            titleStyle={s.achievementButtonTitle}
-            title={`${achievementCount}`}
             onPress={() => onPressAchievements(pilot, model)}
           />
         )}
@@ -131,6 +122,7 @@ export const ModelPostCard = ({
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   achievementButtonIcon: {
     height: 30,
+    top: 2,
   },
   achievementButtonTitle: {
     ...theme.styles.textTiny,

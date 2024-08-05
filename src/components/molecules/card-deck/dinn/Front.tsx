@@ -146,16 +146,13 @@ export const Front = ({
             </Pressable>
             {pilot?.achievements && pilot.achievements.length > 0 && (
               <Pressable
-                style={[s.attributeIconContainer, s.achievementIcon]}
+                style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}
                 onPress={onPressAchievements}>
                 <Icon
-                  name={'certificate'}
-                  size={34}
-                  style={[s.attributeIcon, { color: cardColors.accent1 }]}
+                  name={'medal'}
+                  size={18}
+                  style={[s.attributeIcon, { color: cardColors.accent2 }]}
                 />
-                <Text style={[s.achievementCount, { color: cardColors.accent2 }]}>
-                  {`${pilot?.achievements?.length}`}
-                </Text>
               </Pressable>
             )}
           </View>

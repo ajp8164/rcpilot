@@ -6,7 +6,7 @@ import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/typ
 import { Modal, ModalHeader, viewport } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rneui/themed';
 import Animated, { SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import { Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import ColorPicker, {
   Panel5,
   returnedResults,
@@ -29,7 +29,7 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const { extraData, onDismiss } = useContext(ColorPickerContext);
+  const { extraData, recentColors, onDismiss, setRecentColors } = useContext(ColorPickerContext);
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
 
@@ -38,10 +38,14 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
   const externalColor = useRef<SharedValue<string>>();
   const internalSharedColor = useSharedValue(defaultColor);
   const [internalColor, setInternalColor] = useState(defaultColor);
+  const [originalColor, setOriginalColor] = useState(defaultColor);
   const previewStyle = useAnimatedStyle(() => ({ backgroundColor: internalSharedColor.value }));
 
   const eyedropperActive = useRef(false);
   const [eyedropperImage, setEyedropperImage] = useState<SkImage | null>(null);
+
+  // Used to force a re-render when shared values are updated.
+  const [render, setRendrer] = useState(false);
 
   const colorPickers = {
     grid: { label: 'Grid', index: 0 },
@@ -65,14 +69,19 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
   };
 
   const present = (opts?: PresentOptions) => {
-    // Can optionally pass in a shared color value for animation of color in callers components.
-    if (opts?.color) {
-      // Initialize color if provided.
-      internalSharedColor.value = opts.color.value;
-      setInternalColor(opts.color.value); // Needed to force the grid to re-render with this initial color.
+    const inputColor = typeof opts?.color === 'string' ? opts?.color : opts?.color?.value;
+    setOriginalColor(inputColor || defaultColor);
 
-      // Hold on to the callers shared value so it can be updated when the color chnages.
-      externalColor.current = opts.color;
+    // Can optionally pass in a shared color value for animation of color in callers components.
+    if (inputColor) {
+      // Initialize color if provided.
+      internalSharedColor.value = inputColor;
+      setInternalColor(inputColor); // Needed to force the grid to re-render with this initial color.
+
+      // Hold on to the callers shared value so it can be updated when the color changes.
+      if (typeof opts?.color !== 'string') {
+        externalColor.current = opts?.color;
+      }
     }
 
     // Can optionally provide data that will pass through from present to dismiss.
@@ -110,6 +119,12 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
       externalColor.current.value = selectedColor;
     }
 
+    // Force a render to have the colot controls refresh with a possible new shared color value
+    // (spectrum and sliders).
+    setTimeout(() => {
+      setRendrer(!render);
+    });
+
     // If the eyedropper was in use then re-present the modal.
     if (eyedropperActive.current) {
       eyedropperActive.current = false;
@@ -118,11 +133,17 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
   };
 
   const returnResult = () => {
-    !eyedropperActive.current &&
+    if (!eyedropperActive.current) {
       onDismiss({
         color: internalSharedColor.value,
+        originalColor,
         extraData: extraData.current,
       });
+
+      if (originalColor !== recentColors[0]) {
+        setRecentColors([originalColor, ...recentColors].slice(0, 12));
+      }
+    }
   };
 
   return (
@@ -166,7 +187,8 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
             {selectedColorPicker === colorPickers.spectrum.index && (
               <ColorPicker
                 value={internalSharedColor.value}
-                thumbSize={24}
+                thumbSize={35}
+                thumbScaleAnimationValue={1}
                 thumbShape={'circle'}
                 onChange={onChangeColor}>
                 <Panel4 style={s.panelSpectrum} />
@@ -175,8 +197,9 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
             {selectedColorPicker === colorPickers.sliders.index && (
               <ColorPicker
                 value={internalSharedColor.value}
-                sliderThickness={30}
-                thumbSize={30}
+                sliderThickness={35}
+                thumbSize={35}
+                thumbScaleAnimationValue={1}
                 thumbShape={'circle'}
                 thumbAnimationDuration={100}
                 adaptSpectrum
@@ -190,7 +213,21 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
                 <BlueSlider style={s.slider} />
               </ColorPicker>
             )}
-            <Animated.View style={[s.preview, previewStyle]} />
+            <View style={s.previewContainer}>
+              <Animated.View style={[s.preview, previewStyle]} />
+              <View style={s.recentContainer}>
+                {recentColors.map((c, index) => {
+                  return (
+                    <View key={`${index}`} style={s.colorContainer}>
+                      <Pressable
+                        style={[s.colorSwatch, { backgroundColor: c }]}
+                        onPress={() => onChangeColor(c)}
+                      />
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
           </View>
         </View>
       </Modal>
@@ -240,14 +277,31 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderRadius: 7,
     height: 300,
   },
-  preview: {
+  previewContainer: {
     position: 'absolute',
     bottom: 75,
     left: 15,
+    flexDirection: 'row',
+  },
+  preview: {
     width: 80,
     height: 80,
-    marginTop: 15,
     borderRadius: 10,
+  },
+  recentContainer: {
+    alignContent: 'space-between',
+    paddingLeft: 10,
+    flexDirection: 'row',
+    flex: 1,
+    flexWrap: 'wrap',
+  },
+  colorContainer: {
+    marginHorizontal: 5,
+  },
+  colorSwatch: {
+    width: 35,
+    height: 35,
+    borderRadius: 35,
   },
   sliderTitle: {
     ...theme.styles.textTiny,

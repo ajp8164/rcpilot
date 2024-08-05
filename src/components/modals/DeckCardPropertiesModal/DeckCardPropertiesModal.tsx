@@ -183,9 +183,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginRight: 10,
   },
   colorSwatch: {
-    width: 30,
-    height: 30,
-    borderRadius: 30,
+    width: 35,
+    height: 35,
+    borderRadius: 35,
   },
 }));
 

@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { makeStyles } from '@rneui/themed';
 import { viewport } from '@react-native-ajp-elements/ui';
 import Carousel from 'react-native-reanimated-carousel';
-import { Model } from 'realmdb';
+import { Model, Pilot } from 'realmdb';
 import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
 import { Realm } from '@realm/react';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -15,9 +15,16 @@ import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesMod
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
+  pilot?: Pilot;
+  onPressAchievements: (pilot: Pilot, model: Model) => void;
   onStartNewEventSequence: (model: Model) => void;
 }
-export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeckInterface) => {
+export const ModelCardDeck = ({
+  models,
+  pilot,
+  onPressAchievements,
+  onStartNewEventSequence,
+}: ModelCardDeckInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -60,7 +67,9 @@ export const ModelCardDeck = ({ models, onStartNewEventSequence }: ModelCardDeck
           <ModelFlipCard
             key={index}
             model={model}
+            pilot={pilot}
             propertiesModal={cardPropertiesModalRef}
+            onPressAchievements={onPressAchievements}
             onStartNewEventSequence={onStartNewEventSequence}
           />
         )}

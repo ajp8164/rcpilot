@@ -67,7 +67,7 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
           {achievement.name.replace('{Event}', eventKind(model?.type).name)}
         </Text>
         <Text style={s.achievementDate}>
-          {DateTime.fromISO(achievement.date).toFormat('M/dd/yy')}
+          {DateTime.fromISO(achievement.date).toFormat('M/d/yy')}
         </Text>
       </View>
     );

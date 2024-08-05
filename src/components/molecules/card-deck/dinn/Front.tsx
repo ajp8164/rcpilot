@@ -15,6 +15,7 @@ import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { useSelector } from 'react-redux';
 import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
 import { defaultDinnCardColors } from './index';
+import { eventKind } from 'lib/modelEvent';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -34,7 +35,7 @@ export const Front = ({
   const s = useStyles(theme);
 
   const totalTime = Duration.fromMillis(model.statistics.totalTime * 1000).toFormat('h:mm:ss');
-  const lastFlight = model.lastEvent && DateTime.fromISO(model.lastEvent).toFormat('M/dd/yyyy');
+  const lastEvent = model.lastEvent && DateTime.fromISO(model.lastEvent).toFormat('M/d/yyyy');
   const maintenanceIsDue = modelMaintenanceIsDue(model);
   const modelPreferences = useSelector(selectModelPreferences(model._id.toString()));
   const cardColors = modelPreferences?.deckCardColors || defaultDinnCardColors;
@@ -87,7 +88,13 @@ export const Front = ({
                 { color: cardColors.accent1 },
               ]}>{`${model.statistics.totalEvents} Flights`}</Text>
             <Text style={[s.text, { color: cardColors.accent1 }]}>{`${totalTime} Total Time`}</Text>
-            {lastFlight && <Text style={s.text}>{`${lastFlight} Last Flight`}</Text>}
+            {lastEvent && (
+              <Text
+                style={[
+                  s.text,
+                  { color: cardColors.accent1 },
+                ]}>{`${lastEvent} Last ${eventKind(model.type).name}`}</Text>
+            )}
           </View>
           <View style={s.attributesContainer}>
             <Pressable

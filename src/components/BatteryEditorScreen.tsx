@@ -318,7 +318,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         <ListItemInput
           title={'Capacity'}
           value={capacity.current}
-          label="mAh"
+          label={'mAh'}
           placeholder={'Value'}
           titleStyle={!capacity.current ? { color: theme.colors.assertive } : {}}
           keyboardType={'number-pad'}

@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import { ColorPickerContext } from './ColorPickerContext';
-import React, { ReactNode, useRef } from 'react';
+import React, { ReactNode, useRef, useState } from 'react';
 import { ColorPickerModal } from './ColorPickerModal';
 import { makeStyles } from '@rneui/themed';
 import { AppTheme, useTheme } from 'theme';
@@ -14,6 +14,8 @@ export const ColorPickerProvider = ({ children }: { children: ReactNode }): Reac
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const extraDataRef = useRef<any>();
 
+  const [recentColors, setRecentColors] = useState<string[]>([]);
+
   const onDismiss = () => {
     return;
   };
@@ -23,7 +25,9 @@ export const ColorPickerProvider = ({ children }: { children: ReactNode }): Reac
       value={{
         extraData: extraDataRef,
         modal: modalRef,
+        recentColors,
         onDismiss,
+        setRecentColors,
       }}>
       <View ref={eyedropperViewRef} style={s.view}>
         {children}

@@ -3,13 +3,14 @@ import { View } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
 
 export type PresentOptions = {
-  color?: SharedValue<string>;
+  color?: SharedValue<string> | string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any;
 };
 
 export type Result = {
   color: string;
+  originalColor: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any;
 };

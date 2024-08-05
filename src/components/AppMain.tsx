@@ -30,6 +30,7 @@ import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
 import { useColorScheme } from 'react-native';
 import { useSelector } from 'react-redux';
 import { ColorPickerProvider } from 'components/modals/ColorPickerModal';
+import { BackdropProvider } from 'components/atoms/Backdrop';
 
 // See https://reactnavigation.org/docs/configuring-links
 const linking: LinkingOptions<MainNavigatorParamList> = {
@@ -121,7 +122,9 @@ const AppMain = () => {
                       <DatabaseInfoContext.Provider value={databaseInfo}>
                         <GeoPositionContext.Provider value={currentPosition}>
                           <ColorPickerProvider>
-                            <MainNavigator startupScreen={startupScreen} />
+                            <BackdropProvider>
+                              <MainNavigator startupScreen={startupScreen} />
+                            </BackdropProvider>
                           </ColorPickerProvider>
                         </GeoPositionContext.Provider>
                       </DatabaseInfoContext.Provider>

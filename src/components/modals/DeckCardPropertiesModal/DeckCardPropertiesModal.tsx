@@ -14,6 +14,7 @@ import { useDispatch } from 'react-redux';
 import { saveModelPreferences } from 'store/slices/appSettings';
 import { store } from 'store';
 import { defaultDinnCardColors } from 'components/molecules/card-deck/dinn';
+import { BackdropContext } from 'components/atoms/Backdrop';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -30,6 +31,7 @@ const DeckCardPropertiesModal = React.forwardRef<
   const dispatch = useDispatch();
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
+  const backdrop = useContext(BackdropContext);
   const colorPicker = useContext(ColorPickerContext);
 
   // Create state for returning result. The shared values cannot be returned to the caller.
@@ -61,6 +63,7 @@ const DeckCardPropertiesModal = React.forwardRef<
 
   const dismiss = () => {
     innerRef.current?.dismiss();
+    backdrop.setEnabled(false);
   };
 
   const [modelId, setModelId] = useState<string>();
@@ -74,7 +77,13 @@ const DeckCardPropertiesModal = React.forwardRef<
     sharedPrimary.value = colors.primary;
     sharedAccent1.value = colors.accent1;
     sharedAccent2.value = colors.accent2;
+
     innerRef.current?.present();
+
+    // Backdrop prevents touches while this modal is presented. Cannot use the bottomsheet modal
+    // backdrop because the color picker eyedropper would be behind the bottomsheet modal backdrop
+    // and not useable.
+    backdrop.setEnabled(true);
   };
 
   colorPicker.onDismiss = (result: Result) => {
@@ -107,7 +116,8 @@ const DeckCardPropertiesModal = React.forwardRef<
       scrollEnabled={false}
       enableGestureBehavior={true}
       backdrop={false}
-      handleComponent={ModalHandle}>
+      handleComponent={ModalHandle}
+      onDismiss={() => backdrop.setEnabled(false)}>
       <ModalHeader
         title={'Card Preferences'}
         size={'small'}

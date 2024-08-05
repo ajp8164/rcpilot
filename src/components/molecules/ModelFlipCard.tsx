@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useContext } from 'react';
 
 import { makeStyles } from '@rneui/themed';
-import { Model } from 'realmdb';
+import { Model, Pilot } from 'realmdb';
 import FlipCardView from 'components/views/FlipCardView';
 import { Back as DinnBack, Front as DinnFront } from 'components/molecules/card-deck/dinn';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
@@ -14,13 +14,17 @@ import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesMod
 
 interface ModelCardDeckCardInterface {
   model: Model;
+  pilot?: Pilot;
   propertiesModal: React.RefObject<DeckCardPropertiesModal>;
+  onPressAchievements: (pilot: Pilot, model: Model) => void;
   onStartNewEventSequence: (model: Model) => void;
 }
 
 export const ModelFlipCard = ({
   model,
+  pilot,
   propertiesModal,
+  onPressAchievements,
   onStartNewEventSequence,
 }: ModelCardDeckCardInterface) => {
   const theme = useTheme();
@@ -48,6 +52,10 @@ export const ModelFlipCard = ({
     onStartNewEventSequence(model);
   };
 
+  const onAchievements = () => {
+    pilot && onPressAchievements(pilot, model);
+  };
+
   const onEditCardProperties = () => {
     propertiesModal.current?.present(model._id.toString());
   };
@@ -60,8 +68,10 @@ export const ModelFlipCard = ({
       FrontContent={
         <DinnFront
           model={model}
+          pilot={pilot}
           onPressEditModel={editModel}
           onPressNewEventSequence={onNewEventSequence}
+          onPressAchievements={pilot?.achievements.length ? onAchievements : undefined}
           onPressEditCardProperties={onEditCardProperties}
         />
       }

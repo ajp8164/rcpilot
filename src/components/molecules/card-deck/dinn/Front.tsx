@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { makeStyles } from '@rneui/themed';
-import { Model } from 'realmdb';
+import { Model, Pilot } from 'realmdb';
 import { modelMaintenanceIsDue, modelTypeIcons } from 'lib/model';
 import { DateTime, Duration } from 'luxon';
 import type FlipCardView from 'components/views/FlipCardView';
@@ -19,6 +19,8 @@ import { eventKind } from 'lib/modelEvent';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
+  pilot?: Pilot;
+  onPressAchievements?: () => void;
   onPressEditCardProperties?: () => void;
   onPressEditModel?: () => void;
   onPressNewEventSequence?: () => void;
@@ -27,9 +29,11 @@ interface DinnCardInterface extends FlipCardView {
 export const Front = ({
   flip,
   model,
+  onPressAchievements,
   onPressEditCardProperties: _onPressEditCardProperties,
   onPressEditModel,
   onPressNewEventSequence,
+  pilot,
 }: DinnCardInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
@@ -140,6 +144,20 @@ export const Front = ({
                 style={[s.attributeIcon, { color: cardColors.accent2 }]}
               />
             </Pressable>
+            {pilot?.achievements.length && (
+              <Pressable
+                style={[s.attributeIconContainer, s.achievementIcon]}
+                onPress={onPressAchievements}>
+                <Icon
+                  name={'certificate'}
+                  size={34}
+                  style={[s.attributeIcon, { color: cardColors.accent1 }]}
+                />
+                <Text style={[s.achievementCount, { color: cardColors.accent2 }]}>
+                  {pilot?.achievements.length}
+                </Text>
+              </Pressable>
+            )}
           </View>
           {vendorImage && (
             <Image
@@ -198,8 +216,18 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  achievementIcon: {
+    width: 40,
+    height: 40,
+    borderColor: theme.colors.transparent,
+  },
   attributeIcon: {
     color: theme.colors.lightGray,
+  },
+  achievementCount: {
+    ...theme.styles.textNormal,
+    ...theme.styles.textBold,
+    position: 'absolute',
   },
   textContainer: {
     left: 105,

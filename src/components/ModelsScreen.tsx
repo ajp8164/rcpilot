@@ -221,6 +221,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     return (
       <ModelPostCard
         model={model}
+        pilot={pilot}
         onPressAchievements={(pilot, model) => achievementModalRef.current?.present(pilot, model)}
         onPressEditModel={() =>
           navigation.navigate('ModelEditor', {
@@ -236,7 +237,6 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             confirmStartNewEventSequence(model);
           }
         }}
-        pilot={pilot}
       />
     );
   };
@@ -318,7 +318,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       {modelsLayout === ModelsLayout.CardDeck ? (
         <ModelCardDeck
           models={activeModels}
+          pilot={pilot}
           onStartNewEventSequence={confirmStartNewEventSequence}
+          onPressAchievements={(pilot, model) => achievementModalRef.current?.present(pilot, model)}
         />
       ) : (
         <SectionList

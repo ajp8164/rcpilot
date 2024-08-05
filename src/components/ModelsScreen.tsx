@@ -325,7 +325,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           showsVerticalScrollIndicator={false}
           contentInsetAdjustmentBehavior={'automatic'}
           stickySectionHeadersEnabled={true}
-          style={[theme.styles.view, s.sectionList]}
+          style={[
+            theme.styles.view,
+            s.sectionList,
+            modelsLayout === ModelsLayout.PostCards ? s.noPadding : {},
+          ]}
           sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
           keyExtractor={item => item._id.toString()}
           renderItem={section =>
@@ -350,6 +354,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   headerIconDisabled: {
     color: theme.colors.disabled,
+  },
+  noPadding: {
+    paddingHorizontal: 0,
   },
   sectionList: {
     flex: 1,

@@ -3,12 +3,11 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
+import { Modal } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rneui/themed';
 import { Pressable, View } from 'react-native';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
-import ModalHandle from 'components/atoms/ModalHandle';
 import { DeckCardColors } from 'types/preferences';
 import { useDispatch } from 'react-redux';
 import { saveModelPreferences } from 'store/slices/appSettings';
@@ -116,15 +115,7 @@ const DeckCardPropertiesModal = React.forwardRef<
       scrollEnabled={false}
       enableGestureBehavior={true}
       backdrop={false}
-      handleComponent={ModalHandle}
       onDismiss={() => backdrop.setEnabled(false)}>
-      <ModalHeader
-        title={'Card Preferences'}
-        size={'small'}
-        rightButtonIcon={'close-circle'}
-        rightButtonIconColor={theme.colors.lightGray}
-        onRightButtonPress={dismiss}
-      />
       <View style={s.container}>
         <View style={s.colorContainer}>
           <AnimatedPressable

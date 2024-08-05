@@ -554,6 +554,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelContainer: {
     borderRadius: 10,
     overflow: 'hidden',
+    marginTop: 15,
     marginBottom: 10,
     height: 100,
     borderWidth: 0,

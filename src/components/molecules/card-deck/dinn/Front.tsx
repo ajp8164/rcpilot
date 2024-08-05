@@ -144,7 +144,7 @@ export const Front = ({
                 style={[s.attributeIcon, { color: cardColors.accent2 }]}
               />
             </Pressable>
-            {pilot?.achievements.length && (
+            {pilot?.achievements && pilot.achievements.length > 0 && (
               <Pressable
                 style={[s.attributeIconContainer, s.achievementIcon]}
                 onPress={onPressAchievements}>
@@ -154,7 +154,7 @@ export const Front = ({
                   style={[s.attributeIcon, { color: cardColors.accent1 }]}
                 />
                 <Text style={[s.achievementCount, { color: cardColors.accent2 }]}>
-                  {pilot?.achievements.length}
+                  {`${pilot?.achievements?.length}`}
                 </Text>
               </Pressable>
             )}

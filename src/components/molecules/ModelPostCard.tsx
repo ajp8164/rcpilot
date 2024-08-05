@@ -144,7 +144,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     width: '100%',
     paddingVertical: 10,
     marginBottom: 15,
-    borderRadius: 10,
     overflow: 'hidden',
     backgroundColor: theme.colors.listItem,
   },

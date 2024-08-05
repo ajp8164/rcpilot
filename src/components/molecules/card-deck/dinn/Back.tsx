@@ -12,6 +12,10 @@ import CustomIcon from 'theme/icomoon/CustomIcon';
 import { SvgXml } from 'react-native-svg';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { modelTypeIcons } from 'lib/model';
+import { ellipsis } from '@react-native-ajp-elements/core';
+import { eventKind } from 'lib/modelEvent';
+import { DateTime } from 'luxon';
+import { secondsToMSS } from 'lib/formatters';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -39,7 +43,7 @@ export const Back = ({
   return (
     <>
       <View style={s.container} onLayout={onLayout}>
-        <Text style={s.title}>{model.name}</Text>
+        <Text style={s.title}>{ellipsis('SAB Goblin Buddy', 20)}</Text>
         <View style={s.image}>
           {model.image ? (
             <Image
@@ -47,8 +51,9 @@ export const Back = ({
               resizeMode={'cover'}
               // eslint-disable-next-line react-native/no-inline-styles
               style={{
-                width: cardLayout ? cardLayout.width * 0.33 : 0,
+                width: cardLayout ? cardLayout.width - 30 : 0,
                 height: cardLayout ? cardLayout?.width * 0.33 : 0,
+                borderRadius: 10,
               }}
             />
           ) : (
@@ -62,6 +67,25 @@ export const Back = ({
               }}
             />
           )}
+        </View>
+        <Text style={s.subtitle}>{'STATISTICS'}</Text>
+        <View style={s.statRow}>
+          <Text style={s.text}>{`Last ${eventKind(model.type).name}`}</Text>
+          <Text style={s.text}>
+            {model.lastEvent
+              ? DateTime.fromISO(model.lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
+              : 'Unknown'}
+          </Text>
+        </View>
+        <View style={s.statRow}>
+          <Text style={s.text}>{`Number of ${eventKind(model.type).namePlural}`}</Text>
+          <Text style={s.text}>{model?.statistics.totalEvents}</Text>
+        </View>
+        <View style={s.statRow}>
+          <Text style={s.text}>{'Total Time'}</Text>
+          <Text style={s.text}>
+            {secondsToMSS(model?.statistics.totalTime, { format: 'h:mm:ss' })}
+          </Text>
         </View>
         <View style={s.actions}>
           <ListItem
@@ -128,10 +152,23 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textHeading2,
     color: theme.colors.whiteTransparentDark,
   },
-  image: {
-    position: 'absolute',
-    right: 0,
+  subtitle: {
+    ...theme.styles.textSmall,
+    marginTop: 15,
+    marginBottom: 5,
+    color: theme.colors.whiteTransparentLight,
   },
+  text: {
+    ...theme.styles.textNormal,
+    color: theme.colors.whiteTransparentDark,
+    lineHeight: 16,
+  },
+  statRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+  },
+  image: {},
   listItemText: {
     color: theme.colors.darkGray,
   },

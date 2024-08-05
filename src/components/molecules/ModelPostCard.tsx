@@ -34,6 +34,13 @@ export const ModelPostCard = ({
 
   const maintenanceIsDue = modelMaintenanceIsDue(model);
 
+  let achievementCount = 0;
+  pilot?.achievements.forEach(a => {
+    if (a.event.model._id.toString() === model._id.toString()) {
+      achievementCount++;
+    }
+  });
+
   return (
     <View style={s.modelCard}>
       <View style={s.modelCardHeader}>
@@ -88,7 +95,7 @@ export const ModelPostCard = ({
               />
             }
             titleStyle={s.achievementButtonTitle}
-            title={pilot ? `${pilot.achievements.length}` : '0'}
+            title={`${achievementCount}`}
             onPress={() => onPressAchievements(pilot, model)}
           />
         )}

@@ -86,8 +86,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     if (batteryId) return;
 
     const canSave =
-      !!name &&
-      !!capacity &&
+      !!name.current &&
+      !!capacity.current &&
       (!eqString(battery?.name, name.current) ||
         !eqString(battery?.chemistry, chemistry) ||
         !eqString(battery?.vendor, vendor.current) ||
@@ -108,9 +108,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         realm.create('Battery', {
           createdOn: now,
           updatedOn: now,
-          name,
+          name: name.current,
           chemistry,
-          vendor,
+          vendor: vendor.current,
           purchasePrice: toNumber(purchasePrice.current),
           retired,
           cRating: toNumber(cRating.current),

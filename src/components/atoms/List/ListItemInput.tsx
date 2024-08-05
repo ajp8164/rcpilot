@@ -64,6 +64,7 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, Props>((props, ref)
       inputTextStyle={s.inputText}
       titleStyle={ts}
       value={value}
+      placeholderTextColor={props.placeholderTextColor || theme.colors.text}
       onChangeText={handleChange}
       extraContentComponentRight={
         <View style={s.extraComponentContainer}>
@@ -94,18 +95,18 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   inputIcon: {
     top: 0,
     marginLeft: 5,
-    color: theme.colors.subtleGray,
+    color: theme.colors.lightGray,
   },
   inputIconDisabled: {
     opacity: 0,
   },
   inputIconWithLabel: {
     top: 3,
-    color: theme.colors.subtleGray,
+    color: theme.colors.lightGray,
   },
   inputIconWithPlaceholder: {
     marginRight: 18,
-    color: theme.colors.subtleGray,
+    color: theme.colors.lightGray,
   },
   inputContent: {
     minWidth: '50%',
@@ -113,7 +114,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   inputLabel: {
     ...theme.styles.textNormal,
-    color: theme.colors.subtleGray,
+    color: theme.colors.textDim,
     marginLeft: 4,
   },
   inputText: {

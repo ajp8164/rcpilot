@@ -43,7 +43,7 @@ export const Back = ({
   return (
     <>
       <View style={s.container} onLayout={onLayout}>
-        <Text style={s.title}>{ellipsis('SAB Goblin Buddy', 20)}</Text>
+        <Text style={s.title}>{ellipsis(model.name, 20)}</Text>
         <View style={s.image}>
           {model.image ? (
             <Image

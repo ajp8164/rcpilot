@@ -37,22 +37,6 @@ export const ModelPostCard = ({
   return (
     <View style={s.modelCard}>
       <View style={s.modelCardHeader}>
-        {pilot && (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={
-              <Icon
-                name={'certificate'}
-                color={theme.colors.subtleGray}
-                size={30}
-                style={s.achievementButtonIcon}
-              />
-            }
-            titleStyle={s.achievementButtonTitle}
-            title={pilot ? `${pilot.achievements.length}` : '0'}
-            onPress={() => onPressAchievements(pilot, model)}
-          />
-        )}
         <View style={s.modelCardHeaderTextContainer}>
           <View style={s.modelCardTitleContainer}>
             <Text style={s.modelCardTitleLeft}>{model.name}</Text>
@@ -92,14 +76,28 @@ export const ModelPostCard = ({
         </View>
       )}
       <View style={s.modelCardFooter}>
+        {pilot && (
+          <Button
+            buttonStyle={s.modelCardButton}
+            icon={
+              <Icon
+                name={'certificate'}
+                color={theme.colors.clearButtonText}
+                size={30}
+                style={s.achievementButtonIcon}
+              />
+            }
+            titleStyle={s.achievementButtonTitle}
+            title={pilot ? `${pilot.achievements.length}` : '0'}
+            onPress={() => onPressAchievements(pilot, model)}
+          />
+        )}
         <Button
-          title={'Details'}
-          titleStyle={s.modelCardButtonTitle}
           buttonStyle={s.modelCardButton}
           icon={
             <CustomIcon
               name={'circle-info'}
-              size={20}
+              size={30}
               color={theme.colors.clearButtonText}
               style={s.modelCardButtonIcon}
             />
@@ -107,13 +105,11 @@ export const ModelPostCard = ({
           onPress={() => onPressEditModel(model)}
         />
         <Button
-          title={`New ${eventKind(model.type).name}`}
-          titleStyle={s.modelCardButtonTitle}
           buttonStyle={s.modelCardButton}
           icon={
             <Icon
               name={'circle-play'}
-              size={20}
+              size={30}
               color={theme.colors.clearButtonText}
               style={s.modelCardButtonIcon}
             />
@@ -127,17 +123,13 @@ export const ModelPostCard = ({
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   achievementButtonIcon: {
-    top: -2,
     height: 30,
   },
   achievementButtonTitle: {
     ...theme.styles.textTiny,
     ...theme.styles.textBold,
     marginLeft: -30,
-    color: theme.colors.lightGray,
-    top: -2,
-    marginRight: 10,
-    borderWidth: 0,
+    color: theme.colors.stickyWhite,
     width: 30,
   },
   modelCard: {
@@ -193,20 +185,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: 48,
     paddingTop: 10,
     paddingHorizontal: 15,
-    justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  modelCardButtonTitle: {
-    ...theme.styles.buttonScreenHeaderTitle,
-    ...theme.styles.textSmall,
-    ...theme.styles.textBold,
-    color: theme.colors.clearButtonText,
   },
   modelCardButton: {
     ...theme.styles.buttonScreenHeader,
+    marginRight: 15,
   },
   modelCardButtonIcon: {
-    paddingRight: 5,
+    height: 30,
   },
   modelIcon: {
     transform: [{ rotate: '-45deg' }],

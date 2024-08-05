@@ -9,9 +9,6 @@ import type FlipCardView from 'components/views/FlipCardView';
 import { ListItem } from 'components/atoms/List';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { useSelector } from 'react-redux';
-import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
-import { defaultDinnCardColors } from './index';
 import { SvgXml } from 'react-native-svg';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { modelTypeIcons } from 'lib/model';
@@ -35,17 +32,14 @@ export const Back = ({
 
   const [cardLayout, setCardLayout] = useState<LayoutRectangle>();
 
-  const modelPreferences = useSelector(selectModelPreferences(model._id.toString()));
-  const cardColors = modelPreferences?.deckCardColors || defaultDinnCardColors;
-
   const onLayout = (event: LayoutChangeEvent) => {
     setCardLayout(event.nativeEvent.layout);
   };
 
   return (
     <>
-      <View style={[s.container, { backgroundColor: cardColors.primary }]} onLayout={onLayout}>
-        <Text style={[s.title, { color: cardColors.accent1 }]}>{model.name}</Text>
+      <View style={s.container} onLayout={onLayout}>
+        <Text style={s.title}>{model.name}</Text>
         <View style={s.image}>
           {model.image ? (
             <Image
@@ -62,7 +56,7 @@ export const Back = ({
               xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
               width={cardLayout ? cardLayout.width * 0.33 : 0}
               height={cardLayout ? cardLayout?.width * 0.33 : 0}
-              color={theme.colors.brandSecondary}
+              color={theme.colors.whiteTransparentDark}
               style={{
                 transform: [{ rotate: '-45deg' }],
               }}
@@ -72,22 +66,22 @@ export const Back = ({
         <View style={s.actions}>
           <ListItem
             title={'New Flight'}
-            titleStyle={{ color: cardColors.accent1 }}
+            titleStyle={s.listItemText}
             containerStyle={{
-              backgroundColor: cardColors.accent2,
+              backgroundColor: theme.colors.whiteTransparentDark,
             }}
-            bottomDividerColor={cardColors.accent1}
-            rightImage={<Icon name={'play-circle'} size={20} color={cardColors.accent1} />}
+            bottomDividerColor={theme.colors.darkGray}
+            rightImage={<Icon name={'play-circle'} size={20} color={theme.colors.darkGray} />}
             position={['first']}
             onPress={onPressNewEventSequence}
           />
           <ListItem
             title={'Model Details'}
-            titleStyle={{ color: cardColors.accent1 }}
+            titleStyle={s.listItemText}
             containerStyle={{
-              backgroundColor: cardColors.accent2,
+              backgroundColor: theme.colors.whiteTransparentDark,
             }}
-            rightImage={<CustomIcon name={'circle-info'} size={20} color={cardColors.accent1} />}
+            rightImage={<CustomIcon name={'circle-info'} size={20} color={theme.colors.darkGray} />}
             position={['last']}
             onPress={onPressEditModel}
           />
@@ -97,7 +91,10 @@ export const Back = ({
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               icon={
-                <Icon name={'palette'} style={[s.toolbarIcon, { color: cardColors.accent1 }]} />
+                <Icon
+                  name={'palette'}
+                  style={[s.toolbarIcon, { color: theme.colors.whiteTransparentDark }]}
+                />
               }
               onPress={() => {
                 flip && flip();
@@ -106,7 +103,12 @@ export const Back = ({
             />
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
-              icon={<Icon name={'rotate'} style={[s.toolbarIcon, { color: cardColors.accent1 }]} />}
+              icon={
+                <Icon
+                  name={'rotate'}
+                  style={[s.toolbarIcon, { color: theme.colors.whiteTransparentDark }]}
+                />
+              }
               onPress={flip && flip}
             />
           </View>
@@ -119,15 +121,19 @@ export const Back = ({
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   container: {
     height: '100%',
-    backgroundColor: theme.colors.stickyWhite,
+    backgroundColor: theme.colors.darkGray,
     padding: 15,
   },
   title: {
     ...theme.styles.textHeading2,
+    color: theme.colors.whiteTransparentDark,
   },
   image: {
     position: 'absolute',
     right: 0,
+  },
+  listItemText: {
+    color: theme.colors.darkGray,
   },
   actions: {
     flex: 1,

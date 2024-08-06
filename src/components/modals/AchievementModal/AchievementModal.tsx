@@ -24,6 +24,7 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
   const event = useEvent();
   const [pilot, setPilot] = useState<Pilot>();
   const [model, setModel] = useState<Model>();
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
 
@@ -34,6 +35,17 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Get the list of achievements for the pilot/model combination.
+  useEffect(() => {
+    const pilotModelAchievements: Achievement[] = [];
+    pilot?.achievements.forEach(a => {
+      if (a.event.model._id.toString() === model?._id.toString()) {
+        pilotModelAchievements.push(a);
+      }
+    });
+    setAchievements(pilotModelAchievements);
+  }, [model, pilot]);
 
   useImperativeHandle(ref, () => ({
     // These functions exposed to the parent component through the ref.
@@ -83,9 +95,6 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
           </View>
           <View>
             <Text style={s.headerRight}>
-              {`${pilot.achievements.length} award ${pilot.achievements.length > 1 ? 's' : ''}`}
-            </Text>
-            <Text style={s.headerRight}>
               {`Since: ${DateTime.fromISO(pilot.createdOn).toFormat('M/d/yy')}`}
             </Text>
           </View>
@@ -101,9 +110,9 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
             style={s.heroIcon}
           />
         </View>
-        {pilot?.achievements.length ? (
+        {achievements.length ? (
           <FlatList
-            data={pilot.achievements}
+            data={achievements}
             renderItem={renderAchievement}
             horizontal={true}
             keyExtractor={(_item, index) => `${index}`}
@@ -111,7 +120,7 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
             contentContainerStyle={s.achievementListContainer}
           />
         ) : (
-          <Text style={s.title}>{`No achievements yet.`}</Text>
+          <Text style={s.title}>{`Waiting for your first achievement`}</Text>
         )}
       </View>
     </Modal>
@@ -136,9 +145,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   container: {
     top: 50,
-    margin: 10,
-    padding: 10,
-    borderRadius: 10,
+    marginVertical: 10,
+    paddingBottom: 10,
     height: 165,
     backgroundColor: theme.colors.subtleGray,
   },
@@ -160,13 +168,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   title: {
     ...theme.styles.textSmall,
-    top: 50,
+    ...theme.styles.textDim,
+    width: '100%',
+    position: 'absolute',
+    top: 80,
     textAlign: 'center',
   },
   achievementContainer: {
-    position: 'absolute',
-    bottom: 0,
-    paddingHorizontal: 5,
+    paddingHorizontal: 10,
     alignItems: 'center',
   },
   achievementName: {
@@ -178,7 +187,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     ...theme.styles.textDim,
   },
   achievementListContainer: {
-    width: '100%',
+    position: 'absolute',
+    bottom: 0,
   },
 }));
 

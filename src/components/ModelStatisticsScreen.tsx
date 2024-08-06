@@ -37,7 +37,10 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       eventStyle = realm.objectForPrimaryKey(EventStyle, new BSON.ObjectId(data.eventStyleId));
     }
     const average = data.eventStyleCount > 0 ? data.eventStyleDuration / data.eventStyleCount : 0;
-    const percentage = model ? (data.eventStyleDuration / model.statistics.totalTime) * 100 : 0;
+    const percentage =
+      model && model.statistics.totalTime
+        ? (data.eventStyleDuration / model.statistics.totalTime) * 100
+        : 0;
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}

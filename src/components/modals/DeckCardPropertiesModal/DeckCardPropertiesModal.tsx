@@ -94,6 +94,18 @@ const DeckCardPropertiesModal = React.forwardRef<
     onChangeColors(updated);
   };
 
+  colorPicker.onEyedropper = (active: boolean) => {
+    if (active) {
+      setTimeout(() => {
+        innerRef.current?.snapToPosition(1);
+      }, 100);
+    } else {
+      setTimeout(() => {
+        innerRef.current?.snapToIndex(0);
+      }, 100);
+    }
+  };
+
   const onChangeColors = (colors: DeckCardColors) => {
     if (!modelId) return;
     const modelPreferences = store.getState().appSettings.modelsPreferences[modelId];

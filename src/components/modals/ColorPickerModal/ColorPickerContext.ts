@@ -8,6 +8,7 @@ export type ColorPickerContext = {
   modal: React.RefObject<ColorPickerModalMethods>;
   recentColors: string[];
   onDismiss: (result: Result) => void;
+  onEyedropper: (active: boolean) => void;
   setRecentColors: (colors: string[]) => void;
 };
 
@@ -16,6 +17,9 @@ export const ColorPickerContext = createContext<ColorPickerContext>({
   modal: createRef(),
   recentColors: [],
   onDismiss: () => {
+    return;
+  },
+  onEyedropper: () => {
     return;
   },
   setRecentColors: () => {

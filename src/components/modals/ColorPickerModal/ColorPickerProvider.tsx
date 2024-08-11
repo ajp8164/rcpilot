@@ -20,6 +20,10 @@ export const ColorPickerProvider = ({ children }: { children: ReactNode }): Reac
     return;
   };
 
+  const onEyedropper = () => {
+    return;
+  };
+
   return (
     <ColorPickerContext.Provider
       value={{
@@ -27,6 +31,7 @@ export const ColorPickerProvider = ({ children }: { children: ReactNode }): Reac
         modal: modalRef,
         recentColors,
         onDismiss,
+        onEyedropper,
         setRecentColors,
       }}>
       <View ref={eyedropperViewRef} style={s.view}>

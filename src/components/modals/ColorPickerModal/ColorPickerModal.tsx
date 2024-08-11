@@ -29,7 +29,8 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const { extraData, recentColors, onDismiss, setRecentColors } = useContext(ColorPickerContext);
+  const { extraData, recentColors, onDismiss, onEyedropper, setRecentColors } =
+    useContext(ColorPickerContext);
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
 
@@ -97,6 +98,7 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
     // Dismiss (hide) modal while using the eyedropper.
     eyedropperActive.current = true;
     dismiss();
+    onEyedropper(true);
 
     if (!eyedropperViewRef) return;
     makeImageFromView(eyedropperViewRef)
@@ -104,7 +106,7 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
         setEyedropperImage(snapshot);
       })
       .catch(() => log.debug('No image for color picker eyedropper'));
-  }, [eyedropperViewRef]);
+  }, [eyedropperViewRef, onEyedropper]);
 
   const onChangeColor = (color: returnedResults | string) => {
     let selectedColor;
@@ -129,6 +131,7 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
     if (eyedropperActive.current) {
       eyedropperActive.current = false;
       present();
+      onEyedropper(false);
     }
   };
 

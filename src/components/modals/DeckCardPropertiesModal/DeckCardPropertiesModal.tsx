@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { Modal } from '@react-native-ajp-elements/ui';
+import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rneui/themed';
 import { Pressable, View } from 'react-native';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
@@ -128,6 +128,13 @@ const DeckCardPropertiesModal = React.forwardRef<
       enableGestureBehavior={true}
       backdrop={false}
       onDismiss={() => backdrop.setEnabled(false)}>
+      <ModalHeader
+        size={'small'}
+        rightButtonIcon={'close-circle'}
+        rightButtonIconColor={theme.colors.lightGray}
+        containerStyle={s.modalClose}
+        onRightButtonPress={dismiss}
+      />
       <View style={s.container}>
         <View style={s.colorContainer}>
           <AnimatedPressable
@@ -168,6 +175,12 @@ const DeckCardPropertiesModal = React.forwardRef<
 });
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  modalClose: {
+    width: '100%',
+    position: 'absolute',
+    right: 0,
+    marginTop: 20,
+  },
   container: {
     alignSelf: 'flex-start',
     marginTop: 10,

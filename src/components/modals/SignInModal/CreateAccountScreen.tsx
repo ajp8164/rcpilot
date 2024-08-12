@@ -123,7 +123,6 @@ const CreateAccountScreen = () => {
                 <ListItemInput
                   refInner={refFirstName}
                   placeholder="First Name"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.firstName}
                   errorText={
                     formik.values.firstName !== formik.initialValues.firstName
@@ -143,7 +142,6 @@ const CreateAccountScreen = () => {
                 <ListItemInput
                   refInner={refLastName}
                   placeholder="Last Name"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.lastName}
                   errorText={
                     formik.values.lastName !== formik.initialValues.lastName
@@ -163,7 +161,6 @@ const CreateAccountScreen = () => {
                 <ListItemInput
                   refInner={refEmail}
                   placeholder="Email"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.email}
                   errorText={
                     formik.values.email !== formik.initialValues.email
@@ -184,7 +181,6 @@ const CreateAccountScreen = () => {
                 <ListItemInput
                   refInner={refPassword}
                   placeholder="Password"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.password}
                   secureTextEntry={!passwordVisible}
                   rightImage={passwordVisible ? 'eye-off' : 'eye'}

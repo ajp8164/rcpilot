@@ -113,7 +113,6 @@ const EmailSignInScreen = ({ navigation }: Props) => {
                 <ListItemInput
                   refInner={refEmail}
                   placeholder="Email"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.email}
                   errorText={
                     formik.values.email !== formik.initialValues.email
@@ -134,7 +133,6 @@ const EmailSignInScreen = ({ navigation }: Props) => {
                 <ListItemInput
                   refInner={refPassword}
                   placeholder="Password"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.password}
                   secureTextEntry={!passwordVisible}
                   rightImage={passwordVisible ? 'eye-off' : 'eye'}

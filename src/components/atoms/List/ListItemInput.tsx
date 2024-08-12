@@ -64,7 +64,7 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, Props>((props, ref)
       inputTextStyle={s.inputText}
       titleStyle={ts}
       value={value}
-      placeholderTextColor={props.placeholderTextColor || theme.colors.text}
+      placeholderTextColor={`${props.placeholderTextColor?.toString()}80` || theme.colors.textDim}
       onChangeText={handleChange}
       extraContentComponentRight={
         <View style={s.extraComponentContainer}>
@@ -117,9 +117,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.textDim,
     marginLeft: 4,
   },
-  inputText: {
-    ...theme.styles.textDim,
-  },
+  inputText: {},
   title: {
     width: 200,
   },

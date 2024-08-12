@@ -81,7 +81,6 @@ const ForgotPasswordScreen = () => {
                 <ListItemInput
                   refInner={refEmail}
                   placeholder="Email"
-                  placeholderTextColor={theme.colors.textPlaceholder}
                   value={formik.values.email}
                   errorText={
                     formik.values.email !== formik.initialValues.email

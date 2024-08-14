@@ -92,10 +92,10 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
   // Use a database selector to fill values dynamically; use enumName
   let batteries;
   let categories;
+  let eventStyles;
   let locations;
   let models;
   let pilots;
-  let styles;
 
   switch (enumName) {
     case 'Batteries':
@@ -107,8 +107,8 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
       config.values = categories.map(c => c.name).sort();
       break;
     case 'EventStyles':
-      styles = realm.objects(EventStyle);
-      config.values = styles.map(s => s.name).sort();
+      eventStyles = realm.objects(EventStyle);
+      config.values = eventStyles.map(s => s.name).sort();
       break;
     case 'Locations':
       locations = realm.objects(Location);

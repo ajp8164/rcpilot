@@ -54,7 +54,7 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
   },
   EventStyles: {
     mode: 'many-or-none',
-    title: 'Styles',
+    title: 'Event Styles',
     sectionName: 'STYLES TO {0} RESULTS',
     values: [],
   },

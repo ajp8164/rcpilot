@@ -182,7 +182,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             pilot,
             location,
             fuel,
-            fuelConsumed: fuelConsumed.current,
+            fuelConsumed: Number(fuelConsumed.current),
             propeller,
             eventStyle,
             batteryCycles: eventBatteryCycles,

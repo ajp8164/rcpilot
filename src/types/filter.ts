@@ -93,7 +93,7 @@ export type ModelFilterValues = {
 export type EventFilterValues = {
   date: DateFilterState;
   duration: NumberFilterState;
-  style: EnumFilterState;
+  eventStyle: EnumFilterState;
   location: EnumFilterState;
   battery: EnumFilterState;
   pilot: EnumFilterState;
@@ -118,7 +118,8 @@ export type ReportEventFilterValues = {
   date: DateFilterState;
   duration: NumberFilterState;
   pilot: EnumFilterState;
-  style: EnumFilterState;
+  location: EnumFilterState;
+  eventStyle: EnumFilterState;
   outcome: EnumFilterState;
 };
 

@@ -10,7 +10,7 @@ import { EventFilterValues } from 'types/filter';
 export const defaultFilter: EventFilterValues = {
   date: { relation: DateRelation.Any, value: [] },
   duration: { relation: NumberRelation.Any, value: [] },
-  style: { relation: EnumRelation.Any, value: [] },
+  eventStyle: { relation: EnumRelation.Any, value: [] },
   battery: { relation: EnumRelation.Any, value: [] },
   location: { relation: EnumRelation.Any, value: [] },
   pilot: { relation: EnumRelation.Any, value: [] },

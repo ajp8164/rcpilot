@@ -158,13 +158,24 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
       />
       <Divider />
       <ListItemFilterEnum
-        title={'Style'}
-        value={filterEditor.values.style.value}
-        relation={filterEditor.values.style.relation}
+        title={'Location'}
+        value={filterEditor.values.location.value}
+        relation={filterEditor.values.location.relation}
+        enumName={'Locations'}
+        position={['first', 'last']}
+        onValueChange={filterState => {
+          filterEditor.onFilterValueChange('location', filterState);
+        }}
+      />
+      <Divider />
+      <ListItemFilterEnum
+        title={'Event Style'}
+        value={filterEditor.values.eventStyle.value}
+        relation={filterEditor.values.eventStyle.relation}
         enumName={'EventStyles'}
         position={['first', 'last']}
         onValueChange={filterState => {
-          filterEditor.onFilterValueChange('style', filterState);
+          filterEditor.onFilterValueChange('eventStyle', filterState);
         }}
       />
       <Divider />

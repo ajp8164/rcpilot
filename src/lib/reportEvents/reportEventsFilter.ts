@@ -9,6 +9,7 @@ export const defaultFilter: ReportEventFilterValues = {
   date: { relation: DateRelation.Any, value: [] },
   duration: { relation: NumberRelation.Any, value: [] },
   pilot: { relation: EnumRelation.Any, value: [] },
-  style: { relation: EnumRelation.Any, value: [] },
+  location: { relation: EnumRelation.Any, value: [] },
+  eventStyle: { relation: EnumRelation.Any, value: [] },
   outcome: { relation: EnumRelation.Any, value: [] },
 };

@@ -1,3 +1,6 @@
+import { MSSToSeconds } from 'lib/formatters';
+import { DateTime } from 'luxon';
+
 export * from './ListItemFilterBoolean';
 export * from './ListItemFilterDate';
 export * from './ListItemFilterEnum';
@@ -109,4 +112,57 @@ export const RQLCol: Record<EnumRelation, string> = {
   [FilterRelation.Any]: '', // Not used. Excluded from queries.
   [FilterRelation.Is]: 'SOME',
   [FilterRelation.IsNot]: 'NONE',
+};
+
+// Build a RQL query string from a FilterState.
+// 'logicalOp' is used for chaining property filters.
+// 'propertyName' is the property name on the realm object which is to be filtered.
+export const rql = () => {
+  return {
+    result: '',
+    q(logicalOp: string, propertyName: string, filterState: FilterState) {
+      const relation = filterState.relation;
+      const value = filterState.value;
+      let result = '';
+
+      if (relation === FilterRelation.Any) {
+        return this;
+      }
+      if (relation === FilterRelation.No || relation === FilterRelation.Yes) {
+        result = `${propertyName} == ${value}`;
+      }
+      if (relation === FilterRelation.Is) {
+        const values = JSON.stringify(value).replace('[', '{').replace(']', '}');
+        result = `${propertyName} IN ${values}`;
+      }
+      if (relation === FilterRelation.IsNot) {
+        const values = JSON.stringify(value).replace('[', '{').replace(']', '}');
+        result = `NOT ${propertyName} IN ${values}`;
+      }
+      if (relation === FilterRelation.Before) {
+        result = `${propertyName} < '${value}'`;
+      }
+      if (relation === FilterRelation.After) {
+        result = `${propertyName} > '${value}'`;
+      }
+      if (relation === FilterRelation.Past) {
+        const past = DateTime.now().minus({ [value[1].toLowerCase()]: Number(value[0]) });
+        result = `${propertyName} >= '${past}'`;
+      }
+      if (value[1] === 'm:ss') {
+        const op = RQL[relation];
+        const seconds = MSSToSeconds(value[0]);
+        result = `${propertyName} ${op} '${seconds}'`;
+      }
+      if (this.result === '') {
+        this.result = result;
+      } else {
+        this.result = `${this.result} ${logicalOp} ${result}`;
+      }
+      return this;
+    },
+    string() {
+      return this.result;
+    },
+  };
 };

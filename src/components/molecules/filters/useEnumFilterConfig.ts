@@ -21,6 +21,8 @@ const satisfiesRecord =
   <K extends PropertyKey>(rec: Record<K, T>) =>
     rec;
 
+// Config values include the name and id of the enum in a single string separted by a ':'.
+// The name comes first for easy sorting.
 const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
   Batteries: {
     mode: 'many-or-none',
@@ -38,7 +40,9 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     mode: 'many-with-actions',
     title: 'Chemistries',
     sectionName: 'CHEMISTRIES TO {0} RESULTS',
-    values: Object.values(BatteryChemistry),
+    values: Object.values(BatteryChemistry).map(k => {
+      return `${k}:${BatteryChemistry[k as keyof typeof BatteryChemistry]}`;
+    }),
   },
   Locations: {
     mode: 'many-or-none',
@@ -62,14 +66,18 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     mode: 'many-with-actions',
     title: 'Model Types',
     sectionName: 'MODEL TYPES TO {0} RESULTS',
-    values: Object.values(ModelType),
+    values: Object.values(ModelType).map(k => {
+      return `${k}:${ModelType[k as keyof typeof ModelType]}`;
+    }),
   },
   Outcomes: {
     mode: 'many-with-actions',
     title: 'Outcomes',
     sectionName: 'OUTCOMES TO {0} RESULTS',
     icons: eventOutcomeIcons,
-    values: Object.values(EventOutcome),
+    values: Object.keys(EventOutcome).map(k => {
+      return `${k}:${EventOutcome[k as keyof typeof EventOutcome]}`;
+    }),
   },
   Pilots: {
     mode: 'many-or-none',
@@ -100,29 +108,29 @@ export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) 
   switch (enumName) {
     case 'Batteries':
       batteries = realm.objects(Battery);
-      config.values = batteries.map(b => b.name).sort();
+      config.values = batteries.map(b => `${b.name}:${b._id.toString()}`).sort();
       break;
     case 'Categories':
       categories = realm.objects(ModelCategory);
-      config.values = categories.map(c => c.name).sort();
+      config.values = categories.map(c => `${c.name}:${c._id.toString()}`).sort();
       break;
     case 'EventStyles':
       eventStyles = realm.objects(EventStyle);
-      config.values = eventStyles.map(s => s.name).sort();
+      config.values = eventStyles.map(s => `${s.name}:${s._id.toString()}`).sort();
       break;
     case 'Locations':
       locations = realm.objects(Location);
-      config.values = locations.map(l => l.name).sort();
+      config.values = locations.map(l => `${l.name}:${l._id.toString()}`).sort();
       break;
     case 'Models':
       models = realm.objects(Model);
-      config.values = models.map(m => m.name).sort();
+      config.values = models.map(m => `${m.name}:${m._id.toString()}`).sort();
       break;
     case 'Pilots':
       pilots = realm.objects(Pilot);
-      config.values = pilots.map(p => p.name).sort();
+      config.values = pilots.map(p => `${p.name}:${p._id.toString()}`).sort();
       break;
   }
-
+  console.log('***', JSON.stringify(config));
   return config;
 };

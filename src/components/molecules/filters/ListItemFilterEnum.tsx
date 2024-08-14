@@ -90,7 +90,10 @@ const ListItemFilterEnum = (props: Props) => {
   }, [filterState.relation]);
 
   const valueToString = () => {
-    return filterState.value
+    console.log('filterState.value', filterState.value);
+    // Isolate just the name of the enum from the id.
+    const value = filterState.value.map(v => v.substring(0, v.lastIndexOf(':')));
+    return value
       ?.toString()
       .replaceAll(',', ', ')
       .replace(/(, )(?!.*\1)/, ', or ');

@@ -29,11 +29,11 @@ export type EnumPickerInterface = {
   mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none' | 'many-with-actions';
   title: string;
   headerBackTitle?: string;
-  icons?: { [key in string]: EnumPickerIconProps }; // Key is a enum value
+  icons?: { [key in string]: EnumPickerIconProps }; // Key is a enum value as 'name:id'
   sectionName?: string;
   footer?: string;
   values: string[];
-  selected?: string | string[]; // The literal value(s)
+  selected?: string | string[]; // The literal value(s) as 'name:id'
   eventName: string;
 };
 
@@ -61,7 +61,11 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   const event = useEvent();
   const setScreenEditHeader = useScreenEditHeader();
 
-  const [list, setList] = useSetState<{ values: string[]; selected: string[]; initial: string[] }>({
+  const [list, setList] = useSetState<{
+    values: string[];
+    selected: string[];
+    initial: string[];
+  }>({
     values,
     // Use an empty array if empty string is set.
     selected: lodash.isString(selected) ? [selected] : selected ? selected : [],
@@ -157,10 +161,11 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   };
 
   const renderValue: ListRenderItem<string> = ({ item: value, index }) => {
+    const name = value.substring(0, value.lastIndexOf(':'));
     return (
       <ListItemCheckbox
         key={`${value}${index}`}
-        title={icons && icons[value]?.hideTitle ? '' : value}
+        title={icons && icons[value]?.hideTitle ? '' : name}
         leftImage={getIconEl(value)}
         position={
           mode === 'one-or-none'

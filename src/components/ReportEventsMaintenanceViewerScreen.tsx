@@ -47,7 +47,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
 
     let r;
     if (query) {
-      r = events.filtered(query).sorted(['date', 'model.name']);
+      r = events.filtered(query).sorted(['number']);
     } else {
       r = events;
     }

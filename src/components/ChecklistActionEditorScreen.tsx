@@ -70,7 +70,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
 
   const description = useRef(action?.description);
   const cost = useRef(action?.cost?.toFixed(2));
-  const [notes, setNotes] = useState(action?.notes);
+  const [notes, setNotes] = useState(action?.notes || undefined);
   const [selectedSchedule, setSelectedSchedule] =
     useSetState<Omit<ChecklistActionSchedule, keyof Realm.Object>>();
 

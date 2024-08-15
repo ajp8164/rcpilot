@@ -120,6 +120,12 @@ export const RQLCol: Record<EnumRelation, string> = {
 export const rql = () => {
   return {
     result: '',
+    and(propertyName: string, filterState: FilterState) {
+      return this.q('AND', propertyName, filterState);
+    },
+    or(propertyName: string, filterState: FilterState) {
+      return this.q('OR', propertyName, filterState);
+    },
     q(logicalOp: string, propertyName: string, filterState: FilterState) {
       const relation = filterState.relation;
       const value = filterState.value;

@@ -40,7 +40,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
       .q('AND', 'pilot._id', emValues.pilot)
       .q('AND', 'location._id', emValues.location)
       .q('AND', 'eventStyle._id', emValues.eventStyle)
-      .q('AND', 'outcome._id', emValues.outcome)
+      .q('AND', 'outcome', emValues.outcome)
       .string();
 
     let r;

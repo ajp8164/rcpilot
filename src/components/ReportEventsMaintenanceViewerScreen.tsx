@@ -29,20 +29,18 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
   const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
 
   const emValues = report?.eventsFilter?.values as ReportEventFilterValues;
-  console.log(JSON.stringify(report));
-  console.log(emValues);
 
   const events = useQuery<Event>('Event', events => {
     const query = rql()
-      .q('AND', 'model.name', emValues.model)
+      .q('AND', 'model._id', emValues.model)
       .q('AND', 'model.type', emValues.modelType)
-      .q('AND', 'model.category', emValues.category)
+      .q('AND', 'model.category._id', emValues.category)
       .q('AND', 'date', emValues.date)
       .q('AND', 'duration', emValues.duration)
-      .q('AND', 'pilot.name', emValues.pilot)
-      .q('AND', 'location.name', emValues.location)
-      .q('AND', 'eventStyle', emValues.eventStyle)
-      .q('AND', 'outcome', emValues.outcome)
+      .q('AND', 'pilot._id', emValues.pilot)
+      .q('AND', 'location._id', emValues.location)
+      .q('AND', 'eventStyle._id', emValues.eventStyle)
+      .q('AND', 'outcome._id', emValues.outcome)
       .string();
 
     let r;
@@ -53,8 +51,6 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
     }
     return r.sorted(['date', 'model.name']);
   });
-
-  console.log(events);
 
   if (!report) {
     return <EmptyView error message={'Report Not Found!'} />;

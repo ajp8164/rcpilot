@@ -96,7 +96,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
         title={'Model'}
         value={filterEditor.values.model.value}
         relation={filterEditor.values.model.relation}
-        enumName={'Models'}
+        enumName={'Model'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('model', filterState);
@@ -107,7 +107,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
         title={'Model Type'}
         value={filterEditor.values.modelType.value}
         relation={filterEditor.values.modelType.relation}
-        enumName={'ModelTypes'}
+        enumName={'ModelType'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('modelType', filterState);
@@ -118,7 +118,7 @@ const ReportMaintenanceFilterEditorScreen = ({ route }: Props) => {
         title={'Category'}
         value={filterEditor.values.category.value}
         relation={filterEditor.values.category.relation}
-        enumName={'Categories'}
+        enumName={'ModelCategory'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('category', filterState);

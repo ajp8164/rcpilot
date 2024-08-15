@@ -91,7 +91,7 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
         title={'Chemistry'}
         value={filterEditor.values.chemistry.value}
         relation={filterEditor.values.chemistry.relation}
-        enumName={'Chemistries'}
+        enumName={'BatteryChemistry'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('chemistry', filterState);

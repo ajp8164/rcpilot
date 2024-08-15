@@ -11,6 +11,8 @@ import lodash from 'lodash';
 import { useEvent } from 'lib/event';
 import { useTheme } from 'theme';
 import { uuidv4 } from 'lib/utils';
+import { useRealm } from '@realm/react';
+import { BSON } from 'realm';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   onValueChange: (filterState: EnumFilterState) => void;
@@ -26,6 +28,7 @@ const ListItemFilterEnum = (props: Props) => {
   const theme = useTheme();
   const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
   const event = useEvent();
+  const realm = useRealm();
 
   const segments = [EnumRelation.Any, EnumRelation.Is, EnumRelation.IsNot];
 
@@ -90,9 +93,25 @@ const ListItemFilterEnum = (props: Props) => {
   }, [filterState.relation]);
 
   const valueToString = () => {
-    console.log('filterState.value', filterState.value);
-    // Isolate just the name of the enum from the id.
-    const value = filterState.value.map(v => v.substring(0, v.lastIndexOf(':')));
+    const value: string[] = [];
+    filterState.value.forEach(v => {
+      let objId;
+      try {
+        objId = new BSON.ObjectId(new BSON.ObjectId(v));
+      } catch (e) {
+        // Using exception to determine if value is a valid object id.
+      }
+
+      if (objId) {
+        // Get the enum names using the filter saved enum id's and specified enumName.
+        const obj = realm.objectForPrimaryKey(enumName, objId);
+        obj?.name && value.push(obj.name as string);
+      } else {
+        // Not a database enum, use the enum value in place of an id.
+        value.push(v);
+      }
+    });
+
     return value
       ?.toString()
       .replaceAll(',', ', ')

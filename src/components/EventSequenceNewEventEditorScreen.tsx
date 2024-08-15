@@ -515,6 +515,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           position={['first', 'last']}
           onPress={() =>
             navigation.navigate('EnumPicker', {
+              enumName: 'ModelPropeller',
               title: 'Default Propeller',
               headerBackTitle: 'Model',
               footer: 'You can manage propellers through the Globals section in the Setup tab.',
@@ -535,6 +536,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         value={fuel?.name || 'Unspecified'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
+            enumName: 'ModelFuel',
             title: 'Fuel',
             headerBackTitle: `${kind.name}`,
             footer: 'You can manage fuels through the Globals section in the Setup tab.',
@@ -564,6 +566,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         value={pilot?.name || 'Unknown'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
+            enumName: 'Pilot',
             title: 'Pilot',
             headerBackTitle: `${kind.name}`,
             footer: 'You can manage pilots through the Globals section in the Setup tab.',
@@ -581,6 +584,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         value={eventStyle?.name || 'Unspecified'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
+            enumName: 'EventStyle',
             title: 'Style',
             headerBackTitle: `${kind.name}`,
             footer: 'You can manage styles through the Globals section in the Setup tab.',

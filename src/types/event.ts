@@ -1,9 +1,9 @@
 export enum EventOutcome {
   Unspecified = 'Unspecified',
-  Star1 = '1',
-  Star2 = '2',
-  Star3 = '3',
-  Star4 = '4',
+  Star1 = '1 Star',
+  Star2 = '2 Stars',
+  Star3 = '3 Stars',
+  Star4 = '4 Stars',
   Crashed = 'Crashed',
 }
 

@@ -278,6 +278,12 @@ export type BatteryCycleFiltersNavigatorParamList = {
     requireFilterName?: boolean;
   };
   EnumPicker: EnumPickerInterface;
+  NotesEditor: {
+    title?: string;
+    headerButtonStyle?: TextStyle;
+    text?: string;
+    eventName: string;
+  };
 };
 
 export type ReportEventFiltersNavigatorParamList = {

@@ -1,4 +1,4 @@
-import { EnumRelation, NumberRelation, RQL } from 'components/molecules/filters';
+import { rql } from 'components/molecules/filters';
 import { useObject, useQuery } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -10,46 +10,17 @@ import { useSelector } from 'react-redux';
 
 export const useBatteriesFilter = () => {
   const filterId = useSelector(selectFilters(FilterType.BatteriesFilter));
-  const filter = useObject(Filter, new BSON.ObjectId(filterId))?.values;
-  let result = useQuery(Battery);
+  const values = useObject(Filter, new BSON.ObjectId(filterId))?.values;
+  const batteries = useQuery<Battery>('Battery');
 
-  if (!filter) return result;
+  const query = rql()
+    .and('chemistry', values?.chemistry)
+    .and('totalTime', values?.totalTime)
+    .and('capacity', values?.capacity)
+    .and('cRating', values?.cRating)
+    .and('sCells', values?.sCells)
+    .and('pCells', values?.pCells)
+    .string();
 
-  if (filter.chemistry.relation !== EnumRelation.Any) {
-    result = result.filtered(`chemistry ${RQL[filter.chemistry.relation]} $0`, [
-      ...filter.chemistry.value,
-    ]);
-  }
-  if (filter.totalTime.relation !== NumberRelation.Any) {
-    result = result.filtered(
-      `totalTime ${RQL[filter.totalTime.relation]} $0`,
-      parseFloat(filter.totalTime.value[0]),
-    );
-  }
-  if (filter.capacity.relation !== NumberRelation.Any) {
-    result = result.filtered(
-      `capacity ${RQL[filter.capacity.relation]} $0`,
-      parseInt(filter.capacity.value[0], 10),
-    );
-  }
-  if (filter.cRating.relation !== NumberRelation.Any) {
-    result = result.filtered(
-      `cRating ${RQL[filter.cRating.relation]} $0`,
-      parseInt(filter.cRating.value[0], 10),
-    );
-  }
-  if (filter.sCells.relation !== NumberRelation.Any) {
-    result = result.filtered(
-      `sCells ${RQL[filter.sCells.relation]} $0`,
-      parseInt(filter.sCells.value[0], 10),
-    );
-  }
-  if (filter.pCells.relation !== NumberRelation.Any) {
-    result = result.filtered(
-      `pCells ${RQL[filter.pCells.relation]} $0`,
-      parseInt(filter.pCells.value[0], 10),
-    );
-  }
-
-  return result;
+  return query ? batteries.filtered(query) : batteries;
 };

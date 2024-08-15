@@ -80,7 +80,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
       (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
   );
   const [excludeFromPlots, setExcludeFromPlots] = useState(false);
-  const [notes, setNotes] = useState<string | undefined>(undefined);
+  const [notes, setNotes] = useState<string | undefined>(cycle?.notes || undefined);
 
   const batteryCycleCharge = cycle && batteryCycleChargeData(cycle);
   const batteryCycleStats = cycle && batteryCycleStatisticsData(cycle);

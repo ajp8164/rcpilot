@@ -47,7 +47,7 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
       .split('|');
 
   const name = useRef(location?.name || undefined);
-  const [notes, setNotes] = useState(location?.notes);
+  const [notes, setNotes] = useState(location?.notes || undefined);
 
   useEffect(() => {
     if (!locationId || !location) return;

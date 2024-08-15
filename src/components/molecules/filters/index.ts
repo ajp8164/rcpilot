@@ -132,27 +132,22 @@ export const rql = () => {
         result = `${propertyName} == ${value}`;
       }
       if (relation === FilterRelation.Is) {
-        // Create a list of enum id's not names. The input property is expected to be '_id'.
-        const oidValue = value
-          .map(v => {
-            // const idPart = v.substring(v.lastIndexOf(':') + 1, v.length);
-            const idPart = v;
-            return `oid(${idPart})`;
-          })
-          .join(',');
-        result = `${propertyName} IN {${oidValue}}`;
+        // If the input property ends in '_id' then use an oid query, otherwise just use the value provided.
+        if (propertyName.match(/\._id$/)) {
+          const oidValue = value.map(v => `oid(${v})`).join(',');
+          result = `${propertyName} IN {${oidValue}}`;
+        } else {
+          result = `${propertyName} IN {${value.map(v => `'${v}'`).join(',')}}`;
+        }
       }
       if (relation === FilterRelation.IsNot) {
-        // Create a list of enum id's not names. The input property is expected to be '_id'.
-        // Create oid() query string.
-        const oidValue = value
-          .map(v => {
-            // const idPart = v.substring(v.lastIndexOf(':') + 1, v.length);
-            const idPart = v;
-            return `oid(${idPart})`;
-          })
-          .join(',');
-        result = `NOT ${propertyName} IN {${oidValue}}`;
+        // If the input property ends in '_id' then use an oid query, otherwise just use the value provided.
+        if (propertyName.match(/\._id$/)) {
+          const oidValue = value.map(v => `oid(${v})`).join(',');
+          result = `NOT ${propertyName} IN {${oidValue}}`;
+        } else {
+          result = `NOT ${propertyName} IN {${value.map(v => `'${v}'`).join(',')}}`;
+        }
       }
       if (relation === FilterRelation.Before) {
         result = `${propertyName} < '${value}'`;

@@ -6,6 +6,7 @@ import NavContext from './NavContext';
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 
 const BatteryCycleFiltersStack =
   createNativeStackNavigator<BatteryCycleFiltersNavigatorParamList>();
@@ -41,6 +42,13 @@ const BatteryCycleFiltersNavigator = () => {
           component={EnumPickerScreen}
           options={{
             title: '',
+          }}
+        />
+        <BatteryCycleFiltersStack.Screen
+          name="NotesEditor"
+          component={NotesEditorScreen}
+          options={{
+            title: 'String Value',
           }}
         />
       </BatteryCycleFiltersStack.Navigator>

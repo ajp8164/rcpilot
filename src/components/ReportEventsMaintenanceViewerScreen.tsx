@@ -32,15 +32,15 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
 
   const events = useQuery<Event>('Event', events => {
     const query = rql()
-      .q('AND', 'model._id', emValues.model)
-      .q('AND', 'model.type', emValues.modelType)
-      .q('AND', 'model.category._id', emValues.category)
-      .q('AND', 'date', emValues.date)
-      .q('AND', 'duration', emValues.duration)
-      .q('AND', 'pilot._id', emValues.pilot)
-      .q('AND', 'location._id', emValues.location)
-      .q('AND', 'eventStyle._id', emValues.eventStyle)
-      .q('AND', 'outcome', emValues.outcome)
+      .and('model._id', emValues.model)
+      .and('model.type', emValues.modelType)
+      .and('model.category._id', emValues.category)
+      .and('date', emValues.date)
+      .and('duration', emValues.duration)
+      .and('pilot._id', emValues.pilot)
+      .and('location._id', emValues.location)
+      .and('eventStyle._id', emValues.eventStyle)
+      .and('outcome', emValues.outcome)
       .string();
 
     let r;

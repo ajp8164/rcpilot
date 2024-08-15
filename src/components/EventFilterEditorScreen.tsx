@@ -117,7 +117,7 @@ const EventFilterEditorScreen = ({ route }: Props) => {
         title={'Style'}
         value={filterEditor.values.eventStyle.value}
         relation={filterEditor.values.eventStyle.relation}
-        enumName={'EventStyles'}
+        enumName={'EventStyle'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('eventStyle', filterState);
@@ -128,7 +128,7 @@ const EventFilterEditorScreen = ({ route }: Props) => {
         title={'Battery'}
         value={filterEditor.values.battery.value}
         relation={filterEditor.values.battery.relation}
-        enumName={'Batteries'}
+        enumName={'Battery'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('battery', filterState);
@@ -139,7 +139,7 @@ const EventFilterEditorScreen = ({ route }: Props) => {
         title={'Location'}
         value={filterEditor.values.location.value}
         relation={filterEditor.values.location.relation}
-        enumName={'Locations'}
+        enumName={'Location'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('location', filterState);
@@ -150,7 +150,7 @@ const EventFilterEditorScreen = ({ route }: Props) => {
         title={'Pilot'}
         value={filterEditor.values.pilot.value}
         relation={filterEditor.values.pilot.relation}
-        enumName={'Pilots'}
+        enumName={'Pilot'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('pilot', filterState);
@@ -161,7 +161,7 @@ const EventFilterEditorScreen = ({ route }: Props) => {
         title={'Outcome'}
         value={filterEditor.values.outcome.value}
         relation={filterEditor.values.outcome.relation}
-        enumName={'Outcomes'}
+        enumName={'EventOutcome'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('outcome', filterState);

@@ -95,7 +95,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Model'}
         value={filterEditor.values.model.value}
         relation={filterEditor.values.model.relation}
-        enumName={'Models'}
+        enumName={'Model'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('model', filterState);
@@ -106,7 +106,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Model Type'}
         value={filterEditor.values.modelType.value}
         relation={filterEditor.values.modelType.relation}
-        enumName={'ModelTypes'}
+        enumName={'ModelType'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('modelType', filterState);
@@ -117,7 +117,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Category'}
         value={filterEditor.values.category.value}
         relation={filterEditor.values.category.relation}
-        enumName={'Categories'}
+        enumName={'ModelCategory'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('category', filterState);
@@ -150,7 +150,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Pilot'}
         value={filterEditor.values.pilot.value}
         relation={filterEditor.values.pilot.relation}
-        enumName={'Pilots'}
+        enumName={'Pilot'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('pilot', filterState);
@@ -161,7 +161,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Location'}
         value={filterEditor.values.location.value}
         relation={filterEditor.values.location.relation}
-        enumName={'Locations'}
+        enumName={'Location'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('location', filterState);
@@ -172,7 +172,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Event Style'}
         value={filterEditor.values.eventStyle.value}
         relation={filterEditor.values.eventStyle.relation}
-        enumName={'EventStyles'}
+        enumName={'EventStyle'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('eventStyle', filterState);
@@ -183,7 +183,7 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         title={'Outcome'}
         value={filterEditor.values.outcome.value}
         relation={filterEditor.values.outcome.relation}
-        enumName={'Outcomes'}
+        enumName={'EventOutcome'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('outcome', filterState);

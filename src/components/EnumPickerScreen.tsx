@@ -13,6 +13,8 @@ import { makeStyles } from '@rneui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';
+import { useRealm } from '@realm/react';
+import { BSON } from 'realm';
 
 export type EnumPickerIconProps = {
   type?: 'icon' | 'svg';
@@ -26,6 +28,7 @@ export type EnumPickerIconProps = {
 } | null;
 
 export type EnumPickerInterface = {
+  enumName?: string; // Only required for realm objects
   mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none' | 'many-with-actions';
   title: string;
   headerBackTitle?: string;
@@ -45,6 +48,7 @@ export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'EnumPick
 
 const EnumPickerScreen = ({ route, navigation }: Props) => {
   const {
+    enumName,
     mode = 'one',
     title,
     headerBackTitle,
@@ -59,8 +63,10 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   const s = useStyles(theme);
 
   const event = useEvent();
+  const realm = useRealm();
   const setScreenEditHeader = useScreenEditHeader();
 
+  // All of these strings are object ids or enum values.
   const [list, setList] = useSetState<{
     values: string[];
     selected: string[];
@@ -108,7 +114,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
     // For single selection mode we send the selected value immediately.
     if (mode === 'one' || mode === 'one-or-none') {
-      event.emit(eventName, { value: [value] } as EnumPickerResult);
+      event.emit(eventName, { value: value ? [value] : [] } as EnumPickerResult);
     }
   };
 
@@ -161,7 +167,23 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   };
 
   const renderValue: ListRenderItem<string> = ({ item: value, index }) => {
-    const name = value.substring(0, value.lastIndexOf(':'));
+    let name = value;
+    let objId;
+    try {
+      objId = new BSON.ObjectId(new BSON.ObjectId(value));
+    } catch (e) {
+      // Using exception to determine if value is a valid object id.
+    }
+
+    if (enumName && objId) {
+      const enumObj = realm.objectForPrimaryKey(enumName, objId);
+      if (!enumObj) {
+        // Nothing to render if no enum object is found. Was it deleted?
+        return null;
+      }
+      name = enumObj.name as string;
+    }
+
     return (
       <ListItemCheckbox
         key={`${value}${index}`}

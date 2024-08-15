@@ -453,6 +453,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             position={modelId ? ['first', 'last'] : ['last']}
             onPress={() =>
               navigation.navigate('EnumPicker', {
+                enumName: 'ModelCategory',
                 title: 'Model Category',
                 headerBackTitle: 'Model',
                 footer: 'You can manage categories through the Globals section in the Setup tab.',
@@ -648,6 +649,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             position={!modelHasPropeller(type) && !logsFuel ? ['first', 'last'] : ['first']}
             onPress={() =>
               navigation.navigate('EnumPicker', {
+                enumName: 'EventStyle',
                 title: 'Default Style',
                 headerBackTitle: 'Model',
                 footer: 'You can manage styles through the Globals section in the Setup tab.',
@@ -667,6 +669,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               position={!logsFuel ? ['last'] : []}
               onPress={() =>
                 navigation.navigate('EnumPicker', {
+                  enumName: 'ModelPropeller',
                   title: 'Default Propeller',
                   headerBackTitle: 'Model',
                   footer: 'You can manage propellers through the Globals section in the Setup tab.',
@@ -687,6 +690,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               position={['last']}
               onPress={() =>
                 navigation.navigate('EnumPicker', {
+                  enumName: 'ModelFuel',
                   title: 'Default Fuel',
                   headerBackTitle: 'Model',
                   footer: 'You can manage fuel through the Globals section in the Setup tab.',

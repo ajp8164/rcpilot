@@ -132,12 +132,27 @@ export const rql = () => {
         result = `${propertyName} == ${value}`;
       }
       if (relation === FilterRelation.Is) {
-        const values = JSON.stringify(value).replace('[', '{').replace(']', '}');
-        result = `${propertyName} IN ${values}`;
+        // Create a list of enum id's not names. The input property is expected to be '_id'.
+        const oidValue = value
+          .map(v => {
+            // const idPart = v.substring(v.lastIndexOf(':') + 1, v.length);
+            const idPart = v;
+            return `oid(${idPart})`;
+          })
+          .join(',');
+        result = `${propertyName} IN {${oidValue}}`;
       }
       if (relation === FilterRelation.IsNot) {
-        const values = JSON.stringify(value).replace('[', '{').replace(']', '}');
-        result = `NOT ${propertyName} IN ${values}`;
+        // Create a list of enum id's not names. The input property is expected to be '_id'.
+        // Create oid() query string.
+        const oidValue = value
+          .map(v => {
+            // const idPart = v.substring(v.lastIndexOf(':') + 1, v.length);
+            const idPart = v;
+            return `oid(${idPart})`;
+          })
+          .join(',');
+        result = `NOT ${propertyName} IN {${oidValue}}`;
       }
       if (relation === FilterRelation.Before) {
         result = `${propertyName} < '${value}'`;

@@ -91,7 +91,7 @@ const ReportModelScanCodeFilterEditorScreen = ({ route }: Props) => {
         title={'Model Type'}
         value={filterEditor.values.modelType.value}
         relation={filterEditor.values.modelType.relation}
-        enumName={'ModelTypes'}
+        enumName={'ModelType'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('modelType', filterState);
@@ -102,7 +102,7 @@ const ReportModelScanCodeFilterEditorScreen = ({ route }: Props) => {
         title={'Category'}
         value={filterEditor.values.category.value}
         relation={filterEditor.values.category.relation}
-        enumName={'Categories'}
+        enumName={'ModelCategory'}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('category', filterState);

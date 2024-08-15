@@ -54,13 +54,6 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         refInput.current.focus();
       }
     }, 600);
-
-    // The ref may be cleaned up by the time the following function runs.
-    // Make a copy for the ?check.
-    const refInputCurrent = refInput.current;
-    return () => {
-      refInputCurrent?.blur();
-    };
   }, []);
 
   useImperativeHandle(ref, () => ({

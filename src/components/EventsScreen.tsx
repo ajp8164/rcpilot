@@ -24,7 +24,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEventsFilter } from 'lib/modelEvent';
@@ -120,7 +120,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   const eventTitle = (event: Event) => {
     const number = `#${event.number}`;
-    const duration = `${secondsToMSS(event.duration, { format: 'm:ss' })}`;
+    const duration = `${secondsToFormat(event.duration, { format: 'm:ss' })}`;
     const time = DateTime.fromISO(event.createdOn).toLocaleString(DateTime.TIME_SIMPLE);
     const location = `${event.location?.name || 'Unknown location'}`;
     return `${number}: ${duration} at ${time}, ${location}`;

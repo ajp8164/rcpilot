@@ -3,7 +3,7 @@ import { Milliamps, MilliampsPerMinute, Seconds, Volts } from 'types/battery';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 
 export type BatteryCycleStaticsticsData = {
   value: {
@@ -75,7 +75,7 @@ export const batteryCycleStatisticsData = (cycle: BatteryCycle) => {
       },
       string: {
         averageDischargeCurrent: `${Math.trunc(averageDischargeCurrent)} mA`,
-        dischargeBy80Percent: secondsToMSS(dischargeBy80Percent, { format: 'm:ss' }),
+        dischargeBy80Percent: secondsToFormat(dischargeBy80Percent, { format: 'm:ss' }),
       },
     };
   }
@@ -103,7 +103,7 @@ export const batteryCycleDischargeData = (cycle: BatteryCycle) => {
       },
       string: {
         dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat('M/d/yy'),
-        dischargeDuration: secondsToMSS(dischargeDuration, { format: 'm:ss' }),
+        dischargeDuration: secondsToFormat(dischargeDuration, { format: 'm:ss' }),
         dischargeRestingVoltage: dischargeRestingVoltage
           ? `${dischargeRestingVoltage.toFixed(1)}V`
           : 'unknown',

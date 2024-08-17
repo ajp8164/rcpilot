@@ -28,7 +28,7 @@ import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { eventKind } from 'lib/modelEvent';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useObject } from '@realm/react';
@@ -201,7 +201,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
             followingStr = ChecklistActionScheduleFollowing.TimeAtInstall;
           } else {
             following = `${model.statistics.totalTime}`;
-            followingStr = `Total Time ${secondsToMSS(model.statistics.totalTime, { format: 'm:ss' })}`;
+            followingStr = `Total Time ${secondsToFormat(model.statistics.totalTime, { format: 'm:ss' })}`;
           }
         }
         setScheduleStr({

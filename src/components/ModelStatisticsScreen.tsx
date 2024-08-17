@@ -12,7 +12,7 @@ import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { eventKind } from 'lib/modelEvent';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
 import { useTheme } from 'theme';
 
@@ -44,8 +44,8 @@ const ModelStatisticsScreen = ({ route }: Props) => {
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}
-        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToMSS(data.eventStyleDuration, { format: 'm:ss' })}`}
-        value={`${Math.round(percentage)}%, ${secondsToMSS(average, { format: 'm:ss' })}`}
+        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToFormat(data.eventStyleDuration, { format: 'm:ss' })}`}
+        value={`${Math.round(percentage)}%, ${secondsToFormat(average, { format: 'm:ss' })}`}
         position={listItemPosition(index, model?.statistics.eventStyleData.length || 0)}
         rightImage={false}
       />
@@ -84,7 +84,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       />
       <ListItem
         title={'Total Time'}
-        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToMSS(model.statistics.totalTime, { format: 'm:ss' })}`}
+        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToFormat(model.statistics.totalTime, { format: 'm:ss' })}`}
         position={['first', 'last']}
         rightImage={false}
       />

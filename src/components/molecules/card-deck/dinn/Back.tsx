@@ -15,7 +15,7 @@ import { modelTypeIcons } from 'lib/model';
 import { ellipsis } from '@react-native-ajp-elements/core';
 import { eventKind } from 'lib/modelEvent';
 import { DateTime } from 'luxon';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -84,7 +84,7 @@ export const Back = ({
         <View style={s.statRow}>
           <Text style={s.text}>{'Total Time'}</Text>
           <Text style={s.text}>
-            {secondsToMSS(model?.statistics.totalTime, { format: 'h:mm:ss' })}
+            {secondsToFormat(model?.statistics.totalTime, { format: 'h:mm:ss' })}
           </Text>
         </View>
         <View style={s.actions}>

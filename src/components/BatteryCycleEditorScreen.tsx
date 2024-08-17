@@ -7,7 +7,7 @@ import {
   ListItemInputMethods,
   ListItemSwitch,
 } from 'components/atoms/List';
-import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
+import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { batteryCycleChargeData, batteryCycleStatisticsData } from 'lib/batteryCycle';
@@ -52,7 +52,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
 
   // Discharge phase
   const [dischargeDate, setDischargeDate] = useState(cycle?.discharge?.date);
-  const dischargeDuration = useRef(secondsToMSS(cycle?.discharge?.duration) || undefined);
+  const dischargeDuration = useRef(secondsToFormat(cycle?.discharge?.duration) || undefined);
   const dischargePackVoltage = useRef(cycle?.discharge?.packVoltage?.toString() || undefined);
   const dischargePackResistance = useRef(cycle?.discharge?.packResistance?.toString() || undefined);
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
@@ -496,7 +496,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             value={
               <View style={s.valueContainer}>
                 <Text style={s.value}>
-                  {secondsToMSS(batteryCycleStats?.value.dischargeBy80Percent, { format: 'm:ss' })}
+                  {secondsToFormat(batteryCycleStats?.value.dischargeBy80Percent, {
+                    format: 'm:ss',
+                  })}
                 </Text>
                 <Text style={s.valueLabel}>{' m:ss'}</Text>
               </View>

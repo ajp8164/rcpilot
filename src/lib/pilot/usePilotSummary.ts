@@ -1,6 +1,6 @@
 import { Event } from 'realmdb/Event';
 import { Pilot } from 'realmdb/Pilot';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { useQuery } from '@realm/react';
 
 export const usePilotSummary = () => {
@@ -12,7 +12,7 @@ export const usePilotSummary = () => {
       return (accumulator += event.duration);
     }, 0);
 
-    const time = secondsToMSS(totalTime, { format: 'm:ss' });
+    const time = secondsToFormat(totalTime, { format: 'm:ss' });
     const eventCount = `${pilotEvents.length} event${pilotEvents.length !== 1 ? 's' : ''}`;
     return `Logged ${time} over ${eventCount}`;
   };

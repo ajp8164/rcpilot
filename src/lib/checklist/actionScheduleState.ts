@@ -13,7 +13,7 @@ import {
 import { DateTime } from 'luxon';
 import { Model } from 'realmdb/Model';
 import { eventKind } from 'lib/modelEvent';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 
 export const actionScheduleState = (
   action: JChecklistAction,
@@ -205,7 +205,7 @@ function actionNonRepeatingScheduleState(
       timeframe = schedule.value === 1 ? timeframe.replace(/s$/, '') : timeframe;
 
       if (model && schedule.following !== undefined) {
-        after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToMSS(schedule.following, { format: 'm:ss' })}`;
+        after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToFormat(schedule.following, { format: 'm:ss' })}`;
 
         const targetMinute = parseInt(schedule.following, 10) + schedule.value;
         const estMinutes = targetMinute - Math.trunc(model.statistics.totalTime / 60);

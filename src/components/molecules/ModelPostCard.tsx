@@ -11,7 +11,7 @@ import { SvgXml } from 'react-native-svg';
 import { Button } from '@rneui/base';
 import { eventKind } from 'lib/modelEvent';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { DateTime } from 'luxon';
 
 interface ModelPostCardInterface {
@@ -51,7 +51,7 @@ export const ModelPostCard = ({
               {`${model.statistics.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
             </Text>
             <Text style={s.modelCardSubtitle}>
-              {`${secondsToMSS(model.statistics.totalTime, { format: 'm:ss' })} total time`}
+              {`${secondsToFormat(model.statistics.totalTime, { format: 'm:ss' })} total time`}
             </Text>
           </View>
         </View>

@@ -20,6 +20,7 @@ import { batteryStatistics } from 'lib/battery';
 import ViewShot from 'react-native-view-shot';
 import { secondsToFormat } from 'lib/formatters';
 import { EventRating } from 'components/molecules/EventRating';
+import { BatteryCycle } from 'realmdb';
 
 type ColumnDef = {
   field: string;
@@ -32,10 +33,10 @@ const columns: ColumnDef[] = [
   { field: 'date', headerName: 'Date', style: { width: 175 } },
   { field: 'eventStyle', headerName: 'Style', style: { width: 150 } },
   { field: 'modelName', headerName: 'Model', style: { width: 100 } },
-  { field: 'batteryName', headerName: 'Battery', style: { width: 100 } },
+  { field: 'batteryName', headerName: 'Battery', style: { width: 200 } },
   { field: 'duration', headerName: 'Duration', style: { width: 80, alignItems: 'flex-end' } },
   { field: 'totalTime', headerName: 'Total Time', style: { width: 100, alignItems: 'flex-end' } },
-  { field: 'outcome', headerName: 'Outcome', style: { width: 100, alignItems: 'center' } },
+  { field: 'outcome', headerName: 'Outcome', style: { width: 130, alignItems: 'center' } },
   { field: 'operatorName', headerName: 'Name', style: { width: 200 } },
   { field: 'notes', headerName: 'Notes', style: { width: 400 } },
 ];
@@ -92,20 +93,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
           date: `${DateTime.fromISO(e.date).toFormat('M/d/yyyy h:mm a')}`,
           eventStyle: `${e.eventStyle || '---'}`,
           modelName: `${e.model.name}`,
-          batteryName: `
-            ${e.batteryCycles[0]?.battery.name || '---'}
-            ${
-              e.batteryCycles[0]?.battery.name
-                ? 'Cycle ' + e.batteryCycles[0]?.cycleNumber + ':' + e.batteryCycles[0]?.battery
-                  ? batteryStatistics(e.batteryCycles[0]?.battery)?.string.averageDischargeCurrent
-                  : '?' + e.batteryCycles[0]?.battery
-                    ? batteryCycleStatisticsData(e.batteryCycles[0]).string.averageDischargeCurrent
-                    : '?' + 'C' + e.batteryCycles[0]?.battery
-                      ? batteryCycleStatisticsData(e.batteryCycles[0]).string.dischargeBy80Percent
-                      : '?'
-                : ''
-            }
-          `,
+          batteryName: `${batteryCycleInfo(e.batteryCycles)}`,
           duration: `${secondsToFormat(e.duration, { format: 'm:ss' })}`,
           totalTime: `${secondsToFormat(e.model.statistics.totalTime, { format: 'h:mm:ss' })}`,
           outcome: <EventRating style={s.outcome} value={e.outcome} />,
@@ -118,6 +106,33 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events]);
+
+  const batteryCycleInfo = (cycles: BatteryCycle[]) => {
+    let result: string | undefined;
+
+    cycles.forEach(cycle => {
+      const name = cycle.battery.name || '---';
+      const cycleNo = cycle.battery.name ? 'Cycle ' + cycle.cycleNumber + ':' : undefined;
+      const adc1 = cycle.battery
+        ? batteryStatistics(cycle.battery)?.string.averageDischargeCurrent
+        : '?';
+      const adc2 = cycle.battery
+        ? batteryCycleStatisticsData(cycle).string.averageDischargeCurrent + 'C'
+        : '?';
+      const d80 = cycle.battery
+        ? batteryCycleStatisticsData(cycle).string.dischargeBy80Percent
+        : '?';
+
+      const cycleInfo = `${name}\n${cycleNo ? cycleNo : ''}\n${cycleNo ? adc1 : ''}\n${cycleNo ? adc2 : ''}\n${cycleNo ? d80 : ''}`;
+      if (result) {
+        result = `${result}\n\n${cycleInfo}`;
+      } else {
+        result = cycleInfo;
+      }
+    });
+
+    return result || '';
+  };
 
   const onCapture = (url: string) => {
     openShareSheet({
@@ -132,11 +147,11 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
   const renderRow: ListRenderItem<RowData> = ({ item: row, index }) => {
     return (
       <View key={`${index}`} style={s.row}>
-        {columns.map(c => {
+        {columns.map(col => {
           // Value is a string or react node.
-          const value = row[c.field as keyof RowData];
+          const value = row[col.field as keyof RowData];
           return (
-            <View style={[c.style, index % 2 === 1 ? s.striped : {}]}>
+            <View style={[col.style, index % 2 === 1 ? s.striped : {}]}>
               {typeof value === 'string' ? <Text style={[s.cell, s.text]}>{value}</Text> : value}
             </View>
           );
@@ -151,18 +166,28 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
 
   return (
     <ScrollView horizontal={true}>
-      <ViewShot style={s.container} onCapture={onCapture} captureMode={'mount'}>
+      <ViewShot
+        style={s.container}
+        onCapture={onCapture}
+        captureMode={'mount'}
+        options={{ width: 1650 }}>
+        <View style={s.reportHeader}>
+          <Text style={theme.styles.textHeading5}>{'Event/Maintenance Report'}</Text>
+          <Text style={theme.styles.textNormal}>
+            {DateTime.now().toFormat("MMMM dd, yyyy 'at' h:m a")}
+          </Text>
+        </View>
         <FlatList
           data={rows}
           renderItem={renderRow}
           keyExtractor={item => item.number.toString()}
           ListHeaderComponent={
             <View style={s.header}>
-              {columns.map(c => {
+              {columns.map((col, index) => {
                 return (
-                  <View style={c.style}>
+                  <View key={`${index}`} style={col.style}>
                     <Text style={[s.cell, s.headerText]} numberOfLines={1}>
-                      {c.headerName}
+                      {col.headerName}
                     </Text>
                   </View>
                 );
@@ -178,10 +203,15 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   container: {
     padding: 15,
+    width: 1650,
+  },
+  reportHeader: {
+    marginBottom: 30,
   },
   header: {
     flexDirection: 'row',
     backgroundColor: theme.colors.brandPrimary,
+    paddingVertical: 5,
   },
   row: {
     flexDirection: 'row',

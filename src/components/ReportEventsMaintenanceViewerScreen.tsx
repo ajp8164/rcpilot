@@ -147,11 +147,11 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
   const renderRow: ListRenderItem<RowData> = ({ item: row, index }) => {
     return (
       <View key={`${index}`} style={s.row}>
-        {columns.map(col => {
+        {columns.map((col, index) => {
           // Value is a string or react node.
           const value = row[col.field as keyof RowData];
           return (
-            <View style={[col.style, index % 2 === 1 ? s.striped : {}]}>
+            <View key={`${index}`} style={[col.style, index % 2 === 1 ? s.striped : {}]}>
               {typeof value === 'string' ? <Text style={[s.cell, s.text]}>{value}</Text> : value}
             </View>
           );

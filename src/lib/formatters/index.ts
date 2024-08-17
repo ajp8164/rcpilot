@@ -3,4 +3,3 @@ export * from './MSSToSeconds';
 export * from './hmsMaskToSeconds';
 export * from './maskToHMS';
 export * from './secondsToFormat';
-export * from './secondsToMSS';

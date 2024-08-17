@@ -5,7 +5,7 @@ import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
 import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
+import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Model, ModelStatistics } from 'realmdb/Model';
 import React, { useEffect, useRef, useState } from 'react';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
@@ -82,7 +82,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const currentPilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
 
   const [date] = useState(DateTime.now());
-  const duration = useRef(secondsToMSS(currentEventSequence.duration));
+  const duration = useRef(secondsToFormat(currentEventSequence.duration));
   const [fuel, setFuel] = useState<ModelFuel | undefined>(model?.defaultFuel);
   const fuelConsumed = useRef<string>();
   const [propeller, setPropeller] = useState<ModelPropeller | undefined>(model?.defaultPropeller);

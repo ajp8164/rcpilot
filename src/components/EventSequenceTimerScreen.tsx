@@ -40,7 +40,7 @@ import WheelPicker from 'components/atoms/WheelPicker';
 import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { makeStyles } from '@rneui/themed';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
@@ -198,7 +198,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const millisecondsToPickerMSS = (ms: number) => {
     const secs = ms / 1000;
     const nearest5 = Math.ceil(secs / 5) * 5;
-    const mss = secondsToMSS(nearest5);
+    const mss = secondsToFormat(nearest5);
     const str = mss.split(':');
     return [`${+str[0]}`, `${+str[1]}`];
   };
@@ -341,7 +341,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToMSS(s.seconds, { format: 'm:ss' })} (80%)`,
+        time: `${secondsToFormat(s.seconds, { format: 'm:ss' })} (80%)`,
       };
     });
   };
@@ -352,7 +352,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToMSS(s.seconds, { format: 'm:ss' })} (80%)`,
+        time: `${secondsToFormat(s.seconds, { format: 'm:ss' })} (80%)`,
       };
     });
   };
@@ -485,7 +485,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               timer.state.mode === TimerMode.Armed ? s.timerValueArmed : {},
               timer.state.inOvertime ? s.timerOvertime : {},
             ]}>
-            {secondsToMSS(Math.abs(Math.trunc(timer.state.value / 1000)), { format: 'm:ss' })}
+            {secondsToFormat(Math.abs(Math.trunc(timer.state.value / 1000)), { format: 'm:ss' })}
           </Animated.Text>
         )}
         {timer.state.mode === TimerMode.Armed && (

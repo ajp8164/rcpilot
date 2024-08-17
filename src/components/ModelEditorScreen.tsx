@@ -5,7 +5,7 @@ import { Model, ModelStatistics } from 'realmdb/Model';
 import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
-import { hmsMaskToSeconds, maskToHMS, secondsToMSS } from 'lib/formatters';
+import { hmsMaskToSeconds, maskToHMS, secondsToFormat } from 'lib/formatters';
 import {
   modelCostStatistics,
   modelEventOutcomeStatistics,
@@ -503,7 +503,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               <Divider text={kind.namePlural.toUpperCase()} />
               <ListItem
                 title={'Statistics'}
-                value={`${secondsToMSS(model?.statistics.totalTime, { format: 'm:ss' })} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
+                value={`${secondsToFormat(model?.statistics.totalTime, { format: 'm:ss' })} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
                 position={['first']}
                 onPress={() =>
                   navigation.navigate('ModelStatistics', {

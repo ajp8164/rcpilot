@@ -14,7 +14,7 @@ import React from 'react';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rneui/themed';
-import { secondsToMSS } from 'lib/formatters';
+import { secondsToFormat } from 'lib/formatters';
 import { useObject } from '@realm/react';
 
 type Section = {
@@ -48,7 +48,7 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       <ListItem
         key={`${index}`}
         title={`${eventKind(model?.type).name} #${historyEntry.eventNumber}`}
-        subtitle={`${DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}\nModel Time ${secondsToMSS(historyEntry.modelTime, { format: 'm:ss' })}`}
+        subtitle={`${DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}\nModel Time ${secondsToFormat(historyEntry.modelTime, { format: 'm:ss' })}`}
         position={listItemPosition(index, action.history.length)}
         rightImage={false}
       />

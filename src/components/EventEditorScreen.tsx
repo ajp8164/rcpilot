@@ -7,7 +7,7 @@ import {
   ModelsNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import { MSSToSeconds, secondsToMSS } from 'lib/formatters';
+import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import React, { useEffect, useRef, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
@@ -68,7 +68,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const pilots = useQuery(Pilot);
 
   const [date, setDate] = useState(modelEvent?.createdOn);
-  const duration = useRef(secondsToMSS(modelEvent?.duration) || undefined);
+  const duration = useRef(secondsToFormat(modelEvent?.duration) || undefined);
   const [fuel, setFuel] = useState(modelEvent?.fuel || undefined);
   const fuelConsumed = useRef(modelEvent?.fuelConsumed?.toString() || undefined);
   const [propeller, setPropeller] = useState(modelEvent?.propeller || undefined);

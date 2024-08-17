@@ -9,7 +9,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportModelScanCodeFilterValues } from 'types/filter';
 import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/reportModelScanCode';
+import { defaultFilter } from 'lib/reports/reportModelScanCode';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';

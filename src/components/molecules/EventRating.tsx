@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import { Text, View } from 'react-native';
+import { Text, View, ViewStyle } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { EventOutcome } from 'types/event';
@@ -8,10 +8,11 @@ import React from 'react';
 import { makeStyles } from '@rneui/themed';
 
 interface EventRatingInterface {
+  style?: ViewStyle | ViewStyle[];
   value?: EventOutcome;
 }
 
-export const EventRating = ({ value }: EventRatingInterface) => {
+export const EventRating = ({ style = {}, value }: EventRatingInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -31,7 +32,9 @@ export const EventRating = ({ value }: EventRatingInterface) => {
 
       for (let i = 0; i < num; i++) {
         outcomeEl.push(
-          <Icon key={i} name={'star'} size={20} style={s.icon} color={theme.colors.midGray} />,
+          <View style={style}>
+            <Icon key={i} name={'star'} size={20} style={s.icon} color={theme.colors.midGray} />
+          </View>,
         );
       }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

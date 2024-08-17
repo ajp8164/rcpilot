@@ -1,18 +1,65 @@
 import { AppTheme, useTheme } from 'theme';
 import { rql } from 'components/molecules/filters';
-import { ScrollView, Text, View } from 'react-native';
-import { useObject, useQuery, useRealm } from '@realm/react';
+import {
+  DimensionValue,
+  FlatList,
+  ListRenderItem,
+  ScrollView,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
+import { useObject, useQuery } from '@realm/react';
 
 import { BSON } from 'realm';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReportViewerNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
-import { viewport } from '@react-native-ajp-elements/ui';
+import { openShareSheet } from '@react-native-ajp-elements/ui';
 import { ReportEventFilterValues } from 'types/filter';
+import { DateTime } from 'luxon';
+import { batteryCycleStatisticsData } from 'lib/batteryCycle';
+import { batteryStatistics } from 'lib/battery';
+// import RNFetchBlob from 'rn-fetch-blob';
+import ViewShot from 'react-native-view-shot';
+import { secondsToFormat } from 'lib/formatters';
+
+type ColumnDef = {
+  field: string;
+  headerName: string;
+  style?: ViewStyle;
+  width?: DimensionValue;
+};
+
+const columns: ColumnDef[] = [
+  { field: 'number', headerName: 'No.', style: { width: 80, alignItems: 'center' } },
+  { field: 'date', headerName: 'Date', style: { width: 175 } },
+  { field: 'eventStyle', headerName: 'Style', style: { width: 150 } },
+  { field: 'modelName', headerName: 'Model', style: { width: 100 } },
+  { field: 'batteryName', headerName: 'Battery', style: { width: 100 } },
+  { field: 'duration', headerName: 'Duration', style: { width: 80, alignItems: 'flex-end' } },
+  { field: 'totalTime', headerName: 'Total Time', style: { width: 100, alignItems: 'flex-end' } },
+  { field: 'outcome', headerName: 'Outcome', style: { width: 100, alignItems: 'center' } },
+  { field: 'operatorName', headerName: 'Name', style: { width: 200 } },
+  { field: 'notes', headerName: 'Notes', style: { width: 400 } },
+];
+
+type RowData = {
+  number: string;
+  date: string;
+  eventStyle: string;
+  modelName: string;
+  batteryName: string;
+  duration: string;
+  totalTime: string;
+  outcome: string;
+  operatorName: string;
+  notes: string;
+};
 
 export type Props = NativeStackScreenProps<
   ReportViewerNavigatorParamList,
@@ -25,72 +72,155 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const _realm = useRealm();
   const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
-
-  const emValues = report?.eventsFilter?.values as ReportEventFilterValues;
+  const values = report?.eventsFilter?.values as ReportEventFilterValues;
+  const [rows, setRows] = useState<RowData[]>([]);
 
   const events = useQuery<Event>('Event', events => {
     const query = rql()
-      .and('model._id', emValues.model)
-      .and('model.type', emValues.modelType)
-      .and('model.category._id', emValues.category)
-      .and('date', emValues.date)
-      .and('duration', emValues.duration)
-      .and('pilot._id', emValues.pilot)
-      .and('location._id', emValues.location)
-      .and('eventStyle._id', emValues.eventStyle)
-      .and('outcome', emValues.outcome)
+      .and('model._id', values.model)
+      .and('model.type', values.modelType)
+      .and('model.category._id', values.category)
+      .and('date', values.date)
+      .and('duration', values.duration)
+      .and('pilot._id', values.pilot)
+      .and('location._id', values.location)
+      .and('eventStyle._id', values.eventStyle)
+      .and('outcome', values.outcome)
       .string();
-
-    let r;
-    if (query) {
-      r = events.filtered(query).sorted(['number']);
-    } else {
-      r = events;
-    }
-    return r.sorted(['date', 'model.name']);
+    return query ? events.filtered(query).sorted(['number']) : events;
   });
+
+  // Create report rows from the database query.
+  useEffect(() => {
+    (async () => {
+      const rows = events.map(e => {
+        return {
+          number: `${e.number}/${e.model.statistics.totalEvents}`,
+          date: `${DateTime.fromISO(e.date).toFormat('M/d/yyyy h:mm a')}`,
+          eventStyle: `${e.eventStyle || '---'}`,
+          modelName: `${e.model.name}`,
+          batteryName: `
+            ${e.batteryCycles[0]?.battery.name || '---'}
+            ${
+              e.batteryCycles[0]?.battery.name
+                ? 'Cycle ' + e.batteryCycles[0]?.cycleNumber + ':' + e.batteryCycles[0]?.battery
+                  ? batteryStatistics(e.batteryCycles[0]?.battery)?.string.averageDischargeCurrent
+                  : '?' + e.batteryCycles[0]?.battery
+                    ? batteryCycleStatisticsData(e.batteryCycles[0]).string.averageDischargeCurrent
+                    : '?' + 'C' + e.batteryCycles[0]?.battery
+                      ? batteryCycleStatisticsData(e.batteryCycles[0]).string.dischargeBy80Percent
+                      : '?'
+                : ''
+            }
+          `,
+          duration: `${secondsToFormat(e.duration, { format: 'm:ss' })}`,
+          totalTime: `${secondsToFormat(e.model.statistics.totalTime, { format: 'h:mm:ss' })}`,
+          outcome: `${e.outcome}`,
+          operatorName: `${e.pilot.name}`,
+          notes: `${e.notes}`,
+        };
+      });
+
+      setRows(rows);
+    })();
+  }, [events]);
+
+  const onCapture = (url: string) => {
+    openShareSheet({
+      title: 'Event/Maintenance Report',
+      message: '',
+      subject: 'Event/Maintenance Report',
+      email: '',
+      url,
+    });
+  };
+
+  const renderRow: ListRenderItem<RowData> = ({ item: row, index }) => {
+    return (
+      <View key={`${index}`} style={s.row}>
+        {columns.map(c => {
+          const value = row[c.field as keyof RowData];
+          return (
+            <View style={[c.style, index % 2 === 1 ? s.striped : {}]}>
+              <Text style={[s.cell, s.text]}>{value}</Text>
+            </View>
+          );
+        })}
+      </View>
+    );
+  };
 
   if (!report) {
     return <EmptyView error message={'Report Not Found!'} />;
   }
 
   return (
-    <ScrollView style={s.container}>
-      <Text>{report?.name}</Text>
-      {events.map((e, i) => {
-        return (
-          <View key={`${i}`}>
-            <Text>{'Created on: ' + e.createdOn}</Text>
-            <Text>{'Updated on: ' + e.updatedOn}</Text>
-            <Text>{'Event number: ' + e.number}</Text>
-            <Text>{'Date: ' + e.date}</Text>
-            <Text>{'Model Name: ' + e.model.name}</Text>
-            <Text>{'Pilot name: ' + e.pilot.name}</Text>
-            <Text>{'Location name: ' + e.location?.name}</Text>
-            <Text>{'Duration: ' + e.duration}</Text>
-            <Text>{'Style name: ' + e.eventStyle?.name}</Text>
-            <Text>{'Outcome: ' + e.outcome}</Text>
-            <Text>{'Battery cycles: ' + e.batteryCycles.length}</Text>
-            <Text>{'Fuel name: ' + e.fuel?.name}</Text>
-            <Text>{'Fuel consumed: ' + e.fuelConsumed}</Text>
-            <Text>{'Propeller name: ' + e.propeller?.name}</Text>
-            <Text>{'Notes: ' + e.notes}</Text>
-            <Text />
-          </View>
-        );
-      })}
+    <ScrollView horizontal={true}>
+      <ViewShot style={s.container} onCapture={onCapture} captureMode={'mount'}>
+        <FlatList
+          data={rows}
+          renderItem={renderRow}
+          keyExtractor={item => item.number.toString()}
+          ListHeaderComponent={
+            <View style={s.header}>
+              {columns.map(c => {
+                return (
+                  <View style={c.style}>
+                    <Text style={[s.cell, s.headerText]} numberOfLines={1}>
+                      {c.headerName}
+                    </Text>
+                  </View>
+                );
+              })}
+            </View>
+          }
+        />
+      </ViewShot>
     </ScrollView>
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   container: {
-    width: viewport.width,
-    // height: (viewport.width * 8.5) / 11,
-    borderWidth: 1,
+    padding: 15,
+  },
+  header: {
+    flexDirection: 'row',
+    backgroundColor: theme.colors.brandPrimary,
+  },
+  row: {
+    flexDirection: 'row',
+  },
+  striped: {
+    backgroundColor: theme.colors.subtleGray,
+  },
+  cell: {
+    paddingVertical: 5,
+    paddingHorizontal: 5,
+  },
+  headerText: {
+    ...theme.styles.textNormal,
+    ...theme.styles.textBold,
+    color: theme.colors.stickyWhite,
+  },
+  text: {
+    ...theme.styles.textNormal,
   },
 }));
 
 export default ReportEventsMaintenanceViewerScreen;
+
+// const dirs = RNFetchBlob.fs.dirs;
+// const filename = 'event-maintenance-report.html';
+// const path = `${Platform.OS === 'android' ? dirs.DownloadDir : dirs.DocumentDir}/${filename}`;
+
+// RNFetchBlob.fs.writeFile(path, html).then(() => {
+//   openShareSheet({
+//     title: 'Event/Maintenance Report',
+//     message: '',
+//     subject: 'Event/Maintenance Report',
+//     email: '',
+//     url: file.filePath,
+//   });
+// });

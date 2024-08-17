@@ -9,7 +9,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportBatteryScanCodeFilterValues } from 'types/filter';
 import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/reportBatteryScanCode';
+import { defaultFilter } from 'lib/reports/reportBatteryScanCode';
 import lodash from 'lodash';
 import { makeStyles } from '@rneui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';

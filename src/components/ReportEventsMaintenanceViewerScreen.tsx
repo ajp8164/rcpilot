@@ -1,14 +1,6 @@
 import { AppTheme, useTheme } from 'theme';
 import { rql } from 'components/molecules/filters';
-import {
-  DimensionValue,
-  FlatList,
-  ListRenderItem,
-  ScrollView,
-  Text,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { FlatList, ListRenderItem, ScrollView, Text, View, ViewStyle } from 'react-native';
 import { useObject, useQuery } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -16,7 +8,7 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { ReportViewerNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rneui/themed';
 import { openShareSheet } from '@react-native-ajp-elements/ui';
@@ -27,12 +19,12 @@ import { batteryStatistics } from 'lib/battery';
 // import RNFetchBlob from 'rn-fetch-blob';
 import ViewShot from 'react-native-view-shot';
 import { secondsToFormat } from 'lib/formatters';
+import { EventRating } from 'components/molecules/EventRating';
 
 type ColumnDef = {
   field: string;
   headerName: string;
   style?: ViewStyle;
-  width?: DimensionValue;
 };
 
 const columns: ColumnDef[] = [
@@ -56,7 +48,7 @@ type RowData = {
   batteryName: string;
   duration: string;
   totalTime: string;
-  outcome: string;
+  outcome: string | ReactNode;
   operatorName: string;
   notes: string;
 };
@@ -116,7 +108,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
           `,
           duration: `${secondsToFormat(e.duration, { format: 'm:ss' })}`,
           totalTime: `${secondsToFormat(e.model.statistics.totalTime, { format: 'h:mm:ss' })}`,
-          outcome: `${e.outcome}`,
+          outcome: <EventRating style={s.outcome} value={e.outcome} />,
           operatorName: `${e.pilot.name}`,
           notes: `${e.notes}`,
         };
@@ -124,6 +116,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
 
       setRows(rows);
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [events]);
 
   const onCapture = (url: string) => {
@@ -140,10 +133,11 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
     return (
       <View key={`${index}`} style={s.row}>
         {columns.map(c => {
+          // Value is a string or react node.
           const value = row[c.field as keyof RowData];
           return (
             <View style={[c.style, index % 2 === 1 ? s.striped : {}]}>
-              <Text style={[s.cell, s.text]}>{value}</Text>
+              {typeof value === 'string' ? <Text style={[s.cell, s.text]}>{value}</Text> : value}
             </View>
           );
         })}
@@ -206,6 +200,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   text: {
     ...theme.styles.textNormal,
+  },
+  outcome: {
+    marginTop: 5,
   },
 }));
 

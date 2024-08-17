@@ -14,7 +14,7 @@ import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { View } from 'react-native-ui-lib';
-import { defaultFilter } from 'lib/reportBatteryScanCode';
+import { defaultFilter } from 'lib/reports/reportBatteryScanCode';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';

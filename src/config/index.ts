@@ -20,6 +20,7 @@ export interface AppConfig
   requireReAuthDays: number;
   sentryEndpoint: string;
   sentryLoggingEnabled: boolean;
+  storageAllocation: number;
   storageImageUsers: string;
   storageSchemaVersion: number;
   supportEmail: string;
@@ -46,6 +47,7 @@ export const appConfig: AppConfig = {
   requireReAuthDays: Number(Config.REQUIRE_REAUTH_DAYS) || 0,
   sentryEndpoint: Config.SENTRY_ENDPOINT || '',
   sentryLoggingEnabled: Config.SENTRY_LOGGING_ENABLED === 'true' ? true : false,
+  storageAllocation: Number(Config.STORAGE_ALLOCATION) || 0,
   storageImageUsers: Config.STORAGE_IMAGE_USERS || '',
   storageSchemaVersion: Number(Config.STORAGE_SCHEMA_VERSION) || 0,
   supportEmail: Config.SUPPORT_EMAIL || '',

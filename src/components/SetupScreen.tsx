@@ -19,7 +19,7 @@ import { appConfig } from 'config';
 import { makeStyles } from '@rneui/themed';
 import { saveDatabaseAccessWith } from 'store/slices/appSettings';
 import { saveSelectedPilot } from 'store/slices/pilot';
-import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
+// import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { useEvent } from 'lib/event';
@@ -43,7 +43,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
   const selectedPilot = useObject(Pilot, new BSON.ObjectId(selectedPilotId));
   const pilotSummary = usePilotSummary();
 
-  const databaseAccessWith = useSelector(selectDatabaseAccessWith);
+  // const databaseAccessWith = useSelector(selectDatabaseAccessWith);
 
   useEffect(() => {
     if (route.params?.subNav) {
@@ -137,7 +137,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
         position={['first']}
         onPress={() => navigation.navigate('DatabaseInfo')}
       />
-      <ListItem
+      {/* <ListItem
         title={'Access With'}
         value={databaseAccessWith}
         onPress={() =>
@@ -150,15 +150,16 @@ const SetupScreen = ({ navigation, route }: Props) => {
             eventName: 'database-access-with',
           })
         }
-      />
-      {databaseAccessWith === DatabaseAccessWith.Dropbox ? (
-        <ListItem title={'Dropbox Access'} onPress={() => navigation.navigate('DropboxAccess')} />
+      /> */}
+      {/* {databaseAccessWith === DatabaseAccessWith.Dropbox ? (
+        <ListItem title={'Dropbox Access'} onPress={() => navigation.navigate('DatabaseBackup')} />
       ) : (
         <ListItem
           title={'Web Server Access'}
           onPress={() => navigation.navigate('WebServerAccess')}
         />
-      )}
+      )} */}
+      <ListItem title={'Backup & Export'} onPress={() => navigation.navigate('DatabaseBackup')} />
       <ListItem
         title={'Reporting'}
         position={['last']}

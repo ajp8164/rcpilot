@@ -59,11 +59,12 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
             props.swipeable ? theme.styles.swipeableListItemContainer : {},
           ]}
           valueStyle={[
-            { ...props.valueStyle, ...s.value },
+            s.value,
             props.disabled ? s.valuePosition : {},
             (props.rightImage === undefined || props.rightImage === true) && props.value
               ? {}
               : s.valuePosition,
+            Array.isArray(props.valueStyle) ? {} : props.valueStyle ? props.valueStyle : {},
           ]}
           position={expanded ? [first] : props.position}
           disabled={props.disabled}

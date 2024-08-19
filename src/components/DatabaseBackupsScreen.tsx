@@ -1,11 +1,10 @@
 import { ActivityIndicator, Alert, FlatList, ListRenderItem, Platform, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
+import { useTheme } from 'theme';
 import React, { useEffect, useState } from 'react';
 
 import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rneui/themed';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { deleteFile as storageDeleteFile } from 'firebase/storage/file';
 import { Directory, File, listFiles } from 'firebase/storage/operations';
@@ -22,7 +21,6 @@ export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseBac
 
 const DatabaseBackupsScreen = () => {
   const theme = useTheme();
-  const _s = useStyles(theme);
   const realm = useRealm();
   const confirmAction = useConfirmAction();
   const user = useSelector(selectUser);
@@ -158,7 +156,5 @@ const DatabaseBackupsScreen = () => {
     </View>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({}));
 
 export default DatabaseBackupsScreen;

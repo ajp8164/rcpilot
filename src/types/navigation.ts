@@ -585,8 +585,9 @@ export type SetupNavigatorParamList = {
     content: ContentView;
   };
   DatabaseInfo: undefined;
-  DropboxAccess: undefined;
+  DatabaseBackups: undefined;
   DatabaseReporting: undefined;
+  DatabaseBackup: undefined;
   EnumPicker: EnumPickerInterface;
   Events: {
     filterType: FilterType;

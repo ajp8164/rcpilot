@@ -7,7 +7,7 @@ import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
 import DatabaseInfoScreen from 'components/DatabaseInfoScreen';
 import DatabaseReportingScreen from 'components/DatabaseReportingScreen';
-import DropboxAccessScreen from 'components/DropboxAccessScreen';
+import DatabaseBackupScreen from 'components/DatabaseBackupScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
@@ -53,6 +53,7 @@ import WebServerAccessScreen from 'components/WebServerAccessScreen';
 import { appConfig } from 'config';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import DatabaseBackupsScreen from 'components/DatabaseBackupsScreen';
 
 const SetupStack = createNativeStackNavigator<SetupNavigatorParamList>();
 
@@ -290,10 +291,18 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="DropboxAccess"
-        component={DropboxAccessScreen}
+        name="DatabaseBackup"
+        component={DatabaseBackupScreen}
         options={{
-          title: 'Dropbox Access',
+          title: 'Backup & Export',
+        }}
+      />
+      <SetupStack.Screen
+        name="DatabaseBackups"
+        component={DatabaseBackupsScreen}
+        options={{
+          title: 'Database Backups',
+          headerBackTitle: 'Backup',
         }}
       />
       <SetupStack.Screen

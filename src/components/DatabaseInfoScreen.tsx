@@ -38,7 +38,7 @@ const DatabaseInfoScreen = () => {
       <Divider text={'INFORMATION'} />
       <ListItem
         title={'Version'}
-        value={`v${databaseInfo.databaseVersion}, ${DateTime.fromISO(databaseInfo.databaseVersionDate).toFormat('M/d/yyyy')}`}
+        value={`v${databaseInfo.databaseVersion} (${DateTime.fromISO(databaseInfo.databaseVersionDate).toFormat('M/d/yyyy')})`}
         position={['first']}
         rightImage={false}
       />
@@ -49,12 +49,12 @@ const DatabaseInfoScreen = () => {
       />
       <ListItem
         title={'Total Size'}
-        value={`${(databaseInfo.databaseSize / 1000).toFixed(2)} KB`}
+        value={`${(databaseInfo.databaseSize / 1000000).toFixed(2)} MB`}
         rightImage={false}
       />
       <ListItem
         title={'Last Modified'}
-        value={DateTime.fromISO(databaseInfo.databaseLastUpdate).toFormat('M/d/yyyy')}
+        value={DateTime.fromISO(databaseInfo.databaseLastUpdate).toFormat("M/d/yyyy 'at' h:mm a")}
         position={['last']}
         rightImage={false}
       />

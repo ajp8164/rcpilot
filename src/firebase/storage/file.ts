@@ -12,6 +12,7 @@ export type File = {
  * file if specified.
  * @param args.file - the local file description
  * @param args.storagePath - path in storage where the file will be stored
+ * @param args.destFilename - (optional) if it exists, the name of the destination file. If not specifed then a random filename is created.
  * @param args.oldFile - (optional) if it exists, this file will be deleted from storage
  * @param args.onSuccess - callback with a storage public url
  * @param args.onError - callback when an error occurs
@@ -19,14 +20,15 @@ export type File = {
 export const saveFile = async (args: {
   file: File;
   storagePath: string;
+  destFilename?: string;
   oldFile?: string;
   onSuccess: (url: string) => void;
-  onError: () => void;
+  onError?: () => void;
 }) => {
-  const { file, storagePath, oldFile, onSuccess, onError } = args;
+  const { file, storagePath, destFilename: dest, oldFile, onSuccess, onError } = args;
   try {
     const fileType = file.mimeType.split('/')[1];
-    const destFilename = `${storagePath}${uuidv4()}.${fileType}`;
+    const destFilename = dest ? `${storagePath}${dest}` : `${storagePath}${uuidv4()}.${fileType}`;
     const sourceFilename = file.uri.replace('file://', '');
     const storageRef = storage().ref(destFilename);
 
@@ -35,16 +37,22 @@ export const saveFile = async (args: {
         // Need a handler here to swallow possible second throw inside putFile().
       });
       const url = await storageRef.getDownloadURL();
-      oldFile && (await deleteFile({ filename: oldFile, storagePath }));
-      onSuccess(url);
+      oldFile &&
+        (await deleteFile({
+          filename: oldFile,
+          storagePath,
+          onSuccess: () => {
+            onSuccess(url);
+          },
+        }));
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
-      onError();
+      onError && onError();
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     log.error(`File save failed: ${e.message}`);
-    onError();
+    onError && onError();
   }
 };
 
@@ -58,7 +66,7 @@ export const saveFile = async (args: {
 export const deleteFile = async (args: {
   filename: string;
   storagePath: string;
-  onSuccess?: () => void;
+  onSuccess: () => void;
   onError?: () => void;
 }) => {
   const { filename, onError, onSuccess, storagePath } = args;
@@ -68,7 +76,7 @@ export const deleteFile = async (args: {
   await storage()
     .ref(filenameRef)
     .delete()
-    .then(() => onSuccess && onSuccess())
+    .then(() => onSuccess())
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .catch((e: any) => {
       if (!e.message.includes('storage/object-not-found')) {

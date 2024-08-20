@@ -41,7 +41,9 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
       storagePath: `users/${user.profile?.id}/backups/`,
       onSuccess: dir => {
         setDir(dir);
-        setBackupAllowed(dir && dir?.allocated + databaseInfo.databaseSize < 5000000);
+        setBackupAllowed(
+          dir && dir?.allocated + databaseInfo.databaseSize < appConfig.storageAllocation,
+        );
       },
     });
   };

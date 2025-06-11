@@ -74,6 +74,7 @@ export const signInWithGoogle = async () => {
 
     const { idToken } = await GoogleSignin.signIn();
     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+    console.log('googleCredential', googleCredential);
     return auth().signInWithCredential(googleCredential);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {

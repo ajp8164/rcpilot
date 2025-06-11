@@ -13,6 +13,7 @@ import { signOut } from 'lib/auth';
 import { store } from 'store';
 import { useDispatch } from 'react-redux';
 import { useTheme } from 'theme';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export const useAuthorizeUser = () => {
   const setUser = useSetUser();
@@ -30,6 +31,18 @@ export const useAuthorizeUser = () => {
       // Check if user already exists in firstore. If not then add the user to firestore.
       getUser(credentials.uid)
         .then(userProfile => {
+          console.log('help1');
+          GoogleSignin.signInSilently().then(user => {
+            console.log('user', user);
+            GoogleSignin.getTokens()
+              .then(accessToken => {
+                console.log('accessToken', accessToken);
+              })
+              .catch(e => {
+                console.log(e);
+              });
+          });
+
           if (!userProfile) {
             // Add user to firestore and set user.
             const profile = createProfile(credentials, theme.colors.avatarColors);

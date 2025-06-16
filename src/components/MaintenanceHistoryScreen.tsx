@@ -12,7 +12,7 @@ import React, { useEffect } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistType } from 'types/checklist';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
@@ -24,7 +24,7 @@ import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useSelector } from 'react-redux';

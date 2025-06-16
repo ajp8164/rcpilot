@@ -1,11 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useRef } from 'react';
+import React from 'react';
 
-import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { View } from 'react-native';
 import { ListItem as _ListItem } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export interface ListItemSegmentedInterface extends _ListItem {
   expanded?: boolean;
@@ -33,7 +33,6 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const sectionInitiallyExpanded = useRef(expanded);
   const first = props.position?.includes('first') ? 'first' : undefined;
 
   return (
@@ -68,12 +67,7 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
           </View>
         }
       />
-      <CollapsibleView
-        initExpanded={sectionInitiallyExpanded.current}
-        expanded={expanded}
-        noArrow
-        style={s.collapsible}
-        titleStyle={s.collapsibleTitle}>
+      <CollapsibleView expanded={expanded}>
         {ExpandableComponent}
       </CollapsibleView>
     </>
@@ -81,15 +75,6 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  collapsible: {
-    padding: 0,
-    marginVertical: 0,
-    marginHorizontal: 0,
-    borderWidth: 0,
-  },
-  collapsibleTitle: {
-    height: 0,
-  },
   container: {
     minHeight: 48,
   },

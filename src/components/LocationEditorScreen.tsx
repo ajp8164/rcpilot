@@ -15,7 +15,7 @@ import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { ScrollView } from 'react-native';
 import { eqString } from 'realmdb/helpers';
 import formatcoords from 'formatcoords';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { saveCurrentLocation } from 'store/slices/location';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';

@@ -13,7 +13,7 @@ import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 
 import { useQuery, useRealm } from '@realm/react';
 
 import ActionBar from 'components/atoms/ActionBar';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
 import { GeoPositionContext } from 'lib/location';
@@ -23,7 +23,7 @@ import { LocationPickerResult } from 'components/LocationsScreen';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { useEvent } from 'lib/event';
 import { useFocusEffect } from '@react-navigation/native';

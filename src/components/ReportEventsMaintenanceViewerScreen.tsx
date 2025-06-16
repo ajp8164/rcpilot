@@ -10,7 +10,7 @@ import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { ReportViewerNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { openShareSheet } from '@react-native-ajp-elements/ui';
 import { ReportEventFilterValues } from 'types/filter';
 import { DateTime } from 'luxon';

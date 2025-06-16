@@ -1,9 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
 import { Platform, Text, TextStyle, View, ViewStyle } from 'react-native';
 
-import { Icon } from '@rneui/base';
+import { Icon } from '@rn-vui/base';
 import React from 'react';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface TextMessageInterface {
   containerStyle?: ViewStyle | ViewStyle[];

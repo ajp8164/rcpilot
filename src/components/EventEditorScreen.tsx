@@ -35,7 +35,7 @@ import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 

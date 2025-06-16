@@ -1,11 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
-import { Avatar, Icon } from '@rneui/base';
+import { Avatar, Icon } from '@rn-vui/base';
 import { TextStyle, ViewStyle } from 'react-native';
 
 import { UserProfile } from 'types/user';
 import { fontFamily } from '@react-native-ajp-elements/ui';
 import { fontSizes } from 'theme/styles';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface ChatAvatarInterface {
   avatarStyle?: ViewStyle;

@@ -11,7 +11,7 @@ import { Modal } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb/Model';
 import { achievementConfig } from 'lib/achievement';
 import { eventKind } from 'lib/modelEvent';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useEvent } from 'lib/event';
 
 type AchievementModal = AchievementModalMethods;

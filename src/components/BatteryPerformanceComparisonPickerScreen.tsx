@@ -10,7 +10,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { View } from 'react-native-ui-lib';
 import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useQuery } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 

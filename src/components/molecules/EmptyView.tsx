@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { viewport } from '@react-native-ajp-elements/ui';
 

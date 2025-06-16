@@ -6,7 +6,7 @@ import React, { forwardRef, useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Location } from 'realmdb';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useLocationSummary } from 'lib/location';
 
 interface MapMarkerCalloutInterface {

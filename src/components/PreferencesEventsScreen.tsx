@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { TimerStartDelay } from 'types/event';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesEvents'>;
 

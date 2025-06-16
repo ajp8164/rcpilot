@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 import React, { useContext } from 'react';
 
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { Model, Pilot } from 'realmdb';
 import FlipCardView from 'components/views/FlipCardView';
 import { Back as DinnBack, Front as DinnFront } from 'components/molecules/card-deck/dinn';

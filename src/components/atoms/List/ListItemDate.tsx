@@ -1,14 +1,14 @@
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import React, { useRef } from 'react';
+import React from 'react';
 
-import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
 import { ViewStyle } from 'react-native';
 import { ListItem as _ListItem } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 type IOSMode = 'date' | 'time' | 'datetime' | 'countdown';
 
@@ -34,7 +34,6 @@ const ListItemDate = (props: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const sectionInitiallyExpanded = useRef(expanded);
   const first = props.position?.includes('first') ? 'first' : undefined;
 
   return (
@@ -49,15 +48,11 @@ const ListItemDate = (props: Props) => {
         valueStyle={s.valueStyle}
       />
       <CollapsibleView
-        initExpanded={sectionInitiallyExpanded.current}
         expanded={expanded}
-        noArrow
         style={[
-          s.collapsible,
-          expandableContainerStyle,
+          expandableContainerStyle || {},
           props.position?.includes('last') ? s.collapsibleBorder : {},
-        ]}
-        titleStyle={s.collapsibleTitle}>
+        ]}>
         <Animated.View entering={FadeIn} exiting={FadeOut}>
           <DateTimePicker
             mode={mode}
@@ -74,19 +69,9 @@ const ListItemDate = (props: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  collapsible: {
-    padding: 0,
-    marginVertical: 0,
-    marginHorizontal: 0,
-    borderWidth: 0,
-    overflow: 'hidden',
-  },
   collapsibleBorder: {
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
-  },
-  collapsibleTitle: {
-    height: 0,
   },
   containerStyle: {
     minHeight: 48,

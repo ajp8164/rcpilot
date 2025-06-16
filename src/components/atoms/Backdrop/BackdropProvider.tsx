@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import { BackdropContext } from './BackdropContext';
 import React, { ReactNode, useState } from 'react';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { AppTheme, useTheme } from 'theme';
 
 export const BackdropProvider = ({ children }: { children: ReactNode }): ReactNode => {

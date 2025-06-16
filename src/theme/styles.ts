@@ -1,7 +1,7 @@
 import { fontSizes as defaultFontSizes, fontFamily } from '@react-native-ajp-elements/ui';
 
 import { Styles } from 'theme/types/Styles';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export const fontSizes = {
   ...defaultFontSizes,

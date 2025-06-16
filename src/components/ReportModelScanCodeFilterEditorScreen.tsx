@@ -11,7 +11,7 @@ import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
 import { ScrollView } from 'react-native';
 import { defaultFilter } from 'lib/reports/reportModelScanCode';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useFilterEditor } from 'lib/useFilterEditor';
 

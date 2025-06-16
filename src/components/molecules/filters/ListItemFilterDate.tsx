@@ -15,7 +15,7 @@ import React from 'react-native';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { getTimeSpanItems } from './wheelPickerHelpers';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {

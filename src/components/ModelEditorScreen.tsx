@@ -36,7 +36,7 @@ import { ScanCodeSize } from 'types/common';
 import { View } from 'react-native';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';

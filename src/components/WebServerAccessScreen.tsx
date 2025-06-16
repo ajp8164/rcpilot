@@ -7,7 +7,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'WebServerAccess'>;
 

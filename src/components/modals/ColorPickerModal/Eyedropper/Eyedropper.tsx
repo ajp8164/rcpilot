@@ -25,7 +25,7 @@ import { EYE_DROPPER_SHADER } from './shader';
 import { useVector } from './useVector';
 import { viewport } from '@react-native-ajp-elements/ui';
 import { AppTheme, useTheme } from 'theme';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const SHADER = Skia.RuntimeEffect.Make(EYE_DROPPER_SHADER)!;

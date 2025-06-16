@@ -39,7 +39,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { SvgXml } from 'react-native-svg';
 import { actionScheduleState } from 'lib/checklist';
 import { eventSequence } from 'store/slices/eventSequence';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';

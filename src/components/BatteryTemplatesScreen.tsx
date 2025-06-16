@@ -6,11 +6,11 @@ import { SectionList, SectionListData, SectionListRenderItem, View } from 'react
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTemplate } from 'types/battery';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useQuery } from '@realm/react';
 import { useSetState } from '@react-native-ajp-elements/core';
 

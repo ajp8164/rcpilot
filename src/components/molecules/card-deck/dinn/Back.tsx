@@ -2,9 +2,9 @@ import { Image, LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-nat
 import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { Model } from 'realmdb';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import type FlipCardView from 'components/views/FlipCardView';
 import { ListItem } from 'components/atoms/List';
 import Icon from 'react-native-vector-icons/FontAwesome6';

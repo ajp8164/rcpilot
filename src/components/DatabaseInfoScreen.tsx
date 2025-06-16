@@ -8,7 +8,7 @@ import { Divider } from '@react-native-ajp-elements/ui';
 import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { revertSettings } from 'store/actions';
 import { store } from 'store';
 import { useRealm } from '@realm/react';

@@ -2,7 +2,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { Pressable, Text } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface CircleButtonInterface {
   icon: string;

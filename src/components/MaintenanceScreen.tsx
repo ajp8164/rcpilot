@@ -21,7 +21,7 @@ import { SectionList, SectionListData, SectionListRenderItem } from 'react-nativ
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { DateTime } from 'luxon';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -30,7 +30,7 @@ import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { actionScheduleState } from 'lib/checklist';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { modelCostStatistics } from 'lib/analytics';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useDebouncedRender } from 'lib/useDebouncedRender';

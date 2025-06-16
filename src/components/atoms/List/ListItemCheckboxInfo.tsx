@@ -2,11 +2,11 @@ import { AppTheme, useTheme } from 'theme';
 import { ColorValue, Pressable } from 'react-native';
 import React, { useImperativeHandle, useRef } from 'react';
 
-import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItem as _ListItem } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface Props extends _ListItem {
   checked: boolean;
@@ -42,7 +42,6 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
   const liRef = useRef<ListItemCheckboxInfoMethods>(null);
 
   const checkIcon = checked ? iconChecked : iconUnchecked;
-  const sectionInitiallyExpanded = useRef(expanded);
 
   useImperativeHandle(ref, () => ({
     //  These functions exposed to the parent component through the ref.
@@ -87,12 +86,7 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
           </Pressable>
         }
       />
-      <CollapsibleView
-        initExpanded={sectionInitiallyExpanded.current}
-        expanded={expanded}
-        noArrow
-        style={s.collapsible}
-        titleStyle={s.collapsibleTitle}>
+      <CollapsibleView expanded={expanded}>
         {ExpandableComponent}
       </CollapsibleView>
     </>
@@ -100,15 +94,6 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
 });
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  collapsible: {
-    padding: 0,
-    marginVertical: 0,
-    marginHorizontal: 0,
-    borderWidth: 0,
-  },
-  collapsibleTitle: {
-    height: 0,
-  },
   container: {
     minHeight: 48,
   },

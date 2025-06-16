@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { EventOutcome } from 'types/event';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import React from 'react';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface EventRatingInterface {
   style?: ViewStyle | ViewStyle[];

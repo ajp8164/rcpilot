@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import React from 'react';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useSetState } from '@react-native-ajp-elements/core';
 
 type Section = {

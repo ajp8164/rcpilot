@@ -16,7 +16,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
 import { ScrollView } from 'react-native';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { saveDatabaseAccessWith } from 'store/slices/appSettings';
 import { saveSelectedPilot } from 'store/slices/pilot';
 // import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';

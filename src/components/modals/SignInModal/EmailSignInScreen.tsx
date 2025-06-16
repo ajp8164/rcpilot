@@ -6,11 +6,11 @@ import { Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { useRef, useState } from 'react';
 
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ListItemInput } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignInNavigatorParamList } from './types';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { signInwithEmailAndPassword } from 'lib/auth';
 import { useSetState } from '@react-native-ajp-elements/core';
 

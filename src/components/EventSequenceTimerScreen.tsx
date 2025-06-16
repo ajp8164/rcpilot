@@ -28,7 +28,7 @@ import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistType } from 'types/checklist';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
@@ -39,7 +39,7 @@ import { SvgXml } from 'react-native-svg';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { secondsToFormat } from 'lib/formatters';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';

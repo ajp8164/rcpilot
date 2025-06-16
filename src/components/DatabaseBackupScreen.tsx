@@ -7,7 +7,7 @@ import React, { useContext, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { useFocusEffect } from '@react-navigation/native';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useRealm } from '@realm/react';
 import { DateTime } from 'luxon';
 import { saveFile, File } from 'firebase/storage';

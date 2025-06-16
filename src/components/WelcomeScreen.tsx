@@ -2,11 +2,11 @@ import { AppTheme, useTheme } from 'theme';
 import { Platform, ScrollView, StatusBar, Text } from 'react-native';
 import React, { useRef } from 'react';
 
-import { CheckBox } from '@rneui/base';
+import { CheckBox } from '@rn-vui/base';
 import { LegalModal } from 'components/modals/LegalModal';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { dispatch } from 'store';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { saveAcceptTou } from 'store/slices/appSettings';
 import { selectTou } from 'store/selectors/appSettingsSelectors';
 import { useFocusEffect } from '@react-navigation/native';

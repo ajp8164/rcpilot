@@ -10,7 +10,7 @@ import { ListItem } from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StackActions } from '@react-navigation/native';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { signOut } from 'lib/auth';
 import { useSelector } from 'react-redux';

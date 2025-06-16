@@ -5,11 +5,11 @@ import {
   ListItemMethods as _ListItemMethods,
 } from '@react-native-ajp-elements/ui';
 
-import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import CustomIcon from 'theme/icomoon/CustomIcon';
-import { Icon } from '@rneui/base';
+import { Icon } from '@rn-vui/base';
 import { Pressable } from 'react-native';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useRef } from 'react';
 
 interface Props extends _ListItem {
@@ -25,7 +25,7 @@ export interface ListItemMethods {
 }
 
 const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
-  const { expanded = false, ExpandableComponent, onPressInfo, showInfo, visible = true } = props;
+  const { expanded = false, ExpandableComponent, onPressInfo, showInfo, visible } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -33,8 +33,6 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
   // If 'visible' is defined (set either t/f) then this instance can be made visible/invisible
   // using the wrapping collapsible.
   const isCollapsible = useRef(visible !== undefined);
-  const itemInitiallyExpanded = useRef(visible);
-  const sectionInitiallyExpanded = useRef(expanded);
   const first = props.position?.includes('first') ? 'first' : undefined;
 
   const liRef = useRef<_ListItemMethods>(null);
@@ -90,12 +88,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
             )
           }
         />
-        <CollapsibleView
-          initExpanded={sectionInitiallyExpanded.current}
-          expanded={expanded}
-          noArrow
-          style={s.collapsible}
-          titleStyle={s.collapsibleTitle}>
+        <CollapsibleView expanded={expanded}>
           {ExpandableComponent}
         </CollapsibleView>
       </>
@@ -104,12 +97,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
 
   if (isCollapsible.current) {
     return (
-      <CollapsibleView
-        initExpanded={itemInitiallyExpanded.current}
-        expanded={visible}
-        noArrow
-        style={s.collapsible}
-        titleStyle={s.collapsibleTitle}>
+      <CollapsibleView expanded={visible}>
         {renderListItem()}
       </CollapsibleView>
     );
@@ -119,15 +107,6 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
 });
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  collapsible: {
-    padding: 0,
-    marginVertical: 0,
-    marginHorizontal: 0,
-    borderWidth: 0,
-  },
-  collapsibleTitle: {
-    height: 0,
-  },
   container: {
     minHeight: 48,
   },

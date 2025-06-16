@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Incubator } from 'react-native-ui-lib';
 import { NetworkContext } from 'lib/network';
 import React from 'react-native';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 const NetworkConnectionBar = () => {
   const theme = useTheme();

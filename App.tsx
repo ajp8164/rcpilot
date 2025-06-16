@@ -11,7 +11,7 @@ import { RealmProvider } from '@realm/react';
 import { Provider as ReduxProvider } from 'react-redux';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Schema from 'realmdb/Schema';
-import { ThemeProvider } from '@rneui/themed';
+import { ThemeProvider } from '@rn-vui/themed';
 import { appConfig } from 'config';
 // import { migrateRealm } from 'app';
 import { theme } from 'theme';

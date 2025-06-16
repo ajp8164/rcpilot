@@ -26,7 +26,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { batteryCycleSummary } from 'lib/batteryCycle';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { toNumber } from 'realmdb/helpers';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';

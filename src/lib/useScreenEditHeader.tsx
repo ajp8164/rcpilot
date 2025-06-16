@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { TextStyle } from 'react-native';

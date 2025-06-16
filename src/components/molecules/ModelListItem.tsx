@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import React from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb';
 import { modelMaintenanceIsDue, modelSummary, modelTypeIcons } from 'lib/model';

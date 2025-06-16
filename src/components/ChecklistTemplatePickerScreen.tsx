@@ -2,7 +2,7 @@ import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
 
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistType } from 'types/checklist';
 import { Divider } from '@react-native-ajp-elements/ui';

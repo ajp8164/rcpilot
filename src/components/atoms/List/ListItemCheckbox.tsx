@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import React from 'react-native';
 import { ListItemCheckbox as _ListItemCheckbox } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 type Props = _ListItemCheckbox;
 

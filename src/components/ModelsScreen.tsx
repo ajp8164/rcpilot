@@ -9,7 +9,7 @@ import { useObject } from '@realm/react';
 
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistType } from 'types/checklist';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -22,7 +22,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { modelMaintenanceIsDue } from 'lib/model';
 import { selectModelsLayout } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';

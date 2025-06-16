@@ -15,7 +15,7 @@ import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
 import { ModelType } from 'types/model';
 import { SvgXml } from 'react-native-svg';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useObject } from '@realm/react';
 

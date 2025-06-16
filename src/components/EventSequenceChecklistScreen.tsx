@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import ActionBar from 'components/atoms/ActionBar';
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistType } from 'types/checklist';
 import { DateTime } from 'luxon';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -19,7 +19,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
 import { eventSequence } from 'store/slices/eventSequence';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useObject } from '@realm/react';

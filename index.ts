@@ -5,7 +5,6 @@ if (__DEV__) {
 }
 
 import 'react-native-gesture-handler';
-import './shim.js';
 import 'react-native-get-random-values'; // Polyfill for realm
 
 import App from './App';

@@ -1,31 +1,29 @@
 import { AppTheme, useTheme } from 'theme';
-import { ReactNode, useRef } from 'react';
+import { ReactNode } from 'react';
 
-import React from 'react-native';
-import _CollapsibleView from '@eliav2/react-native-collapsible-view';
-import { makeStyles } from '@rneui/themed';
+import React, { ViewStyle } from 'react-native';
+import Collapsible from 'react-native-collapsible';
+import { makeStyles } from '@rn-vui/themed';
 
 interface Props {
   children: ReactNode | ReactNode[];
   expanded?: boolean;
+  style?: ViewStyle | ViewStyle[];
 }
 
 const CollapsibleView = (props: Props) => {
-  const { children, expanded = true } = props;
+  const { children,
+    expanded = true, 
+    style, 
+  } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const sectionInitiallyExpanded = useRef(expanded);
 
   return (
-    <_CollapsibleView
-      initExpanded={sectionInitiallyExpanded.current}
-      expanded={expanded}
-      style={s.collapsible}
-      titleStyle={s.collapsibleTitle}
-      noArrow>
+    <Collapsible collapsed={!expanded} style={{...s.collapsible, ...style}}>
       <>{children}</>
-    </_CollapsibleView>
+    </Collapsible>
   );
 };
 
@@ -36,9 +34,6 @@ const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
     marginHorizontal: 0,
     borderWidth: 0,
     overflow: 'hidden',
-  },
-  collapsibleTitle: {
-    height: 0,
   },
 }));
 

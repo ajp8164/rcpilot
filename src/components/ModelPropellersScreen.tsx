@@ -5,13 +5,13 @@ import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atom
 import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellers'>;

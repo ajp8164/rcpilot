@@ -13,7 +13,7 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 

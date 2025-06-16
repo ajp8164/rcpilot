@@ -2,7 +2,7 @@ import { FlatList, ListRenderItem } from 'react-native';
 import { ListItem, listItemPosition } from 'components/atoms/List';
 import React, { useEffect } from 'react';
 
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import Icon from 'react-native-vector-icons/FontAwesome6';

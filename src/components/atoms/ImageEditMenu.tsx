@@ -4,7 +4,7 @@ import { AppTheme, useTheme } from 'theme';
 
 import React from 'react-native';
 import { ReactNode } from 'react';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 // const itemHeight = 25;
 

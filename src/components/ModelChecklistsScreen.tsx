@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistTemplatePickerResult } from 'components/ChecklistTemplatePickerScreen';
 import { ChecklistType } from 'types/checklist';
@@ -17,7 +17,7 @@ import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';

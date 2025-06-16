@@ -22,7 +22,7 @@ import { MarkingProps } from 'react-native-calendars/src/calendar/day/marking';
 import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import isEmpty from 'lodash/isEmpty';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 // Enable passing specific day mark data through the marked dates.
 // This allows the presentation of specific icons on the calendar day to show

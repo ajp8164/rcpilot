@@ -13,7 +13,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { secondsToFormat } from 'lib/formatters';
 import { useObject } from '@realm/react';
 

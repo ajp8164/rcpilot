@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { fontFamily, fontSizes } from '@react-native-ajp-elements/ui';
 
 import React from 'react';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface SectionListHeaderInterface {
   title?: string;

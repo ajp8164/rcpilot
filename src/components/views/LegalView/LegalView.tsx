@@ -6,7 +6,7 @@ import { ContentView } from '@react-native-ajp-elements/ui';
 import React from 'react';
 import { TabController } from 'react-native-ui-lib';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import privacy from 'lib/content/privacy';
 import terms from 'lib/content/terms';
 

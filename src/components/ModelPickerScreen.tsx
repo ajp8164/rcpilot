@@ -12,7 +12,7 @@ import { SvgXml } from 'react-native-svg';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
 import { useSetState } from '@react-native-ajp-elements/core';

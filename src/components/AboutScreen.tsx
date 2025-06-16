@@ -8,10 +8,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import VersionNumber from 'react-native-version-number';
 import helpContent from 'lib/content/helpContent';
 import legalContent from 'lib/content/legalContent';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'About'>;
+type Props = NativeStackScreenProps<SetupNavigatorParamList, 'About'>;
 
 const AboutScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -19,7 +19,8 @@ const AboutScreen = ({ navigation }: Props) => {
 
   const tabBarHeight = useBottomTabBarHeight();
   const headerBarLargeHeight = theme.styles.headerBarLarge.height as number;
-  const visibleViewHeight = viewport.height - tabBarHeight - headerBarLargeHeight;
+  const visibleViewHeight =
+    viewport.height - tabBarHeight - headerBarLargeHeight;
 
   return (
     <ScrollView
@@ -48,7 +49,9 @@ const AboutScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
-        text={'This log shows the activity of the application and can be useful for app support.'}
+        text={
+          'This log shows the activity of the application and can be useful for app support.'
+        }
       />
       <Text style={s.version}>
         {`App Version ${VersionNumber.appVersion}.${VersionNumber.buildVersion}`}

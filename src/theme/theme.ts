@@ -1,5 +1,5 @@
 import { Platform } from 'react-native';
-import { createTheme } from '@rneui/themed';
+import { createTheme } from '@rn-vui/themed';
 import lodash from 'lodash';
 import { theme as rneulTheme } from '@react-native-ajp-elements/ui';
 

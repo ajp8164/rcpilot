@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { ListItemInput as _ListItemInput } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useState } from 'react';
 
 // Uncontrolled component. The `value` property acts as an initial value only.

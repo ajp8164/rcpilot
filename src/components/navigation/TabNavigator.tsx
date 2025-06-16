@@ -44,7 +44,8 @@ const TabNavigator = () => {
           backgroundColor: theme.colors.inactiveTabBackground,
           borderTopColor: theme.colors.tabBarBorder,
         },
-        tabBarIconStyle: { top: 3 },
+        tabBarItemStyle: { top: 3 },
+        tabBarLabelStyle: { top: 3 },
       }}>
       <Tab.Screen
         name="LogTab"

@@ -1,9 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useRef } from 'react';
+import React from 'react';
 
-import CollapsibleView from '@eliav2/react-native-collapsible-view';
+import { CollapsibleView } from 'components/atoms/CollapsibleView';
 import { ListItemSwitch as _ListItemSwitch } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 interface Props extends _ListItemSwitch {
   expanded?: boolean;
@@ -16,7 +16,6 @@ const ListItemSwitch = (props: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const sectionInitiallyExpanded = useRef(expanded);
   const first = props.position?.includes('first') ? 'first' : undefined;
 
   return (
@@ -28,12 +27,7 @@ const ListItemSwitch = (props: Props) => {
         containerStyle={{ ...props.containerStyle, ...s.container }}
         position={expanded ? [first] : props.position}
       />
-      <CollapsibleView
-        initExpanded={sectionInitiallyExpanded.current}
-        expanded={expanded}
-        noArrow
-        style={s.collapsible}
-        titleStyle={s.collapsibleTitle}>
+      <CollapsibleView expanded={expanded}>
         {ExpandableComponent}
       </CollapsibleView>
     </>
@@ -41,15 +35,6 @@ const ListItemSwitch = (props: Props) => {
 };
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  collapsible: {
-    padding: 0,
-    marginVertical: 0,
-    marginHorizontal: 0,
-    borderWidth: 0,
-  },
-  collapsibleTitle: {
-    height: 0,
-  },
   container: {
     minHeight: 48,
   },

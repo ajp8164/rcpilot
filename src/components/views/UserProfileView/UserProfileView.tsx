@@ -1,6 +1,6 @@
 import { Alert, ScrollView, Text, TouchableWithoutFeedback, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { Button, Icon } from '@rneui/base';
+import { Button, Icon } from '@rn-vui/base';
 import { Asset, Divider, ListItem, selectImage } from '@react-native-ajp-elements/ui';
 import { EditorState, UserProfileViewMethods, UserProfileViewProps } from './types';
 import { Image as ImageUpload, deleteImage, uploadImage } from 'firebase/storage';
@@ -10,7 +10,7 @@ import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { ChatAvatar } from 'components/molecules/ChatAvatar';
 import { UserProfile } from 'types/user';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { openComposer } from 'react-native-email-link';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { updateUser } from 'firebase/firestore';

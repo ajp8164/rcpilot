@@ -3,12 +3,12 @@ import { AppTheme, useTheme } from 'theme';
 import React from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Model, Pilot } from 'realmdb';
 import { modelMaintenanceIsDue, modelTypeIcons } from 'lib/model';
 import { SvgXml } from 'react-native-svg';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { eventKind } from 'lib/modelEvent';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { secondsToFormat } from 'lib/formatters';

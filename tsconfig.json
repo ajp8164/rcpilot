@@ -1,81 +1,32 @@
-// prettier-ignore
 {
   "extends": "@tsconfig/react-native/tsconfig.json",
   "compilerOptions": {
-    "allowJs": true,
     "alwaysStrict": true,
     "baseUrl": "./src",
-    "paths": {
-      "app": [
-        "./app/*",
-        "./app/"
-      ],
-      "components": [
-        "./components/*",
-        "./components/"
-      ],
-      "config": [
-        "./config/*",
-        "./config"
-      ],
-      "firestore": [
-        "./firestore/*",
-        "./firestore/"
-      ],
-      "img": [
-        "./theme/img/*",
-        "./theme/img/"
-      ],
-      "lib": [
-        "./lib/*",
-        "./lib"
-      ],
-      "realmdb": [
-        "./realmdb/*",
-        "./realmdb"
-      ],
-      "store": [
-        "./store/*",
-        "./store"
-      ],
-      "theme": [
-        "./theme/*",
-        "./theme"
-      ],
-      "types": [
-        "./types/*",
-        "./types/"
-      ],
-    },
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": [
-      "es2021",
-      "dom",
-    ],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
+    "checkJs": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    //"target": "esnext"
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "app": ["./app/*", "./app/"],
+      "components": ["./components/*", "./components/"],
+      "config": ["./config/*", "./config"],
+      "firestore": ["./firestore/*", "./firestore/"],
+      "img": ["./theme/img/*", "./theme/img/"],
+      "lib": ["./lib/*", "./lib"],
+      "realmdb": ["./realmdb/*", "./realmdb"],
+      "store": ["./store/*", "./store"],
+      "theme": ["./theme/*", "./theme"],
+      "types": ["./types/*", "./types/"]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "e2e"
-  ],
+  "exclude": ["node_modules", "e2e"],
   "include": [
     "**/*.ts",
     "**/*.tsx",
     "**/*.js",
     "**/*.jsx",
     "**/*.svg",
-    "**/*.png",
+    "**/*.png"
   ]
 }

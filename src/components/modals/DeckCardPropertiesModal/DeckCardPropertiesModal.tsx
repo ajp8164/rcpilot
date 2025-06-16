@@ -4,7 +4,7 @@ import React, { useContext, useImperativeHandle, useRef, useState } from 'react'
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { Pressable, View } from 'react-native';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';

@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 import CircleButton from 'components/atoms/CircleButton';
 import React from 'react';
 import { ScannerView } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 const ScanScreen = () => {
   const theme = useTheme();

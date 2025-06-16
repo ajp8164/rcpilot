@@ -22,7 +22,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistType } from 'types/checklist';
 import { CompositeScreenProps } from '@react-navigation/core';
@@ -30,7 +30,7 @@ import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Model } from 'realmdb/Model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eqString } from 'realmdb/helpers';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';

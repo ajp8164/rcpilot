@@ -4,10 +4,10 @@ import React, { useContext, useEffect, useImperativeHandle, useRef, useState } f
 import { TextViewMethods, TextViewProps } from './types';
 
 // See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
-import { Input as BaseInput } from '@rneui/base';
-import { Input } from '@rneui/base';
+import { Input as BaseInput } from '@rn-vui/base';
+import { Input } from '@rn-vui/base';
 import NavContext from 'components/navigation/NavContext';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 

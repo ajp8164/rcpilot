@@ -1,4 +1,4 @@
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import React from 'react';
 import { View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';

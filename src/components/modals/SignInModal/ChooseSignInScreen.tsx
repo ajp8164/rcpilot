@@ -4,12 +4,12 @@ import React, { useState } from 'react';
 import { getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
 import { signInWithApple, signInWithFacebook, signInWithGoogle } from 'lib/auth';
 
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SignInNavigatorParamList } from './types';
 import { SvgXml } from 'react-native-svg';
 import { appConfig } from 'config';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export type Props = NativeStackScreenProps<SignInNavigatorParamList, 'ChooseSignInScreen'>;
 

@@ -6,7 +6,7 @@ import { ScrollView, View } from 'react-native';
 import { ContentContainer } from 'types/content';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Content'>;
 

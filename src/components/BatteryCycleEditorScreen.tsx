@@ -27,7 +27,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { batterySummary } from 'lib/battery';
 import { batteryTintIcons } from 'lib/battery';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';

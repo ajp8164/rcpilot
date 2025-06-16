@@ -1,4 +1,4 @@
-import { Colors, Theme, useTheme as useRNETheme } from '@rneui/themed';
+import { Colors, Theme, useTheme as useRNETheme } from '@rn-vui/themed';
 import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Styles as RNEULStyles, useStyles as useRNEULStyles } from '@react-native-ajp-elements/ui';
 

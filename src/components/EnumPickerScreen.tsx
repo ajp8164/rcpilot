@@ -9,7 +9,7 @@ import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SvgXml } from 'react-native-svg';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSetState } from '@react-native-ajp-elements/core';

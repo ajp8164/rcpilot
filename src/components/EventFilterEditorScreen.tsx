@@ -16,7 +16,7 @@ import { EventFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ScrollView } from 'react-native';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useFilterEditor } from 'lib/useFilterEditor';
 

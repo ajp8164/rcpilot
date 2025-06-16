@@ -13,7 +13,7 @@ import { modelSummary, modelSummaryPilot } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { DateTime } from 'luxon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Event } from 'realmdb/Event';
@@ -26,7 +26,7 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { SvgXml } from 'react-native-svg';
 import { eqString } from 'realmdb/helpers';
 import lodash from 'lodash';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { modelTypeIcons } from 'lib/model';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';

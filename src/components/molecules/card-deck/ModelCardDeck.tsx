@@ -2,7 +2,7 @@ import { Platform, StatusBar } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import React, { useRef } from 'react';
 
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { viewport } from '@react-native-ajp-elements/ui';
 import Carousel from 'react-native-reanimated-carousel';
 import { Model, Pilot } from 'realmdb';

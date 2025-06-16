@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, { ReactNode } from 'react';
 
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 
 const buttonSize = 44;
 

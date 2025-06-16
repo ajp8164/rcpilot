@@ -19,14 +19,14 @@ import {
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { FilterType } from 'types/filter';
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import { useConfirmAction } from 'lib/useConfirmAction';

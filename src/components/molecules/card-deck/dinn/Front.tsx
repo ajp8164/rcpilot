@@ -3,7 +3,7 @@ import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { Model, Pilot } from 'realmdb';
 import { modelMaintenanceIsDue, modelTypeIcons } from 'lib/model';
 import { DateTime, Duration } from 'luxon';

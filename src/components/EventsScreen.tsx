@@ -11,7 +11,7 @@ import { SectionList, SectionListData, SectionListRenderItem } from 'react-nativ
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
-import { Button } from '@rneui/base';
+import { Button } from '@rn-vui/base';
 import { CompositeScreenProps } from '@react-navigation/core';
 import CustomIcon from 'theme/icomoon/CustomIcon';
 import { DateTime } from 'luxon';
@@ -23,7 +23,7 @@ import { ModelType } from 'types/model';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rneui/themed';
+import { makeStyles } from '@rn-vui/themed';
 import { secondsToFormat } from 'lib/formatters';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';

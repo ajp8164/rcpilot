@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
-import React from 'react-native';
+import React from 'react';
 import WheelPicker from 'components/atoms/WheelPicker';
 import { getTimeSpanItems } from './wheelPickerHelpers';
 import lodash from 'lodash';
@@ -31,7 +31,12 @@ const ListItemFilterDate = (props: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const segments = [DateRelation.Any, DateRelation.Before, DateRelation.After, DateRelation.Past];
+  const segments = [
+    DateRelation.Any,
+    DateRelation.Before,
+    DateRelation.After,
+    DateRelation.Past,
+  ];
 
   const initializing = useRef(true);
   const [expanded, setExpanded] = useState(props.value.length > 0);
@@ -63,14 +68,20 @@ const ListItemFilterDate = (props: Props) => {
     });
     setIndex(newIndex);
 
-    if (props.relation !== filterState.relation && props.relation === DateRelation.Any) {
+    if (
+      props.relation !== filterState.relation &&
+      props.relation === DateRelation.Any
+    ) {
       // Closing
       setExpanded(false);
       setTimeout(() => {
         setFilterState({ relation: props.relation, value: props.value });
         setPickerExpanded(false);
       }, 300);
-    } else if (props.relation !== filterState.relation && props.relation !== DateRelation.Any) {
+    } else if (
+      props.relation !== filterState.relation &&
+      props.relation !== DateRelation.Any
+    ) {
       // Opening
       setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
@@ -91,7 +102,10 @@ const ListItemFilterDate = (props: Props) => {
     } else if (newRelation === DateRelation.Past) {
       newValue = initialInThePastItems.default.items;
       inThePastPickerValue.current = newValue;
-    } else if (filterState.value.length === 0 || !DateTime.isDateTime(filterState.value[0])) {
+    } else if (
+      filterState.value.length === 0 ||
+      !DateTime.isDateTime(filterState.value[0])
+    ) {
       newValue = [DateTime.now().toISO()];
     } else {
       newValue = filterState.value;
@@ -136,7 +150,9 @@ const ListItemFilterDate = (props: Props) => {
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={expanded && position ? lodash.without(position, 'last') : position}
+      position={
+        expanded && position ? lodash.without(position, 'last') : position
+      }
       onChangeIndex={onRelationSelect}
       expanded={expanded}
       ExpandableComponent={
@@ -144,7 +160,9 @@ const ListItemFilterDate = (props: Props) => {
         filterState.relation === DateRelation.Before ? (
           <ListItemDate
             title={'Date'}
-            value={DateTime.fromISO(filterState.value[0]).toFormat("MMM d, yyyy 'at' h:mm a")}
+            value={DateTime.fromISO(filterState.value[0]).toFormat(
+              "MMM d, yyyy 'at' h:mm a",
+            )}
             rightImage={false}
             onPress={() => setPickerExpanded(!pickerExpanded)}
             expanded={pickerExpanded}
@@ -172,7 +190,9 @@ const ListItemFilterDate = (props: Props) => {
                 exiting={FadeOut}
                 style={[
                   s.pastPicker,
-                  props.position?.includes('last') ? s.pastExpandableContainer : {},
+                  props.position?.includes('last')
+                    ? s.pastExpandableContainer
+                    : {},
                 ]}>
                 {/* Wheel index 0 is value, wheel index 1 is time span. */}
                 <WheelPicker

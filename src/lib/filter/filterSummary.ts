@@ -1,6 +1,6 @@
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
-import { filterSummaryState } from '.';
+import { filterSummaryState } from './index';
 
 export const filterSummary = (filterOrFilterType: Filter | string) => {
   let filterType: string;
@@ -40,7 +40,11 @@ export const filterSummary = (filterOrFilterType: Filter | string) => {
     let s = '';
     const filterValues = Object.keys(filter.values);
     filterValues.forEach((property, index) => {
-      s.length > 0 ? (index === filterValues.length - 1 ? (s += ', and ') : (s += ', ')) : null;
+      s.length > 0
+        ? index === filterValues.length - 1
+          ? (s += ', and ')
+          : (s += ', ')
+        : null;
       // Checking filter here to satisfy the 'keyof typeof' type cast.
       s += filter
         ? `${filterSummaryState(property, filter.values[property as keyof typeof filter.values])}`

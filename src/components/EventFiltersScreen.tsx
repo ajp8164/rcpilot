@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -14,7 +14,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { EventFiltersNavigatorParamList } from 'types/navigation';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native-ui-lib';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
 import { saveSelectedFilter } from 'store/slices/filters';
@@ -22,7 +21,10 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<EventFiltersNavigatorParamList, 'EventFilters'>;
+export type Props = NativeStackScreenProps<
+  EventFiltersNavigatorParamList,
+  'EventFilters'
+>;
 
 const EventFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, modelType, useGeneralFilter } = route.params;
@@ -35,11 +37,19 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
 
   const generalEventsFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allEventFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalEventsFilterName);
+    return filters.filtered(
+      'type == $0 AND name != $1',
+      filterType,
+      generalEventsFilterName,
+    );
   });
 
   const generalEventsFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalEventsFilterName);
+    return filters.filtered(
+      'type == $0 AND name == $1',
+      filterType,
+      generalEventsFilterName,
+    );
   });
   const [generalEventsFilter, setGeneralEventsFilter] = useState<Filter>();
 
@@ -82,7 +92,9 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'event-filters', filter._id.toString())}
+        ref={ref =>
+          ref && listEditor.add(ref, 'event-filters', filter._id.toString())
+        }
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
@@ -178,7 +190,9 @@ const EventFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allEventFilters.length ? <Divider text={'SAVED EVENT FILTERS'} /> : null
+          allEventFilters.length ? (
+            <Divider text={'SAVED EVENT FILTERS'} />
+          ) : null
         }
       />
     </View>

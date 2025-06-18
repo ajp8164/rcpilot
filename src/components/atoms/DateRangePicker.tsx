@@ -2,7 +2,7 @@ import { Calendar, CalendarProps } from 'react-native-calendars';
 import { DateData, MarkedDates, Theme } from 'react-native-calendars/src/types';
 
 import { DateTime } from 'luxon';
-import React from 'react-native';
+import React from 'react';
 import { useEffect } from 'react';
 import { useSetState } from '@react-native-ajp-elements/core';
 
@@ -96,12 +96,20 @@ const DateRangePicker = ({
         textColor: theme.markTextColor,
       },
     };
-    const { markedDates, range: _range } = setupMarkedDates(fromDate, toDate, initialMarkedDates);
+    const { markedDates, range: _range } = setupMarkedDates(
+      fromDate,
+      toDate,
+      initialMarkedDates,
+    );
     setRangeData({ markedDates, fromDate });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setupMarkedDates = (fromDate: string, toDate = '', markedDates: MarkedDates) => {
+  const setupMarkedDates = (
+    fromDate: string,
+    toDate = '',
+    markedDates: MarkedDates,
+  ) => {
     const mFromDate = DateTime.fromFormat(fromDate, 'yyyy-MM-dd');
     const mToDate = DateTime.fromFormat(toDate, 'yyyy-MM-dd');
     const range = mToDate.diff(mFromDate, 'days').days;
@@ -173,7 +181,11 @@ const DateRangePicker = ({
       onSuccess(day.dateString);
     } else if (!rangeData.isToDatePicked && rangeData.fromDate) {
       const md = { ...rangeData.markedDates };
-      const { markedDates, range } = setupMarkedDates(rangeData.fromDate, day.dateString, md);
+      const { markedDates, range } = setupMarkedDates(
+        rangeData.fromDate,
+        day.dateString,
+        md,
+      );
       if (range >= 0) {
         setRangeData({
           isFromDatePicked: true,

@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/reports/reportModelScanCode';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
@@ -52,7 +51,8 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
       generalReportModelScanCodesFilterName,
     );
   });
-  const [generalReportModelScanCodesFilter, setGeneralModelScanCodesFilter] = useState<Filter>();
+  const [generalReportModelScanCodesFilter, setGeneralModelScanCodesFilter] =
+    useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
@@ -94,7 +94,12 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
     return (
       <ListItemCheckboxInfo
         ref={ref =>
-          ref && listEditor.add(ref, 'report-model-scan-code-filters', filter._id.toString())
+          ref &&
+          listEditor.add(
+            ref,
+            'report-model-scan-code-filters',
+            filter._id.toString(),
+          )
         }
         key={index}
         title={filter.name}
@@ -126,7 +131,10 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('report-model-scan-code-filters', filter._id.toString())
+          listEditor.onItemWillOpen(
+            'report-model-scan-code-filters',
+            filter._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -151,7 +159,10 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
             title={`General Model Filter`}
             subtitle={filterSummary(generalReportModelScanCodesFilter)}
             position={['first', 'last']}
-            checked={generalReportModelScanCodesFilter._id.toString() === selectedFilterId}
+            checked={
+              generalReportModelScanCodesFilter._id.toString() ===
+              selectedFilterId
+            }
             onPress={() => setFilter(generalReportModelScanCodesFilter)}
             onPressInfo={() =>
               navigation.navigate('ReportModelScanCodeFilterEditor', {
@@ -191,7 +202,9 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allModelScanCodeFilters.length ? <Divider text={'SAVED MODEL FILTERS'} /> : null
+          allModelScanCodeFilters.length ? (
+            <Divider text={'SAVED MODEL FILTERS'} />
+          ) : null
         }
       />
     </View>

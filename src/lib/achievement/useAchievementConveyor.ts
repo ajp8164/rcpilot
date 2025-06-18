@@ -4,7 +4,7 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { DateTime } from 'luxon';
 import { Event } from 'realmdb/Event';
-import { achievementConfig } from '.';
+import { achievementConfig } from './index';
 import { displayNotification } from 'lib/notifications';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
@@ -20,7 +20,9 @@ export const useAchievementConveyor = () => {
   const pilotEvents = useQuery(
     Event,
     events => {
-      return events.filtered(`pilot._id == $0`, pilot?._id).sorted('createdOn', true);
+      return events
+        .filtered(`pilot._id == $0`, pilot?._id)
+        .sorted('createdOn', true);
     },
     [pilot],
   );
@@ -56,7 +58,9 @@ export const useAchievementConveyor = () => {
 
         // Must have met all of the criteria.
         if (qualifies === achievementConfig[name].criteria.length) {
-          const alreadyAwarded = pilot?.achievements.find(ac => ac.name === name);
+          const alreadyAwarded = pilot?.achievements.find(
+            ac => ac.name === name,
+          );
           if (!alreadyAwarded) {
             // Award the achievement.
             const achievement = {
@@ -70,7 +74,10 @@ export const useAchievementConveyor = () => {
             });
 
             // Send an app location notification.
-            const displayName = name.replace('{Event}', eventKind(pilotEvent.model?.type).name);
+            const displayName = name.replace(
+              '{Event}',
+              eventKind(pilotEvent.model?.type).name,
+            );
             displayNotification({
               title: `${displayName} for ${pilotEvent.pilot?.name}`,
               description: `Congratulations! You've earned the '${displayName}' achievement with ${pilotEvent.model?.name}.`,

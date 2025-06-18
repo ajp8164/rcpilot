@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { Filter } from 'realmdb/Filter';
 import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/maintenance';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
@@ -38,13 +37,22 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
 
   const generalMaintenanceFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allMaintenanceFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalMaintenanceFilterName);
+    return filters.filtered(
+      'type == $0 AND name != $1',
+      filterType,
+      generalMaintenanceFilterName,
+    );
   });
 
   const generalMaintenanceFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalMaintenanceFilterName);
+    return filters.filtered(
+      'type == $0 AND name == $1',
+      filterType,
+      generalMaintenanceFilterName,
+    );
   });
-  const [generalMaintenanceFilter, setGeneralMaintenanceFilter] = useState<Filter>();
+  const [generalMaintenanceFilter, setGeneralMaintenanceFilter] =
+    useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
@@ -85,7 +93,10 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'maintenance-filters', filter._id.toString())}
+        ref={ref =>
+          ref &&
+          listEditor.add(ref, 'maintenance-filters', filter._id.toString())
+        }
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
@@ -116,7 +127,10 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('maintenance-filters', filter._id.toString())
+          listEditor.onItemWillOpen(
+            'maintenance-filters',
+            filter._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -141,7 +155,9 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
             title={'General Maintenance Filter'}
             subtitle={filterSummary(generalMaintenanceFilter)}
             position={['first', 'last']}
-            checked={generalMaintenanceFilter._id.toString() === selectedFilterId}
+            checked={
+              generalMaintenanceFilter._id.toString() === selectedFilterId
+            }
             onPress={() => setFilter(generalMaintenanceFilter)}
             onPressInfo={() =>
               navigation.navigate('MaintenanceFilterEditor', {
@@ -183,7 +199,9 @@ const MaintenanceFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allMaintenanceFilters.length ? <Divider text={'SAVED MAINTENANCE FILTERS'} /> : null
+          allMaintenanceFilters.length ? (
+            <Divider text={'SAVED MAINTENANCE FILTERS'} />
+          ) : null
         }
       />
     </View>

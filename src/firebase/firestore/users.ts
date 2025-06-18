@@ -7,8 +7,10 @@ import {
   documentChangeListener,
   getDocument,
   getDocuments,
-} from '.';
-import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+} from './index';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 
 import { UserProfile } from 'types/user';
 import { log } from '@react-native-ajp-elements/core';

@@ -4,15 +4,13 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 buildscript {
     ext {
-        buildToolsVersion = "33.0.0"
+        buildToolsVersion = "35.0.0"
         minSdkVersion = 24
-        compileSdkVersion = 33
-        targetSdkVersion = 33
-
-        // We use NDK 23 which has both M1 support and is the side-by-side NDK version from AGP.
-        ndkVersion = "23.1.7779620"
-
-        kotlin_version = '1.7.21' // For react-native-camera-kit
+        compileSdkVersion = 35
+        targetSdkVersion = 35
+        ndkVersion = "27.1.12297006"
+        kotlinVersion = "2.0.21"
+        kotlin_version = kotlinVersion // Used by react-native-camera-kit
     }
     repositories {
         google()
@@ -21,26 +19,15 @@ buildscript {
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
         classpath 'com.google.gms:google-services:4.3.15'
     }
 }
 
 allprojects {
-    ext {
-        kotlinVersion = '1.7.21' // For react-native-webview
-    }
     repositories {
-        google()
-        mavenCentral()
-        jcenter()
-     }
+        google() // Used by react-native-camera-kit
+    }
 }
 
-// For projects still using compile (removed in gradle 7) rather than implementatoin in their build.gradle.
-// See https://github.com/software-mansion/react-native-reanimated/issues/3242#issuecomment-1145423942
-// subprojects { subproject ->
-//     if(project['name'] == 'react-native-os'){
-//         project.configurations { compile { } }
-//     }
-// }
+apply plugin: "com.facebook.react.rootproject"

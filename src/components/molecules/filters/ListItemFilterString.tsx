@@ -1,11 +1,18 @@
-import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemSegmented,
+  ListItemSegmentedInterface,
+} from 'components/atoms/List';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { StringFilterState, StringRelation } from 'components/molecules/filters';
+import {
+  StringFilterState,
+  StringRelation,
+} from 'components/molecules/filters';
 import { useEffect, useRef, useState } from 'react';
 
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
-import React from 'react-native';
+import React from 'react';
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
 import { useSetState } from '@react-native-ajp-elements/core';
@@ -23,10 +30,15 @@ const ListItemFilterString = (props: Props) => {
   const { onValueChange, position, title } = props;
 
   const theme = useTheme();
-  const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
+  const navigation: NavigationProp<MultipleNavigatorParamList> =
+    useNavigation();
   const event = useEvent();
 
-  const segments = [StringRelation.Any, StringRelation.Contains, StringRelation.Missing];
+  const segments = [
+    StringRelation.Any,
+    StringRelation.Contains,
+    StringRelation.Missing,
+  ];
 
   const initializing = useRef(true);
   const eventName = useRef(`list-item-filter-string-${uuidv4()}`).current;
@@ -52,20 +64,35 @@ const ListItemFilterString = (props: Props) => {
     });
     setIndex(newIndex);
 
-    if (props.relation !== filterState.relation && props.relation === StringRelation.Any) {
+    if (
+      props.relation !== filterState.relation &&
+      props.relation === StringRelation.Any
+    ) {
       // Closing
       setExpanded(false);
       setTimeout(() => {
-        setFilterState({ relation: props.relation, value: props.value }, { assign: true });
+        setFilterState(
+          { relation: props.relation, value: props.value },
+          { assign: true },
+        );
       }, 300);
-    } else if (props.relation !== filterState.relation && props.relation !== StringRelation.Any) {
+    } else if (
+      props.relation !== filterState.relation &&
+      props.relation !== StringRelation.Any
+    ) {
       // Opening
-      setFilterState({ relation: props.relation, value: props.value }, { assign: true });
+      setFilterState(
+        { relation: props.relation, value: props.value },
+        { assign: true },
+      );
       setTimeout(() => {
         setExpanded(true);
       }, 300);
     } else {
-      setFilterState({ relation: props.relation, value: props.value }, { assign: true });
+      setFilterState(
+        { relation: props.relation, value: props.value },
+        { assign: true },
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.relation, props.value]);
@@ -97,7 +124,10 @@ const ListItemFilterString = (props: Props) => {
 
     if (newRelation !== StringRelation.Any) {
       // Opening
-      setFilterState({ relation: newRelation, value: newValue }, { assign: true });
+      setFilterState(
+        { relation: newRelation, value: newValue },
+        { assign: true },
+      );
       onValueChange({ relation: newRelation, value: newValue });
       setTimeout(() => {
         setExpanded(true);
@@ -106,7 +136,10 @@ const ListItemFilterString = (props: Props) => {
       // Closing
       setExpanded(false);
       setTimeout(() => {
-        setFilterState({ relation: newRelation, value: newValue }, { assign: true });
+        setFilterState(
+          { relation: newRelation, value: newValue },
+          { assign: true },
+        );
         onValueChange({ relation: newRelation, value: newValue });
       }, 300);
     }
@@ -119,15 +152,21 @@ const ListItemFilterString = (props: Props) => {
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={expanded && position ? lodash.without(position, 'last') : position}
+      position={
+        expanded && position ? lodash.without(position, 'last') : position
+      }
       onChangeIndex={onRelationSelect}
       expanded={expanded}
       ExpandableComponent={
         <ListItem
           title={'The Text'}
-          titleStyle={!filterState.value.length ? { color: theme.colors.assertive } : {}}
+          titleStyle={
+            !filterState.value.length ? { color: theme.colors.assertive } : {}
+          }
           subtitle={
-            !filterState.value.length ? 'Matching text not specified' : filterState.value[0]
+            !filterState.value.length
+              ? 'Matching text not specified'
+              : filterState.value[0]
           }
           position={position?.includes('last') ? ['last'] : []}
           onPress={() =>

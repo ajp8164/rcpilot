@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/reports/reportBatteryScanCode';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
@@ -52,8 +51,10 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
       generalReportBatteryScanCodesFilterName,
     );
   });
-  const [generalReportBatteryScanCodesFilter, setGeneralBatteryScanCodesFilter] =
-    useState<Filter>();
+  const [
+    generalReportBatteryScanCodesFilter,
+    setGeneralBatteryScanCodesFilter,
+  ] = useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
@@ -71,7 +72,9 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
         setGeneralBatteryScanCodesFilter(gef);
       });
     } else {
-      setGeneralBatteryScanCodesFilter(generalReportBatteryScanCodesFilterQuery[0]);
+      setGeneralBatteryScanCodesFilter(
+        generalReportBatteryScanCodesFilterQuery[0],
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -95,7 +98,12 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
     return (
       <ListItemCheckboxInfo
         ref={ref =>
-          ref && listEditor.add(ref, 'report-battery-scan-code-filters', filter._id.toString())
+          ref &&
+          listEditor.add(
+            ref,
+            'report-battery-scan-code-filters',
+            filter._id.toString(),
+          )
         }
         key={index}
         title={filter.name}
@@ -127,7 +135,10 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('report-battery-scan-code-filters', filter._id.toString())
+          listEditor.onItemWillOpen(
+            'report-battery-scan-code-filters',
+            filter._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -152,7 +163,10 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
             title={`General Battery Filter`}
             subtitle={filterSummary(generalReportBatteryScanCodesFilter)}
             position={['first', 'last']}
-            checked={generalReportBatteryScanCodesFilter._id.toString() === selectedFilterId}
+            checked={
+              generalReportBatteryScanCodesFilter._id.toString() ===
+              selectedFilterId
+            }
             onPress={() => setFilter(generalReportBatteryScanCodesFilter)}
             onPressInfo={() =>
               navigation.navigate('ReportBatteryScanCodeFilterEditor', {
@@ -192,7 +206,9 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allBatteryScanCodeFilters.length ? <Divider text={'SAVED BATTERY FILTERS'} /> : null
+          allBatteryScanCodeFilters.length ? (
+            <Divider text={'SAVED BATTERY FILTERS'} />
+          ) : null
         }
       />
     </View>

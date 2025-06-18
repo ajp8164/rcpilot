@@ -8,7 +8,7 @@ import { UserProfile } from 'types/user';
 import { appConfig } from 'config';
 import lodash from 'lodash';
 import { selectUser } from 'store/selectors/userSelectors';
-import { useAuthorizeUser } from '.';
+import { useAuthorizeUser } from './userAuthorization';
 import { useSelector } from 'react-redux';
 
 type AuthContext = {
@@ -28,7 +28,7 @@ export const AuthContext = createContext<AuthContext>({
 });
 
 export const useAuthContext = (
-  signInModalRef: React.RefObject<SignInModalMethods>,
+  signInModalRef: React.RefObject<SignInModalMethods | null>,
 ): AuthContext => {
   const authorizeUser = useAuthorizeUser();
   const authorizeUserDebounced = useRef(lodash.debounce(authorizeUser, 200));
@@ -51,7 +51,6 @@ export const useAuthContext = (
       });
     });
     return unsubscribe;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dismiss = () => {
@@ -103,14 +102,19 @@ export const useAuthContext = (
   };
 };
 
-const isReAuthenticationRequired = (credentials?: FirebaseAuthTypes.User | null) => {
+const isReAuthenticationRequired = (
+  credentials?: FirebaseAuthTypes.User | null,
+) => {
   const lastSignInTime = credentials?.metadata.lastSignInTime;
   if (appConfig.requireReAuthDays > 0 && lastSignInTime) {
     const daysSinceLastSignIn = DateTime.fromISO(lastSignInTime)
       .diffNow()
       .shiftTo('days')
       .toObject().days;
-    if (daysSinceLastSignIn && Math.abs(daysSinceLastSignIn) < appConfig.requireReAuthDays) {
+    if (
+      daysSinceLastSignIn &&
+      Math.abs(daysSinceLastSignIn) < appConfig.requireReAuthDays
+    ) {
       return true;
     }
   }

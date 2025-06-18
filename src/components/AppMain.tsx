@@ -5,7 +5,11 @@ import {
   ColorModeSwitch,
   useCameraContext,
 } from '@react-native-ajp-elements/ui';
-import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  NavigationContainer,
+} from '@react-navigation/native';
 import { DatabaseInfoContext, useDatabaseInfo } from 'lib/database';
 import { GeoPositionContext, useCurrentLocation } from 'lib/location';
 import { InitStatus, useInitApp } from 'app';
@@ -22,8 +26,8 @@ import { LinkingOptions } from '@react-navigation/native';
 import MainNavigator from 'components/navigation/MainNavigator';
 import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
 import RNBootSplash from 'react-native-bootsplash';
-import React from 'react-native';
-import { SignInModal } from 'components/modals/SignInModal';
+import React from 'react';
+import { SignInModal, SignInModalMethods } from 'components/modals/SignInModal';
 import { StatusBar } from 'react-native';
 import { log } from '@react-native-ajp-elements/core';
 import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
@@ -45,7 +49,7 @@ const AppMain = () => {
   const scheme = useColorScheme();
 
   const cameraModalRef = useRef<CameraModal>(null);
-  const signInModalRef = useRef<SignInModal>(null);
+  const signInModalRef = useRef<SignInModalMethods>(null);
   const auth = useAuthContext(signInModalRef);
   const camera = useCameraContext(cameraModalRef);
   const network = useNetworkContext();
@@ -53,7 +57,9 @@ const AppMain = () => {
   const currentPosition = useCurrentLocation();
   const initApp = useInitApp();
 
-  const [startupScreen, setStartupScreen] = useState<StartupScreen>(StartupScreen.None);
+  const [startupScreen, setStartupScreen] = useState<StartupScreen>(
+    StartupScreen.None,
+  );
   const [fatal, setFatal] = useState<string | undefined>(undefined);
 
   useEffect(() => {
@@ -94,7 +100,6 @@ const AppMain = () => {
         hideSplashScreen();
       }
     })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (fatal) {

@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -14,7 +14,6 @@ import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/batteryCycle';
 import { filterSummary } from 'lib/filter';
 import { generalBatteryCyclesFilterName } from 'components/BatteryCycleFilterEditorScreen';
@@ -52,9 +51,12 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
       generalBatteryCyclesFilterName,
     );
   });
-  const [generalBatteryCyclesFilter, setGeneralBatteryCyclesFilter] = useState<Filter>();
+  const [generalBatteryCyclesFilter, setGeneralBatteryCyclesFilter] =
+    useState<Filter>();
 
-  const selectedFilterId = useSelector(selectFilters(FilterType.BatteryCyclesFilter));
+  const selectedFilterId = useSelector(
+    selectFilters(FilterType.BatteryCyclesFilter),
+  );
 
   useEffect(() => {
     // Lazy initialization of a general battery cycles filter.
@@ -93,7 +95,10 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'battery-cycle-filters', filter._id.toString())}
+        ref={ref =>
+          ref &&
+          listEditor.add(ref, 'battery-cycle-filters', filter._id.toString())
+        }
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
@@ -122,7 +127,10 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('battery-cycle-filters', filter._id.toString())
+          listEditor.onItemWillOpen(
+            'battery-cycle-filters',
+            filter._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -146,7 +154,9 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
           title={'General Battery Cycles Filter'}
           subtitle={filterSummary(generalBatteryCyclesFilter)}
           position={['first', 'last']}
-          checked={generalBatteryCyclesFilter._id.toString() === selectedFilterId}
+          checked={
+            generalBatteryCyclesFilter._id.toString() === selectedFilterId
+          }
           onPress={() => setFilter(generalBatteryCyclesFilter)}
           onPressInfo={() =>
             navigation.navigate('BatteryCycleFilterEditor', {
@@ -183,7 +193,9 @@ const BatteryCycleFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allBatteryCycleFilters.length ? <Divider text={'SAVED BATTERY CYCLE FILTERS'} /> : null
+          allBatteryCycleFilters.length ? (
+            <Divider text={'SAVED BATTERY CYCLE FILTERS'} />
+          ) : null
         }
       />
     </View>

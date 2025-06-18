@@ -1,8 +1,14 @@
-import { BooleanFilterState, BooleanRelation } from 'components/molecules/filters';
-import { ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import {
+  BooleanFilterState,
+  BooleanRelation,
+} from 'components/molecules/filters';
+import {
+  ListItemSegmented,
+  ListItemSegmentedInterface,
+} from 'components/atoms/List';
 import { useEffect, useRef, useState } from 'react';
 
-import React from 'react-native';
+import React from 'react';
 
 interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
   label?: string;
@@ -14,7 +20,11 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
 const ListItemFilterBoolean = (props: Props) => {
   const { onValueChange, title } = props;
 
-  const segments = [BooleanRelation.Any, BooleanRelation.Yes, BooleanRelation.No];
+  const segments = [
+    BooleanRelation.Any,
+    BooleanRelation.Yes,
+    BooleanRelation.No,
+  ];
 
   const initializing = useRef(true);
   const [index, setIndex] = useState(() =>
@@ -37,7 +47,9 @@ const ListItemFilterBoolean = (props: Props) => {
   }, [props.relation]);
 
   const onRelationSelect = (index: number) => {
-    const newRelation = Object.values(BooleanRelation)[index] as BooleanRelation;
+    const newRelation = Object.values(BooleanRelation)[
+      index
+    ] as BooleanRelation;
     onValueChange({ relation: newRelation, value: [] });
   };
 

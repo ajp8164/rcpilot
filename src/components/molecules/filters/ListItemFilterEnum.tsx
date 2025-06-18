@@ -1,12 +1,16 @@
 import { EnumFilterState, EnumRelation } from 'components/molecules/filters';
 import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
-import { ListItem, ListItemSegmented, ListItemSegmentedInterface } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemSegmented,
+  ListItemSegmentedInterface,
+} from 'components/atoms/List';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
 
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { MultipleNavigatorParamList } from 'types/navigation';
-import React from 'react-native';
+import React from 'react';
 import lodash from 'lodash';
 import { useEvent } from 'lib/event';
 import { useTheme } from 'theme';
@@ -26,7 +30,8 @@ const ListItemFilterEnum = (props: Props) => {
   const { onValueChange, enumName, position, title } = props;
 
   const theme = useTheme();
-  const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
+  const navigation: NavigationProp<MultipleNavigatorParamList> =
+    useNavigation();
   const event = useEvent();
   const realm = useRealm();
 
@@ -58,13 +63,19 @@ const ListItemFilterEnum = (props: Props) => {
     });
     setIndex(newIndex);
 
-    if (props.relation !== filterState.relation && props.relation === EnumRelation.Any) {
+    if (
+      props.relation !== filterState.relation &&
+      props.relation === EnumRelation.Any
+    ) {
       // Closing (moving relation to Any)
       setExpanded(false);
       setTimeout(() => {
         setFilterState({ relation: props.relation, value: props.value });
       }, 300);
-    } else if (props.relation !== filterState.relation && props.relation !== EnumRelation.Any) {
+    } else if (
+      props.relation !== filterState.relation &&
+      props.relation !== EnumRelation.Any
+    ) {
       // Opening (moving relation to something other than Any)
       setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
@@ -151,13 +162,19 @@ const ListItemFilterEnum = (props: Props) => {
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={expanded && position ? lodash.without(position, 'last') : position}
+      position={
+        expanded && position ? lodash.without(position, 'last') : position
+      }
       onChangeIndex={onRelationSelect}
       expanded={expanded}
       ExpandableComponent={
         <ListItem
           title={'Any of these values...'}
-          titleStyle={filterState.value?.length === 0 ? { color: theme.colors.assertive } : {}}
+          titleStyle={
+            filterState.value?.length === 0
+              ? { color: theme.colors.assertive }
+              : {}
+          }
           subtitle={filterState.value?.length === 0 ? 'None' : valueToString()}
           position={position?.includes('last') ? ['last'] : []}
           onPress={() =>

@@ -1,5 +1,7 @@
 import { log } from '@react-native-ajp-elements/core';
-import firestore, { FirebaseFirestoreTypes } from '@react-native-firebase/firestore';
+import firestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
 import { addFirestoreSubscription } from './subscriptions';
 import { UserRole } from 'types/user';
 
@@ -39,14 +41,17 @@ export type CollectionChangeListenerOptions = {
   auth?: ListenerAuth;
 };
 
-export const getDocument = <T>(collectionPath: string, id: string): Promise<T | undefined> => {
+export const getDocument = <T>(
+  collectionPath: string,
+  id: string,
+): Promise<T | undefined> => {
   return (
     firestore()
       .collection(collectionPath)
       .doc(id)
       .get()
       .then(documentSnapshot => {
-        if (documentSnapshot.exists) {
+        if (documentSnapshot.exists()) {
           const result = {
             ...documentSnapshot.data(),
             id,
@@ -75,7 +80,14 @@ export const getDocuments = <T extends { id?: string | undefined }>(
     fromCache?: boolean;
   },
 ): Promise<QueryResult<T>> => {
-  const { orderBy, limit = 1, lastDocument, skipIdMap, where, fromCache } = opts || {};
+  const {
+    orderBy,
+    limit = 1,
+    lastDocument,
+    skipIdMap,
+    where,
+    fromCache,
+  } = opts || {};
   let query = firestore().collection(collectionPath);
 
   if (where) {
@@ -147,11 +159,16 @@ export const collectionChangeListener = (
   ) => void,
   opts?: CollectionChangeListenerOptions,
 ): (() => void) => {
-  const { lastDocument, limit, orderBy, where, subCollection, auth } = opts || {};
+  const { lastDocument, limit, orderBy, where, subCollection, auth } =
+    opts || {};
 
   // If not allowed then just return an empty (subscription) function.
   if (auth) {
-    auth.allowedRoles = auth.allowedRoles || [UserRole.Admin, UserRole.Owner, UserRole.User];
+    auth.allowedRoles = auth.allowedRoles || [
+      UserRole.Admin,
+      UserRole.Owner,
+      UserRole.User,
+    ];
     if (!auth.userRole || !auth.allowedRoles.includes(auth.userRole)) {
       return () => {
         return;
@@ -162,7 +179,9 @@ export const collectionChangeListener = (
   let query = firestore().collection(collectionPath);
 
   if (subCollection) {
-    query = query.doc(subCollection.documentPath).collection(subCollection.name);
+    query = query
+      .doc(subCollection.documentPath)
+      .collection(subCollection.name);
   }
 
   if (orderBy) {
@@ -200,7 +219,9 @@ export const collectionChangeListener = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e: any) => {
       if (!e.message.includes('firestore/permission-denied')) {
-        log.error(`Failed onSnapshot for ${collectionPath} collection: ${e.message}`);
+        log.error(
+          `Failed onSnapshot for ${collectionPath} collection: ${e.message}`,
+        );
       }
     },
   );
@@ -222,7 +243,9 @@ export const documentChangeListener = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .onSnapshot({ includeMetadataChanges: true }, handler, (e: any) => {
       if (!e.message.includes('firestore/permission-denied')) {
-        log.error(`Failed onSnapshot for ${collectionPath}.${documentPath} document: ${e.message}`);
+        log.error(
+          `Failed onSnapshot for ${collectionPath}.${documentPath} document: ${e.message}`,
+        );
       }
     });
 

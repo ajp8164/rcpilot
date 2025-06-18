@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { Filter } from 'realmdb/Filter';
 import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/model';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
@@ -22,7 +21,10 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilters'>;
+export type Props = NativeStackScreenProps<
+  ModelFiltersNavigatorParamList,
+  'ModelFilters'
+>;
 
 const ModelFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, useGeneralFilter } = route.params;
@@ -35,11 +37,19 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
 
   const generalModelsFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allModelFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalModelsFilterName);
+    return filters.filtered(
+      'type == $0 AND name != $1',
+      filterType,
+      generalModelsFilterName,
+    );
   });
 
   const generalModelsFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalModelsFilterName);
+    return filters.filtered(
+      'type == $0 AND name == $1',
+      filterType,
+      generalModelsFilterName,
+    );
   });
   const [generalModelsFilter, setGeneralModelsFilter] = useState<Filter>();
 
@@ -82,7 +92,9 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'model-filters', filter._id.toString())}
+        ref={ref =>
+          ref && listEditor.add(ref, 'model-filters', filter._id.toString())
+        }
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
@@ -178,7 +190,9 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allModelFilters.length ? <Divider text={'SAVED MODEL FILTERS'} /> : null
+          allModelFilters.length ? (
+            <Divider text={'SAVED MODEL FILTERS'} />
+          ) : null
         }
       />
     </View>

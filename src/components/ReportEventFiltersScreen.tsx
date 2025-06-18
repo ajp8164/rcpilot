@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportEventFiltersNavigatorParamList } from 'types/navigation';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/reports/reportEvents';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
@@ -38,13 +37,22 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
 
   const generalReportEventsFilterName = `general-${lodash.kebabCase(filterType)}`;
   const allEventFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalReportEventsFilterName);
+    return filters.filtered(
+      'type == $0 AND name != $1',
+      filterType,
+      generalReportEventsFilterName,
+    );
   });
 
   const generalReportEventsFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalReportEventsFilterName);
+    return filters.filtered(
+      'type == $0 AND name == $1',
+      filterType,
+      generalReportEventsFilterName,
+    );
   });
-  const [generalReportEventsFilter, setGeneralEventsFilter] = useState<Filter>();
+  const [generalReportEventsFilter, setGeneralEventsFilter] =
+    useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
@@ -85,7 +93,10 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'report-event-filters', filter._id.toString())}
+        ref={ref =>
+          ref &&
+          listEditor.add(ref, 'report-event-filters', filter._id.toString())
+        }
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
@@ -116,7 +127,10 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('report-event-filters', filter._id.toString())
+          listEditor.onItemWillOpen(
+            'report-event-filters',
+            filter._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -141,7 +155,9 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
             title={`General Events Filter`}
             subtitle={filterSummary(generalReportEventsFilter)}
             position={['first', 'last']}
-            checked={generalReportEventsFilter._id.toString() === selectedFilterId}
+            checked={
+              generalReportEventsFilter._id.toString() === selectedFilterId
+            }
             onPress={() => setFilter(generalReportEventsFilter)}
             onPressInfo={() =>
               navigation.navigate('ReportEventFilterEditor', {
@@ -181,7 +197,9 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allEventFilters.length ? <Divider text={'SAVED EVENT FILTERS'} /> : null
+          allEventFilters.length ? (
+            <Divider text={'SAVED EVENT FILTERS'} />
+          ) : null
         }
       />
     </View>

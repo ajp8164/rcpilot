@@ -1,9 +1,10 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json",
+  "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
     "alwaysStrict": true,
     "baseUrl": "./src",
     "checkJs": true,
+    "jsx": "react-native",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
@@ -18,9 +19,10 @@
       "store": ["./store/*", "./store"],
       "theme": ["./theme/*", "./theme"],
       "types": ["./types/*", "./types/"]
-    }
+    },
+    "types": []
   },
-  "exclude": ["node_modules", "e2e"],
+  "exclude": ["node_modules"],
   "include": [
     "**/*.ts",
     "**/*.tsx",

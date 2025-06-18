@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ReportMaintenanceFiltersNavigatorParamList } from 'types/navigation';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/reports/reportMaintenance';
 import { filterSummary } from 'lib/filter';
 import lodash from 'lodash';
@@ -52,7 +51,8 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
       generalReportMaintenancesFilterName,
     );
   });
-  const [generalReportMaintenancesFilter, setGeneralMaintenanceFilter] = useState<Filter>();
+  const [generalReportMaintenancesFilter, setGeneralMaintenanceFilter] =
+    useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
@@ -94,7 +94,12 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
     return (
       <ListItemCheckboxInfo
         ref={ref =>
-          ref && listEditor.add(ref, 'report-model-maintenance-filters', filter._id.toString())
+          ref &&
+          listEditor.add(
+            ref,
+            'report-model-maintenance-filters',
+            filter._id.toString(),
+          )
         }
         key={index}
         title={filter.name}
@@ -126,7 +131,10 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('report-model-mantenance-filters', filter._id.toString())
+          listEditor.onItemWillOpen(
+            'report-model-mantenance-filters',
+            filter._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -151,7 +159,10 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
             title={`General Maintenance Filter`}
             subtitle={filterSummary(generalReportMaintenancesFilter)}
             position={['first', 'last']}
-            checked={generalReportMaintenancesFilter._id.toString() === selectedFilterId}
+            checked={
+              generalReportMaintenancesFilter._id.toString() ===
+              selectedFilterId
+            }
             onPress={() => setFilter(generalReportMaintenancesFilter)}
             onPressInfo={() =>
               navigation.navigate('ReportMaintenanceFilterEditor', {
@@ -191,7 +202,9 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allMaintenanceFilters.length ? <Divider text={'SAVED MAINTEANCE FILTERS'} /> : null
+          allMaintenanceFilters.length ? (
+            <Divider text={'SAVED MAINTEANCE FILTERS'} />
+          ) : null
         }
       />
     </View>

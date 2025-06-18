@@ -4,11 +4,14 @@ import {
   ListItemSegmented,
   ListItemSegmentedInterface,
 } from 'components/atoms/List';
-import { NumberFilterState, NumberRelation } from 'components/molecules/filters';
+import {
+  NumberFilterState,
+  NumberRelation,
+} from 'components/molecules/filters';
 import { useEffect, useRef, useState } from 'react';
 
 import { FakeCurrencyInputProps } from 'react-native-currency-input';
-import React from 'react-native';
+import React from 'react';
 import lodash from 'lodash';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 
@@ -59,13 +62,19 @@ const ListItemFilterNumber = (props: Props) => {
     });
     setIndex(newIndex);
 
-    if (props.relation !== filterState.relation && props.relation === NumberRelation.Any) {
+    if (
+      props.relation !== filterState.relation &&
+      props.relation === NumberRelation.Any
+    ) {
       // Closing (moving relation to Any)
       setExpanded(false);
       setTimeout(() => {
         setFilterState({ relation: props.relation, value: props.value });
       }, 300);
-    } else if (props.relation !== filterState.relation && props.relation !== NumberRelation.Any) {
+    } else if (
+      props.relation !== filterState.relation &&
+      props.relation !== NumberRelation.Any
+    ) {
       // Opening (moving relation to something other than Any)
       setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
@@ -81,7 +90,9 @@ const ListItemFilterNumber = (props: Props) => {
     const newRelation = Object.values(NumberRelation)[index] as NumberRelation;
 
     // Provide an initial default value.
-    let newValue = filterState.value.length ? filterState.value : ['0', `${label}`];
+    let newValue = filterState.value.length
+      ? filterState.value
+      : ['0', `${label}`];
 
     // Reset the value of the filter if choosing Any.
     if (newRelation === NumberRelation.Any) {
@@ -127,7 +138,9 @@ const ListItemFilterNumber = (props: Props) => {
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={expanded && position ? lodash.without(position, 'last') : position}
+      position={
+        expanded && position ? lodash.without(position, 'last') : position
+      }
       onChangeIndex={onRelationSelect}
       expanded={expanded}
       ExpandableComponent={
@@ -139,7 +152,9 @@ const ListItemFilterNumber = (props: Props) => {
           keyboardType={'number-pad'}
           numeric={true}
           numericProps={numericProps}
-          value={filterState.value[0]?.length ? filterState.value[0] : undefined}
+          value={
+            filterState.value[0]?.length ? filterState.value[0] : undefined
+          }
           placeholder={'0'}
           onChangeText={value => setDebounced(() => onChangedFilter(value))}
         />

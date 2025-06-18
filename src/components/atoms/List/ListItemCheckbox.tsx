@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
 
 import Icon from 'react-native-vector-icons/FontAwesome6';
-import React from 'react-native';
+import React from 'react';
 import { ListItemCheckbox as _ListItemCheckbox } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rn-vui/themed';
 
@@ -15,7 +15,9 @@ const ListItemCheckbox = (props: Props) => {
     <_ListItemCheckbox
       {...props}
       containerStyle={{ ...props.containerStyle, ...s.containerStyle }}
-      checkedIcon={<Icon name={'check'} size={18} color={theme.colors.brandPrimary} />}
+      checkedIcon={
+        <Icon name={'check'} size={18} color={theme.colors.brandPrimary} />
+      }
       uncheckedIcon={<Icon name={'check'} size={18} style={s.uncheckedIcon} />}
     />
   );

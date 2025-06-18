@@ -1,5 +1,5 @@
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 import {
   ListItem,
   ListItemCheckboxInfo,
@@ -13,7 +13,6 @@ import { useQuery, useRealm } from '@realm/react';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 import { Filter } from 'realmdb/Filter';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native-ui-lib';
 import { defaultFilter } from 'lib/battery';
 import { filterSummary } from 'lib/filter';
 import { generalBatteriesFilterName } from 'components/BatteryFilterEditorScreen';
@@ -22,7 +21,10 @@ import { selectFilters } from 'store/selectors/filterSelectors';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<BatteryFiltersNavigatorParamList, 'BatteryFilters'>;
+export type Props = NativeStackScreenProps<
+  BatteryFiltersNavigatorParamList,
+  'BatteryFilters'
+>;
 
 const BatteryFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, useGeneralFilter } = route.params;
@@ -34,13 +36,22 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const allBatteryFilters = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name != $1', filterType, generalBatteriesFilterName);
+    return filters.filtered(
+      'type == $0 AND name != $1',
+      filterType,
+      generalBatteriesFilterName,
+    );
   });
 
   const generalBatteriesFilterQuery = useQuery(Filter, filters => {
-    return filters.filtered('type == $0 AND name == $1', filterType, generalBatteriesFilterName);
+    return filters.filtered(
+      'type == $0 AND name == $1',
+      filterType,
+      generalBatteriesFilterName,
+    );
   });
-  const [generalBatteriesFilter, setGeneralBatteriesFilter] = useState<Filter>();
+  const [generalBatteriesFilter, setGeneralBatteriesFilter] =
+    useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
 
@@ -81,7 +92,9 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'battery-filters', filter._id.toString())}
+        ref={ref =>
+          ref && listEditor.add(ref, 'battery-filters', filter._id.toString())
+        }
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}
@@ -175,7 +188,9 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={
-          allBatteryFilters.length ? <Divider text={'SAVED BATTERY FILTERS'} /> : null
+          allBatteryFilters.length ? (
+            <Divider text={'SAVED BATTERY FILTERS'} />
+          ) : null
         }
       />
     </View>

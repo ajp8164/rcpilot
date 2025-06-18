@@ -1,13 +1,16 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import {
+  ListItemCheckbox,
+  SectionListHeader,
+  listItemPosition,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { SectionList, SectionListData } from 'react-native';
+import { SectionList, SectionListData, View } from 'react-native';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { Divider } from '@react-native-ajp-elements/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native-ui-lib';
 import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { makeStyles } from '@rn-vui/themed';
@@ -24,7 +27,9 @@ export type Props = NativeStackScreenProps<
   'BatteryPerformanceComparisonPicker'
 >;
 
-const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: Props) => {
+const BatteryPerformanceComparisonPickerScreen = ({
+  navigation: _navigation,
+}: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const setScreenEditHeader = useScreenEditHeader();
@@ -74,7 +79,9 @@ const BatteryPerformanceComparisonPickerScreen = ({ navigation: _navigation }: P
           onPress={() => null}
         />
       )}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
       ListHeaderComponent={
         <View style={s.listHeader}>
           <Divider note text={'Choose up to four batteries to compare.'} />

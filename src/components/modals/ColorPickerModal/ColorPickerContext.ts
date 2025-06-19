@@ -4,8 +4,8 @@ import { createContext, createRef } from 'react';
 
 export type ColorPickerContext = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extraData: React.MutableRefObject<any>;
-  modal: React.RefObject<ColorPickerModalMethods>;
+  extraData: React.RefObject<any>;
+  modal: React.RefObject<ColorPickerModalMethods | null>;
   recentColors: string[];
   onDismiss: (result: Result) => void;
   onEyedropper: (active: boolean) => void;

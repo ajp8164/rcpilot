@@ -2,7 +2,11 @@ import { Alert, Platform, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 import { getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
-import { signInWithApple, signInWithFacebook, signInWithGoogle } from 'lib/auth';
+import {
+  signInWithApple,
+  signInWithFacebook,
+  signInWithGoogle,
+} from 'lib/auth';
 
 import { Button } from '@rn-vui/base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -11,7 +15,10 @@ import { SvgXml } from 'react-native-svg';
 import { appConfig } from 'config';
 import { makeStyles } from '@rn-vui/themed';
 
-export type Props = NativeStackScreenProps<SignInNavigatorParamList, 'ChooseSignInScreen'>;
+export type Props = NativeStackScreenProps<
+  SignInNavigatorParamList,
+  'ChooseSignInScreen'
+>;
 
 const ChooseSignInScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
@@ -22,15 +29,28 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
   return (
     <View style={theme.styles.viewAlt}>
       <Text style={s.title}>{appConfig.appName}</Text>
-      {route.params?.msg && <Text style={s.description}>{route.params?.msg}</Text>}
-      <Text style={s.subtitle}>{signInAction ? 'Sign In' : 'Create Account'}</Text>
-      <Text style={s.footer}>{'By signing up you agree to our Terms and Privacy Policy'}</Text>
+      {route.params?.msg && (
+        <Text style={s.description}>{route.params?.msg}</Text>
+      )}
+      <Text style={s.subtitle}>
+        {signInAction ? 'Sign In' : 'Create Account'}
+      </Text>
+      <Text style={s.footer}>
+        {'By signing up you agree to our Terms and Privacy Policy'}
+      </Text>
       <Button
         title={'Continue with Google'}
         titleStyle={theme.styles.buttonOutlineTitle}
         buttonStyle={theme.styles.buttonOutline}
         containerStyle={s.signInButtonContainer}
-        icon={<SvgXml width={28} height={28} style={s.googleIcon} xml={getSvg('googleIcon')} />}
+        icon={
+          <SvgXml
+            width={28}
+            height={28}
+            style={s.googleIcon}
+            xml={getSvg('googleIcon')}
+          />
+        }
         onPress={() => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           signInWithGoogle().catch((e: any) => {
@@ -45,7 +65,14 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
         titleStyle={theme.styles.buttonOutlineTitle}
         buttonStyle={theme.styles.buttonOutline}
         containerStyle={s.signInButtonContainer}
-        icon={<SvgXml width={45} height={45} style={s.facebookIcon} xml={getSvg('facebookIcon')} />}
+        icon={
+          <SvgXml
+            width={45}
+            height={45}
+            style={s.facebookIcon}
+            xml={getSvg('facebookIcon')}
+          />
+        }
         onPress={() => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           signInWithFacebook().catch((e: any) => {

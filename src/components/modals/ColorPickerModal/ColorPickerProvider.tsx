@@ -5,14 +5,18 @@ import { ColorPickerModal } from './ColorPickerModal';
 import { makeStyles } from '@rn-vui/themed';
 import { AppTheme, useTheme } from 'theme';
 
-export const ColorPickerProvider = ({ children }: { children: ReactNode }): ReactNode => {
+export const ColorPickerProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}): ReactNode => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   const modalRef = useRef<ColorPickerModal>(null);
   const eyedropperViewRef = useRef<View>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const extraDataRef = useRef<any>();
+  const extraDataRef = useRef<any>(null);
 
   const [recentColors, setRecentColors] = useState<string[]>([]);
 
@@ -36,7 +40,10 @@ export const ColorPickerProvider = ({ children }: { children: ReactNode }): Reac
       }}>
       <View ref={eyedropperViewRef} style={s.view}>
         {children}
-        <ColorPickerModal ref={modalRef} eyedropperViewRef={eyedropperViewRef} />
+        <ColorPickerModal
+          ref={modalRef}
+          eyedropperViewRef={eyedropperViewRef as React.RefObject<View>}
+        />
       </View>
     </ColorPickerContext.Provider>
   );

@@ -16,7 +16,10 @@ import { useEvent } from 'lib/event';
 
 type AchievementModal = AchievementModalMethods;
 
-const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProps>((props, ref) => {
+const AchievementModal = React.forwardRef<
+  AchievementModal,
+  AchievementModalProps
+>((props, ref) => {
   const { onDismiss, snapPoints = [290] } = props;
 
   const theme = useTheme();
@@ -67,7 +70,9 @@ const AchievementModal = React.forwardRef<AchievementModal, AchievementModalProp
     return;
   };
 
-  const renderAchievement: ListRenderItem<Achievement> = ({ item: achievement }) => {
+  const renderAchievement: ListRenderItem<Achievement> = ({
+    item: achievement,
+  }) => {
     return (
       <View style={s.achievementContainer}>
         <Icon

@@ -4,7 +4,8 @@ export declare type DeckCardPropertiesModal = DeckCardPropertiesModalMethods;
 
 declare const LegalModal: React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
-    DeckCardPropertiesModalProps & React.RefAttributes<CDeckardPropertiesModalMethods>
+    DeckCardPropertiesModalProps &
+      React.RefAttributes<CDeckardPropertiesModalMethods>
   >
 >;
 

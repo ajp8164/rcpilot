@@ -30,7 +30,10 @@ const ActionBar = ({ actions, onLayout }: ActionBarInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const renderActions: ListRenderItem<ActionBarItem> = ({ item: action, index }) => {
+  const renderActions: ListRenderItem<ActionBarItem> = ({
+    item: action,
+    index,
+  }) => {
     return (
       <View
         key={index}

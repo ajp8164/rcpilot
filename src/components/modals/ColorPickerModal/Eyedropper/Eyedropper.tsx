@@ -39,7 +39,11 @@ interface EyedropperInterface {
   setImage: Dispatch<SetStateAction<SkImage | null>>;
 }
 
-const Eyedropper = ({ image, onSelectColor, setImage }: EyedropperInterface) => {
+const Eyedropper = ({
+  image,
+  onSelectColor,
+  setImage,
+}: EyedropperInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -80,7 +84,10 @@ const Eyedropper = ({ image, onSelectColor, setImage }: EyedropperInterface) => 
     return {
       size: [SIZE, SIZE],
       nestedSize: [width, height],
-      gesturePos: [width / 2 + translate.x.value, height / 2 + translate.y.value],
+      gesturePos: [
+        width / 2 + translate.x.value,
+        height / 2 + translate.y.value,
+      ],
     };
   });
 
@@ -115,7 +122,14 @@ const Eyedropper = ({ image, onSelectColor, setImage }: EyedropperInterface) => 
     <GestureDetector gesture={pan}>
       <Animated.View style={s.root}>
         <Canvas style={s.backgroundCanvas}>
-          <Image image={image} x={0} y={0} width={width} height={height} fit={'cover'} />
+          <Image
+            image={image}
+            x={0}
+            y={0}
+            width={width}
+            height={height}
+            fit={'cover'}
+          />
         </Canvas>
         <Animated.View style={[s.container, selectorStyles]}>
           <Canvas style={s.container}>

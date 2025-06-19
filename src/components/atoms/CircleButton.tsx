@@ -13,14 +13,23 @@ interface CircleButtonInterface {
   text?: string;
 }
 
-const CircleButton = ({ icon, onPress, size = 50, style, text }: CircleButtonInterface) => {
+const CircleButton = ({
+  icon,
+  onPress,
+  size = 50,
+  style,
+  text,
+}: CircleButtonInterface) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   return (
     <Pressable style={s.buttonWrapper} onPress={onPress}>
       <Icon name={'circle'} style={[s.buttonOutline, { fontSize: size }]} />
-      <Icon name={icon} style={[s.buttonIcon, { fontSize: size * 0.6 }, style]} />
+      <Icon
+        name={icon}
+        style={[s.buttonIcon, { fontSize: size * 0.6 }, style]}
+      />
       <Text style={s.buttonText}>{text}</Text>
     </Pressable>
   );

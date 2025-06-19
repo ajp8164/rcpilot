@@ -5,7 +5,10 @@ import { useEffect, useRef } from 'react';
 type Values = any;
 
 interface OuterProps<Values> {
-  onChange: (currentState: FormikProps<Values>, previousState: FormikProps<Values> | null) => void;
+  onChange: (
+    currentState: FormikProps<Values>,
+    previousState: FormikProps<Values> | null,
+  ) => void;
 }
 
 interface Props<Values> extends OuterProps<Values> {

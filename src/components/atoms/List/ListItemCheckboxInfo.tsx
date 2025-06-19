@@ -11,7 +11,7 @@ import { makeStyles } from '@rn-vui/themed';
 interface Props extends _ListItem {
   checked: boolean;
   expanded?: boolean;
-  ExpandableComponent?: JSX.Element;
+  ExpandableComponent?: React.ReactElement;
   onPressInfo?: () => void;
   hideInfo?: boolean;
   iconChecked?: string;
@@ -24,7 +24,10 @@ export interface ListItemCheckboxInfoMethods {
   resetEditor: () => void;
 }
 
-const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props>((props, ref) => {
+const ListItemCheckboxInfo = React.forwardRef<
+  ListItemCheckboxInfoMethods,
+  Props
+>((props, ref) => {
   const {
     checked,
     expanded = false,
@@ -58,7 +61,12 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
         ref={liRef}
         {...props}
         containerStyle={[
-          { ...props.containerStyle, ...s.container },
+          ...(props.containerStyle
+            ? Array.isArray(props.containerStyle)
+              ? props.containerStyle
+              : [props.containerStyle]
+            : []),
+          s.container,
           props.swipeable ? theme.styles.swipeableListItemContainer : {},
         ]}
         leftImage={
@@ -69,7 +77,8 @@ const ListItemCheckboxInfo = React.forwardRef<ListItemCheckboxInfoMethods, Props
             solid={checked}
             style={[
               s.icon,
-              (checked && iconChecked === iconUnchecked) || iconChecked !== iconUnchecked
+              (checked && iconChecked === iconUnchecked) ||
+              iconChecked !== iconUnchecked
                 ? {}
                 : s.uncheckedIcon,
             ]}

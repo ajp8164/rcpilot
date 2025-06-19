@@ -1,7 +1,7 @@
 import { AppTheme, useTheme } from 'theme';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
-import React, { ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { makeStyles } from '@rn-vui/themed';
 
@@ -12,16 +12,13 @@ interface Props {
 }
 
 const CollapsibleView = (props: Props) => {
-  const { children,
-    expanded = true, 
-    style, 
-  } = props;
+  const { children, expanded = true, style } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
 
   return (
-    <Collapsible collapsed={!expanded} style={{...s.collapsible, ...style}}>
+    <Collapsible collapsed={!expanded} style={{ ...s.collapsible, ...style }}>
       <>{children}</>
     </Collapsible>
   );

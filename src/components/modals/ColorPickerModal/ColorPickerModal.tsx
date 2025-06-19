@@ -1,11 +1,25 @@
-import { ColorPickerModalMethods, ColorPickerModalProps, PresentOptions } from './types';
+import {
+  ColorPickerModalMethods,
+  ColorPickerModalProps,
+  PresentOptions,
+} from './types';
 import { AppTheme, useTheme } from 'theme';
-import React, { useCallback, useContext, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader, viewport } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rn-vui/themed';
-import Animated, { SharedValue, useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  SharedValue,
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { Pressable, Text, View } from 'react-native';
 import ColorPicker, {
   Panel5,
@@ -24,7 +38,10 @@ import ModalHandle from 'components/atoms/ModalHandle';
 
 type ColorPickerModal = ColorPickerModalMethods;
 
-const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProps>((props, ref) => {
+const ColorPickerModal = React.forwardRef<
+  ColorPickerModal,
+  ColorPickerModalProps
+>((props, ref) => {
   const { eyedropperViewRef, snapPoints = ['70%'] } = props;
 
   const theme = useTheme();
@@ -36,11 +53,13 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
 
   const defaultColor = theme.colors.stickyBlack;
 
-  const externalColor = useRef<SharedValue<string>>();
+  const externalColor = useRef<SharedValue<string>>(null);
   const internalSharedColor = useSharedValue(defaultColor);
   const [internalColor, setInternalColor] = useState(defaultColor);
   const [originalColor, setOriginalColor] = useState(defaultColor);
-  const previewStyle = useAnimatedStyle(() => ({ backgroundColor: internalSharedColor.value }));
+  const previewStyle = useAnimatedStyle(() => ({
+    backgroundColor: internalSharedColor.value,
+  }));
 
   const eyedropperActive = useRef(false);
   const [eyedropperImage, setEyedropperImage] = useState<SkImage | null>(null);
@@ -57,7 +76,9 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
   const colorPickerSegments = Object.keys(colorPickers).map(
     k => colorPickers[k as keyof typeof colorPickers].label,
   );
-  const [selectedColorPicker, setSelectedColorPicker] = useState(colorPickers.grid.index);
+  const [selectedColorPicker, setSelectedColorPicker] = useState(
+    colorPickers.grid.index,
+  );
 
   useImperativeHandle(ref, () => ({
     // These functions exposed to the parent component through the ref.
@@ -70,7 +91,8 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
   };
 
   const present = (opts?: PresentOptions) => {
-    const inputColor = typeof opts?.color === 'string' ? opts?.color : opts?.color?.value;
+    const inputColor =
+      typeof opts?.color === 'string' ? opts?.color : opts?.color?.value;
     setOriginalColor(inputColor || defaultColor);
 
     // Can optionally pass in a shared color value for animation of color in callers components.
@@ -80,8 +102,8 @@ const ColorPickerModal = React.forwardRef<ColorPickerModal, ColorPickerModalProp
       setInternalColor(inputColor); // Needed to force the grid to re-render with this initial color.
 
       // Hold on to the callers shared value so it can be updated when the color changes.
-      if (typeof opts?.color !== 'string') {
-        externalColor.current = opts?.color;
+      if (opts?.color && typeof opts.color !== 'string') {
+        externalColor.current = opts.color;
       }
     }
 

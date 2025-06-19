@@ -1,6 +1,13 @@
 import * as Yup from 'yup';
 
-import { Alert, Keyboard, ScrollView, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { useRef, useState } from 'react';
@@ -34,14 +41,17 @@ export interface EditorState {
   fieldCount: number;
 }
 
-export type Props = NativeStackScreenProps<SignInNavigatorParamList, 'CreateAccountScreen'>;
+export type Props = NativeStackScreenProps<
+  SignInNavigatorParamList,
+  'CreateAccountScreen'
+>;
 
 const CreateAccountScreen = () => {
   const theme = useTheme();
   const s = useStyles(theme);
 
   const formikRef = useRef<FormikProps<FormValues>>(null);
-  const refFirstName = useRef<TextInput>(null);
+  const refFirstName = useRef<TextInput | null>(null);
   const refLastName = useRef<TextInput>(null);
   const refEmail = useRef<TextInput>(null);
   const refPassword = useRef<TextInput>(null);
@@ -70,10 +80,18 @@ const CreateAccountScreen = () => {
   //   setEditorState({ focusedField: nextField });
   // };
 
-  const signIn = (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+  const signIn = (
+    values: FormValues,
+    { resetForm }: FormikHelpers<FormValues>,
+  ) => {
     Keyboard.dismiss();
     setEditorState({ isSubmitting: true });
-    createUserWithEmailAndPassword(values.firstName, values.lastName, values.email, values.password)
+    createUserWithEmailAndPassword(
+      values.firstName,
+      values.lastName,
+      values.email,
+      values.password,
+    )
       .then(() => {
         setEditorState({ isSubmitting: false });
         resetForm({ values });
@@ -106,7 +124,9 @@ const CreateAccountScreen = () => {
   return (
     <>
       <AvoidSoftInputView style={s.avoidContainer}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={s.container}>
           <Formik
             innerRef={formikRef}
             initialValues={{
@@ -137,7 +157,9 @@ const CreateAccountScreen = () => {
                     setEditorState({ focusedField: undefined });
                   }}
                   onChangeText={formik.handleChange('firstName')}
-                  onFocus={() => setEditorState({ focusedField: Fields.firstName })}
+                  onFocus={() =>
+                    setEditorState({ focusedField: Fields.firstName })
+                  }
                 />
                 <ListItemInput
                   refInner={refLastName}
@@ -156,7 +178,9 @@ const CreateAccountScreen = () => {
                     setEditorState({ focusedField: undefined });
                   }}
                   onChangeText={formik.handleChange('lastName')}
-                  onFocus={() => setEditorState({ focusedField: Fields.lastName })}
+                  onFocus={() =>
+                    setEditorState({ focusedField: Fields.lastName })
+                  }
                 />
                 <ListItemInput
                   refInner={refEmail}

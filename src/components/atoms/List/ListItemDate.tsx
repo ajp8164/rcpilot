@@ -1,6 +1,8 @@
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import React from 'react';
 
 import { CollapsibleView } from 'components/atoms/CollapsibleView';
@@ -41,7 +43,12 @@ const ListItemDate = (props: Props) => {
       <_ListItem
         {...props}
         containerStyle={[
-          { ...props.containerStyle, ...s.containerStyle },
+          ...(props.containerStyle
+            ? Array.isArray(props.containerStyle)
+              ? props.containerStyle
+              : [props.containerStyle]
+            : []),
+          s.container,
           props.swipeable ? theme.styles.swipeableListItemContainer : {},
         ]}
         position={expanded ? [first] : props.position}
@@ -59,8 +66,12 @@ const ListItemDate = (props: Props) => {
             maximumDate={new Date()}
             style={[s.datePickerContainer, datePickerContainerStyle]}
             accentColor={theme.colors.brandSecondary}
-            value={DateTime.fromISO(pickerValue || new Date().toISOString()).toJSDate()}
-            onChange={(_event: DateTimePickerEvent, date?: Date) => onDateChange(date)}
+            value={DateTime.fromISO(
+              pickerValue || new Date().toISOString(),
+            ).toJSDate()}
+            onChange={(_event: DateTimePickerEvent, date?: Date) =>
+              onDateChange(date)
+            }
           />
         </Animated.View>
       </CollapsibleView>
@@ -73,7 +84,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
   },
-  containerStyle: {
+  container: {
     minHeight: 48,
   },
   datePickerContainer: {

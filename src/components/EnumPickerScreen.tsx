@@ -44,7 +44,10 @@ export type EnumPickerResult = {
   value: string[];
 };
 
-export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'EnumPicker'>;
+export type Props = NativeStackScreenProps<
+  MultipleNavigatorParamList,
+  'EnumPicker'
+>;
 
 const EnumPickerScreen = ({ route, navigation }: Props) => {
   const {
@@ -103,10 +106,15 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
   const toggleSelect = (value?: string) => {
     if (mode === 'one' || mode === 'one-or-none') {
-      value ? setList({ selected: [value] }) : setList({ selected: [] }, { assign: true });
+      value
+        ? setList({ selected: [value] })
+        : setList({ selected: [] }, { assign: true });
     } else if (value) {
       if (list.selected.includes(value)) {
-        setList({ selected: list.selected.filter(v => v !== value) }, { assign: true });
+        setList(
+          { selected: list.selected.filter(v => v !== value) },
+          { assign: true },
+        );
       } else {
         setList({ selected: list.selected.concat(value) }, { assign: true });
       }
@@ -114,7 +122,9 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
     // For single selection mode we send the selected value immediately.
     if (mode === 'one' || mode === 'one-or-none') {
-      event.emit(eventName, { value: value ? [value] : [] } as EnumPickerResult);
+      event.emit(eventName, {
+        value: value ? [value] : [],
+      } as EnumPickerResult);
     }
   };
 
@@ -132,7 +142,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
   const getIconEl = (value: string) => {
     // If icons are specified then create an array of icon elements.
-    const iconArr: JSX.Element[] = [];
+    const iconArr: React.ReactElement[] = [];
     if (icons && icons[value]) {
       let name = icons[value]?.name || '';
       let el;
@@ -163,7 +173,9 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
         iconArr.push(el);
       });
     }
-    return iconArr.length ? <View style={s.iconArr}>{iconArr}</View> : undefined;
+    return iconArr.length ? (
+      <View style={s.iconArr}>{iconArr}</View>
+    ) : undefined;
   };
 
   const renderValue: ListRenderItem<string> = ({ item: value, index }) => {

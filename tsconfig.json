@@ -20,7 +20,7 @@
       "theme": ["./theme/*", "./theme"],
       "types": ["./types/*", "./types/"]
     },
-    "types": []
+    "types": ["react-native", "react"]
   },
   "exclude": ["node_modules"],
   "include": [

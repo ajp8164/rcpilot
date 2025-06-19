@@ -7,7 +7,7 @@ import { makeStyles } from '@rn-vui/themed';
 
 interface Props extends _ListItemSwitch {
   expanded?: boolean;
-  ExpandableComponent?: JSX.Element;
+  ExpandableComponent?: React.ReactElement;
 }
 
 const ListItemSwitch = (props: Props) => {

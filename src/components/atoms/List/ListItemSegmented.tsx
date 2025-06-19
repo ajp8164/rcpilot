@@ -9,7 +9,7 @@ import { makeStyles } from '@rn-vui/themed';
 
 export interface ListItemSegmentedInterface extends _ListItem {
   expanded?: boolean;
-  ExpandableComponent?: JSX.Element;
+  ExpandableComponent?: React.ReactElement;
   fullWidth?: boolean;
   index?: number;
   onChangeIndex: (index: number) => void;
@@ -41,7 +41,12 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
         {...props}
         containerStyle={[
           fullWidth ? s.containerFullWidth : {},
-          { ...props.containerStyle, ...s.container },
+          ...(props.containerStyle
+            ? Array.isArray(props.containerStyle)
+              ? props.containerStyle
+              : [props.containerStyle]
+            : []),
+          s.container,
           props.swipeable ? theme.styles.swipeableListItemContainer : {},
         ]}
         leftContainerStyle={s.containerLeft}
@@ -49,7 +54,10 @@ const ListItemSegmented = (props: ListItemSegmentedInterface) => {
         rightImage={false}
         extraContentComponent={
           <View
-            style={[s.segmentedView, fullWidth ? s.segmentedViewFullWidth : s.segmentedViewRight]}>
+            style={[
+              s.segmentedView,
+              fullWidth ? s.segmentedViewFullWidth : s.segmentedViewRight,
+            ]}>
             <SegmentedControl
               values={segments}
               // eslint-disable-next-line react-native/no-inline-styles

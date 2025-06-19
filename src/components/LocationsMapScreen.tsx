@@ -9,7 +9,13 @@ import MapView, {
   MarkerPressEvent,
   Region,
 } from 'react-native-maps';
-import React, { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
 import ActionBar from 'components/atoms/ActionBar';
@@ -53,7 +59,10 @@ export type LocationsMapResult = {
   locationId: string;
 };
 
-export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationsMap'>;
+export type Props = NativeStackScreenProps<
+  LocationNavigatorParamList,
+  'LocationsMap'
+>;
 
 const LocationsMapScreen = ({ navigation, route }: Props) => {
   const { eventName, locationId } = route.params;
@@ -69,13 +78,17 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   // location is specified then use an available closest location to our current position. Failing
   // to get any location record just set the map to our current position.
   const currentPosition = useContext(GeoPositionContext);
-  let initialLocation = locations.find(location => location._id.toString() === locationId);
+  let initialLocation = locations.find(
+    location => location._id.toString() === locationId,
+  );
 
   const currentLocationId = useSelector(selectLocation).locationId;
   if (!initialLocation) {
     // Get closest the location closest to our current position.
     // Note: Current location is set using a radius around our current position.
-    initialLocation = locations.find(l => l._id.toString() === currentLocationId);
+    initialLocation = locations.find(
+      l => l._id.toString() === currentLocationId,
+    );
   }
 
   const mapViewRef = useRef<MapView>(null);
@@ -85,12 +98,17 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     longitude: currentPosition.coords.longitude,
   } as LocationCoords);
 
-  const [mapPresentation, setMapPresentation] = useState<{ mapType: MapType; icon: string }>({
+  const [mapPresentation, setMapPresentation] = useState<{
+    mapType: MapType;
+    icon: string;
+  }>({
     mapType: 'standard',
     icon: MapTypeButtonState.Map,
   });
 
-  const [recenterButtonState, setRecenterButtonState] = useState(RecenterButtonState.Initial);
+  const [recenterButtonState, setRecenterButtonState] = useState(
+    RecenterButtonState.Initial,
+  );
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -100,7 +118,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
             icon={<Icon name={'book-open'} style={s.headerIcon} />}
-            onPress={() => navigation.navigate('Locations', { eventName: 'map-location' })}
+            onPress={() =>
+              navigation.navigate('Locations', { eventName: 'map-location' })
+            }
           />
         );
       },
@@ -135,7 +155,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const onChangeMapLocation = (result: LocationPickerResult) => {
-    const newLocation = locations.find(l => l._id.toString() === result.locationId);
+    const newLocation = locations.find(
+      l => l._id.toString() === result.locationId,
+    );
     if (newLocation) {
       mapViewRef.current?.animateToRegion({
         latitude: newLocation.coords.latitude,
@@ -179,10 +201,16 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const toggleMapPresenation = () => {
     switch (mapPresentation.mapType) {
       case 'standard':
-        setMapPresentation({ mapType: 'satellite', icon: MapTypeButtonState.Satellite });
+        setMapPresentation({
+          mapType: 'satellite',
+          icon: MapTypeButtonState.Satellite,
+        });
         break;
       case 'satellite':
-        setMapPresentation({ mapType: 'standard', icon: MapTypeButtonState.Map });
+        setMapPresentation({
+          mapType: 'standard',
+          icon: MapTypeButtonState.Map,
+        });
         break;
     }
   };
@@ -200,7 +228,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       });
 
       if (eventName) {
-        event.emit(eventName, { locationId: newLocation._id.toString() } as LocationsMapResult);
+        event.emit(eventName, {
+          locationId: newLocation._id.toString(),
+        } as LocationsMapResult);
       }
     });
 
@@ -210,7 +240,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       markersRef.current.forEach(marker => {
         marker.mapMarker.hideCallout();
       });
-      markersRef.current[markersRef.current.length - 1]?.mapMarker.showCallout();
+      markersRef.current[
+        markersRef.current.length - 1
+      ]?.mapMarker.showCallout();
     }, 500); // Add for UX.
   };
 
@@ -221,7 +253,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     } as LocationCoords;
   };
 
-  const onMarkerDragEnd = (event: MarkerDragStartEndEvent, location: Location) => {
+  const onMarkerDragEnd = (
+    event: MarkerDragStartEndEvent,
+    location: Location,
+  ) => {
     realm.write(() => {
       location.coords.latitude = event.nativeEvent.coordinate.latitude;
       location.coords.longitude = event.nativeEvent.coordinate.longitude;
@@ -230,7 +265,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const onMarkerPress = (markerEvent: MarkerPressEvent) => {
     if (eventName) {
-      event.emit(eventName, { locationId: markerEvent.nativeEvent.id } as LocationsMapResult);
+      event.emit(eventName, {
+        locationId: markerEvent.nativeEvent.id,
+      } as LocationsMapResult);
     }
   };
 
@@ -242,7 +279,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   });
 
-  const renderMapMarkers = (): JSX.Element[] => {
+  const renderMapMarkers = (): React.ReactElement[] => {
     return locations.map((location, index) => {
       if (!markersRef.current[index]) {
         markersRef.current[index] = {} as MapMarkerLocation;
@@ -274,8 +311,11 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         showsUserLocation={true}
         mapType={mapPresentation.mapType}
         initialRegion={{
-          latitude: initialLocation?.coords.latitude || currentPosition.coords.latitude,
-          longitude: initialLocation?.coords.longitude || currentPosition.coords.longitude,
+          latitude:
+            initialLocation?.coords.latitude || currentPosition.coords.latitude,
+          longitude:
+            initialLocation?.coords.longitude ||
+            currentPosition.coords.longitude,
           latitudeDelta: currentPosition.error ? 10 : 0.01,
           longitudeDelta: currentPosition.error ? 10 : 0.01,
         }}
@@ -297,7 +337,11 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           },
           {
             ActionComponent: (
-              <Icon name={'location-dot'} size={28} color={theme.colors.clearButtonText} />
+              <Icon
+                name={'location-dot'}
+                size={28}
+                color={theme.colors.clearButtonText}
+              />
             ),
             onPress: addLocation,
           },

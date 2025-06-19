@@ -1,13 +1,24 @@
-import { DeckCardPropertiesModalMethods, DeckCardPropertiesModalProps } from './types';
+import {
+  DeckCardPropertiesModalMethods,
+  DeckCardPropertiesModalProps,
+} from './types';
 import { AppTheme, useTheme } from 'theme';
-import React, { useContext, useImperativeHandle, useRef, useState } from 'react';
+import React, {
+  useContext,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal, ModalHeader } from '@react-native-ajp-elements/ui';
 import { makeStyles } from '@rn-vui/themed';
 import { Pressable, View } from 'react-native';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
-import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { DeckCardColors } from 'types/preferences';
 import { useDispatch } from 'react-redux';
 import { saveModelPreferences } from 'store/slices/appSettings';
@@ -69,7 +80,8 @@ const DeckCardPropertiesModal = React.forwardRef<
 
   const present = (modelId: string) => {
     setModelId(modelId);
-    const modelPreferences = store.getState().appSettings.modelsPreferences[modelId];
+    const modelPreferences =
+      store.getState().appSettings.modelsPreferences[modelId];
 
     const colors = modelPreferences?.deckCardColors || defaultDinnCardColors;
     setDeckCardColors(colors);
@@ -108,7 +120,8 @@ const DeckCardPropertiesModal = React.forwardRef<
 
   const onChangeColors = (colors: DeckCardColors) => {
     if (!modelId) return;
-    const modelPreferences = store.getState().appSettings.modelsPreferences[modelId];
+    const modelPreferences =
+      store.getState().appSettings.modelsPreferences[modelId];
     dispatch(
       saveModelPreferences({
         modelId: modelId,

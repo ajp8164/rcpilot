@@ -1,0 +1,29 @@
+diff --git a/node_modules/react-native-animated-dots-carousel/src/CarouselDots/Dot/index.tsx b/node_modules/react-native-animated-dots-carousel/src/CarouselDots/Dot/index.tsx
+index 167c0e6..3a5a8ab 100644
+--- a/node_modules/react-native-animated-dots-carousel/src/CarouselDots/Dot/index.tsx
++++ b/node_modules/react-native-animated-dots-carousel/src/CarouselDots/Dot/index.tsx
+@@ -1,4 +1,4 @@
+-import { useEffect, useState, useMemo } from 'react';
++import React, { type JSX, useEffect, useState, useMemo } from 'react';
+ import Animated, {
+   useSharedValue,
+   withTiming,
+diff --git a/node_modules/react-native-animated-dots-carousel/src/CarouselDots/InvisibleFiller/index.tsx b/node_modules/react-native-animated-dots-carousel/src/CarouselDots/InvisibleFiller/index.tsx
+index 9be00cd..e21f46c 100644
+--- a/node_modules/react-native-animated-dots-carousel/src/CarouselDots/InvisibleFiller/index.tsx
++++ b/node_modules/react-native-animated-dots-carousel/src/CarouselDots/InvisibleFiller/index.tsx
+@@ -1,3 +1,4 @@
++import React, { type JSX } from 'react';
+ import { View } from 'react-native';
+ 
+ import styles from './styles';
+diff --git a/node_modules/react-native-animated-dots-carousel/src/CarouselDots/index.tsx b/node_modules/react-native-animated-dots-carousel/src/CarouselDots/index.tsx
+index e91f902..96a742d 100644
+--- a/node_modules/react-native-animated-dots-carousel/src/CarouselDots/index.tsx
++++ b/node_modules/react-native-animated-dots-carousel/src/CarouselDots/index.tsx
+@@ -1,4 +1,4 @@
+-import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
++import React, { type JSX, useCallback, useEffect, useRef, useState, useMemo } from 'react';
+ import { I18nManager, View, ScrollView } from 'react-native';
+ import { GestureDetector, Gesture } from 'react-native-gesture-handler';
+ import { useSharedValue, runOnJS } from 'react-native-reanimated';

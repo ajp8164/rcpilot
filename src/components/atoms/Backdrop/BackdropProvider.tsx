@@ -4,7 +4,11 @@ import React, { ReactNode, useState } from 'react';
 import { makeStyles } from '@rn-vui/themed';
 import { AppTheme, useTheme } from 'theme';
 
-export const BackdropProvider = ({ children }: { children: ReactNode }): ReactNode => {
+export const BackdropProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}): ReactNode => {
   const theme = useTheme();
   const s = useStyles(theme);
 

@@ -24,68 +24,73 @@ export interface ListItemInputMethods {
   setValue: (value?: string) => void;
 }
 
-const ListItemInput = React.forwardRef<ListItemInputMethods, Props>((props, ref) => {
-  const {
-    inputDisabled,
-    label,
-    onChangeText: onUpdate,
-    placeholder,
-    title,
-    value: initialValue,
-  } = props;
+const ListItemInput = React.forwardRef<ListItemInputMethods, Props>(
+  (props, ref) => {
+    const {
+      inputDisabled,
+      label,
+      onChangeText: onUpdate,
+      placeholder,
+      title,
+      value: initialValue,
+    } = props;
 
-  const theme = useTheme();
-  const s = useStyles(theme);
+    const theme = useTheme();
+    const s = useStyles(theme);
 
-  const [value, setValue] = useState<string | undefined>(initialValue);
+    const [value, setValue] = useState<string | undefined>(initialValue);
 
-  useImperativeHandle(ref, () => ({
-    //  These functions exposed to the parent component through the ref.
-    setValue,
-  }));
+    useImperativeHandle(ref, () => ({
+      //  These functions exposed to the parent component through the ref.
+      setValue,
+    }));
 
-  const handleChange = (text: string) => {
-    setValue(text.length ? text : undefined);
-    onUpdate(text.length ? text : undefined);
-    // onUpdate(text);
-  };
+    const handleChange = (text: string) => {
+      setValue(text.length ? text : undefined);
+      onUpdate(text.length ? text : undefined);
+      // onUpdate(text);
+    };
 
-  const ts = Array.isArray(props.titleStyle)
-    ? props.titleStyle.concat([s.title])
-    : props.titleStyle
-      ? [s.title, props.titleStyle]
-      : [s.title];
+    const ts = Array.isArray(props.titleStyle)
+      ? props.titleStyle.concat([s.title])
+      : props.titleStyle
+        ? [s.title, props.titleStyle]
+        : [s.title];
 
-  return (
-    <_ListItemInput
-      {...props}
-      containerStyle={{ ...props.containerStyle, ...s.containerStyle }}
-      contentStyle={s.inputContent}
-      inputTextStyle={s.inputText}
-      titleStyle={ts}
-      value={value}
-      placeholderTextColor={
-        (props.placeholderTextColor && `${props.placeholderTextColor?.toString()}80`) ||
-        theme.colors.textDim
-      }
-      onChangeText={handleChange}
-      extraContentComponentRight={
-        <View style={s.extraComponentContainer}>
-          {label && <Text style={s.inputLabel}>{label}</Text>}
-          <Icon
-            name={'pencil'}
-            size={18}
-            style={[
-              label ? s.inputIconWithLabel : s.inputIcon,
-              placeholder && !title ? s.inputIconWithPlaceholder : s.inputIcon,
-              inputDisabled ? s.inputIconDisabled : {},
-            ]}
-          />
-        </View>
-      }
-    />
-  );
-});
+    return (
+      <_ListItemInput
+        {...props}
+        containerStyle={{ ...props.containerStyle, ...s.containerStyle }}
+        contentStyle={s.inputContent}
+        inputTextStyle={s.inputText}
+        titleStyle={ts}
+        value={value}
+        placeholderTextColor={
+          (props.placeholderTextColor &&
+            `${props.placeholderTextColor?.toString()}80`) ||
+          theme.colors.textDim
+        }
+        onChangeText={handleChange}
+        extraContentComponentRight={
+          <View style={s.extraComponentContainer}>
+            {label && <Text style={s.inputLabel}>{label}</Text>}
+            <Icon
+              name={'pencil'}
+              size={18}
+              style={[
+                label ? s.inputIconWithLabel : s.inputIcon,
+                placeholder && !title
+                  ? s.inputIconWithPlaceholder
+                  : s.inputIcon,
+                inputDisabled ? s.inputIconDisabled : {},
+              ]}
+            />
+          </View>
+        }
+      />
+    );
+  },
+);
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   containerStyle: {

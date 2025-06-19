@@ -1,5 +1,5 @@
 import { AppTheme, useTheme } from 'theme';
-import React, { useImperativeHandle } from 'react';
+import React, { ReactNode, useImperativeHandle } from 'react';
 import {
   ListItem as _ListItem,
   ListItemMethods as _ListItemMethods,
@@ -14,7 +14,7 @@ import { useRef } from 'react';
 
 interface Props extends _ListItem {
   expanded?: boolean;
-  ExpandableComponent?: JSX.Element;
+  ExpandableComponent?: ReactNode;
   onPressInfo?: () => void;
   showInfo?: boolean;
   visible?: boolean;
@@ -25,7 +25,13 @@ export interface ListItemMethods {
 }
 
 const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
-  const { expanded = false, ExpandableComponent, onPressInfo, showInfo, visible } = props;
+  const {
+    expanded = false,
+    ExpandableComponent,
+    onPressInfo,
+    showInfo,
+    visible,
+  } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -53,16 +59,26 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
           ref={liRef}
           {...props}
           containerStyle={[
-            { ...props.containerStyle, ...s.container },
+            ...(props.containerStyle
+              ? Array.isArray(props.containerStyle)
+                ? props.containerStyle
+                : [props.containerStyle]
+              : []),
+            s.container,
             props.swipeable ? theme.styles.swipeableListItemContainer : {},
           ]}
           valueStyle={[
             s.value,
             props.disabled ? s.valuePosition : {},
-            (props.rightImage === undefined || props.rightImage === true) && props.value
+            (props.rightImage === undefined || props.rightImage === true) &&
+            props.value
               ? {}
               : s.valuePosition,
-            Array.isArray(props.valueStyle) ? {} : props.valueStyle ? props.valueStyle : {},
+            Array.isArray(props.valueStyle)
+              ? {}
+              : props.valueStyle
+                ? props.valueStyle
+                : {},
           ]}
           position={expanded ? [first] : props.position}
           disabled={props.disabled}
@@ -89,7 +105,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
           }
         />
         <CollapsibleView expanded={expanded}>
-          {ExpandableComponent}
+          {ExpandableComponent || null}
         </CollapsibleView>
       </>
     );
@@ -97,9 +113,7 @@ const ListItem = React.forwardRef<ListItemMethods, Props>((props, ref) => {
 
   if (isCollapsible.current) {
     return (
-      <CollapsibleView expanded={visible}>
-        {renderListItem()}
-      </CollapsibleView>
+      <CollapsibleView expanded={visible}>{renderListItem()}</CollapsibleView>
     );
   } else {
     return renderListItem();

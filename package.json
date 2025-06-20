@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "Xpostinstall": "patch-package; npm run prepare:ios; rn-nodeify --hack --install fs,path,buffer,stream,assert,events,crypto,vm,process,http,https,os",
     "postinstall": "patch-package; npm run prepare:ios",
     "android": "react-native run-android",
     "android:prod": "react-native run-android --variant Release",
@@ -72,7 +71,7 @@
     "react-native-avoid-softinput": "^7.0.1",
     "react-native-biometrics": "^3.0.1",
     "react-native-bootsplash": "^6.3.9",
-    "react-native-calendars": "^1.1302.0",
+    "react-native-calendars": "^1.1312.1",
     "react-native-camera-kit": "^15.1.0",
     "react-native-collapsible": "^1.6.2",
     "react-native-config": "^1.5.0",

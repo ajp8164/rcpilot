@@ -1,4 +1,10 @@
-import { Alert, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import {
+  Alert,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import {
@@ -37,7 +43,10 @@ type Section = {
   data: Battery[];
 };
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'Batteries'>;
+export type Props = NativeStackScreenProps<
+  BatteriesNavigatorParamList,
+  'Batteries'
+>;
 
 const BatteriesScreen = ({ navigation, route }: Props) => {
   const { listBatteries } = route.params;
@@ -52,7 +61,11 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const filterId = useSelector(selectFilters(FilterType.BatteriesFilter));
 
   const batteries = useBatteriesFilter();
-  const activeBatteries = batteries.filtered('retired == $0 AND inStorage == $1', false, false);
+  const activeBatteries = batteries.filtered(
+    'retired == $0 AND inStorage == $1',
+    false,
+    false,
+  );
   const retiredBatteries = batteries.filtered('retired == $0', true);
   const inStorageBatteries = batteries.filtered('inStorage == $0', true);
 
@@ -82,7 +95,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && (!activeBatteries.length || listEditor.enabled)}
+              disabled={
+                !filterId && (!activeBatteries.length || listEditor.enabled)
+              }
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
@@ -121,7 +136,10 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 icon={
                   <Icon
                     name={'plus'}
-                    style={[s.headerIcon, listEditor.enabled ? s.headerIconDisabled : {}]}
+                    style={[
+                      s.headerIcon,
+                      listEditor.enabled ? s.headerIconDisabled : {},
+                    ]}
                   />
                 }
                 onPress={addBattery}
@@ -132,11 +150,19 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeBatteries, filterId, inStorageBatteries, listEditor.enabled, retiredBatteries]);
+  }, [
+    activeBatteries,
+    filterId,
+    inStorageBatteries,
+    listEditor.enabled,
+    retiredBatteries,
+  ]);
 
   const addBattery = () => {
     const haveBatteries =
-      !!activeBatteries.length || !!retiredBatteries.length || !!inStorageBatteries.length;
+      !!activeBatteries.length ||
+      !!retiredBatteries.length ||
+      !!inStorageBatteries.length;
     showActionSheetWithOptions(
       {
         options: ['Add New', 'Add From Template', 'Cancel'],
@@ -259,7 +285,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'batteries', battery._id.toString())}
+        ref={ref => {
+          ref && listEditor.add(ref, 'batteries', battery._id.toString());
+        }}
         key={battery._id.toString()}
         title={battery.name}
         subtitle={batterySummaryExtended(battery)}
@@ -278,7 +306,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         leftImage={
           <View>
             <Icon
-              name={batteryIsCharged(battery) ? 'battery-full' : 'battery-quarter'}
+              name={
+                batteryIsCharged(battery) ? 'battery-full' : 'battery-quarter'
+              }
               solid={true}
               size={45}
               color={theme.colors.brandPrimary}
@@ -331,7 +361,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
             },
           ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('batteries', battery._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('batteries', battery._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );
@@ -340,14 +372,17 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const renderInactive = () => {
     return (
       <>
-        {listBatteries === 'all' && (retiredBatteries.length || inStorageBatteries.length) ? (
+        {listBatteries === 'all' &&
+        (retiredBatteries.length || inStorageBatteries.length) ? (
           <>
             <Divider text={'INACTIVE BATTERIES'} />
             {retiredBatteries.length ? (
               <ListItem
                 title={'Retired'}
                 value={`${retiredBatteries.length}`}
-                position={inStorageBatteries.length ? ['first'] : ['first', 'last']}
+                position={
+                  inStorageBatteries.length ? ['first'] : ['first', 'last']
+                }
                 onPress={() =>
                   navigation.push('Batteries', {
                     listBatteries: 'retired',
@@ -359,7 +394,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
               <ListItem
                 title={'In Storage'}
                 value={`${inStorageBatteries.length}`}
-                position={inStorageBatteries.length ? ['last'] : ['first', 'last']}
+                position={
+                  inStorageBatteries.length ? ['last'] : ['first', 'last']
+                }
                 onPress={() =>
                   navigation.push('Batteries', {
                     listBatteries: 'in-storage',
@@ -380,7 +417,11 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
     return <EmptyView info message={'No Retired Batteries'} />;
   }
 
-  if (!filterId && listBatteries === 'in-storage' && !inStorageBatteries.length) {
+  if (
+    !filterId &&
+    listBatteries === 'in-storage' &&
+    !inStorageBatteries.length
+  ) {
     return <EmptyView info message={'No Batteries In Storage'} />;
   }
 
@@ -426,7 +467,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       )}
       keyExtractor={item => item._id.toString()}
       renderItem={renderBattery}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
       ListFooterComponent={renderInactive()}
     />
   );

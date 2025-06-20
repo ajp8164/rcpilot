@@ -5,9 +5,16 @@ import {
   listItemPosition,
   swipeableDeleteItem,
 } from 'components/atoms/List';
-import { ModelsNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import {
+  ModelsNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
 import React, { useEffect } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -42,7 +49,8 @@ export type Props = CompositeScreenProps<
 >;
 
 const EventsScreen = ({ navigation, route }: Props) => {
-  const { filterType, batteryId, eventStyleId, locationId, modelId, pilotId } = route.params;
+  const { filterType, batteryId, eventStyleId, locationId, modelId, pilotId } =
+    route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -73,7 +81,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
               <Button
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                disabled={!filterId && (!model?.events.length || listEditor.enabled)}
+                disabled={
+                  !filterId && (!model?.events.length || listEditor.enabled)
+                }
                 icon={
                   <CustomIcon
                     name={filterId ? 'filter-check' : 'filter'}
@@ -121,7 +131,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const eventTitle = (event: Event) => {
     const number = `#${event.number}`;
     const duration = `${secondsToFormat(event.duration, { format: 'm:ss' })}`;
-    const time = DateTime.fromISO(event.createdOn).toLocaleString(DateTime.TIME_SIMPLE);
+    const time = DateTime.fromISO(event.createdOn).toLocaleString(
+      DateTime.TIME_SIMPLE,
+    );
     const location = `${event.location?.name || 'Unknown location'}`;
     return `${number}: ${duration} at ${time}, ${location}`;
   };
@@ -150,7 +162,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   const groupEvents = (events: Event[]): SectionListData<Event, Section>[] => {
     return groupItems<Event, Section>(events, event => {
-      return DateTime.fromISO(event.createdOn).toFormat('MMMM dd, yyyy').toUpperCase();
+      return DateTime.fromISO(event.createdOn)
+        .toFormat('MMMM dd, yyyy')
+        .toUpperCase();
     }).sort();
   };
 
@@ -165,7 +179,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'events', event._id.toString())}
+        ref={ref => {
+          ref && listEditor.add(ref, 'events', event._id.toString());
+        }}
         key={event._id.toString()}
         title={eventTitle(event)}
         subtitle={eventSummary(event)}
@@ -200,14 +216,20 @@ const EventsScreen = ({ navigation, route }: Props) => {
             },
           ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('events', event._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('events', event._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );
   };
 
   if (filterId && !events.length) {
-    return <EmptyView message={`No ${eventKind(model?.type).namePlural} Match Your Filter`} />;
+    return (
+      <EmptyView
+        message={`No ${eventKind(model?.type).namePlural} Match Your Filter`}
+      />
+    );
   }
 
   if (!events.length) {
@@ -223,7 +245,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
       sections={groupEvents([...events].reverse())}
       keyExtractor={item => item._id.toString()}
       renderItem={renderEvent}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
     />
   );
 };

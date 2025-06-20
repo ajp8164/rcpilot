@@ -1,0 +1,40 @@
+diff --git a/node_modules/react-native-calendars/src/expandableCalendar/index.js b/node_modules/react-native-calendars/src/expandableCalendar/index.js
+index 7198c45..2456c85 100644
+--- a/node_modules/react-native-calendars/src/expandableCalendar/index.js
++++ b/node_modules/react-native-calendars/src/expandableCalendar/index.js
+@@ -61,9 +61,21 @@ const ExpandableCalendar = forwardRef((props, ref) => {
+     horizontal = true, calendarStyle, theme, style: propsStyle, firstDay = 0, onDayPress, hideArrows, onPressArrowLeft, onPressArrowRight, renderArrow, testID, ...others } = props;
+     const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+     const [headerHeight, setHeaderHeight] = useState(0);
+-    const onHeaderLayout = useCallback(({ nativeEvent: { layout: { height } } }) => {
+-        setHeaderHeight(height || DEFAULT_HEADER_HEIGHT);
+-    }, []);
++
++    const shouldMeasureHeader = useRef(true);
++    const onHeaderLayout = useCallback(
++      ({
++        nativeEvent: {
++          layout: {height}
++        }
++      }) => {
++        if (height !== headerHeight) {
++          setHeaderHeight(height || DEFAULT_HEADER_HEIGHT);
++        }
++        shouldMeasureHeader.current = false;
++      },
++      [headerHeight]
++    );
+     /** Date */
+     const getYear = (date) => {
+         const d = new XDate(date);
+@@ -410,7 +422,9 @@ const ExpandableCalendar = forwardRef((props, ref) => {
+         return (<CalendarList testID={`${testID}.calendarList`} horizontal={horizontal} firstDay={firstDay} calendarStyle={calendarStyle} onHeaderLayout={onHeaderLayout} {...others} current={date} theme={themeObject} ref={calendarList} onDayPress={_onDayPress} onVisibleMonthsChange={onVisibleMonthsChange} pagingEnabled scrollEnabled={isOpen} hideArrows={shouldHideArrows} onPressArrowLeft={_onPressArrowLeft} onPressArrowRight={_onPressArrowRight} hideExtraDays={!horizontal && isOpen} renderArrow={_renderArrow} staticHeader numberOfDays={numberOfDays} headerStyle={_headerStyle} timelineLeftInset={timelineLeftInset} context={_context}/>);
+     };
+     return (<View testID={testID} style={containerStyle}>
+-      {screenReaderEnabled ? (<Calendar testID={`${testID}.calendarAccessible`} {...others} theme={themeObject} onHeaderLayout={onHeaderLayout} onDayPress={_onDayPress} hideExtraDays renderArrow={_renderArrow}/>) : (<Animated.View testID={`${testID}.expandableContainer`} ref={wrapper} style={wrapperStyle} {...panResponder.panHandlers}>
++      {screenReaderEnabled ? (<Calendar testID={`${testID}.calendarAccessible`} {...others} theme={themeObject} onHeaderLayout={onHeaderLayout} onDayPress={_onDayPress} hideExtraDays renderArrow={_renderArrow}/>) : (
++        // <Animated.View testID={`${testID}.expandableContainer`} ref={wrapper} style={wrapperStyle} {...panResponder.panHandlers}>
++        <Animated.View testID={`${testID}.expandableContainer`} ref={wrapper} style={wrapperStyle} onLayout={shouldMeasureHeader.current ? onHeaderLayout : undefined} {...panResponder.panHandlers}>
+           {renderCalendarList()}
+           {renderWeekCalendar()}
+           {!hideKnob && renderKnob()}

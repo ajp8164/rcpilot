@@ -143,7 +143,9 @@ export const rql = () => {
       }
       if (relation === FilterRelation.Past) {
         // E.g. ['1', 'Days']
-        const past = DateTime.now().minus({ [value[1].toLowerCase()]: Number(value[0]) });
+        const past = DateTime.now().minus({
+          [value[1].toLowerCase()]: Number(value[0]),
+        });
         result = `${propertyName} >= '${past}'`;
       }
 

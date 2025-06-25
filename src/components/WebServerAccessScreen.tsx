@@ -9,7 +9,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { appConfig } from 'config';
 import { makeStyles } from '@rn-vui/themed';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'WebServerAccess'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'WebServerAccess'
+>;
 
 const WebServerAccessScreen = () => {
   const theme = useTheme();

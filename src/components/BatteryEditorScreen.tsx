@@ -1,6 +1,9 @@
 import { Alert, ScrollView, Text } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import { BatteriesNavigatorParamList, NewBatteryNavigatorParamList } from 'types/navigation';
+import {
+  BatteriesNavigatorParamList,
+  NewBatteryNavigatorParamList,
+} from 'types/navigation';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
@@ -53,19 +56,27 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
-  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
+  const isCharged =
+    battery?.cycles[battery.cycles.length - 1]?.charge ||
+    !battery?.cycles.length;
 
   const name = useRef(battery?.name || batteryTemplate?.name || undefined);
   const [chemistry, setChemistry] = useState<BatteryChemistry>(
     battery?.chemistry || batteryTemplate?.chemistry || BatteryChemistry.LiPo,
   );
-  const vendor = useRef(battery?.vendor || batteryTemplate?.vendor || undefined);
+  const vendor = useRef(
+    battery?.vendor || batteryTemplate?.vendor || undefined,
+  );
   const purchasePrice = useRef(battery?.purchasePrice?.toString() || undefined);
   const [retired, setRetired] = useState(battery?.retired || false);
   const cRating = useRef(
-    battery?.cRating?.toString() || batteryTemplate?.cRating?.toString() || undefined,
+    battery?.cRating?.toString() ||
+      batteryTemplate?.cRating?.toString() ||
+      undefined,
   );
-  const capacity = useRef(battery?.capacity?.toString() || batteryTemplate?.capacity?.toString());
+  const capacity = useRef(
+    battery?.capacity?.toString() || batteryTemplate?.capacity?.toString(),
+  );
   const totalCycles = useRef(battery?.totalCycles?.toString() || undefined);
   const [sCells, setSCells] = useState(
     battery?.sCells?.toString() || batteryTemplate?.sCells?.toString() || '3',
@@ -76,11 +87,14 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const [tint, setTint] = useState(
     battery?.tint || (batteryTemplate?.tint as BatteryTint) || BatteryTint.None,
   );
-  const [scanCodeSize, setScanCodeSize] = useState(battery?.scanCodeSize || ScanCodeSize.None);
+  const [scanCodeSize, setScanCodeSize] = useState(
+    battery?.scanCodeSize || ScanCodeSize.None,
+  );
   const [notes, setNotes] = useState(battery?.notes || undefined);
 
   const originalCapacity = useRef(capacity).current;
-  const [expandedCellConfiguration, setExpandedCellConfiguration] = useState(false);
+  const [expandedCellConfiguration, setExpandedCellConfiguration] =
+    useState(false);
 
   useEffect(() => {
     if (batteryId) return;
@@ -130,7 +144,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, { title: 'New Battery' });
+    setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, {
+      title: 'New Battery',
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     name.current,
@@ -174,7 +190,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
         battery.purchasePrice = toNumber(purchasePrice.current);
         battery.retired = retired;
         battery.cRating = toNumber(cRating.current);
-        battery.capacity = toNumber(capacity.current) || toNumber(originalCapacity.current);
+        battery.capacity =
+          toNumber(capacity.current) || toNumber(originalCapacity.current);
         battery.sCells = toNumber(sCells) || 1;
         battery.pCells = toNumber(pCells) || 0;
         battery.tint = tint;
@@ -247,7 +264,11 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const operatingCost = () => {
-    if (battery?.purchasePrice && battery.totalCycles && battery.totalCycles > 0) {
+    if (
+      battery?.purchasePrice &&
+      battery.totalCycles &&
+      battery.totalCycles > 0
+    ) {
       return formatCurrency(battery.purchasePrice / battery.totalCycles);
     } else {
       return 'Unknown';
@@ -257,7 +278,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const confirmDeleteBattery = () => {
     confirmAction(deleteBattery, {
       label: 'Delete Battery',
-      title: 'This action cannot be undone.\nAre you sure you want to delete this battery?',
+      title:
+        'This action cannot be undone.\nAre you sure you want to delete this battery?',
       value: battery,
     });
   };
@@ -271,7 +293,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
   return (
     <AvoidSoftInputView style={[theme.styles.view]}>
-      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior={'automatic'}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
         <Divider />
         <ListItem
           title={battery ? battery.name : name.current || 'New Battery'}
@@ -320,7 +344,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           value={capacity.current}
           label={'mAh'}
           placeholder={'Value'}
-          titleStyle={!capacity.current ? { color: theme.colors.assertive } : {}}
+          titleStyle={
+            !capacity.current ? { color: theme.colors.assertive } : {}
+          }
           keyboardType={'number-pad'}
           position={['first']}
           onBlur={validateCapacity}
@@ -344,7 +370,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           title={'Cell Configuration'}
           value={batteryCellConfigurationToString(chemistry, [sCells, pCells])}
           expanded={expandedCellConfiguration}
-          onPress={() => setExpandedCellConfiguration(!expandedCellConfiguration)}
+          onPress={() =>
+            setExpandedCellConfiguration(!expandedCellConfiguration)
+          }
           ExpandableComponent={
             <WheelPicker
               placeholder={'none'}
@@ -403,7 +431,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
             placeholder={'None'}
             keyboardType={'number-pad'}
             position={['first', 'last']}
-            onChangeText={value => setDebounced(() => (totalCycles.current = value))}
+            onChangeText={value =>
+              setDebounced(() => (totalCycles.current = value))
+            }
           />
         )}
         <Divider />
@@ -416,7 +446,10 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
                   name={'circle'}
                   solid={true}
                   size={10}
-                  style={[{ color: batteryTintIcons[tint]?.color }, s.tintValueDot]}
+                  style={[
+                    { color: batteryTintIcons[tint]?.color },
+                    s.tintValueDot,
+                  ]}
                 />
               )}
               <Text style={s.tintValueText}>{tint}</Text>
@@ -460,7 +493,9 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
           keyboardType={'number-pad'}
           numeric={true}
           position={batteryId ? ['first'] : ['first', 'last']}
-          onChangeText={value => setDebounced(() => (purchasePrice.current = value))}
+          onChangeText={value =>
+            setDebounced(() => (purchasePrice.current = value))
+          }
         />
         {batteryId && (
           <>

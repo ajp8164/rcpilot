@@ -1,8 +1,21 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, JChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import { ListItemCheckboxInfo, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import {
+  Checklist,
+  ChecklistAction,
+  JChecklistActionHistoryEntry,
+} from 'realmdb/Checklist';
+import {
+  ListItemCheckboxInfo,
+  SectionListHeader,
+  listItemPosition,
+} from 'components/atoms/List';
 import React, { useEffect, useRef, useState } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import ActionBar from 'components/atoms/ActionBar';
@@ -25,7 +38,10 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import { useObject } from '@realm/react';
 import { uuidv4 } from 'lib/utils';
 
-type ChecklistActionItemData = { checklist: Checklist; action: ChecklistAction };
+type ChecklistActionItemData = {
+  checklist: Checklist;
+  action: ChecklistAction;
+};
 type Section = {
   title?: string;
   data: ChecklistActionItemData[];
@@ -45,7 +61,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
 
   const currentEventSequence = useSelector(selectEventSequence);
-  const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const model = useObject(
+    Model,
+    new BSON.ObjectId(currentEventSequence.modelId),
+  );
   const [kind] = useState(eventKind(model?.type));
 
   const checklists = useRef(
@@ -58,12 +77,13 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
 
   // History captures the current date, the model time before the event, and the
   // event number at which the checklist action is performed.
-  const [newChecklistActionHistoryEntry] = useState<JChecklistActionHistoryEntry>({
-    refId: '',
-    date: DateTime.now().toISO(),
-    modelTime: model ? model.statistics.totalTime : 0,
-    eventNumber: model ? model.statistics.totalEvents : 0,
-  });
+  const [newChecklistActionHistoryEntry] =
+    useState<JChecklistActionHistoryEntry>({
+      refId: '',
+      date: DateTime.now().toISO(),
+      modelTime: model ? model.statistics.totalTime : 0,
+      eventNumber: model ? model.statistics.totalEvents : 0,
+    });
 
   useEffect(() => {
     navigation.setOptions({
@@ -136,22 +156,31 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
       });
     });
 
-    return groupItems<ChecklistActionItemData, Section>(actionItemData, actionItem => {
-      return actionItem.checklist.name.toUpperCase();
-    });
+    return groupItems<ChecklistActionItemData, Section>(
+      actionItemData,
+      actionItem => {
+        return actionItem.checklist.name.toUpperCase();
+      },
+    );
   }
 
   const allActionsComplete = () => {
-    const entries = Object.keys(currentEventSequence.checklistActionHistoryEntries[checklistType]);
+    const entries = Object.keys(
+      currentEventSequence.checklistActionHistoryEntries[checklistType],
+    );
     if (!entries.length) return false;
     return entries.every(
-      key => !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date,
+      key =>
+        !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]
+          ?.date,
     );
   };
 
   const someActionsComplete = () => {
     return Object.keys(currentEventSequence.checklistActionHistoryEntries).some(
-      key => !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]?.date,
+      key =>
+        !!currentEventSequence.checklistActionHistoryEntries[checklistType][key]
+          ?.date,
     );
   };
 
@@ -160,7 +189,9 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
       section.data.forEach(actionItem => {
         const action = actionItem.action;
         if (
-          !currentEventSequence.checklistActionHistoryEntries[checklistType][action.refId]?.date
+          !currentEventSequence.checklistActionHistoryEntries[checklistType][
+            action.refId
+          ]?.date
         ) {
           dispatch(
             eventSequence.setChecklistActionComplete({
@@ -178,8 +209,13 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   };
 
   const pendAllActions = () => {
-    Object.keys(currentEventSequence.checklistActionHistoryEntries[checklistType]).forEach(key => {
-      if (currentEventSequence.checklistActionHistoryEntries[checklistType][key].date) {
+    Object.keys(
+      currentEventSequence.checklistActionHistoryEntries[checklistType],
+    ).forEach(key => {
+      if (
+        currentEventSequence.checklistActionHistoryEntries[checklistType][key]
+          .date
+      ) {
         dispatch(
           eventSequence.setChecklistActionNotComplete({
             checklistActionRefId: key,
@@ -190,7 +226,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const renderChecklistAction: SectionListRenderItem<ChecklistActionItemData, Section> = ({
+  const renderChecklistAction: SectionListRenderItem<
+    ChecklistActionItemData,
+    Section
+  > = ({
     item: actionItem,
     section,
     index,
@@ -266,7 +305,9 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         sections={actionsToDo.current}
         keyExtractor={(item, index) => `${index}${item.action.refId}`}
         renderItem={renderChecklistAction}
-        renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+        renderSectionHeader={({ section: { title } }) => (
+          <SectionListHeader title={title} />
+        )}
         ListFooterComponent={<Divider />}
       />
       <ActionBar

@@ -1,4 +1,10 @@
-import { Image, LayoutChangeEvent, LayoutRectangle, Text, View } from 'react-native';
+import {
+  Image,
+  LayoutChangeEvent,
+  LayoutRectangle,
+  Text,
+  View,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 
@@ -73,18 +79,25 @@ export const Back = ({
           <Text style={s.text}>{`Last ${eventKind(model.type).name}`}</Text>
           <Text style={s.text}>
             {model.lastEvent
-              ? DateTime.fromISO(model.lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
+              ? DateTime.fromISO(model.lastEvent).toFormat(
+                  "MMM d, yyyy 'at' h:mm a",
+                )
               : 'Unknown'}
           </Text>
         </View>
         <View style={s.statRow}>
-          <Text style={s.text}>{`Number of ${eventKind(model.type).namePlural}`}</Text>
+          <Text
+            style={
+              s.text
+            }>{`Number of ${eventKind(model.type).namePlural}`}</Text>
           <Text style={s.text}>{model?.statistics.totalEvents}</Text>
         </View>
         <View style={s.statRow}>
           <Text style={s.text}>{'Total Time'}</Text>
           <Text style={s.text}>
-            {secondsToFormat(model?.statistics.totalTime, { format: 'h:mm:ss' })}
+            {secondsToFormat(model?.statistics.totalTime, {
+              format: 'h:mm:ss',
+            })}
           </Text>
         </View>
         <View style={s.actions}>
@@ -95,7 +108,13 @@ export const Back = ({
               backgroundColor: theme.colors.whiteTransparentDark,
             }}
             bottomDividerColor={theme.colors.darkGray}
-            rightImage={<Icon name={'play-circle'} size={20} color={theme.colors.darkGray} />}
+            rightImage={
+              <Icon
+                name={'play-circle'}
+                size={20}
+                color={theme.colors.darkGray}
+              />
+            }
             position={['first']}
             onPress={onPressNewEventSequence}
           />
@@ -105,7 +124,13 @@ export const Back = ({
             containerStyle={{
               backgroundColor: theme.colors.whiteTransparentDark,
             }}
-            rightImage={<CustomIcon name={'circle-info'} size={20} color={theme.colors.darkGray} />}
+            rightImage={
+              <CustomIcon
+                name={'circle-info'}
+                size={20}
+                color={theme.colors.darkGray}
+              />
+            }
             position={['last']}
             onPress={onPressEditModel}
           />
@@ -117,7 +142,10 @@ export const Back = ({
               icon={
                 <Icon
                   name={'palette'}
-                  style={[s.toolbarIcon, { color: theme.colors.whiteTransparentDark }]}
+                  style={[
+                    s.toolbarIcon,
+                    { color: theme.colors.whiteTransparentDark },
+                  ]}
                 />
               }
               onPress={() => {
@@ -130,7 +158,10 @@ export const Back = ({
               icon={
                 <Icon
                   name={'rotate'}
-                  style={[s.toolbarIcon, { color: theme.colors.whiteTransparentDark }]}
+                  style={[
+                    s.toolbarIcon,
+                    { color: theme.colors.whiteTransparentDark },
+                  ]}
                 />
               }
               onPress={flip && flip}

@@ -1,6 +1,13 @@
 import { Collection, CollectionChangeSet } from 'realm';
-import { GeoPositionContext, defaultGeoPosition, distanceBetweenLocations } from 'lib/location';
-import { GeolocationError, GeolocationResponse } from '@react-native-community/geolocation/js/';
+import {
+  GeoPositionContext,
+  defaultGeoPosition,
+  distanceBetweenLocations,
+} from 'lib/location';
+import {
+  GeolocationError,
+  GeolocationResponse,
+} from '@react-native-community/geolocation/js/';
 import { Location, LocationCoords } from 'realmdb/Location';
 import { useEffect, useRef } from 'react';
 
@@ -33,7 +40,10 @@ export const useCurrentLocation = () => {
   useEffect(() => {
     const allLocations = realm.objects(Location);
     // @ts-expect-error Can't get listener callback to type properly.
-    allLocations.addListener(onLocationCoordsChange, ['coords.latitude', 'coords.longitude']);
+    allLocations.addListener(onLocationCoordsChange, [
+      'coords.latitude',
+      'coords.longitude',
+    ]);
 
     Geolocation.watchPosition(onWatch, onWatchError, {
       interval: 5 * 60 * 1000, // 5 mins
@@ -61,7 +71,9 @@ export const useCurrentLocation = () => {
     });
 
     if (closest.dist.mi < 0.5) {
-      dispatch(saveCurrentLocation({ locationId: closest.location._id.toString() }));
+      dispatch(
+        saveCurrentLocation({ locationId: closest.location._id.toString() }),
+      );
     } else {
       dispatch(saveCurrentLocation({}));
     }

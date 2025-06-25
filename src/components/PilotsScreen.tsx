@@ -1,6 +1,10 @@
 import { AppTheme, useTheme } from 'theme';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItemCheckboxInfo, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItemCheckboxInfo,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useQuery, useRealm } from '@realm/react';
@@ -26,10 +30,14 @@ const PilotsScreen = ({ navigation }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
-  const unknownPilots = useQuery(Pilot, pilots => pilots.filtered('unknownPilot == $0', true));
+  const unknownPilots = useQuery(Pilot, pilots =>
+    pilots.filtered('unknownPilot == $0', true),
+  );
   const unknownPilot = unknownPilots[0];
 
-  const allPilots = useQuery(Pilot, pilots => pilots.filtered('unknownPilot == $0', false));
+  const allPilots = useQuery(Pilot, pilots =>
+    pilots.filtered('unknownPilot == $0', false),
+  );
   const selectedPilotId = useSelector(selectPilot).pilotId;
   const pilotSummary = usePilotSummary();
 

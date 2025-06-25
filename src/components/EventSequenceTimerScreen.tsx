@@ -17,11 +17,26 @@ import {
   getColoredSvg,
   viewport,
 } from '@react-native-ajp-elements/ui';
-import { FlatList, Image, ListRenderItem, Pressable, ScrollView, Text, View } from 'react-native';
-import { ListItem, ListItemSwitch, listItemPosition } from 'components/atoms/List';
+import {
+  FlatList,
+  Image,
+  ListRenderItem,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
+import {
+  ListItem,
+  ListItemSwitch,
+  listItemPosition,
+} from 'components/atoms/List';
 import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
 import { TimerMode, TimerState } from 'types/timer';
-import { batteryPerformanceWithModel, fuelCapacityPerformanceWithModel } from 'lib/analytics';
+import {
+  batteryPerformanceWithModel,
+  fuelCapacityPerformanceWithModel,
+} from 'lib/analytics';
 import { modelHasChecklists, modelTypeIcons } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
@@ -52,7 +67,10 @@ type TimerButton = {
   onPress?: () => void | undefined;
 };
 
-export type Props = NativeStackScreenProps<EventSequenceNavigatorParamList, 'EventSequenceTimer'>;
+export type Props = NativeStackScreenProps<
+  EventSequenceNavigatorParamList,
+  'EventSequenceTimer'
+>;
 
 const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const { cancelable } = route.params;
@@ -65,7 +83,10 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const currentEventSequence = useSelector(selectEventSequence);
-  const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const model = useObject(
+    Model,
+    new BSON.ObjectId(currentEventSequence.modelId),
+  );
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const [kind] = useState(eventKind(model?.type));
 
@@ -123,7 +144,10 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     // Get all the batteries for this event.
     const eventBatteries: Battery[] = [];
     currentEventSequence.batteryIds.forEach(id => {
-      const b = realm.objectForPrimaryKey(Battery, new BSON.ObjectId(new BSON.ObjectId(id)));
+      const b = realm.objectForPrimaryKey(
+        Battery,
+        new BSON.ObjectId(new BSON.ObjectId(id)),
+      );
       b && eventBatteries.push(b);
     });
     setBatteries(eventBatteries);
@@ -134,7 +158,10 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     timerMessageAnim.value = withDelay(
       500,
       withRepeat(
-        withSequence(withTiming(0.1, { duration, easing }), withTiming(1, { duration, easing })),
+        withSequence(
+          withTiming(0.1, { duration, easing }),
+          withTiming(1, { duration, easing }),
+        ),
         -1,
       ),
     );
@@ -165,7 +192,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       }
     }
     // Set the number of seconds.
-    dispatch(eventSequence.setDuration({ duration: Math.trunc(duration / 1000) }));
+    dispatch(
+      eventSequence.setDuration({ duration: Math.trunc(duration / 1000) }),
+    );
 
     if (model && modelHasChecklists(model, ChecklistType.PostEvent)) {
       navigation.push('EventSequenceChecklist', {
@@ -212,24 +241,72 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     let rightButton: TimerButton;
 
     if (timer.state.mode === TimerMode.Initial) {
-      leftButton = { icon: 'circle-check', color: theme.colors.assertive, onPress: timer.arm };
-      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
+      leftButton = {
+        icon: 'circle-check',
+        color: theme.colors.assertive,
+        onPress: timer.arm,
+      };
+      rightButton = {
+        icon: 'circle-play',
+        color: theme.colors.stickyWhite,
+        onPress: undefined,
+      };
     } else if (timer.state.mode === TimerMode.Armed) {
-      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: timer.disarm };
-      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: timer.start };
+      leftButton = {
+        icon: 'circle-stop',
+        color: theme.colors.success,
+        onPress: timer.disarm,
+      };
+      rightButton = {
+        icon: 'circle-play',
+        color: theme.colors.stickyWhite,
+        onPress: timer.start,
+      };
     } else if (timer.state.mode === TimerMode.Running) {
-      leftButton = { icon: 'circle-stop', color: theme.colors.stickyWhite, onPress: undefined };
-      rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: timer.pause };
+      leftButton = {
+        icon: 'circle-stop',
+        color: theme.colors.stickyWhite,
+        onPress: undefined,
+      };
+      rightButton = {
+        icon: 'circle-pause',
+        color: theme.colors.stickyWhite,
+        onPress: timer.pause,
+      };
     } else if (timer.state.mode === TimerMode.Paused) {
-      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: timer.stop };
-      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: timer.start };
+      leftButton = {
+        icon: 'circle-stop',
+        color: theme.colors.success,
+        onPress: timer.stop,
+      };
+      rightButton = {
+        icon: 'circle-play',
+        color: theme.colors.stickyWhite,
+        onPress: timer.start,
+      };
     } else if (timer.state.mode === TimerMode.Expired) {
-      leftButton = { icon: 'circle-stop', color: theme.colors.stickyWhite, onPress: undefined };
-      rightButton = { icon: 'circle-pause', color: theme.colors.stickyWhite, onPress: timer.pause };
+      leftButton = {
+        icon: 'circle-stop',
+        color: theme.colors.stickyWhite,
+        onPress: undefined,
+      };
+      rightButton = {
+        icon: 'circle-pause',
+        color: theme.colors.stickyWhite,
+        onPress: timer.pause,
+      };
     } else {
       // Stopped
-      leftButton = { icon: 'circle-stop', color: theme.colors.success, onPress: undefined };
-      rightButton = { icon: 'circle-play', color: theme.colors.stickyWhite, onPress: undefined };
+      leftButton = {
+        icon: 'circle-stop',
+        color: theme.colors.success,
+        onPress: undefined,
+      };
+      rightButton = {
+        icon: 'circle-play',
+        color: theme.colors.stickyWhite,
+        onPress: undefined,
+      };
     }
 
     return (
@@ -265,7 +342,11 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           }
           text={'Slide to arm'}
           textStyle={s.swipeText}
-          backText={timer.state.mode === TimerMode.Running ? 'Timer running' : 'Slide to disarm'}
+          backText={
+            timer.state.mode === TimerMode.Running
+              ? 'Timer running'
+              : 'Slide to disarm'
+          }
           backTextStyle={s.swipeText}
           padding={7}
           height={60}
@@ -280,7 +361,11 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               ? theme.colors.blackTransparentSubtle
               : theme.colors.success
           }
-          thumbStyle={timer.state.mode === TimerMode.Running ? s.swipeThumbTimerRunning : {}}
+          thumbStyle={
+            timer.state.mode === TimerMode.Running
+              ? s.swipeThumbTimerRunning
+              : {}
+          }
           onToggle={onSwipeArmTimer}
         />
       </View>
@@ -316,7 +401,11 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       <>
         <View style={s.modelContainer}>
           {model.image ? (
-            <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+            <Image
+              source={{ uri: model.image }}
+              resizeMode={'cover'}
+              style={s.modelImage}
+            />
           ) : (
             <SvgXml
               xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
@@ -359,7 +448,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
 
   const renderBattery: ListRenderItem<Battery> = ({ item: battery, index }) => {
     const performance = batteryPerformance();
-    const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
+    const isCharged =
+      battery?.cycles[battery.cycles.length - 1]?.charge ||
+      !battery?.cycles.length;
     return (
       <ListItem
         key={`${index}`}
@@ -371,7 +462,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
                 return (
                   <View key={index} style={s.performanceRow}>
                     <Text style={s.performanceItem}>{item.style}</Text>
-                    <Text style={[s.performanceItem, s.performanceRowMid]}>{item.count}</Text>
+                    <Text style={[s.performanceItem, s.performanceRowMid]}>
+                      {item.count}
+                    </Text>
                     <Text style={s.performanceItem}>{item.time}</Text>
                   </View>
                 );
@@ -380,7 +473,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           ) : (
             <View style={s.performanceContainer}>
               <View style={s.performanceRow}>
-                <Text style={s.performanceItem}>{'No recent flights with this model'}</Text>
+                <Text style={s.performanceItem}>
+                  {'No recent flights with this model'}
+                </Text>
               </View>
             </View>
           )
@@ -416,7 +511,11 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         rightImage={false}
         leftImage={
           <View>
-            <Icon name={'triangle-exclamation'} size={22} color={theme.colors.warning} />
+            <Icon
+              name={'triangle-exclamation'}
+              size={22}
+              color={theme.colors.warning}
+            />
           </View>
         }
       />
@@ -435,7 +534,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
                 return (
                   <View key={index} style={s.performanceRow}>
                     <Text style={s.performanceItem}>{item.style}</Text>
-                    <Text style={[s.performanceItem, s.performanceRowMid]}>{item.count}</Text>
+                    <Text style={[s.performanceItem, s.performanceRowMid]}>
+                      {item.count}
+                    </Text>
                     <Text style={s.performanceItem}>{item.time}</Text>
                   </View>
                 );
@@ -444,7 +545,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           ) : (
             <View style={s.performanceContainer}>
               <View style={s.performanceRow}>
-                <Text style={s.performanceItem}>{'No recent flights with this model'}</Text>
+                <Text style={s.performanceItem}>
+                  {'No recent flights with this model'}
+                </Text>
               </View>
             </View>
           )
@@ -476,7 +579,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     <View style={s.view}>
       <View style={s.upper}>
         {(!countdownTimerEnabled ||
-          (countdownTimerEnabled && timer.state.mode !== TimerMode.Initial)) && (
+          (countdownTimerEnabled &&
+            timer.state.mode !== TimerMode.Initial)) && (
           <Animated.Text
             entering={FadeIn}
             exiting={FadeOut}
@@ -485,13 +589,17 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               timer.state.mode === TimerMode.Armed ? s.timerValueArmed : {},
               timer.state.inOvertime ? s.timerOvertime : {},
             ]}>
-            {secondsToFormat(Math.abs(Math.trunc(timer.state.value / 1000)), { format: 'm:ss' })}
+            {secondsToFormat(Math.abs(Math.trunc(timer.state.value / 1000)), {
+              format: 'm:ss',
+            })}
           </Animated.Text>
         )}
         {timer.state.mode === TimerMode.Armed && (
           <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
             <Text style={s.timerMessage}>
-              {timerUsesButtons ? 'Tap to Start Timer...' : 'Shake to Start Timer...'}
+              {timerUsesButtons
+                ? 'Tap to Start Timer...'
+                : 'Shake to Start Timer...'}
             </Text>
           </Animated.View>
         )}
@@ -503,7 +611,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               itemWidth={['45%', '45%']}
               items={countdownTimerItems}
               value={millisecondsToPickerMSS(countdownValue.current)}
-              onValueChange={(_wheelIndex, value) => onCountdownValueChange(value as string[])}
+              onValueChange={(_wheelIndex, value) =>
+                onCountdownValueChange(value as string[])
+              }
             />
           </Animated.View>
         )}

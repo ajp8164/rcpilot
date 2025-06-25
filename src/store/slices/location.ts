@@ -23,7 +23,8 @@ const handleSaveCurrentLocation: CaseReducer<
 const locationSlice = createSlice({
   name: 'location',
   initialState: initialLocationState,
-  extraReducers: builder => builder.addCase(revertSettings, () => initialLocationState),
+  extraReducers: builder =>
+    builder.addCase(revertSettings, () => initialLocationState),
   reducers: {
     saveCurrentLocation: handleSaveCurrentLocation,
   },

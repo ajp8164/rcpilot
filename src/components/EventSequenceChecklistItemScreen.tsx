@@ -30,9 +30,16 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const currentEventSequence = useSelector(selectEventSequence);
-  const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
-  const checklist = useRef(model?.checklists.find(c => c.refId === checklistRefId)).current;
-  const action = useRef(checklist?.actions.find(a => a.refId === actionRefId)).current;
+  const model = useObject(
+    Model,
+    new BSON.ObjectId(currentEventSequence.modelId),
+  );
+  const checklist = useRef(
+    model?.checklists.find(c => c.refId === checklistRefId),
+  ).current;
+  const action = useRef(
+    checklist?.actions.find(a => a.refId === actionRefId),
+  ).current;
 
   useEffect(() => {
     event.on('event-checklist-item-notes', onChangeNotes);
@@ -48,9 +55,9 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
 
   const lastTimePerformed = (action: ChecklistAction) => {
     if (action.history.length) {
-      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat(
-        'MMM d, yyyy',
-      );
+      return DateTime.fromISO(
+        action.history[action.history.length - 1].date,
+      ).toFormat('MMM d, yyyy');
     }
     return 'never';
   };
@@ -90,7 +97,9 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
         onPress={() =>
           navigation.navigate('NotesEditor', {
             text: action.notes,
-            headerButtonStyle: { color: theme.colors.screenHeaderInvButtonText },
+            headerButtonStyle: {
+              color: theme.colors.screenHeaderInvButtonText,
+            },
             eventName: 'event-checklist-item-notes',
           })
         }

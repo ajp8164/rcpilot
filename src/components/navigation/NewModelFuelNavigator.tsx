@@ -6,7 +6,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const NewModelFuelStack = createNativeStackNavigator<NewModelFuelNavigatorParamList>();
+const NewModelFuelStack =
+  createNativeStackNavigator<NewModelFuelNavigatorParamList>();
 
 const NewModelFuelNavigator = () => {
   const theme = useTheme();

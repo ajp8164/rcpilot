@@ -44,7 +44,13 @@ export const EmptyView = ({
           />
         ) : (
           <Icon
-            name={error ? 'triangle-exclamation' : info ? 'circle-info' : 'magnifying-glass'}
+            name={
+              error
+                ? 'triangle-exclamation'
+                : info
+                  ? 'circle-info'
+                  : 'magnifying-glass'
+            }
             size={45}
             color={theme.colors.midGray}
           />

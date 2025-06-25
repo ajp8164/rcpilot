@@ -8,7 +8,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const ModelFiltersStack = createNativeStackNavigator<ModelFiltersNavigatorParamList>();
+const ModelFiltersStack =
+  createNativeStackNavigator<ModelFiltersNavigatorParamList>();
 
 const ModelFiltersNavigator = () => {
   const theme = useTheme();

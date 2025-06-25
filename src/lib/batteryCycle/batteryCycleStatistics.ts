@@ -62,7 +62,8 @@ export const batteryCycleStatisticsData = (cycle: BatteryCycle) => {
   if (cycle.discharge && cycle.charge) {
     const averageDischargeCurrent =
       cycle.battery.capacity && c.value.chargeToCapacity
-        ? (cycle.battery.capacity * c.value.chargeToCapacity) / (cycle.discharge?.duration / 60) // mA/min
+        ? (cycle.battery.capacity * c.value.chargeToCapacity) /
+          (cycle.discharge?.duration / 60) // mA/min
         : 0;
     const dischargeBy80Percent = c.value.chargeToCapacity
       ? (cycle.discharge.duration / c.value.chargeToCapacity) * 0.8 // Seconds
@@ -75,7 +76,9 @@ export const batteryCycleStatisticsData = (cycle: BatteryCycle) => {
       },
       string: {
         averageDischargeCurrent: `${Math.trunc(averageDischargeCurrent)} mA`,
-        dischargeBy80Percent: secondsToFormat(dischargeBy80Percent, { format: 'm:ss' }),
+        dischargeBy80Percent: secondsToFormat(dischargeBy80Percent, {
+          format: 'm:ss',
+        }),
       },
     };
   }
@@ -102,8 +105,12 @@ export const batteryCycleDischargeData = (cycle: BatteryCycle) => {
         dischargeRestingVoltage,
       },
       string: {
-        dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat('M/d/yy'),
-        dischargeDuration: secondsToFormat(dischargeDuration, { format: 'm:ss' }),
+        dischargeDate: DateTime.fromISO(cycle.discharge.date).toFormat(
+          'M/d/yy',
+        ),
+        dischargeDuration: secondsToFormat(dischargeDuration, {
+          format: 'm:ss',
+        }),
         dischargeRestingVoltage: dischargeRestingVoltage
           ? `${dischargeRestingVoltage.toFixed(1)}V`
           : 'unknown',
@@ -138,7 +145,9 @@ export const batteryCycleChargeData = (cycle: BatteryCycle) => {
   const Cr = cycle.discharge
     ? Math.round((60 / (cycle.discharge.duration / 60)) * chargeToCapacity) // C rating
     : 0;
-  const averageCurrent = cycle.battery.capacity ? cycle.battery.capacity * Cr : 0; // mA
+  const averageCurrent = cycle.battery.capacity
+    ? cycle.battery.capacity * Cr
+    : 0; // mA
 
   if (cycle.charge) {
     result = {
@@ -161,7 +170,9 @@ export const batteryCycleChargeData = (cycle: BatteryCycle) => {
             ? `${((cycle.charge.amount / cycle.battery.capacity) * 100).toFixed(1)}%`
             : '0%',
         chargeToCapacity: `${chargeToCapacity}`,
-        chargeRestingVoltage: cycle.charge.packVoltage ? `${cycle.charge.packVoltage}V` : 'unknown',
+        chargeRestingVoltage: cycle.charge.packVoltage
+          ? `${cycle.charge.packVoltage}V`
+          : 'unknown',
         Cr: `${Cr}C`,
         averageCurrent: `${(averageCurrent / 1000).toFixed(1)}A`,
       },

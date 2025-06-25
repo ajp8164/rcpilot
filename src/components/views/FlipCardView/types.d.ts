@@ -5,7 +5,9 @@ import { StyleProp, ViewStyle } from 'react-native';
 export declare type FlipCardView = FlipCardViewMethods;
 
 declare const TextView: React.MemoExoticComponent<
-  React.ForwardRefExoticComponent<FlipCardViewProps & React.RefAttributes<FlipCardViewMethods>>
+  React.ForwardRefExoticComponent<
+    FlipCardViewProps & React.RefAttributes<FlipCardViewMethods>
+  >
 >;
 
 export interface FlipCardViewProps {

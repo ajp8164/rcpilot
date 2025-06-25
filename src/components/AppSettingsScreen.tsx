@@ -1,7 +1,17 @@
-import { AppState, Linking, ScrollView, View, useColorScheme } from 'react-native';
+import {
+  AppState,
+  Linking,
+  ScrollView,
+  View,
+  useColorScheme,
+} from 'react-native';
 import { ListItem, ListItemSwitch } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { saveBiometrics, saveModelsLayout, saveThemeSettings } from 'store/slices/appSettings';
+import {
+  saveBiometrics,
+  saveModelsLayout,
+  saveThemeSettings,
+} from 'store/slices/appSettings';
 import {
   selectBiometrics,
   selectModelsLayout,
@@ -19,7 +29,10 @@ import { ModelsLayout } from 'types/preferences';
 import { useEvent } from 'lib/event';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'AppSettings'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'AppSettings'
+>;
 
 const AppSettings = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -63,7 +76,9 @@ const AppSettings = ({ navigation }: Props) => {
   }, []);
 
   const onChangeModelsLayout = (result: EnumPickerResult) => {
-    dispatch(saveModelsLayout({ presentation: result.value[0] as ModelsLayout }));
+    dispatch(
+      saveModelsLayout({ presentation: result.value[0] as ModelsLayout }),
+    );
   };
 
   const toggleAppearance = (value: boolean) => {
@@ -103,7 +118,9 @@ const AppSettings = ({ navigation }: Props) => {
 
   return (
     <View style={theme.styles.view}>
-      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior={'automatic'}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
         <Divider text={'NOTIFICATIONS'} />
         <ListItem
           title={'Push Notifications'}

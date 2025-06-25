@@ -1,4 +1,9 @@
-import { Alert, SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import {
+  Alert,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { ListItem, SectionListHeader } from 'components/atoms/List';
@@ -54,7 +59,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const models = useModelsFilter();
   const activeModels = models.filtered('retired == $0', false);
   const retiredModels = models.filtered('retired == $0', true);
-  const pilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId)) || undefined;
+  const pilot =
+    useObject(Pilot, new BSON.ObjectId(_pilot.pilotId)) || undefined;
 
   const achievementModalRef = useRef<AchievementModal>(null);
 
@@ -84,7 +90,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && (!activeModels.length || listEditor.enabled)}
+              disabled={
+                !filterId && (!activeModels.length || listEditor.enabled)
+              }
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
@@ -123,7 +131,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 icon={
                   <Icon
                     name={'plus'}
-                    style={[s.headerIcon, listEditor.enabled ? s.headerIconDisabled : {}]}
+                    style={[
+                      s.headerIcon,
+                      listEditor.enabled ? s.headerIconDisabled : {},
+                    ]}
                   />
                 }
                 onPress={() =>
@@ -141,9 +152,16 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeModels, modelsLayout, filterId, listEditor.enabled, retiredModels]);
 
-  const groupModels = (models: Realm.Results<Model>): SectionListData<Model, Section>[] => {
+  const groupModels = (
+    models: Realm.Results<Model>,
+  ): SectionListData<Model, Section>[] => {
     const groups = groupItems<Model, Section>(models, model => {
-      if (pilot && pilot.favoriteModels.find(m => m._id.toString() === model._id.toString())) {
+      if (
+        pilot &&
+        pilot.favoriteModels.find(
+          m => m._id.toString() === model._id.toString(),
+        )
+      ) {
         return `FAVORITE MODELS FOR ${pilot.name.toUpperCase()}`;
       }
       if (model.category) {
@@ -151,7 +169,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       }
       return `${model.type.toUpperCase()}S`;
     }).sort((a, b) => {
-      return a.title?.includes('FAVORITE') ? -1 : b.title?.includes('FAVORITE') ? 1 : 0;
+      return a.title?.includes('FAVORITE')
+        ? -1
+        : b.title?.includes('FAVORITE')
+          ? 1
+          : 0;
     });
 
     return groups;
@@ -222,7 +244,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <ModelPostCard
         model={model}
         pilot={pilot}
-        onPressAchievements={(pilot, model) => achievementModalRef.current?.present(pilot, model)}
+        onPressAchievements={(pilot, model) =>
+          achievementModalRef.current?.present(pilot, model)
+        }
         onPressEditModel={() =>
           navigation.navigate('ModelEditor', {
             modelId: model._id.toString(),
@@ -301,7 +325,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   }
 
   if (
-    (filterId && listModels === 'all' && !activeModels.length && !retiredModels.length) ||
+    (filterId &&
+      listModels === 'all' &&
+      !activeModels.length &&
+      !retiredModels.length) ||
     (filterId && listModels === 'retired' && !retiredModels.length)
   ) {
     return <EmptyView message={'No Models Match Your Filter'} />;
@@ -309,7 +336,11 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   if (!filterId && !activeModels.length && !retiredModels.length) {
     return (
-      <EmptyView info message={'No Models'} details={'Tap the + button to add your first model.'} />
+      <EmptyView
+        info
+        message={'No Models'}
+        details={'Tap the + button to add your first model.'}
+      />
     );
   }
 
@@ -320,7 +351,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           models={activeModels}
           pilot={pilot}
           onStartNewEventSequence={confirmStartNewEventSequence}
-          onPressAchievements={(pilot, model) => achievementModalRef.current?.present(pilot, model)}
+          onPressAchievements={(pilot, model) =>
+            achievementModalRef.current?.present(pilot, model)
+          }
         />
       ) : (
         <SectionList
@@ -332,14 +365,18 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             s.sectionList,
             modelsLayout === ModelsLayout.PostCards ? s.noPadding : {},
           ]}
-          sections={groupModels(listModels === 'retired' ? retiredModels : activeModels)}
+          sections={groupModels(
+            listModels === 'retired' ? retiredModels : activeModels,
+          )}
           keyExtractor={item => item._id.toString()}
           renderItem={section =>
             modelsLayout === ModelsLayout.PostCards && listModels !== 'retired'
               ? renderModelPostCard(section)
               : renderModelListItem(section)
           }
-          renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+          renderSectionHeader={({ section: { title } }) => (
+            <SectionListHeader title={title} />
+          )}
           ListFooterComponent={renderInactive()}
         />
       )}

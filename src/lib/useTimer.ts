@@ -19,7 +19,10 @@ const timerModeAlertPhrase: TimerEventAlertPhrase = {
 
 // All duration values are in milliseconds.
 
-export const useTimer = (onTimerTick: (state: TimerState) => void, opts?: TimerOptions) => {
+export const useTimer = (
+  onTimerTick: (state: TimerState) => void,
+  opts?: TimerOptions,
+) => {
   const callback = useRef(onTimerTick).current;
   const errorCallback = useRef(opts?.errorCallback).current;
 
@@ -101,7 +104,9 @@ export const useTimer = (onTimerTick: (state: TimerState) => void, opts?: TimerO
 
     if (mode === TimerMode.Armed || mode === TimerMode.Paused) {
       startTime.current = DateTime.now();
-      expected.current = startTime.current.plus({ milliseconds: interval.current });
+      expected.current = startTime.current.plus({
+        milliseconds: interval.current,
+      });
       timeout.current = setTimeout(onTick, interval.current);
       setMode(TimerMode.Running);
     }
@@ -139,7 +144,9 @@ export const useTimer = (onTimerTick: (state: TimerState) => void, opts?: TimerO
     tickCount.current += 1;
     let drift = 0;
     if (expected.current) {
-      drift = DateTime.now().diff(expected.current, ['milliseconds']).milliseconds;
+      drift = DateTime.now().diff(expected.current, [
+        'milliseconds',
+      ]).milliseconds;
 
       if (drift > interval.current) {
         errorCallback && errorCallback();
@@ -152,22 +159,29 @@ export const useTimer = (onTimerTick: (state: TimerState) => void, opts?: TimerO
         newMode = allowOvertime.current ? TimerMode.Running : TimerMode.Expired;
         setMode(newMode);
         inOvertime.current = true;
-      } else if (tickCount.current * interval.current === initialValue.current) {
+      } else if (
+        tickCount.current * interval.current ===
+        initialValue.current
+      ) {
         alert(TimerEvent.Expired);
       }
     }
 
     if (newMode !== TimerMode.Expired) {
-      expected.current = expected.current?.plus({ milliseconds: interval.current });
+      expected.current = expected.current?.plus({
+        milliseconds: interval.current,
+      });
       timeout.current = setTimeout(onTick, interval.current - drift);
     }
 
     // Timer value is same as timer elapsed for count up timer.
     // Timer value goes negative for timer in overtime (countdown timer).
     if (endTime.current) {
-      value.current = initialValue.current - tickCount.current * interval.current;
+      value.current =
+        initialValue.current - tickCount.current * interval.current;
     } else {
-      value.current = initialValue.current + tickCount.current * interval.current;
+      value.current =
+        initialValue.current + tickCount.current * interval.current;
     }
 
     setTick(tickCount.current);

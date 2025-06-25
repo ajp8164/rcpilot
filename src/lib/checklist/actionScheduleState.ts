@@ -40,7 +40,9 @@ function actionRepeatingScheduleState(
   let freq = '';
   let due: JChecklistActionScheduleDue = { value: 0, units: 'days', now: true };
 
-  if (schedule.period === ChecklistActionRepeatingScheduleFrequency.ModelMinutes) {
+  if (
+    schedule.period === ChecklistActionRepeatingScheduleFrequency.ModelMinutes
+  ) {
     times = schedule.value.toString();
     freq = ` minute${schedule.value === 1 ? '' : 's'} of model time`;
   } else {
@@ -115,14 +117,19 @@ function actionRepeatingScheduleState(
         } else if (minutesSinceLastPerformed >= schedule.value) {
           // Action is due
           const minutesPastDue = schedule.value - minutesSinceLastPerformed;
-          const modelAverageEventDurationMins = modelTotalTime / model.statistics.totalEvents;
-          const estEvents = Math.round(minutesPastDue / modelAverageEventDurationMins);
+          const modelAverageEventDurationMins =
+            modelTotalTime / model.statistics.totalEvents;
+          const estEvents = Math.round(
+            minutesPastDue / modelAverageEventDurationMins,
+          );
           due = { value: estEvents, units: 'events', now: true };
         } else {
           // Action is not due
-          const modelAverageEventDurationMins = modelTotalTime / model.statistics.totalEvents;
+          const modelAverageEventDurationMins =
+            modelTotalTime / model.statistics.totalEvents;
           const estEvents = Math.round(
-            (schedule.value - minutesSinceLastPerformed) / modelAverageEventDurationMins,
+            (schedule.value - minutesSinceLastPerformed) /
+              modelAverageEventDurationMins,
           );
           due = { value: estEvents, units: 'events', now: false };
         }
@@ -190,25 +197,35 @@ function actionNonRepeatingScheduleState(
       due = { value: 0, units: 'events', now: false };
     } else {
       dueStr =
-        schedule.following || checklistType === ChecklistType.OneTimeMaintenance ? 'Due now' : '';
+        schedule.following || checklistType === ChecklistType.OneTimeMaintenance
+          ? 'Due now'
+          : '';
       due = { value: 0, units: 'days', now: true };
     }
   } else {
     value = `${schedule.value} `;
-    timeframe = schedule.period.replace('Events', eventKind(model?.type).namePlural.toLowerCase());
+    timeframe = schedule.period.replace(
+      'Events',
+      eventKind(model?.type).namePlural.toLowerCase(),
+    );
     timeframe = schedule.value === 1 ? timeframe.replace(/s$/, '') : timeframe;
     timeframe = timeframe.toLowerCase();
 
     // MODEL MINUTES
-    if (schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.ModelMinutes) {
+    if (
+      schedule.period ===
+      ChecklistActionNonRepeatingScheduleTimeframe.ModelMinutes
+    ) {
       timeframe = 'minutes';
-      timeframe = schedule.value === 1 ? timeframe.replace(/s$/, '') : timeframe;
+      timeframe =
+        schedule.value === 1 ? timeframe.replace(/s$/, '') : timeframe;
 
       if (model && schedule.following !== undefined) {
         after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToFormat(schedule.following, { format: 'm:ss' })}`;
 
         const targetMinute = parseInt(schedule.following, 10) + schedule.value;
-        const estMinutes = targetMinute - Math.trunc(model.statistics.totalTime / 60);
+        const estMinutes =
+          targetMinute - Math.trunc(model.statistics.totalTime / 60);
 
         if (history.length) {
           dueStr = 'Has already been performed';
@@ -230,7 +247,8 @@ function actionNonRepeatingScheduleState(
             model.statistics.totalTime / model.statistics.totalEvents;
 
           if (modelAverageEventDuration) {
-            estEvents = modelAverageEventDuration / parseInt(schedule.following, 10);
+            estEvents =
+              modelAverageEventDuration / parseInt(schedule.following, 10);
           }
 
           if (estEvents === 0) {
@@ -248,11 +266,14 @@ function actionNonRepeatingScheduleState(
       }
 
       // EVENTS
-    } else if (schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.Events) {
+    } else if (
+      schedule.period === ChecklistActionNonRepeatingScheduleTimeframe.Events
+    ) {
       if (model && schedule.following !== undefined) {
         after = ` after ${eventKind(model?.type).name.toLowerCase()} #${schedule.following}`;
 
-        const targetEvent = parseInt(schedule.following, 10) + (schedule.value - 1);
+        const targetEvent =
+          parseInt(schedule.following, 10) + (schedule.value - 1);
         const estEvents = targetEvent - model.statistics.totalEvents;
 
         if (history.length) {
@@ -263,11 +284,13 @@ function actionNonRepeatingScheduleState(
           due = { value: 0, units: 'events', now: true };
         } else if (estEvents < 0) {
           dueStr = `Past due by ${Math.abs(estEvents)} ${eventKind(model.type).namePlural.toLowerCase()}`;
-          dueStr = Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
+          dueStr =
+            Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
           due = { value: estEvents, units: 'events', now: true };
         } else {
           dueStr = `Due in ${estEvents} ${eventKind(model.type).namePlural.toLowerCase()}`;
-          dueStr = Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
+          dueStr =
+            Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
           due = { value: estEvents, units: 'events', now: false };
         }
       } else {

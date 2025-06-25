@@ -8,10 +8,10 @@ export const initialAppState = Object.freeze<AppState>({
   storageSchemaVersion: 0,
 });
 
-const handleSaveSchemaVersion: CaseReducer<AppState, PayloadAction<{ version: number }>> = (
-  state,
-  { payload },
-) => {
+const handleSaveSchemaVersion: CaseReducer<
+  AppState,
+  PayloadAction<{ version: number }>
+> = (state, { payload }) => {
   return {
     ...state,
     storageSchemaVersion: payload.version,

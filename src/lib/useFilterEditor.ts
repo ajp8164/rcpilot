@@ -19,11 +19,20 @@ export interface FilterEditorInterface<T> {
   generalFilterName: string;
 }
 
-export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorInterface<T>) => {
-  const { filterId, filterType, defaultFilter, filterValueLabels, generalFilterName } = props;
+export const useFilterEditor = <T extends AnyFilterValues>(
+  props: FilterEditorInterface<T>,
+) => {
+  const {
+    filterId,
+    filterType,
+    defaultFilter,
+    filterValueLabels,
+    generalFilterName,
+  } = props;
 
   const realm = useRealm();
-  const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
+  const navigation: NavigationProp<MultipleNavigatorParamList> =
+    useNavigation();
   const setScreenEditHeader = useScreenEditHeader();
 
   const filter = useObject(Filter, new BSON.ObjectId(filterId));
@@ -69,7 +78,9 @@ export const useFilterEditor = <T extends AnyFilterValues>(props: FilterEditorIn
       enabled: canSave,
       visible: !createSavedFilter || (createSavedFilter && !!customName),
       label:
-        (createSavedFilter && customName?.length) || name !== generalFilterName ? 'Save' : 'Update',
+        (createSavedFilter && customName?.length) || name !== generalFilterName
+          ? 'Save'
+          : 'Update',
       action: onDone,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -8,13 +8,17 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { UnitSystem } from 'types/common';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesBasics'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'PreferencesBasics'
+>;
 
 const PreferencesBasicsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
 
   const [timerDimsScreenEnabled, setTimerDimsScreenEnabled] = useState(false);
-  const [resetFilterSystemEnabled, setResetFilterSystemEnabled] = useState(false);
+  const [resetFilterSystemEnabled, setResetFilterSystemEnabled] =
+    useState(false);
 
   const toggleTimerDimsScreen = (value: boolean) => {
     setTimerDimsScreenEnabled(value);

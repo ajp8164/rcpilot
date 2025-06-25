@@ -8,7 +8,11 @@ import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { Model } from 'realmdb';
 import { modelMaintenanceIsDue, modelSummary, modelTypeIcons } from 'lib/model';
 import { SvgXml } from 'react-native-svg';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useRealm } from '@realm/react';
 import { useDispatch } from 'react-redux';
@@ -65,7 +69,11 @@ export const ModelListItem = ({
       leftImage={
         <View style={s.modelIconContainer}>
           {model.image ? (
-            <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+            <Image
+              source={{ uri: model.image }}
+              resizeMode={'cover'}
+              style={s.modelImage}
+            />
           ) : (
             <View style={s.modelSvgContainer}>
               <SvgXml
@@ -129,7 +137,9 @@ export const ModelListItem = ({
           },
         ],
       }}
-      onSwipeableWillOpen={() => listEditor.onItemWillOpen('models', model._id.toString())}
+      onSwipeableWillOpen={() =>
+        listEditor.onItemWillOpen('models', model._id.toString())
+      }
       onSwipeableWillClose={listEditor.onItemWillClose}
     />
   );

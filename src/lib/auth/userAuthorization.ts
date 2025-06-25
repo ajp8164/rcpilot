@@ -1,7 +1,15 @@
 import { User, UserProfile, UserRole, UserStatus } from 'types/user';
-import { addUser, cancelAllFirestoreSubscriptions, getUser, updateUser } from 'firebase/firestore';
+import {
+  addUser,
+  cancelAllFirestoreSubscriptions,
+  getUser,
+  updateUser,
+} from 'firebase/firestore';
 import { getUserAvatarColor, getUserInitials } from 'lib/user';
-import { removePushNotificationsFromUser, setupPushNotificationsForUser } from 'lib/notifications';
+import {
+  removePushNotificationsFromUser,
+  setupPushNotificationsForUser,
+} from 'lib/notifications';
 
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { listenForChangesToMyUserProfile } from 'lib/listeners';
@@ -32,7 +40,10 @@ export const useAuthorizeUser = () => {
         .then(userProfile => {
           if (!userProfile) {
             // Add user to firestore and set user.
-            const profile = createProfile(credentials, theme.colors.avatarColors);
+            const profile = createProfile(
+              credentials,
+              theme.colors.avatarColors,
+            );
 
             addUser(profile)
               .then(() => {
@@ -40,7 +51,9 @@ export const useAuthorizeUser = () => {
                 const user = setUser(credentials, profile);
                 postSignInActions(user.profile).then(userProfile => {
                   result?.onAuthorized && result.onAuthorized(userProfile);
-                  log.debug(`User sign in complete: ${JSON.stringify(userProfile)}`);
+                  log.debug(
+                    `User sign in complete: ${JSON.stringify(userProfile)}`,
+                  );
                 });
               })
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -57,17 +70,22 @@ export const useAuthorizeUser = () => {
                   : credentials?.photoURL !== null
                     ? credentials?.photoURL
                     : '',
-                photoUrlDefault: credentials?.photoURL !== null ? credentials?.photoURL : '',
+                photoUrlDefault:
+                  credentials?.photoURL !== null ? credentials?.photoURL : '',
               }) as UserProfile;
 
               if (!lodash.isEqual(updatedProfile, userProfile)) {
                 updateUser(updatedProfile)
                   .then(() => {
-                    log.debug(`User profile updated: ${JSON.stringify(updatedProfile)}`);
+                    log.debug(
+                      `User profile updated: ${JSON.stringify(updatedProfile)}`,
+                    );
                     const user = setUser(credentials, updatedProfile);
                     postSignInActions(user.profile).then(userProfile => {
                       result?.onAuthorized && result.onAuthorized(userProfile);
-                      log.debug(`User sign in complete: ${JSON.stringify(userProfile)}`);
+                      log.debug(
+                        `User sign in complete: ${JSON.stringify(userProfile)}`,
+                      );
                     });
                   })
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -79,7 +97,9 @@ export const useAuthorizeUser = () => {
                 const user = setUser(credentials, userProfile);
                 postSignInActions(user.profile).then(userProfile => {
                   result?.onAuthorized && result.onAuthorized(userProfile);
-                  log.debug(`User sign in complete: ${JSON.stringify(userProfile)}`);
+                  log.debug(
+                    `User sign in complete: ${JSON.stringify(userProfile)}`,
+                  );
                 });
               }
             } else {
@@ -104,7 +124,10 @@ export const useAuthorizeUser = () => {
   };
 };
 
-const createProfile = (credentials: FirebaseAuthTypes.User, colors: string[]): UserProfile => {
+const createProfile = (
+  credentials: FirebaseAuthTypes.User,
+  colors: string[],
+): UserProfile => {
   const firstName = credentials.displayName?.split(' ')[0] || '';
   const lastName = credentials.displayName?.split(' ')[1] || '';
   return {
@@ -145,7 +168,9 @@ const useSetUser = () => {
   };
 };
 
-const postSignInActions = async (userProfile: UserProfile): Promise<UserProfile> => {
+const postSignInActions = async (
+  userProfile: UserProfile,
+): Promise<UserProfile> => {
   listenForChangesToMyUserProfile();
   return await setupPushNotificationsForUser(userProfile);
 };

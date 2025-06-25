@@ -23,7 +23,8 @@ export type ScreenEditHeaderAction = {
  */
 export const useScreenEditHeader = () => {
   const theme = useTheme();
-  const navigation: NavigationProp<MultipleNavigatorParamList> = useNavigation();
+  const navigation: NavigationProp<MultipleNavigatorParamList> =
+    useNavigation();
 
   const setScreenEditHeader = (
     rightButton?: ScreenEditHeaderAction,
@@ -38,12 +39,19 @@ export const useScreenEditHeader = () => {
           // eslint-disable-next-line react/react-in-jsx-scope
           <Button
             title={leftButton?.label || 'Cancel'}
-            titleStyle={[theme.styles.buttonScreenHeaderTitle, leftButton?.style]}
+            titleStyle={[
+              theme.styles.buttonScreenHeaderTitle,
+              leftButton?.style,
+            ]}
             buttonStyle={theme.styles.buttonScreenHeader}
-            disabled={leftButton?.enabled !== undefined ? !leftButton.enabled : false}
+            disabled={
+              leftButton?.enabled !== undefined ? !leftButton.enabled : false
+            }
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() =>
-              leftButton && leftButton.action ? leftButton.action() : navigation.goBack()
+              leftButton && leftButton.action
+                ? leftButton.action()
+                : navigation.goBack()
             }
           />
         );
@@ -56,9 +64,14 @@ export const useScreenEditHeader = () => {
           // eslint-disable-next-line react/react-in-jsx-scope
           <Button
             title={rightButton?.label || 'Save'}
-            titleStyle={[theme.styles.buttonScreenHeaderTitle, rightButton?.style]}
+            titleStyle={[
+              theme.styles.buttonScreenHeaderTitle,
+              rightButton?.style,
+            ]}
             buttonStyle={theme.styles.buttonScreenHeader}
-            disabled={rightButton?.enabled !== undefined ? !rightButton.enabled : false}
+            disabled={
+              rightButton?.enabled !== undefined ? !rightButton.enabled : false
+            }
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() =>
               rightButton && rightButton.action

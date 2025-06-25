@@ -1,5 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
-import { ChimeAfterExpiring, ChimeWhileArmed, ChimeWhileRunning } from 'types/event';
+import {
+  ChimeAfterExpiring,
+  ChimeWhileArmed,
+  ChimeWhileRunning,
+} from 'types/event';
 import React, { useState } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -11,7 +15,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { makeStyles } from '@rn-vui/themed';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesChimeCues'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'PreferencesChimeCues'
+>;
 
 const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
   const theme = useTheme();

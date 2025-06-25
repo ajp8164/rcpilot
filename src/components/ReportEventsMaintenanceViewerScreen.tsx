@@ -1,6 +1,13 @@
 import { AppTheme, useTheme } from 'theme';
 import { rql } from 'components/molecules/filters';
-import { FlatList, ListRenderItem, ScrollView, Text, View, ViewStyle } from 'react-native';
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollView,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { useObject, useQuery } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -29,14 +36,30 @@ type ColumnDef = {
 };
 
 const columns: ColumnDef[] = [
-  { field: 'number', headerName: 'No.', style: { width: 80, alignItems: 'center' } },
+  {
+    field: 'number',
+    headerName: 'No.',
+    style: { width: 80, alignItems: 'center' },
+  },
   { field: 'date', headerName: 'Date', style: { width: 175 } },
   { field: 'eventStyle', headerName: 'Style', style: { width: 150 } },
   { field: 'modelName', headerName: 'Model', style: { width: 100 } },
   { field: 'batteryName', headerName: 'Battery', style: { width: 200 } },
-  { field: 'duration', headerName: 'Duration', style: { width: 80, alignItems: 'flex-end' } },
-  { field: 'totalTime', headerName: 'Total Time', style: { width: 100, alignItems: 'flex-end' } },
-  { field: 'outcome', headerName: 'Outcome', style: { width: 130, alignItems: 'center' } },
+  {
+    field: 'duration',
+    headerName: 'Duration',
+    style: { width: 80, alignItems: 'flex-end' },
+  },
+  {
+    field: 'totalTime',
+    headerName: 'Total Time',
+    style: { width: 100, alignItems: 'flex-end' },
+  },
+  {
+    field: 'outcome',
+    headerName: 'Outcome',
+    style: { width: 130, alignItems: 'center' },
+  },
   { field: 'operatorName', headerName: 'Name', style: { width: 200 } },
   { field: 'notes', headerName: 'Notes', style: { width: 400 } },
 ];
@@ -59,13 +82,19 @@ export type Props = NativeStackScreenProps<
   'ReportEventsMaintenanceViewer'
 >;
 
-const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }: Props) => {
+const ReportEventsMaintenanceViewerScreen = ({
+  route,
+  navigation: _navigation,
+}: Props) => {
   const { reportId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
+  const report = useObject(
+    EventsMaintenanceReport,
+    new BSON.ObjectId(reportId),
+  );
   const values = report?.eventsFilter?.values as ReportEventFilterValues;
   const [rows, setRows] = useState<RowData[]>([]);
 
@@ -112,7 +141,9 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
 
     cycles.forEach(cycle => {
       const name = cycle.battery.name || '---';
-      const cycleNo = cycle.battery.name ? 'Cycle ' + cycle.cycleNumber + ':' : undefined;
+      const cycleNo = cycle.battery.name
+        ? 'Cycle ' + cycle.cycleNumber + ':'
+        : undefined;
       const adc1 = cycle.battery
         ? batteryStatistics(cycle.battery)?.string.averageDischargeCurrent
         : '?';
@@ -151,8 +182,14 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
           // Value is a string or react node.
           const value = row[col.field as keyof RowData];
           return (
-            <View key={`${index}`} style={[col.style, index % 2 === 1 ? s.striped : {}]}>
-              {typeof value === 'string' ? <Text style={[s.cell, s.text]}>{value}</Text> : value}
+            <View
+              key={`${index}`}
+              style={[col.style, index % 2 === 1 ? s.striped : {}]}>
+              {typeof value === 'string' ? (
+                <Text style={[s.cell, s.text]}>{value}</Text>
+              ) : (
+                value
+              )}
             </View>
           );
         })}
@@ -172,7 +209,9 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation: _navigation }:
         captureMode={'mount'}
         options={{ width: 1650 }}>
         <View style={s.reportHeader}>
-          <Text style={theme.styles.textHeading5}>{'Event/Maintenance Report'}</Text>
+          <Text style={theme.styles.textHeading5}>
+            {'Event/Maintenance Report'}
+          </Text>
           <Text style={theme.styles.textNormal}>
             {DateTime.now().toFormat("MMMM dd, yyyy 'at' h:m a")}
           </Text>

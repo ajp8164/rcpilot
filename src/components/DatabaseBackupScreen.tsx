@@ -17,7 +17,10 @@ import { DatabaseInfoContext } from 'lib/database';
 import { Directory, listFiles } from 'firebase/storage/operations';
 import { appConfig } from 'config';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseBackup'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'DatabaseBackup'
+>;
 
 const DatabaseBackupScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -42,7 +45,9 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
       onSuccess: dir => {
         setDir(dir);
         setBackupAllowed(
-          dir && dir?.allocated + databaseInfo.databaseSize < appConfig.storageAllocation,
+          dir &&
+            dir?.allocated + databaseInfo.databaseSize <
+              appConfig.storageAllocation,
         );
       },
     });
@@ -88,7 +93,10 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
         title={'Create Full Backup'}
         value={
           backupAllowed ? (
-            <ActivityIndicator color={theme.colors.brandPrimary} animating={isBackingUp} />
+            <ActivityIndicator
+              color={theme.colors.brandPrimary}
+              animating={isBackingUp}
+            />
           ) : (
             'At storage limit'
           )
@@ -108,10 +116,18 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
       />
       <Divider note text={note} />
       <Divider text={'TEXT EXPORT & IMPORT'} />
-      <ListItem title={'Export to Text File...'} position={['first', 'last']} rightImage={false} />
+      <ListItem
+        title={'Export to Text File...'}
+        position={['first', 'last']}
+        rightImage={false}
+      />
       <Divider />
       <ListItem title={'Import from Text File'} position={['first']} />
-      <ListItem title={'Save Import Template...'} position={['last']} rightImage={false} />
+      <ListItem
+        title={'Save Import Template...'}
+        position={['last']}
+        rightImage={false}
+      />
       <Divider />
     </ScrollView>
   );

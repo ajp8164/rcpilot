@@ -13,7 +13,10 @@ import { View } from 'react-native';
 import { useObject } from '@realm/react';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'MaintenanceAction'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'MaintenanceAction'
+>;
 
 const MaintenanceActionScreen = ({ route }: Props) => {
   const { modelId, checklistRefId, actionRefId } = route.params;
@@ -21,14 +24,18 @@ const MaintenanceActionScreen = ({ route }: Props) => {
   const theme = useTheme();
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
-  const checklist = useRef(model?.checklists.find(c => c.refId === checklistRefId)).current;
-  const action = useRef(checklist?.actions.find(a => a.refId === actionRefId)).current;
+  const checklist = useRef(
+    model?.checklists.find(c => c.refId === checklistRefId),
+  ).current;
+  const action = useRef(
+    checklist?.actions.find(a => a.refId === actionRefId),
+  ).current;
 
   const lastTimePerformed = (action: ChecklistAction) => {
     if (action.history.length) {
-      return DateTime.fromISO(action.history[action.history.length - 1].date).toFormat(
-        'MMM d, yyyy',
-      );
+      return DateTime.fromISO(
+        action.history[action.history.length - 1].date,
+      ).toFormat('MMM d, yyyy');
     }
     return 'never';
   };

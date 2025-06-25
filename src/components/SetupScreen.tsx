@@ -1,6 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
 import React, { useContext, useEffect } from 'react';
-import { SetupNavigatorParamList, TabNavigatorParamList } from 'types/navigation';
+import {
+  SetupNavigatorParamList,
+  TabNavigatorParamList,
+} from 'types/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useObject, useRealm } from '@realm/react';
 
@@ -63,12 +66,16 @@ const SetupScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const onChangeDatabaseAccessWith = (result: EnumPickerResult) => {
-    dispatch(saveDatabaseAccessWith({ value: result.value[0] as DatabaseAccessWith }));
+    dispatch(
+      saveDatabaseAccessWith({ value: result.value[0] as DatabaseAccessWith }),
+    );
   };
 
   const clearPilot = () => {
     // Replace current pilot with unknown pilot.
-    const unknownPilot = realm.objects(Pilot).filtered('unknownPilot == true')[0];
+    const unknownPilot = realm
+      .objects(Pilot)
+      .filtered('unknownPilot == true')[0];
     dispatch(
       saveSelectedPilot({
         pilotId: unknownPilot._id.toString(),
@@ -108,7 +115,11 @@ const SetupScreen = ({ navigation, route }: Props) => {
       )}
       <ListItem
         title={'Select or Create a Pilot...'}
-        position={selectedPilot && !selectedPilot.unknownPilot ? ['last'] : ['first', 'last']}
+        position={
+          selectedPilot && !selectedPilot.unknownPilot
+            ? ['last']
+            : ['first', 'last']
+        }
         onPress={() => navigation.navigate('Pilots')}
       />
       <Divider text={'GLOBALS'} />
@@ -122,10 +133,22 @@ const SetupScreen = ({ navigation, route }: Props) => {
           })
         }
       />
-      <ListItem title={'Event Styles'} onPress={() => navigation.navigate('EventStyles')} />
-      <ListItem title={'Model Categories'} onPress={() => navigation.navigate('ModelCategories')} />
-      <ListItem title={'Model Fuels'} onPress={() => navigation.navigate('ModelFuels')} />
-      <ListItem title={'Model Propellers'} onPress={() => navigation.navigate('ModelPropellers')} />
+      <ListItem
+        title={'Event Styles'}
+        onPress={() => navigation.navigate('EventStyles')}
+      />
+      <ListItem
+        title={'Model Categories'}
+        onPress={() => navigation.navigate('ModelCategories')}
+      />
+      <ListItem
+        title={'Model Fuels'}
+        onPress={() => navigation.navigate('ModelFuels')}
+      />
+      <ListItem
+        title={'Model Propellers'}
+        onPress={() => navigation.navigate('ModelPropellers')}
+      />
       <ListItem
         title={'List Templates'}
         position={['last']}
@@ -159,7 +182,10 @@ const SetupScreen = ({ navigation, route }: Props) => {
           onPress={() => navigation.navigate('WebServerAccess')}
         />
       )} */}
-      <ListItem title={'Backup & Export'} onPress={() => navigation.navigate('DatabaseBackup')} />
+      <ListItem
+        title={'Backup & Export'}
+        onPress={() => navigation.navigate('DatabaseBackup')}
+      />
       <ListItem
         title={'Reporting'}
         position={['last']}
@@ -192,7 +218,9 @@ const SetupScreen = ({ navigation, route }: Props) => {
       {userProfile ? (
         <ListItem
           title={userProfile.name || userProfile.email || 'My Account'}
-          leftImage={<ChatAvatar userProfile={userProfile} avatarStyle={s.avatar} />}
+          leftImage={
+            <ChatAvatar userProfile={userProfile} avatarStyle={s.avatar} />
+          }
           position={['first', 'last']}
           onPress={() => navigation.navigate('UserAccount')}
         />

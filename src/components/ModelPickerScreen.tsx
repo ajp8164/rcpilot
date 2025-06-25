@@ -1,6 +1,16 @@
 import { AppTheme, useTheme } from 'theme';
-import { Image, SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
-import { ListItemCheckbox, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import {
+  Image,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
+import {
+  ListItemCheckbox,
+  SectionListHeader,
+  listItemPosition,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { modelSummary, modelTypeIcons } from 'lib/model';
 
@@ -33,7 +43,10 @@ type Section = {
   data: Model[];
 };
 
-export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'ModelPicker'>;
+export type Props = NativeStackScreenProps<
+  MultipleNavigatorParamList,
+  'ModelPicker'
+>;
 
 const ModelPickerScreen = ({ navigation, route }: Props) => {
   const { mode = 'one', title, selected, eventName } = route.params;
@@ -51,8 +64,16 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
 
   const [list, setList] = useSetState<{ selected: Model[]; initial: Model[] }>({
     // Use an empty array if empty string is set.
-    selected: lodash.isArrayLike(selected) ? selected : selected ? [selected] : [],
-    initial: lodash.isArrayLike(selected) ? selected : selected ? [selected] : [],
+    selected: lodash.isArrayLike(selected)
+      ? selected
+      : selected
+        ? [selected]
+        : [],
+    initial: lodash.isArrayLike(selected)
+      ? selected
+      : selected
+        ? [selected]
+        : [],
   });
 
   useEffect(() => {
@@ -66,8 +87,14 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       model ? (selected = [model]) : (selected = []);
       setList({ selected }, { assign: true });
     } else if (model) {
-      if (list.selected.findIndex(s => s._id.toString() === model._id.toString()) > -1) {
-        selected = list.selected.filter(s => s._id.toString() !== model._id.toString());
+      if (
+        list.selected.findIndex(
+          s => s._id.toString() === model._id.toString(),
+        ) > -1
+      ) {
+        selected = list.selected.filter(
+          s => s._id.toString() !== model._id.toString(),
+        );
         setList({ selected }, { assign: true });
       } else {
         selected = list.selected.concat(model);
@@ -78,7 +105,9 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
     event.emit(eventName, { models: selected } as ModelPickerResult);
   };
 
-  const groupModels = (models: Realm.Results<Model>): SectionListData<Model, Section>[] => {
+  const groupModels = (
+    models: Realm.Results<Model>,
+  ): SectionListData<Model, Section>[] => {
     return groupItems<Model, Section>(models, model => {
       if (model.category) {
         return `${model.type.toUpperCase()} - ${model.category.name.toUpperCase()}`;
@@ -108,11 +137,17 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
         leftImage={
           <View style={s.modelIconContainer}>
             {model.image ? (
-              <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
             ) : (
               <View style={s.modelSvgContainer}>
                 <SvgXml
-                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                  xml={getColoredSvg(
+                    modelTypeIcons[model.type]?.name as string,
+                  )}
                   width={s.modelImage.width}
                   height={s.modelImage.height}
                   color={theme.colors.brandSecondary}
@@ -122,7 +157,11 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
             )}
           </View>
         }
-        checked={list.selected.findIndex(s => s._id.toString() === model._id.toString()) > -1}
+        checked={
+          list.selected.findIndex(
+            s => s._id.toString() === model._id.toString(),
+          ) > -1
+        }
         onPress={() => toggleSelect(model)}
       />
     );
@@ -130,7 +169,11 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
 
   if (!activeModels.length) {
     return (
-      <EmptyView info message={'No Models'} details={'Add your first model on the Models tab.'} />
+      <EmptyView
+        info
+        message={'No Models'}
+        details={'Add your first model on the Models tab.'}
+      />
     );
   }
 
@@ -143,7 +186,9 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       sections={groupModels(activeModels)}
       keyExtractor={item => item._id.toString()}
       renderItem={renderItem}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
     />
   );
 };

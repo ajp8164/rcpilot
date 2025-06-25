@@ -38,7 +38,13 @@ export const useModelEventStyleStatistics = () => {
     }
     // Unspecified style.
     eventStyleData.push(
-      computeEventDurationData(mode, model, newEventDuration, oldEventStyle, newEventStyle),
+      computeEventDurationData(
+        mode,
+        model,
+        newEventDuration,
+        oldEventStyle,
+        newEventStyle,
+      ),
     );
 
     return eventStyleData;
@@ -80,23 +86,31 @@ const computeEventDurationData = (
   // Update data using this event.
   // Add to the new event style, remove from the old event style.
   // The mode tells us if we should ever reduce stats in an event style.
-  if (mode === 'init' && style?._id.toString() === oldEventStyle?._id.toString()) {
+  if (
+    mode === 'init' &&
+    style?._id.toString() === oldEventStyle?._id.toString()
+  ) {
     durationData = {
       ...previousDurationData,
       eventStyleCount: 0,
       eventStyleDuration: 0,
     } as ModelEventStyleData;
-  } else if (mode === 'update' && style?._id.toString() === oldEventStyle?._id.toString()) {
+  } else if (
+    mode === 'update' &&
+    style?._id.toString() === oldEventStyle?._id.toString()
+  ) {
     durationData = {
       ...previousDurationData,
       eventStyleCount: previousDurationData.eventStyleCount - 1,
-      eventStyleDuration: previousDurationData.eventStyleDuration - newEventDuration,
+      eventStyleDuration:
+        previousDurationData.eventStyleDuration - newEventDuration,
     } as ModelEventStyleData;
   } else if (style?._id.toString() === newEventStyle?._id.toString()) {
     durationData = {
       ...previousDurationData,
       eventStyleCount: previousDurationData.eventStyleCount + 1,
-      eventStyleDuration: previousDurationData.eventStyleDuration + newEventDuration,
+      eventStyleDuration:
+        previousDurationData.eventStyleDuration + newEventDuration,
     } as ModelEventStyleData;
   }
 

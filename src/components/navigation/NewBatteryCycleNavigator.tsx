@@ -8,7 +8,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import lodash from 'lodash';
 import { useTheme } from 'theme';
 
-const NewBatteryCycleStack = createNativeStackNavigator<NewBatteryCycleNavigatorParamList>();
+const NewBatteryCycleStack =
+  createNativeStackNavigator<NewBatteryCycleNavigatorParamList>();
 
 const NewBatteryCycleNavigator = () => {
   const theme = useTheme();

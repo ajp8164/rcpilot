@@ -8,7 +8,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const MaintenanceFiltersStack = createNativeStackNavigator<MaintenanceFiltersNavigatorParamList>();
+const MaintenanceFiltersStack =
+  createNativeStackNavigator<MaintenanceFiltersNavigatorParamList>();
 
 const MaintenanceFiltersNavigator = () => {
   const theme = useTheme();

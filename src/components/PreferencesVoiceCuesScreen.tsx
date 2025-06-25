@@ -10,7 +10,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { makeStyles } from '@rn-vui/themed';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesVoiceCues'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'PreferencesVoiceCues'
+>;
 
 const PreferencesVoiceCuesScreen = ({ navigation }: Props) => {
   const theme = useTheme();

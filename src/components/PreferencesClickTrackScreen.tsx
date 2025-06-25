@@ -10,7 +10,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { Slider } from 'react-native-ui-lib';
 import { makeStyles } from '@rn-vui/themed';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesClickTrack'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'PreferencesClickTrack'
+>;
 
 const PreferencesClickTrackScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -60,7 +63,9 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
-        text={'Higher BPM values may not aloways operate smoothly  on older devices.'}
+        text={
+          'Higher BPM values may not aloways operate smoothly  on older devices.'
+        }
       />
     </ScrollView>
   );

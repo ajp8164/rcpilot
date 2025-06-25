@@ -49,8 +49,13 @@ export const batterySPCellConfigurationItems: ExtendedWheelPickerItem[][] = [
   ],
 ];
 
-const getBatteryCellArchitecture = (chemistry: BatteryChemistry): BatteryCellArchitecture => {
-  if (chemistry.includes(BatteryChemistry.NiCd) || chemistry.includes(BatteryChemistry.NiMH)) {
+const getBatteryCellArchitecture = (
+  chemistry: BatteryChemistry,
+): BatteryCellArchitecture => {
+  if (
+    chemistry.includes(BatteryChemistry.NiCd) ||
+    chemistry.includes(BatteryChemistry.NiMH)
+  ) {
     return BatteryCellArchitecture.SeriesCells;
   } else {
     return BatteryCellArchitecture.SeriesParallelCells;
@@ -69,11 +74,20 @@ export const batteryCellConfigurationToString = (
     typeof cellConfiguration[1] === 'string'
       ? parseInt(cellConfiguration[1], 10)
       : cellConfiguration[1];
-  if (getBatteryCellArchitecture(chemistry) === BatteryCellArchitecture.SeriesParallelCells) {
+  if (
+    getBatteryCellArchitecture(chemistry) ===
+    BatteryCellArchitecture.SeriesParallelCells
+  ) {
     const series =
-      sCells > 0 ? batterySPCellConfigurationItems[0][Number(sCells) - 1].labelShort || '' : '';
+      sCells > 0
+        ? batterySPCellConfigurationItems[0][Number(sCells) - 1].labelShort ||
+          ''
+        : '';
     const parallel =
-      pCells > 0 ? batterySPCellConfigurationItems[1][Number(pCells) - 1].labelShort || '' : '';
+      pCells > 0
+        ? batterySPCellConfigurationItems[1][Number(pCells) - 1].labelShort ||
+          ''
+        : '';
 
     return `${series}${parallel.length > 0 ? ' / ' : ''}${parallel}`;
   } else {
@@ -81,8 +95,13 @@ export const batteryCellConfigurationToString = (
   }
 };
 
-export const getBatteryCellConfigurationItems = (chemistry: BatteryChemistry) => {
-  if (getBatteryCellArchitecture(chemistry) === BatteryCellArchitecture.SeriesParallelCells) {
+export const getBatteryCellConfigurationItems = (
+  chemistry: BatteryChemistry,
+) => {
+  if (
+    getBatteryCellArchitecture(chemistry) ===
+    BatteryCellArchitecture.SeriesParallelCells
+  ) {
     return batterySPCellConfigurationItems;
   } else {
     return batterySCellConfigurationItems;

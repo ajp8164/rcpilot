@@ -1,5 +1,11 @@
-import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+import {
+  NewReportNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
 
 import { CompositeScreenProps } from '@react-navigation/core';
 import React from 'react';
@@ -11,7 +17,8 @@ import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportMod
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import { useTheme } from 'theme';
 
-const NewReportStack = createNativeStackNavigator<NewReportNavigatorParamList>();
+const NewReportStack =
+  createNativeStackNavigator<NewReportNavigatorParamList>();
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'NewReportNavigator'>,

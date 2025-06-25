@@ -11,63 +11,77 @@ import { makeStyles } from '@rn-vui/themed';
 
 type FlipCardView = FlipCardViewMethods;
 
-const FlipCardView = React.forwardRef<FlipCardView, FlipCardViewProps>((props, ref) => {
-  const {
-    cardStyle,
-    direction = 'y',
-    duration = 500,
-    isFlipped,
-    FrontContent,
-    BackContent,
-  } = props;
+const FlipCardView = React.forwardRef<FlipCardView, FlipCardViewProps>(
+  (props, ref) => {
+    const {
+      cardStyle,
+      direction = 'y',
+      duration = 500,
+      isFlipped,
+      FrontContent,
+      BackContent,
+    } = props;
 
-  const theme = useTheme();
-  const s = useStyles(theme);
-  const isDirectionX = direction === 'x';
+    const theme = useTheme();
+    const s = useStyles(theme);
+    const isDirectionX = direction === 'x';
 
-  useImperativeHandle(ref, () => ({
-    //  These functions exposed to the parent component through the ref.
-    flip,
-  }));
+    useImperativeHandle(ref, () => ({
+      //  These functions exposed to the parent component through the ref.
+      flip,
+    }));
 
-  const flip = () => {
-    isFlipped.value = !isFlipped.value;
-  };
-
-  const frontCardAnimatedStyle = useAnimatedStyle(() => {
-    const spinValue = interpolate(Number(isFlipped.value), [0, 1], [0, 180]);
-    const rotateValue = withTiming(`${spinValue}deg`, { duration });
-
-    return {
-      ...(spinValue === 0 ? { zIndex: 2 } : { zIndex: 1, backfaceVisibility: 'hidden' }),
-      transform: [isDirectionX ? { rotateX: rotateValue } : { rotateY: rotateValue }],
+    const flip = () => {
+      isFlipped.value = !isFlipped.value;
     };
-  });
 
-  const backCardAnimatedStyle = useAnimatedStyle(() => {
-    const spinValue = interpolate(Number(isFlipped.value), [0, 1], [180, 360]);
-    const rotateValue = withTiming(`${spinValue}deg`, { duration });
+    const frontCardAnimatedStyle = useAnimatedStyle(() => {
+      const spinValue = interpolate(Number(isFlipped.value), [0, 1], [0, 180]);
+      const rotateValue = withTiming(`${spinValue}deg`, { duration });
 
-    return {
-      ...(spinValue === 360 ? { zIndex: 2, backfaceVisibility: 'hidden' } : { zIndex: 1 }),
-      transform: [isDirectionX ? { rotateX: rotateValue } : { rotateY: rotateValue }],
-    };
-  });
+      return {
+        ...(spinValue === 0
+          ? { zIndex: 2 }
+          : { zIndex: 1, backfaceVisibility: 'hidden' }),
+        transform: [
+          isDirectionX ? { rotateX: rotateValue } : { rotateY: rotateValue },
+        ],
+      };
+    });
 
-  const ClonedFrontContent = React.cloneElement(FrontContent, { flip: flip });
-  const ClonedBackContent = React.cloneElement(BackContent, { flip: flip });
+    const backCardAnimatedStyle = useAnimatedStyle(() => {
+      const spinValue = interpolate(
+        Number(isFlipped.value),
+        [0, 1],
+        [180, 360],
+      );
+      const rotateValue = withTiming(`${spinValue}deg`, { duration });
 
-  return (
-    <Animated.View entering={FadeIn}>
-      <Animated.View style={[s.front, cardStyle, frontCardAnimatedStyle]}>
-        {ClonedFrontContent}
+      return {
+        ...(spinValue === 360
+          ? { zIndex: 2, backfaceVisibility: 'hidden' }
+          : { zIndex: 1 }),
+        transform: [
+          isDirectionX ? { rotateX: rotateValue } : { rotateY: rotateValue },
+        ],
+      };
+    });
+
+    const ClonedFrontContent = React.cloneElement(FrontContent, { flip: flip });
+    const ClonedBackContent = React.cloneElement(BackContent, { flip: flip });
+
+    return (
+      <Animated.View entering={FadeIn}>
+        <Animated.View style={[s.front, cardStyle, frontCardAnimatedStyle]}>
+          {ClonedFrontContent}
+        </Animated.View>
+        <Animated.View style={[s.back, cardStyle, backCardAnimatedStyle]}>
+          {ClonedBackContent}
+        </Animated.View>
       </Animated.View>
-      <Animated.View style={[s.back, cardStyle, backCardAnimatedStyle]}>
-        {ClonedBackContent}
-      </Animated.View>
-    </Animated.View>
-  );
-});
+    );
+  },
+);
 
 const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   front: {

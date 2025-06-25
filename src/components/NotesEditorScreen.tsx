@@ -13,7 +13,10 @@ export type NotesEditorResult = {
   extraData?: any;
 };
 
-export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'NotesEditor'>;
+export type Props = NativeStackScreenProps<
+  MultipleNavigatorParamList,
+  'NotesEditor'
+>;
 
 const NotesEditorScreen = ({ navigation, route }: Props) => {
   const { title, text, headerButtonStyle, extraData, eventName } = route.params;

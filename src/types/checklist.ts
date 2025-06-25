@@ -44,7 +44,9 @@ export enum ChecklistType {
   OneTimeMaintenance = 'One-Time Maintenance',
 }
 
-export type EventSequenceChecklistType = ChecklistType.PreEvent | ChecklistType.PostEvent;
+export type EventSequenceChecklistType =
+  | ChecklistType.PreEvent
+  | ChecklistType.PostEvent;
 
 export enum ChecklistActionScheduleType {
   NonRepeating = 'NonRepeating',

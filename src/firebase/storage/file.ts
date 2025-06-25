@@ -25,10 +25,19 @@ export const saveFile = async (args: {
   onSuccess: (url: string) => void;
   onError?: () => void;
 }) => {
-  const { file, storagePath, destFilename: dest, oldFile, onSuccess, onError } = args;
+  const {
+    file,
+    storagePath,
+    destFilename: dest,
+    oldFile,
+    onSuccess,
+    onError,
+  } = args;
   try {
     const fileType = file.mimeType.split('/')[1];
-    const destFilename = dest ? `${storagePath}${dest}` : `${storagePath}${uuidv4()}.${fileType}`;
+    const destFilename = dest
+      ? `${storagePath}${dest}`
+      : `${storagePath}${uuidv4()}.${fileType}`;
     const sourceFilename = file.uri.replace('file://', '');
     const storageRef = storage().ref(destFilename);
 

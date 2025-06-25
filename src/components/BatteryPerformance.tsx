@@ -8,7 +8,10 @@ import React from 'react';
 import { View } from 'react-native';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryPerformance'>;
+export type Props = NativeStackScreenProps<
+  BatteriesNavigatorParamList,
+  'BatteryPerformance'
+>;
 
 const BatteryPerformanceScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -20,7 +23,11 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
         actions={[
           {
             ActionComponent: (
-              <Icon name={'filter'} size={28} color={theme.colors.clearButtonText} />
+              <Icon
+                name={'filter'}
+                size={28}
+                color={theme.colors.clearButtonText}
+              />
             ),
             onPress: () =>
               navigation.navigate('EventFiltersNavigator', {
@@ -33,9 +40,14 @@ const BatteryPerformanceScreen = ({ navigation }: Props) => {
           },
           {
             ActionComponent: (
-              <Icon name={'scale-unbalanced-flip'} size={28} color={theme.colors.clearButtonText} />
+              <Icon
+                name={'scale-unbalanced-flip'}
+                size={28}
+                color={theme.colors.clearButtonText}
+              />
             ),
-            onPress: () => navigation.navigate('BatteryPerformanceComparisonPicker'),
+            onPress: () =>
+              navigation.navigate('BatteryPerformanceComparisonPicker'),
           },
           {
             label: 'Done',

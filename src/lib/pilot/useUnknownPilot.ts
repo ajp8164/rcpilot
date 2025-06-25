@@ -10,7 +10,9 @@ export const useUnknownPilot = () => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
-  const pilot = useQuery(Pilot, pilots => pilots.filtered('unknownPilot == true'));
+  const pilot = useQuery(Pilot, pilots =>
+    pilots.filtered('unknownPilot == true'),
+  );
 
   useEffect(() => {
     if (!pilot.length) {

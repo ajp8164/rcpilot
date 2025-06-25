@@ -1,8 +1,19 @@
-import { ActivityIndicator, Alert, FlatList, ListRenderItem, Platform, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  ListRenderItem,
+  Platform,
+  View,
+} from 'react-native';
 import { useTheme } from 'theme';
 import React, { useEffect, useState } from 'react';
 
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -17,7 +28,10 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import { appConfig } from 'config';
 import { EmptyView } from 'components/molecules/EmptyView';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseBackups'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'DatabaseBackups'
+>;
 
 const DatabaseBackupsScreen = () => {
   const theme = useTheme();
@@ -84,7 +98,10 @@ const DatabaseBackupsScreen = () => {
         getFiles();
       },
       onError: () => {
-        Alert.alert('Backup File Not Deleted', 'The file could not be deleted. Please try again.');
+        Alert.alert(
+          'Backup File Not Deleted',
+          'The file could not be deleted. Please try again.',
+        );
       },
     });
   };
@@ -106,7 +123,8 @@ const DatabaseBackupsScreen = () => {
         onPress={() => {
           confirmAction(restoreFromBackup, {
             label: 'Restore Database',
-            title: 'This action cannot be undone.\nAre you sure you want to restore your database?',
+            title:
+              'This action cannot be undone.\nAre you sure you want to restore your database?',
             value: file,
           });
         }}
@@ -135,7 +153,9 @@ const DatabaseBackupsScreen = () => {
       <EmptyView
         info
         message={'No Database Backups'}
-        details={'Tap Create Backup on the previous screen to backup your database.'}
+        details={
+          'Tap Create Backup on the previous screen to backup your database.'
+        }
       />
     );
   }
@@ -151,7 +171,9 @@ const DatabaseBackupsScreen = () => {
         renderItem={renderBackup}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListEmptyComponent={<ActivityIndicator color={theme.colors.brandPrimary} />}
+        ListEmptyComponent={
+          <ActivityIndicator color={theme.colors.brandPrimary} />
+        }
       />
     </View>
   );

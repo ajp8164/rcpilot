@@ -5,7 +5,10 @@ import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { revertSettings } from 'store/actions';
 
 type EventSequenceChecklistActionHistoryEntries = {
-  [key in EventSequenceChecklistType]: Record<string, JChecklistActionHistoryEntry>;
+  [key in EventSequenceChecklistType]: Record<
+    string,
+    JChecklistActionHistoryEntry
+  >;
 };
 
 export interface EventSequenceState {
@@ -39,20 +42,20 @@ const handleSetBatteries: CaseReducer<
   };
 };
 
-const handleSetDuration: CaseReducer<EventSequenceState, PayloadAction<{ duration: number }>> = (
-  state,
-  { payload },
-) => {
+const handleSetDuration: CaseReducer<
+  EventSequenceState,
+  PayloadAction<{ duration: number }>
+> = (state, { payload }) => {
   return {
     ...state,
     duration: payload.duration,
   };
 };
 
-const handleSetModel: CaseReducer<EventSequenceState, PayloadAction<{ modelId: string }>> = (
-  state,
-  { payload },
-) => {
+const handleSetModel: CaseReducer<
+  EventSequenceState,
+  PayloadAction<{ modelId: string }>
+> = (state, { payload }) => {
   return {
     ...state,
     modelId: payload.modelId,
@@ -86,7 +89,10 @@ const handleSetChecklistActionNotComplete: CaseReducer<
     checklistType: EventSequenceChecklistType;
   }>
 > = (state, { payload }) => {
-  const entries = Object.assign({}, state.checklistActionHistoryEntries[payload.checklistType]);
+  const entries = Object.assign(
+    {},
+    state.checklistActionHistoryEntries[payload.checklistType],
+  );
   delete entries[payload.checklistActionRefId];
   return {
     ...state,
@@ -100,7 +106,8 @@ const handleSetChecklistActionNotComplete: CaseReducer<
 const eventSequenceSlice = createSlice({
   name: 'eventSequence',
   initialState: initialEventSequenceState,
-  extraReducers: builder => builder.addCase(revertSettings, () => initialEventSequenceState),
+  extraReducers: builder =>
+    builder.addCase(revertSettings, () => initialEventSequenceState),
   reducers: {
     reset: handleReset,
     setBatteries: handleSetBatteries,

@@ -10,10 +10,10 @@ export const initialPilotState = Object.freeze<PilotState>({
   pilotId: undefined,
 });
 
-const handleSaveSelectedPilot: CaseReducer<PilotState, PayloadAction<{ pilotId?: string }>> = (
-  state,
-  { payload },
-) => {
+const handleSaveSelectedPilot: CaseReducer<
+  PilotState,
+  PayloadAction<{ pilotId?: string }>
+> = (state, { payload }) => {
   return {
     ...state,
     pilotId: payload.pilotId,
@@ -23,7 +23,8 @@ const handleSaveSelectedPilot: CaseReducer<PilotState, PayloadAction<{ pilotId?:
 const pilotSlice = createSlice({
   name: 'pilot',
   initialState: initialPilotState,
-  extraReducers: builder => builder.addCase(revertSettings, () => initialPilotState),
+  extraReducers: builder =>
+    builder.addCase(revertSettings, () => initialPilotState),
   reducers: {
     saveSelectedPilot: handleSaveSelectedPilot,
   },

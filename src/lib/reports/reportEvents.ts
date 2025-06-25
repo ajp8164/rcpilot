@@ -1,4 +1,8 @@
-import { DateRelation, EnumRelation, NumberRelation } from 'components/molecules/filters';
+import {
+  DateRelation,
+  EnumRelation,
+  NumberRelation,
+} from 'components/molecules/filters';
 
 import { ReportEventFilterValues } from 'types/filter';
 

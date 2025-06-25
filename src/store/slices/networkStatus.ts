@@ -30,7 +30,8 @@ const handleSaveInternetStatus: CaseReducer<
 const networkStatusSlice = createSlice({
   name: 'networkStatus',
   initialState: initialNetworkStatusState,
-  extraReducers: builder => builder.addCase(revertSettings, () => initialNetworkStatusState),
+  extraReducers: builder =>
+    builder.addCase(revertSettings, () => initialNetworkStatusState),
   reducers: {
     saveInternetStatus: handleSaveInternetStatus,
   },

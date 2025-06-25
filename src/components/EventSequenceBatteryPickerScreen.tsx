@@ -41,7 +41,10 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
     [],
   );
   const currentEventSequence = useSelector(selectEventSequence);
-  const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const model = useObject(
+    Model,
+    new BSON.ObjectId(currentEventSequence.modelId),
+  );
   const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
@@ -66,7 +69,8 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
       },
       // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
-        const hasChecklists = model && modelHasChecklists(model, ChecklistType.PreEvent);
+        const hasChecklists =
+          model && modelHasChecklists(model, ChecklistType.PreEvent);
         return (
           <Button
             title={hasChecklists ? 'Checklist' : 'Timer'}
@@ -104,7 +108,11 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   };
 
   const onSelect = (selected: Battery[]) => {
-    dispatch(eventSequence.setBatteries({ batteryIds: selected.map(b => b._id.toString()) }));
+    dispatch(
+      eventSequence.setBatteries({
+        batteryIds: selected.map(b => b._id.toString()),
+      }),
+    );
   };
 
   return (

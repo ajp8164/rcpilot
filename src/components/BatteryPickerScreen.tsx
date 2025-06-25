@@ -25,7 +25,10 @@ export type BatteryPickerResult = {
   batteries: Battery[];
 };
 
-export type Props = NativeStackScreenProps<MultipleNavigatorParamList, 'BatteryPicker'>;
+export type Props = NativeStackScreenProps<
+  MultipleNavigatorParamList,
+  'BatteryPicker'
+>;
 
 const BatteryPickerScreen = ({ navigation, route }: Props) => {
   const {
@@ -73,7 +76,8 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
 
   const onSelect = (selected: Battery[]) => {
     selectedBatteries.current = selected;
-    eventName && event.emit(eventName, { batteries: selected } as BatteryPickerResult);
+    eventName &&
+      event.emit(eventName, { batteries: selected } as BatteryPickerResult);
   };
 
   if (!pickerBatteries.length) {

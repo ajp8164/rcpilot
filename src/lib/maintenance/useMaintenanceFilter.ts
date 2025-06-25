@@ -1,5 +1,13 @@
-import { Checklist, ChecklistAction, ChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import { DateRelation, NumberRelation, StringRelation } from 'components/molecules/filters';
+import {
+  Checklist,
+  ChecklistAction,
+  ChecklistActionHistoryEntry,
+} from 'realmdb/Checklist';
+import {
+  DateRelation,
+  NumberRelation,
+  StringRelation,
+} from 'components/molecules/filters';
 
 import { BSON } from 'realm';
 import { ChecklistType } from 'types/checklist';
@@ -26,7 +34,9 @@ export const useMaintenanceFilter = (params: { modelId: string }) => {
 
   let entries: HistoryEntry[] = [];
   const maintenanceChecklists = model?.checklists.filter(
-    c => c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance,
+    c =>
+      c.type === ChecklistType.Maintenance ||
+      c.type === ChecklistType.OneTimeMaintenance,
   );
   maintenanceChecklists?.forEach(c => {
     c.actions.forEach(a => {
@@ -41,7 +51,11 @@ export const useMaintenanceFilter = (params: { modelId: string }) => {
   });
 
   entries.sort((a, b) => {
-    return a.history.date > b.history.date ? -1 : a.history.date < b.history.date ? 1 : 0;
+    return a.history.date > b.history.date
+      ? -1
+      : a.history.date < b.history.date
+        ? 1
+        : 0;
   });
 
   if (!filter) return entries;
@@ -60,7 +74,8 @@ export const useMaintenanceFilter = (params: { modelId: string }) => {
   });
 
   entries = entries.filter(e => {
-    if (!e.history.cost && filter.costs.relation === NumberRelation.Any) return true;
+    if (!e.history.cost && filter.costs.relation === NumberRelation.Any)
+      return true;
     if (!e.history.cost) return false;
     switch (filter.costs.relation) {
       case NumberRelation.LT:

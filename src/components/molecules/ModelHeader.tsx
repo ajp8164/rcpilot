@@ -7,7 +7,11 @@ import Animated, {
 import { AppTheme, useTheme } from 'theme';
 import { Image, Platform, Pressable, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { getColoredSvg, useSelectAttachments, viewport } from '@react-native-ajp-elements/ui';
+import {
+  getColoredSvg,
+  useSelectAttachments,
+  viewport,
+} from '@react-native-ajp-elements/ui';
 
 import { BSON } from 'realm';
 import CircleButton from 'components/atoms/CircleButton';
@@ -63,7 +67,12 @@ export const ModelHeader = ({
   const backgroundTranslateY = useAnimatedStyle(() => {
     if (!scrollY) return {};
     return {
-      height: interpolate(scrollY.value, [0, 40], [maxHeight, minHeight], Extrapolation.CLAMP),
+      height: interpolate(
+        scrollY.value,
+        [0, 40],
+        [maxHeight, minHeight],
+        Extrapolation.CLAMP,
+      ),
     };
   });
 
@@ -78,7 +87,14 @@ export const ModelHeader = ({
     if (!scrollY) return {};
     return {
       transform: [
-        { translateY: interpolate(scrollY.value, [0, maxHeight], [0, -300], Extrapolation.CLAMP) },
+        {
+          translateY: interpolate(
+            scrollY.value,
+            [0, maxHeight],
+            [0, -300],
+            Extrapolation.CLAMP,
+          ),
+        },
       ],
     };
   });
@@ -86,7 +102,12 @@ export const ModelHeader = ({
   const collapsedHeaderOpacity = useAnimatedStyle(() => {
     if (!scrollY) return {};
     return {
-      opacity: interpolate(scrollY.value, [30, 50], [0, 1], Extrapolation.CLAMP),
+      opacity: interpolate(
+        scrollY.value,
+        [30, 50],
+        [0, 1],
+        Extrapolation.CLAMP,
+      ),
     };
   });
 
@@ -113,13 +134,27 @@ export const ModelHeader = ({
   return (
     <>
       {/* Collapsed header */}
-      <Animated.View style={[s.collapsedHeader, { height: minHeight }, collapsedHeaderOpacity]}>
+      <Animated.View
+        style={[
+          s.collapsedHeader,
+          { height: minHeight },
+          collapsedHeaderOpacity,
+        ]}>
         <Text style={s.title}>{model?.name}</Text>
       </Animated.View>
       {/* Background image */}
-      <Animated.View style={[s.backgroundContainer, backgroundTranslateY, backgroundOpacity]}>
+      <Animated.View
+        style={[
+          s.backgroundContainer,
+          backgroundTranslateY,
+          backgroundOpacity,
+        ]}>
         {image ? (
-          <Image source={{ uri: image }} resizeMode={'cover'} style={s.headerImage} />
+          <Image
+            source={{ uri: image }}
+            resizeMode={'cover'}
+            style={s.headerImage}
+          />
         ) : (
           <View style={s.defaultHeaderImage}>
             <SvgXml
@@ -136,7 +171,10 @@ export const ModelHeader = ({
       {onGoBack && (
         <Pressable onPress={onGoBack} style={s.buttonLeftContainer}>
           <Animated.View style={collapsedHeaderOpacity}>
-            <Icon name={'chevron-left'} style={[s.buttonLeft, s.buttonLeftCollapsed]} />
+            <Icon
+              name={'chevron-left'}
+              style={[s.buttonLeft, s.buttonLeftCollapsed]}
+            />
           </Animated.View>
           <Animated.View style={backgroundOpacity}>
             <Icon name={'chevron-left'} style={[s.buttonLeft]} />
@@ -149,7 +187,9 @@ export const ModelHeader = ({
           <CircleButton
             size={30}
             icon={'camera'}
-            onPress={() => (!model || (scrollY && scrollY.value < 5)) && selectModelImage()}
+            onPress={() =>
+              (!model || (scrollY && scrollY.value < 5)) && selectModelImage()
+            }
           />
         </View>
         <View style={s.insetImageContainer}>

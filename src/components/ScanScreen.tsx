@@ -34,11 +34,26 @@ const ScanScreen = () => {
           <Text style={[s.text, s.title]}>
             {'Scan a model or battery QR code\nto log an event'}
           </Text>
-          <Text style={[s.text, s.scannedNames]}>{'Event for Goblin Buddy'}</Text>
+          <Text style={[s.text, s.scannedNames]}>
+            {'Event for Goblin Buddy'}
+          </Text>
           <View style={s.buttonContainer}>
-            <CircleButton icon={'share'} text={'Undo scan'} style={s.flip} onPress={undoLastScan} />
-            <CircleButton icon={'file-lines'} text={'Log event'} onPress={logEvent} />
-            <CircleButton icon={'plane-up'} text={'Start event'} onPress={startEvent} />
+            <CircleButton
+              icon={'share'}
+              text={'Undo scan'}
+              style={s.flip}
+              onPress={undoLastScan}
+            />
+            <CircleButton
+              icon={'file-lines'}
+              text={'Log event'}
+              onPress={logEvent}
+            />
+            <CircleButton
+              icon={'plane-up'}
+              text={'Start event'}
+              onPress={startEvent}
+            />
           </View>
         </View>
       }

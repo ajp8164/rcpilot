@@ -14,4 +14,5 @@ export type GeoPositionContext = {
   error?: PositionError;
 };
 
-export const GeoPositionContext = createContext<GeoPositionContext>(defaultGeoPosition);
+export const GeoPositionContext =
+  createContext<GeoPositionContext>(defaultGeoPosition);

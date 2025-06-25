@@ -34,7 +34,8 @@ export const ModelCardDeck = ({
   const headerBarLargeHeight = theme.styles.headerBarLarge.height as number;
   const statusBarHeight =
     Platform.OS === 'android' ? StatusBar.currentHeight || 0 : theme.insets.top;
-  const visibleViewHeight = viewport.height - tabBarHeight - headerBarLargeHeight - statusBarHeight;
+  const visibleViewHeight =
+    viewport.height - tabBarHeight - headerBarLargeHeight - statusBarHeight;
 
   // The ModelCardDeckProvider manages card state outside of the carousel. When the carousel
   // has less than 3 cards it auto fills (see carousel autoFillData) the list so that at least
@@ -84,6 +85,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'center',
     marginTop:
       Number(theme.styles.headerBarLarge.height) +
-      (Platform.OS === 'android' ? StatusBar.currentHeight || 0 : theme.insets.top),
+      (Platform.OS === 'android'
+        ? StatusBar.currentHeight || 0
+        : theme.insets.top),
   },
 }));

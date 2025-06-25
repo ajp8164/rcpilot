@@ -32,19 +32,32 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
 
   const realm = useRealm();
 
-  const report = useObject(EventsMaintenanceReport, new BSON.ObjectId(reportId));
-  const reportEventsFilterId = useSelector(selectFilters(FilterType.ReportEventsFilter));
-  const reportMaintenanceFilterId = useSelector(selectFilters(FilterType.ReportMaintenanceFilter));
+  const report = useObject(
+    EventsMaintenanceReport,
+    new BSON.ObjectId(reportId),
+  );
+  const reportEventsFilterId = useSelector(
+    selectFilters(FilterType.ReportEventsFilter),
+  );
+  const reportMaintenanceFilterId = useSelector(
+    selectFilters(FilterType.ReportMaintenanceFilter),
+  );
 
   const name = useRef<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
-  const [includesSummary, setIncludesSummary] = useState(report ? report.includesSummary : true);
-  const [includesEvents, setIncludesEvents] = useState(report ? report.includesEvents : true);
+  const [includesSummary, setIncludesSummary] = useState(
+    report ? report.includesSummary : true,
+  );
+  const [includesEvents, setIncludesEvents] = useState(
+    report ? report.includesEvents : true,
+  );
   const [includesMaintenance, setIncludesMaintenance] = useState(
     report ? report.includesMaintenance : true,
   );
   const [eventsFilter, setEventsFilter] = useState(report?.eventsFilter);
-  const [maintenanceFilter, setMaintenanceFilter] = useState(report?.maintenanceFilter);
+  const [maintenanceFilter, setMaintenanceFilter] = useState(
+    report?.maintenanceFilter,
+  );
 
   useEffect(() => {
     const filter = realm.objectForPrimaryKey(
@@ -85,8 +98,14 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         !eqBoolean(report?.includesSummary, includesSummary) ||
         !eqBoolean(report?.includesEvents, includesEvents) ||
         !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
-        !eqString(report?.eventsFilter?._id.toString(), eventsFilter?._id.toString()) ||
-        !eqString(report?.maintenanceFilter?._id.toString(), maintenanceFilter?._id.toString()));
+        !eqString(
+          report?.eventsFilter?._id.toString(),
+          eventsFilter?._id.toString(),
+        ) ||
+        !eqString(
+          report?.maintenanceFilter?._id.toString(),
+          maintenanceFilter?._id.toString(),
+        ));
 
     const save = () => {
       if (reportId) {
@@ -122,7 +141,10 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({ enabled: canSave, action: onDone }, { visible: !reportId });
+    setScreenEditHeader(
+      { enabled: canSave, action: onDone },
+      { visible: !reportId },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     name.current,
@@ -160,7 +182,9 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
           <ListItem
             title={eventsFilter ? eventsFilter.name : 'No Filter Selected'}
             subtitle={
-              eventsFilter ? filterSummary(eventsFilter) : 'Report will include all events.'
+              eventsFilter
+                ? filterSummary(eventsFilter)
+                : 'Report will include all events.'
             }
             position={['last']}
             onPress={() =>
@@ -183,7 +207,9 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
         expanded={includesMaintenance}
         ExpandableComponent={
           <ListItem
-            title={maintenanceFilter ? maintenanceFilter.name : 'No Filter Selected'}
+            title={
+              maintenanceFilter ? maintenanceFilter.name : 'No Filter Selected'
+            }
             subtitle={
               maintenanceFilter
                 ? filterSummary(maintenanceFilter)

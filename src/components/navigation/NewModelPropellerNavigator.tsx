@@ -7,7 +7,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const NewModelPropellerStack = createNativeStackNavigator<NewModelPropellerNavigatorParamList>();
+const NewModelPropellerStack =
+  createNativeStackNavigator<NewModelPropellerNavigatorParamList>();
 
 const NewModelPropellerNavigator = () => {
   const theme = useTheme();

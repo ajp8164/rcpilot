@@ -31,7 +31,8 @@ export const modelCostStatistics = (
   let perEventCost = 0;
   if (model.statistics.totalEvents > 0) {
     perEventCost =
-      ((model.purchasePrice || 0) + totalMaintenanceCost) / model.statistics.totalEvents;
+      ((model.purchasePrice || 0) + totalMaintenanceCost) /
+      model.statistics.totalEvents;
   } else {
     perEventCost = (model.purchasePrice || 0) + totalMaintenanceCost;
   }
@@ -43,7 +44,11 @@ export const modelCostStatistics = (
   } as ModelCostStatistics;
 };
 
-export const updateMaintenanceCost = (model: Model, oldValue: number, newValue: number) => {
+export const updateMaintenanceCost = (
+  model: Model,
+  oldValue: number,
+  newValue: number,
+) => {
   model.statistics.totalMaintenanceCost =
     model.statistics.totalMaintenanceCost - oldValue + newValue;
 };

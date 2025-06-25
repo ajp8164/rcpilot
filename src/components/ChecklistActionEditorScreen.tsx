@@ -15,7 +15,10 @@ import {
 } from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import Realm, { BSON } from 'realm';
-import { actionScheduleState, getChecklistActionScheduleItems } from 'lib/checklist';
+import {
+  actionScheduleState,
+  getChecklistActionScheduleItems,
+} from 'lib/checklist';
 import { eqNumber, eqString } from 'realmdb/helpers';
 
 import { CompositeScreenProps } from '@react-navigation/core';
@@ -40,7 +43,10 @@ export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'>,
   CompositeScreenProps<
     NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistActionEditor'>,
-    NativeStackScreenProps<NewChecklistActionNavigatorParamList, 'NewChecklistAction'>
+    NativeStackScreenProps<
+      NewChecklistActionNavigatorParamList,
+      'NewChecklistAction'
+    >
   >
 >;
 
@@ -62,7 +68,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   // Force non-repeating items for creating a one-time maintenance action.
   const initialScheduleItems = useRef(
     getChecklistActionScheduleItems(
-      action?.schedule.type || checklistType === ChecklistType.OneTimeMaintenance
+      action?.schedule.type ||
+        checklistType === ChecklistType.OneTimeMaintenance
         ? ChecklistActionScheduleType.NonRepeating
         : ChecklistActionScheduleType.Repeating,
     ),
@@ -116,7 +123,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     }
 
     // Initialize wheel items based on schedule type.
-    schedulePickerItems.current = getChecklistActionScheduleItems(action?.schedule.type).items;
+    schedulePickerItems.current = getChecklistActionScheduleItems(
+      action?.schedule.type,
+    ).items;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,7 +134,10 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       !!description.current &&
       (!eqString(action?.description, description.current) ||
         !eqString(action?.schedule?.period, selectedSchedule.period) ||
-        !eqNumber(action?.schedule?.value, selectedSchedule.value?.toString()) ||
+        !eqNumber(
+          action?.schedule?.value,
+          selectedSchedule.value?.toString(),
+        ) ||
         !eqString(action?.schedule?.type, selectedSchedule.type) ||
         !eqNumber(action?.cost, cost.current) ||
         !eqString(action?.notes, notes));
@@ -140,13 +152,20 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         notes,
       };
 
-      result.schedule.state = actionScheduleState(result, checklistType, model || undefined);
+      result.schedule.state = actionScheduleState(
+        result,
+        checklistType,
+        model || undefined,
+      );
 
       event.emit(eventName, result);
       navigation.goBack();
     };
 
-    setScreenEditHeader({ enabled: canSave, action: onDone }, { visible: isNewAction });
+    setScreenEditHeader(
+      { enabled: canSave, action: onDone },
+      { visible: isNewAction },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [description.current, selectedSchedule, cost.current, notes]);
 
@@ -174,7 +193,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     // Set strings based on selected action schedule.
     switch (period) {
       case ChecklistActionSchedulePeriod.Events:
-        if (selectedSchedule.type === ChecklistActionScheduleType.NonRepeating) {
+        if (
+          selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
+        ) {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.EventAtInstall;
           } else {
@@ -196,7 +217,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         break;
 
       case ChecklistActionSchedulePeriod.ModelMinutes:
-        if (selectedSchedule.type === ChecklistActionScheduleType.NonRepeating) {
+        if (
+          selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
+        ) {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.TimeAtInstall;
           } else {
@@ -217,7 +240,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       case ChecklistActionSchedulePeriod.Days:
       case ChecklistActionSchedulePeriod.Weeks:
       case ChecklistActionSchedulePeriod.Months:
-        if (selectedSchedule.type === ChecklistActionScheduleType.NonRepeating) {
+        if (
+          selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
+        ) {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.InstallDate;
           } else {
@@ -277,7 +302,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     });
 
     // If there are changes to the items then the picker wheel is updated.
-    schedulePickerItems.current = getChecklistActionScheduleItems(newType).items;
+    schedulePickerItems.current =
+      getChecklistActionScheduleItems(newType).items;
   };
 
   const toggleSchedulePickerOpen = () => {
@@ -285,7 +311,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const hideValueWheel =
-    schedulePickerValue[1] === ChecklistActionNonRepeatingScheduleTimeframe.Today;
+    schedulePickerValue[1] ===
+    ChecklistActionNonRepeatingScheduleTimeframe.Today;
 
   return (
     <ScrollView
@@ -297,7 +324,9 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         value={description.current}
         placeholder={'Brief action description'}
         position={['first', 'last']}
-        onChangeText={value => setDebounced(() => (description.current = value))}
+        onChangeText={value =>
+          setDebounced(() => (description.current = value))
+        }
       />
       <Divider text={'ON SCHEDULE'} />
       <ListItem
@@ -348,8 +377,13 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       {!action?.history.length && (
         <ListItemSwitch
           title={'Action Repeats'}
-          value={selectedSchedule.type === ChecklistActionScheduleType.Repeating}
-          disabled={selectedSchedule?.period === ChecklistActionNonRepeatingScheduleTimeframe.Today}
+          value={
+            selectedSchedule.type === ChecklistActionScheduleType.Repeating
+          }
+          disabled={
+            selectedSchedule?.period ===
+            ChecklistActionNonRepeatingScheduleTimeframe.Today
+          }
           position={['last']}
           onValueChange={toggleActionRepeats}
         />
@@ -357,12 +391,16 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       {checklistType === ChecklistType.OneTimeMaintenance ? (
         <Divider
           note
-          text={'Changes to the action are limited. This is a one-time maintenance action.'}
+          text={
+            'Changes to the action are limited. This is a one-time maintenance action.'
+          }
         />
       ) : action?.history.length ? (
         <Divider
           note
-          text={'Changes to the action are limited. This action has been performed at least once.'}
+          text={
+            'Changes to the action are limited. This action has been performed at least once.'
+          }
         />
       ) : null}
       {(checklistType === ChecklistType.Maintenance ||

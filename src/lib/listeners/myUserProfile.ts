@@ -9,6 +9,8 @@ export const listenForChangesToMyUserProfile = () => {
   if (!me?.id) return;
 
   usersDocumentChangeListener(me.id, snapshot => {
-    dispatch(updateUserProfile({ userProfile: snapshot.data() as UserProfile }));
+    dispatch(
+      updateUserProfile({ userProfile: snapshot.data() as UserProfile }),
+    );
   });
 };

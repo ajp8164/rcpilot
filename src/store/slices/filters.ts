@@ -41,7 +41,8 @@ const handleSaveSelectedFilter: CaseReducer<
 const filtersSlice = createSlice({
   name: 'filters',
   initialState: initialFiltersState,
-  extraReducers: builder => builder.addCase(revertSettings, () => initialFiltersState),
+  extraReducers: builder =>
+    builder.addCase(revertSettings, () => initialFiltersState),
   reducers: {
     saveSelectedFilter: handleSaveSelectedFilter,
   },

@@ -1,6 +1,11 @@
 import Animated, { SlideInUp } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { Callout, MapMarker, Marker, MarkerDragStartEndEvent } from 'react-native-maps';
+import {
+  Callout,
+  MapMarker,
+  Marker,
+  MarkerDragStartEndEvent,
+} from 'react-native-maps';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 import React, { forwardRef, useState } from 'react';
 
@@ -18,7 +23,12 @@ interface MapMarkerCalloutInterface {
 
 export const MapMarkerCallout = forwardRef(
   (
-    { index, location, onMarkerDragEnd, onPressCallout }: MapMarkerCalloutInterface,
+    {
+      index,
+      location,
+      onMarkerDragEnd,
+      onPressCallout,
+    }: MapMarkerCalloutInterface,
     ref: React.LegacyRef<MapMarker> | undefined,
   ) => {
     const theme = useTheme();
@@ -33,7 +43,10 @@ export const MapMarkerCallout = forwardRef(
     return (
       <>
         {/* This text is used to measure the location name width. */}
-        <Text numberOfLines={1} style={[s.calloutText1, s.calloutText1Hidden]} onLayout={onLayout}>
+        <Text
+          numberOfLines={1}
+          style={[s.calloutText1, s.calloutText1Hidden]}
+          onLayout={onLayout}>
           {location.name}
         </Text>
         <Marker
@@ -61,7 +74,11 @@ export const MapMarkerCallout = forwardRef(
                 {locationSummary}
               </Text>
             </View>
-            <Icon name={'chevron-right'} color={theme.colors.midGray} size={16} />
+            <Icon
+              name={'chevron-right'}
+              color={theme.colors.midGray}
+              size={16}
+            />
           </Callout>
         </Marker>
       </>

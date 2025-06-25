@@ -1,6 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import { ListItemFilterEnum, ListItemFilterNumber } from 'components/molecules/filters';
+import {
+  ListItemFilterEnum,
+  ListItemFilterNumber,
+} from 'components/molecules/filters';
 import React, { useEffect } from 'react';
 
 import { Divider } from '@react-native-ajp-elements/ui';
@@ -23,7 +26,8 @@ export type Props = NativeStackScreenProps<
 >;
 
 const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
+  const { filterId, filterType, generalFilterName, requireFilterName } =
+    route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -51,10 +55,13 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'} />
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
+      {filterEditor.name === filterEditor.generalFilterName ||
+      requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
-          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          position={
+            filterEditor.createSavedFilter ? ['first'] : ['first', 'last']
+          }
           value={filterEditor.createSavedFilter}
           disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
@@ -64,7 +71,9 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
               value={filterEditor.customName}
               placeholder={'Filter Name'}
               position={['last']}
-              onChangeText={value => setDebounced(() => filterEditor.setCustomName(value))}
+              onChangeText={value =>
+                setDebounced(() => filterEditor.setCustomName(value))
+              }
             />
           }
         />
@@ -73,7 +82,9 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
-          onChangeText={value => setDebounced(() => filterEditor.setName(value))}
+          onChangeText={value =>
+            setDebounced(() => filterEditor.setName(value))
+          }
         />
       )}
       <Divider />
@@ -86,7 +97,9 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={`This filter shows all the batteries that match all of these criteria.`} />
+      <Divider
+        text={`This filter shows all the batteries that match all of these criteria.`}
+      />
       <ListItemFilterEnum
         title={'Chemistry'}
         value={filterEditor.values.chemistry.value}

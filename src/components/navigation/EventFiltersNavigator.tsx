@@ -9,7 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
 import { useTheme } from 'theme';
 
-const EventFiltersStack = createNativeStackNavigator<EventFiltersNavigatorParamList>();
+const EventFiltersStack =
+  createNativeStackNavigator<EventFiltersNavigatorParamList>();
 
 const EventFiltersNavigator = () => {
   const theme = useTheme();

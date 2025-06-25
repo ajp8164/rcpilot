@@ -7,7 +7,10 @@ import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import ViewShot from 'react-native-view-shot';
 import { useObject } from '@realm/react';
 
-export type Props = NativeStackScreenProps<ReportViewerNavigatorParamList, 'ReportScanCodesViewer'>;
+export type Props = NativeStackScreenProps<
+  ReportViewerNavigatorParamList,
+  'ReportScanCodesViewer'
+>;
 
 const ReportScanCodesViewerScreen = ({ route }: Props) => {
   const { reportId } = route.params;

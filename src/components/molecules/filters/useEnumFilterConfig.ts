@@ -90,7 +90,10 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
   },
 });
 
-export const useEnumFilterConfig = (enumName: EnumName, relation: EnumRelation) => {
+export const useEnumFilterConfig = (
+  enumName: EnumName,
+  relation: EnumRelation,
+) => {
   const realm = useRealm();
 
   // Include the enum name itself in the configuration.

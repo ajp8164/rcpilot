@@ -27,7 +27,8 @@ export type Props = NativeStackScreenProps<
 >;
 
 const MaintenanceFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
+  const { filterId, filterType, generalFilterName, requireFilterName } =
+    route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -55,10 +56,13 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'} />
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
+      {filterEditor.name === filterEditor.generalFilterName ||
+      requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
-          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          position={
+            filterEditor.createSavedFilter ? ['first'] : ['first', 'last']
+          }
           value={filterEditor.createSavedFilter}
           disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
@@ -68,7 +72,9 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
               value={filterEditor.customName}
               placeholder={'Filter Name'}
               position={['last']}
-              onChangeText={value => setDebounced(() => filterEditor.setCustomName(value))}
+              onChangeText={value =>
+                setDebounced(() => filterEditor.setCustomName(value))
+              }
             />
           }
         />
@@ -77,7 +83,9 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
-          onChangeText={value => setDebounced(() => filterEditor.setName(value))}
+          onChangeText={value =>
+            setDebounced(() => filterEditor.setName(value))
+          }
         />
       )}
       <Divider />
@@ -90,7 +98,11 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the logs that match all of these criteria.'} />
+      <Divider
+        text={
+          'This filter shows all the logs that match all of these criteria.'
+        }
+      />
       <ListItemFilterDate
         title={'Date'}
         value={filterEditor.values.date.value}

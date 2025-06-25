@@ -1,5 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, SectionListHeader, listItemPosition } from 'components/atoms/List';
+import {
+  ListItem,
+  SectionListHeader,
+  listItemPosition,
+} from 'components/atoms/List';
 import { ListRenderItem, SectionList, SectionListData } from 'react-native';
 
 import { BSON } from 'realm';
@@ -22,7 +26,10 @@ type Section = {
   data: JChecklistActionHistoryEntry[];
 };
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistActionHistory'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'ChecklistActionHistory'
+>;
 
 const ChecklistActionHistoryScreen = ({ route }: Props) => {
   const { action, modelId } = route.params;
@@ -35,15 +42,17 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
   const groupEntries = (
     entries?: JChecklistActionHistoryEntry[],
   ): SectionListData<JChecklistActionHistoryEntry, Section>[] => {
-    return groupItems<JChecklistActionHistoryEntry, Section>(entries || [], entry => {
-      return DateTime.fromISO(entry.date).toFormat('MMMM yyyy').toUpperCase();
-    });
+    return groupItems<JChecklistActionHistoryEntry, Section>(
+      entries || [],
+      entry => {
+        return DateTime.fromISO(entry.date).toFormat('MMMM yyyy').toUpperCase();
+      },
+    );
   };
 
-  const renderActionHistoryEntry: ListRenderItem<JChecklistActionHistoryEntry> = ({
-    item: historyEntry,
-    index,
-  }) => {
+  const renderActionHistoryEntry: ListRenderItem<
+    JChecklistActionHistoryEntry
+  > = ({ item: historyEntry, index }) => {
     return (
       <ListItem
         key={`${index}`}
@@ -72,11 +81,15 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       stickySectionHeadersEnabled={true}
       style={[theme.styles.view, s.sectionList]}
       sections={groupEntries(
-        ([] as JChecklistActionHistoryEntry[]).concat([], action.history).reverse(),
+        ([] as JChecklistActionHistoryEntry[])
+          .concat([], action.history)
+          .reverse(),
       )}
       keyExtractor={(item, index) => `${index}${item.eventNumber}`}
       renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
       ListFooterComponent={<Divider />}
     />
   );

@@ -11,9 +11,12 @@ export const selectBiometrics = createSelector(selectAppState, appState => {
   return appState.appSettings.biometrics;
 });
 
-export const selectDatabaseAccessWith = createSelector(selectAppState, appState => {
-  return appState.appSettings.databaseAccessWith;
-});
+export const selectDatabaseAccessWith = createSelector(
+  selectAppState,
+  appState => {
+    return appState.appSettings.databaseAccessWith;
+  },
+);
 
 export const selectModelPreferences = (modelId: string) =>
   createSelector(selectAppState, appState => {
@@ -24,9 +27,12 @@ export const selectModelsLayout = createSelector(selectAppState, appState => {
   return appState.appSettings.modelsLayout;
 });
 
-export const selectModelsPreferences = createSelector(selectAppState, appState => {
-  return appState.appSettings.modelsPreferences;
-});
+export const selectModelsPreferences = createSelector(
+  selectAppState,
+  appState => {
+    return appState.appSettings.modelsPreferences;
+  },
+);
 
 export const selectOutputReportTo = createSelector(selectAppState, appState => {
   return appState.appSettings.outputReportTo;

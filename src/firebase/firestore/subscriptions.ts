@@ -5,7 +5,10 @@ const firestoreSubscriptions: {
   who: string;
 }[] = [];
 
-export const addFirestoreSubscription = (subscription: () => void, who: string) => {
+export const addFirestoreSubscription = (
+  subscription: () => void,
+  who: string,
+) => {
   firestoreSubscriptions.push({ subscription, who });
   log.debug(
     `Added firestore subscription ${who}, subscriptions count=${firestoreSubscriptions.length}`,

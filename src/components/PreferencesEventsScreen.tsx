@@ -11,7 +11,10 @@ import { Slider } from 'react-native-ui-lib';
 import { TimerStartDelay } from 'types/event';
 import { makeStyles } from '@rn-vui/themed';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesEvents'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'PreferencesEvents'
+>;
 
 const PreferencesEventsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -20,7 +23,8 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
   const [atFieldSingleTapEnabled, setAtFieldSingleTapEnabled] = useState(false);
   const [atFieldUsesTimerEnabled, setFieldUsesTimerEnabled] = useState(false);
   const [timerUsesButtonsEnabled, setTimerUsesButtonsEnabled] = useState(false);
-  const [defaultFromLastEventEnabled, setDefaultFromLastEventEnabled] = useState(false);
+  const [defaultFromLastEventEnabled, setDefaultFromLastEventEnabled] =
+    useState(false);
 
   const toggleAtFieldSingleTap = (value: boolean) => {
     setAtFieldSingleTapEnabled(value);
@@ -80,7 +84,9 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
-        text={'Default from last event will only apply when you are not using the event timer.'}
+        text={
+          'Default from last event will only apply when you are not using the event timer.'
+        }
       />
       <Divider text={'EVENT TIMER SHAKE SENSITIVITY'} />
       <Slider
@@ -94,7 +100,9 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
-        text={'Adjusts the sensitivity of the application to shake gestures to operate the timer.'}
+        text={
+          'Adjusts the sensitivity of the application to shake gestures to operate the timer.'
+        }
       />
       <Divider text={'EVENT LOCATION SENSITIVITY'} />
       <Slider

@@ -1,5 +1,8 @@
 import { ListItem, ListItemInput } from 'components/atoms/List';
-import { NewModelFuelNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import {
+  NewModelFuelNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';

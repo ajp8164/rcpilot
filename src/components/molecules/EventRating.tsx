@@ -33,7 +33,12 @@ export const EventRating = ({ style = {}, value }: EventRatingInterface) => {
       for (let i = 0; i < num; i++) {
         outcomeEl.push(
           <View key={i} style={style}>
-            <Icon name={'star'} size={20} style={s.icon} color={theme.colors.midGray} />
+            <Icon
+              name={'star'}
+              size={20}
+              style={s.icon}
+              color={theme.colors.midGray}
+            />
           </View>,
         );
       }

@@ -1,6 +1,9 @@
 import { LocationCoords } from 'realmdb';
 
-export const distanceBetweenLocations = (coordsA: LocationCoords, coordsB: LocationCoords) => {
+export const distanceBetweenLocations = (
+  coordsA: LocationCoords,
+  coordsB: LocationCoords,
+) => {
   const R = 6371; //  Earth distance in km so it will return the distance in km
   const p = 0.017453292519943295; // Math.PI / 180
   const c = Math.cos;

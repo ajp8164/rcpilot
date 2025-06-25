@@ -19,7 +19,10 @@ export type LocationPickerResult = {
   locationId: string;
 };
 
-export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'Locations'>;
+export type Props = NativeStackScreenProps<
+  LocationNavigatorParamList,
+  'Locations'
+>;
 
 const LocationsScreen = ({ navigation, route }: Props) => {
   const { eventName } = route.params;
@@ -47,7 +50,10 @@ const LocationsScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderLocation: ListRenderItem<Location> = ({ item: location, index }) => {
+  const renderLocation: ListRenderItem<Location> = ({
+    item: location,
+    index,
+  }) => {
     return (
       <ListItem
         key={location._id.toString()}
@@ -93,7 +99,9 @@ const LocationsScreen = ({ navigation, route }: Props) => {
       keyExtractor={item => item._id.toString()}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={
-        allLocations.length ? <Divider note text={'Choose a location to view on the map.'} /> : null
+        allLocations.length ? (
+          <Divider note text={'Choose a location to view on the map.'} />
+        ) : null
       }
       ListFooterComponent={<Divider style={{ height: theme.insets.bottom }} />}
     />

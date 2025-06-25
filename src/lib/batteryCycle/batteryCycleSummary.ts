@@ -3,7 +3,9 @@ import { DateTime } from 'luxon';
 
 export const batteryCycleSummary = (battery: Battery) => {
   const lastCycle = battery?.cycles[battery.cycles.length - 1];
-  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
+  const isCharged =
+    battery?.cycles[battery.cycles.length - 1]?.charge ||
+    !battery?.cycles.length;
 
   const lastCycleDate = lastCycle
     ? isCharged

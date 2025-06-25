@@ -2,7 +2,9 @@ import { TimeSpan } from 'types/common';
 import { WheelPickerItem } from 'components/atoms/WheelPicker';
 
 const timeSpanItems: WheelPickerItem[][] = [
-  new Array(90).fill(null).map((_, index) => ({ label: `${index + 1}`, value: `${index + 1}` })),
+  new Array(90)
+    .fill(null)
+    .map((_, index) => ({ label: `${index + 1}`, value: `${index + 1}` })),
   new Array(Object.values(TimeSpan).length).fill(null).map((_, index) => ({
     label: Object.values(TimeSpan)[index],
     value: Object.values(TimeSpan)[index],

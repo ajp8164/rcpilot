@@ -12,5 +12,7 @@ export const useDebouncedRender = (wait?: number, maxWait?: number) => {
     callback && callback();
     setRender(!render);
   };
-  return lodash.debounce(callbackRenderer, wait || 250, { maxWait: maxWait || 1000 });
+  return lodash.debounce(callbackRenderer, wait || 250, {
+    maxWait: maxWait || 1000,
+  });
 };

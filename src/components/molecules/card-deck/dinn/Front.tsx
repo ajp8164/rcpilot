@@ -1,4 +1,11 @@
-import { Image, LayoutChangeEvent, LayoutRectangle, Pressable, Text, View } from 'react-native';
+import {
+  Image,
+  LayoutChangeEvent,
+  LayoutRectangle,
+  Pressable,
+  Text,
+  View,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import React, { useState } from 'react';
 
@@ -38,10 +45,15 @@ export const Front = ({
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const totalTime = Duration.fromMillis(model.statistics.totalTime * 1000).toFormat('h:mm:ss');
-  const lastEvent = model.lastEvent && DateTime.fromISO(model.lastEvent).toFormat('M/d/yyyy');
+  const totalTime = Duration.fromMillis(
+    model.statistics.totalTime * 1000,
+  ).toFormat('h:mm:ss');
+  const lastEvent =
+    model.lastEvent && DateTime.fromISO(model.lastEvent).toFormat('M/d/yyyy');
   const maintenanceIsDue = modelMaintenanceIsDue(model);
-  const modelPreferences = useSelector(selectModelPreferences(model._id.toString()));
+  const modelPreferences = useSelector(
+    selectModelPreferences(model._id.toString()),
+  );
   const cardColors = modelPreferences?.deckCardColors || defaultDinnCardColors;
 
   const handlePress = () => {
@@ -65,7 +77,11 @@ export const Front = ({
     <View style={s.container} onLayout={onLayout}>
       <Pressable onPress={handlePress}>
         {model.image ? (
-          <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+          <Image
+            source={{ uri: model.image }}
+            resizeMode={'cover'}
+            style={s.modelImage}
+          />
         ) : (
           <View style={s.defaultImage}>
             <SvgXml
@@ -82,16 +98,25 @@ export const Front = ({
         <View
           style={[
             s.background,
-            { backgroundColor: cardColors.primary, borderColor: cardColors.accent1 },
+            {
+              backgroundColor: cardColors.primary,
+              borderColor: cardColors.accent1,
+            },
           ]}>
           <View style={s.textContainer}>
-            <Text style={[s.title, { color: cardColors.accent1 }]}>{ellipsis(model.name, 13)}</Text>
+            <Text style={[s.title, { color: cardColors.accent1 }]}>
+              {ellipsis(model.name, 13)}
+            </Text>
             <Text
               style={[
                 s.text,
                 { color: cardColors.accent1 },
               ]}>{`${model.statistics.totalEvents} Flights`}</Text>
-            <Text style={[s.text, { color: cardColors.accent1 }]}>{`${totalTime} Total Time`}</Text>
+            <Text
+              style={[
+                s.text,
+                { color: cardColors.accent1 },
+              ]}>{`${totalTime} Total Time`}</Text>
             {lastEvent && (
               <Text
                 style={[
@@ -104,7 +129,10 @@ export const Front = ({
             <Pressable
               style={[
                 s.mainIconContainer,
-                { backgroundColor: cardColors.accent2, borderColor: cardColors.accent1 },
+                {
+                  backgroundColor: cardColors.accent2,
+                  borderColor: cardColors.accent1,
+                },
               ]}
               onPress={onPressNewEventSequence}>
               <Icon
@@ -114,7 +142,11 @@ export const Front = ({
               />
             </Pressable>
             {maintenanceIsDue && (
-              <View style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}>
+              <View
+                style={[
+                  s.attributeIconContainer,
+                  { borderColor: cardColors.accent1 },
+                ]}>
                 <Icon
                   name={'wrench'}
                   size={20}
@@ -123,20 +155,30 @@ export const Front = ({
               </View>
             )}
             {model.damaged && (
-              <View style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}>
+              <View
+                style={[
+                  s.attributeIconContainer,
+                  { borderColor: cardColors.accent1 },
+                ]}>
                 <Icon
                   name={'bandage'}
                   size={18}
                   color={theme.colors.stickyWhite}
                   style={[
                     s.attributeIcon,
-                    { color: cardColors.accent2, transform: [{ rotate: '30deg' }] },
+                    {
+                      color: cardColors.accent2,
+                      transform: [{ rotate: '30deg' }],
+                    },
                   ]}
                 />
               </View>
             )}
             <Pressable
-              style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}
+              style={[
+                s.attributeIconContainer,
+                { borderColor: cardColors.accent1 },
+              ]}
               onPress={onPressEditModel}>
               <Icon
                 name={'info'}
@@ -146,7 +188,10 @@ export const Front = ({
             </Pressable>
             {pilot?.achievements && pilot.achievements.length > 0 && (
               <Pressable
-                style={[s.attributeIconContainer, { borderColor: cardColors.accent1 }]}
+                style={[
+                  s.attributeIconContainer,
+                  { borderColor: cardColors.accent1 },
+                ]}
                 onPress={onPressAchievements}>
                 <Icon
                   name={'medal'}
@@ -166,7 +211,8 @@ export const Front = ({
                 {
                   width: cardLayout.width * 0.2,
                   height:
-                    (cardLayout.width * 0.2) / (vendorImage.size.width / vendorImage.size.height),
+                    (cardLayout.width * 0.2) /
+                    (vendorImage.size.width / vendorImage.size.height),
                 },
               ]}
             />

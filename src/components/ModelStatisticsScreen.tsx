@@ -16,7 +16,10 @@ import { secondsToFormat } from 'lib/formatters';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelStatistics'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'ModelStatistics'
+>;
 
 const ModelStatisticsScreen = ({ route }: Props) => {
   const { modelId } = route.params;
@@ -34,9 +37,15 @@ const ModelStatisticsScreen = ({ route }: Props) => {
   }) => {
     let eventStyle;
     if (data.eventStyleId.length) {
-      eventStyle = realm.objectForPrimaryKey(EventStyle, new BSON.ObjectId(data.eventStyleId));
+      eventStyle = realm.objectForPrimaryKey(
+        EventStyle,
+        new BSON.ObjectId(data.eventStyleId),
+      );
     }
-    const average = data.eventStyleCount > 0 ? data.eventStyleDuration / data.eventStyleCount : 0;
+    const average =
+      data.eventStyleCount > 0
+        ? data.eventStyleDuration / data.eventStyleCount
+        : 0;
     const percentage =
       model && model.statistics.totalTime
         ? (data.eventStyleDuration / model.statistics.totalTime) * 100
@@ -46,7 +55,10 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         title={eventStyle?.name || 'Unspecified'}
         subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToFormat(data.eventStyleDuration, { format: 'm:ss' })}`}
         value={`${Math.round(percentage)}%, ${secondsToFormat(average, { format: 'm:ss' })}`}
-        position={listItemPosition(index, model?.statistics.eventStyleData.length || 0)}
+        position={listItemPosition(
+          index,
+          model?.statistics.eventStyleData.length || 0,
+        )}
         rightImage={false}
       />
     );
@@ -98,7 +110,9 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       <Divider text={'OPERATING COSTS'} />
       <ListItem
         title={'Model'}
-        value={model.purchasePrice ? formatCurrency(model.purchasePrice) : 'Unknown'}
+        value={
+          model.purchasePrice ? formatCurrency(model.purchasePrice) : 'Unknown'
+        }
         position={['first']}
         rightImage={false}
       />
@@ -116,7 +130,9 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       {(!model.purchasePrice || model.statistics.uncertainCost) && (
         <Divider
           note
-          text={'Costs are uncertain due to gaps in the underlying pricing or cost data.'}
+          text={
+            'Costs are uncertain due to gaps in the underlying pricing or cost data.'
+          }
         />
       )}
     </ScrollView>

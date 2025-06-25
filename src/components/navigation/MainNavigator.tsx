@@ -19,7 +19,9 @@ const MainNavigator = ({ startupScreen }: MainNavigatorInterface) => {
 
   return (
     <MainStack.Navigator
-      initialRouteName={startupScreen === StartupScreen.Welcome ? 'Startup' : 'Tabs'}>
+      initialRouteName={
+        startupScreen === StartupScreen.Welcome ? 'Startup' : 'Tabs'
+      }>
       <MainStack.Screen
         name="Startup"
         component={StartupNavigator}

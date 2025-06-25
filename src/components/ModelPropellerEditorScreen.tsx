@@ -1,6 +1,9 @@
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MeasurementUnits, MeasurementUnitsAbbr } from 'types/common';
-import { NewModelPropellerNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import {
+  NewModelPropellerNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
@@ -21,7 +24,10 @@ import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellerEditor'>,
-  NativeStackScreenProps<NewModelPropellerNavigatorParamList, 'NewModelPropeller'>
+  NativeStackScreenProps<
+    NewModelPropellerNavigatorParamList,
+    'NewModelPropeller'
+  >
 >;
 
 const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
@@ -32,11 +38,16 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
-  const modelPropeller = useObject(ModelPropeller, new BSON.ObjectId(modelPropellerId));
+  const modelPropeller = useObject(
+    ModelPropeller,
+    new BSON.ObjectId(modelPropellerId),
+  );
 
   const name = useRef(modelPropeller?.name || undefined);
   const vendor = useRef(modelPropeller?.vendor || undefined);
-  const numberOfBlades = useRef(modelPropeller?.numberOfBlades?.toString() || undefined);
+  const numberOfBlades = useRef(
+    modelPropeller?.numberOfBlades?.toString() || undefined,
+  );
   const diameter = useRef(modelPropeller?.diameter?.toString() || undefined);
   const pitch = useRef(modelPropeller?.pitch?.toString() || undefined);
   const [measurementUnits, setMeasurementUnits] = useState<MeasurementUnits>(
@@ -106,7 +117,10 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
     event.on('propeller-measurement-units', onChangeMeasurementUnits);
     event.on('propeller-notes', onChangeNotes);
     return () => {
-      event.removeListener('propeller-measurement-units', onChangeMeasurementUnits);
+      event.removeListener(
+        'propeller-measurement-units',
+        onChangeMeasurementUnits,
+      );
       event.removeListener('propeller-notes', onChangeNotes);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,7 +160,9 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
         numeric={true}
         numericProps={{ prefix: '', precision: 0 }}
         keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (numberOfBlades.current = value))}
+        onChangeText={value =>
+          setDebounced(() => (numberOfBlades.current = value))
+        }
       />
       <ListItemInput
         title={'Diameter'}

@@ -57,10 +57,13 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'} />
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
+      {filterEditor.name === filterEditor.generalFilterName ||
+      requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
-          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          position={
+            filterEditor.createSavedFilter ? ['first'] : ['first', 'last']
+          }
           value={filterEditor.createSavedFilter}
           disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
@@ -70,7 +73,9 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
               value={filterEditor.customName}
               placeholder={'Filter Name'}
               position={['last']}
-              onChangeText={value => setDebounced(() => filterEditor.setCustomName(value))}
+              onChangeText={value =>
+                setDebounced(() => filterEditor.setCustomName(value))
+              }
             />
           }
         />
@@ -79,7 +84,9 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
-          onChangeText={value => setDebounced(() => filterEditor.setName(value))}
+          onChangeText={value =>
+            setDebounced(() => filterEditor.setName(value))
+          }
         />
       )}
       <Divider />
@@ -93,7 +100,9 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
         onPress={filterEditor.resetFilter}
       />
       <Divider
-        text={'This filter shows all the battery cycles that match all of these criteria.'}
+        text={
+          'This filter shows all the battery cycles that match all of these criteria.'
+        }
       />
       <ListItemFilterDate
         title={'Discharge Date'}

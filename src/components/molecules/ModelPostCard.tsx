@@ -57,7 +57,11 @@ export const ModelPostCard = ({
         </View>
       </View>
       {model.image ? (
-        <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelCardImage} />
+        <Image
+          source={{ uri: model.image }}
+          resizeMode={'cover'}
+          style={s.modelCardImage}
+        />
       ) : (
         <View style={s.modelCardSvg}>
           <SvgXml
@@ -72,7 +76,9 @@ export const ModelPostCard = ({
       {(model.damaged || maintenanceIsDue) && (
         <View style={s.modelTagContainer}>
           {model.damaged && <Text style={s.modelTag}>{'Damaged'}</Text>}
-          {maintenanceIsDue && <Text style={s.modelTag}>{'Maintenance Due'}</Text>}
+          {maintenanceIsDue && (
+            <Text style={s.modelTag}>{'Maintenance Due'}</Text>
+          )}
         </View>
       )}
       <View style={s.modelCardFooter}>

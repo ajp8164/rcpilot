@@ -1,6 +1,13 @@
 import * as Yup from 'yup';
 
-import { Alert, Keyboard, ScrollView, Text, TextInput, View } from 'react-native';
+import {
+  Alert,
+  Keyboard,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import React, { useRef } from 'react';
@@ -22,7 +29,10 @@ export interface EditorState {
   isSubmitting: boolean;
 }
 
-export type Props = NativeStackScreenProps<SignInNavigatorParamList, 'ForgotPasswordScreen'>;
+export type Props = NativeStackScreenProps<
+  SignInNavigatorParamList,
+  'ForgotPasswordScreen'
+>;
 
 const ForgotPasswordScreen = () => {
   const theme = useTheme();
@@ -35,7 +45,10 @@ const ForgotPasswordScreen = () => {
     isSubmitting: false,
   });
 
-  const sendEmail = (values: FormValues, { resetForm }: FormikHelpers<FormValues>) => {
+  const sendEmail = (
+    values: FormValues,
+    { resetForm }: FormikHelpers<FormValues>,
+  ) => {
     Keyboard.dismiss();
     setEditorState({ isSubmitting: true });
     sendPasswordResetEmail(values.email)
@@ -64,7 +77,9 @@ const ForgotPasswordScreen = () => {
   return (
     <>
       <AvoidSoftInputView style={s.avoidContainer}>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.container}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={s.container}>
           <Formik
             innerRef={formikRef}
             initialValues={{
@@ -76,7 +91,9 @@ const ForgotPasswordScreen = () => {
             {formik => (
               <View style={[theme.styles.viewAlt, s.view]}>
                 <Text style={s.description}>
-                  {"Enter your email address and we'll send a link to reset your password."}
+                  {
+                    "Enter your email address and we'll send a link to reset your password."
+                  }
                 </Text>
                 <ListItemInput
                   refInner={refEmail}

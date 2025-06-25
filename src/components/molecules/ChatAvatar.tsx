@@ -96,7 +96,8 @@ export const ChatAvatar = ({
           titleStyle={[_titleStyle, titleStyle]}
           containerStyle={{
             ..._avatarStyle,
-            backgroundColor: userProfile?.avatar.color || theme.colors.subtleGray,
+            backgroundColor:
+              userProfile?.avatar.color || theme.colors.subtleGray,
             ...avatarStyle,
           }}
           onPress={onPress}

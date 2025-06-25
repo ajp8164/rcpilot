@@ -1,7 +1,18 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
-import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
-import { ListItem, ListItemDate, ListItemInput, listItemPosition } from 'components/atoms/List';
+import {
+  FlatList,
+  Image,
+  ListRenderItem,
+  ScrollView,
+  View,
+} from 'react-native';
+import {
+  ListItem,
+  ListItemDate,
+  ListItemInput,
+  listItemPosition,
+} from 'components/atoms/List';
 import {
   LogNavigatorParamList,
   ModelsNavigatorParamList,
@@ -12,7 +23,10 @@ import React, { useEffect, useRef, useState } from 'react';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
 import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
-import { modelEventOutcomeStatistics, useModelEventStyleStatistics } from 'lib/analytics';
+import {
+  modelEventOutcomeStatistics,
+  useModelEventStyleStatistics,
+} from 'lib/analytics';
 import { modelHasPropeller, modelSummary, modelTypeIcons } from 'lib/model';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -70,9 +84,15 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const [date, setDate] = useState(modelEvent?.createdOn);
   const duration = useRef(secondsToFormat(modelEvent?.duration) || undefined);
   const [fuel, setFuel] = useState(modelEvent?.fuel || undefined);
-  const fuelConsumed = useRef(modelEvent?.fuelConsumed?.toString() || undefined);
-  const [propeller, setPropeller] = useState(modelEvent?.propeller || undefined);
-  const [eventStyle, setEventStyle] = useState(modelEvent?.eventStyle || undefined);
+  const fuelConsumed = useRef(
+    modelEvent?.fuelConsumed?.toString() || undefined,
+  );
+  const [propeller, setPropeller] = useState(
+    modelEvent?.propeller || undefined,
+  );
+  const [eventStyle, setEventStyle] = useState(
+    modelEvent?.eventStyle || undefined,
+  );
   const [location, setLocation] = useState(modelEvent?.location || undefined);
   const [pilot, setPilot] = useState(modelEvent?.pilot || undefined);
   const [outcome, setOutcome] = useState(modelEvent?.outcome || undefined);
@@ -87,7 +107,10 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     const canSave =
       !!duration.current &&
       (!eqString(modelEvent.date, date) ||
-        !eqNumber(modelEvent.duration, MSSToSeconds(duration.current).toString()) ||
+        !eqNumber(
+          modelEvent.duration,
+          MSSToSeconds(duration.current).toString(),
+        ) ||
         !eqObjectId(modelEvent.location, location) ||
         !eqString(modelEvent.outcome, outcome) ||
         !eqObjectId(modelEvent.propeller, propeller) ||
@@ -131,15 +154,17 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         // Recompute event duration data only when inputs change.
         if (
           previous.duration !== modelEvent.duration ||
-          previous.eventStyle?._id.toString() !== modelEvent.eventStyle?._id.toString()
+          previous.eventStyle?._id.toString() !==
+            modelEvent.eventStyle?._id.toString()
         ) {
-          modelEvent.model.statistics.eventStyleData = modelEventStyleStatistics(
-            'update',
-            modelEvent.model,
-            modelEvent.duration,
-            previous.eventStyle,
-            eventStyle,
-          );
+          modelEvent.model.statistics.eventStyleData =
+            modelEventStyleStatistics(
+              'update',
+              modelEvent.model,
+              modelEvent.duration,
+              previous.eventStyle,
+              eventStyle,
+            );
         }
 
         if (previous.outcome !== modelEvent.outcome) {
@@ -192,7 +217,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const onDateChange = (date?: Date) => {
-    date && setDate(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
+    date &&
+      setDate(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
   };
 
   const onChangeModelFuel = (result: EnumPickerResult) => {
@@ -238,13 +264,19 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     setNotes(result.text);
   };
 
-  const renderBatteryCycle: ListRenderItem<BatteryCycle> = ({ item: cycle, index }) => {
+  const renderBatteryCycle: ListRenderItem<BatteryCycle> = ({
+    item: cycle,
+    index,
+  }) => {
     return (
       <ListItem
         key={index}
         title={batteryCycleTitle(cycle)}
         subtitle={batteryCycleDescription(cycle)}
-        position={listItemPosition(index, modelEvent?.batteryCycles.length || 0)}
+        position={listItemPosition(
+          index,
+          modelEvent?.batteryCycles.length || 0,
+        )}
         onPress={() =>
           navigation.navigate('BatteryCycleEditor', {
             batteryId: cycle.battery._id.toString(),
@@ -284,7 +316,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
               <View style={s.modelSvgContainer}>
                 {modelEvent.model?.type && (
                   <SvgXml
-                    xml={getColoredSvg(modelTypeIcons[modelEvent.model.type]?.name as string)}
+                    xml={getColoredSvg(
+                      modelTypeIcons[modelEvent.model.type]?.name as string,
+                    )}
                     width={s.modelImage.width}
                     height={s.modelImage.height}
                     color={theme.colors.brandSecondary}
@@ -301,7 +335,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       <Divider />
       <ListItemDate
         title={'Date'}
-        value={date && DateTime.fromISO(date).toFormat("MMM d, yyyy 'at' h:mm a")}
+        value={
+          date && DateTime.fromISO(date).toFormat("MMM d, yyyy 'at' h:mm a")
+        }
         pickerValue={date}
         rightImage={false}
         expanded={expandedDate}
@@ -359,7 +395,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
               enumName: 'ModelPropeller',
               title: 'Propeller',
               headerBackTitle: 'Model',
-              footer: 'You can manage propellers through the Globals section in the Setup tab.',
+              footer:
+                'You can manage propellers through the Globals section in the Setup tab.',
               values: modelPropellers.map(p => {
                 return p.name;
               }),
@@ -380,7 +417,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
             enumName: 'ModelFuel',
             title: 'Fuel',
             headerBackTitle: `${kind.name}`,
-            footer: 'You can manage fuels through the Globals section in the Setup tab.',
+            footer:
+              'You can manage fuels through the Globals section in the Setup tab.',
             values: modelFuels.map(f => {
               return f.name;
             }),
@@ -399,7 +437,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         numericProps={{ precision: 2, prefix: '' }}
         position={['last']}
         keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (fuelConsumed.current = value))}
+        onChangeText={value =>
+          setDebounced(() => (fuelConsumed.current = value))
+        }
       />
       <Divider />
       <ListItem
@@ -411,7 +451,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
             enumName: 'Pilot',
             title: 'Pilot',
             headerBackTitle: `${kind.name}`,
-            footer: 'You can manage pilots through the Globals section in the Setup tab.',
+            footer:
+              'You can manage pilots through the Globals section in the Setup tab.',
             values: pilots.map(p => {
               return p.name;
             }),
@@ -429,7 +470,8 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
             enumName: 'EventStyle',
             title: 'Style',
             headerBackTitle: `${kind.name}`,
-            footer: 'You can manage styles through the Globals section in the Setup tab.',
+            footer:
+              'You can manage styles through the Globals section in the Setup tab.',
             values: eventStyles.map(s => {
               return s.name;
             }),
@@ -446,7 +488,9 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
         onPress={() =>
           navigation.navigate('NotesEditor', {
             title: 'Event Notes',
-            headerButtonStyle: { color: theme.colors.screenHeaderInvButtonText },
+            headerButtonStyle: {
+              color: theme.colors.screenHeaderInvButtonText,
+            },
             text: notes,
             eventName: 'event-notes',
           })
@@ -461,7 +505,11 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
           showsVerticalScrollIndicator={false}
           ListHeaderComponent={
             <Divider
-              text={modelEvent.batteryCycles.length === 1 ? 'BATTERY USED' : 'BATTERIES USED'}
+              text={
+                modelEvent.batteryCycles.length === 1
+                  ? 'BATTERY USED'
+                  : 'BATTERIES USED'
+              }
             />
           }
         />

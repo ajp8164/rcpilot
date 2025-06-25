@@ -1,7 +1,12 @@
 import { AppTheme, useTheme } from 'theme';
 import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
 import React, { useEffect, useRef } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem, View } from 'react-native';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
 
 import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
@@ -20,7 +25,10 @@ type Section = {
   nameSuggestion: string;
 };
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryTemplates'>;
+export type Props = NativeStackScreenProps<
+  BatteriesNavigatorParamList,
+  'BatteryTemplates'
+>;
 
 const BatteryTemplatesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -123,7 +131,11 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
     return templates;
   };
 
-  const setSelected = (index: number, battery: Battery, nameSuggestion: string) => {
+  const setSelected = (
+    index: number,
+    battery: Battery,
+    nameSuggestion: string,
+  ) => {
     const template: BatteryTemplate = {
       capacity: battery.capacity,
       chemistry: battery.chemistry,

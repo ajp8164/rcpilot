@@ -51,7 +51,10 @@ export class BatteryCharge extends Object<BatteryCharge> {
 }
 
 // Plain JS object types.
-export type JBatteryDischargeValues = Omit<JBatteryDischarge, 'date' | 'duration'>;
+export type JBatteryDischargeValues = Omit<
+  JBatteryDischarge,
+  'date' | 'duration'
+>;
 export type JBatteryDischarge = {
   date: ISODateString;
   duration: number;

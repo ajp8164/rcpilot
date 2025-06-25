@@ -7,7 +7,11 @@ import {
   swipeableDeleteItem,
 } from 'components/atoms/List';
 import React, { useEffect } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
 import {
   batteryCycleDescription,
   batteryCycleTitle,
@@ -36,7 +40,10 @@ type Section = {
   data: BatteryCycle[];
 };
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCycles'>;
+export type Props = NativeStackScreenProps<
+  BatteriesNavigatorParamList,
+  'BatteryCycles'
+>;
 
 const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const { batteryId } = route.params;
@@ -60,7 +67,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && (!batteryCycles.length || listEditor.enabled)}
+              disabled={
+                !filterId && (!batteryCycles.length || listEditor.enabled)
+              }
               icon={
                 <CustomIcon
                   name={filterId ? 'filter-check' : 'filter'}
@@ -96,21 +105,29 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterId, listEditor.enabled]);
 
-  const groupCycles = (cycles?: BatteryCycle[]): SectionListData<BatteryCycle, Section>[] => {
+  const groupCycles = (
+    cycles?: BatteryCycle[],
+  ): SectionListData<BatteryCycle, Section>[] => {
     return groupItems<BatteryCycle, Section>(cycles || [], cycle => {
       const date = cycle.charge?.date || cycle.discharge?.date;
-      return date ? DateTime.fromISO(date).toFormat('MMMM yyyy').toUpperCase() : '';
+      return date
+        ? DateTime.fromISO(date).toFormat('MMMM yyyy').toUpperCase()
+        : '';
     });
   };
 
   const deleteCycle = (cycleNumber: number) => {
     if (battery) {
       realm.write(() => {
-        const index = batteryCycles.findIndex(c => c.cycleNumber === cycleNumber);
+        const index = batteryCycles.findIndex(
+          c => c.cycleNumber === cycleNumber,
+        );
         if (index !== undefined && index >= 0) {
           // Make sure to decrement the battery's total cycle count.
           realm.delete(batteryCycles[index]);
-          battery.totalCycles ? (battery.totalCycles = battery.totalCycles - 1) : null;
+          battery.totalCycles
+            ? (battery.totalCycles = battery.totalCycles - 1)
+            : null;
         }
       });
     }
@@ -127,7 +144,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'battery-cycles', cycle._id.toString())}
+        ref={ref => {
+          ref && listEditor.add(ref, 'battery-cycles', cycle._id.toString());
+        }}
         key={index}
         title={batteryCycleTitle(cycle)}
         subtitle={batteryCycleDescription(cycle)}
@@ -197,7 +216,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
       sections={groupCycles([...batteryCycles].reverse())} // Most recent cycles at the top
       keyExtractor={(item, index) => `${index}${item.cycleNumber}`}
       renderItem={renderBatteryCycle}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
       ListFooterComponent={<Divider />}
     />
   );

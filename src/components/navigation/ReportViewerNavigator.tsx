@@ -1,5 +1,11 @@
-import { NativeStackScreenProps, createNativeStackNavigator } from '@react-navigation/native-stack';
-import { ReportViewerNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
+import {
+  NativeStackScreenProps,
+  createNativeStackNavigator,
+} from '@react-navigation/native-stack';
+import {
+  ReportViewerNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
 
 import { CompositeScreenProps } from '@react-navigation/core';
 import React from 'react';
@@ -7,7 +13,8 @@ import ReportEventsMaintenanceViewerScreen from 'components/ReportEventsMaintena
 import ReportScanCodesViewerScreen from 'components/ReportScanCodesViewerScreen';
 import { useTheme } from 'theme';
 
-const ReportViewerStack = createNativeStackNavigator<ReportViewerNavigatorParamList>();
+const ReportViewerStack =
+  createNativeStackNavigator<ReportViewerNavigatorParamList>();
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ReportViewerNavigator'>,

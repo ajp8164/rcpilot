@@ -6,7 +6,10 @@ import { ScrollView } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'PreferencesAudio'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'PreferencesAudio'
+>;
 
 const PreferencesAudioScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -22,7 +25,10 @@ const PreferencesAudioScreen = ({ navigation }: Props) => {
         position={['first']}
         onPress={() => navigation.navigate('PreferencesChimeCues')}
       />
-      <ListItem title={'Voice Cues'} onPress={() => navigation.navigate('PreferencesVoiceCues')} />
+      <ListItem
+        title={'Voice Cues'}
+        onPress={() => navigation.navigate('PreferencesVoiceCues')}
+      />
       <ListItem
         title={'Click Track'}
         position={['last']}

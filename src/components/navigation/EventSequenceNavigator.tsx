@@ -19,7 +19,8 @@ import { store } from 'store';
 import { useRealm } from '@realm/react';
 import { useTheme } from 'theme';
 
-const EventSequenceStack = createNativeStackNavigator<EventSequenceNavigatorParamList>();
+const EventSequenceStack =
+  createNativeStackNavigator<EventSequenceNavigatorParamList>();
 
 const EventSequenceNavigator = () => {
   const theme = useTheme();
@@ -30,7 +31,9 @@ const EventSequenceNavigator = () => {
       <EventSequenceStack.Navigator
         initialRouteName="EventSequenceBatteryPicker"
         screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.screenHeaderInvBackground },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderInvBackground,
+          },
           headerTitleStyle: { color: theme.colors.stickyWhite },
           headerTintColor: theme.colors.stickyWhite,
         }}>
@@ -46,9 +49,15 @@ const EventSequenceNavigator = () => {
           component={EventSequenceChecklistScreen}
           options={({ route }) => {
             const modelId = store.getState().eventSequence.modelId;
-            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const model = realm.objectForPrimaryKey(
+              'Model',
+              new BSON.ObjectId(modelId),
+            ) as Model;
             const kind = eventKind(model ? model.type : undefined);
-            const type = route.params.checklistType === ChecklistType.PreEvent ? 'Pre-' : 'Post-';
+            const type =
+              route.params.checklistType === ChecklistType.PreEvent
+                ? 'Pre-'
+                : 'Post-';
             return {
               title: `${type}${kind.name}`,
             };
@@ -66,7 +75,10 @@ const EventSequenceNavigator = () => {
           component={EventSequenceNewEventEditorScreen}
           options={() => {
             const modelId = store.getState().eventSequence.modelId;
-            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const model = realm.objectForPrimaryKey(
+              'Model',
+              new BSON.ObjectId(modelId),
+            ) as Model;
             const kind = eventKind(model ? model.type : undefined);
             return {
               title: `Log ${kind.name}`,
@@ -85,7 +97,10 @@ const EventSequenceNavigator = () => {
           component={NotesEditorScreen}
           options={() => {
             const modelId = store.getState().eventSequence.modelId;
-            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const model = realm.objectForPrimaryKey(
+              'Model',
+              new BSON.ObjectId(modelId),
+            ) as Model;
             const kind = eventKind(model ? model.type : undefined);
             return {
               title: `${kind.name} Notes`,
@@ -97,7 +112,10 @@ const EventSequenceNavigator = () => {
           component={EventSequenceTimerScreen}
           options={() => {
             const modelId = store.getState().eventSequence.modelId;
-            const model = realm.objectForPrimaryKey('Model', new BSON.ObjectId(modelId)) as Model;
+            const model = realm.objectForPrimaryKey(
+              'Model',
+              new BSON.ObjectId(modelId),
+            ) as Model;
             const kind = eventKind(model ? model.type : undefined);
             return {
               title: `${kind.name} Timer`,

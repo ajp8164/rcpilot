@@ -1,4 +1,8 @@
-import { DateRelation, NumberRelation, StringRelation } from 'components/molecules/filters';
+import {
+  DateRelation,
+  NumberRelation,
+  StringRelation,
+} from 'components/molecules/filters';
 
 import { BatteryCycleFilterValues } from 'types/filter';
 

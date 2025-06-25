@@ -21,7 +21,9 @@ export const batteryStatistics = (battery: Battery) => {
       count++;
       sumDischargeCurrent =
         sumDischargeCurrent +
-        (data.value.averageDischargeCurrent ? data.value.averageDischargeCurrent : 0);
+        (data.value.averageDischargeCurrent
+          ? data.value.averageDischargeCurrent
+          : 0);
     }
   });
 

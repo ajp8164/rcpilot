@@ -41,7 +41,8 @@ const handleUpdateUserProfile: CaseReducer<
 const userSlice = createSlice({
   name: 'user',
   initialState: initialUserState,
-  extraReducers: builder => builder.addCase(revertCredentials, () => initialUserState),
+  extraReducers: builder =>
+    builder.addCase(revertCredentials, () => initialUserState),
   reducers: {
     saveUser: handleSaveUser,
     updateUserProfile: handleUpdateUserProfile,

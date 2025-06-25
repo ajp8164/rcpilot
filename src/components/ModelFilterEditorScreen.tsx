@@ -23,10 +23,14 @@ import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
 
-export type Props = NativeStackScreenProps<ModelFiltersNavigatorParamList, 'ModelFilterEditor'>;
+export type Props = NativeStackScreenProps<
+  ModelFiltersNavigatorParamList,
+  'ModelFilterEditor'
+>;
 
 const ModelFilterEditorScreen = ({ route }: Props) => {
-  const { filterId, filterType, generalFilterName, requireFilterName } = route.params;
+  const { filterId, filterType, generalFilterName, requireFilterName } =
+    route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -54,10 +58,13 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
   return (
     <ScrollView style={theme.styles.view}>
       <Divider text={'FILTER NAME'} />
-      {filterEditor.name === filterEditor.generalFilterName || requireFilterName ? (
+      {filterEditor.name === filterEditor.generalFilterName ||
+      requireFilterName ? (
         <ListItemSwitch
           title={'Create a Saved Filter'}
-          position={filterEditor.createSavedFilter ? ['first'] : ['first', 'last']}
+          position={
+            filterEditor.createSavedFilter ? ['first'] : ['first', 'last']
+          }
           value={filterEditor.createSavedFilter}
           disabled={requireFilterName}
           expanded={filterEditor.createSavedFilter}
@@ -67,7 +74,9 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
               value={filterEditor.customName}
               placeholder={'Filter Name'}
               position={['last']}
-              onChangeText={value => setDebounced(() => filterEditor.setCustomName(value))}
+              onChangeText={value =>
+                setDebounced(() => filterEditor.setCustomName(value))
+              }
             />
           }
         />
@@ -76,7 +85,9 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
           value={filterEditor.name}
           placeholder={'Filter Name'}
           position={['first', 'last']}
-          onChangeText={value => setDebounced(() => filterEditor.setName(value))}
+          onChangeText={value =>
+            setDebounced(() => filterEditor.setName(value))
+          }
         />
       )}
       <Divider />
@@ -89,7 +100,11 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
         rightImage={false}
         onPress={filterEditor.resetFilter}
       />
-      <Divider text={'This filter shows all the models that match all of these criteria.'} />
+      <Divider
+        text={
+          'This filter shows all the models that match all of these criteria.'
+        }
+      />
       <ListItemFilterEnum
         title={'Model Type'}
         value={filterEditor.values.modelType.value}

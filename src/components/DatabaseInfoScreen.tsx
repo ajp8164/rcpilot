@@ -13,7 +13,10 @@ import { revertSettings } from 'store/actions';
 import { store } from 'store';
 import { useRealm } from '@realm/react';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseInfo'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'DatabaseInfo'
+>;
 
 const DatabaseInfoScreen = () => {
   const theme = useTheme();
@@ -54,7 +57,9 @@ const DatabaseInfoScreen = () => {
       />
       <ListItem
         title={'Last Modified'}
-        value={DateTime.fromISO(databaseInfo.databaseLastUpdate).toFormat("M/d/yyyy 'at' h:mm a")}
+        value={DateTime.fromISO(databaseInfo.databaseLastUpdate).toFormat(
+          "M/d/yyyy 'at' h:mm a",
+        )}
         position={['last']}
         rightImage={false}
       />

@@ -22,7 +22,10 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 
-export type Props = NativeStackScreenProps<LocationNavigatorParamList, 'LocationEditor'>;
+export type Props = NativeStackScreenProps<
+  LocationNavigatorParamList,
+  'LocationEditor'
+>;
 
 const LocationEditorScreen = ({ navigation, route }: Props) => {
   const { locationId } = route.params;
@@ -53,7 +56,9 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
     if (!locationId || !location) return;
 
     const canSave =
-      !!name && (!eqString(location?.name, name.current) || !eqString(location?.notes, notes));
+      !!name &&
+      (!eqString(location?.name, name.current) ||
+        !eqString(location?.notes, notes));
 
     if (canSave) {
       realm.write(() => {
@@ -153,7 +158,8 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
         onPress={() => {
           confirmAction(deleteLocation, {
             label: 'Delete Location',
-            title: 'This action cannot be undone.\nAre you sure you want to delete this location?',
+            title:
+              'This action cannot be undone.\nAre you sure you want to delete this location?',
           });
         }}
       />

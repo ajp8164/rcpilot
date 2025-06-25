@@ -8,7 +8,8 @@ import { useTheme } from 'theme';
 const PreferencesBatteriesScreen = () => {
   const theme = useTheme();
 
-  const [defaultToFullChargeEnabled, setAtFieldSingleTapEnabled] = useState(false);
+  const [defaultToFullChargeEnabled, setAtFieldSingleTapEnabled] =
+    useState(false);
   const [hideStoredPacksEnabled, setHideStoredPacksEnabled] = useState(false);
   const [autofillPerPackEnabled, setAutofillPerPackEnabled] = useState(false);
   const [autofillPerCellEnabled, setAutofillPerCellEnabled] = useState(false);

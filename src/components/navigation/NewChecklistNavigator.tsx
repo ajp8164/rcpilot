@@ -8,7 +8,8 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
 
-const NewChecklistStack = createNativeStackNavigator<NewChecklistNavigatorParamList>();
+const NewChecklistStack =
+  createNativeStackNavigator<NewChecklistNavigatorParamList>();
 
 const NewChecklistNavigator = () => {
   const theme = useTheme();

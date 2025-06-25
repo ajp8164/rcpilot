@@ -1,5 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
-import { ContentView, Divider, ListItemAccordian } from '@react-native-ajp-elements/ui';
+import {
+  ContentView,
+  Divider,
+  ListItemAccordian,
+} from '@react-native-ajp-elements/ui';
 import React, { useEffect } from 'react';
 import { ScrollView, View } from 'react-native';
 
@@ -37,7 +41,9 @@ const ContentScreen = ({ route, navigation }: Props) => {
 
   return (
     <View style={theme.styles.view}>
-      <ScrollView showsVerticalScrollIndicator={false} contentInsetAdjustmentBehavior={'automatic'}>
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
         {contentView.lists.map((list, listIndex) => {
           return (
             <View key={listIndex}>

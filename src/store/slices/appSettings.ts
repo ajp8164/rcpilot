@@ -4,7 +4,11 @@ import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
 import { revertSettings } from 'store/actions';
-import { ModelPreferences, ModelsPreferences, ModelsLayout } from 'types/preferences';
+import {
+  ModelPreferences,
+  ModelsPreferences,
+  ModelsLayout,
+} from 'types/preferences';
 
 export interface AppSettingsState {
   biometrics: boolean;
@@ -31,10 +35,10 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   },
 });
 
-const handleSaveBiometrics: CaseReducer<AppSettingsState, PayloadAction<{ value: boolean }>> = (
-  state,
-  { payload },
-) => {
+const handleSaveBiometrics: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ value: boolean }>
+> = (state, { payload }) => {
   return {
     ...state,
     biometrics: payload.value,
@@ -105,10 +109,10 @@ const handleSaveThemeSettings: CaseReducer<
   };
 };
 
-const handleSaveAcceptTou: CaseReducer<AppSettingsState, PayloadAction<{ tou: Tou }>> = (
-  state,
-  { payload },
-) => {
+const handleSaveAcceptTou: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ tou: Tou }>
+> = (state, { payload }) => {
   return {
     ...state,
     tou: payload.tou,
@@ -118,7 +122,8 @@ const handleSaveAcceptTou: CaseReducer<AppSettingsState, PayloadAction<{ tou: To
 const appSettingsSlice = createSlice({
   name: 'appSettings',
   initialState: initialAppSettingsState,
-  extraReducers: builder => builder.addCase(revertSettings, () => initialAppSettingsState),
+  extraReducers: builder =>
+    builder.addCase(revertSettings, () => initialAppSettingsState),
   reducers: {
     deleteModelPreferences: handleDeleteModelPreferences,
     saveAcceptTou: handleSaveAcceptTou,
@@ -132,11 +137,14 @@ const appSettingsSlice = createSlice({
 });
 
 export const appSettingsReducer = appSettingsSlice.reducer;
-export const deleteModelPreferences = appSettingsSlice.actions.deleteModelPreferences;
+export const deleteModelPreferences =
+  appSettingsSlice.actions.deleteModelPreferences;
 export const saveAcceptTou = appSettingsSlice.actions.saveAcceptTou;
 export const saveBiometrics = appSettingsSlice.actions.saveBiometrics;
-export const saveDatabaseAccessWith = appSettingsSlice.actions.saveDatabaseAccessWith;
+export const saveDatabaseAccessWith =
+  appSettingsSlice.actions.saveDatabaseAccessWith;
 export const saveOutputReportTo = appSettingsSlice.actions.saveOutputReportTo;
 export const saveModelsLayout = appSettingsSlice.actions.saveModelsLayout;
-export const saveModelPreferences = appSettingsSlice.actions.saveModelPreferences;
+export const saveModelPreferences =
+  appSettingsSlice.actions.saveModelPreferences;
 export const saveThemeSettings = appSettingsSlice.actions.saveThemeSettings;

@@ -1,10 +1,28 @@
-import Animated, { useAnimatedScrollHandler, useSharedValue } from 'react-native-reanimated';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { ListItem, ListItemDate, ListItemInput, ListItemSwitch } from 'components/atoms/List';
+import {
+  ListItem,
+  ListItemDate,
+  ListItemInput,
+  ListItemSwitch,
+} from 'components/atoms/List';
 import { Model, ModelStatistics } from 'realmdb/Model';
-import { ModelsNavigatorParamList, NewModelNavigatorParamList } from 'types/navigation';
+import {
+  ModelsNavigatorParamList,
+  NewModelNavigatorParamList,
+} from 'types/navigation';
 import React, { useEffect, useRef, useState } from 'react';
-import { eqArray, eqBoolean, eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
+import {
+  eqArray,
+  eqBoolean,
+  eqNumber,
+  eqObjectId,
+  eqString,
+  toNumber,
+} from 'realmdb/helpers';
 import { hmsMaskToSeconds, maskToHMS, secondsToFormat } from 'lib/formatters';
 import {
   modelCostStatistics,
@@ -78,22 +96,42 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const purchasePrice = useRef(model?.purchasePrice?.toString() || undefined);
   const [damaged, setDamaged] = useState(model?.damaged || false);
   const [retired, setRetired] = useState(model?.retired || false);
-  const totalEvents = useRef(model?.statistics.totalEvents?.toString() || undefined);
-  const totalTime = useRef(model?.statistics.totalTime?.toString() || undefined);
+  const totalEvents = useRef(
+    model?.statistics.totalEvents?.toString() || undefined,
+  );
+  const totalTime = useRef(
+    model?.statistics.totalTime?.toString() || undefined,
+  );
   const [lastEvent, setLastEvent] = useState(model?.lastEvent || undefined);
-  const [logsBatteries, setLogsBatteries] = useState(model?.logsBatteries || false);
-  const [favoriteBatteries, setFavoriteBatteries] = useState(model?.favoriteBatteries || []);
+  const [logsBatteries, setLogsBatteries] = useState(
+    model?.logsBatteries || false,
+  );
+  const [favoriteBatteries, setFavoriteBatteries] = useState(
+    model?.favoriteBatteries || [],
+  );
   const [logsFuel, setLogsFuel] = useState(model?.logsFuel || false);
   const fuelCapacity = useRef(model?.fuelCapacity?.toString() || undefined);
   const totalFuel = useRef(model?.totalFuel?.toString() || undefined);
-  const [defaultFuel, setDefaultFuel] = useState(model?.defaultFuel || undefined);
-  const [defaultPropeller, setDefaultPropeller] = useState(model?.defaultPropeller || undefined);
-  const [defaultStyle, setDefaultStyle] = useState(model?.defaultStyle || undefined);
-  const [scanCodeSize, setScanCodeSize] = useState(model?.scanCodeSize || ScanCodeSize.None);
+  const [defaultFuel, setDefaultFuel] = useState(
+    model?.defaultFuel || undefined,
+  );
+  const [defaultPropeller, setDefaultPropeller] = useState(
+    model?.defaultPropeller || undefined,
+  );
+  const [defaultStyle, setDefaultStyle] = useState(
+    model?.defaultStyle || undefined,
+  );
+  const [scanCodeSize, setScanCodeSize] = useState(
+    model?.scanCodeSize || ScanCodeSize.None,
+  );
   const [notes, setNotes] = useState(model?.notes || undefined);
 
-  const [completedMaintenanceActionsCount, setCompletedMaintenanceActionsCount] = useState(0);
-  const [pendingMaintenanceActionsCount, setPendingMaintenanceActionsCount] = useState(0);
+  const [
+    completedMaintenanceActionsCount,
+    setCompletedMaintenanceActionsCount,
+  ] = useState(0);
+  const [pendingMaintenanceActionsCount, setPendingMaintenanceActionsCount] =
+    useState(0);
 
   const [expandedLastEvent, setExpandedLastEvent] = useState(false);
   const scrollY = useSharedValue(0);
@@ -177,7 +215,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, { title: 'New Model' });
+    setScreenEditHeader({ enabled: canSave, action: onDone }, undefined, {
+      title: 'New Model',
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     name.current,
@@ -246,7 +286,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.defaultStyle = defaultStyle;
         model.scanCodeSize = scanCodeSize;
         model.notes = notes;
-        model.statistics = lodash.merge(model.statistics, modelCostStatistics(model));
+        model.statistics = lodash.merge(
+          model.statistics,
+          modelCostStatistics(model),
+        );
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -291,7 +334,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     let completedCount = 0;
     let pendingCount = 0;
     const maintenanceChecklists = model?.checklists.filter(
-      c => c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance,
+      c =>
+        c.type === ChecklistType.Maintenance ||
+        c.type === ChecklistType.OneTimeMaintenance,
     );
     maintenanceChecklists?.forEach(c => {
       c.actions.forEach(a => {
@@ -320,7 +365,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     return () => {
       event.removeListener('model-type', onChangeType);
       event.removeListener('model-category', onChangeCategory);
-      event.removeListener('model-favorite-batteries', onChangeFavoriteBatteries);
+      event.removeListener(
+        'model-favorite-batteries',
+        onChangeFavoriteBatteries,
+      );
       event.removeListener('default-propeller', onChangeDefaultPropeller);
       event.removeListener('default-style', onChangeDefaultStyle);
       event.removeListener('default-fuel', onChangeDefaultFuel);
@@ -367,7 +415,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const onLastEventChange = (date?: Date) => {
-    date && setLastEvent(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
+    date &&
+      setLastEvent(
+        DateTime.fromJSDate(date).toISO() || new Date().toISOString(),
+      );
   };
 
   const onChangeScanCodeSize = (result: EnumPickerResult) => {
@@ -392,7 +443,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
   const deleteModel = () => {
     // Cleanup model preferences.
-    model && dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
+    model &&
+      dispatch(deleteModelPreferences({ modelId: model._id.toString() }));
 
     realm.write(() => {
       realm.delete(model);
@@ -409,7 +461,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         contentInsetAdjustmentBehavior={'automatic'}>
         {!modelId && (
           <>
-            <ModelHeader modelId={route.params.modelId} modelType={type} onChangeImage={setImage} />
+            <ModelHeader
+              modelId={route.params.modelId}
+              modelType={type}
+              onChangeImage={setImage}
+            />
             <Divider />
           </>
         )}
@@ -456,7 +512,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 enumName: 'ModelCategory',
                 title: 'Model Category',
                 headerBackTitle: 'Model',
-                footer: 'You can manage categories through the Globals section in the Setup tab.',
+                footer:
+                  'You can manage categories through the Globals section in the Setup tab.',
                 values: modelCategories.map(c => {
                   return c.name;
                 }),
@@ -483,7 +540,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               position={['first']}
               onChangeText={value =>
                 setDebounced(
-                  () => (totalTime.current = hmsMaskToSeconds(value) > 0 ? value : undefined),
+                  () =>
+                    (totalTime.current =
+                      hmsMaskToSeconds(value) > 0 ? value : undefined),
                 )
               }
             />
@@ -495,7 +554,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               keyboardType={'number-pad'}
               numeric={true}
               numericProps={{ precision: 0, prefix: '' }}
-              onChangeText={value => setDebounced(() => (totalEvents.current = value))}
+              onChangeText={value =>
+                setDebounced(() => (totalEvents.current = value))
+              }
             />
           </CollapsibleView>
           {!!modelId && (
@@ -518,7 +579,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
               title={`Last ${kind.name}`}
               value={
                 lastEvent
-                  ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
+                  ? DateTime.fromISO(lastEvent).toFormat(
+                      "MMM d, yyyy 'at' h:mm a",
+                    )
                   : 'Tap to Set...'
               }
               pickerValue={lastEvent}
@@ -535,7 +598,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                 title={`Last ${kind.name}`}
                 value={
                   lastEvent
-                    ? DateTime.fromISO(lastEvent).toFormat("MMM d, yyyy 'at' h:mm a")
+                    ? DateTime.fromISO(lastEvent).toFormat(
+                        "MMM d, yyyy 'at' h:mm a",
+                      )
                     : 'Unknown'
                 }
                 rightImage={false}
@@ -626,7 +691,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                   numeric={true}
                   numericProps={{ precision: 2, prefix: '' }}
                   keyboardType={'number-pad'}
-                  onChangeText={value => setDebounced(() => (fuelCapacity.current = value))}
+                  onChangeText={value =>
+                    setDebounced(() => (fuelCapacity.current = value))
+                  }
                 />
                 <ListItemInput
                   title={'Total Fuel Consumed'}
@@ -637,7 +704,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                   numericProps={{ precision: 2, prefix: '' }}
                   position={['last']}
                   keyboardType={'number-pad'}
-                  onChangeText={value => setDebounced(() => (totalFuel.current = value))}
+                  onChangeText={value =>
+                    setDebounced(() => (totalFuel.current = value))
+                  }
                 />
               </>
             }
@@ -646,13 +715,18 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           <ListItem
             title={'Default Style'}
             value={defaultStyle?.name || 'None'}
-            position={!modelHasPropeller(type) && !logsFuel ? ['first', 'last'] : ['first']}
+            position={
+              !modelHasPropeller(type) && !logsFuel
+                ? ['first', 'last']
+                : ['first']
+            }
             onPress={() =>
               navigation.navigate('EnumPicker', {
                 enumName: 'EventStyle',
                 title: 'Default Style',
                 headerBackTitle: 'Model',
-                footer: 'You can manage styles through the Globals section in the Setup tab.',
+                footer:
+                  'You can manage styles through the Globals section in the Setup tab.',
                 values: eventStyles.map(s => {
                   return s.name;
                 }),
@@ -672,7 +746,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                   enumName: 'ModelPropeller',
                   title: 'Default Propeller',
                   headerBackTitle: 'Model',
-                  footer: 'You can manage propellers through the Globals section in the Setup tab.',
+                  footer:
+                    'You can manage propellers through the Globals section in the Setup tab.',
                   values: modelPropellers.map(p => {
                     return p.name;
                   }),
@@ -693,7 +768,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                   enumName: 'ModelFuel',
                   title: 'Default Fuel',
                   headerBackTitle: 'Model',
-                  footer: 'You can manage fuel through the Globals section in the Setup tab.',
+                  footer:
+                    'You can manage fuel through the Globals section in the Setup tab.',
                   values: modelFuels.map(f => {
                     return f.name;
                   }),
@@ -728,7 +804,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
             keyboardType={'number-pad'}
             placeholder={'Unknown'}
             position={['first']}
-            onChangeText={value => setDebounced(() => (purchasePrice.current = value))}
+            onChangeText={value =>
+              setDebounced(() => (purchasePrice.current = value))
+            }
           />
           {!!modelId && (
             <ListItemSwitch

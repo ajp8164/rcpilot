@@ -10,8 +10,17 @@ import {
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import { batteryCycleChargeData, batteryCycleStatisticsData } from 'lib/batteryCycle';
-import { eqArray, eqBoolean, eqNumber, eqString, toNumber } from 'realmdb/helpers';
+import {
+  batteryCycleChargeData,
+  batteryCycleStatisticsData,
+} from 'lib/batteryCycle';
+import {
+  eqArray,
+  eqBoolean,
+  eqNumber,
+  eqString,
+  toNumber,
+} from 'realmdb/helpers';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -32,7 +41,10 @@ import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
-export type Props = NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCycleEditor'>;
+export type Props = NativeStackScreenProps<
+  BatteriesNavigatorParamList,
+  'BatteryCycleEditor'
+>;
 
 const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   const { batteryId, cycleNumber } = route.params;
@@ -48,19 +60,29 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   const cycle = battery?.cycles.find(c => {
     return c.cycleNumber === cycleNumber;
   });
-  const isCharged = battery?.cycles[battery.cycles.length - 1]?.charge || !battery?.cycles.length;
+  const isCharged =
+    battery?.cycles[battery.cycles.length - 1]?.charge ||
+    !battery?.cycles.length;
 
   // Discharge phase
   const [dischargeDate, setDischargeDate] = useState(cycle?.discharge?.date);
-  const dischargeDuration = useRef(secondsToFormat(cycle?.discharge?.duration) || undefined);
-  const dischargePackVoltage = useRef(cycle?.discharge?.packVoltage?.toString() || undefined);
-  const dischargePackResistance = useRef(cycle?.discharge?.packResistance?.toString() || undefined);
+  const dischargeDuration = useRef(
+    secondsToFormat(cycle?.discharge?.duration) || undefined,
+  );
+  const dischargePackVoltage = useRef(
+    cycle?.discharge?.packVoltage?.toString() || undefined,
+  );
+  const dischargePackResistance = useRef(
+    cycle?.discharge?.packResistance?.toString() || undefined,
+  );
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
   const [dischargeCellVoltages, setDischargeCellVoltages] = useState<string[]>(
     cycle?.discharge?.cellVoltage ||
       (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
   );
-  const [dischargeCellResistances, setDischargeCellResistances] = useState<string[]>(
+  const [dischargeCellResistances, setDischargeCellResistances] = useState<
+    string[]
+  >(
     cycle?.discharge?.cellResistance ||
       (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
   );
@@ -68,8 +90,12 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   // Charge phase
   const [chargeDate, setChargeDate] = useState(cycle?.charge?.date);
   const chargeAmount = useRef(cycle?.charge?.amount?.toString() || undefined);
-  const chargePackVoltage = useRef(cycle?.charge?.packVoltage?.toString() || undefined);
-  const chargePackResistance = useRef(cycle?.charge?.packResistance?.toString() || undefined);
+  const chargePackVoltage = useRef(
+    cycle?.charge?.packVoltage?.toString() || undefined,
+  );
+  const chargePackResistance = useRef(
+    cycle?.charge?.packResistance?.toString() || undefined,
+  );
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
   const [chargeCellVoltages, setChargeCellVoltages] = useState<string[]>(
     cycle?.charge?.cellVoltage ||
@@ -80,7 +106,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
       (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
   );
   const [excludeFromPlots, setExcludeFromPlots] = useState(false);
-  const [notes, setNotes] = useState<string | undefined>(cycle?.notes || undefined);
+  const [notes, setNotes] = useState<string | undefined>(
+    cycle?.notes || undefined,
+  );
 
   const batteryCycleCharge = cycle && batteryCycleChargeData(cycle);
   const batteryCycleStats = cycle && batteryCycleStatisticsData(cycle);
@@ -108,15 +136,20 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             MSSToSeconds(dischargeDuration.current).toString(),
           )) ||
         !eqNumber(cycle.discharge?.packVoltage, dischargePackVoltage.current) ||
-        !eqNumber(cycle.discharge?.packResistance, dischargePackResistance.current) ||
+        !eqNumber(
+          cycle.discharge?.packResistance,
+          dischargePackResistance.current,
+        ) ||
         !eqArray(cycle.discharge?.cellVoltage, dischargeCellVoltages) ||
         !eqArray(cycle.discharge?.cellResistance, dischargeCellResistances) ||
         !eqString(cycle.charge?.date, chargeDate) ||
         !eqNumber(cycle.charge?.amount, chargeAmount.current) ||
         !eqNumber(cycle.charge?.packVoltage, chargePackVoltage.current) ||
         !eqNumber(cycle.charge?.packResistance, chargePackResistance.current) ||
-        (cycle.charge && !eqArray(cycle.charge?.cellVoltage, chargeCellVoltages)) ||
-        (cycle.charge && !eqArray(cycle.charge?.cellResistance, chargeCellResistances)) ||
+        (cycle.charge &&
+          !eqArray(cycle.charge?.cellVoltage, chargeCellVoltages)) ||
+        (cycle.charge &&
+          !eqArray(cycle.charge?.cellResistance, chargeCellResistances)) ||
         !eqBoolean(cycle.excludeFromPlots, excludeFromPlots) ||
         !eqString(cycle.notes, notes));
 
@@ -124,7 +157,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         cycle.discharge = {
           date: dischargeDate,
-          duration: dischargeDuration.current ? MSSToSeconds(dischargeDuration.current) : 0,
+          duration: dischargeDuration.current
+            ? MSSToSeconds(dischargeDuration.current)
+            : 0,
           packVoltage: toNumber(dischargePackVoltage.current),
           packResistance: toNumber(dischargePackResistance.current),
           cellVoltage: dischargeCellVoltages?.map(v => {
@@ -178,22 +213,39 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   ]);
 
   useEffect(() => {
-    event.on('battery-discharge-cell-resistances', onChangeDischargeCellResistances);
+    event.on(
+      'battery-discharge-cell-resistances',
+      onChangeDischargeCellResistances,
+    );
     event.on('battery-discharge-cell-voltages', onChangeDischargeCellVoltages);
     event.on('battery-charge-cell-resistances', onChangeChargeCellResistances);
     event.on('battery-charge-cell-voltages', onChangeChargeCellVoltages);
     event.on('battery-cycle-notes', onChangeNotes);
     return () => {
-      event.removeListener('battery-discharge-cell-resistances', onChangeDischargeCellResistances);
-      event.removeListener('battery-discharge-cell-voltages', onChangeDischargeCellVoltages);
-      event.removeListener('battery-charge-cell-resistances', onChangeChargeCellResistances);
-      event.removeListener('battery-charge-cell-voltages', onChangeChargeCellVoltages);
+      event.removeListener(
+        'battery-discharge-cell-resistances',
+        onChangeDischargeCellResistances,
+      );
+      event.removeListener(
+        'battery-discharge-cell-voltages',
+        onChangeDischargeCellVoltages,
+      );
+      event.removeListener(
+        'battery-charge-cell-resistances',
+        onChangeChargeCellResistances,
+      );
+      event.removeListener(
+        'battery-charge-cell-voltages',
+        onChangeChargeCellVoltages,
+      );
       event.removeListener('battery-cycle-notes', onChangeNotes);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChangeDischargeCellResistances = (result: BatteryCellValuesEditorResult) => {
+  const onChangeDischargeCellResistances = (
+    result: BatteryCellValuesEditorResult,
+  ) => {
     setDischargeCellResistances(
       result.cellValues.map(v => {
         return v.toString();
@@ -203,7 +255,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     dischargePackResistanceRef.current?.setValue(result.packValue.toString());
   };
 
-  const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
+  const onChangeDischargeCellVoltages = (
+    result: BatteryCellValuesEditorResult,
+  ) => {
     setDischargeCellVoltages(
       result.cellValues.map(v => {
         return v.toString();
@@ -213,7 +267,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     dischargePackVoltageRef.current?.setValue(result.packValue.toString());
   };
 
-  const onChangeChargeCellResistances = (result: BatteryCellValuesEditorResult) => {
+  const onChangeChargeCellResistances = (
+    result: BatteryCellValuesEditorResult,
+  ) => {
     setChargeCellResistances(
       result.cellValues.map(v => {
         return v.toString();
@@ -223,7 +279,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     chargePackResistanceRef.current?.setValue(result.packValue.toString());
   };
 
-  const onChangeChargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
+  const onChangeChargeCellVoltages = (
+    result: BatteryCellValuesEditorResult,
+  ) => {
     setChargeCellVoltages(
       result.cellValues.map(v => {
         return v.toString();
@@ -234,11 +292,17 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   };
 
   const onDischargeDateChange = (date?: Date) => {
-    date && setDischargeDate(DateTime.fromJSDate(date).toISO() || DateTime.now().toISO());
+    date &&
+      setDischargeDate(
+        DateTime.fromJSDate(date).toISO() || DateTime.now().toISO(),
+      );
   };
 
   const onChargeDateChange = (date?: Date) => {
-    date && setChargeDate(DateTime.fromJSDate(date).toISO() || DateTime.now().toISO());
+    date &&
+      setChargeDate(
+        DateTime.fromJSDate(date).toISO() || DateTime.now().toISO(),
+      );
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
@@ -289,7 +353,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         title={'Date'}
         value={
           dischargeDate
-            ? DateTime.fromISO(dischargeDate).toFormat("MMM d, yyyy 'at' h:mm a")
+            ? DateTime.fromISO(dischargeDate).toFormat(
+                "MMM d, yyyy 'at' h:mm a",
+              )
             : 'Tap to Set...'
         }
         pickerValue={dischargeDate}
@@ -312,41 +378,54 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         numeric={true}
         numericProps={{ prefix: '', separator: ':' }}
         keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (dischargeDuration.current = value))}
+        onChangeText={value =>
+          setDebounced(() => (dischargeDuration.current = value))
+        }
       />
       <ListItemInput
         ref={dischargePackVoltageRef}
         title={'Pack Voltage'}
         label={'V'}
         value={
-          dischargePackVoltage.current && parseFloat(dischargePackVoltage.current) > 0
+          dischargePackVoltage.current &&
+          parseFloat(dischargePackVoltage.current) > 0
             ? parseFloat(dischargePackVoltage.current).toFixed(1)
             : undefined
         }
         placeholder={'Value'}
         numeric={true}
         numericProps={{ prefix: '' }}
-        onChangeText={value => setDebounced(() => (dischargePackVoltage.current = value))}
+        onChangeText={value =>
+          setDebounced(() => (dischargePackVoltage.current = value))
+        }
       />
       <ListItemInput
         ref={dischargePackResistanceRef}
         title={'Pack Resistance'}
         label={'mΩ'}
         value={
-          dischargePackResistance.current && parseFloat(dischargePackResistance.current) > 0
+          dischargePackResistance.current &&
+          parseFloat(dischargePackResistance.current) > 0
             ? parseFloat(dischargePackResistance.current).toFixed(3)
             : undefined
         }
         placeholder={'Value'}
         numeric={true}
         numericProps={{ prefix: '', precision: 3 }}
-        onChangeText={value => setDebounced(() => (dischargePackResistance.current = value))}
+        onChangeText={value =>
+          setDebounced(() => (dischargePackResistance.current = value))
+        }
       />
       <ListItem
         title={'Cell Voltage'}
         onPress={() =>
           navigation.navigate('BatteryCellValuesEditor', {
-            config: { name: 'voltage', namePlural: 'voltages', label: 'V', precision: 2 },
+            config: {
+              name: 'voltage',
+              namePlural: 'voltages',
+              label: 'V',
+              precision: 2,
+            },
             packValue: Number(dischargePackVoltage.current),
             cellValues: dischargeCellVoltages?.map(v => {
               return toNumber(v) || 0;
@@ -362,7 +441,12 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
         position={['last']}
         onPress={() =>
           navigation.navigate('BatteryCellValuesEditor', {
-            config: { name: 'resistance', namePlural: 'resistances', label: 'mΩ', precision: 3 },
+            config: {
+              name: 'resistance',
+              namePlural: 'resistances',
+              label: 'mΩ',
+              precision: 3,
+            },
             packValue: Number(dischargePackResistance.current),
             cellValues: dischargeCellResistances?.map(r => {
               return toNumber(r) || 0;
@@ -380,7 +464,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             title={'Date'}
             value={
               chargeDate
-                ? DateTime.fromISO(chargeDate).toFormat("MMM d, yyyy 'at' h:mm a")
+                ? DateTime.fromISO(chargeDate).toFormat(
+                    "MMM d, yyyy 'at' h:mm a",
+                  )
                 : 'Tap to Set...'
             }
             pickerValue={chargeDate}
@@ -401,8 +487,15 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             placeholder={'Value'}
             label={'mAh'}
             numeric={true}
-            numericProps={{ prefix: '', delimiter: '', precision: 0, maxValue: 99999 }}
-            onChangeText={value => setDebounced(() => (chargeAmount.current = value))}
+            numericProps={{
+              prefix: '',
+              delimiter: '',
+              precision: 0,
+              maxValue: 99999,
+            }}
+            onChangeText={value =>
+              setDebounced(() => (chargeAmount.current = value))
+            }
           />
           <ListItem
             title={'Percent of Capacity'}
@@ -414,36 +507,49 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             title={'Pack Voltage'}
             label={'V'}
             value={
-              chargePackVoltage.current && parseFloat(chargePackVoltage.current) > 0
+              chargePackVoltage.current &&
+              parseFloat(chargePackVoltage.current) > 0
                 ? parseFloat(chargePackVoltage.current).toFixed(1)
                 : undefined
             }
             placeholder={'Value'}
             numeric={true}
             numericProps={{ prefix: '' }}
-            onChangeText={value => setDebounced(() => (chargePackVoltage.current = value))}
+            onChangeText={value =>
+              setDebounced(() => (chargePackVoltage.current = value))
+            }
           />
           <ListItemInput
             ref={chargePackResistanceRef}
             title={'Pack Resistance'}
             label={'mΩ'}
             value={
-              chargePackResistance.current && parseFloat(chargePackResistance.current) > 0
+              chargePackResistance.current &&
+              parseFloat(chargePackResistance.current) > 0
                 ? parseFloat(chargePackResistance.current).toFixed(3)
                 : undefined
             }
             placeholder={'Value'}
             numeric={true}
             numericProps={{ prefix: '', precision: 3 }}
-            onChangeText={value => setDebounced(() => (chargePackResistance.current = value))}
+            onChangeText={value =>
+              setDebounced(() => (chargePackResistance.current = value))
+            }
           />
           <ListItem
             title={'Cell Voltage'}
             onPress={() =>
               navigation.navigate('BatteryCellValuesEditor', {
-                config: { name: 'voltage', namePlural: 'voltages', label: 'V', precision: 2 },
+                config: {
+                  name: 'voltage',
+                  namePlural: 'voltages',
+                  label: 'V',
+                  precision: 2,
+                },
                 packValue:
-                  (chargePackVoltage.current && parseFloat(chargePackVoltage.current)) || 0,
+                  (chargePackVoltage.current &&
+                    parseFloat(chargePackVoltage.current)) ||
+                  0,
                 cellValues: chargeCellVoltages?.map(v => {
                   return toNumber(v) || 0;
                 }),
@@ -465,7 +571,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
                   precision: 3,
                 },
                 packValue:
-                  (chargePackResistance.current && parseFloat(chargePackResistance.current)) || 0,
+                  (chargePackResistance.current &&
+                    parseFloat(chargePackResistance.current)) ||
+                  0,
                 cellValues: chargeCellResistances?.map(r => {
                   return toNumber(r) || 0;
                 }),
@@ -484,7 +592,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             title={'Energy per Minute'}
             value={
               <View style={s.valueContainer}>
-                <Text style={s.value}>{batteryCycleStats?.value.averageDischargeCurrent}</Text>
+                <Text style={s.value}>
+                  {batteryCycleStats?.value.averageDischargeCurrent}
+                </Text>
                 <Text style={s.valueLabel}>{' mAh'}</Text>
               </View>
             }
@@ -496,9 +606,12 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
             value={
               <View style={s.valueContainer}>
                 <Text style={s.value}>
-                  {secondsToFormat(batteryCycleStats?.value.dischargeBy80Percent, {
-                    format: 'm:ss',
-                  })}
+                  {secondsToFormat(
+                    batteryCycleStats?.value.dischargeBy80Percent,
+                    {
+                      format: 'm:ss',
+                    },
+                  )}
                 </Text>
                 <Text style={s.valueLabel}>{' m:ss'}</Text>
               </View>

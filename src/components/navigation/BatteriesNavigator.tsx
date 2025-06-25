@@ -20,7 +20,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import lodash from 'lodash';
 import { useTheme } from 'theme';
 
-const BatteriesStack = createNativeStackNavigator<BatteriesNavigatorParamList>();
+const BatteriesStack =
+  createNativeStackNavigator<BatteriesNavigatorParamList>();
 
 const BatteriesNavigator = () => {
   const theme = useTheme();

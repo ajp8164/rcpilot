@@ -18,7 +18,10 @@ import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ReportScanCodesEditor'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'ReportScanCodesEditor'
+>;
 
 const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
@@ -30,18 +33,24 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
-  const reportModeslFilterId = useSelector(selectFilters(FilterType.ReportModelScanCodesFilter));
+  const reportModeslFilterId = useSelector(
+    selectFilters(FilterType.ReportModelScanCodesFilter),
+  );
   const reportBatteriesFilterId = useSelector(
     selectFilters(FilterType.ReportBatteryScanCodesFilter),
   );
 
   const name = useRef<string | undefined>(report?.name);
   const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
-  const [includesModels, setIncludesModels] = useState(report ? report.includesModels : true);
+  const [includesModels, setIncludesModels] = useState(
+    report ? report.includesModels : true,
+  );
   const [includesBatteries, setIncludesBatteries] = useState(
     report ? report.includesBatteries : true,
   );
-  const [modelScanCodesFilter, setModelScanCodesFilter] = useState(report?.modelScanCodesFilter);
+  const [modelScanCodesFilter, setModelScanCodesFilter] = useState(
+    report?.modelScanCodesFilter,
+  );
   const [batteryScanCodesFilter, setBatteryScanCodesFilter] = useState(
     report?.batteryScanCodesFilter,
   );
@@ -119,9 +128,18 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader({ enabled: canSave, action: onDone }, { visible: !reportId });
+    setScreenEditHeader(
+      { enabled: canSave, action: onDone },
+      { visible: !reportId },
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, includesModels, includesBatteries, modelScanCodesFilter, batteryScanCodesFilter]);
+  }, [
+    name,
+    includesModels,
+    includesBatteries,
+    modelScanCodesFilter,
+    batteryScanCodesFilter,
+  ]);
 
   return (
     <ScrollView style={theme.styles.view}>

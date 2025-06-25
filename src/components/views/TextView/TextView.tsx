@@ -1,6 +1,18 @@
 import { AppTheme, useTheme } from 'theme';
-import { InputAccessoryView, LayoutChangeEvent, Text, TextInput, View } from 'react-native';
-import React, { useContext, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import {
+  InputAccessoryView,
+  LayoutChangeEvent,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import React, {
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { TextViewMethods, TextViewProps } from './types';
 
 // See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
@@ -99,7 +111,10 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         {characterLimit ? (
           <InputAccessoryView nativeID={'inputAccessoryViewID'}>
             <View style={s.remainingView}>
-              <Text style={s.remaining}>{`Characters left: ${countRemaining}`}</Text>
+              <Text
+                style={
+                  s.remaining
+                }>{`Characters left: ${countRemaining}`}</Text>
             </View>
           </InputAccessoryView>
         ) : null}

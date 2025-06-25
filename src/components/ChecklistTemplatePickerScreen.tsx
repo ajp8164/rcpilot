@@ -17,7 +17,10 @@ export type ChecklistTemplatePickerResult = {
   checklistTemplateId: string;
 };
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ChecklistTemplatePicker'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'ChecklistTemplatePicker'
+>;
 
 const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
   const { eventName } = route.params;
@@ -54,9 +57,15 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    const pre = checklistTemplates.filter(t => t.type === ChecklistType.PreEvent);
-    const post = checklistTemplates.filter(t => t.type === ChecklistType.PostEvent);
-    const maint = checklistTemplates.filter(t => t.type === ChecklistType.Maintenance);
+    const pre = checklistTemplates.filter(
+      t => t.type === ChecklistType.PreEvent,
+    );
+    const post = checklistTemplates.filter(
+      t => t.type === ChecklistType.PostEvent,
+    );
+    const maint = checklistTemplates.filter(
+      t => t.type === ChecklistType.Maintenance,
+    );
     setAllChecklistTemplates({
       [ChecklistType.PreEvent]: pre,
       [ChecklistType.PostEvent]: post,
@@ -74,7 +83,10 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         key={checklistTemplate._id.toString()}
         title={checklistTemplate.name}
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
-        position={listItemPosition(index, allChecklistTemplates[ChecklistType.PreEvent].length)}
+        position={listItemPosition(
+          index,
+          allChecklistTemplates[ChecklistType.PreEvent].length,
+        )}
         rightImage={false}
         onPress={() =>
           event.emit(eventName, {
@@ -94,7 +106,10 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
         key={checklistTemplate._id.toString()}
         title={checklistTemplate.name}
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
-        position={listItemPosition(index, allChecklistTemplates[ChecklistType.PostEvent].length)}
+        position={listItemPosition(
+          index,
+          allChecklistTemplates[ChecklistType.PostEvent].length,
+        )}
         rightImage={false}
         onPress={() =>
           event.emit(eventName, {
@@ -105,16 +120,18 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const renderMaintenanceChecklistTemplate: ListRenderItem<ChecklistTemplate> = ({
-    item: checklistTemplate,
-    index,
-  }) => {
+  const renderMaintenanceChecklistTemplate: ListRenderItem<
+    ChecklistTemplate
+  > = ({ item: checklistTemplate, index }) => {
     return (
       <ListItem
         key={checklistTemplate._id.toString()}
         title={checklistTemplate.name}
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
-        position={listItemPosition(index, allChecklistTemplates[ChecklistType.Maintenance].length)}
+        position={listItemPosition(
+          index,
+          allChecklistTemplates[ChecklistType.Maintenance].length,
+        )}
         rightImage={false}
         onPress={() =>
           event.emit(eventName, {

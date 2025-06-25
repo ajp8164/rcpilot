@@ -79,7 +79,9 @@ export const setupPushNotificationsForUser = async (
   return updatedProfile;
 };
 
-export const removePushNotificationsFromUser = async (userProfile?: UserProfile): Promise<void> => {
+export const removePushNotificationsFromUser = async (
+  userProfile?: UserProfile,
+): Promise<void> => {
   // Remove push token from the authorized user profile.
   // Remove only the token for this device.
   if (userProfile) {

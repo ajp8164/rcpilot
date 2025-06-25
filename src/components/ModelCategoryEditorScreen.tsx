@@ -26,12 +26,16 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
   const setDebounced = useDebouncedRender();
 
   const realm = useRealm();
-  const modelCategory = useObject(ModelCategory, new BSON.ObjectId(modelCategoryId));
+  const modelCategory = useObject(
+    ModelCategory,
+    new BSON.ObjectId(modelCategoryId),
+  );
 
   const name = useRef(modelCategory?.name || undefined);
 
   useEffect(() => {
-    const canSave = !!name.current && !eqString(modelCategory?.name, name.current);
+    const canSave =
+      !!name.current && !eqString(modelCategory?.name, name.current);
 
     const save = () => {
       if (modelCategory) {

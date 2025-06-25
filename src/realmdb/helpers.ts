@@ -23,7 +23,10 @@ export const eqString = (schemaAttr?: string, formAttr?: string) => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const eqArray = (schemaArr?: ArrayLike<any>, otherFormArr?: ArrayLike<any>) => {
+export const eqArray = (
+  schemaArr?: ArrayLike<any>,
+  otherFormArr?: ArrayLike<any>,
+) => {
   return lodash.isEqual(schemaArr, otherFormArr);
 };
 
@@ -32,7 +35,10 @@ export const eqObject = (schemaObj?: object, otherFormObj?: object) => {
   return lodash.isEqual(JSON.parse(JSON.stringify(schemaObj)), otherFormObj);
 };
 
-export const eqObjectId = <T>(schemaObj?: Realm.Object<T>, otherObj?: Realm.Object<T>) => {
+export const eqObjectId = <T>(
+  schemaObj?: Realm.Object<T>,
+  otherObj?: Realm.Object<T>,
+) => {
   // Test for the exact same Realm object.
   return schemaObj?._objectKey() === otherObj?._objectKey();
 };
@@ -47,6 +53,6 @@ export const eqBoolean = (schemaAttr?: boolean, formAttr?: boolean) => {
 
 // Used for setting number values on realm writes. Converts a string or undefined
 // value to a number or undefined. Avoids possible NaN.
-export const toNumber = (value?: string) => {
-  return value !== undefined ? Number(value) : undefined;
+export const toNumber = (value?: string, def = 0) => {
+  return value !== undefined ? Number(value) : def;
 };

@@ -2,7 +2,11 @@ import { AppTheme, useTheme } from 'theme';
 import { Checklist, JChecklistAction } from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useObject, useQuery, useRealm } from '@realm/react';
 
@@ -23,7 +27,10 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'ModelChecklists'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'ModelChecklists'
+>;
 
 const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
@@ -56,19 +63,29 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const preEventModelChecklists = () => {
-    return model?.checklists.filter(t => t.type === ChecklistType.PreEvent) || [];
+    return (
+      model?.checklists.filter(t => t.type === ChecklistType.PreEvent) || []
+    );
   };
 
   const postEventModelChecklists = () => {
-    return model?.checklists.filter(t => t.type === ChecklistType.PostEvent) || [];
+    return (
+      model?.checklists.filter(t => t.type === ChecklistType.PostEvent) || []
+    );
   };
 
   const maintenanceModelChecklists = () => {
-    return model?.checklists.filter(t => t.type === ChecklistType.Maintenance) || [];
+    return (
+      model?.checklists.filter(t => t.type === ChecklistType.Maintenance) || []
+    );
   };
 
   const oneTimeMaintenanceModelChecklists = () => {
-    return model?.checklists.filter(t => t.type === ChecklistType.OneTimeMaintenance) || [];
+    return (
+      model?.checklists.filter(
+        t => t.type === ChecklistType.OneTimeMaintenance,
+      ) || []
+    );
   };
 
   useEffect(() => {
@@ -145,14 +162,20 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
 
   const deleteChecklist = (checklist: Checklist) => {
     realm.write(() => {
-      const index = model?.checklists.findIndex(cl => cl.refId === checklist.refId);
+      const index = model?.checklists.findIndex(
+        cl => cl.refId === checklist.refId,
+      );
       if (index !== undefined) {
         model?.checklists.splice(index, 1);
       }
     });
   };
 
-  const renderChecklist = (checklist: Checklist, index: number, arrLength: number) => {
+  const renderChecklist = (
+    checklist: Checklist,
+    index: number,
+    arrLength: number,
+  ) => {
     // Cannot delete the one-time maintenance list.
     let swipeable = {};
     if (checklist.type !== ChecklistType.OneTimeMaintenance) {
@@ -167,7 +190,9 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     }
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'checklists', checklist.refId)}
+        ref={ref => {
+          ref && listEditor.add(ref, 'checklists', checklist.refId);
+        }}
         key={checklist.refId}
         title={checklist.name}
         subtitle={`Contains ${checklist.actions.length} actions`}
@@ -188,29 +213,48 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         }}
         showEditor={listEditor.show}
         swipeable={swipeable}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('checklists', checklist.refId)}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('checklists', checklist.refId)
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );
   };
 
-  const renderPreEventChecklist: ListRenderItem<Checklist> = ({ item: checklist, index }) => {
+  const renderPreEventChecklist: ListRenderItem<Checklist> = ({
+    item: checklist,
+    index,
+  }) => {
     return renderChecklist(checklist, index, preEventModelChecklists().length);
   };
 
-  const renderPostEventChecklist: ListRenderItem<Checklist> = ({ item: checklist, index }) => {
+  const renderPostEventChecklist: ListRenderItem<Checklist> = ({
+    item: checklist,
+    index,
+  }) => {
     return renderChecklist(checklist, index, postEventModelChecklists().length);
   };
 
-  const renderMaintenanceChecklist: ListRenderItem<Checklist> = ({ item: checklist, index }) => {
-    return renderChecklist(checklist, index, maintenanceModelChecklists().length);
+  const renderMaintenanceChecklist: ListRenderItem<Checklist> = ({
+    item: checklist,
+    index,
+  }) => {
+    return renderChecklist(
+      checklist,
+      index,
+      maintenanceModelChecklists().length,
+    );
   };
 
   const renderOneTimeMaintenanceChecklist: ListRenderItem<Checklist> = ({
     item: checklist,
     index,
   }) => {
-    return renderChecklist(checklist, index, oneTimeMaintenanceModelChecklists().length);
+    return renderChecklist(
+      checklist,
+      index,
+      oneTimeMaintenanceModelChecklists().length,
+    );
   };
 
   if (!model?.checklists.length) {
@@ -237,7 +281,11 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          preEventModelChecklists().length > 0 ? <Divider text={'PRE-FLIGHT'} /> : <></>
+          preEventModelChecklists().length > 0 ? (
+            <Divider text={'PRE-FLIGHT'} />
+          ) : (
+            <></>
+          )
         }
       />
       <FlatList
@@ -247,7 +295,11 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          postEventModelChecklists().length > 0 ? <Divider text={'POST-FLIGHT'} /> : <></>
+          postEventModelChecklists().length > 0 ? (
+            <Divider text={'POST-FLIGHT'} />
+          ) : (
+            <></>
+          )
         }
       />
       <FlatList
@@ -257,7 +309,11 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         showsVerticalScrollIndicator={false}
         scrollEnabled={false}
         ListHeaderComponent={
-          maintenanceModelChecklists().length > 0 ? <Divider text={'MAINTENANCE'} /> : <></>
+          maintenanceModelChecklists().length > 0 ? (
+            <Divider text={'MAINTENANCE'} />
+          ) : (
+            <></>
+          )
         }
       />
       <FlatList

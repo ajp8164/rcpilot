@@ -6,9 +6,20 @@ import {
   NestableScrollContainer,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
-import { NewReportNavigatorParamList, SetupNavigatorParamList } from 'types/navigation';
-import { OutputReportTo, OutputReportToDescription, ReportType } from 'types/database';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
+import {
+  NewReportNavigatorParamList,
+  SetupNavigatorParamList,
+} from 'types/navigation';
+import {
+  OutputReportTo,
+  OutputReportToDescription,
+  ReportType,
+} from 'types/database';
 import { Platform, Pressable, View } from 'react-native';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,7 +41,10 @@ import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'DatabaseReporting'>,
-  NativeStackScreenProps<NewReportNavigatorParamList, 'ReportEventsMaintenanceEditor'>
+  NativeStackScreenProps<
+    NewReportNavigatorParamList,
+    'ReportEventsMaintenanceEditor'
+  >
 >;
 
 type Report = EventsMaintenanceReport | ScanCodesReport;
@@ -60,7 +74,9 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   const outputReportTo = useSelector(selectOutputReportTo);
 
   const realm = useRealm();
-  const emReports = useQuery<EventsMaintenanceReport>('EventsMaintenanceReport');
+  const emReports = useQuery<EventsMaintenanceReport>(
+    'EventsMaintenanceReport',
+  );
   const scReports = useQuery<ScanCodesReport>('ScanCodesReport');
 
   useEffect(() => {
@@ -109,14 +125,21 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   };
 
   const emReportSummary = (report: EventsMaintenanceReport) => {
-    const whichEvents = report.eventsFilter ? `"${report.eventsFilter.name}" filter` : 'All';
+    const whichEvents = report.eventsFilter
+      ? `"${report.eventsFilter.name}" filter`
+      : 'All';
     const whichMaintenance = report.maintenanceFilter
       ? `"${report.maintenanceFilter.name}" filter`
       : 'All';
     const summary = report.includesSummary ? 'Summary, ' : '';
     const events = report.includesEvents ? `Events: ${whichEvents}, ` : '';
-    const maintenance = report.includesMaintenance ? `Maintenance: ${whichMaintenance}` : '';
-    return `${summary}${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
+    const maintenance = report.includesMaintenance
+      ? `Maintenance: ${whichMaintenance}`
+      : '';
+    return (
+      `${summary}${events}${maintenance}`.replace(/,\s*$/, '') ||
+      'Report is empty'
+    );
   };
 
   const scReportSummary = (report: ScanCodesReport) => {
@@ -126,8 +149,12 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     const whichMaintenance = report.modelScanCodesFilter
       ? `"${report.modelScanCodesFilter.name}" filter`
       : 'All';
-    const events = report.includesBatteries ? `Batteries: ${whichEvents}, ` : '';
-    const maintenance = report.includesModels ? `Models: ${whichMaintenance}` : '';
+    const events = report.includesBatteries
+      ? `Batteries: ${whichEvents}, `
+      : '';
+    const maintenance = report.includesModels
+      ? `Models: ${whichMaintenance}`
+      : '';
     return `${events}${maintenance}`.replace(/,\s*$/, '') || 'Report is empty';
   };
 
@@ -173,11 +200,21 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
     drag: () => void;
     isActive: boolean;
   }) => {
-    const { report, reportType, reportCount, reportSummary, index, drag, isActive } = props;
+    const {
+      report,
+      reportType,
+      reportCount,
+      reportSummary,
+      index,
+      drag,
+      isActive,
+    } = props;
     return (
       <View key={index} style={[isActive ? s.shadow : {}]}>
         <ListItem
-          ref={ref => ref && listEditor.add(ref, reportType, report._id.toString())}
+          ref={ref => {
+            ref && listEditor.add(ref, reportType, report._id.toString());
+          }}
           title={report.name}
           subtitle={reportSummary}
           subtitleNumberOfLines={1}
@@ -207,7 +244,9 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               },
             ],
           }}
-          onSwipeableWillOpen={() => listEditor.onItemWillOpen(reportType, report._id.toString())}
+          onSwipeableWillOpen={() =>
+            listEditor.onItemWillOpen(reportType, report._id.toString())
+          }
           onSwipeableWillClose={listEditor.onItemWillClose}
           rightImage={
             <Pressable
@@ -217,7 +256,11 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
                   reportId: report._id.toString(),
                 })
               }>
-              <CustomIcon name={'circle-info'} size={22} color={theme.colors.clearButtonText} />
+              <CustomIcon
+                name={'circle-info'}
+                size={22}
+                color={theme.colors.clearButtonText}
+              />
             </Pressable>
           }
           onPress={() =>

@@ -1,5 +1,9 @@
 import { AppTheme, useTheme } from 'theme';
-import { Checklist, ChecklistAction, JChecklistAction } from 'realmdb/Checklist';
+import {
+  Checklist,
+  ChecklistAction,
+  JChecklistAction,
+} from 'realmdb/Checklist';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import {
   ListItem,
@@ -44,7 +48,8 @@ export type Props = CompositeScreenProps<
 >;
 
 const ChecklistEditorScreen = ({ navigation, route }: Props) => {
-  const { checklistTemplateId, modelId, modelChecklistRefId } = route.params || {};
+  const { checklistTemplateId, modelId, modelChecklistRefId } =
+    route.params || {};
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -55,28 +60,38 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
   // This editor provides capability for checklist templates and model checklists. We use a
   // 'working' reference to the correct object throughout the editor.
-  const checklistTemplate = useObject(ChecklistTemplate, new BSON.ObjectId(checklistTemplateId));
+  const checklistTemplate = useObject(
+    ChecklistTemplate,
+    new BSON.ObjectId(checklistTemplateId),
+  );
 
   const model = useObject(Model, new BSON.ObjectId(modelId));
-  const modelChecklist = model?.checklists.find(c => c.refId === modelChecklistRefId);
+  const modelChecklist = model?.checklists.find(
+    c => c.refId === modelChecklistRefId,
+  );
 
   const workingChecklist = checklistTemplate || modelChecklist || undefined;
   const editingTemplate = useRef(!modelId).current; // This is a template editor if no modelId.
   const eventNameId = useRef(uuidv4()).current; // Used for unique action change event name.
 
-  const name = useRef(checklistTemplate?.name || modelChecklist?.name || undefined);
+  const name = useRef(
+    checklistTemplate?.name || modelChecklist?.name || undefined,
+  );
   const [type, setType] = useState(
     checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent,
   );
   const [actions, setActions] = useState<JChecklistAction[]>(
     checklistTemplate?.actions.toJSON() ||
-      (modelChecklist !== undefined ? JSON.parse(JSON.stringify(modelChecklist.actions)) : []),
+      (modelChecklist !== undefined
+        ? JSON.parse(JSON.stringify(modelChecklist.actions))
+        : []),
   ); // Need to convert the model checklist actions into a plain object to decouple from the realm array instance.
 
   useEffect(() => {
     const canSave =
       !!name.current &&
-      (!eqString(workingChecklist?.name, name.current) || !eqString(workingChecklist?.type, type));
+      (!eqString(workingChecklist?.name, name.current) ||
+        !eqString(workingChecklist?.type, type));
 
     const save = () => {
       if (editingTemplate) {
@@ -101,7 +116,9 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         if (model && modelChecklist) {
           // Update an existing model checklist.
           realm.write(() => {
-            const index = model?.checklists.findIndex(c => c.refId === modelChecklistRefId);
+            const index = model?.checklists.findIndex(
+              c => c.refId === modelChecklistRefId,
+            );
             model.checklists[index].name = name.current || 'no-name';
             model.checklists[index].type = type;
             // Existing actions are saved inline with edits/adds.
@@ -191,7 +208,9 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       if (model && modelChecklist) {
         // Update an existing model checklist.
         realm.write(() => {
-          const index = model.checklists.findIndex(c => c.refId === modelChecklistRefId);
+          const index = model.checklists.findIndex(
+            c => c.refId === modelChecklistRefId,
+          );
           model.checklists[index].actions = actions as ChecklistAction[];
         });
       }
@@ -208,7 +227,9 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       // Update existing action.
       setActions(prevState => {
         const actns = [...prevState];
-        const index = actns.findIndex(a => a.refId === newOrChangedAction.refId);
+        const index = actns.findIndex(
+          a => a.refId === newOrChangedAction.refId,
+        );
         actns[index] = newOrChangedAction;
         return actns;
       });
@@ -244,7 +265,11 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     return (
       <View key={index} style={[isActive ? s.shadow : {}]}>
         <ListItem
-          ref={ref => ref && action.refId && listEditor.add(ref, 'checklist-actions', action.refId)}
+          ref={ref => {
+            ref &&
+              action.refId &&
+              listEditor.add(ref, 'checklist-actions', action.refId);
+          }}
           title={action.description}
           subtitle={action.schedule.state.text}
           position={listItemPosition(index, actions.length)}
@@ -268,7 +293,8 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
             ],
           }}
           onSwipeableWillOpen={() =>
-            action.refId && listEditor.onItemWillOpen('checklist-actions', action.refId)
+            action.refId &&
+            listEditor.onItemWillOpen('checklist-actions', action.refId)
           }
           onSwipeableWillClose={listEditor.onItemWillClose}
           onPress={() =>
@@ -292,7 +318,9 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       <Divider text={'NAME & TYPE'} />
       <ListItemInput
         value={name.current}
-        placeholder={editingTemplate ? 'Checklist Template Name' : 'Checklist Name'}
+        placeholder={
+          editingTemplate ? 'Checklist Template Name' : 'Checklist Name'
+        }
         position={['first']}
         disabled={type === ChecklistType.OneTimeMaintenance}
         onChangeText={value => setDebounced(() => (name.current = value))}

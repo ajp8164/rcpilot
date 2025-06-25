@@ -92,9 +92,9 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref =>
-          ref && listEditor.add(ref, 'model-filters', filter._id.toString())
-        }
+        ref={ref => {
+          ref && listEditor.add(ref, 'model-filters', filter._id.toString());
+        }}
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}

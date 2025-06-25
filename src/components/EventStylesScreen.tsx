@@ -1,7 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -14,7 +18,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'EventStyles'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'EventStyles'
+>;
 
 const EventStylesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -47,10 +54,15 @@ const EventStylesScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderEventStyle: ListRenderItem<EventStyle> = ({ item: style, index }) => {
+  const renderEventStyle: ListRenderItem<EventStyle> = ({
+    item: style,
+    index,
+  }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'event-styles', style._id.toString())}
+        ref={ref => {
+          ref && listEditor.add(ref, 'event-styles', style._id.toString());
+        }}
         key={style._id.toString()}
         title={style.name}
         position={listItemPosition(index, allEventStyles.length)}
@@ -73,7 +85,9 @@ const EventStylesScreen = ({ navigation }: Props) => {
             },
           ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('event-styles', style._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('event-styles', style._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );

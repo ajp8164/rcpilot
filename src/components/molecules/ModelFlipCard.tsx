@@ -4,7 +4,10 @@ import React, { useContext } from 'react';
 import { makeStyles } from '@rn-vui/themed';
 import { Model, Pilot } from 'realmdb';
 import FlipCardView from 'components/views/FlipCardView';
-import { Back as DinnBack, Front as DinnFront } from 'components/molecules/card-deck/dinn';
+import {
+  Back as DinnBack,
+  Front as DinnFront,
+} from 'components/molecules/card-deck/dinn';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { ModelsNavigatorParamList } from 'types/navigation';
 import { viewport } from '@react-native-ajp-elements/ui';
@@ -15,7 +18,7 @@ import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesMod
 interface ModelCardDeckCardInterface {
   model: Model;
   pilot?: Pilot;
-  propertiesModal: React.RefObject<DeckCardPropertiesModal>;
+  propertiesModal: React.RefObject<DeckCardPropertiesModal | null>;
   onPressAchievements: (pilot: Pilot, model: Model) => void;
   onStartNewEventSequence: (model: Model) => void;
 }
@@ -71,7 +74,9 @@ export const ModelFlipCard = ({
           pilot={pilot}
           onPressEditModel={editModel}
           onPressNewEventSequence={onNewEventSequence}
-          onPressAchievements={pilot?.achievements.length ? onAchievements : undefined}
+          onPressAchievements={
+            pilot?.achievements.length ? onAchievements : undefined
+          }
           onPressEditCardProperties={onEditCardProperties}
         />
       }

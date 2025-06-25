@@ -17,7 +17,11 @@ import {
   swipeableDeleteItem,
 } from 'components/atoms/List';
 import React, { useEffect, useState } from 'react';
-import { SectionList, SectionListData, SectionListRenderItem } from 'react-native';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
 import { useObject, useRealm } from '@realm/react';
 
 import { BSON } from 'realm';
@@ -37,13 +41,19 @@ import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
 
-type ChecklistActionItemData = { checklist: Checklist; action: ChecklistAction };
+type ChecklistActionItemData = {
+  checklist: Checklist;
+  action: ChecklistAction;
+};
 type Section = {
   title?: string;
   data: ChecklistActionItemData[];
 };
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'Maintenance'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'Maintenance'
+>;
 
 const MaintenanceScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
@@ -59,16 +69,19 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
   const actionsToDo = refreshActionsToDo();
-  const [selectedMaintenanceActions, setSelectedMaintenanceActions] = useState<string[]>([]);
+  const [selectedMaintenanceActions, setSelectedMaintenanceActions] = useState<
+    string[]
+  >([]);
 
   // History captures the current date, the model time before the event, and the
   // event number at which the checklist action is performed.
-  const [newChecklistActionHistoryEntry] = useState<JChecklistActionHistoryEntry>({
-    refId: '',
-    date: DateTime.now().toISO(),
-    modelTime: model ? model.statistics.totalTime : 0,
-    eventNumber: model ? model.statistics.totalEvents : 0,
-  });
+  const [newChecklistActionHistoryEntry] =
+    useState<JChecklistActionHistoryEntry>({
+      refId: '',
+      date: DateTime.now().toISO(),
+      modelTime: model ? model.statistics.totalTime : 0,
+      eventNumber: model ? model.statistics.totalEvents : 0,
+    });
 
   useEffect(() => {
     navigation.setOptions({
@@ -107,7 +120,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         actionsToDo.forEach(section => {
           selectedMaintenanceActions.forEach(actionRefId => {
-            const actionItem = section.data.find(item => item.action.refId === actionRefId);
+            const actionItem = section.data.find(
+              item => item.action.refId === actionRefId,
+            );
             if (actionItem) {
               // Note: write the history entry before updating the schedule.
               actionItem.action.history.push({
@@ -119,7 +134,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
               // Update the model with maintenance cost change.
               model.statistics = lodash.merge(
                 model.statistics,
-                modelCostStatistics(model, { newValue: actionItem.action.cost }),
+                modelCostStatistics(model, {
+                  newValue: actionItem.action.cost,
+                }),
               );
 
               // Update the action schedule state.
@@ -147,7 +164,10 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
 
   function refreshActionsToDo() {
     const c = model?.checklists.filter(c => {
-      return c.type === ChecklistType.Maintenance || c.type === ChecklistType.OneTimeMaintenance;
+      return (
+        c.type === ChecklistType.Maintenance ||
+        c.type === ChecklistType.OneTimeMaintenance
+      );
     });
     return groupChecklistActions(c || []);
   }
@@ -157,7 +177,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     const actionRefId = result.extraData;
     realm.write(() => {
       actionsToDo.forEach(section => {
-        const actionItem = section.data.find(item => item.action.refId === actionRefId);
+        const actionItem = section.data.find(
+          item => item.action.refId === actionRefId,
+        );
         if (actionItem) {
           actionItem.action.notes = result.text;
         }
@@ -208,10 +230,12 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
   const togglePendMaintenanceItem = (actionRefId: string) => {
     if (selectedMaintenanceActions.includes(actionRefId)) {
       const actions = ([] as string[]).concat(selectedMaintenanceActions);
-      lodash.remove(actions, refId => refId === actionRefId);
+      lodash.remove(actions as never, refId => refId === actionRefId);
       setSelectedMaintenanceActions(actions);
     } else {
-      setSelectedMaintenanceActions(selectedMaintenanceActions.concat(actionRefId));
+      setSelectedMaintenanceActions(
+        selectedMaintenanceActions.concat(actionRefId),
+      );
     }
   };
 
@@ -231,9 +255,12 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
       });
     });
 
-    return groupItems<ChecklistActionItemData, Section>(actionItemData, actionItem => {
-      return actionItem.checklist.name.toUpperCase();
-    });
+    return groupItems<ChecklistActionItemData, Section>(
+      actionItemData,
+      actionItem => {
+        return actionItem.checklist.name.toUpperCase();
+      },
+    );
   }
 
   const actionSwipeable = (actionItem: ChecklistActionItemData) => {
@@ -254,7 +281,10 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     };
   };
 
-  const renderChecklistAction: SectionListRenderItem<ChecklistActionItemData, Section> = ({
+  const renderChecklistAction: SectionListRenderItem<
+    ChecklistActionItemData,
+    Section
+  > = ({
     item: actionItem,
     section,
     index,
@@ -263,18 +293,24 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     section: Section;
     index: number;
   }) => {
-    const isExpanded = selectedMaintenanceActions.includes(actionItem.action.refId);
+    const isExpanded = selectedMaintenanceActions.includes(
+      actionItem.action.refId,
+    );
     const isLastInList = index === section.data.length - 1;
 
     // Cannot delete repeating actions.
     const swipeable =
-      actionItem.action.schedule.type === ChecklistActionScheduleType.NonRepeating
+      actionItem.action.schedule.type ===
+      ChecklistActionScheduleType.NonRepeating
         ? actionSwipeable(actionItem)
         : {};
 
     return (
       <ListItemCheckboxInfo
-        ref={ref => ref && listEditor.add(ref, 'maintenance-actions', actionItem.action.refId)}
+        ref={ref => {
+          ref &&
+            listEditor.add(ref, 'maintenance-actions', actionItem.action.refId);
+        }}
         key={actionItem.action.refId}
         title={actionItem.action.description}
         titleNumberOfLines={1}
@@ -285,7 +321,11 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
         iconColor={theme.colors.clearButtonText}
         checked={isExpanded}
         position={
-          !isExpanded ? listItemPosition(index, section.data.length) : index === 0 ? ['first'] : []
+          !isExpanded
+            ? listItemPosition(index, section.data.length)
+            : index === 0
+              ? ['first']
+              : []
         }
         onPress={() => {
           togglePendMaintenanceItem(actionItem.action.refId);
@@ -309,7 +349,10 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
               placeholder={'Unknown'}
               onChangeText={value =>
                 setDebounced(() =>
-                  onChangeCost(actionItem.action, value ? parseFloat(value) : undefined),
+                  onChangeCost(
+                    actionItem.action,
+                    value ? parseFloat(value) : undefined,
+                  ),
                 )
               }
             />
@@ -329,7 +372,10 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
         }
         swipeable={swipeable}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('maintenance-actions', actionItem.action.refId)
+          listEditor.onItemWillOpen(
+            'maintenance-actions',
+            actionItem.action.refId,
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -345,7 +391,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
       sections={actionsToDo}
       keyExtractor={item => item.action.refId}
       renderItem={renderChecklistAction}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
       ListFooterComponent={
         <>
           <Divider />

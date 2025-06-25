@@ -1,7 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -15,7 +19,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistTemplates'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'ChecklistTemplates'
+>;
 
 const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -48,15 +55,21 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   }, []);
 
   const preEventModelChecklists = () => {
-    return checklistTemplates.filter(t => t.type === ChecklistType.PreEvent) || [];
+    return (
+      checklistTemplates.filter(t => t.type === ChecklistType.PreEvent) || []
+    );
   };
 
   const postEventModelChecklists = () => {
-    return checklistTemplates.filter(t => t.type === ChecklistType.PostEvent) || [];
+    return (
+      checklistTemplates.filter(t => t.type === ChecklistType.PostEvent) || []
+    );
   };
 
   const maintenanceModelChecklists = () => {
-    return checklistTemplates.filter(t => t.type === ChecklistType.Maintenance) || [];
+    return (
+      checklistTemplates.filter(t => t.type === ChecklistType.Maintenance) || []
+    );
   };
 
   const deleteChecklistTemplate = (checklistTemplate: ChecklistTemplate) => {
@@ -75,9 +88,14 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   ) => {
     return (
       <ListItem
-        ref={ref =>
-          ref && listEditor.add(ref, 'checklistTemplates', checklistTemplate._id.toString())
-        }
+        ref={ref => {
+          ref &&
+            listEditor.add(
+              ref,
+              'checklistTemplates',
+              checklistTemplate._id.toString(),
+            );
+        }}
         key={checklistTemplate._id.toString()}
         title={checklistTemplate.name}
         subtitle={`Contains ${checklistTemplate.actions.length} actions`}
@@ -111,7 +129,10 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('checklistTemplates', checklistTemplate._id.toString())
+          listEditor.onItemWillOpen(
+            'checklistTemplates',
+            checklistTemplate._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -122,21 +143,32 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
     item: checklist,
     index,
   }) => {
-    return renderChecklistTemplate(checklist, index, preEventModelChecklists().length);
+    return renderChecklistTemplate(
+      checklist,
+      index,
+      preEventModelChecklists().length,
+    );
   };
 
   const renderPostEventChecklistTemplate: ListRenderItem<ChecklistTemplate> = ({
     item: checklist,
     index,
   }) => {
-    return renderChecklistTemplate(checklist, index, postEventModelChecklists().length);
+    return renderChecklistTemplate(
+      checklist,
+      index,
+      postEventModelChecklists().length,
+    );
   };
 
-  const renderMaintenanceChecklistTemplate: ListRenderItem<ChecklistTemplate> = ({
-    item: checklist,
-    index,
-  }) => {
-    return renderChecklistTemplate(checklist, index, maintenanceModelChecklists().length);
+  const renderMaintenanceChecklistTemplate: ListRenderItem<
+    ChecklistTemplate
+  > = ({ item: checklist, index }) => {
+    return renderChecklistTemplate(
+      checklist,
+      index,
+      maintenanceModelChecklists().length,
+    );
   };
 
   if (!checklistTemplates.length) {

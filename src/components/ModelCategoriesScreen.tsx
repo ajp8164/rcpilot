@@ -1,7 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -14,7 +18,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelCategories'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'ModelCategories'
+>;
 
 const ModelCategoriesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -47,10 +54,16 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderModelCategory: ListRenderItem<ModelCategory> = ({ item: category, index }) => {
+  const renderModelCategory: ListRenderItem<ModelCategory> = ({
+    item: category,
+    index,
+  }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'model-categories', category._id.toString())}
+        ref={ref => {
+          ref &&
+            listEditor.add(ref, 'model-categories', category._id.toString());
+        }}
         key={category._id.toString()}
         title={category.name}
         position={listItemPosition(index, allModelCategories.length)}

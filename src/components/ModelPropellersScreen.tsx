@@ -1,7 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -14,7 +18,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellers'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'ModelPropellers'
+>;
 
 const ModelPropellersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -51,10 +58,16 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderModelPropeller: ListRenderItem<ModelPropeller> = ({ item: propeller, index }) => {
+  const renderModelPropeller: ListRenderItem<ModelPropeller> = ({
+    item: propeller,
+    index,
+  }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'model-propellers', propeller._id.toString())}
+        ref={ref => {
+          ref &&
+            listEditor.add(ref, 'model-propellers', propeller._id.toString());
+        }}
         key={propeller._id.toString()}
         title={propeller.name}
         position={listItemPosition(index, allModelPropellers.length)}
@@ -78,7 +91,10 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('model-propellers', propeller._id.toString())
+          listEditor.onItemWillOpen(
+            'model-propellers',
+            propeller._id.toString(),
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />

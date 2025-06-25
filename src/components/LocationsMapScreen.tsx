@@ -286,7 +286,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       }
       return (
         <MapMarkerCallout
-          ref={el => (el ? (markersRef.current[index].mapMarker = el) : null)}
+          ref={el => {
+            el ? (markersRef.current[index].mapMarker = el) : null;
+          }}
           key={index}
           index={index}
           location={location}

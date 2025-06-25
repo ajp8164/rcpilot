@@ -1,5 +1,8 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteriesNavigatorParamList, NewBatteryCycleNavigatorParamList } from 'types/navigation';
+import {
+  BatteriesNavigatorParamList,
+  NewBatteryCycleNavigatorParamList,
+} from 'types/navigation';
 import { FlatList, ListRenderItem, Text, TextStyle, View } from 'react-native';
 import {
   ListItem,
@@ -35,7 +38,10 @@ export type BatteryCellValuesEditorResult = {
 };
 
 export type Props = CompositeScreenProps<
-  NativeStackScreenProps<BatteriesNavigatorParamList, 'BatteryCellValuesEditor'>,
+  NativeStackScreenProps<
+    BatteriesNavigatorParamList,
+    'BatteryCellValuesEditor'
+  >,
   NativeStackScreenProps<NewBatteryCycleNavigatorParamList>
 >;
 
@@ -135,7 +141,9 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     const p = Math.trunc(index / sCells) + 1;
     return (
       <ListItemInput
-        ref={ref => ref && (liRef.current[index] = ref)}
+        ref={ref => {
+          ref && (liRef.current[index] = ref);
+        }}
         title={`S Cell ${s} in P Leg ${p}`}
         label={config.label}
         value={parseFloat(value) === 0 || value === '' ? undefined : value}
@@ -173,7 +181,9 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
               title={'Total Pack'}
               value={
                 <View style={s.valueContainer}>
-                  <Text style={s.value}>{parseFloat(packValue) === 0 ? 'Unknown' : packValue}</Text>
+                  <Text style={s.value}>
+                    {parseFloat(packValue) === 0 ? 'Unknown' : packValue}
+                  </Text>
                   <Text style={s.valueLabel}>{` ${config.label}`}</Text>
                 </View>
               }

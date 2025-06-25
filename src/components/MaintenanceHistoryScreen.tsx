@@ -34,7 +34,10 @@ type Section = {
   data: JChecklistActionHistoryEntry[];
 };
 
-export type Props = NativeStackScreenProps<ModelsNavigatorParamList, 'MaintenanceHistory'>;
+export type Props = NativeStackScreenProps<
+  ModelsNavigatorParamList,
+  'MaintenanceHistory'
+>;
 
 const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
@@ -95,9 +98,13 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterId, listEditor.enabled, entries]);
 
-  const groupEntries = (entries?: HistoryEntry[]): SectionListData<HistoryEntry, Section>[] => {
+  const groupEntries = (
+    entries?: HistoryEntry[],
+  ): SectionListData<HistoryEntry, Section>[] => {
     return groupItems<HistoryEntry, Section>(entries || [], entry => {
-      return DateTime.fromISO(entry.history.date).toFormat('MMMM yyyy').toUpperCase();
+      return DateTime.fromISO(entry.history.date)
+        .toFormat('MMMM yyyy')
+        .toUpperCase();
     });
   };
 
@@ -123,14 +130,26 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
     });
   };
 
-  const renderActionHistoryEntry: ListRenderItem<HistoryEntry> = ({ item: entry, index }) => {
-    let subtitle = DateTime.fromISO(entry.history.date).toFormat('M/d/yyyy h:mm a');
+  const renderActionHistoryEntry: ListRenderItem<HistoryEntry> = ({
+    item: entry,
+    index,
+  }) => {
+    let subtitle = DateTime.fromISO(entry.history.date).toFormat(
+      'M/d/yyyy h:mm a',
+    );
     if (entry.action.notes) {
       subtitle = `${subtitle}\n\n${entry.action.notes}`;
     }
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'model-maintenance-history', entry.action.refId)}
+        ref={ref => {
+          ref &&
+            listEditor.add(
+              ref,
+              'model-maintenance-history',
+              entry.action.refId,
+            );
+        }}
         key={`${index}`}
         title={entry.action.description}
         subtitle={subtitle}
@@ -171,7 +190,10 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
           ],
         }}
         onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('model-maintenance-history', entry.action.refId)
+          listEditor.onItemWillOpen(
+            'model-maintenance-history',
+            entry.action.refId,
+          )
         }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
@@ -195,7 +217,9 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
       sections={groupEntries(entries)}
       keyExtractor={(item, index) => `${index}${item.action.refId}`}
       renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({ section: { title } }) => <SectionListHeader title={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <SectionListHeader title={title} />
+      )}
       ListFooterComponent={<Divider />}
     />
   );

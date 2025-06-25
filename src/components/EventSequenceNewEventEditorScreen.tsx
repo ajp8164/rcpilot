@@ -1,9 +1,22 @@
 import { AppTheme, useTheme } from 'theme';
-import { BatteryCycle, JBatteryDischarge, JBatteryDischargeValues } from 'realmdb/BatteryCycle';
-import { ChecklistActionHistoryEntry, JChecklistAction } from 'realmdb/Checklist';
+import {
+  BatteryCycle,
+  JBatteryDischarge,
+  JBatteryDischargeValues,
+} from 'realmdb/BatteryCycle';
+import {
+  ChecklistActionHistoryEntry,
+  JChecklistAction,
+} from 'realmdb/Checklist';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
-import { FlatList, Image, ListRenderItem, ScrollView, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  ListRenderItem,
+  ScrollView,
+  View,
+} from 'react-native';
 import { ListItem, ListItemInput } from 'components/atoms/List';
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Model, ModelStatistics } from 'realmdb/Model';
@@ -65,10 +78,14 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
 
   const currentEventSequence = useSelector(selectEventSequence);
   const events = useQuery(Event);
-  const model = useObject(Model, new BSON.ObjectId(currentEventSequence.modelId));
+  const model = useObject(
+    Model,
+    new BSON.ObjectId(currentEventSequence.modelId),
+  );
   const checklists = useRef(
     model?.checklists.filter(
-      c => c.type === ChecklistType.PreEvent || c.type === ChecklistType.PostEvent,
+      c =>
+        c.type === ChecklistType.PreEvent || c.type === ChecklistType.PostEvent,
     ),
   );
   const [batteries, setBatteries] = useState<Battery[]>([]);
@@ -84,15 +101,23 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const [date] = useState(DateTime.now());
   const duration = useRef(secondsToFormat(currentEventSequence.duration));
   const [fuel, setFuel] = useState<ModelFuel | undefined>(model?.defaultFuel);
-  const fuelConsumed = useRef<string>();
-  const [propeller, setPropeller] = useState<ModelPropeller | undefined>(model?.defaultPropeller);
-  const [eventStyle, setEventStyle] = useState<EventStyle | undefined>(model?.defaultStyle);
+  const fuelConsumed = useRef<string>(undefined);
+  const [propeller, setPropeller] = useState<ModelPropeller | undefined>(
+    model?.defaultPropeller,
+  );
+  const [eventStyle, setEventStyle] = useState<EventStyle | undefined>(
+    model?.defaultStyle,
+  );
   const [location, setLocation] = useState<Location>();
-  const [pilot, setPilot] = useState<Pilot | undefined>(currentPilot ? currentPilot : undefined);
+  const [pilot, setPilot] = useState<Pilot | undefined>(
+    currentPilot ? currentPilot : undefined,
+  );
   const [outcome, setOutcome] = useState<EventOutcome>();
   const [notes, setNotes] = useState<string | undefined>(undefined);
 
-  const [allBatteryDischarges, setAllBatteryDischarges] = useState<JBatteryDischarge[]>([]);
+  const [allBatteryDischarges, setAllBatteryDischarges] = useState<
+    JBatteryDischarge[]
+  >([]);
   const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
@@ -110,7 +135,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           // battery cycle to the battery's list of cycles.
           const eventBatteryCycles = [] as BatteryCycle[];
           batteries.forEach((battery, index) => {
-            const cycleNumber = battery.totalCycles ? battery.totalCycles + 1 : 1;
+            const cycleNumber = battery.totalCycles
+              ? battery.totalCycles + 1
+              : 1;
 
             const newCycle = realm.create('BatteryCycle', {
               cycleNumber,
@@ -135,7 +162,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
 
           model.lastEvent = date.toISO();
           model.statistics.totalEvents = model.statistics.totalEvents + 1;
-          model.statistics.totalTime = model.statistics.totalTime + eventDuration;
+          model.statistics.totalTime =
+            model.statistics.totalTime + eventDuration;
 
           model.statistics = {
             ...model.statistics,
@@ -159,7 +187,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                   checklist.type as EventSequenceChecklistType
                 ][action.refId];
               if (historyEntry) {
-                action.history.push(historyEntry as ChecklistActionHistoryEntry);
+                action.history.push(
+                  historyEntry as ChecklistActionHistoryEntry,
+                );
               }
 
               // Update model checklist action schedule for next event.
@@ -199,8 +229,16 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     };
 
     setScreenEditHeader(
-      { enabled: true, action: onDone, style: { color: theme.colors.screenHeaderInvButtonText } },
-      { enabled: true, action: onCancel, style: { color: theme.colors.screenHeaderInvButtonText } },
+      {
+        enabled: true,
+        action: onDone,
+        style: { color: theme.colors.screenHeaderInvButtonText },
+      },
+      {
+        enabled: true,
+        action: onCancel,
+        style: { color: theme.colors.screenHeaderInvButtonText },
+      },
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
@@ -221,7 +259,10 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     // Get all the batteries for this event.
     const eventBatteries: Battery[] = [];
     currentEventSequence.batteryIds.forEach(id => {
-      const b = realm.objectForPrimaryKey(Battery, new BSON.ObjectId(new BSON.ObjectId(id)));
+      const b = realm.objectForPrimaryKey(
+        Battery,
+        new BSON.ObjectId(new BSON.ObjectId(id)),
+      );
       b && eventBatteries.push(b);
     });
     setBatteries(eventBatteries);
@@ -252,7 +293,10 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     event.on('event-outcome', onChangeOutcome);
     event.on('event-notes', onChangeNotes);
     event.on(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
-    event.on(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
+    event.on(
+      `event-battery-cell-resistances`,
+      onChangeDischargeCellResistances,
+    );
     event.on('event-location', onChangeLocation);
 
     return () => {
@@ -263,8 +307,14 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       event.removeListener('event-location', onChangeLocation);
       event.removeListener('event-outcome', onChangeOutcome);
       event.removeListener('event-notes', onChangeNotes);
-      event.removeListener(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
-      event.removeListener(`event-battery-cell-resistances`, onChangeDischargeCellResistances);
+      event.removeListener(
+        `event-battery-cell-voltages`,
+        onChangeDischargeCellVoltages,
+      );
+      event.removeListener(
+        `event-battery-cell-resistances`,
+        onChangeDischargeCellResistances,
+      );
       event.removeListener('event-location', onChangeLocation);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -318,13 +368,17 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     setNotes(result.text);
   };
 
-  const onChangeDischargeCellVoltages = (result: BatteryCellValuesEditorResult) => {
+  const onChangeDischargeCellVoltages = (
+    result: BatteryCellValuesEditorResult,
+  ) => {
     // extraData is the battery index.
     setDischargeValue('cellVoltage', result.extraData, result.cellValues);
     setDischargeValue('packVoltage', result.extraData, result.packValue);
   };
 
-  const onChangeDischargeCellResistances = (result: BatteryCellValuesEditorResult) => {
+  const onChangeDischargeCellResistances = (
+    result: BatteryCellValuesEditorResult,
+  ) => {
     // extraData is the battery index.
     setDischargeValue('cellResistance', result.extraData, result.cellValues);
     setDischargeValue('packResistance', result.extraData, result.packValue);
@@ -335,12 +389,17 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     index: number,
     value?: number | number[],
   ) => {
-    const batteryDischarges = ([] as JBatteryDischarge[]).concat(allBatteryDischarges);
+    const batteryDischarges = ([] as JBatteryDischarge[]).concat(
+      allBatteryDischarges,
+    );
     batteryDischarges[index][property] = value as number & number[];
     setAllBatteryDischarges(batteryDischarges);
   };
 
-  const renderBatteryPostEvent: ListRenderItem<Battery> = ({ item: battery, index }) => {
+  const renderBatteryPostEvent: ListRenderItem<Battery> = ({
+    item: battery,
+    index,
+  }) => {
     const batteryDischarge = allBatteryDischarges[index];
     const packVoltage = batteryDischarge.packVoltage;
     const cellVoltage = batteryDischarge.cellVoltage;
@@ -352,27 +411,41 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         <ListItemInput
           title={'Pack Voltage'}
           label={'V'}
-          value={packVoltage && packVoltage > 0 ? packVoltage.toFixed(1) : undefined}
+          value={
+            packVoltage && packVoltage > 0 ? packVoltage.toFixed(1) : undefined
+          }
           position={['first']}
           placeholder={'Value'}
           numeric={true}
           numericProps={{ prefix: '' }}
           onChangeText={value =>
             setDebounced(() =>
-              setDischargeValue('packVoltage', index, value ? parseFloat(value) : undefined),
+              setDischargeValue(
+                'packVoltage',
+                index,
+                value ? parseFloat(value) : undefined,
+              ),
             )
           }
         />
         <ListItemInput
           title={'Pack Resistance'}
           label={'mΩ'}
-          value={packResistance && packResistance > 0 ? packResistance.toString() : undefined}
+          value={
+            packResistance && packResistance > 0
+              ? packResistance.toString()
+              : undefined
+          }
           placeholder={'Value'}
           numeric={true}
           numericProps={{ prefix: '', precision: 3 }}
           onChangeText={value =>
             setDebounced(() =>
-              setDischargeValue('packResistance', index, value ? parseFloat(value) : undefined),
+              setDischargeValue(
+                'packResistance',
+                index,
+                value ? parseFloat(value) : undefined,
+              ),
             )
           }
         />
@@ -385,7 +458,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                 namePlural: 'voltages',
                 label: 'V',
                 precision: 2,
-                headerButtonStyle: { color: theme.colors.screenHeaderInvButtonText },
+                headerButtonStyle: {
+                  color: theme.colors.screenHeaderInvButtonText,
+                },
                 extraData: index,
               },
               packValue: packVoltage || 0,
@@ -408,7 +483,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                 namePlural: 'resistances',
                 label: 'mΩ',
                 precision: 3,
-                headerButtonStyle: { color: theme.colors.screenHeaderInvButtonText },
+                headerButtonStyle: {
+                  color: theme.colors.screenHeaderInvButtonText,
+                },
                 extraData: index,
               },
               packValue: packResistance || 0,
@@ -445,11 +522,17 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         leftImage={
           <View style={s.modelIconContainer}>
             {model.image ? (
-              <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
             ) : (
               <View style={s.modelSvgContainer}>
                 <SvgXml
-                  xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                  xml={getColoredSvg(
+                    modelTypeIcons[model.type]?.name as string,
+                  )}
                   width={s.modelImage.width}
                   height={s.modelImage.height}
                   color={theme.colors.brandSecondary}
@@ -477,7 +560,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         numeric={true}
         numericProps={{ prefix: '', separator: ':' }}
         keyboardType={'number-pad'}
-        onChangeText={value => value && setDebounced(() => (duration.current = value))}
+        onChangeText={value =>
+          value && setDebounced(() => (duration.current = value))
+        }
       />
       <ListItem
         title={'Location'}
@@ -518,7 +603,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
               enumName: 'ModelPropeller',
               title: 'Default Propeller',
               headerBackTitle: 'Model',
-              footer: 'You can manage propellers through the Globals section in the Setup tab.',
+              footer:
+                'You can manage propellers through the Globals section in the Setup tab.',
               values: modelPropellers.map(p => {
                 return p.name;
               }),
@@ -539,7 +625,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             enumName: 'ModelFuel',
             title: 'Fuel',
             headerBackTitle: `${kind.name}`,
-            footer: 'You can manage fuels through the Globals section in the Setup tab.',
+            footer:
+              'You can manage fuels through the Globals section in the Setup tab.',
             values: modelFuels.map(f => {
               return f.name;
             }),
@@ -551,13 +638,17 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       />
       <ListItemInput
         title={'Fuel Consumed'}
-        value={fuelConsumed.current}
+        value={fuelConsumed.current || undefined}
         label="oz"
         placeholder={'Value'}
         numeric={true}
         numericProps={{ precision: 2, prefix: '' }}
         keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (fuelConsumed.current = value))}
+        onChangeText={value =>
+          setDebounced(() => {
+            fuelConsumed.current = value;
+          })
+        }
       />
       <Divider />
       <ListItem
@@ -569,7 +660,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             enumName: 'Pilot',
             title: 'Pilot',
             headerBackTitle: `${kind.name}`,
-            footer: 'You can manage pilots through the Globals section in the Setup tab.',
+            footer:
+              'You can manage pilots through the Globals section in the Setup tab.',
             values: pilots.map(p => {
               return p.name;
             }),
@@ -587,7 +679,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
             enumName: 'EventStyle',
             title: 'Style',
             headerBackTitle: `${kind.name}`,
-            footer: 'You can manage styles through the Globals section in the Setup tab.',
+            footer:
+              'You can manage styles through the Globals section in the Setup tab.',
             values: eventStyles.map(s => {
               return s.name;
             }),
@@ -604,7 +697,9 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         onPress={() =>
           navigation.navigate('NotesEditor', {
             title: 'Event Notes',
-            headerButtonStyle: { color: theme.colors.screenHeaderInvButtonText },
+            headerButtonStyle: {
+              color: theme.colors.screenHeaderInvButtonText,
+            },
             text: notes,
             eventName: 'event-notes',
           })

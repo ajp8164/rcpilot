@@ -1,7 +1,11 @@
 import { AppTheme, useTheme } from 'theme';
 import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, listItemPosition, swipeableDeleteItem } from 'components/atoms/List';
+import {
+  ListItem,
+  listItemPosition,
+  swipeableDeleteItem,
+} from 'components/atoms/List';
 import React, { useEffect } from 'react';
 import { useQuery, useRealm } from '@realm/react';
 
@@ -14,7 +18,10 @@ import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rn-vui/themed';
 import { useConfirmAction } from 'lib/useConfirmAction';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuels'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'ModelFuels'
+>;
 
 const ModelFuelsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
@@ -51,10 +58,15 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
     });
   };
 
-  const renderModelFuel: ListRenderItem<ModelFuel> = ({ item: fuel, index }) => {
+  const renderModelFuel: ListRenderItem<ModelFuel> = ({
+    item: fuel,
+    index,
+  }) => {
     return (
       <ListItem
-        ref={ref => ref && listEditor.add(ref, 'model-fuels', fuel._id.toString())}
+        ref={ref => {
+          ref && listEditor.add(ref, 'model-fuels', fuel._id.toString());
+        }}
         key={fuel._id.toString()}
         title={fuel.name}
         position={listItemPosition(index, allModelFuels.length)}
@@ -77,7 +89,9 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
             },
           ],
         }}
-        onSwipeableWillOpen={() => listEditor.onItemWillOpen('model-fuels', fuel._id.toString())}
+        onSwipeableWillOpen={() =>
+          listEditor.onItemWillOpen('model-fuels', fuel._id.toString())
+        }
         onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );

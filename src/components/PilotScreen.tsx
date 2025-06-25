@@ -1,8 +1,23 @@
 import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg, useListEditor } from '@react-native-ajp-elements/ui';
+import {
+  Divider,
+  getColoredSvg,
+  useListEditor,
+} from '@react-native-ajp-elements/ui';
 import { EventStyleStatistics, eventStyleSummaryPilot } from 'lib/modelEvent';
-import { FlatList, Image, Keyboard, ListRenderItem, Platform, View } from 'react-native';
-import { ListItem, ListItemInput, listItemPosition } from 'components/atoms/List';
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  ListRenderItem,
+  Platform,
+  View,
+} from 'react-native';
+import {
+  ListItem,
+  ListItemInput,
+  listItemPosition,
+} from 'components/atoms/List';
 import {
   NestableDraggableFlatList,
   NestableScrollContainer,
@@ -59,9 +74,12 @@ const PilotScreen = ({ navigation, route }: Props) => {
   );
   Object.keys(groupedPilotEventStyles).forEach(eventStyleName => {
     const count = groupedPilotEventStyles[eventStyleName].length;
-    const duration = groupedPilotEventStyles[eventStyleName].reduce((accumulator, event) => {
-      return (accumulator += event.duration);
-    }, 0);
+    const duration = groupedPilotEventStyles[eventStyleName].reduce(
+      (accumulator, event) => {
+        return (accumulator += event.duration);
+      },
+      0,
+    );
     eventStyleStatistics[eventStyleName] = { eventStyleName, count, duration };
   });
 
@@ -154,7 +172,9 @@ const PilotScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         pilot.updatedOn = DateTime.now().toISO();
         pilot.favoriteModels =
-          pilot.favoriteModels.filter(m => m._id.toString() !== model._id.toString()) || [];
+          pilot.favoriteModels.filter(
+            m => m._id.toString() !== model._id.toString(),
+          ) || [];
       });
     }
   };
@@ -178,7 +198,9 @@ const PilotScreen = ({ navigation, route }: Props) => {
     return (
       <View key={index} style={[isActive ? s.shadow : {}]}>
         <ListItem
-          ref={ref => ref && listEditor.add(ref, 'favorite-models', model._id.toString())}
+          ref={ref => {
+            ref && listEditor.add(ref, 'favorite-models', model._id.toString());
+          }}
           title={model.name}
           subtitle={modelSummary(model)}
           titleStyle={s.modelText}
@@ -189,11 +211,17 @@ const PilotScreen = ({ navigation, route }: Props) => {
           leftImage={
             <View style={s.modelIconContainer}>
               {model.image ? (
-                <Image source={{ uri: model.image }} resizeMode={'cover'} style={s.modelImage} />
+                <Image
+                  source={{ uri: model.image }}
+                  resizeMode={'cover'}
+                  style={s.modelImage}
+                />
               ) : (
                 <View style={s.modelSvgContainer}>
                   <SvgXml
-                    xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+                    xml={getColoredSvg(
+                      modelTypeIcons[model.type]?.name as string,
+                    )}
                     width={s.modelImage.width}
                     height={s.modelImage.height}
                     color={theme.colors.brandSecondary}
@@ -251,7 +279,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const renderEventStyle: ListRenderItem<string> = ({ item: eventStyleName, index }) => {
+  const renderEventStyle: ListRenderItem<string> = ({
+    item: eventStyleName,
+    index,
+  }) => {
     const event = groupedPilotEventStyles[eventStyleName][0];
     return (
       <ListItem
@@ -290,7 +321,11 @@ const PilotScreen = ({ navigation, route }: Props) => {
       {allPilotModels.length ? (
         <>
           <Divider text={'MODEL USAGE'} />
-          <FlatList data={allPilotModels} renderItem={renderModel} scrollEnabled={false} />
+          <FlatList
+            data={allPilotModels}
+            renderItem={renderModel}
+            scrollEnabled={false}
+          />
           <Divider
             note
             text={

@@ -97,14 +97,14 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
       <ListItemCheckboxInfo
-        ref={ref =>
+        ref={ref => {
           ref &&
-          listEditor.add(
-            ref,
-            'report-battery-scan-code-filters',
-            filter._id.toString(),
-          )
-        }
+            listEditor.add(
+              ref,
+              'report-battery-scan-code-filters',
+              filter._id.toString(),
+            );
+        }}
         key={index}
         title={filter.name}
         subtitle={filterSummary(filter)}

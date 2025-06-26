@@ -1,11 +1,13 @@
 import {
   fontSizes as defaultFontSizes,
   fontFamily,
+  fontFamilyBold,
   Styles as RNEULStyles,
-} from '@react-native-ajp-elements/ui';
+} from '@react-native-hello/ui';
 
 import { Styles } from 'theme/types/Styles';
 import { makeStyles } from '@rn-vui/themed';
+import { Platform } from 'react-native';
 
 export const fontSizes = {
   ...defaultFontSizes,
@@ -29,6 +31,102 @@ export const useStyles = makeStyles(
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
     },
+
+    /**
+     * Text
+     */
+
+    textHeading1: {
+      color: theme.colors.text,
+      lineHeight: 48,
+      fontSize: fontSizes.heading1,
+      ...Platform.select({
+        android: {
+          fontFamily: fontFamilyBold,
+        },
+        ios: {
+          fontFamily,
+          fontWeight: '700',
+        },
+      }),
+    },
+    textHeading2: {
+      color: theme.colors.text,
+      lineHeight: 36,
+      fontSize: fontSizes.heading2,
+      ...Platform.select({
+        android: {
+          fontFamily: fontFamilyBold,
+        },
+        ios: {
+          fontFamily,
+          fontWeight: '700',
+        },
+      }),
+    },
+    textHeading3: {
+      color: theme.colors.text,
+      lineHeight: 32,
+      fontSize: fontSizes.heading3,
+      ...Platform.select({
+        android: {
+          fontFamily: fontFamilyBold,
+        },
+        ios: {
+          fontFamily,
+          fontWeight: '700',
+        },
+      }),
+    },
+    textHeading4: {
+      color: theme.colors.text,
+      lineHeight: 32,
+      fontSize: fontSizes.heading4,
+      ...Platform.select({
+        android: {
+          fontFamily: fontFamilyBold,
+        },
+        ios: {
+          fontFamily,
+          fontWeight: '700',
+        },
+      }),
+    },
+    textXL: {
+      color: theme.colors.text,
+      lineHeight: 24,
+      fontSize: fontSizes.XL,
+      fontFamily,
+      fontWeight: '600',
+    },
+    textLarge: {
+      color: theme.colors.text,
+      lineHeight: 24,
+      fontSize: fontSizes.large,
+      fontFamily,
+      fontWeight: '400',
+    },
+    textNormal: {
+      color: theme.colors.text,
+      lineHeight: 24,
+      fontSize: fontSizes.normal,
+      fontFamily,
+      fontWeight: '500',
+    },
+    textSmall: {
+      color: theme.colors.text,
+      lineHeight: 18,
+      fontSize: fontSizes.small,
+      fontFamily,
+      fontWeight: '500',
+    },
+    textTiny: {
+      color: theme.colors.text,
+      lineHeight: 15,
+      fontSize: fontSizes.tiny,
+      fontFamily,
+      fontWeight: '500',
+    },
     textGiant: {
       color: theme.colors.text,
       fontSize: fontSizes.giant,
@@ -41,6 +139,11 @@ export const useStyles = makeStyles(
       fontFamily,
       fontWeight: 'normal',
     },
+
+    /**
+     * View
+     */
+
     view: {
       height: '100%',
       paddingHorizontal: 7,

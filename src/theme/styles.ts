@@ -1,6 +1,7 @@
 import {
   fontSizes as defaultFontSizes,
   fontFamily,
+  Styles as RNEULStyles,
 } from '@react-native-ajp-elements/ui';
 
 import { Styles } from 'theme/types/Styles';
@@ -13,7 +14,7 @@ export const fontSizes = {
 };
 
 export const useStyles = makeStyles(
-  (theme): Styles => ({
+  (theme): Partial<RNEULStyles & Styles> => ({
     listItemButtonTitle: {
       alignSelf: 'center',
       textAlign: 'center',

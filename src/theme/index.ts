@@ -31,5 +31,5 @@ export const useTheme = () => {
 export interface AppTheme extends Theme {
   colors: Colors;
   insets: EdgeInsets;
-  styles: RNEULStyles & Styles;
+  styles: Partial<RNEULStyles & Styles>;
 }

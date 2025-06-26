@@ -1,6 +1,8 @@
 import '@react-native-firebase/app';
 
 import { AJPElements, log } from '@react-native-ajp-elements/core';
+import { ReactNativeHello } from '@react-native-hello/core';
+import { useTheme } from 'theme';
 
 import { AppError } from 'lib/errors';
 import { BackHandler } from 'react-native';
@@ -22,6 +24,7 @@ export enum InitStatus {
 }
 
 export const useInitApp = () => {
+  const theme = useTheme();
   useDeviceShake();
 
   // Order is important here.
@@ -51,6 +54,15 @@ export const useInitApp = () => {
         sentryEndpoint: appConfig.sentryEndpoint,
         sentryLoggingEnabled: appConfig.sentryLoggingEnabled,
         svgImages,
+        // userId: '',
+      });
+
+      ReactNativeHello.init({
+        buildEnvironment: appConfig.buildEnvironment,
+        sentryEndpoint: appConfig.sentryEndpoint,
+        sentryLoggingEnabled: appConfig.sentryLoggingEnabled,
+        svgImages,
+        theme,
         // userId: '',
       });
 

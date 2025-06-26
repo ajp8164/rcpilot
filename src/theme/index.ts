@@ -3,7 +3,7 @@ import { EdgeInsets, useSafeAreaInsets } from 'react-native-safe-area-context';
 import {
   Styles as RNEULStyles,
   useStyles as useRNEULStyles,
-} from '@react-native-ajp-elements/ui';
+} from '@react-native-hello/ui';
 
 import { Styles } from './types/Styles';
 import { useStyles } from './styles';
@@ -15,7 +15,7 @@ export * from './svg';
 export const useTheme = () => {
   const { theme, updateTheme } = useRNETheme();
   const rneulStyles = useRNEULStyles();
-  const styles = useStyles();
+  const styles = useStyles(theme);
   const insets = useSafeAreaInsets();
   return {
     ...theme,

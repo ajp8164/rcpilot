@@ -1,7 +1,7 @@
 import { Platform } from 'react-native';
 import { createTheme } from '@rn-vui/themed';
 import lodash from 'lodash';
-import { theme as rneulTheme } from '@react-native-ajp-elements/ui';
+import { theme as rneulTheme } from '@react-native-hello/ui';
 
 export const theme = createTheme(
   lodash.merge({}, rneulTheme, {
@@ -22,6 +22,8 @@ export const theme = createTheme(
       brandSecondary: '#007bff',
       disabled: '#787878',
       listItemBackgroundAlt: '#101010',
+      listItemIcon: '#007bff',
+      listItemIconNav: '#007bff',
       screenHeaderButtonText: '#007bff',
 
       ...Platform.select({
@@ -58,6 +60,8 @@ export const theme = createTheme(
       brandSecondary: '#007bff',
       disabled: '#787878',
       listItemBackgroundAlt: '#f7f7f7',
+      listItemIcon: '#007bff',
+      listItemIconNav: '#007bff',
       screenHeaderButtonText: '#007bff',
 
       ...Platform.select({

@@ -1,7 +1,5 @@
+import { Divider, ListItemSwitch } from '@react-native-hello/ui';
 import React, { useState } from 'react';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItemSwitch } from 'components/atoms/List';
 import { ScrollView } from 'react-native';
 import { useTheme } from 'theme';
 

@@ -1,14 +1,17 @@
-import { AppTheme, useTheme } from 'theme';
-import {
-  Checklist,
-  ChecklistAction,
-  JChecklistActionHistoryEntry,
-} from 'realmdb/Checklist';
-import {
-  ListItemCheckboxInfo,
-  SectionListHeader,
-  listItemPosition,
-} from 'components/atoms/List';
+import { Divider, listItemPosition } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import ActionBar from 'components/atoms/ActionBar';
+import { Button } from 'components/atoms/Button';
+import { ListItemCheckBoxInfo } from 'components/atoms/List';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { eventKind } from 'lib/modelEvent';
+import { groupItems } from 'lib/sectionList';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { uuidv4 } from 'lib/utils';
+import { ChevronRight } from 'lucide-react-native';
+import { DateTime } from 'luxon';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   SectionList,
@@ -17,26 +20,18 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-
-import ActionBar from 'components/atoms/ActionBar';
 import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { ChecklistType } from 'types/checklist';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { EventSequenceNavigatorParamList } from 'types/navigation';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import {
+  Checklist,
+  ChecklistAction,
+  JChecklistActionHistoryEntry,
+} from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { eventKind } from 'lib/modelEvent';
-import { eventSequence } from 'store/slices/eventSequence';
-import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
 import { selectEventSequence } from 'store/selectors/eventSequence';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useObject } from '@realm/react';
-import { uuidv4 } from 'lib/utils';
+import { eventSequence } from 'store/slices/eventSequence';
+import { AppTheme, useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { EventSequenceNavigatorParamList } from 'types/navigation';
 
 type ChecklistActionItemData = {
   checklist: Checklist;
@@ -87,38 +82,44 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (cancelable) {
           return (
             <Button
               title={'Cancel'}
-              titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonInvScreenHeader}
-              onPressIn={() =>
-                confirmAction(cancelEvent, {
-                  label: `Do Not Log ${kind.name}`,
-                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                })
+              titleStyle={{
+                ...theme.styles.buttonScreenHeaderTitle,
+                ...s.buttonScreenHeaderTitleLeft,
+              }}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              onPress={() =>
+                confirmAction(
+                  {
+                    label: `Do Not Log ${kind.name}`,
+                    title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                  },
+                  cancelEvent,
+                )
               }
             />
           );
         }
       },
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             title={checklistType === ChecklistType.PreEvent ? 'Timer' : 'Log'}
-            titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonInvScreenHeader}
-            iconRight={true}
+            titleStyle={{
+              ...theme.styles.buttonScreenHeaderTitle,
+              ...s.buttonScreenHeaderTitleRight,
+            }}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            iconRight
             icon={
-              <Icon
-                name={'chevron-right'}
+              <ChevronRight
                 color={theme.colors.stickyWhite}
-                size={22}
-                style={s.headerIcon}
+                size={33}
+                style={{ right: 10 }}
               />
             }
             onPress={() => {
@@ -239,20 +240,17 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     index: number;
   }) => {
     return (
-      <ListItemCheckboxInfo
-        key={index}
+      <ListItemCheckBoxInfo
+        key={actionItem.action.refId}
         title={actionItem.action.description}
         subtitle={actionItem.action.schedule.state.text}
-        iconChecked={'square-check'}
-        iconUnchecked={'square'}
-        iconSize={26}
-        iconColor={theme.colors.clearButtonText}
+        position={listItemPosition(index, section.data.length)}
+        checkBox
         checked={
           !!currentEventSequence.checklistActionHistoryEntries[checklistType][
             actionItem.action.refId
           ]?.date
         }
-        position={listItemPosition(index, section.data.length)}
         onPress={() => {
           if (
             currentEventSequence.checklistActionHistoryEntries[checklistType][
@@ -306,7 +304,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
         keyExtractor={(item, index) => `${index}${item.action.refId}`}
         renderItem={renderChecklistAction}
         renderSectionHeader={({ section: { title } }) => (
-          <SectionListHeader title={title} />
+          <Divider text={title} />
         )}
         ListFooterComponent={<Divider />}
       />
@@ -328,13 +326,17 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  buttonScreenHeaderTitleLeft: {
+    color: theme.colors.stickyWhite,
+  },
+  buttonScreenHeaderTitleRight: {
+    right: 10,
+    color: theme.colors.stickyWhite,
+  },
   sectionList: {
     flex: 1,
     flexGrow: 1,
-  },
-  headerIcon: {
-    paddingLeft: 5,
   },
 }));
 

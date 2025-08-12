@@ -1,5 +1,5 @@
-import { Battery } from 'realmdb/Battery';
 import { DateTime } from 'luxon';
+import { Battery } from 'realmdb/Battery';
 
 export const batteryCycleSummary = (battery: Battery) => {
   const lastCycle = battery?.cycles[battery.cycles.length - 1];

@@ -1,21 +1,19 @@
 import '@react-native-firebase/app';
-
-import { AJPElements, log } from '@react-native-ajp-elements/core';
-import { ReactNativeHello } from '@react-native-hello/core';
-import { useTheme } from 'theme';
-
-import { AppError } from 'lib/errors';
-import { BackHandler } from 'react-native';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { log } from '@react-native-hello/core';
+import { ReactNativeHello } from '@react-native-hello/core';
 import { appConfig } from 'config';
+import { useAchievementConveyor } from 'lib/achievement';
+import { AppError } from 'lib/errors';
 // import firestore from '@react-native-firebase/firestore';
 import { initPushNotifications } from 'lib/notifications';
-// import storage from '@react-native-firebase/storage';
-import { svgImages } from 'theme';
-import { useAchievementConveyor } from 'lib/achievement';
+import { useUnknownPilot } from 'lib/pilot';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useDeviceShake } from 'lib/useDeviceShake';
-import { useUnknownPilot } from 'lib/pilot';
+import { BackHandler } from 'react-native';
+import { useTheme } from 'theme';
+// import storage from '@react-native-firebase/storage';
+import { svgImages } from 'theme';
 
 export enum InitStatus {
   NotAuthorized = 'NotAuthorized',
@@ -48,14 +46,6 @@ export const useInitApp = () => {
       });
 
       initPushNotifications();
-
-      AJPElements.init({
-        buildEnvironment: appConfig.buildEnvironment,
-        sentryEndpoint: appConfig.sentryEndpoint,
-        sentryLoggingEnabled: appConfig.sentryLoggingEnabled,
-        svgImages,
-        // userId: '',
-      });
 
       ReactNativeHello.init({
         buildEnvironment: appConfig.buildEnvironment,

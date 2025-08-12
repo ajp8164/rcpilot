@@ -1,3 +1,9 @@
+import { useRealm } from '@realm/react';
+import { appConfig } from 'config';
+import { DatabaseInfoContext } from 'lib/database';
+import { DateTime } from 'luxon';
+import { useEffect, useRef } from 'react';
+import fs from 'react-native-fs';
 import {
   Battery,
   BatteryCycle,
@@ -14,13 +20,6 @@ import {
   Pilot,
   ScanCodesReport,
 } from 'realmdb';
-import { useEffect, useRef } from 'react';
-
-import { DatabaseInfoContext } from 'lib/database';
-import { DateTime } from 'luxon';
-import { appConfig } from 'config';
-import fs from 'react-native-fs';
-import { useRealm } from '@realm/react';
 
 export const useDatabaseInfo = (): DatabaseInfoContext => {
   const realm = useRealm();

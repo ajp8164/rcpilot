@@ -1,8 +1,13 @@
 import { TextStyle, ViewStyle } from 'react-native';
 
 export type Styles = {
-  listItemButtonTitle: TextStyle;
+  buttonAssertive: ViewStyle;
+  buttonAssertiveContainer: ViewStyle;
+  buttonAssertiveTitle: TextStyle;
+  dividerButton: ViewStyle;
+  dividerButtonDisabled: ViewStyle;
   listItemButtonDisabled: ViewStyle;
+  listItemButtonTitle: TextStyle;
   swipeableListItemContainer: ViewStyle;
   textGiant: TextStyle;
   textMicro: TextStyle;

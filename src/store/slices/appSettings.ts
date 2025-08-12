@@ -1,18 +1,19 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { revertSettings } from 'store/actions';
 import { DatabaseAccessWith, OutputReportTo } from 'types/database';
-
+import {
+  EventPreferences,
+  ModelPreferences,
+  ModelsLayout,
+  ModelsPreferences,
+} from 'types/preferences';
 import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
-import { revertSettings } from 'store/actions';
-import {
-  ModelPreferences,
-  ModelsPreferences,
-  ModelsLayout,
-} from 'types/preferences';
 
 export interface AppSettingsState {
   biometrics: boolean;
   databaseAccessWith: DatabaseAccessWith;
+  eventPreferences: EventPreferences;
   outputReportTo: OutputReportTo;
   modelsLayout: ModelsLayout;
   modelsPreferences: ModelsPreferences;
@@ -23,6 +24,9 @@ export interface AppSettingsState {
 export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   biometrics: true,
   databaseAccessWith: DatabaseAccessWith.WebServer,
+  eventPreferences: {
+    timerUsesButtons: false,
+  },
   outputReportTo: OutputReportTo.WebServer,
   modelsLayout: ModelsLayout.List,
   modelsPreferences: {},
@@ -52,6 +56,19 @@ const handleSaveDatabaseAccessWith: CaseReducer<
   return {
     ...state,
     databaseAccessWith: payload.value,
+  };
+};
+
+const handleSaveEventPreferences: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ preferences: EventPreferences }>
+> = (state, { payload }) => {
+  return {
+    ...state,
+    eventPreferences: {
+      ...state.eventPreferences,
+      ...payload.preferences,
+    },
   };
 };
 
@@ -129,6 +146,7 @@ const appSettingsSlice = createSlice({
     saveAcceptTou: handleSaveAcceptTou,
     saveBiometrics: handleSaveBiometrics,
     saveDatabaseAccessWith: handleSaveDatabaseAccessWith,
+    saveEventPreferences: handleSaveEventPreferences,
     saveOutputReportTo: handleSaveOutputReportTo,
     saveModelsLayout: handleSaveModelsLayout,
     saveModelPreferences: handleSaveModelPreferences,
@@ -143,6 +161,8 @@ export const saveAcceptTou = appSettingsSlice.actions.saveAcceptTou;
 export const saveBiometrics = appSettingsSlice.actions.saveBiometrics;
 export const saveDatabaseAccessWith =
   appSettingsSlice.actions.saveDatabaseAccessWith;
+export const saveEventPreferences =
+  appSettingsSlice.actions.saveEventPreferences;
 export const saveOutputReportTo = appSettingsSlice.actions.saveOutputReportTo;
 export const saveModelsLayout = appSettingsSlice.actions.saveModelsLayout;
 export const saveModelPreferences =

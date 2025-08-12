@@ -1,5 +1,5 @@
+import { log } from '@react-native-hello/core';
 import Realm from 'realm';
-import { log } from '@react-native-ajp-elements/core';
 
 export const migrateRealm = (oldRealm: Realm, newRealm: Realm) => {
   log.info(

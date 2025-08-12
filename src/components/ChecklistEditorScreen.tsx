@@ -1,43 +1,54 @@
-import { AppTheme, useTheme } from 'theme';
+import * as Yup from 'yup';
+import {
+  Divider,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItem,
+  ListItemSwipeable,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import { Formik, FormikProps } from 'formik';
+import { useEvent } from 'lib/event';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { uuidv4 } from 'lib/utils';
+import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, LayoutRectangle, View } from 'react-native';
+import {
+  DragEndParams,
+  NestableDraggableFlatList,
+  NestableScrollContainer,
+  RenderItemParams,
+} from 'react-native-draggable-flatlist';
+import { BSON } from 'realm';
 import {
   Checklist,
   ChecklistAction,
   JChecklistAction,
 } from 'realmdb/Checklist';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import {
-  ListItem,
-  ListItemInput,
-  listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
+import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
+import { Model } from 'realmdb/Model';
+import { AppTheme, useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
 import {
   ModelsNavigatorParamList,
   NewChecklistNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import {
-  NestableDraggableFlatList,
-  NestableScrollContainer,
-  RenderItemParams,
-} from 'react-native-draggable-flatlist';
-import { Platform, View } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
-import { ChecklistType } from 'types/checklist';
-import { CompositeScreenProps } from '@react-navigation/core';
-import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { Model } from 'realmdb/Model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { eqString } from 'realmdb/helpers';
-import { makeStyles } from '@rn-vui/themed';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
-import { uuidv4 } from 'lib/utils';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistEditor'>,
@@ -47,14 +58,24 @@ export type Props = CompositeScreenProps<
   >
 >;
 
+// Order of fields for accessory view.
+enum Fields {
+  name,
+}
+
+type FormValues = {
+  name: string;
+  type: ChecklistType;
+  actions: JChecklistAction[];
+};
+
 const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   const { checklistTemplateId, modelId, modelChecklistRefId } =
     route.params || {};
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const setDebounced = useDebouncedRender();
-  const listEditor = useListEditor();
+  const confirmAction = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
 
@@ -70,121 +91,145 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     c => c.refId === modelChecklistRefId,
   );
 
-  const workingChecklist = checklistTemplate || modelChecklist || undefined;
   const editingTemplate = useRef(!modelId).current; // This is a template editor if no modelId.
   const eventNameId = useRef(uuidv4()).current; // Used for unique action change event name.
 
-  const name = useRef(
-    checklistTemplate?.name || modelChecklist?.name || undefined,
-  );
-  const [type, setType] = useState(
-    checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent,
-  );
-  const [actions, setActions] = useState<JChecklistAction[]>(
-    checklistTemplate?.actions.toJSON() ||
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+  const [listLayout, setListLayout] = useState<LayoutRectangle>();
+
+  const initialValues = {
+    name: checklistTemplate?.name || modelChecklist?.name || undefined,
+    type:
+      checklistTemplate?.type || modelChecklist?.type || ChecklistType.PreEvent,
+    actions:
+      // Need to convert the model checklist actions into a plain object to decouple from the realm array instance.
+      checklistTemplate?.actions.toJSON() ||
       (modelChecklist !== undefined
         ? JSON.parse(JSON.stringify(modelChecklist.actions))
         : []),
-  ); // Need to convert the model checklist actions into a plain object to decouple from the realm array instance.
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    type: Yup.string().required(),
+    actions: Yup.array().of(Yup.object()),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const nameFieldRef = useRef<ListItemInputMethods>(null);
 
   useEffect(() => {
-    const canSave =
-      !!name.current &&
-      (!eqString(workingChecklist?.name, name.current) ||
-        !eqString(workingChecklist?.type, type));
+    if (!formikRef.current?.values.actions.length) return;
+    navigation.setOptions({
+      headerRight: renderListEditButton,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listEditorState]);
 
-    const save = () => {
-      if (editingTemplate) {
-        // Not a model checklist, handle saving a checklist template.
-        if (checklistTemplate) {
-          realm.write(() => {
-            checklistTemplate.name = name.current || 'no-name';
-            checklistTemplate.type = type;
-            // Existing actions are saved inline with edits/adds.
-          });
-        } else {
-          realm.write(() => {
-            realm.create('ChecklistTemplate', {
-              name: name.current,
-              type,
-              actions,
-            });
-          });
-        }
+  const cancel = () => {
+    formikRef.current?.resetForm();
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    if (editingTemplate) {
+      // Not a model checklist, handle saving a checklist template.
+      if (checklistTemplate) {
+        realm.write(() => {
+          checklistTemplate.name = values.name || 'no-name';
+          checklistTemplate.type = values.type;
+          // Existing actions are saved inline with edits/adds.
+        });
       } else {
-        // Is a model checklist, handle updating the checklist on the model.
-        if (model && modelChecklist) {
-          // Update an existing model checklist.
-          realm.write(() => {
-            const index = model?.checklists.findIndex(
-              c => c.refId === modelChecklistRefId,
-            );
-            model.checklists[index].name = name.current || 'no-name';
-            model.checklists[index].type = type;
-            // Existing actions are saved inline with edits/adds.
+        realm.write(() => {
+          realm.create('ChecklistTemplate', {
+            name: values.name,
+            type: values.type,
+            actions: values.actions,
           });
-        } else {
-          // Create a new checklist on the model.
-          realm.write(() => {
-            const newModelChecklist = {
-              refId: uuidv4(),
-              name: name.current,
-              type,
-              actions,
-            } as Checklist;
-
-            model?.checklists.push(newModelChecklist);
-          });
-        }
+        });
       }
-    };
+    } else {
+      // Is a model checklist, handle updating the checklist on the model.
+      if (model && modelChecklist) {
+        // Update an existing model checklist.
+        realm.write(() => {
+          const index = model?.checklists.findIndex(
+            c => c.refId === modelChecklistRefId,
+          );
+          model.checklists[index].name = values.name || 'no-name';
+          model.checklists[index].type = values.type;
+          // Existing actions are saved inline with edits/adds.
+        });
+      } else {
+        // Create a new checklist on the model.
+        realm.write(() => {
+          const newModelChecklist = {
+            refId: uuidv4(),
+            name: values.name,
+            type: values.type,
+            actions: values.actions,
+          } as Checklist;
 
-    const onDone = () => {
-      save();
-      navigation.goBack();
-    };
+          model?.checklists.push(newModelChecklist);
+        });
+      }
+    }
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
 
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
-        if (!checklistTemplateId && !modelChecklistRefId) {
+        if (next.dirty) {
           return (
             <Button
               title={'Cancel'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={navigation.goBack}
+              onPress={cancel}
             />
           );
         }
       },
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
-        if (canSave) {
+        if (next.dirty || next.values.actions.length === 0) {
           return (
             <Button
               title={'Save'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={onDone}
+              disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={!canSubmit}
+              onPress={save}
             />
           );
-        } else {
-          if (actions.length > 0) {
-            return (
-              <Button
-                title={listEditor.enabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={theme.styles.buttonScreenHeader}
-                onPress={listEditor.onEdit}
-              />
-            );
-          }
+        } else if (next.values.actions.length > 0) {
+          return renderListEditButton();
         }
       },
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name.current, type, actions, listEditor.enabled]);
+  };
 
   useEffect(() => {
     event.on(`checklist-type-${eventNameId}`, onChangeType);
@@ -201,7 +246,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
       if (checklistTemplate) {
         realm.write(() => {
           // @ts-expect-error: not recognizing the target as a (realm) embedded array
-          checklistTemplate.actions = actions;
+          checklistTemplate.actions = formikRef.current?.values.actions;
         });
       }
     } else {
@@ -211,47 +256,58 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
           const index = model.checklists.findIndex(
             c => c.refId === modelChecklistRefId,
           );
-          model.checklists[index].actions = actions as ChecklistAction[];
+          model.checklists[index].actions = (formikRef.current?.values
+            .actions || []) as ChecklistAction[];
         });
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [actions]);
+  }, [formikRef.current?.values.actions]);
 
   const onChangeType = (result: EnumPickerResult) => {
-    setType(result.value[0] as ChecklistType);
+    formikRef.current?.setFieldValue('type', result.value[0]);
   };
 
   const upsertAction = (newOrChangedAction: JChecklistAction) => {
     if (newOrChangedAction.refId !== undefined) {
       // Update existing action.
-      setActions(prevState => {
-        const actns = [...prevState];
-        const index = actns.findIndex(
-          a => a.refId === newOrChangedAction.refId,
-        );
-        actns[index] = newOrChangedAction;
-        return actns;
-      });
+      const actns = [...(formikRef.current?.values.actions || [])];
+      const index = actns.findIndex(a => a.refId === newOrChangedAction.refId);
+      actns[index] = newOrChangedAction;
+
+      formikRef.current?.setFieldValue('actions', actns);
     } else {
       // Insert a new action.
       newOrChangedAction.refId = uuidv4();
-      setActions(prevState => {
-        return [...prevState].concat(newOrChangedAction);
-      });
+      formikRef.current?.setFieldValue(
+        'actions',
+        [...formikRef.current.values.actions].concat(newOrChangedAction),
+      );
     }
   };
 
   const deleteAction = (index: number) => {
     if ((editingTemplate && checklistTemplate) || modelChecklist) {
-      const a = [...actions];
+      const a = [...(formikRef.current?.values.actions || [])];
       a.splice(index, 1);
-      setActions(a);
+      formikRef.current?.setFieldValue('actions', a);
     }
   };
 
-  const reorderActions = (data: JChecklistAction[]) => {
-    setActions(data);
+  const reorderActions = (params: DragEndParams<JChecklistAction>) => {
+    const { data } = params;
+    formikRef.current?.setFieldValue('actions', data);
+  };
+
+  const renderListEditButton = () => {
+    return (
+      <Button
+        title={listEditorState?.enabled ? 'Done' : 'Edit'}
+        titleStyle={theme.styles.buttonScreenHeaderTitle}
+        buttonStyle={theme.styles.buttonScreenHeader}
+        onPress={() => listEditorRef.current?.onToggleEditMode()}
+      />
+    );
   };
 
   const renderChecklistAction = ({
@@ -263,142 +319,190 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     const index = getIndex();
     if (index === undefined) return null;
     return (
-      <View key={index} style={[isActive ? s.shadow : {}]}>
-        <ListItem
-          ref={ref => {
-            ref &&
-              action.refId &&
-              listEditor.add(ref, 'checklist-actions', action.refId);
-          }}
-          title={action.description}
-          subtitle={action.schedule.state.text}
-          position={listItemPosition(index, actions.length)}
-          titleNumberOfLines={1}
-          drag={drag}
-          editable={{
-            item: {
-              icon: 'remove-circle',
-              color: theme.colors.assertive,
-              action: 'open-swipeable',
+      <ListItemSwipeable
+        title={action.description}
+        subtitle={action.schedule.state.text}
+        position={listItemPosition(
+          index,
+          formikRef.current?.values.actions.length || 0,
+        )}
+        rightContent={'chevron-right'}
+        onPress={() =>
+          navigation.navigate('ChecklistActionEditor', {
+            checklistAction: action,
+            checklistType:
+              formikRef.current?.values.type || ChecklistType.PreEvent,
+            modelId,
+            eventName: `checklist-action-${eventNameId}`,
+          })
+        }
+        drag={drag}
+        dragIsActive={isActive}
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+          draggable: true,
+        }}
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
+            color: theme.colors.assertive,
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: 'Delete Action',
+                title:
+                  'This action cannot be undone.\nAre you sure you want to delete this checklist action?',
+              });
             },
-            reorder: true,
-          }}
-          showEditor={listEditor.show}
-          swipeable={{
-            rightItems: [
-              {
-                ...swipeableDeleteItem[theme.mode],
-                onPress: () => deleteAction(index),
-              },
-            ],
-          }}
-          onSwipeableWillOpen={() =>
-            action.refId &&
-            listEditor.onItemWillOpen('checklist-actions', action.refId)
-          }
-          onSwipeableWillClose={listEditor.onItemWillClose}
-          onPress={() =>
-            navigation.navigate('ChecklistActionEditor', {
-              checklistAction: action,
-              checklistType: type,
-              modelId,
-              eventName: `checklist-action-${eventNameId}`,
-            })
-          }
-        />
-      </View>
+            onPress: () => deleteAction(index),
+          },
+        ]}
+      />
     );
   };
 
   return (
-    <NestableScrollContainer
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'NAME & TYPE'} />
-      <ListItemInput
-        value={name.current}
-        placeholder={
-          editingTemplate ? 'Checklist Template Name' : 'Checklist Name'
-        }
-        position={['first']}
-        disabled={type === ChecklistType.OneTimeMaintenance}
-        onChangeText={value => setDebounced(() => (name.current = value))}
+    <>
+      <ListEditor
+        ref={listEditorRef}
+        onChangeState={setListEditorState}
+        listLayout={listLayout}>
+        <NestableScrollContainer
+          style={theme.styles.view}
+          showsVerticalScrollIndicator={false}
+          contentInsetAdjustmentBehavior={'automatic'}>
+          <Formik
+            innerRef={formik => {
+              if (formik) {
+                formikRef.current = formik;
+              }
+            }}
+            initialValues={initialValues}
+            validationSchema={schema}
+            validateOnMount
+            onSubmit={onSubmit}>
+            {({ errors, handleChange, values }) => (
+              <View>
+                <FormikStateWatcher<FormValues>
+                  dirtyIgnoreFields={['actions']}
+                  onChange={onFormikWatcherStateChange}
+                />
+                <Divider text={'NAME & TYPE'} />
+                <ListItemInput
+                  ref={nameFieldRef}
+                  error={!!errors.name}
+                  position={['first']}
+                  inputProps={{
+                    inputAccessoryViewID: 'keyboardAccessory',
+                    onChangeText: handleChange('name'),
+                    onFocus: () =>
+                      keyboardAccessory.current?.focusedField(Fields.name),
+                    value: values.name,
+                    label: editingTemplate
+                      ? 'Checklist Template Name'
+                      : 'Checklist Name',
+                    placeholder: editingTemplate
+                      ? 'Checklist Template Name'
+                      : 'Checklist Name',
+                    editable: values.type !== ChecklistType.OneTimeMaintenance,
+                    autoCapitalize: 'words',
+                  }}
+                />
+                <ListItem
+                  title={
+                    editingTemplate ? 'Template for List Type' : 'List Type'
+                  }
+                  value={values.type}
+                  position={['last']}
+                  rightContent={
+                    values.type !== ChecklistType.OneTimeMaintenance
+                      ? 'chevron-right'
+                      : undefined
+                  }
+                  disabled={values.type === ChecklistType.OneTimeMaintenance}
+                  onPress={() =>
+                    navigation.navigate('EnumPicker', {
+                      title: editingTemplate
+                        ? 'Template Type'
+                        : 'Checklist Type',
+                      headerBackTitle: 'Back',
+                      values: Object.values(ChecklistType).filter(
+                        t => t !== ChecklistType.OneTimeMaintenance,
+                      ),
+                      selected: values.type,
+                      eventName: `checklist-type-${eventNameId}`,
+                    })
+                  }
+                />
+                <Divider
+                  text={'ACTIONS'}
+                  rightComponent={
+                    <Button
+                      icon={
+                        <Plus color={theme.colors.screenHeaderButtonText} />
+                      }
+                      buttonStyle={theme.styles.dividerButton}
+                      onPress={() =>
+                        navigation.navigate('NewChecklistActionNavigator', {
+                          screen: 'NewChecklistAction',
+                          params: {
+                            checklistType:
+                              values.type || ChecklistType.PreEvent,
+                            modelId,
+                            eventName: `checklist-action-${eventNameId}`,
+                          },
+                        })
+                      }
+                    />
+                  }
+                />
+                {values.actions.length ? (
+                  <View
+                    style={[{ flex: 1 }]}
+                    onLayout={e => setListLayout(e.nativeEvent.layout)}>
+                    <NestableDraggableFlatList
+                      data={[...values.actions]}
+                      renderItem={renderChecklistAction}
+                      keyExtractor={item => `${item.refId}`}
+                      showsVerticalScrollIndicator={false}
+                      scrollEnabled={false}
+                      style={s.actionsList}
+                      onDragEnd={reorderActions}
+                    />
+                  </View>
+                ) : (
+                  <Divider
+                    note
+                    light
+                    subHeaderStyle={{ textAlign: 'center' }}
+                    text={"Tap '+' to add a new action."}
+                  />
+                )}
+                <Divider />
+              </View>
+            )}
+          </Formik>
+        </NestableScrollContainer>
+      </ListEditor>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={[nameFieldRef.current]}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <ListItem
-        title={editingTemplate ? 'Template for List Type' : 'List Type'}
-        value={type}
-        position={['last']}
-        rightImage={type !== ChecklistType.OneTimeMaintenance}
-        disabled={type === ChecklistType.OneTimeMaintenance}
-        onPress={() =>
-          navigation.navigate('EnumPicker', {
-            title: editingTemplate ? 'Template Type' : 'Checklist Type',
-            headerBackTitle: 'Back',
-            values: Object.values(ChecklistType).filter(
-              t => t !== ChecklistType.OneTimeMaintenance,
-            ),
-            selected: type,
-            eventName: `checklist-type-${eventNameId}`,
-          })
-        }
-      />
-      {actions.length > 0 && <Divider text={'ACTIONS'} />}
-      <NestableDraggableFlatList
-        data={actions}
-        renderItem={renderChecklistAction}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-        style={s.actionsList}
-        animationConfig={{
-          damping: 20,
-          mass: 0.01,
-          stiffness: 100,
-          overshootClamping: false,
-          restSpeedThreshold: 0.2,
-          restDisplacementThreshold: 2,
-        }}
-        onDragEnd={({ data }) => reorderActions(data)}
-      />
-      <Divider />
-      <ListItem
-        title={'Add a New Action'}
-        titleStyle={s.actionTitle}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={() =>
-          navigation.navigate('NewChecklistActionNavigator', {
-            screen: 'NewChecklistAction',
-            params: {
-              checklistType: type,
-              modelId,
-              eventName: `checklist-action-${eventNameId}`,
-            },
-          })
-        }
-      />
-      <Divider />
-    </NestableScrollContainer>
+    </>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  actionTitle: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: theme.colors.clearButtonText,
-  },
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   actionsList: {
     overflow: 'visible',
-  },
-  shadow: {
-    ...theme.styles.shadowGlow,
-    ...Platform.select({
-      android: {
-        borderRadius: 20,
-      },
-    }),
   },
 }));
 

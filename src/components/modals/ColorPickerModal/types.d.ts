@@ -17,7 +17,7 @@ export type Result = {
 
 export declare type ColorPickerModal = ColorPickerModalMethods;
 
-declare const LegalModal: React.MemoExoticComponent<
+declare const ColorPickerModal: React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     ColorPickerModalProps & React.RefAttributes<ColorPickerModalMethods>
   >

@@ -1,5 +1,5 @@
-import { ChecklistType } from 'types/checklist';
 import { Model } from 'realmdb/Model';
+import { ChecklistType } from 'types/checklist';
 
 export const modelMaintenanceIsDue = (model: Model) => {
   const checklists = model.checklists?.filter(c => {

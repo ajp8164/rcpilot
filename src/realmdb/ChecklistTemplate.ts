@@ -1,7 +1,7 @@
 import { BSON, Object, ObjectSchema } from 'realm';
+import { ChecklistType } from 'types/checklist';
 
 import { ChecklistAction } from './Checklist';
-import { ChecklistType } from 'types/checklist';
 
 export class ChecklistTemplate extends Object<ChecklistTemplate> {
   _id!: BSON.ObjectId;

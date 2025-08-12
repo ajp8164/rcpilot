@@ -1,4 +1,5 @@
 import { BatteryCycle } from 'realmdb/BatteryCycle';
+
 import { batteryCycleChargeData } from './index';
 
 export const batteryCycleTitle = (cycle: BatteryCycle) => {

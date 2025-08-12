@@ -8,11 +8,10 @@ import {
 } from 'react-native-maps';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 import React, { forwardRef, useState } from 'react';
-
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Location } from 'realmdb';
 import { makeStyles } from '@rn-vui/themed';
 import { useLocationSummary } from 'lib/location';
+import { ChevronRight, MapPin } from 'lucide-react-native';
 
 interface MapMarkerCalloutInterface {
   index: number;
@@ -42,7 +41,7 @@ export const MapMarkerCallout = forwardRef(
 
     return (
       <>
-        {/* This text is used to measure the location name width. */}
+        {/* This text is not visible and is used to measure the location name width. */}
         <Text
           numberOfLines={1}
           style={[s.calloutText1, s.calloutText1Hidden]}
@@ -63,7 +62,7 @@ export const MapMarkerCallout = forwardRef(
           draggable
           onDragEnd={event => onMarkerDragEnd(event, location)}>
           <Animated.View entering={SlideInUp.duration(400)}>
-            <Icon name={'map-pin'} color={'red'} size={30} style={s.pin} />
+            <MapPin color={'red'} fill={'white'} size={30} style={s.pin} />
           </Animated.View>
           <Callout style={[s.callout, { width }]} onPress={onPressCallout}>
             <View style={s.calloutTextContainer}>
@@ -74,10 +73,9 @@ export const MapMarkerCallout = forwardRef(
                 {locationSummary}
               </Text>
             </View>
-            <Icon
-              name={'chevron-right'}
-              color={theme.colors.midGray}
-              size={16}
+            <ChevronRight
+              color={theme.colors.listItemIcon}
+              style={{ right: 15 }}
             />
           </Callout>
         </Marker>
@@ -93,7 +91,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   callout: {
     height: 26,
     width: '100%',
-    minWidth: 150,
+    minWidth: 175,
     maxWidth: 250,
     marginVertical: -12,
     paddingRight: 10,
@@ -103,6 +101,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   calloutTextContainer: {
     width: '100%',
+    paddingRight: 10,
   },
   calloutText1Hidden: {
     position: 'absolute',
@@ -110,7 +109,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   calloutText1: {
     ...theme.styles.textNormal,
-    paddingRight: 10,
   },
   calloutText2: {
     ...theme.styles.textSmall,
@@ -118,6 +116,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   pin: {
     height: 30,
-    top: -15,
+    top: -14,
+    left: -5,
   },
 }));

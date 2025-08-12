@@ -1,23 +1,20 @@
-import { AppTheme, useTheme } from 'theme';
-import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
+import { Divider } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterEditorHeader } from 'components/molecules/FilterEditorHeader';
 import {
   ListItemFilterDate,
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
-import React, { useEffect } from 'react';
-
+import { defaultFilter } from 'lib/batteryCycle';
+import { Masks } from 'lib/inputMasks';
+import { useFilterEditor } from 'lib/useFilterEditor';
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { useTheme } from 'theme';
 import { BatteryCycleFilterValues } from 'types/filter';
 import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScrollView } from 'react-native';
-import { defaultFilter } from 'lib/batteryCycle';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useFilterEditor } from 'lib/useFilterEditor';
 
 export const generalBatteryCyclesFilterName = 'general-battery-cycles-filter';
 
@@ -32,8 +29,6 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, requireFilterName } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
-  const setDebounced = useDebouncedRender();
 
   const filterEditor = useFilterEditor<BatteryCycleFilterValues>({
     filterId,
@@ -43,66 +38,17 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
     generalFilterName: generalBatteryCyclesFilterName,
   });
 
-  useEffect(() => {
-    if (requireFilterName) {
-      filterEditor.setCreateSavedFilter(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   if (!filterEditor.filter) {
     return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'} />
-      {filterEditor.name === filterEditor.generalFilterName ||
-      requireFilterName ? (
-        <ListItemSwitch
-          title={'Create a Saved Filter'}
-          position={
-            filterEditor.createSavedFilter ? ['first'] : ['first', 'last']
-          }
-          value={filterEditor.createSavedFilter}
-          disabled={requireFilterName}
-          expanded={filterEditor.createSavedFilter}
-          onValueChange={filterEditor.setCreateSavedFilter}
-          ExpandableComponent={
-            <ListItemInput
-              value={filterEditor.customName}
-              placeholder={'Filter Name'}
-              position={['last']}
-              onChangeText={value =>
-                setDebounced(() => filterEditor.setCustomName(value))
-              }
-            />
-          }
-        />
-      ) : (
-        <ListItemInput
-          value={filterEditor.name}
-          placeholder={'Filter Name'}
-          position={['first', 'last']}
-          onChangeText={value =>
-            setDebounced(() => filterEditor.setName(value))
-          }
-        />
-      )}
-      <Divider />
-      <ListItem
-        title={'Reset Filter'}
-        titleStyle={s.reset}
-        disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
-        disabledStyle={s.resetDisabled}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={filterEditor.resetFilter}
-      />
-      <Divider
-        text={
-          'This filter shows all the battery cycles that match all of these criteria.'
-        }
+      <FilterEditorHeader
+        filterEditor={filterEditor}
+        itemName={'battery cycle'}
+        requireFilterName={requireFilterName}
+        defaultFilter={defaultFilter}
       />
       <ListItemFilterDate
         title={'Discharge Date'}
@@ -116,10 +62,13 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
       <Divider />
       <ListItemFilterNumber
         title={'D. Duration'}
-        label={'m:ss'}
         value={filterEditor.values.dischargeDuration.value}
         relation={filterEditor.values.dischargeDuration.relation}
-        numericProps={{ prefix: '', separator: ':' }}
+        numericProps={{
+          mask: Masks.MINUTES_SECONDS,
+          placeholder: '0:00',
+          units: 'm:ss',
+        }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('dischargeDuration', filterState);
@@ -138,10 +87,9 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
       <Divider />
       <ListItemFilterNumber
         title={'C. Amount'}
-        label={'mAh'}
         value={filterEditor.values.chargeAmount.value}
         relation={filterEditor.values.chargeAmount.relation}
-        numericProps={{ prefix: '' }}
+        numericProps={{ mask: Masks.C_RATING, placeholder: '0', units: 'mAh' }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('chargeAmount', filterState);
@@ -161,16 +109,5 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  reset: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: theme.colors.clearButtonText,
-  },
-  resetDisabled: {
-    opacity: 0.3,
-  },
-}));
 
 export default BatteryCycleFilterEditorScreen;

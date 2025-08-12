@@ -1,12 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import ModelFilterEditorScreen from 'components/ModelFilterEditorScreen';
-import { ModelFiltersNavigatorParamList } from 'types/navigation';
 import ModelFiltersScreen from 'components/ModelFiltersScreen';
-import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import { ModelFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const ModelFiltersStack =
   createNativeStackNavigator<ModelFiltersNavigatorParamList>();

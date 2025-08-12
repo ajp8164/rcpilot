@@ -1,45 +1,76 @@
-import { AppTheme, useTheme } from 'theme';
-import { BatteryCharge, BatteryDischarge } from 'realmdb/BatteryCycle';
+import * as Yup from 'yup';
 import {
+  Divider,
+  InputMethods,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
   ListItem,
-  ListItemDate,
+  ListItemDateTime,
+  ListItemSwitch,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import {
   ListItemInput,
   ListItemInputMethods,
-  ListItemSwitch,
+  ListItemNotes,
 } from 'components/atoms/List';
-import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
-import React, { useEffect, useRef, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import {
-  batteryCycleChargeData,
-  batteryCycleStatisticsData,
-} from 'lib/batteryCycle';
-import {
-  eqArray,
-  eqBoolean,
-  eqNumber,
-  eqString,
-  toNumber,
-} from 'realmdb/helpers';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { BatteriesNavigatorParamList } from 'types/navigation';
-import { Battery } from 'realmdb/Battery';
-import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
-import { BatteryTint } from 'types/battery';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { batterySummary } from 'lib/battery';
-import { batteryTintIcons } from 'lib/battery';
-import { makeStyles } from '@rn-vui/themed';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
+import { Formik, FormikProps } from 'formik';
+import { batterySummary, batteryTintIconProps } from 'lib/battery';
+import { batteryCycleStatisticsData } from 'lib/batteryCycle';
 import { useEvent } from 'lib/event';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
+import { Masks } from 'lib/inputMasks';
+import { BatteryFull, BatteryLow } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, Text, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { BSON } from 'realm';
+import { Battery } from 'realmdb/Battery';
+import { BatteryCharge, BatteryDischarge } from 'realmdb/BatteryCycle';
+import { toNumber } from 'realmdb/helpers';
+import { AppTheme, useTheme } from 'theme';
+import { BatteryTint } from 'types/battery';
+import { ISODateString } from 'types/common';
+import { BatteriesNavigatorParamList } from 'types/navigation';
+
+// Order of fields for accessory view.
+enum Fields {
+  dischargeDuration,
+  dischargePackVoltage,
+  dischargePackResistance,
+  chargeAmount,
+  chargePackVoltage,
+  chargePackResistance,
+}
+
+type FormValues = {
+  chargeAmount: string;
+  chargeCellResistances: string[];
+  chargeCellVoltages: string[];
+  chargeDate: ISODateString;
+  chargePackResistance: string;
+  chargePackVoltage: string;
+  dischargeCellResistances: string[];
+  dischargeCellVoltages: string[];
+  dischargeDate: ISODateString;
+  dischargeDuration: string;
+  dischargePackResistance: string;
+  dischargePackVoltage: string;
+  excludeFromPlots: boolean;
+  isCharged: boolean;
+  notes: string;
+};
 
 export type Props = NativeStackScreenProps<
   BatteriesNavigatorParamList,
@@ -52,8 +83,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
-  const setDebounced = useDebouncedRender();
-  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
@@ -64,53 +93,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     battery?.cycles[battery.cycles.length - 1]?.charge ||
     !battery?.cycles.length;
 
-  // Discharge phase
-  const [dischargeDate, setDischargeDate] = useState(cycle?.discharge?.date);
-  const dischargeDuration = useRef(
-    secondsToFormat(cycle?.discharge?.duration) || undefined,
-  );
-  const dischargePackVoltage = useRef(
-    cycle?.discharge?.packVoltage?.toString() || undefined,
-  );
-  const dischargePackResistance = useRef(
-    cycle?.discharge?.packResistance?.toString() || undefined,
-  );
-  // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
-  const [dischargeCellVoltages, setDischargeCellVoltages] = useState<string[]>(
-    cycle?.discharge?.cellVoltage ||
-      (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
-  );
-  const [dischargeCellResistances, setDischargeCellResistances] = useState<
-    string[]
-  >(
-    cycle?.discharge?.cellResistance ||
-      (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
-  );
-
-  // Charge phase
-  const [chargeDate, setChargeDate] = useState(cycle?.charge?.date);
-  const chargeAmount = useRef(cycle?.charge?.amount?.toString() || undefined);
-  const chargePackVoltage = useRef(
-    cycle?.charge?.packVoltage?.toString() || undefined,
-  );
-  const chargePackResistance = useRef(
-    cycle?.charge?.packResistance?.toString() || undefined,
-  );
-  // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
-  const [chargeCellVoltages, setChargeCellVoltages] = useState<string[]>(
-    cycle?.charge?.cellVoltage ||
-      (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
-  );
-  const [chargeCellResistances, setChargeCellResistances] = useState<string[]>(
-    cycle?.charge?.cellResistance ||
-      (battery ? new Array(battery.sCells * battery.pCells).fill('0') : []),
-  );
-  const [excludeFromPlots, setExcludeFromPlots] = useState(false);
-  const [notes, setNotes] = useState<string | undefined>(
-    cycle?.notes || undefined,
-  );
-
-  const batteryCycleCharge = cycle && batteryCycleChargeData(cycle);
   const batteryCycleStats = cycle && batteryCycleStatisticsData(cycle);
 
   const [expandedDischargeDate, setExpandedDischargeDate] = useState(false);
@@ -123,94 +105,86 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   const chargePackResistanceRef = useRef<ListItemInputMethods>(null);
   const chargePackVoltageRef = useRef<ListItemInputMethods>(null);
 
+  const initialValues = {
+    chargeAmount: battery?.capacity?.toFixed() || '',
+    chargeDate: cycle?.charge?.date || '',
+    chargeCellResistances: battery
+      ? new Array(battery.sCells * battery.pCells).fill('0')
+      : [],
+    chargeCellVoltages: battery
+      ? new Array(battery.sCells * battery.pCells).fill('0')
+      : [],
+    chargePackResistance: '',
+    chargePackVoltage: '',
+    dischargeDate: cycle?.discharge?.date || '',
+    dischargeDuration: secondsToFormat(cycle?.discharge?.duration, {
+      format: 'm:ss',
+    }),
+    dischargeCellVoltages: battery
+      ? new Array(battery.sCells * battery.pCells).fill('0')
+      : [],
+    dischargeCellResistances: battery
+      ? new Array(battery.sCells * battery.pCells).fill('0')
+      : [],
+    dischargePackResistance: '',
+    dischargePackVoltage: '',
+    excludeFromPlots: false,
+    isCharged: false,
+    notes: '',
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    chargeAmount: Yup.string().when('isCharged', {
+      is: true,
+      then: Yup.string().required(),
+      otherwise: Yup.string(),
+    }),
+    chargeCellResistances: Yup.array().of(Yup.string()),
+    chargeCellVoltages: Yup.array().of(Yup.string()),
+    chargeDate: Yup.string().when('isCharged', {
+      is: true,
+      then: Yup.string().required(),
+      otherwise: Yup.string(),
+    }),
+    chargePackResistance: Yup.string(),
+    chargePackVoltage: Yup.string(),
+    dischargeCellResistances: Yup.array().of(Yup.string()),
+    dischargeCellVoltages: Yup.array().of(Yup.string()),
+    dischargeDate: Yup.string().required(),
+    dischargeDuration: Yup.string().required(),
+    dischargePackResistance: Yup.string(),
+    dischargePackVoltage: Yup.string(),
+    excludeFromPlots: Yup.boolean(),
+    notes: Yup.string(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const dischargeDurationFieldRef = useRef<ListItemInputMethods>(null);
+  const dischargePackVoltageFieldRef = useRef<ListItemInputMethods>(null);
+  const dischargePackResistanceFieldRef = useRef<ListItemInputMethods>(null);
+  const chargeAmountFieldRef = useRef<ListItemInputMethods>(null);
+  const chargePackVoltageFieldRef = useRef<ListItemInputMethods>(null);
+  const chargePackResistanceFieldRef = useRef<ListItemInputMethods>(null);
+  const [resolvedRefs, setResolvedRefs] = useState<(InputMethods | null)[]>([]);
+
+  // Supports keyboard accessory view.
+  // Ensures all refs are set.
   useEffect(() => {
-    if (!battery || !cycle) return;
-
-    const canSave =
-      !(cycle.discharge && !dischargeDuration.current) &&
-      !(cycle.charge && !chargeAmount.current) &&
-      (!eqString(cycle.discharge?.date, dischargeDate) ||
-        (dischargeDuration.current &&
-          !eqNumber(
-            cycle.discharge?.duration,
-            MSSToSeconds(dischargeDuration.current).toString(),
-          )) ||
-        !eqNumber(cycle.discharge?.packVoltage, dischargePackVoltage.current) ||
-        !eqNumber(
-          cycle.discharge?.packResistance,
-          dischargePackResistance.current,
-        ) ||
-        !eqArray(cycle.discharge?.cellVoltage, dischargeCellVoltages) ||
-        !eqArray(cycle.discharge?.cellResistance, dischargeCellResistances) ||
-        !eqString(cycle.charge?.date, chargeDate) ||
-        !eqNumber(cycle.charge?.amount, chargeAmount.current) ||
-        !eqNumber(cycle.charge?.packVoltage, chargePackVoltage.current) ||
-        !eqNumber(cycle.charge?.packResistance, chargePackResistance.current) ||
-        (cycle.charge &&
-          !eqArray(cycle.charge?.cellVoltage, chargeCellVoltages)) ||
-        (cycle.charge &&
-          !eqArray(cycle.charge?.cellResistance, chargeCellResistances)) ||
-        !eqBoolean(cycle.excludeFromPlots, excludeFromPlots) ||
-        !eqString(cycle.notes, notes));
-
-    const save = () => {
-      realm.write(() => {
-        cycle.discharge = {
-          date: dischargeDate,
-          duration: dischargeDuration.current
-            ? MSSToSeconds(dischargeDuration.current)
-            : 0,
-          packVoltage: toNumber(dischargePackVoltage.current),
-          packResistance: toNumber(dischargePackResistance.current),
-          cellVoltage: dischargeCellVoltages?.map(v => {
-            return parseFloat(v);
-          }),
-          cellResistance: dischargeCellResistances?.map(r => {
-            return parseFloat(r);
-          }),
-        } as BatteryDischarge;
-        if (cycle.charge) {
-          cycle.charge = {
-            date: chargeDate,
-            amount: toNumber(chargeAmount.current),
-            packVoltage: toNumber(chargePackVoltage.current),
-            packResistance: toNumber(chargePackResistance.current),
-            cellVoltage: chargeCellVoltages?.map(v => {
-              return toNumber(v) || 0;
-            }),
-            cellResistance: chargeCellResistances?.map(r => {
-              return toNumber(r) || 0;
-            }),
-          } as BatteryCharge;
-        }
-        cycle.excludeFromPlots = excludeFromPlots;
-        cycle.notes = notes;
-      });
-    };
-
-    const onDone = () => {
-      save();
-      navigation.goBack();
-    };
-
-    setScreenEditHeader({ enabled: canSave, action: onDone });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dischargeDate,
-    dischargeDuration.current,
-    dischargePackResistance.current,
-    dischargePackVoltage.current,
-    dischargeCellVoltages,
-    dischargeCellResistances,
-    chargeDate,
-    chargeAmount.current,
-    chargePackResistance.current,
-    chargePackVoltage.current,
-    chargeCellVoltages,
-    chargeCellResistances,
-    excludeFromPlots,
-    notes,
-  ]);
+    setResolvedRefs(
+      [
+        dischargeDurationFieldRef.current,
+        dischargePackVoltageFieldRef.current,
+        dischargePackResistanceFieldRef.current,
+        chargeAmountFieldRef.current,
+        chargePackVoltageFieldRef.current,
+        chargePackResistanceFieldRef.current,
+      ].filter(Boolean),
+    );
+  }, []);
 
   useEffect(() => {
     event.on(
@@ -243,70 +217,172 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    formikRef.current?.setFieldValue('isCharged', isCharged);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const cancel = () => {
+    Keyboard.dismiss();
+    formikRef.current?.resetForm();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    if (!cycle) return;
+
+    realm.write(() => {
+      cycle.discharge = {
+        date: values.dischargeDate,
+        duration: values.dischargeDuration
+          ? MSSToSeconds(values.dischargeDuration)
+          : 0,
+        packVoltage: toNumber(values.dischargePackVoltage),
+        packResistance: toNumber(values.dischargePackResistance),
+        cellVoltage: values.dischargeCellVoltages?.map(v => {
+          return parseFloat(v);
+        }),
+        cellResistance: values.dischargeCellResistances?.map(r => {
+          return parseFloat(r);
+        }),
+      } as BatteryDischarge;
+      if (cycle.charge) {
+        cycle.charge = {
+          date: values.chargeDate,
+          amount: toNumber(values.chargeAmount),
+          packVoltage: toNumber(values.chargePackVoltage),
+          packResistance: toNumber(values.chargePackResistance),
+          cellVoltage: values.chargeCellVoltages?.map(v => {
+            return toNumber(v) || 0;
+          }),
+          cellResistance: values.chargeCellResistances?.map(r => {
+            return toNumber(r) || 0;
+          }),
+        } as BatteryCharge;
+      }
+      cycle.excludeFromPlots = values.excludeFromPlots;
+      cycle.notes = values.notes;
+    });
+  };
+
   const onChangeDischargeCellResistances = (
     result: BatteryCellValuesEditorResult,
   ) => {
-    setDischargeCellResistances(
+    formikRef.current?.setFieldValue(
+      'dischargeCellResistances',
       result.cellValues.map(v => {
         return v.toString();
       }),
     );
-    dischargePackResistance.current = result.packValue.toString();
-    dischargePackResistanceRef.current?.setValue(result.packValue.toString());
+    formikRef.current?.setFieldValue(
+      'dischargePackResistance',
+      result.packValue.toString(),
+    );
   };
 
   const onChangeDischargeCellVoltages = (
     result: BatteryCellValuesEditorResult,
   ) => {
-    setDischargeCellVoltages(
+    formikRef.current?.setFieldValue(
+      'dischargeCellVoltages',
       result.cellValues.map(v => {
         return v.toString();
       }),
     );
-    dischargePackVoltage.current = result.packValue.toString();
-    dischargePackVoltageRef.current?.setValue(result.packValue.toString());
+    formikRef.current?.setFieldValue(
+      'dischargePackVoltage',
+      result.packValue.toString(),
+    );
   };
 
   const onChangeChargeCellResistances = (
     result: BatteryCellValuesEditorResult,
   ) => {
-    setChargeCellResistances(
+    formikRef.current?.setFieldValue(
+      'chargeCellResistances',
       result.cellValues.map(v => {
         return v.toString();
       }),
     );
-    chargePackResistance.current = result.packValue.toString();
-    chargePackResistanceRef.current?.setValue(result.packValue.toString());
+    formikRef.current?.setFieldValue(
+      'chargePackResistance',
+      result.packValue.toString(),
+    );
   };
 
   const onChangeChargeCellVoltages = (
     result: BatteryCellValuesEditorResult,
   ) => {
-    setChargeCellVoltages(
+    formikRef.current?.setFieldValue(
+      'chargeCellVoltages',
       result.cellValues.map(v => {
         return v.toString();
       }),
     );
-    chargePackVoltage.current = result.packValue.toString();
-    chargePackVoltageRef.current?.setValue(result.packValue.toString());
+    formikRef.current?.setFieldValue(
+      'chargePackVoltage',
+      result.packValue.toString(),
+    );
   };
 
   const onDischargeDateChange = (date?: Date) => {
-    date &&
-      setDischargeDate(
-        DateTime.fromJSDate(date).toISO() || DateTime.now().toISO(),
-      );
+    formikRef.current?.setFieldValue(
+      'dischargeDate',
+      date ? DateTime.fromJSDate(date).toISO() : DateTime.now().toISO(),
+    );
   };
 
   const onChargeDateChange = (date?: Date) => {
-    date &&
-      setChargeDate(
-        DateTime.fromJSDate(date).toISO() || DateTime.now().toISO(),
-      );
+    formikRef.current?.setFieldValue(
+      'chargeDate',
+      date ? DateTime.fromJSDate(date).toISO() : DateTime.now().toISO(),
+    );
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
-    setNotes(result.text);
+    formikRef.current?.setFieldValue('notes', result.text);
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
   };
 
   if (!battery) {
@@ -316,341 +392,409 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'BATTERY'} />
-      <ListItem
-        title={battery.name}
-        subtitle={batterySummary(battery)}
-        subtitleNumberOfLines={2}
-        containerStyle={{
-          ...s.batteryTint,
-          borderLeftColor:
-            battery.tint !== BatteryTint.None
-              ? batteryTintIcons[battery.tint]?.color
-              : theme.colors.transparent,
-        }}
-        titleStyle={s.batteryText}
-        subtitleStyle={s.batteryText}
-        position={['first', 'last']}
-        rightImage={false}
-        leftImage={
-          <View>
-            <Icon
-              name={isCharged ? 'battery-full' : 'battery-quarter'}
-              solid={true}
-              size={45}
-              color={theme.colors.brandPrimary}
-              style={s.batteryIcon}
-            />
-          </View>
-        }
-      />
-      <Divider text={'DISCHARGE PHASE'} />
-      <ListItemDate
-        title={'Date'}
-        value={
-          dischargeDate
-            ? DateTime.fromISO(dischargeDate).toFormat(
-                "MMM d, yyyy 'at' h:mm a",
-              )
-            : 'Tap to Set...'
-        }
-        pickerValue={dischargeDate}
-        expanded={expandedDischargeDate}
-        position={['first']}
-        onPress={() => setExpandedDischargeDate(!expandedDischargeDate)}
-        onDateChange={onDischargeDateChange}
-      />
-      <ListItemInput
-        ref={dischargeDurationRef}
-        title={'Duration'}
-        value={
-          dischargeDuration.current && parseFloat(dischargeDuration.current) > 0
-            ? dischargeDuration.current
-            : undefined
-        }
-        titleStyle={!dischargeDuration.current ? s.required : {}}
-        placeholder={'Value'}
-        label="m:ss"
-        numeric={true}
-        numericProps={{ prefix: '', separator: ':' }}
-        keyboardType={'number-pad'}
-        onChangeText={value =>
-          setDebounced(() => (dischargeDuration.current = value))
-        }
-      />
-      <ListItemInput
-        ref={dischargePackVoltageRef}
-        title={'Pack Voltage'}
-        label={'V'}
-        value={
-          dischargePackVoltage.current &&
-          parseFloat(dischargePackVoltage.current) > 0
-            ? parseFloat(dischargePackVoltage.current).toFixed(1)
-            : undefined
-        }
-        placeholder={'Value'}
-        numeric={true}
-        numericProps={{ prefix: '' }}
-        onChangeText={value =>
-          setDebounced(() => (dischargePackVoltage.current = value))
-        }
-      />
-      <ListItemInput
-        ref={dischargePackResistanceRef}
-        title={'Pack Resistance'}
-        label={'mΩ'}
-        value={
-          dischargePackResistance.current &&
-          parseFloat(dischargePackResistance.current) > 0
-            ? parseFloat(dischargePackResistance.current).toFixed(3)
-            : undefined
-        }
-        placeholder={'Value'}
-        numeric={true}
-        numericProps={{ prefix: '', precision: 3 }}
-        onChangeText={value =>
-          setDebounced(() => (dischargePackResistance.current = value))
-        }
-      />
-      <ListItem
-        title={'Cell Voltage'}
-        onPress={() =>
-          navigation.navigate('BatteryCellValuesEditor', {
-            config: {
-              name: 'voltage',
-              namePlural: 'voltages',
-              label: 'V',
-              precision: 2,
-            },
-            packValue: Number(dischargePackVoltage.current),
-            cellValues: dischargeCellVoltages?.map(v => {
-              return toNumber(v) || 0;
-            }),
-            sCells: battery.sCells,
-            pCells: battery.pCells,
-            eventName: 'battery-discharge-cell-voltages',
-          })
-        }
-      />
-      <ListItem
-        title={'Cell Resistance'}
-        position={['last']}
-        onPress={() =>
-          navigation.navigate('BatteryCellValuesEditor', {
-            config: {
-              name: 'resistance',
-              namePlural: 'resistances',
-              label: 'mΩ',
-              precision: 3,
-            },
-            packValue: Number(dischargePackResistance.current),
-            cellValues: dischargeCellResistances?.map(r => {
-              return toNumber(r) || 0;
-            }),
-            sCells: battery.sCells,
-            pCells: battery.pCells,
-            eventName: 'battery-discharge-cell-resistances',
-          })
-        }
-      />
-      {cycle.charge && (
-        <>
-          <Divider text={'CHARGE PHASE'} />
-          <ListItemDate
-            title={'Date'}
-            value={
-              chargeDate
-                ? DateTime.fromISO(chargeDate).toFormat(
-                    "MMM d, yyyy 'at' h:mm a",
-                  )
-                : 'Tap to Set...'
-            }
-            pickerValue={chargeDate}
-            expanded={expandedChargeDate}
-            position={['first']}
-            onPress={() => setExpandedChargeDate(!expandedChargeDate)}
-            onDateChange={onChargeDateChange}
-          />
-          <ListItemInput
-            ref={chargeAmountRef}
-            title={'Amount'}
-            value={
-              chargeAmount.current && parseFloat(chargeAmount.current) > 0
-                ? chargeAmount.current
-                : undefined
-            }
-            titleStyle={!chargeAmount ? s.required : {}}
-            placeholder={'Value'}
-            label={'mAh'}
-            numeric={true}
-            numericProps={{
-              prefix: '',
-              delimiter: '',
-              precision: 0,
-              maxValue: 99999,
+    <>
+      <AvoidSoftInputView style={[theme.styles.view]}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentInsetAdjustmentBehavior={'automatic'}>
+          <Divider text={'BATTERY'} />
+          <ListItem
+            title={battery.name}
+            subtitle={batterySummary(battery)}
+            subtitleLines={2}
+            containerStyle={{
+              ...s.batteryTint,
+              borderLeftColor:
+                battery.tint !== BatteryTint.None
+                  ? batteryTintIconProps[battery.tint].color
+                  : theme.colors.transparent,
             }}
-            onChangeText={value =>
-              setDebounced(() => (chargeAmount.current = value))
-            }
-          />
-          <ListItem
-            title={'Percent of Capacity'}
-            value={batteryCycleCharge?.string.chargeToCapacityPercentage}
-            rightImage={false}
-          />
-          <ListItemInput
-            ref={chargePackVoltageRef}
-            title={'Pack Voltage'}
-            label={'V'}
-            value={
-              chargePackVoltage.current &&
-              parseFloat(chargePackVoltage.current) > 0
-                ? parseFloat(chargePackVoltage.current).toFixed(1)
-                : undefined
-            }
-            placeholder={'Value'}
-            numeric={true}
-            numericProps={{ prefix: '' }}
-            onChangeText={value =>
-              setDebounced(() => (chargePackVoltage.current = value))
-            }
-          />
-          <ListItemInput
-            ref={chargePackResistanceRef}
-            title={'Pack Resistance'}
-            label={'mΩ'}
-            value={
-              chargePackResistance.current &&
-              parseFloat(chargePackResistance.current) > 0
-                ? parseFloat(chargePackResistance.current).toFixed(3)
-                : undefined
-            }
-            placeholder={'Value'}
-            numeric={true}
-            numericProps={{ prefix: '', precision: 3 }}
-            onChangeText={value =>
-              setDebounced(() => (chargePackResistance.current = value))
-            }
-          />
-          <ListItem
-            title={'Cell Voltage'}
-            onPress={() =>
-              navigation.navigate('BatteryCellValuesEditor', {
-                config: {
-                  name: 'voltage',
-                  namePlural: 'voltages',
-                  label: 'V',
-                  precision: 2,
-                },
-                packValue:
-                  (chargePackVoltage.current &&
-                    parseFloat(chargePackVoltage.current)) ||
-                  0,
-                cellValues: chargeCellVoltages?.map(v => {
-                  return toNumber(v) || 0;
-                }),
-                sCells: battery.sCells,
-                pCells: battery.pCells,
-                eventName: 'battery-charge-cell-voltages',
-              })
-            }
-          />
-          <ListItem
-            title={'Cell Resistance'}
-            position={['last']}
-            onPress={() =>
-              navigation.navigate('BatteryCellValuesEditor', {
-                config: {
-                  name: 'resistance',
-                  namePlural: 'resistances',
-                  label: 'mΩ',
-                  precision: 3,
-                },
-                packValue:
-                  (chargePackResistance.current &&
-                    parseFloat(chargePackResistance.current)) ||
-                  0,
-                cellValues: chargeCellResistances?.map(r => {
-                  return toNumber(r) || 0;
-                }),
-                sCells: battery.sCells,
-                pCells: battery.pCells,
-                eventName: 'battery-charge-cell-resistances',
-              })
-            }
-          />
-        </>
-      )}
-      <Divider text={'CYCLE STATISTICS'} />
-      {cycle.charge && (
-        <>
-          <ListItem
-            title={'Energy per Minute'}
-            value={
-              <View style={s.valueContainer}>
-                <Text style={s.value}>
-                  {batteryCycleStats?.value.averageDischargeCurrent}
-                </Text>
-                <Text style={s.valueLabel}>{' mAh'}</Text>
+            titleStyle={s.batteryText}
+            subtitleStyle={s.batteryText}
+            position={['first', 'last']}
+            leftContentStyle={{ paddingHorizontal: 0 }}
+            leftContent={
+              <View>
+                {isCharged ? (
+                  <BatteryFull
+                    color={theme.colors.brandPrimary}
+                    style={s.batteryIcon}
+                    size={50}
+                  />
+                ) : (
+                  <BatteryLow
+                    color={theme.colors.brandPrimary}
+                    style={s.batteryIcon}
+                    size={50}
+                  />
+                )}
               </View>
             }
-            position={['first']}
-            rightImage={false}
           />
-          <ListItem
-            title={'Time to 80%'}
-            value={
-              <View style={s.valueContainer}>
-                <Text style={s.value}>
-                  {secondsToFormat(
-                    batteryCycleStats?.value.dischargeBy80Percent,
-                    {
-                      format: 'm:ss',
-                    },
-                  )}
-                </Text>
-                <Text style={s.valueLabel}>{' m:ss'}</Text>
+          <Formik
+            innerRef={formik => {
+              if (formik) {
+                formikRef.current = formik;
+              }
+            }}
+            initialValues={initialValues}
+            validationSchema={schema}
+            validateOnMount
+            onSubmit={onSubmit}>
+            {({ errors, handleChange, setFieldValue, values }) => (
+              <View>
+                <FormikStateWatcher<FormValues>
+                  onChange={onFormikWatcherStateChange}
+                />
+                <Divider text={'DISCHARGE PHASE'} />
+                <ListItemDateTime
+                  title={'Date'}
+                  value={
+                    values.dischargeDate
+                      ? DateTime.fromISO(values.dischargeDate).toFormat(
+                          "MMM d, yyyy 'at' h:mm a",
+                        )
+                      : 'Tap to Set...'
+                  }
+                  pickerValue={values.dischargeDate}
+                  expanded={expandedDischargeDate}
+                  position={['first']}
+                  onPress={() =>
+                    setExpandedDischargeDate(!expandedDischargeDate)
+                  }
+                  onChange={onDischargeDateChange}
+                />
+                <ListItemInput
+                  ref={dischargeDurationRef}
+                  title={'Duration'}
+                  error={!!errors.dischargeDuration}
+                  units={'m:ss'}
+                  container={'right'}
+                  inputProps={{
+                    inputAccessoryViewID: 'keyboardAccessory',
+                    onChangeText: (_, unformatted) =>
+                      handleChange('dischargeDuration')(unformatted),
+                    onFocus: () =>
+                      keyboardAccessory.current?.focusedField(
+                        Fields.dischargeDuration,
+                      ),
+                    value: values.dischargeDuration,
+                    mask: Masks.MINUTES_SECONDS,
+                    delimiter: '',
+                    rtlNumber: true,
+                    placeholder: 'Value',
+                    keyboardType: 'number-pad',
+                  }}
+                />
+                <ListItemInput
+                  ref={dischargePackVoltageRef}
+                  title={'Pack Voltage'}
+                  error={!!errors.dischargePackVoltage}
+                  units={'V'}
+                  container={'right'}
+                  inputProps={{
+                    inputAccessoryViewID: 'keyboardAccessory',
+                    onChangeText: (_, unformatted) =>
+                      handleChange('dischargePackVoltage')(unformatted),
+                    onFocus: () =>
+                      keyboardAccessory.current?.focusedField(
+                        Fields.dischargePackVoltage,
+                      ),
+                    value: values.dischargePackVoltage,
+                    mask: Masks.VOLTS,
+                    delimiter: '',
+                    rtlNumber: true,
+                    placeholder: 'Value',
+                    keyboardType: 'number-pad',
+                  }}
+                />
+                <ListItemInput
+                  ref={dischargePackResistanceRef}
+                  title={'Pack Resistance'}
+                  error={!!errors.dischargePackResistance}
+                  units={'mΩ'}
+                  container={'right'}
+                  inputProps={{
+                    inputAccessoryViewID: 'keyboardAccessory',
+                    onChangeText: (_, unformatted) =>
+                      handleChange('dischargePackResistance')(unformatted),
+                    onFocus: () =>
+                      keyboardAccessory.current?.focusedField(
+                        Fields.dischargePackResistance,
+                      ),
+                    value: values.dischargePackResistance,
+                    mask: Masks.OHMS,
+                    delimiter: '',
+                    rtlNumber: true,
+                    placeholder: 'Value',
+                    keyboardType: 'number-pad',
+                  }}
+                />
+                <ListItem
+                  title={'Cell Voltage'}
+                  rightContent={'chevron-right'}
+                  onPress={() =>
+                    navigation.navigate('BatteryCellValuesEditor', {
+                      config: {
+                        name: 'voltage',
+                        namePlural: 'voltages',
+                        units: 'V',
+                        mask: Masks.VOLTS,
+                      },
+                      packValue: values.dischargePackVoltage
+                        ? parseFloat(values.dischargePackVoltage)
+                        : 0,
+                      cellValues: values.dischargeCellVoltages?.map(v => {
+                        return toNumber(v) || 0;
+                      }),
+                      sCells: battery.sCells,
+                      pCells: battery.pCells,
+                      eventName: 'battery-discharge-cell-voltages',
+                    })
+                  }
+                />
+                <ListItem
+                  title={'Cell Resistance'}
+                  rightContent={'chevron-right'}
+                  position={['last']}
+                  onPress={() =>
+                    navigation.navigate('BatteryCellValuesEditor', {
+                      config: {
+                        name: 'resistance',
+                        namePlural: 'resistances',
+                        units: 'mΩ',
+                        mask: Masks.OHMS,
+                      },
+                      packValue: values.dischargePackResistance
+                        ? parseFloat(values.dischargePackResistance)
+                        : 0,
+                      cellValues: values.dischargeCellResistances?.map(r => {
+                        return toNumber(r) || 0;
+                      }),
+                      sCells: battery.sCells,
+                      pCells: battery.pCells,
+                      eventName: 'battery-discharge-cell-resistances',
+                    })
+                  }
+                />
+                {cycle.charge && (
+                  <>
+                    <Divider text={'CHARGE PHASE'} />
+                    <ListItemDateTime
+                      title={'Date'}
+                      value={
+                        values.chargeDate
+                          ? DateTime.fromISO(values.chargeDate).toFormat(
+                              "MMM d, yyyy 'at' h:mm a",
+                            )
+                          : 'Tap to Set...'
+                      }
+                      pickerValue={values.chargeDate}
+                      expanded={expandedChargeDate}
+                      position={['first']}
+                      onPress={() => setExpandedChargeDate(!expandedChargeDate)}
+                      onChange={onChargeDateChange}
+                    />
+                    <ListItemInput
+                      ref={chargeAmountRef}
+                      title={'Amount'}
+                      error={!!errors.chargeAmount}
+                      units={'mAh'}
+                      container={'right'}
+                      inputProps={{
+                        inputAccessoryViewID: 'keyboardAccessory',
+                        onChangeText: (_, unformatted) =>
+                          handleChange('chargeAmount')(unformatted),
+                        onFocus: () =>
+                          keyboardAccessory.current?.focusedField(
+                            Fields.chargeAmount,
+                          ),
+                        value: values.chargeAmount,
+                        mask: Masks.MAH,
+                        delimiter: '',
+                        rtlNumber: true,
+                        placeholder: 'Value',
+                        keyboardType: 'number-pad',
+                      }}
+                    />
+                    <ListItem
+                      title={'Percent of Capacity'}
+                      value={
+                        values.chargeAmount && battery.capacity
+                          ? values.chargeAmount &&
+                            `${((parseFloat(values.chargeAmount) / battery.capacity) * 100).toFixed(1)}%`
+                          : '0.0%'
+                      }
+                    />
+                    <ListItemInput
+                      ref={chargePackVoltageRef}
+                      title={'Pack Voltage'}
+                      error={!!errors.chargePackVoltage}
+                      units={'V'}
+                      container={'right'}
+                      inputProps={{
+                        inputAccessoryViewID: 'keyboardAccessory',
+                        onChangeText: (_, unformatted) =>
+                          handleChange('chargePackVoltage')(unformatted),
+                        onFocus: () =>
+                          keyboardAccessory.current?.focusedField(
+                            Fields.chargePackVoltage,
+                          ),
+                        value: values.chargePackVoltage,
+                        mask: Masks.VOLTS,
+                        delimiter: '',
+                        rtlNumber: true,
+                        placeholder: 'Value',
+                        keyboardType: 'number-pad',
+                      }}
+                    />
+                    <ListItemInput
+                      ref={chargePackResistanceRef}
+                      title={'Pack Resistance'}
+                      error={!!errors.chargePackResistance}
+                      units={'mΩ'}
+                      container={'right'}
+                      inputProps={{
+                        inputAccessoryViewID: 'keyboardAccessory',
+                        onChangeText: (_, unformatted) =>
+                          handleChange('chargePackResistance')(unformatted),
+                        onFocus: () =>
+                          keyboardAccessory.current?.focusedField(
+                            Fields.chargePackResistance,
+                          ),
+                        value: values.chargePackResistance,
+                        mask: Masks.OHMS,
+                        delimiter: '',
+                        rtlNumber: true,
+                        placeholder: 'Value',
+                        keyboardType: 'number-pad',
+                      }}
+                    />
+                    <ListItem
+                      title={'Cell Voltage'}
+                      rightContent={'chevron-right'}
+                      onPress={() =>
+                        navigation.navigate('BatteryCellValuesEditor', {
+                          config: {
+                            name: 'voltage',
+                            namePlural: 'voltages',
+                            units: 'V',
+                            mask: Masks.VOLTS,
+                          },
+                          packValue: values.chargePackVoltage
+                            ? parseFloat(values.chargePackVoltage)
+                            : 0,
+                          cellValues: values.chargeCellVoltages?.map(v => {
+                            return toNumber(v) || 0;
+                          }),
+                          sCells: battery.sCells,
+                          pCells: battery.pCells,
+                          eventName: 'battery-charge-cell-voltages',
+                        })
+                      }
+                    />
+                    <ListItem
+                      title={'Cell Resistance'}
+                      rightContent={'chevron-right'}
+                      position={['last']}
+                      onPress={() =>
+                        navigation.navigate('BatteryCellValuesEditor', {
+                          config: {
+                            name: 'resistance',
+                            namePlural: 'resistances',
+                            units: 'mΩ',
+                            mask: Masks.OHMS,
+                          },
+                          packValue: values.chargePackResistance
+                            ? parseFloat(values.chargePackResistance)
+                            : 0,
+                          cellValues: values.chargeCellResistances?.map(r => {
+                            return toNumber(r) || 0;
+                          }),
+                          sCells: battery.sCells,
+                          pCells: battery.pCells,
+                          eventName: 'battery-charge-cell-resistances',
+                        })
+                      }
+                    />
+                  </>
+                )}
+                <Divider text={'CYCLE STATISTICS'} />
+                {cycle.charge && (
+                  <>
+                    <ListItem
+                      title={'Energy per Minute'}
+                      value={
+                        <View style={s.valueContainer}>
+                          <Text style={s.value}>
+                            {batteryCycleStats?.value.averageDischargeCurrent?.toFixed()}
+                          </Text>
+                          <Text style={s.units}>{' mAh'}</Text>
+                        </View>
+                      }
+                      position={['first']}
+                    />
+                    <ListItem
+                      title={'Time to 80%'}
+                      value={
+                        <View style={s.valueContainer}>
+                          <Text style={s.value}>
+                            {secondsToFormat(
+                              batteryCycleStats?.value.dischargeBy80Percent,
+                              {
+                                format: "m'm' s's'",
+                              },
+                            )}
+                          </Text>
+                        </View>
+                      }
+                    />
+                  </>
+                )}
+                <ListItemSwitch
+                  title={'Exclude Cycle from Plots'}
+                  value={values.excludeFromPlots}
+                  position={cycle.charge ? ['last'] : ['first', 'last']}
+                  onValueChange={value =>
+                    setFieldValue('excludeFromPlots', value)
+                  }
+                />
+                <Divider text={'NOTES'} />
+                <ListItemNotes
+                  notes={values.notes}
+                  position={['first', 'last']}
+                  onPress={() =>
+                    navigation.navigate('NotesEditor', {
+                      title: 'Cycle Notes',
+                      text: values.notes,
+                      eventName: 'battery-cycle-notes',
+                    })
+                  }
+                />
               </View>
-            }
-            rightImage={false}
-          />
-        </>
-      )}
-      <ListItemSwitch
-        title={'Exclude from Plots'}
-        value={excludeFromPlots}
-        position={['last']}
-        onValueChange={setExcludeFromPlots}
+            )}
+          </Formik>
+          <Divider />
+        </ScrollView>
+      </AvoidSoftInputView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={resolvedRefs}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            title: 'Cycle Notes',
-            text: notes,
-            eventName: 'battery-cycle-notes',
-          })
-        }
-      />
-      <Divider />
-    </ScrollView>
+    </>
   );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
-    width: '100%',
-    left: -8,
   },
   batteryText: {
-    left: 15,
+    left: 10,
     maxWidth: '90%',
   },
   batteryTint: {
@@ -661,15 +805,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   valueContainer: {
     flexDirection: 'row',
-    left: -25,
   },
   value: {
     ...theme.styles.textNormal,
-    ...theme.styles.textDim,
   },
-  valueLabel: {
+  units: {
     ...theme.styles.textNormal,
-    color: theme.colors.subtleGray,
+    color: theme.colors.listItemValue,
   },
 }));
 

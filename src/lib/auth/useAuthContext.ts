@@ -1,15 +1,14 @@
+import { useAuthorizeUser } from './userAuthorization';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { createContext, useEffect, useRef } from 'react';
-
-import { Alert } from 'react-native';
-import { DateTime } from 'luxon';
 import { SignInModalMethods } from 'components/modals/SignInModal';
-import { UserProfile } from 'types/user';
 import { appConfig } from 'config';
 import lodash from 'lodash';
-import { selectUser } from 'store/selectors/userSelectors';
-import { useAuthorizeUser } from './userAuthorization';
+import { DateTime } from 'luxon';
+import { createContext, useEffect, useRef } from 'react';
+import { Alert } from 'react-native';
 import { useSelector } from 'react-redux';
+import { selectUser } from 'store/selectors/userSelectors';
+import { UserProfile } from 'types/user';
 
 type AuthContext = {
   dismissSignInModal: () => void;
@@ -51,6 +50,7 @@ export const useAuthContext = (
       });
     });
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dismiss = () => {

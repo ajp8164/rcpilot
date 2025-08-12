@@ -1,5 +1,13 @@
 import * as Yup from 'yup';
-
+import { SignInNavigatorParamList } from './types';
+import { useSetState } from '@react-native-hello/core';
+import { ListItemInput } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { sendPasswordResetEmail } from 'lib/auth';
+import React, { useRef } from 'react';
 import {
   Alert,
   Keyboard,
@@ -8,18 +16,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
-import React, { useRef } from 'react';
-
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { Button } from '@rn-vui/base';
-import { ListItemInput } from '@react-native-ajp-elements/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SignInNavigatorParamList } from './types';
-import { makeStyles } from '@rn-vui/themed';
-import { sendPasswordResetEmail } from 'lib/auth';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { AppTheme, useTheme } from 'theme';
 
 type FormValues = {
   email: string;
@@ -96,20 +94,19 @@ const ForgotPasswordScreen = () => {
                   }
                 </Text>
                 <ListItemInput
-                  refInner={refEmail}
-                  placeholder="Email"
-                  value={formik.values.email}
-                  errorText={
-                    formik.values.email !== formik.initialValues.email
-                      ? formik.errors.email
-                      : undefined
-                  }
-                  errorColor={theme.colors.error}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  keyboardType={'email-address'}
-                  onBlur={formik.handleBlur('email')}
-                  onChangeText={formik.handleChange('email')}
+                  ref={ref => {
+                    ref && (refEmail.current = ref);
+                  }}
+                  error={!!formik.errors.email}
+                  inputProps={{
+                    value: formik.values.email,
+                    onChangeText: formik.handleChange('email'),
+                    onBlur: formik.handleBlur('email'),
+                    placeholder: 'Email',
+                    keyboardType: 'email-address',
+                    autoCapitalize: 'none',
+                    autoCorrect: false,
+                  }}
                 />
                 <Button
                   title={'Send'}
@@ -118,7 +115,7 @@ const ForgotPasswordScreen = () => {
                   containerStyle={s.sendButtonContainer}
                   disabled={!(formik.dirty && formik.isValid)}
                   loading={editorState.isSubmitting}
-                  onPress={formikRef.current?.submitForm}
+                  onPress={() => formikRef.current?.submitForm()}
                 />
               </View>
             )}

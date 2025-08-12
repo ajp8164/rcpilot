@@ -1,60 +1,165 @@
-import React, { useEffect, useRef } from 'react';
-
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItemInput } from 'components/atoms/List';
+import * as Yup from 'yup';
+import {
+  Divider,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { View } from 'react-native';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
 import { useRealm } from '@realm/react';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import { Formik, FormikProps } from 'formik';
+import { DateTime } from 'luxon';
+import React, { useRef, useState } from 'react';
+import { Keyboard, View } from 'react-native';
 import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'NewPilot'>;
 
+// Order of fields for accessory view.
+enum Fields {
+  name,
+}
+
+type FormValues = {
+  name: string;
+};
+
 const NewPilotScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const setDebounced = useDebouncedRender();
-  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
 
-  const name = useRef<string | undefined>(undefined);
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const nameFieldRef = useRef<ListItemInputMethods>(null);
 
-  useEffect(() => {
-    const canSave = name.current !== undefined;
+  const initialValues = {
+    name: '',
+  } as FormValues;
 
-    const save = () => {
-      const now = DateTime.now().toISO();
-      realm.write(() => {
-        realm.create('Pilot', {
-          createdOn: now,
-          updatedOn: now,
-          name: name.current,
-        });
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+  });
+
+  const cancel = () => {
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    const now = DateTime.now().toISO();
+    realm.write(() => {
+      realm.create('Pilot', {
+        createdOn: now,
+        updatedOn: now,
+        name: values.name,
       });
-    };
+    });
+  };
 
-    const onDone = () => {
-      save();
-      navigation.goBack();
-    };
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, changedFields, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
 
-    setScreenEditHeader({ enabled: canSave, action: onDone });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name.current]);
+    // Update header as name changes.
+    if (changedFields?.includes('name')) {
+      navigation.setOptions({
+        title: next?.values.name,
+      });
+    }
+
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
+  };
 
   return (
-    <View style={theme.styles.view}>
-      <Divider />
-      <ListItemInput
-        value={name.current}
-        placeholder={"New Pilot's Name"}
-        position={['first', 'last']}
-        onChangeText={value => setDebounced(() => (name.current = value))}
+    <>
+      <View style={theme.styles.view}>
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
+            }
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          onSubmit={onSubmit}>
+          {({ handleChange, values }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
+              />
+              <Divider />
+              <ListItemInput
+                ref={nameFieldRef}
+                position={['first', 'last']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('name'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.name),
+                  value: values.name,
+                  placeholder: 'Pilot Name',
+                  autoCapitalize: 'words',
+                }}
+              />
+            </View>
+          )}
+        </Formik>
+      </View>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={[nameFieldRef.current]}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-    </View>
+    </>
   );
 };
 

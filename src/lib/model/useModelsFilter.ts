@@ -1,12 +1,11 @@
-import { rql } from 'components/molecules/filters';
 import { useObject, useQuery } from '@realm/react';
-
+import { rql } from 'components/molecules/filters';
+import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { Model } from 'realmdb/Model';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useSelector } from 'react-redux';
+import { FilterType } from 'types/filter';
 
 export const useModelsFilter = () => {
   const filterId = useSelector(selectFilters(FilterType.ModelsFilter));

@@ -1,8 +1,7 @@
+import { ellipsis } from '@react-native-hello/core';
 import { FilterRelation, FilterState } from 'components/molecules/filters';
-
-import { DateTime } from 'luxon';
-import { ellipsis } from '@react-native-ajp-elements/core';
 import lodash from 'lodash';
+import { DateTime } from 'luxon';
 
 // Filter values with labels default as a suffix. However, if the label is in
 // this array then it will be output as a prefix instead.

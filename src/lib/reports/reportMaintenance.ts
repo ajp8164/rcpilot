@@ -4,7 +4,6 @@ import {
   NumberRelation,
   StringRelation,
 } from 'components/molecules/filters';
-
 import { ReportMaintenanceFilterValues } from 'types/filter';
 
 export const defaultFilter: ReportMaintenanceFilterValues = {

@@ -1,22 +1,23 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
 import {
-  ListItem,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItemSwipeable,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import { useQuery, useRealm } from '@realm/react';
-
-import { Button } from '@rn-vui/base';
-import { EmptyView } from 'components/molecules/EmptyView';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { ModelPropeller } from 'realmdb/ModelPropeller';
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rn-vui/themed';
+import { useQuery, useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
+import { BSON } from 'realm';
+import { ModelPropeller } from 'realmdb/ModelPropeller';
+import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -25,21 +26,21 @@ export type Props = NativeStackScreenProps<
 
 const ModelPropellersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allModelPropellers = useQuery(ModelPropeller);
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon} />}
+            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
             onPress={() =>
               navigation.navigate('NewModelPropellerNavigator', {
                 screen: 'NewModelPropeller',
@@ -52,10 +53,16 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const deletePropeller = (propeller: ModelPropeller) => {
-    realm.write(() => {
-      realm.delete(propeller);
-    });
+  const deletePropeller = (modelPropellerId: string) => {
+    const event = realm.objectForPrimaryKey(
+      ModelPropeller,
+      new BSON.ObjectId(modelPropellerId),
+    );
+    if (event?.isValid()) {
+      realm.write(() => {
+        realm.delete(event);
+      });
+    }
   };
 
   const renderModelPropeller: ListRenderItem<ModelPropeller> = ({
@@ -63,40 +70,40 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
     index,
   }) => {
     return (
-      <ListItem
-        ref={ref => {
-          ref &&
-            listEditor.add(ref, 'model-propellers', propeller._id.toString());
-        }}
+      <ListItemSwipeable
         key={propeller._id.toString()}
         title={propeller.name}
         position={listItemPosition(index, allModelPropellers.length)}
+        rightContent={'chevron-right'}
+        listEditor={listEditorRef.current}
         onPress={() =>
           navigation.navigate('ModelPropellerEditor', {
             modelPropellerId: propeller._id.toString(),
           })
         }
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () =>
-                confirmAction(deletePropeller, {
-                  label: 'Delete Saved Filter',
-                  title:
-                    'This action cannot be undone.\nAre you sure you want to delete this propeller?',
-                  value: propeller,
-                }),
-            },
-          ],
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+          draggable: true,
         }}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen(
-            'model-propellers',
-            propeller._id.toString(),
-          )
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
+            color: theme.colors.assertive,
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: `Delete Propeller`,
+                title:
+                  'This action cannot be undone.\nAre you sure you want to delete this propeller?',
+              });
+            },
+            onPress: () => deletePropeller(propeller._id.toString()),
+          },
+        ]}
       />
     );
   };
@@ -112,22 +119,17 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <FlatList
-      style={theme.styles.view}
-      data={allModelPropellers}
-      renderItem={renderModelPropeller}
-      keyExtractor={(_item, index) => `${index}`}
-      showsVerticalScrollIndicator={false}
-      ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
-    />
+    <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
+      <FlatList
+        style={theme.styles.view}
+        data={allModelPropellers}
+        renderItem={renderModelPropeller}
+        keyExtractor={(_item, index) => `${index}`}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={allModelPropellers.length ? <Divider /> : null}
+      />
+    </ListEditor>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-  },
-}));
 
 export default ModelPropellersScreen;

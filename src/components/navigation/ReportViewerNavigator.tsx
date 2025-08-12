@@ -1,17 +1,16 @@
+import { CompositeScreenProps } from '@react-navigation/core';
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
+import ReportEventsMaintenanceViewerScreen from 'components/ReportEventsMaintenanceViewerScreen';
+import ReportScanCodesViewerScreen from 'components/ReportScanCodesViewerScreen';
+import React from 'react';
+import { useTheme } from 'theme';
 import {
   ReportViewerNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-
-import { CompositeScreenProps } from '@react-navigation/core';
-import React from 'react';
-import ReportEventsMaintenanceViewerScreen from 'components/ReportEventsMaintenanceViewerScreen';
-import ReportScanCodesViewerScreen from 'components/ReportScanCodesViewerScreen';
-import { useTheme } from 'theme';
 
 const ReportViewerStack =
   createNativeStackNavigator<ReportViewerNavigatorParamList>();
@@ -35,7 +34,7 @@ const ReportViewerNavigator = () => {
         name="ReportEventsMaintenanceViewer"
         component={ReportEventsMaintenanceViewerScreen}
         options={{
-          title: 'Event Report',
+          title: 'Event/Maintenance Report',
         }}
       />
       <ReportViewerStack.Screen

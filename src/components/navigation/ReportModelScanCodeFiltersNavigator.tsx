@@ -1,12 +1,13 @@
-import EnumPickerScreen from 'components/EnumPickerScreen';
-import NavContext from './NavContext';
-import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import ReportModelScanCodeFilterEditorScreen from 'components/ReportModelScanCodeFilterEditorScreen';
-import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
-import ReportModelScanCodeFiltersScreen from 'components/ReportModelScanCodeFiltersScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import EnumPickerScreen from 'components/EnumPickerScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
+import ReportModelScanCodeFilterEditorScreen from 'components/ReportModelScanCodeFilterEditorScreen';
+import ReportModelScanCodeFiltersScreen from 'components/ReportModelScanCodeFiltersScreen';
+import React from 'react';
 import { useTheme } from 'theme';
+import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const ReportModelScanCodeFiltersStack =
   createNativeStackNavigator<ReportModelScanCodeFiltersNavigatorParamList>();

@@ -1,10 +1,10 @@
-import { AppTheme, useTheme } from 'theme';
-import { Text, View } from 'react-native';
-
-import CircleButton from 'components/atoms/CircleButton';
-import React from 'react';
-import { ScannerView } from '@react-native-ajp-elements/ui';
+import { ScannerView } from '@react-native-hello/ui';
 import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { FileText, Plane, Share } from 'lucide-react-native';
+import React from 'react';
+import { Text, View } from 'react-native';
+import { AppTheme, useTheme } from 'theme';
 
 const ScanScreen = () => {
   const theme = useTheme();
@@ -15,15 +15,15 @@ const ScanScreen = () => {
   };
 
   const logEvent = () => {
-    return;
+    console.log('log event');
   };
 
   const undoLastScan = () => {
-    return;
+    console.log('undo event');
   };
 
   const startEvent = () => {
-    return;
+    console.log('start event');
   };
 
   return (
@@ -31,27 +31,32 @@ const ScanScreen = () => {
       onScan={onScan}
       OverlayComponent={
         <View style={s.overlay}>
-          <Text style={[s.text, s.title]}>
-            {'Scan a model or battery QR code\nto log an event'}
-          </Text>
-          <Text style={[s.text, s.scannedNames]}>
-            {'Event for Goblin Buddy'}
-          </Text>
-          <View style={s.buttonContainer}>
-            <CircleButton
-              icon={'share'}
-              text={'Undo scan'}
-              style={s.flip}
+          <View style={[s.title]}>
+            <Text style={s.text1}>{'Event for Goblin Buddy'}</Text>
+            <Text style={s.text2}>
+              {'Scan a model or battery QR code\nto log an event.'}
+            </Text>
+          </View>
+          <View style={s.buttonBarContainer}>
+            <Button
+              title={'Undo Scan'}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              containerStyle={s.buttonContainer}
+              icon={<Share color={theme.colors.whiteTransparentMid} />}
               onPress={undoLastScan}
             />
-            <CircleButton
-              icon={'file-lines'}
-              text={'Log event'}
+            <Button
+              title={'Log Event'}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              containerStyle={s.buttonContainer}
+              icon={<FileText color={theme.colors.whiteTransparentMid} />}
               onPress={logEvent}
             />
-            <CircleButton
-              icon={'plane-up'}
-              text={'Start event'}
+            <Button
+              title={'Start Event'}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              containerStyle={s.buttonContainer}
+              icon={<Plane color={theme.colors.whiteTransparentMid} />}
               onPress={startEvent}
             />
           </View>
@@ -62,33 +67,39 @@ const ScanScreen = () => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  buttonContainer: {
+  buttonBarContainer: {
     position: 'absolute',
-    width: '100%',
-    flexDirection: 'row',
     bottom: 40,
+    right: 10,
     justifyContent: 'space-around',
   },
-  flip: {
-    transform: [{ rotate: '180deg' }],
+  buttonContainer: {
+    paddingHorizontal: 5,
+    marginTop: 10,
+    height: 50,
+    borderColor: theme.colors.whiteTransparentMid,
+    borderWidth: 3.2,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   overlay: {
     position: 'absolute',
     width: '100%',
     height: '100%',
   },
-  scannedNames: {
-    position: 'absolute',
-    width: '100%',
-    bottom: 120,
+  text1: {
+    ...theme.styles.textXL,
+    color: theme.colors.stickyWhite,
+    textAlign: 'center',
   },
-  text: {
-    ...theme.styles.textNormal,
+  text2: {
+    ...theme.styles.textSmall,
     color: theme.colors.stickyWhite,
     textAlign: 'center',
   },
   title: {
-    top: 150,
+    top: '15%',
   },
 }));
 

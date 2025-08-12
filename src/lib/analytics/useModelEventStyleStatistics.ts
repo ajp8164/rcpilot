@@ -1,7 +1,6 @@
-import { Model, ModelEventStyleData } from 'realmdb/Model';
-
-import { EventStyle } from 'realmdb/EventStyle';
 import { useRealm } from '@realm/react';
+import { EventStyle } from 'realmdb/EventStyle';
+import { Model, ModelEventStyleData } from 'realmdb/Model';
 
 export type ModelStatisticsMode = 'add' | 'init' | 'update';
 

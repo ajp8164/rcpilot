@@ -1,5 +1,5 @@
-import { ISODateString } from 'types/common';
 import { createContext } from 'react';
+import { ISODateString } from 'types/common';
 
 export type DatabaseInfoContext = {
   databaseLastUpdate: ISODateString;

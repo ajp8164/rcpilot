@@ -1,8 +1,7 @@
 import { useQuery, useRealm } from '@realm/react';
-
-import { Model } from 'realmdb/Model';
 import { actionScheduleState } from 'lib/checklist';
 import { useEffect } from 'react';
+import { Model } from 'realmdb/Model';
 
 export const useChecklistActionScheduleUpdater = () => {
   const realm = useRealm();

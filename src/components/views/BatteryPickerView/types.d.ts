@@ -1,5 +1,5 @@
-import { Battery } from 'realmdb/Battery';
 import React from 'react';
+import { Battery } from 'realmdb/Battery';
 
 export declare type BatteryPickerView = BatteryPickerViewMethods;
 

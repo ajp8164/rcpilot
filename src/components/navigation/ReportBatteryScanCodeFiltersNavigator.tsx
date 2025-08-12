@@ -1,11 +1,12 @@
-import EnumPickerScreen from 'components/EnumPickerScreen';
-import NavContext from './NavContext';
-import React from 'react';
-import ReportBatteryScanCodeFilterEditorScreen from 'components/ReportBatteryScanCodeFilterEditorScreen';
-import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
-import ReportBatteryScanCodeFiltersScreen from 'components/ReportBatteryScanCodeFiltersScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import EnumPickerScreen from 'components/EnumPickerScreen';
+import ReportBatteryScanCodeFilterEditorScreen from 'components/ReportBatteryScanCodeFilterEditorScreen';
+import ReportBatteryScanCodeFiltersScreen from 'components/ReportBatteryScanCodeFiltersScreen';
+import React from 'react';
 import { useTheme } from 'theme';
+import { ReportBatteryScanCodeFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const ReportBatteryScanCodeFiltersStack =
   createNativeStackNavigator<ReportBatteryScanCodeFiltersNavigatorParamList>();

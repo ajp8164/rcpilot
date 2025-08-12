@@ -1,23 +1,26 @@
 import {
-  ListItemInput,
-  ListItemInputMethods,
+  InputMethods,
   ListItemSegmented,
-  ListItemSegmentedInterface,
-} from 'components/atoms/List';
+  ListItemSegmentedCollapsible,
+  ListItemSegmentedCollapsibleMethods,
+} from '@react-native-hello/ui';
+import { ListItemInput } from 'components/atoms/List';
 import {
   NumberFilterState,
   NumberRelation,
+  numberRelationText,
 } from 'components/molecules/filters';
 import { useEffect, useRef, useState } from 'react';
-
-import { FakeCurrencyInputProps } from 'react-native-currency-input';
 import React from 'react';
-import lodash from 'lodash';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
 
-interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
-  label?: string;
-  numericProps?: Omit<FakeCurrencyInputProps, 'value'>;
+type NumericProps = {
+  placeholder?: string;
+  mask?: string;
+  units?: string;
+};
+
+interface Props extends Pick<ListItemSegmented, 'position'> {
+  numericProps?: NumericProps;
   onValueChange: (filterState: NumberFilterState) => void;
   relation: NumberRelation;
   title: string;
@@ -25,9 +28,12 @@ interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
 }
 
 const ListItemFilterNumber = (props: Props) => {
-  const { label, numericProps, onValueChange, position, title } = props;
-
-  const setDebounced = useDebouncedRender();
+  const {
+    numericProps = { placeholder: '0', mask: '000', units: '' },
+    onValueChange,
+    position,
+    title,
+  } = props;
 
   const segments = [
     NumberRelation.Any,
@@ -38,7 +44,6 @@ const ListItemFilterNumber = (props: Props) => {
   ];
 
   const initializing = useRef(true);
-  const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useState<NumberFilterState>({
     relation: props.relation,
     value: props.value.length ? props.value : [],
@@ -49,7 +54,8 @@ const ListItemFilterNumber = (props: Props) => {
     }),
   );
 
-  const liRef = useRef<ListItemInputMethods>(null);
+  const collapsibleRef = useRef<ListItemSegmentedCollapsibleMethods>(null);
+  const liRef = useRef<InputMethods>(null);
 
   // Controlled component state changes.
   useEffect(() => {
@@ -67,7 +73,7 @@ const ListItemFilterNumber = (props: Props) => {
       props.relation === NumberRelation.Any
     ) {
       // Closing (moving relation to Any)
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState({ relation: props.relation, value: props.value });
       }, 300);
@@ -78,7 +84,7 @@ const ListItemFilterNumber = (props: Props) => {
       // Opening (moving relation to something other than Any)
       setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       }, 300);
     } else {
       setFilterState({ relation: props.relation, value: props.value });
@@ -92,7 +98,7 @@ const ListItemFilterNumber = (props: Props) => {
     // Provide an initial default value.
     let newValue = filterState.value.length
       ? filterState.value
-      : ['0', `${label}`];
+      : ['0', `${numericProps.units}`];
 
     // Reset the value of the filter if choosing Any.
     if (newRelation === NumberRelation.Any) {
@@ -104,11 +110,11 @@ const ListItemFilterNumber = (props: Props) => {
       setFilterState({ relation: newRelation, value: newValue });
       onValueChange({ relation: newRelation, value: newValue });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       });
     } else {
       // Closing
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState({ relation: newRelation, value: newValue });
         onValueChange({ relation: newRelation, value: newValue });
@@ -121,45 +127,43 @@ const ListItemFilterNumber = (props: Props) => {
     // the input is visible - this prevents the text-input from bubbling events up
     // when the caller of this list item has controlled this component without
     // interacting with the text-input (e.g. a filter reset).
-    if (expanded) {
+    if (collapsibleRef.current?.isOpen()) {
       if (value === undefined) {
-        liRef.current?.setValue('0');
+        // liRef.current?.setValue('0');
+        liRef.current?.setText('0');
       }
-      const newValue = [value || '0', `${label}`];
+      const newValue = [value || '0', `${numericProps.units}`];
       setFilterState({ relation: filterState.relation, value: newValue });
       onValueChange({ relation: filterState.relation, value: newValue });
     }
   };
 
   return (
-    <ListItemSegmented
+    <ListItemSegmentedCollapsible
+      ref={collapsibleRef}
       {...props}
       title={title}
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={
-        expanded && position ? lodash.without(position, 'last') : position
-      }
-      onChangeIndex={onRelationSelect}
-      expanded={expanded}
-      ExpandableComponent={
-        <ListItemInput
-          ref={liRef}
-          title={'Value'}
-          label={label}
-          position={position?.includes('last') ? ['last'] : []}
-          keyboardType={'number-pad'}
-          numeric={true}
-          numericProps={numericProps}
-          value={
-            filterState.value[0]?.length ? filterState.value[0] : undefined
-          }
-          placeholder={'0'}
-          onChangeText={value => setDebounced(() => onChangedFilter(value))}
-        />
-      }
-    />
+      initExpanded={props.value.length > 0}
+      onChangeIndex={onRelationSelect}>
+      <ListItemInput
+        ref={liRef}
+        title={numberRelationText[filterState.relation]}
+        position={position?.includes('last') ? ['last'] : []}
+        units={numericProps.units}
+        container={'right'}
+        inputProps={{
+          onChangeText: (_, unformatted) => onChangedFilter(unformatted),
+          value: filterState.value[0]?.length ? filterState.value[0] : '',
+          placeholder: numericProps.placeholder,
+          mask: numericProps.mask,
+          rtlNumber: true,
+          keyboardType: 'number-pad',
+        }}
+      />
+    </ListItemSegmentedCollapsible>
   );
 };
 

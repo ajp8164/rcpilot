@@ -1,24 +1,23 @@
-import { EnumFilterState, EnumRelation } from 'components/molecules/filters';
-import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
-import {
-  ListItem,
-  ListItemSegmented,
-  ListItemSegmentedInterface,
-} from 'components/atoms/List';
+import { ListItem, ListItemSegmented } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useEffect, useRef, useState } from 'react';
-
-import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { MultipleNavigatorParamList } from 'types/navigation';
-import React from 'react';
-import lodash from 'lodash';
-import { useEvent } from 'lib/event';
-import { useTheme } from 'theme';
-import { uuidv4 } from 'lib/utils';
 import { useRealm } from '@realm/react';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import {
+  ListItemSegmentedCollapsible,
+  ListItemSegmentedCollapsibleMethods,
+} from 'components/atoms/List/ListItemSegmentedCollapsible';
+import { EnumFilterState, EnumRelation } from 'components/molecules/filters';
+import { useEvent } from 'lib/event';
+import { uuidv4 } from 'lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { BSON } from 'realm';
+import { useTheme } from 'theme';
+import { MultipleNavigatorParamList } from 'types/navigation';
 
-interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
+import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
+
+interface Props extends Pick<ListItemSegmented, 'position'> {
   onValueChange: (filterState: EnumFilterState) => void;
   enumName: EnumName;
   relation: EnumRelation;
@@ -39,7 +38,6 @@ const ListItemFilterEnum = (props: Props) => {
 
   const initializing = useRef(true);
   const eventName = useRef(`list-item-filter-enum-${uuidv4()}`).current;
-  const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useState<EnumFilterState>({
     relation: props.relation,
     value: props.value.length ? props.value : [],
@@ -51,6 +49,8 @@ const ListItemFilterEnum = (props: Props) => {
   );
 
   const enumFilterConfig = useEnumFilterConfig(enumName, filterState.relation);
+
+  const collapsibleRef = useRef<ListItemSegmentedCollapsibleMethods>(null);
 
   // Controlled component state changes.
   useEffect(() => {
@@ -68,7 +68,7 @@ const ListItemFilterEnum = (props: Props) => {
       props.relation === EnumRelation.Any
     ) {
       // Closing (moving relation to Any)
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState({ relation: props.relation, value: props.value });
       }, 300);
@@ -79,7 +79,7 @@ const ListItemFilterEnum = (props: Props) => {
       // Opening (moving relation to something other than Any)
       setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       }, 300);
     } else {
       setFilterState({ relation: props.relation, value: props.value });
@@ -143,11 +143,11 @@ const ListItemFilterEnum = (props: Props) => {
       setFilterState({ relation: newRelation, value: newValue });
       onValueChange({ relation: newRelation, value: newValue });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       });
     } else {
       // Closing
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState({ relation: newRelation, value: newValue });
         onValueChange({ relation: newRelation, value: newValue });
@@ -156,37 +156,33 @@ const ListItemFilterEnum = (props: Props) => {
   };
 
   return (
-    <ListItemSegmented
+    <ListItemSegmentedCollapsible
+      ref={collapsibleRef}
       {...props}
       title={title}
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={
-        expanded && position ? lodash.without(position, 'last') : position
-      }
-      onChangeIndex={onRelationSelect}
-      expanded={expanded}
-      ExpandableComponent={
-        <ListItem
-          title={'Any of these values...'}
-          titleStyle={
-            filterState.value?.length === 0
-              ? { color: theme.colors.assertive }
-              : {}
-          }
-          subtitle={filterState.value?.length === 0 ? 'None' : valueToString()}
-          position={position?.includes('last') ? ['last'] : []}
-          onPress={() =>
-            navigation.navigate('EnumPicker', {
-              ...enumFilterConfig,
-              selected: filterState.value,
-              eventName,
-            })
-          }
-        />
-      }
-    />
+      initExpanded={filterState.value?.length > 0}
+      onChangeIndex={onRelationSelect}>
+      <ListItem
+        title={'Any of these values...'}
+        titleStyle={
+          filterState.value?.length === 0
+            ? { color: theme.colors.assertive }
+            : {}
+        }
+        subtitle={filterState.value?.length === 0 ? 'None' : valueToString()}
+        position={position?.includes('last') ? ['last'] : []}
+        onPress={() =>
+          navigation.navigate('EnumPicker', {
+            ...enumFilterConfig,
+            selected: filterState.value,
+            eventName,
+          })
+        }
+      />
+    </ListItemSegmentedCollapsible>
   );
 };
 

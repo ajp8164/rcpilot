@@ -1,40 +1,44 @@
 import {
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItem,
+} from '@react-native-hello/ui';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { AchievementModal } from 'components/modals/AchievementModal';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { ModelListItem } from 'components/molecules/ModelListItem';
+import { ModelPostCard } from 'components/molecules/ModelPostCard';
+import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
+import { useModelsFilter } from 'lib/model';
+import { modelMaintenanceIsDue } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { groupItems } from 'lib/sectionList';
+import { Funnel, FunnelPlus, Plus } from 'lucide-react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
   Alert,
   SectionList,
   SectionListData,
   SectionListRenderItem,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { ListItem, SectionListHeader } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
-import { useModelsFilter } from 'lib/model';
 import { useDispatch, useSelector } from 'react-redux';
-import { useObject } from '@realm/react';
-
-import { AchievementModal } from 'components/modals/AchievementModal';
 import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { ChecklistType } from 'types/checklist';
-import CustomIcon from 'theme/icomoon/CustomIcon';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { FilterType } from 'types/filter';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
-import { ModelsNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Pilot } from 'realmdb/Pilot';
-import { eventKind } from 'lib/modelEvent';
-import { eventSequence } from 'store/slices/eventSequence';
-import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
-import { modelMaintenanceIsDue } from 'lib/model';
 import { selectModelsLayout } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
-import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
-import { ModelPostCard } from 'components/molecules/ModelPostCard';
-import { ModelListItem } from 'components/molecules/ModelListItem';
+import { eventSequence } from 'store/slices/eventSequence';
+import { AppTheme, useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { FilterType } from 'types/filter';
+import { ModelsNavigatorParamList } from 'types/navigation';
 import { ModelsLayout } from 'types/preferences';
 
 type Section = {
@@ -49,8 +53,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const listEditor = useListEditor();
   const dispatch = useDispatch();
+  const headerHeight = useHeaderHeight();
 
   const _pilot = useSelector(selectPilot);
   const modelsLayout = useSelector(selectModelsLayout);
@@ -64,26 +68,31 @@ const ModelsScreen = ({ navigation, route }: Props) => {
 
   const achievementModalRef = useRef<AchievementModal>(null);
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (listModels === 'all' && modelsLayout === ModelsLayout.List) {
           return (
             <Button
-              title={listEditor.enabled ? 'Done' : 'Edit'}
+              title={
+                activeModels.length && listEditorState?.enabled
+                  ? 'Done'
+                  : 'Edit'
+              }
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
               disabled={!activeModels.length}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={listEditor.onEdit}
+              onPress={() => listEditorRef.current?.onToggleEditMode()}
             />
           );
         } else {
           return null;
         }
       },
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <>
@@ -91,18 +100,14 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={
-                !filterId && (!activeModels.length || listEditor.enabled)
+                !filterId && (!activeModels.length || listEditorState?.enabled)
               }
               icon={
-                <CustomIcon
-                  name={filterId ? 'filter-check' : 'filter'}
-                  style={[
-                    s.headerIcon,
-                    !filterId && (!activeModels.length || listEditor.enabled)
-                      ? s.headerIconDisabled
-                      : {},
-                  ]}
-                />
+                filterId ? (
+                  <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                ) : (
+                  <Funnel color={theme.colors.screenHeaderButtonText} />
+                )
               }
               onPress={() =>
                 navigation.navigate('ModelFiltersNavigator', {
@@ -116,27 +121,23 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             />
             {listModels !== 'all' ? (
               <Button
-                title={listEditor.enabled ? 'Done' : 'Edit'}
+                title={
+                  activeModels.length && listEditorState?.enabled
+                    ? 'Done'
+                    : 'Edit'
+                }
                 titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabled={!retiredModels.length}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={listEditor.onEdit}
+                onPress={() => listEditorRef.current?.onToggleEditMode()}
               />
             ) : (
               <Button
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                disabled={listEditor.enabled}
-                icon={
-                  <Icon
-                    name={'plus'}
-                    style={[
-                      s.headerIcon,
-                      listEditor.enabled ? s.headerIconDisabled : {},
-                    ]}
-                  />
-                }
+                disabled={!!activeModels.length && listEditorState?.enabled}
+                icon={<Plus color={theme.colors.screenHeaderButtonText} />}
                 onPress={() =>
                   navigation.navigate('NewModelNavigator', {
                     screen: 'NewModel',
@@ -150,7 +151,13 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeModels, modelsLayout, filterId, listEditor.enabled, retiredModels]);
+  }, [
+    activeModels.length,
+    modelsLayout,
+    filterId,
+    listEditorState?.enabled,
+    retiredModels,
+  ]);
 
   const groupModels = (
     models: Realm.Results<Model>,
@@ -265,39 +272,44 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const renderModelListItem: SectionListRenderItem<Model, Section> = ({
-    item: model,
-    section,
-    index,
-  }: {
-    item: Model;
-    section: Section;
-    index: number;
-  }) => {
-    return (
-      <ModelListItem
-        array={section.data}
-        index={index}
-        model={model}
-        listEditor={listEditor}
-        showInfo={listModels === 'all'}
-        onPress={() => {
-          if (listModels !== 'all') {
-            navigation.navigate('ModelEditor', {
-              modelId: model._id.toString(),
-            });
-          } else {
-            confirmStartNewEventSequence(model);
-          }
-        }}
-        onPressInfo={() => {
-          navigation.navigate('ModelEditor', {
-            modelId: model._id.toString(),
-          });
-        }}
-      />
+  const renderModelListItem: SectionListRenderItem<Model, Section> =
+    useCallback(
+      ({
+        item: model,
+        section,
+        index,
+      }: {
+        item: Model;
+        section: Section;
+        index: number;
+      }) => {
+        return (
+          <ModelListItem
+            array={section.data}
+            index={index}
+            model={model}
+            listEditor={listEditorRef.current}
+            showInfo={listModels === 'all'}
+            onPress={() => {
+              if (listModels !== 'all') {
+                navigation.navigate('ModelEditor', {
+                  modelId: model._id.toString(),
+                });
+              } else {
+                confirmStartNewEventSequence(model);
+              }
+            }}
+            onPressInfo={() => {
+              navigation.navigate('ModelEditor', {
+                modelId: model._id.toString(),
+              });
+            }}
+          />
+        );
+      },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [listEditorRef, listEditorState],
     );
-  };
 
   const renderInactive = () => {
     return listModels === 'all' && retiredModels.length ? (
@@ -331,7 +343,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       !retiredModels.length) ||
     (filterId && listModels === 'retired' && !retiredModels.length)
   ) {
-    return <EmptyView message={'No Models Match Your Filter'} />;
+    return (
+      <EmptyView
+        message={'No Models Match Your Filter'}
+        details={'Adjust your filter settings to see your models.'}
+      />
+    );
   }
 
   if (!filterId && !activeModels.length && !retiredModels.length) {
@@ -356,50 +373,50 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           }
         />
       ) : (
-        <SectionList
-          showsVerticalScrollIndicator={false}
-          contentInsetAdjustmentBehavior={'automatic'}
-          stickySectionHeadersEnabled={true}
-          style={[
-            theme.styles.view,
-            s.sectionList,
-            modelsLayout === ModelsLayout.PostCards ? s.noPadding : {},
-          ]}
-          sections={groupModels(
-            listModels === 'retired' ? retiredModels : activeModels,
-          )}
-          keyExtractor={item => item._id.toString()}
-          renderItem={section =>
-            modelsLayout === ModelsLayout.PostCards && listModels !== 'retired'
-              ? renderModelPostCard(section)
-              : renderModelListItem(section)
-          }
-          renderSectionHeader={({ section: { title } }) => (
-            <SectionListHeader title={title} />
-          )}
-          ListFooterComponent={renderInactive()}
-        />
+        <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
+          <>
+            {listEditorRef.current ? (
+              <SectionList
+                showsVerticalScrollIndicator={false}
+                contentInsetAdjustmentBehavior={'automatic'}
+                stickySectionHeadersEnabled={true}
+                contentContainerStyle={{
+                  flexGrow: 1,
+                  marginBottom: headerHeight,
+                }}
+                bounces={true}
+                alwaysBounceVertical={true}
+                style={[
+                  theme.styles.view,
+                  modelsLayout === ModelsLayout.PostCards ? s.noPadding : {},
+                ]}
+                sections={groupModels(
+                  listModels === 'retired' ? retiredModels : activeModels,
+                )}
+                keyExtractor={item => item._id.toString()}
+                renderItem={section =>
+                  modelsLayout === ModelsLayout.PostCards &&
+                  listModels !== 'retired'
+                    ? renderModelPostCard(section)
+                    : renderModelListItem(section)
+                }
+                renderSectionHeader={({ section: { title } }) => (
+                  <Divider text={title} />
+                )}
+                ListFooterComponent={renderInactive()}
+              />
+            ) : null}
+          </>
+        </ListEditor>
       )}
       <AchievementModal ref={achievementModalRef} />
     </>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-    marginHorizontal: 10,
-  },
-  headerIconDisabled: {
-    color: theme.colors.disabled,
-  },
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   noPadding: {
     paddingHorizontal: 0,
-  },
-  sectionList: {
-    flex: 1,
-    flexGrow: 1,
   },
 }));
 

@@ -1,12 +1,11 @@
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
-
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-// import { NativeModules } from 'react-native';
-import { appConfig } from 'config';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
-import { log } from '@react-native-ajp-elements/core';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { log } from '@react-native-hello/core';
+// import { NativeModules } from 'react-native';
+import { appConfig } from 'config';
 import { preSignOutActions } from 'lib/auth';
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 
 // const { RNTwitterSignIn } = NativeModules;
 

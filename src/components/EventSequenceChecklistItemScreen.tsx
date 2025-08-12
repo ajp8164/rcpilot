@@ -1,21 +1,30 @@
-import React, { useEffect, useRef } from 'react';
+import { Divider, ListItem } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemNotes } from 'components/atoms/List';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { Formik, FormikProps } from 'formik';
+import { useEvent } from 'lib/event';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef } from 'react';
+import { View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { EventSequenceNavigatorParamList } from 'types/navigation';
-import { ListItem } from 'components/atoms/List';
 import { Model } from 'realmdb/Model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { View } from 'react-native';
 import { selectEventSequence } from 'store/selectors/eventSequence';
-import { useEvent } from 'lib/event';
-import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
+import { EventSequenceNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
+
+type FormValues = {
+  notes: string;
+};
 
 export type Props = NativeStackScreenProps<
   EventSequenceNavigatorParamList,
@@ -41,6 +50,16 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
     checklist?.actions.find(a => a.refId === actionRefId),
   ).current;
 
+  const initialValues = {
+    notes: action?.notes || '',
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    notes: Yup.string(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+
   useEffect(() => {
     event.on('event-checklist-item-notes', onChangeNotes);
     return () => {
@@ -49,8 +68,16 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const onSubmit = (values: FormValues) => {
+    if (action) {
+      realm.write(() => {
+        action.notes = values.notes;
+      });
+    }
+  };
+
   const onChangeNotes = (result: NotesEditorResult) => {
-    setNotes(result.text);
+    formikRef.current?.setFieldValue('notes', result.text);
   };
 
   const lastTimePerformed = (action: ChecklistAction) => {
@@ -62,11 +89,15 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
     return 'never';
   };
 
-  const setNotes = (text: string) => {
-    if (action) {
-      realm.write(() => {
-        action.notes = text;
-      });
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+
+    // Auto submit the form when updating an existing model.
+    if (canSubmit) {
+      formikRef.current?.handleSubmit();
     }
   };
 
@@ -76,34 +107,51 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
 
   return (
     <View style={theme.styles.view}>
-      <Divider text={'ACTION'} />
-      <ListItem
-        title={action?.description}
-        subtitle={`From checklist '${checklist?.name}'`}
-        position={['first', 'last']}
-        rightImage={false}
-      />
-      <Divider text={'FREQUENCY'} />
-      <ListItem
-        title={action.schedule.state.text}
-        subtitle={`Last time was ${lastTimePerformed(action)}`}
-        position={['first', 'last']}
-        rightImage={false}
-      />
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={action.notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            text: action.notes,
-            headerButtonStyle: {
-              color: theme.colors.screenHeaderInvButtonText,
-            },
-            eventName: 'event-checklist-item-notes',
-          })
-        }
-      />
+      <Formik
+        innerRef={formik => {
+          if (formik) {
+            formikRef.current = formik;
+          }
+        }}
+        initialValues={initialValues}
+        validationSchema={schema}
+        validateOnMount
+        onSubmit={onSubmit}>
+        {({ values }) => (
+          <View>
+            <FormikStateWatcher<FormValues>
+              onChange={onFormikWatcherStateChange}
+            />
+            <Divider text={'ACTION'} />
+            <ListItem
+              title={action?.description}
+              subtitle={`From checklist '${checklist?.name}'`}
+              position={['first', 'last']}
+            />
+            <Divider text={'FREQUENCY'} />
+            <ListItem
+              title={action.schedule.state.text}
+              subtitle={`Last time was ${lastTimePerformed(action)}`}
+              position={['first', 'last']}
+            />
+            <Divider text={'NOTES'} />
+            <ListItemNotes
+              notes={values.notes || 'Notes'}
+              position={['first', 'last']}
+              onPress={() =>
+                navigation.navigate('NotesEditor', {
+                  title: 'Action Notes',
+                  text: values.notes,
+                  headerButtonStyle: {
+                    color: theme.colors.stickyWhite,
+                  },
+                  eventName: 'event-checklist-item-notes',
+                })
+              }
+            />
+          </View>
+        )}
+      </Formik>
     </View>
   );
 };

@@ -1,8 +1,7 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
-
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { revertSettings } from 'store/actions';
+import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 
 type EventSequenceChecklistActionHistoryEntries = {
   [key in EventSequenceChecklistType]: Record<

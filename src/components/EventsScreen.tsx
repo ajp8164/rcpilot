@@ -1,42 +1,43 @@
-import { AppTheme, useTheme } from 'theme';
 import {
-  ListItem,
-  SectionListHeader,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItemSwipeable,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { eventKind, eventPower, eventSummary } from 'lib/modelEvent';
+import { useEventsFilter } from 'lib/modelEvent';
+import { groupItems } from 'lib/sectionList';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { CircleMinus, Funnel, FunnelPlus, Trash2 } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  LayoutRectangle,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import { Event } from 'realmdb/Event';
+import { Model } from 'realmdb/Model';
+import { selectFilters } from 'store/selectors/filterSelectors';
+import { AppTheme, useTheme } from 'theme';
+import { FilterType } from 'types/filter';
+import { ModelType } from 'types/model';
 import {
   ModelsNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import React, { useEffect } from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { CompositeScreenProps } from '@react-navigation/core';
-import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DateTime } from 'luxon';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { Event } from 'realmdb/Event';
-import { FilterType } from 'types/filter';
-import { Model } from 'realmdb/Model';
-import { ModelType } from 'types/model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { eventKind } from 'lib/modelEvent';
-import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
-import { secondsToFormat } from 'lib/formatters';
-import { selectFilters } from 'store/selectors/filterSelectors';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useEventsFilter } from 'lib/modelEvent';
-import { useListEditor } from '@react-native-ajp-elements/ui';
-import { useSelector } from 'react-redux';
 
 type Section = {
   title?: string;
@@ -54,7 +55,6 @@ const EventsScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
@@ -71,9 +71,12 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const kind = eventKind(model?.type);
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+  const [listLayout, setListLayout] = useState<LayoutRectangle>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <>
@@ -82,18 +85,15 @@ const EventsScreen = ({ navigation, route }: Props) => {
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 disabled={
-                  !filterId && (!model?.events.length || listEditor.enabled)
+                  !filterId &&
+                  (!model?.events.length || listEditorState?.enabled)
                 }
                 icon={
-                  <CustomIcon
-                    name={filterId ? 'filter-check' : 'filter'}
-                    style={[
-                      s.headerIcon,
-                      !filterId && (!model?.events.length || listEditor.enabled)
-                        ? s.headerIconDisabled
-                        : {},
-                    ]}
-                  />
+                  filterId ? (
+                    <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                  ) : (
+                    <Funnel color={theme.colors.screenHeaderButtonText} />
+                  )
                 }
                 onPress={() =>
                   navigation.navigate('EventFiltersNavigator', {
@@ -108,56 +108,27 @@ const EventsScreen = ({ navigation, route }: Props) => {
               />
             )}
             <Button
-              title={listEditor.enabled ? 'Done' : 'Edit'}
+              title={listEditorState?.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
-              disabled={!model?.events.length}
+              disabled={!events.length}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={listEditor.onEdit}
+              onPress={() => listEditorRef.current?.onToggleEditMode()}
             />
           </>
         );
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterId, listEditor.enabled]);
+  }, [filterId, listEditorState?.enabled]);
 
-  const deleteEvent = (event: Event) => {
-    realm.write(() => {
-      realm.delete(event);
-    });
-  };
-
-  const eventTitle = (event: Event) => {
-    const number = `#${event.number}`;
-    const duration = `${secondsToFormat(event.duration, { format: 'm:ss' })}`;
-    const time = DateTime.fromISO(event.createdOn).toLocaleString(
-      DateTime.TIME_SIMPLE,
-    );
-    const location = `${event.location?.name || 'Unknown location'}`;
-    return `${number}: ${duration} at ${time}, ${location}`;
-  };
-
-  const eventSummary = (event: Event) => {
-    let battery = '';
-    if (model?.logsBatteries) {
-      if (event.batteryCycles.length === 0) {
-        battery = 'no batteries used during this event';
-      } else if (event.batteryCycles.length === 1) {
-        battery = `Battery: ${event.batteryCycles[0].battery.name}`;
-      } else {
-        battery = `${event.batteryCycles.length} batteries used during this event`;
-      }
+  const deleteEvent = (eventId: string) => {
+    const event = realm.objectForPrimaryKey(Event, new BSON.ObjectId(eventId));
+    if (event?.isValid()) {
+      realm.write(() => {
+        realm.delete(event);
+      });
     }
-
-    let fuel = '';
-    if (model?.logsFuel) {
-      if (event.fuelConsumed !== undefined) {
-        fuel = `Fuel: ${event.fuelConsumed}oz`;
-      }
-    }
-    const summary = `${fuel}${fuel && battery ? ', ' : ''}${battery}`;
-    return summary.length ? summary : undefined;
   };
 
   const groupEvents = (events: Event[]): SectionListData<Event, Section>[] => {
@@ -178,48 +149,41 @@ const EventsScreen = ({ navigation, route }: Props) => {
     index: number;
   }) => {
     return (
-      <ListItem
-        ref={ref => {
-          ref && listEditor.add(ref, 'events', event._id.toString());
-        }}
+      <ListItemSwipeable
         key={event._id.toString()}
-        title={eventTitle(event)}
-        subtitle={eventSummary(event)}
-        titleNumberOfLines={1}
-        subtitleNumberOfLines={1}
+        title={eventSummary(event, { includeNumber: true })}
+        subtitle={eventPower(event)}
         position={listItemPosition(index, section.data.length)}
+        rightContent={'chevron-right'}
+        listEditor={listEditorRef.current}
         onPress={() => {
           navigation.navigate('EventEditor', {
             eventId: event._id.toString(),
             modelType: model?.type || ModelType.Airplane,
           });
         }}
-        editable={{
-          item: {
-            icon: 'remove-circle',
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+          draggable: true,
+        }}
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
             color: theme.colors.assertive,
-            action: 'open-swipeable',
-          },
-          reorder: true,
-        }}
-        showEditor={listEditor.show}
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () =>
-                confirmAction(deleteEvent, {
-                  label: `Delete ${kind.name}`,
-                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                  value: event,
-                }),
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: `Delete ${kind.name}`,
+                title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+              });
             },
-          ],
-        }}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('events', event._id.toString())
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+            onPress: () => deleteEvent(event._id.toString()),
+          },
+        ]}
       />
     );
   };
@@ -228,6 +192,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
     return (
       <EmptyView
         message={`No ${eventKind(model?.type).namePlural} Match Your Filter`}
+        details={`Adjust your filter settings to see your ${eventKind(model?.type).namePlural}.`}
       />
     );
   }
@@ -237,30 +202,31 @@ const EventsScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SectionList
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}
-      stickySectionHeadersEnabled={true}
-      style={[theme.styles.view, s.sectionList]}
-      sections={groupEvents([...events].reverse())}
-      keyExtractor={item => item._id.toString()}
-      renderItem={renderEvent}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
-    />
+    <ListEditor
+      ref={listEditorRef}
+      onChangeState={setListEditorState}
+      listLayout={listLayout}>
+      <View
+        style={[{ flex: 1 }]}
+        onLayout={e => setListLayout(e.nativeEvent.layout)}>
+        <SectionList
+          showsVerticalScrollIndicator={false}
+          contentInsetAdjustmentBehavior={'automatic'}
+          stickySectionHeadersEnabled={true}
+          style={[theme.styles.view, s.sectionList]}
+          sections={groupEvents([...events].reverse())}
+          keyExtractor={item => item._id.toString()}
+          renderItem={renderEvent}
+          renderSectionHeader={({ section: { title } }) => (
+            <Divider text={title} />
+          )}
+        />
+      </View>
+    </ListEditor>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-    marginHorizontal: 10,
-  },
-  headerIconDisabled: {
-    color: theme.colors.disabled,
-  },
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

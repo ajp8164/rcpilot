@@ -1,10 +1,9 @@
-import { Calendar, CalendarProps } from 'react-native-calendars';
-import { DateData, MarkedDates, Theme } from 'react-native-calendars/src/types';
-
+import { useSetState } from '@react-native-hello/core';
 import { DateTime } from 'luxon';
 import React from 'react';
 import { useEffect } from 'react';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { Calendar, CalendarProps } from 'react-native-calendars';
+import { DateData, MarkedDates, Theme } from 'react-native-calendars/src/types';
 
 /** Example:
  * 
@@ -102,7 +101,8 @@ const DateRangePicker = ({
       initialMarkedDates,
     );
     setRangeData({ markedDates, fromDate });
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialRange, theme.markColor, theme.markTextColor]);
 
   const setupMarkedDates = (
     fromDate: string,

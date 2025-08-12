@@ -1,5 +1,5 @@
+import { WheelPickerItem } from '@react-native-hello/ui';
 import { TimeSpan } from 'types/common';
-import { WheelPickerItem } from 'components/atoms/WheelPicker';
 
 const timeSpanItems: WheelPickerItem[][] = [
   new Array(90)

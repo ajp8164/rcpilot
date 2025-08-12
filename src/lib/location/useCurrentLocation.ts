@@ -1,21 +1,20 @@
-import { Collection, CollectionChangeSet } from 'realm';
+import Geolocation from '@react-native-community/geolocation';
+import {
+  GeolocationError,
+  GeolocationResponse,
+} from '@react-native-community/geolocation/js/';
+import { useRealm } from '@realm/react';
 import {
   GeoPositionContext,
   defaultGeoPosition,
   distanceBetweenLocations,
 } from 'lib/location';
-import {
-  GeolocationError,
-  GeolocationResponse,
-} from '@react-native-community/geolocation/js/';
-import { Location, LocationCoords } from 'realmdb/Location';
-import { useEffect, useRef } from 'react';
-
-import Geolocation from '@react-native-community/geolocation';
-import { saveCurrentLocation } from 'store/slices/location';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
+import { useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
-import { useRealm } from '@realm/react';
+import { Collection, CollectionChangeSet } from 'realm';
+import { Location, LocationCoords } from 'realmdb/Location';
+import { saveCurrentLocation } from 'store/slices/location';
 
 export type PositionError = {
   code: 'PERMISSION_DENIED' | 'POSITION_UNAVAILABLE' | 'TIMEOUT';

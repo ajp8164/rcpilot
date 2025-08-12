@@ -1,3 +1,5 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { configureStore } from '@reduxjs/toolkit';
 import {
   FLUSH,
   PAUSE,
@@ -8,9 +10,6 @@ import {
   persistReducer,
   persistStore,
 } from 'redux-persist';
-
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { configureStore } from '@reduxjs/toolkit';
 import { rootReducer } from 'store/rootReducer';
 
 // redux-persist is pushing a function into a reducer (not best practice)

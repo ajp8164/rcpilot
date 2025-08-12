@@ -3,7 +3,6 @@ import {
   NumberRelation,
   StringRelation,
 } from 'components/molecules/filters';
-
 import { BatteryCycleFilterValues } from 'types/filter';
 
 export const defaultFilter: BatteryCycleFilterValues = {

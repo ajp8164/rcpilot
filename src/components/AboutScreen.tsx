@@ -1,15 +1,14 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, ListItem, viewport } from '@react-native-ajp-elements/ui';
-import { ScrollView, Text } from 'react-native';
-
+import { Divider, ListItem, viewport } from '@react-native-hello/ui';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
-import { SetupNavigatorParamList } from 'types/navigation';
-import VersionNumber from 'react-native-version-number';
+import { makeStyles } from '@rn-vui/themed';
 import helpContent from 'lib/content/helpContent';
 import legalContent from 'lib/content/legalContent';
-import { makeStyles } from '@rn-vui/themed';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import React from 'react';
+import { ScrollView, Text } from 'react-native';
+import VersionNumber from 'react-native-version-number';
+import { AppTheme, useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 type Props = NativeStackScreenProps<SetupNavigatorParamList, 'About'>;
 
@@ -32,6 +31,7 @@ const AboutScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Help'}
         position={['first']}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Content', {
             content: helpContent,
@@ -41,6 +41,7 @@ const AboutScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Legal'}
         position={['last']}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Content', {
             content: legalContent,

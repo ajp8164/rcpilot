@@ -1,16 +1,16 @@
-import { Achievement, Pilot } from 'realmdb/Pilot';
 import { useObject, useQuery, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { DateTime } from 'luxon';
-import { Event } from 'realmdb/Event';
-import { achievementConfig } from './index';
-import { displayNotification } from 'lib/notifications';
 import { eventKind } from 'lib/modelEvent';
+import { displayNotification } from 'lib/notifications';
 import lodash from 'lodash';
-import { selectPilot } from 'store/selectors/pilotSelectors';
+import { DateTime } from 'luxon';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import { Event } from 'realmdb/Event';
+import { Achievement, Pilot } from 'realmdb/Pilot';
+import { selectPilot } from 'store/selectors/pilotSelectors';
+
+import { achievementConfig } from './index';
 
 export const useAchievementConveyor = () => {
   const realm = useRealm();

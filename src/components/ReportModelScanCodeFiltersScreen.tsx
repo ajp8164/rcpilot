@@ -1,25 +1,28 @@
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem, View } from 'react-native';
 import {
-  ListItem,
-  ListItemCheckboxInfo,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useQuery, useRealm } from '@realm/react';
-
-import { Filter } from 'realmdb/Filter';
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
-import { defaultFilter } from 'lib/reports/reportModelScanCode';
+import { useQuery, useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { ListItemCheckBoxInfo } from 'components/atoms/List';
+import { FiltersListHeader } from 'components/molecules/FiltersListHeader';
 import { filterSummary } from 'lib/filter';
-import lodash from 'lodash';
-import { saveSelectedFilter } from 'store/slices/filters';
-import { selectFilters } from 'store/selectors/filterSelectors';
+import { defaultFilter } from 'lib/reports/reportModelScanCode';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import lodash from 'lodash';
+import { Plus, Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import { Filter } from 'realmdb/Filter';
+import { selectFilters } from 'store/selectors/filterSelectors';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { useTheme } from 'theme';
+import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   ReportModelScanCodeFiltersNavigatorParamList,
@@ -30,7 +33,6 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, modelType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -55,6 +57,35 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
     useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
+
+  const listEditorRef = useRef<ListEditorMethods>(null);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => {
+        return (
+          <Button
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+            onPress={() =>
+              generalReportModelScanCodesFilter &&
+              navigation.navigate('ReportModelScanCodeFilterEditor', {
+                filterId: generalReportModelScanCodesFilter._id.toString(),
+                filterType,
+                generalFilterName: generalReportModelScanCodesFilterName,
+                modelType,
+                requireFilterName: true,
+              })
+            }
+          />
+        );
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    generalReportModelScanCodesFilter,
+    generalReportModelScanCodesFilterName,
+  ]);
 
   useEffect(() => {
     // Lazy initialization of a general report model scan codes filter.
@@ -84,26 +115,32 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const deleteFilter = (filter: Filter) => {
-    realm.write(() => {
-      realm.delete(filter);
+  const deleteFilter = (filterId: string) => {
+    if (selectedFilterId === filterId) {
+      setFilter();
+    }
+
+    // Wait for filter setting to change before deletion.
+    setTimeout(() => {
+      const filter = realm.objectForPrimaryKey(
+        'Filter',
+        new BSON.ObjectId(filterId),
+      );
+      if (filter?.isValid()) {
+        realm.write(() => {
+          realm.delete(filter);
+        });
+      }
     });
   };
 
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
-      <ListItemCheckboxInfo
-        ref={ref => {
-          ref &&
-            listEditor.add(
-              ref,
-              'report-model-scan-code-filters',
-              filter._id.toString(),
-            );
-        }}
-        key={index}
+      <ListItemCheckBoxInfo
+        key={filter._id.toString()}
         title={filter.name}
         subtitle={filterSummary(filter)}
+        subtitleLines={0}
         position={listItemPosition(index, allModelScanCodeFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
         onPress={() => setFilter(filter)}
@@ -115,98 +152,61 @@ const ReportModelScanCodeFiltersScreen = ({ navigation, route }: Props) => {
             modelType,
           })
         }
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () => {
-                confirmAction(deleteFilter, {
-                  label: 'Delete Saved Filter',
-                  title:
-                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                  value: filter,
-                });
-              },
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
+            color: theme.colors.assertive,
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: 'Delete Saved Filter',
+                title:
+                  'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+              });
             },
-          ],
-        }}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen(
-            'report-model-scan-code-filters',
-            filter._id.toString(),
-          )
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+            onPress: () => deleteFilter(filter._id.toString()),
+          },
+        ]}
       />
     );
   };
 
   return (
     <View style={theme.styles.view}>
-      <Divider />
-      <ListItemCheckboxInfo
-        title={'No Filter'}
-        subtitle={'Matches all models'}
-        position={['first', 'last']}
-        hideInfo={true}
-        checked={!selectedFilterId}
-        onPress={setFilter}
+      <FiltersListHeader
+        filterSummary={filterSummary(generalReportModelScanCodesFilter)}
+        itemName={'model'}
+        generalFilterId={generalReportModelScanCodesFilter?._id.toString()}
+        selectedFilterId={selectedFilterId}
+        useGeneralFilter={useGeneralFilter}
+        onPressEditGeneralFilter={() =>
+          navigation.navigate('ReportModelScanCodeFilterEditor', {
+            filterId: generalReportModelScanCodesFilter?._id.toString() || '',
+            filterType,
+            generalFilterName: generalReportModelScanCodesFilterName,
+            modelType,
+          })
+        }
+        onPressGeneralFilter={() =>
+          setFilter(generalReportModelScanCodesFilter)
+        }
+        onPressNoFilter={setFilter}
       />
-      <Divider />
-      {useGeneralFilter && generalReportModelScanCodesFilter ? (
-        <>
-          <ListItemCheckboxInfo
-            title={`General Model Filter`}
-            subtitle={filterSummary(generalReportModelScanCodesFilter)}
-            position={['first', 'last']}
-            checked={
-              generalReportModelScanCodesFilter._id.toString() ===
-              selectedFilterId
-            }
-            onPress={() => setFilter(generalReportModelScanCodesFilter)}
-            onPressInfo={() =>
-              navigation.navigate('ReportModelScanCodeFilterEditor', {
-                filterId: generalReportModelScanCodesFilter._id.toString(),
-                filterType,
-                generalFilterName: generalReportModelScanCodesFilterName,
-                modelType,
-              })
-            }
-          />
-          <Divider
-            note
-            text={`You can save the General Models Filter to remember a specific filter configuration for later use.`}
-          />
-        </>
-      ) : (
-        <ListItem
-          title={'Add New Filter'}
-          titleStyle={theme.styles.listItemButtonTitle}
-          position={['first', 'last']}
-          rightImage={false}
-          onPress={() =>
-            generalReportModelScanCodesFilter &&
-            navigation.navigate('ReportModelScanCodeFilterEditor', {
-              filterId: generalReportModelScanCodesFilter._id.toString(),
-              filterType,
-              generalFilterName: generalReportModelScanCodesFilterName,
-              modelType,
-              requireFilterName: true,
-            })
+      <ListEditor ref={listEditorRef}>
+        <FlatList
+          data={allModelScanCodeFilters}
+          renderItem={renderFilters}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            allModelScanCodeFilters.length ? (
+              <Divider text={'SAVED MODEL FILTERS'} />
+            ) : null
           }
         />
-      )}
-      <FlatList
-        data={allModelScanCodeFilters}
-        renderItem={renderFilters}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          allModelScanCodeFilters.length ? (
-            <Divider text={'SAVED MODEL FILTERS'} />
-          ) : null
-        }
-      />
+      </ListEditor>
     </View>
   );
 };

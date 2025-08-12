@@ -1,8 +1,7 @@
-import { dispatch, store } from 'store';
-
-import { UserProfile } from 'types/user';
-import { updateUserProfile } from 'store/slices/user';
 import { usersDocumentChangeListener } from 'firebase/firestore';
+import { dispatch, store } from 'store';
+import { updateUserProfile } from 'store/slices/user';
+import { UserProfile } from 'types/user';
 
 export const listenForChangesToMyUserProfile = () => {
   const me = store.getState().user.profile;

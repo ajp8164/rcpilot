@@ -1,6 +1,6 @@
 import React from 'react';
-import { AnimatedStyle, SharedValue } from 'react-native-reanimated';
 import { StyleProp, ViewStyle } from 'react-native';
+import { AnimatedStyle, SharedValue } from 'react-native-reanimated';
 
 export declare type FlipCardView = FlipCardViewMethods;
 

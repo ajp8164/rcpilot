@@ -1,8 +1,8 @@
-import React from 'react';
-import { ScanNavigatorParamList } from 'types/navigation';
-import ScanScreen from 'components/ScanScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import ScanScreen from 'components/ScanScreen';
+import React from 'react';
 import { useTheme } from 'theme';
+import { ScanNavigatorParamList } from 'types/navigation';
 
 const ScanStack = createNativeStackNavigator<ScanNavigatorParamList>();
 

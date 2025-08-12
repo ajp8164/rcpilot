@@ -1,17 +1,15 @@
-import { FlatList, ListRenderItem, ScrollView } from 'react-native';
-import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
-
-import { Button } from '@rn-vui/base';
-import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
-import { ChecklistType } from 'types/checklist';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { ModelsNavigatorParamList } from 'types/navigation';
+import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { useEvent } from 'lib/event';
+import React, { useEffect, useState } from 'react';
+import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 export type ChecklistTemplatePickerResult = {
   checklistTemplateId: string;
@@ -41,7 +39,6 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         return (
           <Button
@@ -87,7 +84,6 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
           index,
           allChecklistTemplates[ChecklistType.PreEvent].length,
         )}
-        rightImage={false}
         onPress={() =>
           event.emit(eventName, {
             checklistTemplateId: checklistTemplate._id.toString(),
@@ -110,7 +106,6 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
           index,
           allChecklistTemplates[ChecklistType.PostEvent].length,
         )}
-        rightImage={false}
         onPress={() =>
           event.emit(eventName, {
             checklistTemplateId: checklistTemplate._id.toString(),
@@ -132,7 +127,6 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
           index,
           allChecklistTemplates[ChecklistType.Maintenance].length,
         )}
-        rightImage={false}
         onPress={() =>
           event.emit(eventName, {
             checklistTemplateId: checklistTemplate._id.toString(),

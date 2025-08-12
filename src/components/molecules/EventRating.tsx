@@ -1,25 +1,21 @@
-import { AppTheme, useTheme } from 'theme';
-import { Text, View, ViewStyle } from 'react-native';
-import { useEffect, useState } from 'react';
-
-import { EventOutcome } from 'types/event';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { eventOutcomeIcons } from 'lib/modelEvent';
+import { ReactElement, useEffect, useState } from 'react';
 import React from 'react';
-import { makeStyles } from '@rn-vui/themed';
+import { Text } from 'react-native';
+import { useTheme } from 'theme';
+import { EventOutcome } from 'types/event';
 
 interface EventRatingInterface {
-  style?: ViewStyle | ViewStyle[];
   value?: EventOutcome;
 }
 
-export const EventRating = ({ style = {}, value }: EventRatingInterface) => {
+export const EventRating = ({ value }: EventRatingInterface) => {
   const theme = useTheme();
-  const s = useStyles(theme);
 
   const [element, setElement] = useState(<></>);
 
   useEffect(() => {
-    const outcomeEl = [];
+    let outcomeEl: ReactElement;
     try {
       if (!value) {
         throw '';
@@ -30,46 +26,26 @@ export const EventRating = ({ style = {}, value }: EventRatingInterface) => {
         throw 'NaN';
       }
 
-      for (let i = 0; i < num; i++) {
-        outcomeEl.push(
-          <View key={i} style={style}>
-            <Icon
-              name={'star'}
-              size={20}
-              style={s.icon}
-              color={theme.colors.midGray}
-            />
-          </View>,
-        );
-      }
+      outcomeEl = eventOutcomeIcons[value]?.leftContent || <></>;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (_e: any) {
       if (value === EventOutcome.Crashed) {
-        outcomeEl.push(
+        outcomeEl = (
           <Text key={'crashed'} style={theme.styles.textNormal}>
             {'Crashed'}
-          </Text>,
+          </Text>
         );
       } else {
-        outcomeEl.push(
+        outcomeEl = (
           <Text key={'unspecified'} style={theme.styles.textNormal}>
             {'Unspecified'}
-          </Text>,
+          </Text>
         );
       }
     }
-    setElement(<View style={s.outcome}>{outcomeEl}</View>);
+    setElement(outcomeEl);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return element;
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  outcome: {
-    flexDirection: 'row',
-  },
-  icon: {
-    width: 22,
-  },
-}));

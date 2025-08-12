@@ -1,5 +1,4 @@
 import { DateFilterState, DateRelation } from 'components/molecules/filters';
-
 import { DateTime } from 'luxon';
 import { TimeSpan } from 'types/common';
 

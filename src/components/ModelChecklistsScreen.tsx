@@ -1,31 +1,31 @@
-import { AppTheme, useTheme } from 'theme';
-import { Checklist, JChecklistAction } from 'realmdb/Checklist';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem, ScrollView } from 'react-native';
-import {
-  ListItem,
-  listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import { useObject, useQuery, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
-import { ChecklistTemplatePickerResult } from 'components/ChecklistTemplatePickerScreen';
-import { ChecklistType } from 'types/checklist';
-import { EmptyView } from 'components/molecules/EmptyView';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { Model } from 'realmdb/Model';
-import { ModelsNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { appConfig } from 'config';
-import { makeStyles } from '@rn-vui/themed';
 import { useActionSheet } from '@expo/react-native-action-sheet';
-import { useConfirmAction } from 'lib/useConfirmAction';
+import {
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItemSwipeable,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useQuery, useRealm } from '@realm/react';
+import { ChecklistTemplatePickerResult } from 'components/ChecklistTemplatePickerScreen';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { appConfig } from 'config';
 import { useEvent } from 'lib/event';
+import { useConfirmAction } from 'lib/useConfirmAction';
 import { uuidv4 } from 'lib/utils';
+import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+import { BSON } from 'realm';
+import { Checklist, JChecklistAction } from 'realmdb/Checklist';
+import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
+import { Model } from 'realmdb/Model';
+import { useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   ModelsNavigatorParamList,
@@ -36,8 +36,6 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
-  const listEditor = useListEditor();
   const { showActionSheetWithOptions } = useActionSheet();
   const confirmAction = useConfirmAction();
   const event = useEvent();
@@ -46,14 +44,16 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const model = useObject(Model, new BSON.ObjectId(modelId));
   const allChecklistTemplates = useQuery(ChecklistTemplate);
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon} />}
+            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
             onPress={addChecklist}
           />
         );
@@ -152,14 +152,6 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const confirmDeleteChecklist = (checklist: Checklist) => {
-    confirmAction(deleteChecklist, {
-      label: `Delete Checklist`,
-      title: `This action cannot be undone.\nAre you sure you want to delete this checklist?`,
-      value: checklist,
-    });
-  };
-
   const deleteChecklist = (checklist: Checklist) => {
     realm.write(() => {
       const index = model?.checklists.findIndex(
@@ -177,46 +169,46 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
     arrLength: number,
   ) => {
     // Cannot delete the one-time maintenance list.
-    let swipeable = {};
-    if (checklist.type !== ChecklistType.OneTimeMaintenance) {
-      swipeable = {
-        rightItems: [
-          {
-            ...swipeableDeleteItem[theme.mode],
-            onPress: () => confirmDeleteChecklist(checklist),
-          },
-        ],
-      };
-    }
+    const deleteAllowed = checklist.type !== ChecklistType.OneTimeMaintenance;
     return (
-      <ListItem
-        ref={ref => {
-          ref && listEditor.add(ref, 'checklists', checklist.refId);
-        }}
+      <ListItemSwipeable
         key={checklist.refId}
         title={checklist.name}
         subtitle={`Contains ${checklist.actions.length} actions`}
         position={listItemPosition(index, arrLength)}
+        rightContent={'chevron-right'}
+        listEditor={listEditorRef.current}
         onPress={() =>
           navigation.navigate('ChecklistEditor', {
             modelId,
             modelChecklistRefId: checklist.refId,
           })
         }
-        editable={{
-          item: {
-            icon: 'remove-circle',
-            color: theme.colors.assertive,
-            action: 'open-swipeable',
-          },
-          reorder: true,
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
         }}
-        showEditor={listEditor.show}
-        swipeable={swipeable}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('checklists', checklist.refId)
+        swipeableActionsRight={
+          deleteAllowed
+            ? [
+                {
+                  text: 'Delete',
+                  color: theme.colors.assertive,
+                  ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+                  op: 'remove',
+                  confirmation: () => {
+                    listEditorRef.current?.reset();
+                    return confirmAction({
+                      label: 'Delete Checklist',
+                      title: `This action cannot be undone.\nAre you sure you want to delete this checklist?`,
+                    });
+                  },
+                  onPress: () => deleteChecklist(checklist),
+                },
+              ]
+            : undefined
         }
-        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );
   };
@@ -274,78 +266,81 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <FlatList
-        data={preEventModelChecklists()}
-        renderItem={renderPreEventChecklist}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-        ListHeaderComponent={
-          preEventModelChecklists().length > 0 ? (
-            <Divider text={'PRE-FLIGHT'} />
-          ) : (
-            <></>
-          )
-        }
-      />
-      <FlatList
-        data={postEventModelChecklists()}
-        renderItem={renderPostEventChecklist}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-        ListHeaderComponent={
-          postEventModelChecklists().length > 0 ? (
-            <Divider text={'POST-FLIGHT'} />
-          ) : (
-            <></>
-          )
-        }
-      />
-      <FlatList
-        data={maintenanceModelChecklists()}
-        renderItem={renderMaintenanceChecklist}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-        ListHeaderComponent={
-          maintenanceModelChecklists().length > 0 ? (
-            <Divider text={'MAINTENANCE'} />
-          ) : (
-            <></>
-          )
-        }
-      />
-      <FlatList
-        data={oneTimeMaintenanceModelChecklists()}
-        renderItem={renderOneTimeMaintenanceChecklist}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        scrollEnabled={false}
-        ListHeaderComponent={
-          oneTimeMaintenanceModelChecklists().length > 0 ? (
-            <Divider text={'ONE-TIME MAINTENANCE'} />
-          ) : (
-            <></>
-          )
-        }
-        ListFooterComponent={
-          <Divider
-            note
-            text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}
+      <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
+        <>
+          <FlatList
+            data={preEventModelChecklists()}
+            renderItem={renderPreEventChecklist}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            ListHeaderComponent={
+              preEventModelChecklists().length > 0 ? (
+                <Divider text={'PRE-FLIGHT'} />
+              ) : (
+                <></>
+              )
+            }
           />
-        }
-      />
+          <FlatList
+            data={postEventModelChecklists()}
+            renderItem={renderPostEventChecklist}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            ListHeaderComponent={
+              postEventModelChecklists().length > 0 ? (
+                <Divider text={'POST-FLIGHT'} />
+              ) : (
+                <></>
+              )
+            }
+          />
+          <FlatList
+            data={maintenanceModelChecklists()}
+            renderItem={renderMaintenanceChecklist}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            ListHeaderComponent={
+              maintenanceModelChecklists().length > 0 ? (
+                <Divider text={'MAINTENANCE'} />
+              ) : (
+                <></>
+              )
+            }
+          />
+          <FlatList
+            data={oneTimeMaintenanceModelChecklists()}
+            renderItem={renderOneTimeMaintenanceChecklist}
+            keyExtractor={item => `${item.refId}`}
+            showsVerticalScrollIndicator={false}
+            scrollEnabled={false}
+            ListHeaderComponent={
+              oneTimeMaintenanceModelChecklists().length > 0 ? (
+                <Divider text={'ONE-TIME MAINTENANCE'} />
+              ) : (
+                <></>
+              )
+            }
+            ListFooterComponent={
+              oneTimeMaintenanceModelChecklists().length > 0 ? (
+                <Divider
+                  note
+                  light
+                  subHeaderStyle={theme.styles.textSmall}
+                  text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}
+                />
+              ) : (
+                <></>
+              )
+            }
+          />
+        </>
+      </ListEditor>
       <Divider />
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-  },
-}));
 
 export default ModelChecklistsScreen;

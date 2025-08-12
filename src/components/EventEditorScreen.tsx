@@ -1,57 +1,69 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg } from '@react-native-ajp-elements/ui';
+import * as Yup from 'yup';
+import {
+  Divider,
+  InputMethods,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListItem,
+  ListItemDateTime,
+  getColoredSvg,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useQuery, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { LocationsMapResult } from 'components/LocationsMapScreen';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import { ListItemNotes } from 'components/atoms/List';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { EventRating } from 'components/molecules/EventRating';
+import { Formik, FormikProps } from 'formik';
+import {
+  modelEventOutcomeStatistics,
+  useModelEventStyleStatistics,
+} from 'lib/analytics';
+import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
+import { useEvent } from 'lib/event';
+import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
+import { Masks } from 'lib/inputMasks';
+import { modelHasPropeller, modelSummary, modelTypeIconProps } from 'lib/model';
+import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
+import lodash from 'lodash';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Image,
+  Keyboard,
   ListRenderItem,
   ScrollView,
   View,
 } from 'react-native';
-import {
-  ListItem,
-  ListItemDate,
-  ListItemInput,
-  listItemPosition,
-} from 'components/atoms/List';
+import { SvgXml } from 'react-native-svg';
+import { BSON } from 'realm';
+import { BatteryCycle } from 'realmdb/BatteryCycle';
+import { Event } from 'realmdb/Event';
+import { EventStyle } from 'realmdb/EventStyle';
+import { Location } from 'realmdb/Location';
+import { ModelFuel } from 'realmdb/ModelFuel';
+import { ModelPropeller } from 'realmdb/ModelPropeller';
+import { Pilot } from 'realmdb/Pilot';
+import { toNumber } from 'realmdb/helpers';
+import { AppTheme, useTheme } from 'theme';
+import { EventOutcome } from 'types/event';
 import {
   LogNavigatorParamList,
   ModelsNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
-import React, { useEffect, useRef, useState } from 'react';
-import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
-import { eqNumber, eqObjectId, eqString, toNumber } from 'realmdb/helpers';
-import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
-import {
-  modelEventOutcomeStatistics,
-  useModelEventStyleStatistics,
-} from 'lib/analytics';
-import { modelHasPropeller, modelSummary, modelTypeIcons } from 'lib/model';
-import { useObject, useQuery, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { BatteryCycle } from 'realmdb/BatteryCycle';
-import { CompositeScreenProps } from '@react-navigation/core';
-import { DateTime } from 'luxon';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { Event } from 'realmdb/Event';
-import { EventOutcome } from 'types/event';
-import { EventRating } from 'components/molecules/EventRating';
-import { EventStyle } from 'realmdb/EventStyle';
-import { Location } from 'realmdb/Location';
-import { LocationsMapResult } from 'components/LocationsMapScreen';
-import { ModelFuel } from 'realmdb/ModelFuel';
-import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { Pilot } from 'realmdb/Pilot';
-import { SvgXml } from 'react-native-svg';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'EventEditor'>,
@@ -63,13 +75,23 @@ export type AdditionalNavigationProps = CompositeScreenProps<
   NativeStackScreenProps<LogNavigatorParamList>
 >;
 
+// Order of fields for accessory view.
+enum Fields {
+  duration,
+  fuelConsumed,
+}
+
+type FormValues = {
+  duration: string;
+  fuelConsumed: string;
+};
+
 const EventEditorScreen = ({ navigation, route }: Props) => {
   const { eventId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
-  const setDebounced = useDebouncedRender();
   const modelEventStyleStatistics = useModelEventStyleStatistics();
   const realm = useRealm();
 
@@ -81,118 +103,33 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const locations = useQuery(Location);
   const pilots = useQuery(Pilot);
 
-  const [date, setDate] = useState(modelEvent?.createdOn);
-  const duration = useRef(secondsToFormat(modelEvent?.duration) || undefined);
-  const [fuel, setFuel] = useState(modelEvent?.fuel || undefined);
-  const fuelConsumed = useRef(
-    modelEvent?.fuelConsumed?.toString() || undefined,
-  );
-  const [propeller, setPropeller] = useState(
-    modelEvent?.propeller || undefined,
-  );
-  const [eventStyle, setEventStyle] = useState(
-    modelEvent?.eventStyle || undefined,
-  );
-  const [location, setLocation] = useState(modelEvent?.location || undefined);
-  const [pilot, setPilot] = useState(modelEvent?.pilot || undefined);
-  const [outcome, setOutcome] = useState(modelEvent?.outcome || undefined);
-  const [notes, setNotes] = useState(modelEvent?.notes || undefined);
-
   const [expandedDate, setExpandedDate] = useState(false);
   const [kind] = useState(eventKind(modelEvent?.model?.type));
 
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const durationFieldRef = useRef<ListItemInputMethods>(null);
+  const fuelConsumedFieldRef = useRef<ListItemInputMethods>(null);
+  const [resolvedRefs, setResolvedRefs] = useState<(InputMethods | null)[]>([]);
+
+  const initialValues = {
+    duration: secondsToFormat(modelEvent?.duration.toString(), {
+      format: 'm:ss',
+    }),
+    fuelConsumed: modelEvent?.fuelConsumed?.toFixed(2),
+    outcome: modelEvent?.outcome,
+  } as FormValues;
+
+  // Supports keyboard accessory view.
+  // Ensures all refs are set.
   useEffect(() => {
-    if (!eventId || !modelEvent) return;
-
-    const canSave =
-      !!duration.current &&
-      (!eqString(modelEvent.date, date) ||
-        !eqNumber(
-          modelEvent.duration,
-          MSSToSeconds(duration.current).toString(),
-        ) ||
-        !eqObjectId(modelEvent.location, location) ||
-        !eqString(modelEvent.outcome, outcome) ||
-        !eqObjectId(modelEvent.propeller, propeller) ||
-        !eqObjectId(modelEvent.fuel, fuel) ||
-        !eqNumber(modelEvent.fuelConsumed, fuelConsumed.current) ||
-        !eqObjectId(modelEvent.pilot, pilot) ||
-        !eqObjectId(modelEvent.eventStyle, eventStyle) ||
-        !eqString(modelEvent.notes, notes));
-
-    if (canSave) {
-      const previous = {
-        eventStyle: modelEvent.eventStyle,
-        duration: modelEvent.duration,
-        outcome: modelEvent.outcome,
-      };
-
-      realm.write(() => {
-        modelEvent.updatedOn = DateTime.now().toISO();
-        modelEvent.date = date || DateTime.now().toISO();
-        modelEvent.duration = MSSToSeconds(duration.current || 0);
-        modelEvent.location = location;
-        modelEvent.outcome = outcome;
-        modelEvent.propeller = propeller;
-        modelEvent.fuel = fuel;
-        modelEvent.fuelConsumed = toNumber(fuelConsumed.current);
-        pilot ? (modelEvent.pilot = pilot) : null;
-        modelEvent.eventStyle = eventStyle;
-        modelEvent.notes = notes;
-
-        // Update battery cycle duration if event duration is changed.
-        // Model events do not affect battery charge phase.
-        if (previous.duration !== modelEvent.duration) {
-          modelEvent.batteryCycles.forEach(c => {
-            if (c.discharge) {
-              c.discharge.duration = modelEvent.duration;
-            }
-          });
-        }
-
-        // Update model statistics with changes made here.
-        // Recompute event duration data only when inputs change.
-        if (
-          previous.duration !== modelEvent.duration ||
-          previous.eventStyle?._id.toString() !==
-            modelEvent.eventStyle?._id.toString()
-        ) {
-          modelEvent.model.statistics.eventStyleData =
-            modelEventStyleStatistics(
-              'update',
-              modelEvent.model,
-              modelEvent.duration,
-              previous.eventStyle,
-              eventStyle,
-            );
-        }
-
-        if (previous.outcome !== modelEvent.outcome) {
-          modelEvent.model.statistics = lodash.merge(
-            modelEvent.model.statistics,
-            modelEventOutcomeStatistics(modelEvent.model, outcome),
-          );
-        }
-
-        if (previous.duration !== modelEvent.duration) {
-          modelEvent.model.statistics.totalTime =
-            modelEvent.model.statistics.totalTime + modelEvent.duration;
-        }
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    date,
-    duration.current,
-    outcome,
-    propeller,
-    fuel,
-    fuelConsumed.current,
-    location,
-    pilot,
-    eventStyle,
-    notes,
-  ]);
+    setResolvedRefs(
+      [durationFieldRef.current, fuelConsumedFieldRef.current].filter(Boolean),
+    );
+  }, []);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -216,52 +153,228 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const schema = Yup.object().shape({
+    duration: Yup.string().required(),
+    fuelConsumed: Yup.string(),
+  });
+
+  const cancel = () => {
+    Keyboard.dismiss();
+    formikRef.current?.resetForm();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    if (!eventId || !modelEvent) return;
+
+    const previous = {
+      duration: modelEvent.duration,
+      eventStyle: modelEvent.eventStyle,
+      outcome: modelEvent.outcome,
+    };
+
+    realm.write(() => {
+      modelEvent.duration = MSSToSeconds(values.duration || 0);
+      modelEvent.fuelConsumed = toNumber(values.fuelConsumed);
+      updateStatistics({ previous });
+    });
+
+    // Update the displayed value format.
+    // Update the form without affecting state.
+    formikRef.current?.resetForm({
+      values: {
+        ...formikRef.current?.values,
+        duration: secondsToFormat(modelEvent.duration, { format: 'm:ss' }),
+      },
+    });
+  };
+
+  const updateStatistics = (props?: {
+    previous?: {
+      duration?: number;
+      eventStyle?: EventStyle;
+      outcome?: EventOutcome;
+    };
+  }) => {
+    if (!modelEvent) return;
+    const { previous } = props ?? {};
+
+    // Battery statistics.
+    if (previous && previous.duration !== modelEvent.duration) {
+      // Model events do not affect battery charge phase.
+      modelEvent.batteryCycles.forEach(c => {
+        if (c.discharge) {
+          c.discharge.duration = modelEvent.duration;
+        }
+      });
+    }
+
+    // Model statistics.
+    if (
+      previous &&
+      (previous.duration !== modelEvent.duration ||
+        previous?.eventStyle !== modelEvent.eventStyle)
+    ) {
+      modelEvent.model.statistics.eventStyleData = modelEventStyleStatistics(
+        'update',
+        modelEvent.model,
+        modelEvent.duration,
+        previous?.eventStyle,
+        modelEvent.eventStyle,
+      );
+
+      modelEvent.model.statistics.totalTime =
+        modelEvent.model.statistics.totalTime -
+        (previous?.duration || 0) +
+        modelEvent.duration;
+    }
+
+    // Outcome statistics.
+    if (previous && previous?.outcome !== modelEvent.outcome) {
+      modelEvent.model.statistics = lodash.merge(
+        modelEvent.model.statistics,
+        modelEventOutcomeStatistics(modelEvent.model, modelEvent.outcome),
+      );
+    }
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    navigation.setOptions({
+      headerLeft: () => {
+        if (next?.dirty) {
+          return (
+            <Button
+              title={'Cancel'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              onPress={cancel}
+            />
+          );
+        }
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
+  };
+
   const onDateChange = (date?: Date) => {
-    date &&
-      setDate(DateTime.fromJSDate(date).toISO() || new Date().toISOString());
+    if (!modelEvent) return;
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.date =
+        (date && DateTime.fromJSDate(date).toISO()) || new Date().toISOString();
+      updateStatistics();
+    });
   };
 
   const onChangeModelFuel = (result: EnumPickerResult) => {
+    if (!modelEvent) return;
     const f = modelFuels.find(f => {
       return f.name === result.value[0];
     });
-    setFuel(f);
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.fuel = f;
+      updateStatistics();
+    });
   };
 
   const onChangeModelPropeller = (result: EnumPickerResult) => {
+    if (!modelEvent) return;
     const p = modelPropellers.find(p => {
       return p.name === result.value[0];
     });
-    setPropeller(p);
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.propeller = p;
+      updateStatistics();
+    });
   };
 
   const onChangeEventStyle = (result: EnumPickerResult) => {
+    if (!modelEvent) return;
+    const previous = {
+      eventStyle: modelEvent?.eventStyle,
+    };
+
     const s = eventStyles.find(s => {
       return s.name === result.value[0];
     });
-    setEventStyle(s);
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.eventStyle = s;
+      updateStatistics({ previous });
+    });
   };
 
   const onChangeLocation = (result: LocationsMapResult) => {
+    if (!modelEvent) return;
     const l = locations.find(l => {
       return l._id.toString() === result.locationId;
     });
-    setLocation(l);
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.location = l;
+      updateStatistics();
+    });
   };
 
   const onChangePilot = (result: EnumPickerResult) => {
+    if (!modelEvent) return;
     const p = pilots.find(p => {
       return p.name === result.value[0];
     });
-    setPilot(p);
+    if (p) {
+      realm.write(() => {
+        modelEvent.updatedOn = DateTime.now().toISO();
+        modelEvent.pilot = p;
+        updateStatistics();
+      });
+    }
   };
 
   const onChangeOutcome = (result: EnumPickerResult) => {
-    setOutcome(result.value[0] as EventOutcome);
+    if (!modelEvent) return;
+    const previous = {
+      outcome: modelEvent?.outcome,
+    };
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.outcome = result.value[0] as EventOutcome;
+      updateStatistics({ previous });
+    });
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
-    setNotes(result.text);
+    if (!modelEvent) return;
+    realm.write(() => {
+      modelEvent.updatedOn = DateTime.now().toISO();
+      modelEvent.notes = result.text;
+      updateStatistics();
+    });
   };
 
   const renderBatteryCycle: ListRenderItem<BatteryCycle> = ({
@@ -292,230 +405,285 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider />
-      <ListItem
-        title={modelEvent.model?.name}
-        subtitle={modelEvent.model && modelSummary(modelEvent.model)}
-        titleStyle={s.modelText}
-        subtitleStyle={s.modelText}
-        subtitleNumberOfLines={2}
-        position={['first', 'last']}
-        leftImage={
-          <View style={s.modelIconContainer}>
-            {modelEvent.model?.image ? (
-              <Image
-                source={{ uri: modelEvent.model.image }}
-                resizeMode={'cover'}
-                style={s.modelImage}
+    <>
+      <ScrollView
+        style={theme.styles.view}
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        <Divider />
+        <ListItem
+          title={modelEvent.model?.name}
+          subtitle={modelEvent.model && modelSummary(modelEvent.model)}
+          subtitleLines={0}
+          position={['first', 'last']}
+          leftContentStyle={{ paddingLeft: 0 }}
+          leftContent={
+            <View>
+              {modelEvent.model?.image ? (
+                <Image
+                  source={{ uri: modelEvent.model.image }}
+                  resizeMode={'cover'}
+                  style={s.modelImage}
+                />
+              ) : modelEvent?.model?.type ? (
+                <View style={s.modelSvgContainer}>
+                  {modelEvent.model?.type && (
+                    <SvgXml
+                      xml={getColoredSvg(
+                        modelTypeIconProps[modelEvent.model.type]
+                          ?.name as string,
+                      )}
+                      width={s.modelImage.width}
+                      height={s.modelImage.height}
+                      color={theme.colors.brandSecondary}
+                      style={s.modelIcon}
+                    />
+                  )}
+                </View>
+              ) : null}
+            </View>
+          }
+        />
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
+            }
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          onSubmit={onSubmit}>
+          {({ handleChange, values }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
               />
-            ) : (
-              <View style={s.modelSvgContainer}>
-                {modelEvent.model?.type && (
-                  <SvgXml
-                    xml={getColoredSvg(
-                      modelTypeIcons[modelEvent.model.type]?.name as string,
-                    )}
-                    width={s.modelImage.width}
-                    height={s.modelImage.height}
-                    color={theme.colors.brandSecondary}
-                    style={s.modelIcon}
+              <Divider />
+              <ListItemDateTime
+                title={'Date'}
+                value={DateTime.fromISO(modelEvent.date).toFormat(
+                  "MMM d, yyyy 'at' h:mm a",
+                )}
+                mode={'datetime'}
+                pickerValue={modelEvent.date}
+                expanded={expandedDate}
+                position={['first']}
+                accentColor={theme.colors.brandSecondary}
+                onPress={() => setExpandedDate(!expandedDate)}
+                onChange={onDateChange}
+              />
+              <ListItemInput
+                ref={durationFieldRef}
+                title={'Duration'}
+                titleStyle={!MSSToSeconds(values.duration) ? s.required : {}}
+                units={'m:ss'}
+                container={'right'}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: (_, unformatted) =>
+                    handleChange('duration')(unformatted),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.duration),
+                  value: values.duration,
+                  placeholder: '0:00',
+                  mask: Masks.MINUTES_SECONDS,
+                  rtlNumber: true,
+                  keyboardType: 'number-pad',
+                }}
+              />
+              <ListItem
+                title={'Location'}
+                value={modelEvent.location?.name || 'Unknown'}
+                rightContent={'chevron-right'}
+                onPress={() =>
+                  navigation.navigate('LocationNavigator', {
+                    screen: 'LocationsMap',
+                    params: {
+                      eventName: 'event-location',
+                      locationId: modelEvent.location?._id.toString(),
+                    },
+                  })
+                }
+              />
+              <ListItem
+                title={'Outcome'}
+                position={['last']}
+                rightContent={'chevron-right'}
+                value={<EventRating value={modelEvent.outcome} />}
+                onPress={() =>
+                  navigation.navigate('EnumPicker', {
+                    title: `${kind.name} Outcome`,
+                    headerBackTitle: `${kind.name}`,
+                    values: Object.values(EventOutcome),
+                    icons: eventOutcomeIcons,
+                    selected: modelEvent.outcome,
+                    eventName: 'event-outcome',
+                  })
+                }
+              />
+              <Divider />
+              {modelEvent.model?.type &&
+                modelHasPropeller(modelEvent.model.type) && (
+                  <ListItem
+                    title={'Propeller'}
+                    value={modelEvent.propeller?.name || 'None'}
+                    position={['first', 'last']}
+                    rightContent={'chevron-right'}
+                    onPress={() =>
+                      navigation.navigate('EnumPicker', {
+                        enumName: 'ModelPropeller',
+                        title: 'Propeller',
+                        headerBackTitle: 'Model',
+                        footer:
+                          'You can manage propellers through the Globals section in the Setup tab.',
+                        values: modelPropellers.map(p => {
+                          return p.name;
+                        }),
+                        selected: modelEvent.propeller?.name,
+                        mode: 'one-or-none',
+                        eventName: 'event-model-propeller',
+                      })
+                    }
                   />
                 )}
-              </View>
-            )}
-          </View>
-        }
-        rightImage={false}
-        zeroEdgeContent={true}
-      />
-      <Divider />
-      <ListItemDate
-        title={'Date'}
-        value={
-          date && DateTime.fromISO(date).toFormat("MMM d, yyyy 'at' h:mm a")
-        }
-        pickerValue={date}
-        rightImage={false}
-        expanded={expandedDate}
-        position={['first']}
-        onPress={() => setExpandedDate(!expandedDate)}
-        onDateChange={onDateChange}
-      />
-      <ListItemInput
-        title={'Duration'}
-        label={'m:ss'}
-        value={duration.current}
-        titleStyle={!duration.current ? s.required : {}}
-        placeholder={'Value'}
-        numeric={true}
-        numericProps={{ prefix: '', separator: ':' }}
-        keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (duration.current = value))}
-      />
-      <ListItem
-        title={'Location'}
-        value={location?.name || 'Unknown'}
-        onPress={() =>
-          navigation.navigate('LocationNavigator', {
-            screen: 'LocationsMap',
-            params: {
-              eventName: 'event-location',
-              locationId: location?._id.toString(),
-            },
-          })
-        }
-      />
-      <ListItem
-        title={'Outcome'}
-        position={['last']}
-        value={<EventRating value={outcome} />}
-        onPress={() =>
-          navigation.navigate('EnumPicker', {
-            title: `${kind.name} Outcome`,
-            headerBackTitle: `${kind.name}`,
-            values: Object.values(EventOutcome),
-            icons: eventOutcomeIcons,
-            selected: outcome,
-            eventName: 'event-outcome',
-          })
-        }
-      />
-      <Divider />
-      {modelEvent.model?.type && modelHasPropeller(modelEvent.model.type) && (
-        <ListItem
-          title={'Propeller'}
-          value={propeller?.name || 'None'}
+              {modelEvent.model?.logsFuel && (
+                <>
+                  <Divider />
+                  <ListItem
+                    title={'Fuel'}
+                    position={['first']}
+                    rightContent={'chevron-right'}
+                    value={modelEvent.fuel?.name || 'Unspecified'}
+                    onPress={() =>
+                      navigation.navigate('EnumPicker', {
+                        enumName: 'ModelFuel',
+                        title: 'Fuel',
+                        headerBackTitle: `${kind.name}`,
+                        footer:
+                          'You can manage fuels through the Globals section in the Setup tab.',
+                        values: modelFuels.map(f => {
+                          return f.name;
+                        }),
+                        selected: modelEvent.fuel?.name,
+                        mode: 'one-or-none',
+                        eventName: 'event-model-fuel',
+                      })
+                    }
+                  />
+                  <ListItemInput
+                    ref={fuelConsumedFieldRef}
+                    position={['last']}
+                    title={'Fuel Consumed'}
+                    units={'oz'}
+                    container={'right'}
+                    inputProps={{
+                      inputAccessoryViewID: 'keyboardAccessory',
+                      inputStyle: {
+                        backgroundColor: theme.colors.transparent,
+                        textAlign: 'right',
+                      },
+                      onChangeText: (_, unformatted) =>
+                        handleChange('fuelConsumed')(unformatted),
+                      onFocus: () =>
+                        keyboardAccessory.current?.focusedField(
+                          Fields.fuelConsumed,
+                        ),
+                      value: values.fuelConsumed,
+                      placeholder: '0.00',
+                      mask: Masks.OUNCES,
+                      rtlNumber: true,
+                      keyboardType: 'number-pad',
+                    }}
+                  />
+                </>
+              )}
+              <Divider />
+              <ListItem
+                title={'Pilot'}
+                position={['first']}
+                rightContent={'chevron-right'}
+                value={modelEvent.pilot?.name || 'Unknown'}
+                onPress={() =>
+                  navigation.navigate('EnumPicker', {
+                    enumName: 'Pilot',
+                    title: 'Pilot',
+                    headerBackTitle: `${kind.name}`,
+                    footer:
+                      'You can manage pilots through the Globals section in the Setup tab.',
+                    values: pilots.map(p => {
+                      return p.name;
+                    }),
+                    selected: modelEvent.pilot?.name,
+                    eventName: 'event-pilot',
+                  })
+                }
+              />
+              <ListItem
+                title={'Style'}
+                position={['last']}
+                rightContent={'chevron-right'}
+                value={modelEvent.eventStyle?.name || 'Unspecified'}
+                onPress={() =>
+                  navigation.navigate('EnumPicker', {
+                    enumName: 'EventStyle',
+                    title: 'Style',
+                    headerBackTitle: `${kind.name}`,
+                    footer:
+                      'You can manage styles through the Globals section in the Setup tab.',
+                    values: eventStyles.map(s => {
+                      return s.name;
+                    }),
+                    selected: modelEvent.eventStyle?.name,
+                    mode: 'one-or-none',
+                    eventName: 'event-model-style',
+                  })
+                }
+              />
+            </View>
+          )}
+        </Formik>
+        <Divider text={'NOTES'} />
+        <ListItemNotes
+          notes={modelEvent.notes}
           position={['first', 'last']}
           onPress={() =>
-            navigation.navigate('EnumPicker', {
-              enumName: 'ModelPropeller',
-              title: 'Propeller',
-              headerBackTitle: 'Model',
-              footer:
-                'You can manage propellers through the Globals section in the Setup tab.',
-              values: modelPropellers.map(p => {
-                return p.name;
-              }),
-              selected: propeller?.name,
-              mode: 'one-or-none',
-              eventName: 'event-model-propeller',
+            navigation.navigate('NotesEditor', {
+              title: 'Event Notes',
+              text: modelEvent.notes,
+              eventName: 'event-notes',
             })
           }
         />
-      )}
-      <Divider />
-      <ListItem
-        title={'Fuel'}
-        position={['first']}
-        value={fuel?.name || 'Unspecified'}
-        onPress={() =>
-          navigation.navigate('EnumPicker', {
-            enumName: 'ModelFuel',
-            title: 'Fuel',
-            headerBackTitle: `${kind.name}`,
-            footer:
-              'You can manage fuels through the Globals section in the Setup tab.',
-            values: modelFuels.map(f => {
-              return f.name;
-            }),
-            selected: fuel?.name,
-            mode: 'one-or-none',
-            eventName: 'event-model-fuel',
-          })
-        }
+        {modelEvent.model?.logsBatteries && (
+          <FlatList
+            scrollEnabled={false}
+            data={modelEvent.batteryCycles}
+            renderItem={renderBatteryCycle}
+            keyExtractor={(_item, index) => `${index}`}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={
+              <Divider
+                text={
+                  modelEvent.batteryCycles.length === 1
+                    ? 'BATTERY USED'
+                    : 'BATTERIES USED'
+                }
+              />
+            }
+          />
+        )}
+        <Divider />
+      </ScrollView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={resolvedRefs}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <ListItemInput
-        title={'Fuel Consumed'}
-        value={fuelConsumed.current}
-        label="oz"
-        placeholder={'Value'}
-        numeric={true}
-        numericProps={{ precision: 2, prefix: '' }}
-        position={['last']}
-        keyboardType={'number-pad'}
-        onChangeText={value =>
-          setDebounced(() => (fuelConsumed.current = value))
-        }
-      />
-      <Divider />
-      <ListItem
-        title={'Pilot'}
-        position={['first']}
-        value={pilot?.name || 'Unknown'}
-        onPress={() =>
-          navigation.navigate('EnumPicker', {
-            enumName: 'Pilot',
-            title: 'Pilot',
-            headerBackTitle: `${kind.name}`,
-            footer:
-              'You can manage pilots through the Globals section in the Setup tab.',
-            values: pilots.map(p => {
-              return p.name;
-            }),
-            selected: pilot?.name,
-            eventName: 'event-pilot',
-          })
-        }
-      />
-      <ListItem
-        title={'Style'}
-        position={['last']}
-        value={eventStyle?.name || 'Unspecified'}
-        onPress={() =>
-          navigation.navigate('EnumPicker', {
-            enumName: 'EventStyle',
-            title: 'Style',
-            headerBackTitle: `${kind.name}`,
-            footer:
-              'You can manage styles through the Globals section in the Setup tab.',
-            values: eventStyles.map(s => {
-              return s.name;
-            }),
-            selected: eventStyle?.name,
-            mode: 'one-or-none',
-            eventName: 'event-model-style',
-          })
-        }
-      />
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            title: 'Event Notes',
-            headerButtonStyle: {
-              color: theme.colors.screenHeaderInvButtonText,
-            },
-            text: notes,
-            eventName: 'event-notes',
-          })
-        }
-      />
-      {modelEvent.model?.logsBatteries && (
-        <FlatList
-          scrollEnabled={false}
-          data={modelEvent.batteryCycles}
-          renderItem={renderBatteryCycle}
-          keyExtractor={(_item, index) => `${index}`}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={
-            <Divider
-              text={
-                modelEvent.batteryCycles.length === 1
-                  ? 'BATTERY USED'
-                  : 'BATTERIES USED'
-              }
-            />
-          }
-        />
-      )}
-      <Divider />
-    </ScrollView>
+    </>
   );
 };
 
@@ -523,20 +691,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelIcon: {
     transform: [{ rotate: '-45deg' }],
   },
-  modelIconContainer: {
-    position: 'absolute',
-    left: -15,
-  },
   modelImage: {
-    width: 150,
-    height: 85,
+    width: 100,
+    height: 80,
   },
   modelSvgContainer: {
     backgroundColor: theme.colors.subtleGray,
-  },
-  modelText: {
-    left: 140,
-    maxWidth: '48%',
   },
   required: {
     color: theme.colors.assertive,

@@ -1,18 +1,18 @@
-import { Achievement, Pilot } from 'realmdb/Pilot';
 import { AchievementModalMethods, AchievementModalProps } from './types';
-import { AppTheme, useTheme } from 'theme';
-import { FlatList, ListRenderItem, Text, View } from 'react-native';
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { DateTime } from 'luxon';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { Modal } from '@react-native-ajp-elements/ui';
-import { Model } from 'realmdb/Model';
-import { achievementConfig } from 'lib/achievement';
-import { eventKind } from 'lib/modelEvent';
+import { Modal } from '@react-native-hello/ui';
 import { makeStyles } from '@rn-vui/themed';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { achievementConfig } from 'lib/achievement';
 import { useEvent } from 'lib/event';
+import { eventKind } from 'lib/modelEvent';
+import { Trophy } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, Text, View } from 'react-native';
+import { Model } from 'realmdb/Model';
+import { Achievement, Pilot } from 'realmdb/Pilot';
+import { AppTheme, useTheme } from 'theme';
 
 type AchievementModal = AchievementModalMethods;
 
@@ -20,7 +20,7 @@ const AchievementModal = React.forwardRef<
   AchievementModal,
   AchievementModalProps
 >((props, ref) => {
-  const { onDismiss, snapPoints = [290] } = props;
+  const { onDismiss, snapPoints = ['92%'] } = props;
 
   const theme = useTheme();
   const s = useStyles(theme);
@@ -75,11 +75,7 @@ const AchievementModal = React.forwardRef<
   }) => {
     return (
       <View style={s.achievementContainer}>
-        <Icon
-          name={achievementConfig[achievement.name].icon}
-          color={achievementConfig[achievement.name].iconColor}
-          size={60}
-        />
+        {achievementConfig[achievement.name].icon}
         <Text style={s.achievementName}>
           {achievement.name.replace('{Event}', eventKind(model?.type).name)}
         </Text>
@@ -107,13 +103,7 @@ const AchievementModal = React.forwardRef<
       )}
       <View style={s.container}>
         <View style={s.hero}>
-          <Icon
-            name={'medal'}
-            solid={true}
-            color={theme.colors.midGray}
-            size={60}
-            style={s.heroIcon}
-          />
+          <Trophy color={theme.colors.midGray} size={60} style={s.heroIcon} />
         </View>
         {achievements.length ? (
           <FlatList
@@ -125,7 +115,11 @@ const AchievementModal = React.forwardRef<
             contentContainerStyle={s.achievementListContainer}
           />
         ) : (
-          <Text style={s.title}>{`Waiting for your first achievement`}</Text>
+          <EmptyView
+            info
+            message={'No Achievement'}
+            details={'Waiting for your first achievement.'}
+          />
         )}
       </View>
     </Modal>
@@ -142,18 +136,17 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'space-between',
   },
   headerLeft: {
-    ...theme.styles.textSmall,
+    ...theme.styles.textMedium,
   },
   headerRight: {
-    ...theme.styles.textSmall,
+    ...theme.styles.textMedium,
     textAlign: 'right',
   },
   container: {
     top: 50,
     marginVertical: 10,
     paddingBottom: 10,
-    height: 165,
-    backgroundColor: theme.colors.subtleGray,
+    backgroundColor: theme.colors.viewBackground,
   },
   hero: {
     position: 'absolute',
@@ -164,8 +157,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderWidth: 7,
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: theme.colors.subtleGray,
-    borderColor: theme.colors.white,
+    backgroundColor: theme.colors.viewBackground,
+    borderColor: theme.colors.viewAltBackground,
   },
   heroIcon: {
     alignSelf: 'center',

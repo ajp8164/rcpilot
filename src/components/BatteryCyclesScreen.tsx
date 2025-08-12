@@ -1,39 +1,39 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
 import {
-  ListItem,
-  SectionListHeader,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItemSwipeable,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
 import {
   batteryCycleDescription,
   batteryCycleTitle,
   useBatteryCyclesFilter,
 } from 'lib/batteryCycle';
-import { useObject, useRealm } from '@realm/react';
-
+import { groupItems } from 'lib/sectionList';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { CircleMinus, Funnel, FunnelPlus, Trash2 } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
-import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
-import { Button } from '@rn-vui/base';
-import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DateTime } from 'luxon';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { FilterType } from 'types/filter';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useSelector } from 'react-redux';
+import { AppTheme, useTheme } from 'theme';
+import { FilterType } from 'types/filter';
+import { BatteriesNavigatorParamList } from 'types/navigation';
 
 type Section = {
   title?: string;
@@ -50,7 +50,6 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
@@ -58,9 +57,11 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const batteryCycles = useBatteryCyclesFilter({ batteryId });
   const battery = useObject(Battery, new BSON.ObjectId(batteryId));
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <>
@@ -68,18 +69,14 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={
-                !filterId && (!batteryCycles.length || listEditor.enabled)
+                !filterId && (!batteryCycles.length || listEditorState?.enabled)
               }
               icon={
-                <CustomIcon
-                  name={filterId ? 'filter-check' : 'filter'}
-                  style={[
-                    s.headerIcon,
-                    !filterId && (!batteryCycles.length || listEditor.enabled)
-                      ? s.headerIconDisabled
-                      : {},
-                  ]}
-                />
+                filterId ? (
+                  <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                ) : (
+                  <Funnel color={theme.colors.screenHeaderButtonText} />
+                )
               }
               onPress={() =>
                 navigation.navigate('BatteryCycleFiltersNavigator', {
@@ -91,19 +88,19 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               }
             />
             <Button
-              title={listEditor.enabled ? 'Done' : 'Edit'}
+              title={listEditorState?.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!batteryCycles.length}
-              onPress={listEditor.onEdit}
+              onPress={() => listEditorRef.current?.onToggleEditMode()}
             />
           </>
         );
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterId, listEditor.enabled]);
+  }, [filterId, listEditorState?.enabled]);
 
   const groupCycles = (
     cycles?: BatteryCycle[],
@@ -143,48 +140,44 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
     index: number;
   }) => {
     return (
-      <ListItem
-        ref={ref => {
-          ref && listEditor.add(ref, 'battery-cycles', cycle._id.toString());
-        }}
-        key={index}
+      <ListItemSwipeable
+        key={cycle._id.toString()}
         title={batteryCycleTitle(cycle)}
         subtitle={batteryCycleDescription(cycle)}
         subtitleStyle={[theme.styles.textTiny, theme.styles.textDim]}
+        subtitleLines={3}
         position={listItemPosition(index, section.data.length)}
-        onPress={() =>
+        rightContent={'chevron-right'}
+        listEditor={listEditorRef.current}
+        onPress={() => {
           navigation.navigate('BatteryCycleEditor', {
             batteryId,
             cycleNumber: cycle.cycleNumber,
-          })
-        }
-        editable={{
-          item: {
-            icon: 'remove-circle',
+          });
+        }}
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+          draggable: true,
+        }}
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
             color: theme.colors.assertive,
-            action: 'open-swipeable',
-          },
-          reorder: true,
-        }}
-        showEditor={listEditor.show}
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () =>
-                confirmAction(deleteCycle, {
-                  label: 'Delete Cycle',
-                  title:
-                    'This action cannot be undone.\nAre you sure you want to delete this battery cycle?',
-                  value: cycle.cycleNumber,
-                }),
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: 'Delete Cycle',
+                title:
+                  'This action cannot be undone.\nAre you sure you want to delete this battery cycle?',
+              });
             },
-          ],
-        }}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('battery-cycles', cycle._id.toString())
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+            onPress: () => deleteCycle(cycle.cycleNumber),
+          },
+        ]}
       />
     );
   };
@@ -194,7 +187,12 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }
 
   if (filterId && !batteryCycles.length) {
-    return <EmptyView message={'No Battery Cycles Match Your Filter'} />;
+    return (
+      <EmptyView
+        message={'No Battery Cycles Match Your Filter'}
+        details={'Adjust your filter settings to see your battery cycles.'}
+      />
+    );
   }
 
   if (!batteryCycles.length) {
@@ -208,31 +206,25 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SectionList
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}
-      stickySectionHeadersEnabled={true}
-      style={[theme.styles.view, s.sectionList]}
-      sections={groupCycles([...batteryCycles].reverse())} // Most recent cycles at the top
-      keyExtractor={(item, index) => `${index}${item.cycleNumber}`}
-      renderItem={renderBatteryCycle}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
-      ListFooterComponent={<Divider />}
-    />
+    <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        style={[theme.styles.view, s.sectionList]}
+        sections={groupCycles([...batteryCycles].reverse())} // Most recent cycles at the top
+        keyExtractor={(item, index) => `${index}${item.cycleNumber}`}
+        renderItem={renderBatteryCycle}
+        renderSectionHeader={({ section: { title } }) => (
+          <Divider text={title} />
+        )}
+        ListFooterComponent={<Divider />}
+      />
+    </ListEditor>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-    marginHorizontal: 10,
-  },
-  headerIconDisabled: {
-    color: theme.colors.disabled,
-  },
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

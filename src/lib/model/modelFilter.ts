@@ -5,7 +5,6 @@ import {
   NumberRelation,
   StringRelation,
 } from 'components/molecules/filters';
-
 import { ModelFilterValues } from 'types/filter';
 
 export const defaultFilter: ModelFilterValues = {

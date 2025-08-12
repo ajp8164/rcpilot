@@ -1,26 +1,40 @@
-import { ListItem, ListItemInput } from 'components/atoms/List';
+import * as Yup from 'yup';
+import {
+  Divider,
+  InputMethods,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListItem,
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import {
+  ListItemInput,
+  ListItemInputMethods,
+  ListItemNotes,
+} from 'components/atoms/List';
+import { Formik, FormikProps } from 'formik';
+import { useEvent } from 'lib/event';
+import { Masks } from 'lib/inputMasks';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+import { BSON } from 'realm';
+import { ModelPropeller } from 'realmdb/ModelPropeller';
+import { useTheme } from 'theme';
 import { MeasurementUnits, MeasurementUnitsAbbr } from 'types/common';
 import {
   NewModelPropellerNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import React, { useEffect, useRef, useState } from 'react';
-import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { CompositeScreenProps } from '@react-navigation/core';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { ScrollView } from 'react-native';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ModelPropellerEditor'>,
@@ -30,12 +44,29 @@ export type Props = CompositeScreenProps<
   >
 >;
 
+// Order of fields for accessory view.
+enum Fields {
+  name,
+  vendor,
+  numberOfBlades,
+  diameter,
+  pitch,
+}
+
+type FormValues = {
+  name: string;
+  vendor: string;
+  numberOfBlades: string;
+  diameter: string;
+  pitch: string;
+  measurementUnits: MeasurementUnits;
+  notes: string;
+};
+
 const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
   const { modelPropellerId } = route.params || {};
   const theme = useTheme();
   const event = useEvent();
-  const setDebounced = useDebouncedRender();
-  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const modelPropeller = useObject(
@@ -43,75 +74,52 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
     new BSON.ObjectId(modelPropellerId),
   );
 
-  const name = useRef(modelPropeller?.name || undefined);
-  const vendor = useRef(modelPropeller?.vendor || undefined);
-  const numberOfBlades = useRef(
-    modelPropeller?.numberOfBlades?.toString() || undefined,
-  );
-  const diameter = useRef(modelPropeller?.diameter?.toString() || undefined);
-  const pitch = useRef(modelPropeller?.pitch?.toString() || undefined);
-  const [measurementUnits, setMeasurementUnits] = useState<MeasurementUnits>(
-    modelPropeller?.measurementUnits || MeasurementUnits.Inches,
-  );
-  const [notes, setNotes] = useState(modelPropeller?.notes || undefined);
+  const initialValues = {
+    name: modelPropeller?.name || '',
+    vendor: modelPropeller?.vendor || '',
+    numberOfBlades: modelPropeller?.numberOfBlades?.toFixed() || '',
+    diameter: modelPropeller?.diameter?.toFixed(2) || '',
+    pitch: modelPropeller?.pitch?.toFixed(2) || '',
+    measurementUnits:
+      modelPropeller?.measurementUnits || MeasurementUnits.Inches,
+    notes: modelPropeller?.notes || '',
+  } as FormValues;
 
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    vendor: Yup.string(),
+    numberOfBlades: Yup.string().required(),
+    diameter: Yup.string().required(),
+    pitch: Yup.string().required(),
+    measurementUnits: Yup.string().required(),
+    notes: Yup.string(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const nameFieldRef = useRef<ListItemInputMethods>(null);
+  const vendorFieldRef = useRef<ListItemInputMethods>(null);
+  const numberOfBladesFieldRef = useRef<ListItemInputMethods>(null);
+  const diameterFieldRef = useRef<ListItemInputMethods>(null);
+  const pitchFieldRef = useRef<ListItemInputMethods>(null);
+  const [resolvedRefs, setResolvedRefs] = useState<(InputMethods | null)[]>([]);
+
+  // Supports keyboard accessory view.
+  // Ensures all refs are set.
   useEffect(() => {
-    const canSave =
-      !!name.current &&
-      (!eqString(modelPropeller?.name, name.current) ||
-        !eqString(modelPropeller?.vendor, vendor.current) ||
-        !eqNumber(modelPropeller?.numberOfBlades, numberOfBlades.current) ||
-        !eqNumber(modelPropeller?.diameter, diameter.current) ||
-        !eqNumber(modelPropeller?.pitch, pitch.current) ||
-        !eqString(modelPropeller?.measurementUnits, measurementUnits) ||
-        !eqString(modelPropeller?.notes, notes));
-
-    const save = () => {
-      if (modelPropeller) {
-        realm.write(() => {
-          modelPropeller.updatedOn = DateTime.now().toISO();
-          modelPropeller.name = name.current || 'no-name';
-          modelPropeller.vendor = vendor.current;
-          modelPropeller.numberOfBlades = toNumber(numberOfBlades.current);
-          modelPropeller.diameter = toNumber(diameter.current);
-          modelPropeller.pitch = toNumber(pitch.current);
-          modelPropeller.measurementUnits = measurementUnits;
-          modelPropeller.notes = notes;
-        });
-      } else {
-        realm.write(() => {
-          const now = DateTime.now().toISO();
-          realm.create('ModelPropeller', {
-            createdOn: now,
-            updatedOn: now,
-            name: name.current,
-            vendor: vendor.current,
-            numberOfBlades: toNumber(numberOfBlades.current),
-            diameter: toNumber(diameter.current),
-            pitch: toNumber(pitch.current),
-            measurementUnits,
-            notes,
-          });
-        });
-      }
-    };
-
-    const onDone = () => {
-      save();
-      navigation.goBack();
-    };
-
-    setScreenEditHeader({ enabled: canSave, action: onDone });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    name.current,
-    vendor.current,
-    diameter.current,
-    pitch.current,
-    measurementUnits,
-    numberOfBlades.current,
-    notes,
-  ]);
+    setResolvedRefs(
+      [
+        nameFieldRef.current,
+        vendorFieldRef.current,
+        numberOfBladesFieldRef.current,
+        diameterFieldRef.current,
+        pitchFieldRef.current,
+      ].filter(Boolean),
+    );
+  }, []);
 
   useEffect(() => {
     event.on('propeller-measurement-units', onChangeMeasurementUnits);
@@ -126,93 +134,258 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const cancel = () => {
+    formikRef.current?.resetForm();
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    const now = DateTime.now().toISO();
+    if (modelPropeller) {
+      realm.write(() => {
+        modelPropeller.updatedOn = now;
+        modelPropeller.name = values.name || 'no-name';
+        modelPropeller.vendor = values.vendor;
+        modelPropeller.numberOfBlades = parseFloat(values.numberOfBlades);
+        modelPropeller.diameter = parseFloat(values.diameter);
+        modelPropeller.pitch = parseFloat(values.pitch);
+        modelPropeller.measurementUnits = values.measurementUnits;
+        modelPropeller.notes = values.notes;
+      });
+    } else {
+      realm.write(() => {
+        realm.create('ModelPropeller', {
+          createdOn: now,
+          updatedOn: now,
+          name: values.name,
+          vendor: values.vendor,
+          numberOfBlades: parseFloat(values.numberOfBlades),
+          diameter: parseFloat(values.diameter),
+          pitch: parseFloat(values.pitch),
+          measurementUnits: values.measurementUnits,
+          notes: values.notes,
+        });
+      });
+    }
+  };
+
   const onChangeMeasurementUnits = (result: EnumPickerResult) => {
-    setMeasurementUnits(result.value[0] as MeasurementUnits);
+    formikRef.current?.setFieldValue('measurementUnits', result.value[0]);
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
-    setNotes(result.text);
+    formikRef.current?.setFieldValue('notes', result.text);
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, changedFields, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    // Update header as name changes.
+    if (changedFields?.includes('name')) {
+      navigation.setOptions({
+        title: next?.values.name,
+      });
+    }
+
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
   };
 
   return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider />
-      <ListItemInput
-        value={name.current}
-        placeholder={'Unnamed Propeller'}
-        position={['first', 'last']}
-        onChangeText={value => setDebounced(() => (name.current = value))}
+    <>
+      <ScrollView
+        style={theme.styles.view}
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        <Divider text={'DETAILS'} />
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
+            }
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          onSubmit={onSubmit}>
+          {({ errors, handleChange, values }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
+              />
+              <ListItemInput
+                ref={nameFieldRef}
+                position={['first', 'last']}
+                error={!!errors.name}
+                inputProps={{
+                  label: 'Propeller Name',
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('name'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.name),
+                  value: values.name,
+                  placeholder: 'Propeller Name',
+                  autoCapitalize: 'words',
+                }}
+              />
+              <Divider />
+              <ListItemInput
+                ref={vendorFieldRef}
+                position={['first']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('vendor'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.vendor),
+                  value: values.vendor,
+                  placeholder: 'Vendor Name',
+                  autoCapitalize: 'words',
+                }}
+              />
+              <ListItemInput
+                ref={numberOfBladesFieldRef}
+                title={'Number of Blades'}
+                error={!!errors.numberOfBlades}
+                container={'right'}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: (_, unformatted) =>
+                    handleChange('numberOfBlades')(unformatted),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(
+                      Fields.numberOfBlades,
+                    ),
+                  value: values.numberOfBlades,
+                  placeholder: 'Unknown',
+                  mask: Masks.PROPELLER_BLADE_COUNT,
+                  rtlNumber: true,
+                  keyboardType: 'number-pad',
+                }}
+              />
+              <ListItemInput
+                ref={diameterFieldRef}
+                title={'Diameter'}
+                error={!!errors.diameter}
+                units={
+                  MeasurementUnitsAbbr[
+                    values.measurementUnits as keyof typeof MeasurementUnitsAbbr
+                  ]
+                }
+                container={'right'}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: (_, unformatted) =>
+                    handleChange('diameter')(unformatted),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.diameter),
+                  value: values.diameter,
+                  placeholder: 'Unknown',
+                  mask: Masks.PROPELLER_DIAMETER,
+                  rtlNumber: true,
+                  keyboardType: 'number-pad',
+                }}
+              />
+              <ListItemInput
+                ref={pitchFieldRef}
+                title={'Pitch'}
+                error={!!errors.pitch}
+                units={
+                  MeasurementUnitsAbbr[
+                    values.measurementUnits as keyof typeof MeasurementUnitsAbbr
+                  ]
+                }
+                container={'right'}
+                position={['last']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: (_, unformatted) =>
+                    handleChange('pitch')(unformatted),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.pitch),
+                  value: values.pitch,
+                  placeholder: 'Unknown',
+                  mask: Masks.PROPELLER_PITCH,
+                  rtlNumber: true,
+                  keyboardType: 'number-pad',
+                }}
+              />
+              <Divider />
+              <ListItem
+                title={'Measurement Units'}
+                value={values.measurementUnits}
+                position={['first', 'last']}
+                rightContent={'chevron-right'}
+                onPress={() =>
+                  navigation.navigate('EnumPicker', {
+                    title: 'Measurement Units',
+                    headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
+                    values: Object.values(MeasurementUnits),
+                    selected: values.measurementUnits,
+                    eventName: 'propeller-measurement-units',
+                  })
+                }
+              />
+              <Divider text={'NOTES'} />
+              <ListItemNotes
+                notes={values.notes}
+                position={['first', 'last']}
+                onPress={() =>
+                  navigation.navigate('NotesEditor', {
+                    title: 'Propeller Notes',
+                    text: values.notes,
+                    eventName: 'propeller-notes',
+                  })
+                }
+              />
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={resolvedRefs}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <Divider />
-      <ListItemInput
-        value={vendor.current}
-        placeholder={'Unnamed Vendor'}
-        position={['first']}
-        onChangeText={value => setDebounced(() => (vendor.current = value))}
-      />
-      <ListItemInput
-        title={'Number of Blades'}
-        value={numberOfBlades.current}
-        placeholder={'Unknown'}
-        numeric={true}
-        numericProps={{ prefix: '', precision: 0 }}
-        keyboardType={'number-pad'}
-        onChangeText={value =>
-          setDebounced(() => (numberOfBlades.current = value))
-        }
-      />
-      <ListItemInput
-        title={'Diameter'}
-        label={MeasurementUnitsAbbr[measurementUnits]}
-        value={diameter.current}
-        placeholder={'Unknown'}
-        numeric={true}
-        numericProps={{ prefix: '' }}
-        keyboardType={'number-pad'}
-        onChangeText={value => setDebounced(() => (diameter.current = value))}
-      />
-      <ListItemInput
-        title={'Pitch'}
-        label={MeasurementUnitsAbbr[measurementUnits]}
-        value={pitch.current}
-        placeholder={'Unknown'}
-        numeric={true}
-        numericProps={{ prefix: '' }}
-        keyboardType={'number-pad'}
-        position={['last']}
-        onChangeText={value => setDebounced(() => (pitch.current = value))}
-      />
-      <Divider />
-      <ListItem
-        title={'Measurement Units'}
-        value={measurementUnits}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('EnumPicker', {
-            title: 'Measurement Units',
-            headerBackTitle: modelPropeller ? 'Propeller' : 'New Prop',
-            values: Object.values(MeasurementUnits),
-            selected: measurementUnits,
-            eventName: 'propeller-measurement-units',
-          })
-        }
-      />
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            title: 'Propeller Notes',
-            text: notes,
-            eventName: 'propeller-notes',
-          })
-        }
-      />
-    </ScrollView>
+    </>
   );
 };
 

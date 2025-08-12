@@ -1,17 +1,15 @@
-import { Alert, ScrollView } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import React, { useContext } from 'react';
-
+import { Divider, ListItem } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
 import { DatabaseInfoContext } from 'lib/database';
 import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rn-vui/themed';
-import { revertSettings } from 'store/actions';
+import React, { useContext } from 'react';
+import { Alert, ScrollView } from 'react-native';
 import { store } from 'store';
-import { useRealm } from '@realm/react';
+import { revertSettings } from 'store/actions';
+import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -20,7 +18,6 @@ export type Props = NativeStackScreenProps<
 
 const DatabaseInfoScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
   const realm = useRealm();
 
   const databaseInfo = useContext(DatabaseInfoContext);
@@ -43,17 +40,14 @@ const DatabaseInfoScreen = () => {
         title={'Version'}
         value={`v${databaseInfo.databaseVersion} (${DateTime.fromISO(databaseInfo.databaseVersionDate).toFormat('M/d/yyyy')})`}
         position={['first']}
-        rightImage={false}
       />
       <ListItem
         title={'Total Records'}
         value={`${databaseInfo.databaseObjects}`}
-        rightImage={false}
       />
       <ListItem
         title={'Total Size'}
         value={`${(databaseInfo.databaseSize / 1000000).toFixed(2)} MB`}
-        rightImage={false}
       />
       <ListItem
         title={'Last Modified'}
@@ -61,14 +55,14 @@ const DatabaseInfoScreen = () => {
           "M/d/yyyy 'at' h:mm a",
         )}
         position={['last']}
-        rightImage={false}
       />
-      <Divider text={'DANGER ZONE'} />
-      <ListItem
+      <Divider />
+      <Button
         title={'Reset Database'}
-        titleStyle={s.reset}
-        position={['first', 'last']}
-        rightImage={false}
+        titleStyle={theme.styles.buttonAssertiveTitle}
+        buttonStyle={theme.styles.buttonAssertive}
+        containerStyle={theme.styles.buttonContainer}
+        outline
         onPress={() => {
           Alert.alert(
             'Reset Database?',
@@ -84,13 +78,5 @@ const DatabaseInfoScreen = () => {
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  reset: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: theme.colors.assertive,
-  },
-}));
 
 export default DatabaseInfoScreen;

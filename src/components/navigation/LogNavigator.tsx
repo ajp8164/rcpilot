@@ -1,10 +1,10 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
-import { LogNavigatorParamList } from 'types/navigation';
 import LogScreen from 'components/LogScreen';
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import { LogNavigatorParamList } from 'types/navigation';
 
 const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
 
@@ -24,6 +24,9 @@ const LogNavigator = () => {
         component={LogScreen}
         options={{
           title: 'Log',
+          headerLargeTitle: true,
+          headerLargeTitleShadowVisible: false,
+          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
         }}
       />
       <LogStack.Screen

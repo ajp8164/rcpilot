@@ -1,0 +1,103 @@
+diff --git a/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.d.ts b/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.d.ts
+index 8219efa..20d1dd3 100644
+--- a/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.d.ts
++++ b/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.d.ts
+@@ -3,6 +3,7 @@ import { ViewStyle, ViewProps, StyleProp } from 'react-native';
+ import { Theme, DateData } from '../../types';
+ import { UpdateSources, CalendarNavigationTypes } from '../commons';
+ export interface CalendarContextProviderProps extends ViewProps {
++    ref: RefObject<CalendarContextProviderImperativeMethods | null>;
+     /** Initial date in 'yyyy-MM-dd' format. Default = now */
+     date: string;
+     /** Specify theme properties to override specific styles for calendar parts */
+@@ -28,6 +29,10 @@ export interface CalendarContextProviderProps extends ViewProps {
+     /** The left inset of the timeline calendar (sidebar width), default is 72 */
+     timelineLeftInset?: number;
+ }
++export interface CalendarContextProviderImperativeMethods {
++    setDate: (date: string) => void;
++    setToday: () => void;
++}; 
+ /**
+  * @description: Calendar context provider component
+  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/expandableCalendar.js
+diff --git a/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.js b/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.js
+index ec1e1be..f4dbc03 100644
+--- a/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.js
++++ b/node_modules/react-native-calendars/src/expandableCalendar/Context/Provider.js
+@@ -1,6 +1,6 @@
+ import { includes } from 'lodash';
+ import XDate from 'xdate';
+-import React, { useRef, useState, useCallback, useMemo } from 'react';
++import React, { forwardRef, useRef, useState, useCallback, useMemo, useImperativeHandle } from 'react';
+ import { View } from 'react-native';
+ import { sameMonth } from '../../dateutils';
+ import { xdateToData } from '../../interface';
+@@ -9,11 +9,21 @@ import { UpdateSources } from '../commons';
+ import styleConstructor from '../style';
+ import CalendarContext from './index';
+ import TodayButton from './todayButton';
++import { toMarkingFormat } from '../../interface';
+ /**
+  * @description: Calendar context provider component
+  * @example: https://github.com/wix/react-native-calendars/blob/master/example/src/screens/expandableCalendar.js
+  */
+-const CalendarProvider = (props) => {
++const CalendarProvider = (props, ref) => {
++    useImperativeHandle(ref, () => ({
++        setDate: (date) => {
++            _setDate(date, UpdateSources.DAY_PRESS);
++        },
++        setToday: () => {
++            _setDate(date, UpdateSources.TODAY_PRESS);
++        }
++    }));
++
+     const { theme, date, onDateChanged, onMonthChange, disableAutoDaySelection, showTodayButton = false, disabledOpacity, todayBottomMargin, todayButtonStyle, style: propsStyle, numberOfDays, timelineLeftInset = 72, children } = props;
+     const style = useRef(styleConstructor(theme));
+     const todayButton = useRef();
+@@ -30,6 +40,10 @@ const CalendarProvider = (props) => {
+             _setDate(date, UpdateSources.PROP_UPDATE);
+         }
+     }, [date]);
++    const getTodayDate = () => {
++        return toMarkingFormat(new XDate());
++    };
++
+     const getUpdateSource = useCallback((updateSource) => {
+         // NOTE: this comes to avoid breaking those how listen to the update source in onDateChanged and onMonthChange - remove on V2
+         if (updateSource === UpdateSources.ARROW_PRESS || updateSource === UpdateSources.WEEK_ARROW_PRESS) {
+@@ -76,5 +90,5 @@ const CalendarProvider = (props) => {
+       {showTodayButton && renderTodayButton()}
+     </CalendarContext.Provider>);
+ };
+-export default CalendarProvider;
++export default forwardRef(CalendarProvider);
+ CalendarProvider.displayName = 'CalendarProvider';
+diff --git a/node_modules/react-native-calendars/src/expandableCalendar/index.js b/node_modules/react-native-calendars/src/expandableCalendar/index.js
+index bea00e0..bf92441 100644
+--- a/node_modules/react-native-calendars/src/expandableCalendar/index.js
++++ b/node_modules/react-native-calendars/src/expandableCalendar/index.js
+@@ -61,9 +61,11 @@ const ExpandableCalendar = forwardRef((props, ref) => {
+     horizontal = true, calendarStyle, theme, style: propsStyle, firstDay = 0, onDayPress, hideArrows, onPressArrowLeft, onPressArrowRight, renderArrow, testID, ...others } = props;
+     const [screenReaderEnabled, setScreenReaderEnabled] = useState(false);
+     const [headerHeight, setHeaderHeight] = useState(0);
++    const shouldMeasureHeader = useRef(true);
+     const onHeaderLayout = useCallback(({ nativeEvent: { layout: { height } } }) => {
+-        setHeaderHeight(height || DEFAULT_HEADER_HEIGHT);
+-    }, []);
++      if (height !== headerHeight) { setHeaderHeight(height || DEFAULT_HEADER_HEIGHT); }
++      shouldMeasureHeader.current = false;
++    }, [headerHeight]);
+     /** Date */
+     const getYear = (date) => {
+         const d = new XDate(date);
+@@ -411,7 +413,7 @@ const ExpandableCalendar = forwardRef((props, ref) => {
+         return (<CalendarList testID={`${testID}.calendarList`} horizontal={horizontal} firstDay={firstDay} calendarStyle={calendarStyle} onHeaderLayout={onHeaderLayout} {...others} current={date} theme={themeObject} ref={calendarList} onDayPress={_onDayPress} onVisibleMonthsChange={onVisibleMonthsChange} pagingEnabled scrollEnabled={isOpen} hideArrows={shouldHideArrows} onPressArrowLeft={_onPressArrowLeft} onPressArrowRight={_onPressArrowRight} hideExtraDays={!horizontal && isOpen} renderArrow={_renderArrow} staticHeader numberOfDays={numberOfDays} headerStyle={_headerStyle} timelineLeftInset={timelineLeftInset} context={_context}/>);
+     };
+     return (<View testID={testID} style={containerStyle}>
+-      {screenReaderEnabled ? (<Calendar testID={`${testID}.calendarAccessible`} {...others} theme={themeObject} onHeaderLayout={onHeaderLayout} onDayPress={_onDayPress} hideExtraDays renderArrow={_renderArrow}/>) : (<Animated.View testID={`${testID}.expandableContainer`} ref={wrapper} style={wrapperStyle} {...panResponder.panHandlers}>
++      {screenReaderEnabled ? (<Calendar testID={`${testID}.calendarAccessible`} {...others} theme={themeObject} onHeaderLayout={onHeaderLayout} onDayPress={_onDayPress} hideExtraDays renderArrow={_renderArrow}/>) : (<Animated.View testID={`${testID}.expandableContainer`} ref={wrapper} style={wrapperStyle} onLayout={shouldMeasureHeader.current ? onHeaderLayout : undefined} {...panResponder.panHandlers}>
+           {renderCalendarList()}
+           {renderWeekCalendar()}
+           {!hideKnob && renderKnob()}

@@ -1,60 +1,76 @@
-import { AppTheme, useTheme } from 'theme';
+import * as Yup from 'yup';
 import {
   Divider,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItem,
+  ListItemSwipeable,
   getColoredSvg,
-  useListEditor,
-} from '@react-native-ajp-elements/ui';
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useQuery, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { ModelPickerResult } from 'components/ModelPickerScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { Formik, FormikProps } from 'formik';
+import { useEvent } from 'lib/event';
+import { modelSummary, modelSummaryPilot } from 'lib/model';
+import { modelTypeIconProps } from 'lib/model';
 import { EventStyleStatistics, eventStyleSummaryPilot } from 'lib/modelEvent';
+import lodash from 'lodash';
+import { CircleMinus, Plus, StarOff } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   Image,
   Keyboard,
+  LayoutRectangle,
   ListRenderItem,
-  Platform,
   View,
 } from 'react-native';
 import {
-  ListItem,
-  ListItemInput,
-  listItemPosition,
-} from 'components/atoms/List';
-import {
+  DragEndParams,
   NestableDraggableFlatList,
   NestableScrollContainer,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import React, { useEffect, useRef, useState } from 'react';
-import { modelSummary, modelSummaryPilot } from 'lib/model';
-import { useObject, useQuery, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { DateTime } from 'luxon';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { Event } from 'realmdb/Event';
-import { FilterType } from 'types/filter';
-import { Model } from 'realmdb/Model';
-import { ModelPickerResult } from 'components/ModelPickerScreen';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pilot } from 'realmdb/Pilot';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { SvgXml } from 'react-native-svg';
-import { eqString } from 'realmdb/helpers';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { modelTypeIcons } from 'lib/model';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
+import { BSON } from 'realm';
+import { Event } from 'realmdb/Event';
+import { Model } from 'realmdb/Model';
+import { Pilot } from 'realmdb/Pilot';
+import { AppTheme, useTheme } from 'theme';
+import { FilterType } from 'types/filter';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilot'>;
+
+// Order of fields for accessory view.
+enum Fields {
+  name,
+}
+
+type FormValues = {
+  name: string;
+};
 
 const PilotScreen = ({ navigation, route }: Props) => {
   const { pilotId } = route.params;
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const setDebounced = useDebouncedRender();
-  const listEditor = useListEditor();
+
   const event = useEvent();
   const realm = useRealm();
 
@@ -83,70 +99,32 @@ const PilotScreen = ({ navigation, route }: Props) => {
     eventStyleStatistics[eventStyleName] = { eventStyleName, count, duration };
   });
 
-  const name = useRef(pilot?.name);
-  const [isEditing, setIsEditing] = useState(false);
+  const initialValues = {
+    name: pilot?.name,
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const nameFieldRef = useRef<ListItemInputMethods>(null);
+
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+  const [listLayout, setListLayout] = useState<LayoutRectangle>();
 
   useEffect(() => {
-    const canSave = name.current && !eqString(pilot?.name, name.current);
-
-    const save = () => {
-      if (pilot) {
-        realm.write(() => {
-          pilot.updatedOn = DateTime.now().toISO();
-          pilot.name = name.current || 'no-name';
-        });
-      }
-    };
-
-    const onDone = () => {
-      save();
-      Keyboard.dismiss();
-      setIsEditing(false);
-    };
-
     navigation.setOptions({
       title: pilot?.name,
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerLeft: () => {
-        if (isEditing) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={() => {
-                Keyboard.dismiss();
-                setIsEditing(false);
-              }}
-            />
-          );
-        }
-      },
-      // eslint-disable-next-line react/no-unstable-nested-components
-      headerRight: () => {
-        if (canSave) {
-          return (
-            <Button
-              title={'Done'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={onDone}
-            />
-          );
-        } else if (pilot?.favoriteModels && pilot.favoriteModels.length > 1) {
-          return (
-            <Button
-              title={listEditor.enabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={listEditor.onEdit}
-            />
-          );
-        }
-      },
+      headerRight: renderListEditButton,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEditing, listEditor.enabled, name.current, pilot?.favoriteModels]);
+  }, [listEditorState, pilot?.favoriteModels.length]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
@@ -158,33 +136,117 @@ const PilotScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const cancel = () => {
+    Keyboard.dismiss();
+    formikRef.current?.resetForm();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    if (pilot) {
+      realm.write(() => {
+        pilot.updatedOn = DateTime.now().toISO();
+        pilot.name = values.name || 'no-name';
+      });
+    }
+  };
+
   const onChangeFavoriteModels = (result: ModelPickerResult) => {
     if (pilot) {
       realm.write(() => {
         pilot.updatedOn = DateTime.now().toISO();
-        pilot.favoriteModels = result.models;
+        pilot.favoriteModels = [...result.models];
       });
     }
   };
 
-  const forgetFavoriteModel = (model: Model) => {
+  const removeFavoriteModel = (modelId: string) => {
     if (pilot) {
       realm.write(() => {
         pilot.updatedOn = DateTime.now().toISO();
         pilot.favoriteModels =
-          pilot.favoriteModels.filter(
-            m => m._id.toString() !== model._id.toString(),
-          ) || [];
+          pilot.favoriteModels.filter(m => m._id.toString() !== modelId) || [];
       });
+
+      // Exit edit mode if no more favorites in the list.
+      if (!pilot.favoriteModels.length) {
+        listEditorRef.current?.onToggleEditMode();
+      }
     }
   };
 
-  const reorderFavoriteModels = (data: Model[]) => {
+  const reorderFavoriteModels = (params: DragEndParams<Model>) => {
+    const { data } = params;
     if (pilot) {
       realm.write(() => {
         pilot.favoriteModels = data;
       });
     }
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, changedFields, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    // Update header as name changes.
+    if (changedFields?.includes('name')) {
+      navigation.setOptions({
+        title: next?.values.name,
+      });
+    }
+
+    navigation.setOptions({
+      headerLeft: () => {
+        if (next.dirty) {
+          return (
+            <Button
+              title={'Cancel'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              onPress={cancel}
+            />
+          );
+        }
+      },
+      headerRight: () => {
+        if (next.dirty) {
+          return (
+            <Button
+              title={'Save'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={!canSubmit}
+              onPress={save}
+            />
+          );
+        } else if (pilot?.favoriteModels && pilot.favoriteModels.length > 0) {
+          return renderListEditButton();
+        }
+      },
+    });
+  };
+
+  const renderListEditButton = () => {
+    if (!pilot?.favoriteModels.length) return null;
+    return (
+      <Button
+        title={listEditorState?.enabled ? 'Done' : 'Edit'}
+        titleStyle={theme.styles.buttonScreenHeaderTitle}
+        buttonStyle={theme.styles.buttonScreenHeader}
+        onPress={() => listEditorRef.current?.onToggleEditMode()}
+      />
+    );
   };
 
   const renderFavoriteModel = ({
@@ -195,70 +257,61 @@ const PilotScreen = ({ navigation, route }: Props) => {
   }: RenderItemParams<Model>) => {
     const index = getIndex();
     if (index === undefined) return null;
+    const modelId = model._id.toString();
     return (
-      <View key={index} style={[isActive ? s.shadow : {}]}>
-        <ListItem
-          ref={ref => {
-            ref && listEditor.add(ref, 'favorite-models', model._id.toString());
-          }}
-          title={model.name}
-          subtitle={modelSummary(model)}
-          titleStyle={s.modelText}
-          subtitleStyle={s.modelText}
-          subtitleNumberOfLines={2}
-          position={listItemPosition(index, pilot?.favoriteModels.length || 0)}
-          rightImage={false}
-          leftImage={
-            <View style={s.modelIconContainer}>
-              {model.image ? (
-                <Image
-                  source={{ uri: model.image }}
-                  resizeMode={'cover'}
-                  style={s.modelImage}
+      <ListItemSwipeable
+        title={model.name}
+        subtitle={modelSummary(model)}
+        subtitleLines={2}
+        position={listItemPosition(index, pilot?.favoriteModels.length || 0)}
+        listEditor={listEditorRef.current}
+        leftContentStyle={{ paddingLeft: 0 }}
+        leftContent={
+          <View>
+            {model.image ? (
+              <Image
+                source={{ uri: model.image }}
+                resizeMode={'cover'}
+                style={s.modelImage}
+              />
+            ) : (
+              <View style={s.modelSvgContainer}>
+                <SvgXml
+                  xml={getColoredSvg(
+                    modelTypeIconProps[model.type]?.name as string,
+                  )}
+                  width={s.modelImage.width}
+                  height={s.modelImage.height}
+                  color={theme.colors.brandSecondary}
+                  style={s.modelIcon}
                 />
-              ) : (
-                <View style={s.modelSvgContainer}>
-                  <SvgXml
-                    xml={getColoredSvg(
-                      modelTypeIcons[model.type]?.name as string,
-                    )}
-                    width={s.modelImage.width}
-                    height={s.modelImage.height}
-                    color={theme.colors.brandSecondary}
-                    style={s.modelIcon}
-                  />
-                </View>
-              )}
-            </View>
-          }
-          drag={drag}
-          editable={{
-            item: {
-              icon: 'remove-circle',
-              color: theme.colors.assertive,
-              action: 'open-swipeable',
+              </View>
+            )}
+          </View>
+        }
+        drag={drag}
+        dragIsActive={isActive}
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+          draggable: true,
+        }}
+        swipeableActionsRight={[
+          {
+            text: 'Remove',
+            color: theme.colors.brandPrimary,
+            ButtonComponent: <StarOff color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            onPress: () => {
+              removeFavoriteModel(modelId);
+              listEditorState?.enabled
+                ? listEditorRef.current?.onToggleEditMode()
+                : null;
             },
-            reorder: true,
-          }}
-          showEditor={listEditor.show}
-          swipeable={{
-            rightItems: [
-              {
-                icon: 'eye-slash',
-                iconType: 'font-awesome',
-                text: 'Forget',
-                color: theme.colors.brandPrimary,
-                x: 64,
-                onPress: () => forgetFavoriteModel(model),
-              },
-            ],
-          }}
-          onSwipeableWillOpen={() =>
-            listEditor.onItemWillOpen('favorite-models', model._id.toString())
-          }
-          onSwipeableWillClose={listEditor.onItemWillClose}
-        />
-      </View>
+          },
+        ]}
+      />
     );
   };
 
@@ -268,6 +321,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
         title={model.name}
         value={pilot ? modelSummaryPilot(model, pilot) : ''}
         position={listItemPosition(index, allPilotModels.length)}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Events', {
             filterType: FilterType.BypassFilter,
@@ -289,10 +343,11 @@ const PilotScreen = ({ navigation, route }: Props) => {
         title={eventStyleName || 'Unspecified'}
         value={eventStyleSummaryPilot(eventStyleStatistics[eventStyleName])}
         position={listItemPosition(index, allPilotEventStyles.length)}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Events', {
             filterType: FilterType.BypassFilter,
-            eventStyleId: event.eventStyle?._id.toString() || 'unspecified',
+            eventStyleId: event.eventStyle?._id.toString(),
             pilotId: pilot?._id.toString(),
           })
         }
@@ -305,111 +360,140 @@ const PilotScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <NestableScrollContainer
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={"PILOT'S NAME"} />
-      <ListItemInput
-        value={name.current}
-        placeholder={'Pilot Name'}
-        position={['first', 'last']}
-        onBlur={() => setIsEditing(false)}
-        onFocus={() => setIsEditing(true)}
-        onChangeText={value => setDebounced(() => (name.current = value))}
-      />
-      {allPilotModels.length ? (
-        <>
-          <Divider text={'MODEL USAGE'} />
-          <FlatList
-            data={allPilotModels}
-            renderItem={renderModel}
-            scrollEnabled={false}
-          />
-          <Divider
-            note
-            text={
-              'Total duration (H:MM) and number of events of each style for events piloted by Andy.'
-            }
-          />
-        </>
-      ) : null}
-      {allPilotModels.length ? (
-        <>
-          <Divider text={'EVENT STYLES'} />
-          <FlatList
-            data={Object.keys(groupedPilotEventStyles).sort()}
-            renderItem={renderEventStyle}
-            scrollEnabled={false}
-          />
-          <Divider
-            note
-            text={
-              'Total duration (H:MM) and number of events of each style for events piloted by Andy.'
-            }
-          />
-        </>
-      ) : null}
-      {pilot?.favoriteModels && pilot.favoriteModels.length > 0 && (
-        <>
-          <Divider text={'FAVORITE MODELS'} />
-          <NestableDraggableFlatList
-            data={pilot.favoriteModels}
-            renderItem={renderFavoriteModel}
-            keyExtractor={(_item, index) => `${index}`}
-            showsVerticalScrollIndicator={false}
-            scrollEnabled={false}
-            style={s.favoriteModelsList}
-            animationConfig={{
-              damping: 20,
-              mass: 0.01,
-              stiffness: 100,
-              overshootClamping: false,
-              restSpeedThreshold: 0.2,
-              restDisplacementThreshold: 2,
+    <>
+      <ListEditor
+        ref={listEditorRef}
+        onChangeState={setListEditorState}
+        listLayout={listLayout}>
+        <NestableScrollContainer
+          style={theme.styles.view}
+          showsVerticalScrollIndicator={false}
+          contentInsetAdjustmentBehavior={'automatic'}>
+          <Formik
+            innerRef={formik => {
+              if (formik) {
+                formikRef.current = formik;
+              }
             }}
-            onDragEnd={({ data }) => reorderFavoriteModels(data)}
+            initialValues={initialValues}
+            validationSchema={schema}
+            validateOnMount
+            onSubmit={onSubmit}>
+            {({ handleChange, values }) => (
+              <View>
+                <FormikStateWatcher<FormValues>
+                  onChange={onFormikWatcherStateChange}
+                />
+                <Divider text={"PILOT'S NAME"} />
+                <ListItemInput
+                  ref={nameFieldRef}
+                  position={['first', 'last']}
+                  inputProps={{
+                    inputAccessoryViewID: 'keyboardAccessory',
+                    onChangeText: handleChange('name'),
+                    onFocus: () =>
+                      keyboardAccessory.current?.focusedField(Fields.name),
+                    value: values.name,
+                    placeholder: 'Pilot Name',
+                    autoCapitalize: 'words',
+                  }}
+                />
+              </View>
+            )}
+          </Formik>
+          {allPilotModels.length ? (
+            <>
+              <Divider text={'MODEL USAGE'} />
+              <FlatList
+                data={allPilotModels}
+                renderItem={renderModel}
+                scrollEnabled={false}
+              />
+              <Divider
+                note
+                text={`Total duration and number of flights for each model piloted by ${pilot.name}.`}
+              />
+            </>
+          ) : null}
+          {allPilotModels.length ? (
+            <>
+              <Divider text={'EVENT STYLES'} />
+              <FlatList
+                data={Object.keys(groupedPilotEventStyles).sort()}
+                renderItem={renderEventStyle}
+                scrollEnabled={false}
+              />
+              <Divider
+                note
+                text={`Total duration and number of events for each style piloted by ${pilot.name}.`}
+              />
+            </>
+          ) : null}
+          <Divider
+            text={'FAVORITE MODELS'}
+            rightComponent={
+              <Button
+                icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+                buttonStyle={theme.styles.dividerButton}
+                onPress={() =>
+                  navigation.navigate('PilotNavigator', {
+                    screen: 'ModelPicker',
+                    params: {
+                      title: 'Models',
+                      selected: pilot.favoriteModels,
+                      mode: 'many',
+                      eventName: 'pilot-favorite-models',
+                    },
+                  })
+                }
+              />
+            }
           />
-        </>
-      )}
-      <Divider />
-      <ListItem
-        title={'Select Favorite Models'}
-        titleStyle={s.actionButtonTitle}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={() =>
-          navigation.navigate('PilotNavigator', {
-            screen: 'ModelPicker',
-            params: {
-              title: 'Models',
-              selected: pilot.favoriteModels,
-              mode: 'many',
-              eventName: 'pilot-favorite-models',
-            },
-          })
-        }
+          {pilot?.favoriteModels && pilot.favoriteModels.length > 0 ? (
+            <>
+              <View
+                style={[{ flex: 1 }]}
+                onLayout={e => setListLayout(e.nativeEvent.layout)}>
+                <NestableDraggableFlatList
+                  data={[...pilot.favoriteModels]}
+                  renderItem={renderFavoriteModel}
+                  keyExtractor={item => `${item._id.toString()}`}
+                  showsVerticalScrollIndicator={false}
+                  scrollEnabled={false}
+                  style={s.favoriteModelsList}
+                  onDragEnd={reorderFavoriteModels}
+                />
+              </View>
+              <Divider />
+            </>
+          ) : (
+            <Divider
+              note
+              light
+              text={"Tap '+' to add a favorite model."}
+              subHeaderStyle={{ textAlign: 'center' }}
+            />
+          )}
+        </NestableScrollContainer>
+      </ListEditor>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={[nameFieldRef.current]}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <Divider />
-    </NestableScrollContainer>
+    </>
   );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  actionButtonTitle: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: theme.colors.clearButtonText,
-  },
   favoriteModelsList: {
     overflow: 'visible',
   },
   modelIcon: {
     transform: [{ rotate: '-45deg' }],
-  },
-  modelIconContainer: {
-    position: 'absolute',
-    left: -15,
   },
   modelImage: {
     width: 150,
@@ -417,18 +501,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   modelSvgContainer: {
     backgroundColor: theme.colors.subtleGray,
-  },
-  modelText: {
-    left: 140,
-    maxWidth: '48%',
-  },
-  shadow: {
-    ...theme.styles.shadowGlow,
-    ...Platform.select({
-      android: {
-        borderRadius: 20,
-      },
-    }),
   },
 }));
 

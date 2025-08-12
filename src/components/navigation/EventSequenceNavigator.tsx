@@ -1,23 +1,24 @@
-import { BSON } from 'realm';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useRealm } from '@realm/react';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
-import { ChecklistType } from 'types/checklist';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
 import EventSequenceChecklistItemScreen from 'components/EventSequenceChecklistItemScreen';
 import EventSequenceChecklistScreen from 'components/EventSequenceChecklistScreen';
-import { EventSequenceNavigatorParamList } from 'types/navigation';
 import EventSequenceNewEventEditorScreen from 'components/EventSequenceNewEventEditorScreen';
 import EventSequenceTimerScreen from 'components/EventSequenceTimerScreen';
-import { Model } from 'realmdb/Model';
-import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
+import React from 'react';
+import { BSON } from 'realm';
+import { Model } from 'realmdb/Model';
 import { store } from 'store';
-import { useRealm } from '@realm/react';
 import { useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { EventSequenceNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const EventSequenceStack =
   createNativeStackNavigator<EventSequenceNavigatorParamList>();
@@ -32,7 +33,7 @@ const EventSequenceNavigator = () => {
         initialRouteName="EventSequenceBatteryPicker"
         screenOptions={{
           headerStyle: {
-            backgroundColor: theme.colors.screenHeaderInvBackground,
+            backgroundColor: theme.colors.brandPrimary,
           },
           headerTitleStyle: { color: theme.colors.stickyWhite },
           headerTintColor: theme.colors.stickyWhite,

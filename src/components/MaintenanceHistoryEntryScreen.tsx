@@ -1,22 +1,46 @@
-import { ListItem, ListItemInput } from 'components/atoms/List';
-import React, { useEffect, useRef } from 'react';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { Model } from 'realmdb/Model';
-import { ModelsNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
+import {
+  Divider,
+  InputMethods,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListItem,
+  ListItemInputMethods,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { View } from 'react-native';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemInput, ListItemNotes } from 'components/atoms/List';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { Formik, FormikProps } from 'formik';
+import { modelCostStatistics } from 'lib/analytics';
+import { useEvent } from 'lib/event';
+import { Masks } from 'lib/inputMasks';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
-import { modelCostStatistics } from 'lib/analytics';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { BSON } from 'realm';
+import { Model } from 'realmdb/Model';
 import { useTheme } from 'theme';
+import { ModelsNavigatorParamList } from 'types/navigation';
+
+// Order of fields for accessory view.
+enum Fields {
+  cost,
+}
+
+type FormValues = {
+  cost: string;
+  notes: string;
+};
 
 export type Props = NativeStackScreenProps<
   ModelsNavigatorParamList,
@@ -27,7 +51,6 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   const { modelId, checklistRefId, actionRefId, historyRefId } = route.params;
 
   const theme = useTheme();
-  const setDebounced = useDebouncedRender();
   const event = useEvent();
   const realm = useRealm();
 
@@ -42,6 +65,30 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
     action?.history.find(h => h.refId === historyRefId),
   ).current;
 
+  const initialValues = {
+    cost: action?.cost?.toFixed(2) || '',
+    notes: action?.notes || '',
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    cost: Yup.string(),
+    notes: Yup.string(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const costFieldRef = useRef<ListItemInputMethods>(null);
+  const [resolvedRefs, setResolvedRefs] = useState<(InputMethods | null)[]>([]);
+
+  // Supports keyboard accessory view.
+  // Ensures all refs are set.
+  useEffect(() => {
+    setResolvedRefs([costFieldRef.current].filter(Boolean));
+  }, []);
+
   useEffect(() => {
     // Event handlers for EnumPicker
     event.on('maintenance-action-notes', onChangeNotes);
@@ -52,7 +99,20 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChangeCost = (value?: number) => {
+  const cancel = () => {
+    Keyboard.dismiss();
+    formikRef.current?.resetForm();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
     if (model && history) {
       realm.write(() => {
         // Update the model with maintenance cost change.
@@ -60,21 +120,52 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
           model.statistics,
           modelCostStatistics(model, {
             oldValue: history.cost,
-            newValue: value,
+            newValue: values.cost ? parseFloat(values.cost) : undefined,
           }),
         );
 
-        history.cost = value;
+        history.cost = values.cost ? parseFloat(values.cost) : undefined;
       });
     }
   };
 
   const onChangeNotes = (result: NotesEditorResult) => {
-    if (action) {
-      realm.write(() => {
-        action.notes = result.text;
-      });
-    }
+    formikRef.current?.setFieldValue('notes', result.text);
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
   };
 
   if (!action || !history) {
@@ -82,42 +173,74 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <View style={theme.styles.view}>
-      <Divider text={'COMPLETED MAINTENANCE'} />
-      <ListItem
-        title={action?.description}
-        subtitle={`${DateTime.fromISO(history.date).toFormat("M/d/yyyy 'at' h:mm a")}, following ${eventKind(model?.type).name.toLowerCase()} #${history.eventNumber}`}
-        position={['first', 'last']}
-        rightImage={false}
+    <>
+      <AvoidSoftInputView style={[theme.styles.view]}>
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
+            }
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          onSubmit={onSubmit}>
+          {({ errors, handleChange, values }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
+              />
+              <Divider text={'COMPLETED MAINTENANCE'} />
+              <ListItem
+                title={action?.description}
+                subtitle={`${DateTime.fromISO(history.date).toFormat("M/d/yyyy 'at' h:mm a")}, following ${eventKind(model?.type).name.toLowerCase()} #${history.eventNumber}`}
+                position={['first', 'last']}
+              />
+              <Divider text={'MAINTENANCE COSTS'} />
+              <ListItemInput
+                ref={costFieldRef}
+                title={'Total Cost'}
+                error={!!errors.cost}
+                position={['first', 'last']}
+                container={'right'}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: (_, unformatted) =>
+                    handleChange('cost')(unformatted),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.cost),
+                  value: values.cost,
+                  mask: Masks.CURRENCY,
+                  rtlNumber: true,
+                  placeholder: 'Unknown',
+                  keyboardType: 'number-pad',
+                }}
+              />
+              <Divider text={'NOTES'} />
+              <ListItemNotes
+                notes={values.notes}
+                position={['first', 'last']}
+                onPress={() =>
+                  navigation.navigate('NotesEditor', {
+                    title: 'Action Notes',
+                    text: values.notes,
+                    eventName: 'maintenance-action-notes',
+                  })
+                }
+              />
+            </View>
+          )}
+        </Formik>
+      </AvoidSoftInputView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={resolvedRefs}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <Divider text={'MAINTENANCE COSTS'} />
-      <ListItemInput
-        title={'Total Costs'}
-        value={`${history.cost}`}
-        numeric={true}
-        numericProps={{ maxValue: 99999 }}
-        keyboardType={'number-pad'}
-        placeholder={'None'}
-        position={['first', 'last']}
-        onChangeText={value =>
-          setDebounced(() =>
-            onChangeCost(value ? parseFloat(value) : undefined),
-          )
-        }
-      />
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={action.notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            title: 'Action Notes',
-            text: action.notes,
-            eventName: 'maintenance-action-notes',
-          })
-        }
-      />
-    </View>
+    </>
   );
 };
 

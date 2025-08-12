@@ -1,4 +1,4 @@
-import { biometricAuthentication as RNXEBiometricAuthentication } from '@react-native-ajp-elements/core';
+import { biometricAuthentication as RNXEBiometricAuthentication } from '@react-native-hello/core';
 import { store } from 'store';
 
 export const biometricAuthentication = async (): Promise<void> => {

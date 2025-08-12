@@ -1,9 +1,11 @@
-import {
-  ColorPickerModalMethods,
-  ColorPickerModalProps,
-  PresentOptions,
-} from './types';
-import { AppTheme, useTheme } from 'theme';
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import { log } from '@react-native-hello/core';
+import { Modal, ModalHeader, viewport } from '@react-native-hello/ui';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { makeStyles } from '@rn-vui/themed';
+import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
+import ModalHandle from 'components/atoms/ModalHandle';
+import { ColorPickerContext } from 'components/modals/ColorPickerModal';
 import React, {
   useCallback,
   useContext,
@@ -11,30 +13,28 @@ import React, {
   useRef,
   useState,
 } from 'react';
-
-import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { Modal, ModalHeader, viewport } from '@react-native-ajp-elements/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { Pressable, Text, View } from 'react-native';
 import Animated, {
   SharedValue,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
-import { Pressable, Text, View } from 'react-native';
 import ColorPicker, {
-  Panel5,
-  returnedResults,
-  Panel4,
-  RedSlider,
-  GreenSlider,
   BlueSlider,
+  GreenSlider,
+  Panel4,
+  Panel5,
+  RedSlider,
+  returnedResults,
 } from 'reanimated-color-picker';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
+import { AppTheme, useTheme } from 'theme';
+
 import { Eyedropper } from './Eyedropper';
-import { ColorPickerContext } from 'components/modals/ColorPickerModal';
-import { log } from '@react-native-ajp-elements/core';
-import ModalHandle from 'components/atoms/ModalHandle';
+import {
+  ColorPickerModalMethods,
+  ColorPickerModalProps,
+  PresentOptions,
+} from './types';
 
 type ColorPickerModal = ColorPickerModalMethods;
 

@@ -1,4 +1,4 @@
-import { WheelPickerItem } from 'components/atoms/WheelPicker';
+import { WheelPickerItem } from '@react-native-hello/ui';
 
 export type ExtendedWheelPickerItem = WheelPickerItem & {
   labelShort?: string;

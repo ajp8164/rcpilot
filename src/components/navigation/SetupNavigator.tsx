@@ -1,3 +1,4 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
@@ -5,29 +6,23 @@ import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen'
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
 import ContentScreen from 'components/ContentScreen';
+import DatabaseBackupScreen from 'components/DatabaseBackupScreen';
+import DatabaseBackupsScreen from 'components/DatabaseBackupsScreen';
 import DatabaseInfoScreen from 'components/DatabaseInfoScreen';
 import DatabaseReportingScreen from 'components/DatabaseReportingScreen';
-import DatabaseBackupScreen from 'components/DatabaseBackupScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import EventStyleEditorScreen from 'components/EventStyleEditorScreen';
 import EventStylesScreen from 'components/EventStylesScreen';
 import EventsScreen from 'components/EventsScreen';
-import LocationNavigator from 'components/navigation/LocationNavigator';
 import ModelCategoriesScreen from 'components/ModelCategoriesScreen';
 import ModelCategoryEditorScreen from 'components/ModelCategoryEditorScreen';
 import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
 import ModelFuelsScreen from 'components/ModelFuelsScreen';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
-import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
-import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
-import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
-import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
 import NewPilotScreen from 'components/NewPilotScreen';
-import NewReportNavigator from 'components/navigation/NewReportNavigator';
 import NotesEditorScreen from 'components/NotesEditorScreen';
-import PilotNavigator from 'components/navigation/PilotNavigator';
 import PilotScreen from 'components/PilotScreen';
 import PilotsScreen from 'components/PilotsScreen';
 import PreferencesAudioScreen from 'components/PreferencesAudioScreen';
@@ -37,23 +32,28 @@ import PreferencesChimeCuesScreen from 'components/PreferencesChimeCuesScreen';
 import PreferencesClickTrackScreen from 'components/PreferencesClickTrackScreen';
 import PreferencesEventsScreen from 'components/PreferencesEventsScreen';
 import PreferencesVoiceCuesScreen from 'components/PreferencesVoiceCuesScreen';
-import React from 'react';
-import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
-import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
-import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
-import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
-import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
-import { SetupNavigatorParamList } from 'types/navigation';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
 import UserProfileScreen from 'components/UserProfileScreen';
 import WebServerAccessScreen from 'components/WebServerAccessScreen';
+import LocationNavigator from 'components/navigation/LocationNavigator';
+import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
+import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
+import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
+import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
+import NewReportNavigator from 'components/navigation/NewReportNavigator';
+import PilotNavigator from 'components/navigation/PilotNavigator';
+import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
+import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
+import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
+import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
+import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
 import { appConfig } from 'config';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 import { useTheme } from 'theme';
-import DatabaseBackupsScreen from 'components/DatabaseBackupsScreen';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 const SetupStack = createNativeStackNavigator<SetupNavigatorParamList>();
 
@@ -93,6 +93,7 @@ const SetupNavigator = () => {
         options={{
           title: "Pilot's Name",
           presentation: 'modal',
+          gestureEnabled: false,
         }}
       />
       <SetupStack.Screen

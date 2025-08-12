@@ -1,6 +1,6 @@
-import { LocationCoords } from 'realmdb';
 import { PositionError } from 'lib/location';
 import { createContext } from 'react';
+import { LocationCoords } from 'realmdb';
 
 export const defaultGeoPosition = {
   coords: {

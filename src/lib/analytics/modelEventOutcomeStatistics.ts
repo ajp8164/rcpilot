@@ -1,5 +1,5 @@
-import { EventOutcome } from 'types/event';
 import { Model } from 'realmdb/Model';
+import { EventOutcome } from 'types/event';
 
 export const modelEventOutcomeStatistics = (
   model: Model,

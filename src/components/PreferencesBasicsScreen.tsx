@@ -1,12 +1,10 @@
-import { Divider, ListItem } from '@react-native-ajp-elements/ui';
-import React, { useState } from 'react';
-
-import { ListItemSwitch } from 'components/atoms/List';
+import { Divider, ListItem, ListItemSwitch } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { UnitSystem } from 'types/common';
 import { useTheme } from 'theme';
+import { UnitSystem } from 'types/common';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -38,6 +36,7 @@ const PreferencesBasicsScreen = ({ navigation }: Props) => {
         title={'Units'}
         value={'US Customary'}
         position={['first']}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
             title: 'Units',

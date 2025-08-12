@@ -1,11 +1,10 @@
-import { AppTheme, useTheme } from 'theme';
-import {
-  InputAccessoryView,
-  LayoutChangeEvent,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { TextViewMethods, TextViewProps } from './types';
+import { Input, InputMethods } from '@react-native-hello/ui';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+// See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
+import { makeStyles } from '@rn-vui/themed';
+import NavContext from 'components/navigation/NavContext';
+import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 import React, {
   useContext,
   useEffect,
@@ -13,15 +12,13 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { TextViewMethods, TextViewProps } from './types';
-
-// See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
-import { Input as BaseInput } from '@rn-vui/base';
-import { Input } from '@rn-vui/base';
-import NavContext from 'components/navigation/NavContext';
-import { makeStyles } from '@rn-vui/themed';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { useKeyboardHeight } from 'lib/useKeyboardHeight';
+import {
+  InputAccessoryView,
+  LayoutChangeEvent,
+  Text,
+  View,
+} from 'react-native';
+import { AppTheme, useTheme } from 'theme';
 
 type TextView = TextViewMethods;
 
@@ -39,7 +36,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 
   const { isModal } = useContext(NavContext);
 
-  const refInput = useRef<BaseInput & TextInput>(null);
+  const refInput = useRef<InputMethods>(null);
   const [text, setText] = useState(value);
   const [countRemaining, setCountRemaining] = useState(characterLimit);
 
@@ -93,15 +90,10 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
           ref={refInput}
           style={[s.text]}
           inputContainerStyle={s.inputContainer}
-          // containerStyle={{borderWidth: 1}}
           multiline={true}
           placeholder={placeholder}
-          // Positions the error message inside the text area.
-          // Needed to remove space taken up by the error message (we don't need it).
-          //  Allows to accurately position the bottom of the text input view.
-          errorStyle={s.inputError}
           inputAccessoryViewID={'inputAccessoryViewID'}
-          value={text}
+          value={text || ''}
           onChangeText={t => {
             setText(t.slice(0, characterLimit));
             characterLimit && setCountRemaining(characterLimit - t.length);
@@ -133,9 +125,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   inputContainer: {
     borderBottomWidth: 0,
-  },
-  inputError: {
-    marginTop: -10,
   },
   remainingView: {
     justifyContent: 'center',

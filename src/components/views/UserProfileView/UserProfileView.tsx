@@ -1,40 +1,35 @@
 import {
+  EditorState,
+  UserProfileViewMethods,
+  UserProfileViewProps,
+} from './types';
+import { useSetState } from '@react-native-hello/core';
+import { Asset, Divider, ListItem, selectImage } from '@react-native-hello/ui';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { Avatar } from 'components/molecules/Avatar';
+import { appConfig } from 'config';
+import { updateUser } from 'firebase/firestore';
+import {
+  Image as ImageUpload,
+  deleteImage,
+  uploadImage,
+} from 'firebase/storage';
+import { SquarePen } from 'lucide-react-native';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import {
   Alert,
   ScrollView,
   Text,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import { Button, Icon } from '@rn-vui/base';
-import {
-  Asset,
-  Divider,
-  ListItem,
-  selectImage,
-} from '@react-native-ajp-elements/ui';
-import {
-  EditorState,
-  UserProfileViewMethods,
-  UserProfileViewProps,
-} from './types';
-import {
-  Image as ImageUpload,
-  deleteImage,
-  uploadImage,
-} from 'firebase/storage';
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { ChatAvatar } from 'components/molecules/ChatAvatar';
-import { UserProfile } from 'types/user';
-import { appConfig } from 'config';
-import { makeStyles } from '@rn-vui/themed';
 import { openComposer } from 'react-native-email-link';
-import { selectUserProfile } from 'store/selectors/userSelectors';
-import { updateUser } from 'firebase/firestore';
 import { useSelector } from 'react-redux';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { selectUserProfile } from 'store/selectors/userSelectors';
+import { AppTheme, useTheme } from 'theme';
+import { UserProfile } from 'types/user';
 
 type UserProfileView = UserProfileViewMethods;
 
@@ -162,7 +157,7 @@ const UserProfileView = React.forwardRef<UserProfileView, UserProfileViewProps>(
     const renderUserProfileHeader = () => {
       return (
         <View style={s.userProfileHeaderContainer}>
-          <ChatAvatar
+          <Avatar
             userProfile={userProfile}
             size={'giant'}
             avatarStyle={s.avatar}
@@ -177,18 +172,14 @@ const UserProfileView = React.forwardRef<UserProfileView, UserProfileViewProps>(
         <>
           <TouchableWithoutFeedback onPress={selectUserProfileImage}>
             <View style={s.userProfileHeaderContainer}>
-              <ChatAvatar
+              <Avatar
                 userProfile={userProfile}
                 size={'giant'}
                 avatarStyle={s.avatar}
               />
-              <Icon
-                name={'pencil-circle'}
-                type={'material-community'}
-                color={theme.colors.darkGray}
-                size={28}
-                containerStyle={s.userProfileImageEditIcon}
-              />
+              <View style={s.userProfileImageEditIcon}>
+                <SquarePen color={theme.colors.darkGray} size={28} />
+              </View>
             </View>
           </TouchableWithoutFeedback>
           {userProfile.photoUrl && (

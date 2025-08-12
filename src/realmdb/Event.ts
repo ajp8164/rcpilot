@@ -1,14 +1,14 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-
-import { BatteryCycle } from './BatteryCycle';
-import { EventOutcome } from 'types/event';
 import { EventStyle } from 'realmdb/EventStyle';
-import { ISODateString } from 'types/common';
 import { Location } from 'realmdb/Location';
 import { Model } from 'realmdb/Model';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { Pilot } from 'realmdb/Pilot';
+import { ISODateString } from 'types/common';
+import { EventOutcome } from 'types/event';
+
+import { BatteryCycle } from './BatteryCycle';
 
 export class Event extends Object<Event> {
   _id!: BSON.ObjectId;

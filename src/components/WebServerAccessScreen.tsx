@@ -1,13 +1,11 @@
-import { AppTheme, useTheme } from 'theme';
-import { Text, View } from 'react-native';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
+import { Divider, ListItem } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { appConfig } from 'config';
 import { makeStyles } from '@rn-vui/themed';
+import { appConfig } from 'config';
+import React from 'react';
+import { Text, View } from 'react-native';
+import { AppTheme, useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -29,7 +27,6 @@ const WebServerAccessScreen = () => {
         title={'http://192.168.1.114:8080'}
         titleStyle={s.item}
         position={['first', 'last']}
-        rightImage={false}
       />
       <Divider />
       <Text style={s.heading}>{'Server Status'}</Text>

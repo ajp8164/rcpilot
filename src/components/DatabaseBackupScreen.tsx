@@ -1,21 +1,19 @@
-import { AppTheme, useTheme } from 'theme';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useContext, useState } from 'react';
-import { ActivityIndicator, Alert, ScrollView } from 'react-native';
-import { SetupNavigatorParamList } from 'types/navigation';
+import { Divider, ListItem } from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
-import { makeStyles } from '@rn-vui/themed';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { appConfig } from 'config';
+import { File, saveFile } from 'firebase/storage';
+import { Directory, listFiles } from 'firebase/storage/operations';
+import { DatabaseInfoContext } from 'lib/database';
 import { DateTime } from 'luxon';
-import { saveFile, File } from 'firebase/storage';
+import React, { useContext, useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'store/selectors/userSelectors';
-import { DatabaseInfoContext } from 'lib/database';
-import { Directory, listFiles } from 'firebase/storage/operations';
-import { appConfig } from 'config';
+import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -24,7 +22,6 @@ export type Props = NativeStackScreenProps<
 
 const DatabaseBackupScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
   const realm = useRealm();
   const user = useSelector(selectUser);
   const databaseInfo = useContext(DatabaseInfoContext);
@@ -90,55 +87,29 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'DATABASE BACKUPS'} />
       <ListItem
-        title={'Create Full Backup'}
-        value={
-          backupAllowed ? (
-            <ActivityIndicator
-              color={theme.colors.brandPrimary}
-              animating={isBackingUp}
-            />
-          ) : (
-            'At storage limit'
-          )
-        }
-        titleStyle={backupAllowed ? {} : theme.styles.textDim}
-        valueStyle={s.backupValue}
-        disabled={isBackingUp || !backupAllowed}
-        position={['first']}
-        rightImage={false}
-        onPress={createBackup}
-      />
-      <ListItem
         title={'Restore From Full Backup'}
         subtitle={`${dir && (dir?.allocated / 1000000).toFixed(3)}MB storage used`}
         position={['last']}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('DatabaseBackups')}
+      />
+      <Divider />
+      <Button
+        title={'Create Full Backup'}
+        containerStyle={theme.styles.buttonContainer}
+        outline
+        disabled={isBackingUp || !backupAllowed}
+        onPress={createBackup}
       />
       <Divider note text={note} />
       <Divider text={'TEXT EXPORT & IMPORT'} />
-      <ListItem
-        title={'Export to Text File...'}
-        position={['first', 'last']}
-        rightImage={false}
-      />
+      <ListItem title={'Export to Text File...'} position={['first', 'last']} />
       <Divider />
       <ListItem title={'Import from Text File'} position={['first']} />
-      <ListItem
-        title={'Save Import Template...'}
-        position={['last']}
-        rightImage={false}
-      />
+      <ListItem title={'Save Import Template...'} position={['last']} />
       <Divider />
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  backupValue: {
-    color: theme.colors.assertive,
-    opacity: 1,
-    paddingRight: 0,
-  },
-}));
 
 export default DatabaseBackupScreen;

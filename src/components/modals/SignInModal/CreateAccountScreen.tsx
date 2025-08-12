@@ -1,5 +1,23 @@
 import * as Yup from 'yup';
-
+import { SignInNavigatorParamList } from './types';
+import { useSetState } from '@react-native-hello/core';
+import {
+  InputMethods,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListItemInput,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { createUserWithEmailAndPassword } from 'lib/auth';
+import { Eye, EyeOff } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
   Keyboard,
@@ -8,18 +26,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
-import React, { useRef, useState } from 'react';
-
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { Button } from '@rn-vui/base';
-import { ListItemInput } from '@react-native-ajp-elements/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SignInNavigatorParamList } from './types';
-import { createUserWithEmailAndPassword } from 'lib/auth';
-import { makeStyles } from '@rn-vui/themed';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { AppTheme, useTheme } from 'theme';
 
 enum Fields {
   firstName,
@@ -51,13 +59,18 @@ const CreateAccountScreen = () => {
   const s = useStyles(theme);
 
   const formikRef = useRef<FormikProps<FormValues>>(null);
-  const refFirstName = useRef<TextInput | null>(null);
-  const refLastName = useRef<TextInput>(null);
-  const refEmail = useRef<TextInput>(null);
-  const refPassword = useRef<TextInput>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const firstNameFieldRef = useRef<TextInput | null>(null);
+  const lastNameFieldRef = useRef<TextInput>(null);
+  const emailFieldRef = useRef<TextInput>(null);
+  const passwordFieldRef = useRef<TextInput>(null);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const [resolvedRefs, setResolvedRefs] = useState<(InputMethods | null)[]>([]);
 
   // Same order as on form.
-  const fieldRefs = [refEmail.current, refPassword.current];
+  const fieldRefs = [emailFieldRef.current, passwordFieldRef.current];
 
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [editorState, setEditorState] = useSetState<EditorState>({
@@ -66,19 +79,18 @@ const CreateAccountScreen = () => {
     isSubmitting: false,
   });
 
-  // const next = () => {
-  //   if (editorState.focusedField === undefined) return;
-  //   const nextField = editorState.focusedField + 1;
-  //   fieldRefs[nextField]?.focus();
-  //   setEditorState({ focusedField: nextField });
-  // };
-
-  // const previous = () => {
-  //   if (editorState.focusedField === undefined) return;
-  //   const nextField = editorState.focusedField - 1;
-  //   fieldRefs[nextField]?.focus();
-  //   setEditorState({ focusedField: nextField });
-  // };
+  // Supports keyboard accessory view.
+  // Ensures all refs are set.
+  useEffect(() => {
+    setResolvedRefs(
+      [
+        firstNameFieldRef.current,
+        lastNameFieldRef.current,
+        emailFieldRef.current,
+        passwordFieldRef.current,
+      ].filter(Boolean),
+    );
+  }, []);
 
   const signIn = (
     values: FormValues,
@@ -121,6 +133,15 @@ const CreateAccountScreen = () => {
       ),
   });
 
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+  };
+
   return (
     <>
       <AvoidSoftInputView style={s.avoidContainer}>
@@ -138,120 +159,112 @@ const CreateAccountScreen = () => {
             validateOnMount={true}
             validationSchema={validationSchema}
             onSubmit={signIn}>
-            {formik => (
-              <View style={[theme.styles.viewAlt, s.view]}>
-                <ListItemInput
-                  refInner={refFirstName}
-                  placeholder="First Name"
-                  value={formik.values.firstName}
-                  errorText={
-                    formik.values.firstName !== formik.initialValues.firstName
-                      ? formik.errors.firstName
-                      : undefined
-                  }
-                  errorColor={theme.colors.error}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  onBlur={() => {
-                    formik.handleBlur('firstName');
-                    setEditorState({ focusedField: undefined });
-                  }}
-                  onChangeText={formik.handleChange('firstName')}
-                  onFocus={() =>
-                    setEditorState({ focusedField: Fields.firstName })
-                  }
+            {({ dirty, errors, handleChange, isValid, submitForm, values }) => (
+              <View>
+                <FormikStateWatcher<FormValues>
+                  onChange={onFormikWatcherStateChange}
                 />
-                <ListItemInput
-                  refInner={refLastName}
-                  placeholder="Last Name"
-                  value={formik.values.lastName}
-                  errorText={
-                    formik.values.lastName !== formik.initialValues.lastName
-                      ? formik.errors.lastName
-                      : undefined
-                  }
-                  errorColor={theme.colors.error}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  onBlur={() => {
-                    formik.handleBlur('lastName');
-                    setEditorState({ focusedField: undefined });
-                  }}
-                  onChangeText={formik.handleChange('lastName')}
-                  onFocus={() =>
-                    setEditorState({ focusedField: Fields.lastName })
-                  }
-                />
-                <ListItemInput
-                  refInner={refEmail}
-                  placeholder="Email"
-                  value={formik.values.email}
-                  errorText={
-                    formik.values.email !== formik.initialValues.email
-                      ? formik.errors.email
-                      : undefined
-                  }
-                  errorColor={theme.colors.error}
-                  autoCapitalize={'none'}
-                  autoCorrect={false}
-                  keyboardType={'email-address'}
-                  onBlur={() => {
-                    formik.handleBlur('email');
-                    setEditorState({ focusedField: undefined });
-                  }}
-                  onChangeText={formik.handleChange('email')}
-                  onFocus={() => setEditorState({ focusedField: Fields.email })}
-                />
-                <ListItemInput
-                  refInner={refPassword}
-                  placeholder="Password"
-                  value={formik.values.password}
-                  secureTextEntry={!passwordVisible}
-                  rightImage={passwordVisible ? 'eye-off' : 'eye'}
-                  rightImageColor={theme.colors.black}
-                  rightImageOnPress={() => setPasswordVisible(!passwordVisible)}
-                  rightImageType={'material-community'}
-                  errorText={
-                    formik.values.password !== formik.initialValues.password
-                      ? formik.errors.password
-                      : undefined
-                  }
-                  errorColor={theme.colors.error}
-                  onBlur={() => {
-                    formik.handleBlur('password');
-                    setEditorState({ focusedField: undefined });
-                  }}
-                  onChangeText={formik.handleChange('password')}
-                  onFocus={() => {
-                    setEditorState({ focusedField: Fields.password });
-                  }}
-                />
-                <Button
-                  title={'Continue'}
-                  titleStyle={theme.styles.buttonTitle}
-                  buttonStyle={theme.styles.button}
-                  containerStyle={s.continueButtonContainer}
-                  disabled={!(formik.dirty && formik.isValid)}
-                  loading={editorState.isSubmitting}
-                  onPress={formikRef.current?.submitForm}
-                />
-                <Text style={s.footer}>
-                  {'By signing up you agree to our Terms and Privacy Policy'}
-                </Text>
+                <View style={[theme.styles.viewAlt, s.view]}>
+                  <ListItemInput
+                    ref={ref => {
+                      ref && (firstNameFieldRef.current = ref);
+                    }}
+                    error={!!errors.firstName}
+                    inputProps={{
+                      value: values.firstName,
+                      onChangeText: handleChange('firstName'),
+                      onFocus: () =>
+                        keyboardAccessory.current?.focusedField(
+                          Fields.firstName,
+                        ),
+                      placeholder: 'First Name',
+                      autoCapitalize: 'none',
+                      autoCorrect: false,
+                    }}
+                  />
+                  <ListItemInput
+                    ref={ref => {
+                      ref && (lastNameFieldRef.current = ref);
+                    }}
+                    error={!!errors.lastName}
+                    inputProps={{
+                      value: values.lastName,
+                      onChangeText: handleChange('lastName'),
+                      onFocus: () =>
+                        keyboardAccessory.current?.focusedField(
+                          Fields.lastName,
+                        ),
+                      placeholder: 'Last Name',
+                      autoCapitalize: 'none',
+                      autoCorrect: false,
+                    }}
+                  />
+                  <ListItemInput
+                    ref={ref => {
+                      ref && (emailFieldRef.current = ref);
+                    }}
+                    error={!!errors.email}
+                    inputProps={{
+                      value: values.email,
+                      onChangeText: handleChange('email'),
+                      onFocus: () =>
+                        keyboardAccessory.current?.focusedField(Fields.email),
+                      placeholder: 'Email',
+                      keyboardType: 'email-address',
+                      autoCapitalize: 'none',
+                      autoCorrect: false,
+                    }}
+                  />
+                  <ListItemInput
+                    ref={ref => {
+                      ref && (passwordFieldRef.current = ref);
+                    }}
+                    error={!!errors.password}
+                    rightContent={
+                      passwordVisible ? (
+                        <EyeOff color={theme.colors.black} />
+                      ) : (
+                        <Eye color={theme.colors.black} />
+                      )
+                    }
+                    onPressRight={() => setPasswordVisible(!passwordVisible)}
+                    inputProps={{
+                      value: values.password,
+                      onChangeText: handleChange('password'),
+                      onFocus: () =>
+                        keyboardAccessory.current?.focusedField(
+                          Fields.password,
+                        ),
+                      placeholder: 'Password',
+                      secureTextEntry: !passwordVisible,
+                    }}
+                  />
+                  <Button
+                    title={'Continue'}
+                    titleStyle={theme.styles.buttonTitle}
+                    buttonStyle={theme.styles.button}
+                    containerStyle={s.continueButtonContainer}
+                    disabled={!(dirty && isValid)}
+                    loading={editorState.isSubmitting}
+                    onPress={() => submitForm()}
+                  />
+                  <Text style={s.footer}>
+                    {'By signing up you agree to our Terms and Privacy Policy'}
+                  </Text>
+                </View>
               </View>
             )}
           </Formik>
         </ScrollView>
       </AvoidSoftInputView>
-      {/* This isn't working inside bottomsheet.
-      {Platform.OS === 'ios' && (
-        <KeyboardAccessory
-          nextDisabled={editorState.focusedField === editorState.fieldCount - 1}
-          previousDisabled={editorState.focusedField === 0}
-          onNext={next}
-          onPrevious={previous}
-        />
-      )} */}
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={resolvedRefs}
+        doneText={'Submit'}
+        disabledDone={!formikCanSubmit}
+        onDone={() => formikRef.current?.handleSubmit()}
+      />
     </>
   );
 };

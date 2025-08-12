@@ -2,11 +2,10 @@ import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
-
 import ModelPickerScreen from 'components/ModelPickerScreen';
-import { PilotNavigatorParamList } from 'types/navigation';
 import React from 'react';
 import { useTheme } from 'theme';
+import { PilotNavigatorParamList } from 'types/navigation';
 
 const PilotStack = createNativeStackNavigator<PilotNavigatorParamList>();
 

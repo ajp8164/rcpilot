@@ -1,10 +1,9 @@
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
+import { Divider, ListItem } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -23,15 +22,18 @@ const PreferencesAudioScreen = ({ navigation }: Props) => {
       <ListItem
         title={'Chime Cues'}
         position={['first']}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesChimeCues')}
       />
       <ListItem
         title={'Voice Cues'}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesVoiceCues')}
       />
       <ListItem
         title={'Click Track'}
         position={['last']}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesClickTrack')}
       />
     </ScrollView>

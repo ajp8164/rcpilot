@@ -1,5 +1,4 @@
 import { DateRelation, EnumRelation } from 'components/molecules/filters';
-
 import { ReportModelScanCodeFilterValues } from 'types/filter';
 
 export const defaultFilter: ReportModelScanCodeFilterValues = {

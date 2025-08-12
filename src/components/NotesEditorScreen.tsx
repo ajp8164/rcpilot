@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-
-import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import TextView from 'components/views/TextView';
-import { eqString } from 'realmdb/helpers';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import React, { useEffect, useState } from 'react';
+import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type NotesEditorResult = {
   text: string;
@@ -27,7 +25,7 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
   const [newText, setNewText] = useState<string | undefined>(text);
 
   useEffect(() => {
-    const canSave = !eqString(text, newText);
+    const canSubmit = text !== newText;
 
     const onDone = () => {
       event.emit(eventName, {
@@ -38,7 +36,7 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
     };
 
     setScreenEditHeader(
-      { enabled: canSave, action: onDone, style: headerButtonStyle },
+      { enabled: canSubmit, action: onDone, style: headerButtonStyle },
       { style: headerButtonStyle },
       title ? { title } : {},
     );

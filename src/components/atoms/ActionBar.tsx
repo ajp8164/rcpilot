@@ -75,6 +75,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     right: 0,
     bottom: 0,
     height: buttonSize + theme.insets.bottom,
+    paddingTop: 5,
     backgroundColor: theme.colors.white,
     borderTopColor: theme.colors.lightGray,
     borderTopWidth: StyleSheet.hairlineWidth,
@@ -92,10 +93,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginTop: -theme.insets.bottom,
   },
   actionContainerStart: {
-    paddingLeft: 10,
+    paddingLeft: 15,
   },
   actionContainerEnd: {
-    paddingRight: 10,
+    paddingRight: 15,
   },
   actionButton: {
     top: -3,

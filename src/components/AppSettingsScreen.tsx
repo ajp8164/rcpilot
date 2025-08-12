@@ -1,3 +1,11 @@
+import { Divider, ListItem, ListItemSwitch } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { biometricAuthentication } from 'lib/biometricAuthentication';
+import { useEvent } from 'lib/event';
+import { hasPushNotificationsPermission } from 'lib/notifications';
+import { modelsLayoutIcons } from 'lib/preferences';
+import React, { useEffect, useState } from 'react';
 import {
   AppState,
   Linking,
@@ -5,29 +13,20 @@ import {
   View,
   useColorScheme,
 } from 'react-native';
-import { ListItem, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
-import {
-  saveBiometrics,
-  saveModelsLayout,
-  saveThemeSettings,
-} from 'store/slices/appSettings';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   selectBiometrics,
   selectModelsLayout,
   selectThemeSettings,
 } from 'store/selectors/appSettingsSelectors';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { biometricAuthentication } from 'lib/biometricAuthentication';
-import { hasPushNotificationsPermission } from 'lib/notifications';
+import {
+  saveBiometrics,
+  saveModelsLayout,
+  saveThemeSettings,
+} from 'store/slices/appSettings';
 import { useTheme } from 'theme';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { ModelsLayout } from 'types/preferences';
-import { useEvent } from 'lib/event';
-import { EnumPickerResult } from 'components/EnumPickerScreen';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -126,6 +125,7 @@ const AppSettings = ({ navigation }: Props) => {
           title={'Push Notifications'}
           value={hasPNPermission ? 'On' : 'Off'}
           position={['first', 'last']}
+          rightContent={'chevron-right'}
           onPress={Linking.openSettings}
         />
         <Divider text={'SECURITY'} />
@@ -159,16 +159,19 @@ const AppSettings = ({ navigation }: Props) => {
         <ListItem
           title={'Models Screen Layout'}
           position={['first', 'last']}
+          rightContent={'chevron-right'}
           value={modelsLayout}
           onPress={() =>
             navigation.navigate('EnumPicker', {
               title: 'Models Layout',
               values: Object.values(ModelsLayout),
               selected: modelsLayout,
+              icons: modelsLayoutIcons,
               eventName: 'models-layout',
             })
           }
         />
+        <Divider />
       </ScrollView>
     </View>
   );

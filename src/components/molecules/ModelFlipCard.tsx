@@ -1,19 +1,18 @@
-import { AppTheme, useTheme } from 'theme';
-import React, { useContext } from 'react';
-
+import { viewport } from '@react-native-hello/ui';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { makeStyles } from '@rn-vui/themed';
-import { Model, Pilot } from 'realmdb';
-import FlipCardView from 'components/views/FlipCardView';
+import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
+import { ModelCardDeckContext } from 'components/molecules/card-deck/ModelCardDeckContext';
 import {
   Back as DinnBack,
   Front as DinnFront,
 } from 'components/molecules/card-deck/dinn';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { ModelsNavigatorParamList } from 'types/navigation';
-import { viewport } from '@react-native-ajp-elements/ui';
+import FlipCardView from 'components/views/FlipCardView';
+import React, { useContext } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
-import { ModelCardDeckContext } from 'components/molecules/card-deck/ModelCardDeckContext';
-import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
+import { Model, Pilot } from 'realmdb';
+import { AppTheme, useTheme } from 'theme';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 interface ModelCardDeckCardInterface {
   model: Model;

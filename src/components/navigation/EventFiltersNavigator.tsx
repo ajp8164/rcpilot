@@ -1,13 +1,14 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventFilterEditorScreen from 'components/EventFilterEditorScreen';
-import { EventFiltersNavigatorParamList } from 'types/navigation';
 import EventFiltersScreen from 'components/EventFiltersScreen';
-import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
+import React from 'react';
 import { useTheme } from 'theme';
+import { EventFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const EventFiltersStack =
   createNativeStackNavigator<EventFiltersNavigatorParamList>();

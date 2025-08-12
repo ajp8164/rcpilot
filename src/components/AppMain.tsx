@@ -1,40 +1,39 @@
-import { AuthContext, useAuthContext } from 'lib/auth';
+import { ActionSheetProvider } from '@expo/react-native-action-sheet';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { log } from '@react-native-hello/core';
 import {
   CameraContext,
   CameraModal,
   ColorModeSwitch,
   useCameraContext,
-} from '@react-native-ajp-elements/ui';
+} from '@react-native-hello/ui';
 import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
 } from '@react-navigation/native';
-import { DatabaseInfoContext, useDatabaseInfo } from 'lib/database';
-import { GeoPositionContext, useCurrentLocation } from 'lib/location';
+import { LinkingOptions } from '@react-navigation/native';
 import { InitStatus, useInitApp } from 'app';
-import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
+import { BackdropProvider } from 'components/atoms/Backdrop';
+import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
+import { ColorPickerProvider } from 'components/modals/ColorPickerModal';
+import { SignInModal, SignInModalMethods } from 'components/modals/SignInModal';
+import MainNavigator from 'components/navigation/MainNavigator';
+import { AuthContext, useAuthContext } from 'lib/auth';
+import { DatabaseInfoContext, useDatabaseInfo } from 'lib/database';
+import { AppError } from 'lib/errors';
+import { EventProvider } from 'lib/event';
+import { GeoPositionContext, useCurrentLocation } from 'lib/location';
 import { NetworkContext, useNetworkContext } from 'lib/network';
 import { useEffect, useRef, useState } from 'react';
-
-import { ActionSheetProvider } from '@expo/react-native-action-sheet';
-import { AppError } from 'lib/errors';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import ErrorBoundary from 'react-native-error-boundary';
-import { EventProvider } from 'lib/event';
-import { LinkingOptions } from '@react-navigation/native';
-import MainNavigator from 'components/navigation/MainNavigator';
-import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
-import RNBootSplash from 'react-native-bootsplash';
 import React from 'react';
-import { SignInModal, SignInModalMethods } from 'components/modals/SignInModal';
 import { StatusBar } from 'react-native';
-import { log } from '@react-native-ajp-elements/core';
-import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
 import { useColorScheme } from 'react-native';
+import RNBootSplash from 'react-native-bootsplash';
+import ErrorBoundary from 'react-native-error-boundary';
 import { useSelector } from 'react-redux';
-import { ColorPickerProvider } from 'components/modals/ColorPickerModal';
-import { BackdropProvider } from 'components/atoms/Backdrop';
+import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
+import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 
 // See https://reactnavigation.org/docs/configuring-links
 const linking: LinkingOptions<MainNavigatorParamList> = {
@@ -100,7 +99,7 @@ const AppMain = () => {
         hideSplashScreen();
       }
     })();
-  }, []);
+  }, [initApp]);
 
   if (fatal) {
     throw new AppError(fatal);

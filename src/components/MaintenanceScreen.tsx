@@ -1,4 +1,36 @@
-import { AppTheme, useTheme } from 'theme';
+import {
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  ListItemCheckBoxInfo,
+  ListItemInput,
+  ListItemNotes,
+} from 'components/atoms/List';
+import { modelCostStatistics } from 'lib/analytics';
+import { actionScheduleState } from 'lib/checklist';
+import { useEvent } from 'lib/event';
+import { Masks } from 'lib/inputMasks';
+import { groupItems } from 'lib/sectionList';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { uuidv4 } from 'lib/utils';
+import lodash from 'lodash';
+import { Trash2 } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+import { BSON } from 'realm';
 import {
   Checklist,
   ChecklistAction,
@@ -6,40 +38,10 @@ import {
   JChecklistAction,
   JChecklistActionHistoryEntry,
 } from 'realmdb/Checklist';
-import { ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import {
-  ListItem,
-  ListItemCheckboxInfo,
-  ListItemInput,
-  SectionListHeader,
-  listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { DateTime } from 'luxon';
 import { Model } from 'realmdb/Model';
+import { AppTheme, useTheme } from 'theme';
+import { ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { actionScheduleState } from 'lib/checklist';
-import { groupItems } from 'lib/sectionList';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { modelCostStatistics } from 'lib/analytics';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
-import { uuidv4 } from 'lib/utils';
 
 type ChecklistActionItemData = {
   checklist: Checklist;
@@ -60,9 +62,7 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles(theme);
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
-  const setDebounced = useDebouncedRender();
   const event = useEvent();
   const realm = useRealm();
 
@@ -83,9 +83,10 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
       eventNumber: model ? model.statistics.totalEvents : 0,
     });
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
@@ -154,11 +155,11 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     setSelectedMaintenanceActions([]);
   };
 
-  const onChangeCost = (action: ChecklistAction, value?: number) => {
+  const onChangeCost = (action: ChecklistAction, value: string) => {
     // The action will always have the last updated cost (even though the actual cost
     // is stored with the history entry).
     realm.write(() => {
-      action.cost = value;
+      action.cost = parseFloat(value);
     });
   };
 
@@ -263,24 +264,6 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     );
   }
 
-  const actionSwipeable = (actionItem: ChecklistActionItemData) => {
-    return {
-      rightItems: [
-        {
-          ...swipeableDeleteItem[theme.mode],
-          onPress: () => {
-            confirmAction(deleteAction, {
-              label: 'Delete Maintenance Action',
-              title:
-                'This action cannot be undone.\nAre you sure you want to delete this maintenance action?',
-              value: actionItem,
-            });
-          },
-        },
-      ],
-    };
-  };
-
   const renderChecklistAction: SectionListRenderItem<
     ChecklistActionItemData,
     Section
@@ -299,27 +282,15 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
     const isLastInList = index === section.data.length - 1;
 
     // Cannot delete repeating actions.
-    const swipeable =
+    const allowDelete =
       actionItem.action.schedule.type ===
-      ChecklistActionScheduleType.NonRepeating
-        ? actionSwipeable(actionItem)
-        : {};
+      ChecklistActionScheduleType.NonRepeating;
 
     return (
-      <ListItemCheckboxInfo
-        ref={ref => {
-          ref &&
-            listEditor.add(ref, 'maintenance-actions', actionItem.action.refId);
-        }}
+      <ListItemCheckBoxInfo
         key={actionItem.action.refId}
         title={actionItem.action.description}
-        titleNumberOfLines={1}
         subtitle={actionItem.action.schedule.state.text}
-        iconChecked={'square-check'}
-        iconUnchecked={'square'}
-        iconSize={26}
-        iconColor={theme.colors.clearButtonText}
-        checked={isExpanded}
         position={
           !isExpanded
             ? listItemPosition(index, section.data.length)
@@ -327,6 +298,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
               ? ['first']
               : []
         }
+        checkBox
+        checked={isExpanded}
+        listEditor={listEditorRef.current}
         onPress={() => {
           togglePendMaintenanceItem(actionItem.action.refId);
         }}
@@ -337,95 +311,103 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
             actionRefId: actionItem.action.refId,
           })
         }
+        swipeableActionsRight={
+          allowDelete
+            ? [
+                {
+                  text: 'Delete',
+                  color: theme.colors.assertive,
+                  ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+                  op: 'remove',
+                  confirmation: () => {
+                    listEditorRef.current?.reset();
+                    return confirmAction({
+                      label: 'Delete Maintenance Action',
+                      title:
+                        'This action cannot be undone.\nAre you sure you want to delete this maintenance action?',
+                    });
+                  },
+                  onPress: () => deleteAction(actionItem),
+                },
+              ]
+            : undefined
+        }
         expanded={isExpanded}
         ExpandableComponent={
           <>
             <ListItemInput
               title={'Total Costs'}
-              value={`${actionItem.action.cost || 0}`}
-              numeric={true}
-              numericProps={{ maxValue: 99999 }}
-              keyboardType={'number-pad'}
-              placeholder={'Unknown'}
-              onChangeText={value =>
-                setDebounced(() =>
-                  onChangeCost(
-                    actionItem.action,
-                    value ? parseFloat(value) : undefined,
-                  ),
-                )
-              }
+              container={'right'}
+              inputProps={{
+                inputAccessoryViewID: 'keyboardAccessory',
+                onChangeText: (_, unformatted) =>
+                  onChangeCost(actionItem.action, unformatted),
+                value: `${actionItem.action.cost || 0}`,
+                placeholder: '$0.00',
+                mask: Masks.CURRENCY,
+                rtlNumber: true,
+                keyboardType: 'number-pad',
+              }}
             />
-            <ListItem
-              title={actionItem.action.notes || 'No notes'}
+            <ListItemNotes
+              notes={actionItem.action.notes}
               position={isExpanded && isLastInList ? ['last'] : []}
               onPress={() =>
                 navigation.navigate('NotesEditor', {
                   title: 'Maintenance Notes',
                   text: actionItem.action.notes,
-                  extraData: actionItem.action.refId,
                   eventName: 'maintenance-notes',
                 })
               }
             />
           </>
         }
-        swipeable={swipeable}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen(
-            'maintenance-actions',
-            actionItem.action.refId,
-          )
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
       />
     );
   };
 
   return (
-    <SectionList
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}
-      stickySectionHeadersEnabled={true}
-      style={[theme.styles.view, s.sectionList]}
-      sections={actionsToDo}
-      keyExtractor={item => item.action.refId}
-      renderItem={renderChecklistAction}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
-      ListFooterComponent={
-        <>
-          <Divider />
-          <ListItem
-            title={'Add One-Time Maintenance'}
-            titleStyle={s.add}
-            position={['first', 'last']}
-            rightImage={false}
-            onPress={() =>
-              navigation.navigate('NewChecklistActionNavigator', {
-                screen: 'NewChecklistAction',
-                params: {
-                  modelId,
-                  checklistType: ChecklistType.OneTimeMaintenance,
-                  eventName: 'model-maintenance-one-time',
-                },
-              })
-            }
-          />
-          <Divider />
-        </>
-      }
-    />
+    <ListEditor ref={listEditorRef}>
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        style={[theme.styles.view, s.sectionList]}
+        sections={actionsToDo}
+        keyExtractor={item => item.action.refId}
+        renderItem={renderChecklistAction}
+        renderSectionHeader={({ section: { title } }) => (
+          <Divider text={title} />
+        )}
+        ListFooterComponent={
+          <>
+            <Divider />
+            <Button
+              title={'Add One-Time Maintenance'}
+              titleStyle={theme.styles.buttonAssertiveTitle}
+              buttonStyle={theme.styles.buttonAssertive}
+              containerStyle={theme.styles.buttonContainer}
+              outline
+              onPress={() =>
+                navigation.navigate('NewChecklistActionNavigator', {
+                  screen: 'NewChecklistAction',
+                  params: {
+                    modelId,
+                    checklistType: ChecklistType.OneTimeMaintenance,
+                    eventName: 'model-maintenance-one-time',
+                  },
+                })
+              }
+            />
+            <Divider />
+          </>
+        }
+      />
+    </ListEditor>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  add: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: theme.colors.clearButtonText,
-  },
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

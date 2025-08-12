@@ -1,14 +1,13 @@
-import { AppTheme, useTheme } from 'theme';
-import { Text, View } from 'react-native';
-
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { ContentView } from '@react-native-ajp-elements/ui';
-import React from 'react';
-import { TabController } from 'react-native-ui-lib';
-import { appConfig } from 'config';
+import { ContentView } from '@react-native-hello/ui';
 import { makeStyles } from '@rn-vui/themed';
+import { appConfig } from 'config';
 import privacy from 'lib/content/privacy';
 import terms from 'lib/content/terms';
+import React from 'react';
+import { Text, View } from 'react-native';
+import TabController from 'react-native-ui-lib/tabController';
+import { AppTheme, useTheme } from 'theme';
 
 const LegalView = () => {
   const theme = useTheme();

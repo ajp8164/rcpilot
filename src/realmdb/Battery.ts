@@ -1,8 +1,7 @@
 import { BSON, Object, ObjectSchema } from 'realm';
+import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
 import { ISODateString, ScanCodeSize } from 'types/common';
-
-import { BatteryCycle } from 'realmdb/BatteryCycle';
 
 export class Battery extends Object<Battery> {
   _id!: BSON.ObjectId;

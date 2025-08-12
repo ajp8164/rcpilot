@@ -1,18 +1,16 @@
-import { AppTheme, useTheme } from 'theme';
-import { Platform, ScrollView, StatusBar, Text } from 'react-native';
-import React, { useRef } from 'react';
-
-import { CheckBox } from '@rn-vui/base';
-import { LegalModal } from 'components/modals/LegalModal';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
-import { dispatch } from 'store';
-import { makeStyles } from '@rn-vui/themed';
-import { saveAcceptTou } from 'store/slices/appSettings';
-import { selectTou } from 'store/selectors/appSettingsSelectors';
+import { CheckBox, viewport } from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
+import { makeStyles } from '@rn-vui/themed';
+import { LegalModal } from 'components/modals/LegalModal';
+import React, { useRef } from 'react';
+import { Platform, ScrollView, StatusBar, Text } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { useSelector } from 'react-redux';
-import { viewport } from '@react-native-ajp-elements/ui';
+import { dispatch } from 'store';
+import { selectTou } from 'store/selectors/appSettingsSelectors';
+import { saveAcceptTou } from 'store/slices/appSettings';
+import { AppTheme, useTheme } from 'theme';
 
 const WelcomeScreen = () => {
   const theme = useTheme();
@@ -102,7 +100,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: 5,
   },
   termsText: {
-    ...theme.styles.link,
+    ...theme.styles.textLink,
     ...theme.styles.textSmall,
     color: theme.colors.textInv,
   },

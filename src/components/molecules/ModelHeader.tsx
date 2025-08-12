@@ -1,29 +1,29 @@
+import {
+  getColoredSvg,
+  useSelectAttachments,
+  viewport,
+} from '@react-native-hello/ui';
+import { useObject } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { modelTypeIconProps } from 'lib/model';
+import { Camera, ChevronLeft } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { Image, Platform, Text, View } from 'react-native';
 import Animated, {
   Extrapolation,
   SharedValue,
   interpolate,
   useAnimatedStyle,
 } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
-import { Image, Platform, Pressable, Text, View } from 'react-native';
-import React, { useState } from 'react';
-import {
-  getColoredSvg,
-  useSelectAttachments,
-  viewport,
-} from '@react-native-ajp-elements/ui';
-
-import { BSON } from 'realm';
-import CircleButton from 'components/atoms/CircleButton';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { Model } from 'realmdb/Model';
-import { ModelType } from 'types/model';
 import { SvgXml } from 'react-native-svg';
-import { makeStyles } from '@rn-vui/themed';
-import { modelTypeIcons } from 'lib/model';
-import { useObject } from '@realm/react';
+import { BSON } from 'realm';
+import { Model } from 'realmdb/Model';
+import { AppTheme, useTheme } from 'theme';
+import { ModelType } from 'types/model';
 
 interface ModelHeaderInterface {
+  navHeader?: boolean;
   modelId: string;
   modelType?: ModelType;
   onChangeImage?: (image?: string) => void;
@@ -32,6 +32,7 @@ interface ModelHeaderInterface {
 }
 
 export const ModelHeader = ({
+  navHeader,
   modelId,
   modelType,
   onChangeImage,
@@ -49,13 +50,13 @@ export const ModelHeader = ({
   const [image, setImage] = useState(model?.image || undefined);
 
   const modelTypeName = model
-    ? (modelTypeIcons[model.type]?.name as string)
+    ? (modelTypeIconProps[model.type]?.name as string)
     : modelType
-      ? (modelTypeIcons[modelType]?.name as string)
+      ? (modelTypeIconProps[modelType]?.name as string)
       : 'flag-checkered';
 
   const minHeight = theme.insets.top + 39;
-  const maxHeight = 150;
+  const maxHeight = 200;
 
   const backgroundOpacity = useAnimatedStyle(() => {
     if (!scrollY) return {};
@@ -69,7 +70,7 @@ export const ModelHeader = ({
     return {
       height: interpolate(
         scrollY.value,
-        [0, 40],
+        [0, 90],
         [maxHeight, minHeight],
         Extrapolation.CLAMP,
       ),
@@ -79,7 +80,7 @@ export const ModelHeader = ({
   const itemsOpacity = useAnimatedStyle(() => {
     if (!scrollY) return {};
     return {
-      opacity: interpolate(scrollY.value, [0, 18], [1, 0], Extrapolation.CLAMP),
+      opacity: interpolate(scrollY.value, [0, 25], [1, 0], Extrapolation.CLAMP),
     };
   });
 
@@ -91,7 +92,7 @@ export const ModelHeader = ({
           translateY: interpolate(
             scrollY.value,
             [0, maxHeight],
-            [0, -300],
+            [0, -500],
             Extrapolation.CLAMP,
           ),
         },
@@ -156,47 +157,71 @@ export const ModelHeader = ({
             style={s.headerImage}
           />
         ) : (
-          <View style={s.defaultHeaderImage}>
+          <View style={[s.defaultHeaderImage]}>
             <SvgXml
               xml={getColoredSvg(modelTypeName)}
-              width={s.dedaultModelImage.width}
+              width={s.defaultModelImage.width}
               height={'100%'}
               color={theme.colors.brandSecondary}
-              style={s.dedaultModelImage}
+              style={[
+                s.defaultModelImage,
+                navHeader ? { top: s.backgroundContainer.height / 6 } : {},
+              ]}
             />
           </View>
         )}
       </Animated.View>
       {/* Left button */}
       {onGoBack && (
-        <Pressable onPress={onGoBack} style={s.buttonLeftContainer}>
-          <Animated.View style={collapsedHeaderOpacity}>
-            <Icon
-              name={'chevron-left'}
-              style={[s.buttonLeft, s.buttonLeftCollapsed]}
-            />
-          </Animated.View>
-          <Animated.View style={backgroundOpacity}>
-            <Icon name={'chevron-left'} style={[s.buttonLeft]} />
-          </Animated.View>
-        </Pressable>
-      )}
-      {/* Items */}
-      <Animated.View style={[s.itemsContainer, itemsTranslateY, itemsOpacity]}>
-        <View style={s.buttonRightContainer}>
-          <CircleButton
-            size={30}
-            icon={'camera'}
-            onPress={() =>
-              (!model || (scrollY && scrollY.value < 5)) && selectModelImage()
+        <View style={[s.buttonLeftContainer]}>
+          <Button
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={
+              <>
+                <Animated.View style={collapsedHeaderOpacity}>
+                  <ChevronLeft
+                    color={theme.colors.screenHeaderButtonText}
+                    size={33}
+                  />
+                </Animated.View>
+                <Animated.View
+                  style={[backgroundOpacity, { position: 'absolute' }]}>
+                  <ChevronLeft
+                    color={theme.colors.whiteTransparentMid}
+                    size={33}
+                  />
+                </Animated.View>
+              </>
             }
+            onPress={onGoBack}
           />
         </View>
-        <View style={s.insetImageContainer}>
+      )}
+      {/* Right button */}
+      <View style={[s.buttonRightContainer]}>
+        <Button
+          buttonStyle={theme.styles.buttonScreenHeader}
+          icon={
+            <>
+              <Animated.View style={collapsedHeaderOpacity}>
+                <Camera color={theme.colors.screenHeaderButtonText} size={33} />
+              </Animated.View>
+              <Animated.View
+                style={[backgroundOpacity, { position: 'absolute' }]}>
+                <Camera color={theme.colors.whiteTransparentMid} size={33} />
+              </Animated.View>
+            </>
+          }
+          onPress={selectModelImage}
+        />
+      </View>
+      {/* Inset model icon */}
+      <Animated.View style={[s.itemsContainer, itemsTranslateY, itemsOpacity]}>
+        <View style={[s.insetImageContainer, navHeader ? { top: 165 } : {}]}>
           <SvgXml
             xml={getColoredSvg(modelTypeName)}
-            width={75}
-            height={75}
+            width={s.insetImageContainer.width}
+            height={s.insetImageContainer.height}
             color={theme.colors.hintGray}
             style={[s.insetImage]}
           />
@@ -211,26 +236,15 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: 150,
     backgroundColor: theme.colors.lightGray,
   },
-  buttonLeft: {
-    top: -22,
-    fontSize: 22,
-    width: 50,
-    color: theme.colors.whiteTransparentMid,
-  },
   buttonLeftContainer: {
     position: 'absolute',
-    left: 8,
-    top: theme.insets.top + 5,
+    top: theme.insets.top - 4,
+    left: -7,
   },
   buttonRightContainer: {
     position: 'absolute',
-    right: 15,
-    top: theme.insets.top,
-    alignItems: 'flex-end',
-  },
-  buttonLeftCollapsed: {
-    top: 0,
-    color: theme.colors.screenHeaderButtonText,
+    top: theme.insets.top - 4,
+    right: 7,
   },
   collapsedHeader: {
     backgroundColor: theme.colors.white,
@@ -257,15 +271,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flex: 1,
     alignItems: 'center',
   },
-  dedaultModelImage: {
-    top: 20,
+  defaultModelImage: {
     width: 125,
     transform: [{ rotate: '-45deg' }],
-  },
-  title: {
-    position: 'absolute',
-    bottom: 12,
-    ...theme.styles.textScreenTitle,
   },
   headerImage: {
     flex: 1,
@@ -277,17 +285,22 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   insetImage: {
     transform: [{ rotate: '-45deg' }],
-    left: -3,
-    top: -1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   insetImageContainer: {
     width: 70,
     height: 70,
     left: 35,
-    top: 110,
+    top: 115,
     borderWidth: 3,
     borderRadius: 15,
     borderColor: theme.colors.viewBackground,
     backgroundColor: theme.colors.darkGray,
+  },
+  title: {
+    position: 'absolute',
+    bottom: 12,
+    ...theme.styles.textScreenTitle,
   },
 }));

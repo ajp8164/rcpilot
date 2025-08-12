@@ -1,14 +1,12 @@
-import { AppTheme, useTheme } from 'theme';
-import { ClickTrackAfterExpiring, ClickTrackWhileRunning } from 'types/event';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
+import { Divider, ListItem } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rn-vui/themed';
 import React from 'react';
 import { ScrollView } from 'react-native';
+import Slider from 'react-native-ui-lib/slider';
+import { AppTheme, useTheme } from 'theme';
+import { ClickTrackAfterExpiring, ClickTrackWhileRunning } from 'types/event';
 import { SetupNavigatorParamList } from 'types/navigation';
-import { Slider } from 'react-native-ui-lib';
-import { makeStyles } from '@rn-vui/themed';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -39,6 +37,7 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
         title={'While Running'}
         value={'None'}
         position={['first']}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
             title: 'While Running',
@@ -52,6 +51,7 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
         title={'After Expiring'}
         value={'None'}
         position={['last']}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
             title: 'After Expiring',

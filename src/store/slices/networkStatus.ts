@@ -1,6 +1,5 @@
-import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
-
 import { NetInfoStateType } from '@react-native-community/netinfo';
+import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { revertSettings } from 'store/actions';
 
 export interface NetworkStatusState {

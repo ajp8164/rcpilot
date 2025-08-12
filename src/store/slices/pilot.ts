@@ -1,5 +1,4 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
-
 import { revertSettings } from 'store/actions';
 
 export interface PilotState {

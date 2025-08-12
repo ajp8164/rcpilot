@@ -2,7 +2,7 @@ import React from 'react';
 
 export declare type DeckCardPropertiesModal = DeckCardPropertiesModalMethods;
 
-declare const LegalModal: React.MemoExoticComponent<
+declare const DeckCardPropertiesModal: React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     DeckCardPropertiesModalProps &
       React.RefAttributes<CDeckardPropertiesModalMethods>

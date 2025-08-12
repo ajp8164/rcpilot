@@ -1,3 +1,44 @@
+import * as Yup from 'yup';
+import {
+  CollapsibleView,
+  Divider,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListItem,
+  ListItemCollapsible,
+  ListItemSwitch,
+  WheelPicker,
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject } from '@realm/react';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import {
+  ListItemInput,
+  ListItemInputMethods,
+  ListItemNotes,
+} from 'components/atoms/List';
+import { Formik, FormikProps } from 'formik';
+import {
+  actionScheduleState,
+  getChecklistActionScheduleItems,
+} from 'lib/checklist';
+import { useEvent } from 'lib/event';
+import { secondsToFormat } from 'lib/formatters';
+import { Masks } from 'lib/inputMasks';
+import { eventKind } from 'lib/modelEvent';
+import { DateTime } from 'luxon';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+import Realm, { BSON } from 'realm';
+import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/Checklist';
+import { Model } from 'realmdb/Model';
+import { useTheme } from 'theme';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionScheduleFollowing,
@@ -6,38 +47,12 @@ import {
   ChecklistActionScheduleWhenPerform,
   ChecklistType,
 } from 'types/checklist';
-import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/Checklist';
-import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
+import { ISODateString } from 'types/common';
 import {
   ModelsNavigatorParamList,
   NewChecklistActionNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import React, { useEffect, useRef, useState } from 'react';
-import Realm, { BSON } from 'realm';
-import {
-  actionScheduleState,
-  getChecklistActionScheduleItems,
-} from 'lib/checklist';
-import { eqNumber, eqString } from 'realmdb/helpers';
-
-import { CompositeScreenProps } from '@react-navigation/core';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ISODateString } from 'types/common';
-import { Model } from 'realmdb/Model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { ScrollView } from 'react-native';
-import WheelPicker from 'components/atoms/WheelPicker';
-import { eventKind } from 'lib/modelEvent';
-import { secondsToFormat } from 'lib/formatters';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
-import { useObject } from '@realm/react';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSetState } from '@react-native-ajp-elements/core';
-import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'>,
@@ -50,20 +65,30 @@ export type Props = CompositeScreenProps<
   >
 >;
 
+// Order of fields for accessory view.
+enum Fields {
+  description,
+  cost,
+  notes,
+}
+
+type FormValues = {
+  description: string;
+  cost: string;
+  schedule: Omit<ChecklistActionSchedule, keyof Realm.Object>;
+  notes: string;
+};
+
 const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   const { checklistType, checklistAction, modelId, eventName } = route.params;
 
   const theme = useTheme();
   const event = useEvent();
-  const setDebounced = useDebouncedRender();
-  const setScreenEditHeader = useScreenEditHeader();
 
   // If a model id is provided then this action is attached to a checklist on the model, not a checklist template.
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
   const action = useRef(checklistAction).current;
-  // If refId is undefined then we're creating a new action.
-  const isNewAction = useRef(checklistAction?.refId === undefined).current;
 
   // Force non-repeating items for creating a one-time maintenance action.
   const initialScheduleItems = useRef(
@@ -75,12 +100,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     ),
   ).current;
 
-  const description = useRef(action?.description);
-  const cost = useRef(action?.cost?.toFixed(2));
-  const [notes, setNotes] = useState(action?.notes || undefined);
-  const [selectedSchedule, setSelectedSchedule] =
-    useSetState<Omit<ChecklistActionSchedule, keyof Realm.Object>>();
-
+  const scheduleInitialized = useRef(false);
   const [schedulePickerOpen, setSchedulePickerOpen] = useState(false);
   const schedulePickerItems = useRef(initialScheduleItems.items);
   const [schedulePickerValue, setSchedulePickerValue] = useState<string[]>(
@@ -95,6 +115,30 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     whenPerformValue: '',
   });
 
+  const initialValues = useMemo(() => {
+    return {
+      description: action?.description || '',
+      cost: action?.cost?.toFixed(2) || '',
+      schedule: action?.schedule || {},
+      notes: action?.notes || '',
+    } as FormValues;
+  }, [action]);
+
+  const schema = Yup.object().shape({
+    description: Yup.string().required(),
+    cost: Yup.string(),
+    scheduleChanged: Yup.boolean(),
+    notes: Yup.string(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const descriptionFieldRef = useRef<ListItemInputMethods>(null);
+  const costFieldRef = useRef<ListItemInputMethods>(null);
+
   useEffect(() => {
     if (checklistType === ChecklistType.OneTimeMaintenance) {
       // Set the selected schedule to 'Today' (appears in non-repeating schedule only).
@@ -108,18 +152,18 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       ]);
 
       // Only need to specify the type, other properties set via hook.
-      setSelectedSchedule({
+      formikRef.current?.setFieldValue('schedule', {
         type: ChecklistActionScheduleType.NonRepeating,
       });
     } else if (!action) {
       // Default values for a new action.
-      setSelectedSchedule({
+      formikRef.current?.setFieldValue('schedule', {
         period: initialScheduleItems.default.frequency,
         type: ChecklistActionScheduleType.Repeating,
         value: Number(initialScheduleItems.default.value),
       });
     } else {
-      setSelectedSchedule(action.schedule);
+      formikRef.current?.setFieldValue('schedule', action.schedule);
     }
 
     // Initialize wheel items based on schedule type.
@@ -130,46 +174,6 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    const canSave =
-      !!description.current &&
-      (!eqString(action?.description, description.current) ||
-        !eqString(action?.schedule?.period, selectedSchedule.period) ||
-        !eqNumber(
-          action?.schedule?.value,
-          selectedSchedule.value?.toString(),
-        ) ||
-        !eqString(action?.schedule?.type, selectedSchedule.type) ||
-        !eqNumber(action?.cost, cost.current) ||
-        !eqString(action?.notes, notes));
-
-    const onDone = () => {
-      const result: JChecklistAction = {
-        history: [],
-        ...action,
-        description: description.current || '',
-        schedule: selectedSchedule,
-        cost: Number(cost.current) || undefined,
-        notes,
-      };
-
-      result.schedule.state = actionScheduleState(
-        result,
-        checklistType,
-        model || undefined,
-      );
-
-      event.emit(eventName, result);
-      navigation.goBack();
-    };
-
-    setScreenEditHeader(
-      { enabled: canSave, action: onDone },
-      { visible: isNewAction },
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [description.current, selectedSchedule, cost.current, notes]);
-
-  useEffect(() => {
     event.on('checklist-action-notes', onChangeNotes);
     return () => {
       event.removeListener('checklist-action-notes', onChangeNotes);
@@ -177,12 +181,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onChangeNotes = (result: NotesEditorResult) => {
-    setNotes(result.text);
-  };
-
   useEffect(() => {
-    let following: ISODateString | string;
+    let following: ISODateString | string = '';
     let followingStr = '';
     const period = schedulePickerValue[1] as ChecklistActionSchedulePeriod;
     const whenPerformValue = whenPerformValueToString(
@@ -190,12 +190,12 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       schedulePickerValue[1],
     );
 
+    const scheduleType = formikRef.current?.values.schedule.type;
+
     // Set strings based on selected action schedule.
     switch (period) {
       case ChecklistActionSchedulePeriod.Events:
-        if (
-          selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
-        ) {
+        if (scheduleType === ChecklistActionScheduleType.NonRepeating) {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.EventAtInstall;
           } else {
@@ -209,7 +209,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         setScheduleStr({
           following: followingStr,
           whenPerform:
-            selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
+            scheduleType === ChecklistActionScheduleType.NonRepeating
               ? ChecklistActionScheduleWhenPerform.After
               : ChecklistActionScheduleWhenPerform.Every,
           whenPerformValue,
@@ -217,20 +217,18 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         break;
 
       case ChecklistActionSchedulePeriod.ModelMinutes:
-        if (
-          selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
-        ) {
+        if (scheduleType === ChecklistActionScheduleType.NonRepeating) {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.TimeAtInstall;
           } else {
             following = `${model.statistics.totalTime}`;
-            followingStr = `Total Time ${secondsToFormat(model.statistics.totalTime, { format: 'm:ss' })}`;
+            followingStr = `Total Time ${secondsToFormat(model.statistics.totalTime, { format: "h'h' m'm'" })}`;
           }
         }
         setScheduleStr({
           following: followingStr,
           whenPerform:
-            selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
+            scheduleType === ChecklistActionScheduleType.NonRepeating
               ? ChecklistActionScheduleWhenPerform.After
               : ChecklistActionScheduleWhenPerform.Every,
           whenPerformValue,
@@ -240,9 +238,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
       case ChecklistActionSchedulePeriod.Days:
       case ChecklistActionSchedulePeriod.Weeks:
       case ChecklistActionSchedulePeriod.Months:
-        if (
-          selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
-        ) {
+        if (scheduleType === ChecklistActionScheduleType.NonRepeating) {
           if (!model) {
             followingStr = ChecklistActionScheduleFollowing.InstallDate;
           } else {
@@ -253,7 +249,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         setScheduleStr({
           following: followingStr,
           whenPerform:
-            selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
+            scheduleType === ChecklistActionScheduleType.NonRepeating
               ? ChecklistActionScheduleWhenPerform.In
               : ChecklistActionScheduleWhenPerform.Every,
           whenPerformValue,
@@ -269,45 +265,120 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
         break;
     }
 
-    setSelectedSchedule(prevState => {
-      return {
-        ...prevState,
-        following,
-        period,
-        value: Number(schedulePickerValue[0]),
-      };
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [schedulePickerValue, selectedSchedule.type]);
+    following.length &&
+      formikRef.current?.setFieldValue('schedule.following', following);
+    formikRef.current?.setFieldValue('schedule.period', period);
+    formikRef.current?.setFieldValue(
+      'schedule.value',
+      Number(schedulePickerValue[0]),
+    );
 
-  function whenPerformValueToString(value: string, period: string) {
-    // Need to hoist
+    // Update schedule initial value when schedule is completely setup.
+    if (
+      formikRef.current?.values.schedule.type &&
+      !scheduleInitialized.current
+    ) {
+      initialValues.schedule = formikRef.current?.values.schedule;
+      scheduleInitialized.current = true;
+    }
+  }, [
+    schedulePickerValue,
+    formikRef.current?.values.schedule.type,
+    model,
+    initialValues,
+  ]);
+
+  const cancel = () => {
+    formikRef.current?.resetForm();
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    const result: JChecklistAction = {
+      history: [],
+      ...action,
+      description: values.description || '',
+      schedule: values.schedule,
+      cost: Number(values.cost) || undefined,
+      notes: values.notes,
+    };
+    result.schedule.state = actionScheduleState(
+      result,
+      checklistType,
+      model || undefined,
+    );
+
+    event.emit(eventName, result);
+    formikRef.current?.setFieldValue('scheduleChanged', false);
+  };
+
+  const onChangeNotes = (result: NotesEditorResult) => {
+    formikRef.current?.setFieldValue('notes', result.text);
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    navigation.setOptions({
+      headerLeft: () => {
+        if (next.dirty) {
+          return (
+            <Button
+              title={'Cancel'}
+              titleStyle={theme.styles.buttonScreenHeaderTitle}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              onPress={cancel}
+            />
+          );
+        }
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
+  };
+
+  const whenPerformValueToString = (value: string, period: string) => {
     if (period === ChecklistActionNonRepeatingScheduleTimeframe.Today) {
       return period;
     } else {
       return `${value} ${Number(value) > 1 ? period : period.replace(/s$/, '')}`;
     }
-  }
+  };
 
   const toggleActionRepeats = (value: boolean) => {
     const newType = value
       ? ChecklistActionScheduleType.Repeating
       : ChecklistActionScheduleType.NonRepeating;
 
-    setSelectedSchedule(prevState => {
-      return {
-        ...prevState,
-        type: newType,
-      };
-    });
+    formikRef.current?.setFieldValue('schedule.type', newType);
 
     // If there are changes to the items then the picker wheel is updated.
     schedulePickerItems.current =
       getChecklistActionScheduleItems(newType).items;
-  };
-
-  const toggleSchedulePickerOpen = () => {
-    setSchedulePickerOpen(!schedulePickerOpen);
   };
 
   const hideValueWheel =
@@ -315,142 +386,179 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
     ChecklistActionNonRepeatingScheduleTimeframe.Today;
 
   return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'PERFORM'} />
-      <ListItemInput
-        value={description.current}
-        placeholder={'Brief action description'}
-        position={['first', 'last']}
-        onChangeText={value =>
-          setDebounced(() => (description.current = value))
-        }
-      />
-      <Divider text={'ON SCHEDULE'} />
-      <ListItem
-        title={scheduleStr.whenPerform}
-        value={scheduleStr.whenPerformValue}
-        position={
-          action?.history.length && scheduleStr.following
-            ? ['first']
-            : action?.history.length
-              ? ['first', 'last']
-              : ['first']
-        }
-        onPress={toggleSchedulePickerOpen}
-        rightImage={false}
-        disabled={
-          (action?.schedule.type === ChecklistActionScheduleType.NonRepeating &&
-            action?.history.length > 0) ||
-          checklistType === ChecklistType.OneTimeMaintenance
-        }
-        expanded={schedulePickerOpen}
-        ExpandableComponent={
-          // Wheel index 0 is value, wheel index 1 is timeframe/frequency.
-          <WheelPicker
-            placeholder={'none'}
-            itemWidth={hideValueWheel ? ['0%', '100%'] : ['30%', '70%']}
-            wheelVisible={[!hideValueWheel, true]}
-            items={schedulePickerItems.current}
-            value={schedulePickerValue}
-            onValueChange={(_wheelIndex, value, _index) => {
-              setSchedulePickerValue(value as string[]);
-            }}
-          />
-        }
-      />
-      <ListItem
-        title={'Following'}
-        value={scheduleStr.following}
-        visible={!!scheduleStr.following}
-        position={
-          action?.schedule.type === ChecklistActionScheduleType.NonRepeating &&
-          action?.history.length > 0
-            ? ['last']
-            : []
-        }
-        rightImage={false}
-        onPress={() => null}
-      />
-      {!action?.history.length && (
-        <ListItemSwitch
-          title={'Action Repeats'}
-          value={
-            selectedSchedule.type === ChecklistActionScheduleType.Repeating
-          }
-          disabled={
-            selectedSchedule?.period ===
-            ChecklistActionNonRepeatingScheduleTimeframe.Today
-          }
-          position={['last']}
-          onValueChange={toggleActionRepeats}
-        />
-      )}
-      {checklistType === ChecklistType.OneTimeMaintenance ? (
-        <Divider
-          note
-          text={
-            'Changes to the action are limited. This is a one-time maintenance action.'
-          }
-        />
-      ) : action?.history.length ? (
-        <Divider
-          note
-          text={
-            'Changes to the action are limited. This action has been performed at least once.'
-          }
-        />
-      ) : null}
-      {(checklistType === ChecklistType.Maintenance ||
-        checklistType === ChecklistType.OneTimeMaintenance) && (
-        <>
-          <Divider text={'MAINTENANCE COSTS'} />
-          <ListItemInput
-            title={'Total Costs'}
-            value={cost.current}
-            numeric={true}
-            keyboardType={'number-pad'}
-            placeholder={'None'}
-            position={['first', 'last']}
-            onChangeText={value => setDebounced(() => (cost.current = value))}
-          />
-        </>
-      )}
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            title: 'Action Notes',
-            text: notes,
-            eventName: 'checklist-action-notes',
-          })
-        }
-      />
-      {modelId && action && (
-        <>
-          <Divider text={'LOG'} />
-          <ListItem
-            title={'Action Log'}
-            value={
-              action.history.length === 1
-                ? `${action.history.length} entry`
-                : `${action.history.length} entries`
+    <>
+      <ScrollView
+        style={theme.styles.view}
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
             }
-            position={['first', 'last']}
-            onPress={() =>
-              navigation.navigate('ChecklistActionHistory', {
-                action,
-                modelId,
-              })
-            }
-          />
-        </>
-      )}
-    </ScrollView>
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          enableReinitialize
+          onSubmit={onSubmit}>
+          {({ handleChange, values, errors }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
+              />
+              <Divider text={'PERFORM'} />
+              <ListItemInput
+                ref={descriptionFieldRef}
+                position={['first', 'last']}
+                error={!!errors.description}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('description'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.description),
+                  value: values.description,
+                  placeholder: 'Brief action description',
+                  autoCapitalize: 'words',
+                }}
+              />
+              <Divider text={'ON SCHEDULE'} />
+              <ListItemCollapsible
+                title={scheduleStr.whenPerform}
+                value={scheduleStr.whenPerformValue}
+                position={
+                  action?.history.length && scheduleStr.following
+                    ? ['first']
+                    : action?.history.length
+                      ? ['first', 'last']
+                      : ['first']
+                }
+                initExpanded={schedulePickerOpen}
+                onPress={() => setSchedulePickerOpen(!schedulePickerOpen)}>
+                {/* Wheel index 0 is value, wheel index 1 is timeframe/frequency. */}
+                <WheelPicker
+                  placeholder={'none'}
+                  itemWidth={hideValueWheel ? ['0%', '100%'] : ['30%', '70%']}
+                  wheelVisible={[!hideValueWheel, true]}
+                  items={schedulePickerItems.current}
+                  value={schedulePickerValue}
+                  onValueChange={(_wheelIndex, value, _index) => {
+                    setSchedulePickerValue(value as string[]);
+                  }}
+                />
+              </ListItemCollapsible>
+              <CollapsibleView expanded={!!scheduleStr.following}>
+                <ListItem
+                  title={'Following'}
+                  value={scheduleStr.following}
+                  position={
+                    action?.schedule.type ===
+                      ChecklistActionScheduleType.NonRepeating &&
+                    action?.history.length > 0
+                      ? ['last']
+                      : []
+                  }
+                />
+              </CollapsibleView>
+              {!action?.history.length && (
+                <ListItemSwitch
+                  title={'Action Repeats'}
+                  value={
+                    values.schedule.type ===
+                    ChecklistActionScheduleType.Repeating
+                  }
+                  disabled={
+                    values.schedule.period ===
+                    ChecklistActionNonRepeatingScheduleTimeframe.Today
+                  }
+                  position={['last']}
+                  onValueChange={toggleActionRepeats}
+                />
+              )}
+              {checklistType === ChecklistType.OneTimeMaintenance ? (
+                <Divider
+                  note
+                  text={
+                    'Changes to the action are limited. This is a one-time maintenance action.'
+                  }
+                />
+              ) : action?.history.length ? (
+                <Divider
+                  note
+                  text={
+                    'Changes to the action are limited. This action has been performed at least once.'
+                  }
+                />
+              ) : null}
+              {(checklistType === ChecklistType.Maintenance ||
+                checklistType === ChecklistType.OneTimeMaintenance) && (
+                <>
+                  <Divider text={'MAINTENANCE COSTS'} />
+                  <ListItemInput
+                    ref={costFieldRef}
+                    position={['first', 'last']}
+                    title={'Total Costs'}
+                    container={'right'}
+                    inputProps={{
+                      inputAccessoryViewID: 'keyboardAccessory',
+                      onChangeText: (_, unformatted) =>
+                        handleChange('cost')(unformatted),
+                      onFocus: () =>
+                        keyboardAccessory.current?.focusedField(Fields.cost),
+                      value: values.cost,
+                      placeholder: '$0.00',
+                      mask: Masks.CURRENCY,
+                      rtlNumber: true,
+                      keyboardType: 'number-pad',
+                    }}
+                  />
+                </>
+              )}
+              <Divider text={'NOTES'} />
+              <ListItemNotes
+                notes={values.notes}
+                position={['first', 'last']}
+                onPress={() =>
+                  navigation.navigate('NotesEditor', {
+                    title: 'Action Notes',
+                    text: values.notes,
+                    eventName: 'checklist-action-notes',
+                  })
+                }
+              />
+            </View>
+          )}
+        </Formik>
+        {modelId && action && (
+          <>
+            <Divider text={'LOG'} />
+            <ListItem
+              title={'Action Log'}
+              value={
+                action.history.length === 1
+                  ? `${action.history.length} entry`
+                  : `${action.history.length} entries`
+              }
+              position={['first', 'last']}
+              onPress={() =>
+                navigation.navigate('ChecklistActionHistory', {
+                  action,
+                  modelId,
+                })
+              }
+            />
+          </>
+        )}
+      </ScrollView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={[descriptionFieldRef.current, costFieldRef.current]}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
+      />
+    </>
   );
 };
 

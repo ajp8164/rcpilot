@@ -1,3 +1,7 @@
+export type EventPreferences = {
+  timerUsesButtons: boolean;
+};
+
 export enum ModelsLayout {
   CardDeck = 'Card Deck',
   List = 'List',

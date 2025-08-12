@@ -1,5 +1,5 @@
-import { Keyboard, KeyboardEvent } from 'react-native';
 import { useEffect, useState } from 'react';
+import { Keyboard, KeyboardEvent } from 'react-native';
 
 /**
  * Shows height of keyboard when shown

@@ -1,26 +1,25 @@
-import { User, UserProfile, UserRole, UserStatus } from 'types/user';
+import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { log } from '@react-native-hello/core';
 import {
   addUser,
   cancelAllFirestoreSubscriptions,
   getUser,
   updateUser,
 } from 'firebase/firestore';
-import { getUserAvatarColor, getUserInitials } from 'lib/user';
+import { signOut } from 'lib/auth';
+import { listenForChangesToMyUserProfile } from 'lib/listeners';
 import {
   removePushNotificationsFromUser,
   setupPushNotificationsForUser,
 } from 'lib/notifications';
-
-import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { listenForChangesToMyUserProfile } from 'lib/listeners';
+import { getUserAvatarColor, getUserInitials } from 'lib/user';
 import lodash from 'lodash';
-import { log } from '@react-native-ajp-elements/core';
+import { useDispatch } from 'react-redux';
+import { store } from 'store';
 import { revertCredentials } from 'store/actions';
 import { saveUser } from 'store/slices/user';
-import { signOut } from 'lib/auth';
-import { store } from 'store';
-import { useDispatch } from 'react-redux';
 import { useTheme } from 'theme';
+import { User, UserProfile, UserRole, UserStatus } from 'types/user';
 
 export const useAuthorizeUser = () => {
   const setUser = useSetUser();

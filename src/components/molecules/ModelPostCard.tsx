@@ -1,18 +1,16 @@
-import { Image, Text, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import React from 'react';
-
-import Icon from 'react-native-vector-icons/FontAwesome6';
+import { getColoredSvg } from '@react-native-hello/ui';
 import { makeStyles } from '@rn-vui/themed';
-import { getColoredSvg } from '@react-native-ajp-elements/ui';
-import { Model, Pilot } from 'realmdb';
-import { modelMaintenanceIsDue, modelTypeIcons } from 'lib/model';
-import { SvgXml } from 'react-native-svg';
-import { Button } from '@rn-vui/base';
-import { eventKind } from 'lib/modelEvent';
-import CustomIcon from 'theme/icomoon/CustomIcon';
+import { Button } from 'components/atoms/Button';
 import { secondsToFormat } from 'lib/formatters';
+import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { CirclePlay, Info, Trophy } from 'lucide-react-native';
 import { DateTime } from 'luxon';
+import React from 'react';
+import { Image, Text, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import { Model, Pilot } from 'realmdb';
+import { AppTheme, useTheme } from 'theme';
 
 interface ModelPostCardInterface {
   model: Model;
@@ -51,7 +49,7 @@ export const ModelPostCard = ({
               {`${model.statistics.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
             </Text>
             <Text style={s.modelCardSubtitle}>
-              {`${secondsToFormat(model.statistics.totalTime, { format: 'm:ss' })} total time`}
+              {`${secondsToFormat(model.statistics.totalTime, { format: "h'h' m'm'" })} total time`}
             </Text>
           </View>
         </View>
@@ -65,7 +63,7 @@ export const ModelPostCard = ({
       ) : (
         <View style={s.modelCardSvg}>
           <SvgXml
-            xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+            xml={getColoredSvg(modelTypeIconProps[model.type]?.name as string)}
             width={s.modelImage.width}
             height={'100%'}
             color={theme.colors.brandSecondary}
@@ -85,39 +83,18 @@ export const ModelPostCard = ({
         {pilot && (
           <Button
             buttonStyle={s.modelCardButton}
-            icon={
-              <Icon
-                name={'medal'}
-                color={theme.colors.clearButtonText}
-                size={26}
-                style={s.achievementButtonIcon}
-              />
-            }
+            icon={<Trophy color={theme.colors.clearButtonText} size={33} />}
             onPress={() => onPressAchievements(pilot, model)}
           />
         )}
         <Button
           buttonStyle={s.modelCardButton}
-          icon={
-            <CustomIcon
-              name={'circle-info'}
-              size={30}
-              color={theme.colors.clearButtonText}
-              style={s.modelCardButtonIcon}
-            />
-          }
+          icon={<Info color={theme.colors.clearButtonText} size={33} />}
           onPress={() => onPressEditModel(model)}
         />
         <Button
           buttonStyle={s.modelCardButton}
-          icon={
-            <Icon
-              name={'circle-play'}
-              size={30}
-              color={theme.colors.clearButtonText}
-              style={s.modelCardButtonIcon}
-            />
-          }
+          icon={<CirclePlay color={theme.colors.clearButtonText} size={33} />}
           onPress={() => onPressNewEvent(model)}
         />
       </View>
@@ -126,10 +103,6 @@ export const ModelPostCard = ({
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  achievementButtonIcon: {
-    height: 30,
-    top: 2,
-  },
   achievementButtonTitle: {
     ...theme.styles.textTiny,
     ...theme.styles.textBold,
@@ -137,12 +110,25 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.stickyWhite,
     width: 30,
   },
+  modelCardButton: {
+    ...theme.styles.buttonScreenHeader,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: 50,
+  },
   modelCard: {
     width: '100%',
     paddingVertical: 10,
     marginBottom: 15,
     overflow: 'hidden',
     backgroundColor: theme.colors.listItem,
+  },
+  modelCardFooter: {
+    flexDirection: 'row',
+    height: 48,
+    paddingTop: 10,
+    paddingHorizontal: 5,
+    alignItems: 'center',
   },
   modelCardHeader: {
     flexDirection: 'row',
@@ -184,20 +170,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     minHeight: 132,
     alignItems: 'center',
     backgroundColor: '#E3F2FD',
-  },
-  modelCardFooter: {
-    flexDirection: 'row',
-    height: 48,
-    paddingTop: 10,
-    paddingHorizontal: 15,
-    alignItems: 'center',
-  },
-  modelCardButton: {
-    ...theme.styles.buttonScreenHeader,
-    marginRight: 15,
-  },
-  modelCardButtonIcon: {
-    height: 30,
   },
   modelIcon: {
     transform: [{ rotate: '-45deg' }],

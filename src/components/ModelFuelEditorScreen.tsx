@@ -1,81 +1,81 @@
-import { ListItem, ListItemInput } from 'components/atoms/List';
+import * as Yup from 'yup';
+import {
+  Divider,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import {
+  ListItemInput,
+  ListItemInputMethods,
+  ListItemNotes,
+} from 'components/atoms/List';
+import { Formik, FormikProps } from 'formik';
+import { useEvent } from 'lib/event';
+import { Masks } from 'lib/inputMasks';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+import { BSON } from 'realm';
+import { ModelFuel } from 'realmdb/ModelFuel';
+import { useTheme } from 'theme';
 import {
   NewModelFuelNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import React, { useEffect, useRef, useState } from 'react';
-import { eqNumber, eqString, toNumber } from 'realmdb/helpers';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { CompositeScreenProps } from '@react-navigation/core';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ModelFuel } from 'realmdb/ModelFuel';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import { ScrollView } from 'react-native';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEvent } from 'lib/event';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useTheme } from 'theme';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuelEditor'>,
   NativeStackScreenProps<NewModelFuelNavigatorParamList, 'NewModelFuel'>
 >;
 
+// Order of fields for accessory view.
+enum Fields {
+  name,
+  cost,
+}
+
+type FormValues = {
+  name: string;
+  cost: string;
+  notes: string;
+};
+
 const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
   const { modelFuelId } = route.params || {};
   const theme = useTheme();
   const event = useEvent();
-  const setDebounced = useDebouncedRender();
-  const setScreenEditHeader = useScreenEditHeader();
 
   const realm = useRealm();
   const modelFuel = useObject(ModelFuel, new BSON.ObjectId(modelFuelId));
 
-  const name = useRef(modelFuel?.name || undefined);
-  const cost = useRef(modelFuel?.cost?.toFixed(2) || undefined);
-  const [notes, setNotes] = useState(modelFuel?.notes || undefined);
+  const initialValues = {
+    name: modelFuel?.name || '',
+    cost: modelFuel?.cost?.toFixed(2) || '',
+    notes: modelFuel?.notes || '',
+  } as FormValues;
 
-  useEffect(() => {
-    const canSave =
-      !!name.current &&
-      (!eqString(modelFuel?.name, name.current) ||
-        !eqNumber(modelFuel?.cost, cost.current) ||
-        !eqString(modelFuel?.notes, notes));
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    cost: Yup.string(),
+    notes: Yup.string(),
+  });
 
-    const save = () => {
-      if (modelFuel) {
-        realm.write(() => {
-          modelFuel.updatedOn = DateTime.now().toISO();
-          modelFuel.name = name.current || 'no-name';
-          modelFuel.cost = toNumber(cost.current);
-          modelFuel.notes = notes;
-        });
-      } else {
-        realm.write(() => {
-          const now = DateTime.now().toISO();
-          realm.create('ModelFuel', {
-            createdOn: now,
-            updatedOn: now,
-            name: name.current,
-            cost: toNumber(cost.current),
-            notes,
-          });
-        });
-      }
-    };
-
-    const onDone = () => {
-      save();
-      navigation.goBack();
-    };
-
-    setScreenEditHeader({ enabled: canSave, action: onDone });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name.current, cost.current, notes]);
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const nameFieldRef = useRef<ListItemInputMethods>(null);
+  const costFieldRef = useRef<ListItemInputMethods>(null);
 
   useEffect(() => {
     event.on('fuel-notes', onChangeNotes);
@@ -85,46 +85,167 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const cancel = () => {
+    formikRef.current?.resetForm();
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    const now = DateTime.now().toISO();
+    if (modelFuel) {
+      realm.write(() => {
+        modelFuel.updatedOn = now;
+        modelFuel.name = values.name || 'no-name';
+        modelFuel.cost = values.cost ? parseFloat(values.cost) : undefined;
+        modelFuel.notes = values.notes;
+      });
+    } else {
+      realm.write(() => {
+        realm.create('ModelFuel', {
+          createdOn: now,
+          updatedOn: now,
+          name: values.name,
+          cost: values.cost ? parseFloat(values.cost) : undefined,
+          notes: values.notes,
+        });
+      });
+    }
+  };
+
   const onChangeNotes = (result: NotesEditorResult) => {
-    setNotes(result.text);
+    formikRef.current?.setFieldValue('notes', result.text);
+  };
+
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, changedFields, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
+
+    // Update header as name changes.
+    if (changedFields?.includes('name')) {
+      navigation.setOptions({
+        title: next?.values.name,
+      });
+    }
+
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
   };
 
   return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'DETAILS'} />
-      <ListItemInput
-        value={name.current}
-        placeholder={'Name for the fuel'}
-        position={['first', 'last']}
-        onChangeText={value => setDebounced(() => (name.current = value))}
+    <>
+      <ScrollView
+        style={theme.styles.view}
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}>
+        <Divider text={'DETAILS'} />
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
+            }
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          onSubmit={onSubmit}>
+          {({ handleChange, values }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
+              />
+              <ListItemInput
+                ref={nameFieldRef}
+                position={['first', 'last']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('name'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.name),
+                  value: values.name,
+                  placeholder: 'Fuel Name',
+                  autoCapitalize: 'words',
+                }}
+              />
+              <Divider />
+              <ListItemInput
+                ref={costFieldRef}
+                position={['first', 'last']}
+                title={'Fuel Cost'}
+                units={'per gal'}
+                container={'right'}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: (_, unformatted) =>
+                    handleChange('cost')(unformatted),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.cost),
+                  value: values.cost,
+                  placeholder: '$0.00',
+                  mask: Masks.CURRENCY,
+                  rtlNumber: true,
+                  keyboardType: 'number-pad',
+                }}
+              />
+              <Divider text={'NOTES'} />
+              <ListItemNotes
+                notes={values.notes}
+                position={['first', 'last']}
+                onPress={() =>
+                  navigation.navigate('NotesEditor', {
+                    title: 'Fuel Notes',
+                    text: values.notes,
+                    eventName: 'fuel-notes',
+                  })
+                }
+              />
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={[nameFieldRef.current, costFieldRef.current]}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <Divider />
-      <ListItemInput
-        title={'Fuel Cost'}
-        label={'per gal'}
-        value={cost.current}
-        placeholder={'Amount'}
-        numeric={true}
-        keyboardType={'number-pad'}
-        position={['first', 'last']}
-        onChangeText={value => setDebounced(() => (cost.current = value))}
-      />
-      <Divider text={'NOTES'} />
-      <ListItem
-        title={notes || 'Notes'}
-        position={['first', 'last']}
-        onPress={() =>
-          navigation.navigate('NotesEditor', {
-            title: 'Fuel Notes',
-            text: notes,
-            eventName: 'fuel-notes',
-          })
-        }
-      />
-    </ScrollView>
+    </>
   );
 };
 

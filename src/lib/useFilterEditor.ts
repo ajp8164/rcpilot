@@ -1,15 +1,14 @@
-import { AnyFilterValues, FilterType, FilterValues } from 'types/filter';
+import { useSetState } from '@react-native-hello/core';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { eqObject, eqString } from 'realmdb/helpers';
-import { useEffect, useState } from 'react';
 import { useObject, useRealm } from '@realm/react';
-
+import { FilterState } from 'components/molecules/filters';
+import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { useEffect, useState } from 'react';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
-import { FilterState } from 'components/molecules/filters';
+import { eqObject } from 'realmdb/helpers';
+import { AnyFilterValues, FilterType, FilterValues } from 'types/filter';
 import { MultipleNavigatorParamList } from 'types/navigation';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSetState } from '@react-native-ajp-elements/core';
 
 export interface FilterEditorInterface<T> {
   filterId: string;
@@ -19,9 +18,23 @@ export interface FilterEditorInterface<T> {
   generalFilterName: string;
 }
 
+export type FilterEditorInstance<T> = {
+  filter: Filter | null;
+  values: FilterValues;
+  generalFilterName: string;
+  name?: string;
+  customName?: string;
+  createSavedFilter: boolean;
+  setName: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setCustomName: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setCreateSavedFilter: React.Dispatch<React.SetStateAction<boolean>>;
+  resetFilter: () => void;
+  onFilterValueChange: (property: keyof T, filterState: FilterState) => void;
+};
+
 export const useFilterEditor = <T extends AnyFilterValues>(
   props: FilterEditorInterface<T>,
-) => {
+): FilterEditorInstance<T> => {
   const {
     filterId,
     filterType,
@@ -48,12 +61,12 @@ export const useFilterEditor = <T extends AnyFilterValues>(
   useEffect(() => {
     if (!filter) return;
 
-    const canSave =
+    const canSubmit =
       (createSavedFilter && customName && customName.length > 0) ||
-      !eqString(filter.name, name) ||
+      filter.name !== name ||
       !eqObject(filter.values, values);
 
-    const onDone = () => {
+    const save = () => {
       // Create a new filter.
       if (customName) {
         realm.write(() => {
@@ -75,13 +88,9 @@ export const useFilterEditor = <T extends AnyFilterValues>(
     };
 
     setScreenEditHeader({
-      enabled: canSave,
-      visible: !createSavedFilter || (createSavedFilter && !!customName),
-      label:
-        (createSavedFilter && customName?.length) || name !== generalFilterName
-          ? 'Save'
-          : 'Update',
-      action: onDone,
+      enabled: canSubmit,
+      label: 'Save',
+      action: save,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, customName, values, createSavedFilter]);

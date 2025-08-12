@@ -1,5 +1,4 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-
 import { Battery } from 'realmdb/Battery';
 import { ISODateString } from 'types/common';
 

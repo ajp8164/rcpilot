@@ -5,7 +5,6 @@ import {
   NumberFilterState,
   StringFilterState,
 } from 'components/molecules/filters';
-
 import { PickEnum } from 'types/custom';
 
 export enum FilterType {

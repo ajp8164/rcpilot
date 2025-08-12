@@ -1,5 +1,5 @@
-import { StoreState } from 'store/initialStoreState';
 import { createSelector } from '@reduxjs/toolkit';
+import { StoreState } from 'store/initialStoreState';
 
 export const selectAppState = (state: StoreState): StoreState => state;
 
@@ -15,6 +15,13 @@ export const selectDatabaseAccessWith = createSelector(
   selectAppState,
   appState => {
     return appState.appSettings.databaseAccessWith;
+  },
+);
+
+export const selectEventPreferences = createSelector(
+  selectAppState,
+  appState => {
+    return appState.appSettings.eventPreferences;
   },
 );
 

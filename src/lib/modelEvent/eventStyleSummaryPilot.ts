@@ -9,7 +9,13 @@ export type EventStyleStatistics = {
 export const eventStyleSummaryPilot = (
   eventStyleStatistics: EventStyleStatistics,
 ) => {
-  const time = `${secondsToFormat(eventStyleStatistics.duration, { format: 'm:ss' })}`;
-  const count = `${eventStyleStatistics.count} event${eventStyleStatistics.count !== 1 ? 's' : ''}`;
-  return `${time}, ${count}`;
+  let time = secondsToFormat(eventStyleStatistics.duration, {
+    format: "h'h' m'm'",
+  });
+
+  time = time.replace(/^0h /g, ''); // Remove zero values
+  time = time.replace(' 0m', '');
+  const events = `${eventStyleStatistics.count} event${eventStyleStatistics.count !== 1 ? 's' : ''}`;
+
+  return `${time}, ${events}`;
 };

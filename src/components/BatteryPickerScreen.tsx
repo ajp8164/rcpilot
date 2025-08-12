@@ -1,15 +1,14 @@
-import React, { useEffect, useRef } from 'react';
-
-import { Battery } from 'realmdb/Battery';
-import BatteryPickerView from 'components/views/BatteryPickerView';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { MultipleNavigatorParamList } from 'types/navigation';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native';
-import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
+import { EmptyView } from 'components/molecules/EmptyView';
+import BatteryPickerView from 'components/views/BatteryPickerView';
+import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import React, { useEffect, useRef } from 'react';
+import { View } from 'react-native';
+import { Battery } from 'realmdb/Battery';
 import { useTheme } from 'theme';
+import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type BatteryPickerInterface = {
   mode?: 'one' | 'many';
@@ -81,7 +80,7 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
   };
 
   if (!pickerBatteries.length) {
-    return <EmptyView message={'No Batteries Found!'} />;
+    return <EmptyView error message={'No Batteries Found!'} />;
   }
 
   return (

@@ -1,7 +1,6 @@
-import { Event, Location } from 'realmdb';
-
-import { DateTime } from 'luxon';
 import { useRealm } from '@realm/react';
+import { DateTime } from 'luxon';
+import { Event, Location } from 'realmdb';
 
 export const useLocationSummary = (location: Location) => {
   const realm = useRealm();

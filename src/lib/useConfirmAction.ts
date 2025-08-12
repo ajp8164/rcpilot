@@ -4,31 +4,34 @@ export const useConfirmAction = () => {
   const { showActionSheetWithOptions } = useActionSheet();
 
   return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    onConfirm: (value: any) => void,
     opts: {
       label: string;
       title?: string;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      value?: any;
     },
-  ) => {
-    showActionSheetWithOptions(
-      {
-        options: [opts.label, 'Cancel'],
-        destructiveButtonIndex: [0],
-        cancelButtonIndex: 1,
-        title: opts.title,
-      },
-      buttonIndex => {
-        switch (buttonIndex) {
-          case 0:
-            onConfirm(opts.value);
-            break;
-          default:
-            break;
-        }
-      },
-    );
+    onConfirm?: () => void,
+  ): Promise<boolean> => {
+    return new Promise(resolve => {
+      showActionSheetWithOptions(
+        {
+          options: [opts.label, 'Cancel'],
+          destructiveButtonIndex: 0,
+          cancelButtonIndex: 1,
+          title: opts.title,
+        },
+        buttonIndex => {
+          if (buttonIndex === 0) {
+            if (onConfirm) {
+              setTimeout(() => {
+                onConfirm();
+              }, 1000);
+            }
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        },
+      );
+    });
   };
 };

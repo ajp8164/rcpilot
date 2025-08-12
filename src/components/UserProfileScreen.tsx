@@ -1,14 +1,13 @@
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import UserProfileView, { EditorState } from 'components/views/UserProfileView';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
+import { useTheme } from 'theme';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import React, { useEffect, useState } from 'react';
-import UserProfileView, { EditorState } from 'components/views/UserProfileView';
-
-import { CompositeScreenProps } from '@react-navigation/core';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useTheme } from 'theme';
 
 type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'UserProfile'>,
@@ -23,7 +22,6 @@ const UserProfileScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <>
@@ -35,7 +33,7 @@ const UserProfileScreen = ({ navigation, route }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editorState]);
+  }, [editorState, theme.colors.brandPrimary]);
 
   return (
     <View>

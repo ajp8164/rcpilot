@@ -1,4 +1,4 @@
-import { Achievement, Pilot } from './Pilot';
+import { Battery } from './Battery';
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
 import {
   ChecklistAction,
@@ -7,19 +7,18 @@ import {
   ChecklistActionScheduleDue,
   ChecklistActionScheduleState,
 } from './Checklist';
-import { Filter, FilterState } from './Filter';
-import { Location, LocationCoords } from './Location';
-import { Model, ModelEventStyleData, ModelStatistics } from './Model';
-
-import { Battery } from './Battery';
 import { Checklist } from './Checklist';
 import { ChecklistTemplate } from './ChecklistTemplate';
 import { Event } from './Event';
 import { EventStyle } from './EventStyle';
 import { EventsMaintenanceReport } from './EventsMaintenanceReport';
+import { Filter, FilterState } from './Filter';
+import { Location, LocationCoords } from './Location';
+import { Model, ModelEventStyleData, ModelStatistics } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
+import { Achievement, Pilot } from './Pilot';
 import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [

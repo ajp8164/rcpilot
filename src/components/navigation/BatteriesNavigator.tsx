@@ -1,24 +1,25 @@
-import { BatteriesNavigatorParamList } from 'types/navigation';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteriesScreen from 'components/BatteriesScreen';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
-import BatteryCycleFiltersNavigator from 'components/navigation/BatteryCycleFiltersNavigator';
 import BatteryCyclesScreen from 'components/BatteryCyclesScreen';
 import BatteryEditorScreen from 'components/BatteryEditorScreen';
-import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
-import BatteryPerformanceComparisonPickerScreen from 'components/BatteryPerformanceComparisonPickerScreen';
 import BatteryPerformanceScreen from 'components/BatteryPerformance';
+import BatteryPerformanceComparisonPickerScreen from 'components/BatteryPerformanceComparisonPickerScreen';
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import BatteryTemplatesScreen from 'components/BatteryTemplatesScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
+import BatteryCycleFiltersNavigator from 'components/navigation/BatteryCycleFiltersNavigator';
+import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigator';
 import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
 import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
-import NewBatteryNavigator from './NewBatteryNavigator';
-import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import lodash from 'lodash';
+import React from 'react';
 import { useTheme } from 'theme';
+import { BatteriesNavigatorParamList } from 'types/navigation';
+
+import NewBatteryNavigator from './NewBatteryNavigator';
 
 const BatteriesStack =
   createNativeStackNavigator<BatteriesNavigatorParamList>();

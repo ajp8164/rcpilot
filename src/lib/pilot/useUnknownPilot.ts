@@ -1,10 +1,9 @@
 import { useQuery, useRealm } from '@realm/react';
-
 import { DateTime } from 'luxon';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Pilot } from 'realmdb/Pilot';
 import { saveSelectedPilot } from 'store/slices/pilot';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
 
 export const useUnknownPilot = () => {
   const dispatch = useDispatch();

@@ -1,20 +1,25 @@
-import 'react-native-gesture-handler'; // Must be at top, see https://reactnavigation.org/docs/en/getting-started.html
+import { RealmProvider } from '@realm/react';
+import { ThemeProvider } from '@rn-vui/themed';
+import AppMain from 'components/AppMain';
+import { appConfig } from 'config';
+import React from 'react';
+import { LogBox } from 'react-native';
+import 'react-native-gesture-handler';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider as ReduxProvider } from 'react-redux';
+import Realm from 'realm';
+import Schema from 'realmdb/Schema';
+import { PersistGate } from 'redux-persist/integration/react';
+// Must be at top, see https://reactnavigation.org/docs/en/getting-started.html
 
 import { persistor, store } from 'store';
-
-import AppMain from 'components/AppMain';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { LogBox } from 'react-native';
-import { PersistGate } from 'redux-persist/integration/react';
-import React from 'react';
-import { RealmProvider } from '@realm/react';
-import { Provider as ReduxProvider } from 'react-redux';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Schema from 'realmdb/Schema';
-import { ThemeProvider } from '@rn-vui/themed';
-import { appConfig } from 'config';
 // import { migrateRealm } from 'app';
 import { theme } from 'theme';
+
+if (__DEV__) {
+  console.log(`Realm: ${Realm.defaultPath}`);
+}
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -24,7 +29,6 @@ LogBox.ignoreLogs([
 
 const App = () => {
   return (
-    // eslint-disable-next-line react-native/no-inline-styles
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider theme={theme}>
         <SafeAreaProvider>

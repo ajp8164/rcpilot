@@ -1,13 +1,14 @@
-import { AppTheme, useTheme } from 'theme';
+import { makeStyles } from '@rn-vui/themed';
 import React, { useImperativeHandle } from 'react';
-import { FlipCardViewMethods, FlipCardViewProps } from './types';
 import Animated, {
   FadeIn,
   interpolate,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { makeStyles } from '@rn-vui/themed';
+import { AppTheme, useTheme } from 'theme';
+
+import { FlipCardViewMethods, FlipCardViewProps } from './types';
 
 type FlipCardView = FlipCardViewMethods;
 

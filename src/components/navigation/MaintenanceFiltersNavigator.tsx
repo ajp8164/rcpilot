@@ -1,12 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import MaintenanceFilterEditorScreen from 'components/MaintenanceFilterEditorScreen';
-import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
 import MaintenanceFiltersScreen from 'components/MaintenanceFiltersScreen';
-import NavContext from './NavContext';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const MaintenanceFiltersStack =
   createNativeStackNavigator<MaintenanceFiltersNavigatorParamList>();

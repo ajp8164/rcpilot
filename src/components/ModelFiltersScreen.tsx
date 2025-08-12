@@ -1,25 +1,27 @@
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem, View } from 'react-native';
 import {
-  ListItem,
-  ListItemCheckboxInfo,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useQuery, useRealm } from '@realm/react';
-
-import { Filter } from 'realmdb/Filter';
-import { ModelFiltersNavigatorParamList } from 'types/navigation';
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { defaultFilter } from 'lib/model';
+import { useQuery, useRealm } from '@realm/react';
+import { ListItemCheckBoxInfo } from 'components/atoms/List';
+import { FiltersListHeader } from 'components/molecules/FiltersListHeader';
 import { filterSummary } from 'lib/filter';
-import lodash from 'lodash';
-import { saveSelectedFilter } from 'store/slices/filters';
-import { selectFilters } from 'store/selectors/filterSelectors';
+import { defaultFilter } from 'lib/model';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import lodash from 'lodash';
+import { Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import { Filter } from 'realmdb/Filter';
+import { selectFilters } from 'store/selectors/filterSelectors';
+import { saveSelectedFilter } from 'store/slices/filters';
 import { useTheme } from 'theme';
+import { ModelFiltersNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   ModelFiltersNavigatorParamList,
@@ -30,7 +32,6 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
   const { filterType, useGeneralFilter } = route.params;
 
   const theme = useTheme();
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -54,6 +55,8 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
   const [generalModelsFilter, setGeneralModelsFilter] = useState<Filter>();
 
   const selectedFilterId = useSelector(selectFilters(filterType));
+
+  const listEditorRef = useRef<ListEditorMethods>(null);
 
   useEffect(() => {
     // Lazy initialization of a general models filter.
@@ -83,23 +86,35 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const deleteFilter = (filter: Filter) => {
-    realm.write(() => {
-      realm.delete(filter);
+  const deleteFilter = (filterId: string) => {
+    if (selectedFilterId === filterId) {
+      setFilter();
+    }
+
+    // Wait for filter setting to change before deletion.
+    setTimeout(() => {
+      const filter = realm.objectForPrimaryKey(
+        'Filter',
+        new BSON.ObjectId(filterId),
+      );
+      if (filter?.isValid()) {
+        realm.write(() => {
+          realm.delete(filter);
+        });
+      }
     });
   };
 
   const renderFilters: ListRenderItem<Filter> = ({ item: filter, index }) => {
     return (
-      <ListItemCheckboxInfo
-        ref={ref => {
-          ref && listEditor.add(ref, 'model-filters', filter._id.toString());
-        }}
-        key={index}
+      <ListItemCheckBoxInfo
+        key={filter._id.toString()}
         title={filter.name}
         subtitle={filterSummary(filter)}
+        subtitleLines={0}
         position={listItemPosition(index, allModelFilters.length)}
         checked={filter._id.toString() === selectedFilterId}
+        listEditor={listEditorRef.current}
         onPress={() => setFilter(filter)}
         onPressInfo={() =>
           navigation.navigate('ModelFilterEditor', {
@@ -108,93 +123,58 @@ const ModelFiltersScreen = ({ navigation, route }: Props) => {
             generalFilterName: generalModelsFilterName,
           })
         }
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () => {
-                confirmAction(deleteFilter, {
-                  label: 'Delete Saved Filter',
-                  title:
-                    'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
-                  value: filter,
-                });
-              },
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
+            color: theme.colors.assertive,
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: 'Delete Saved Filter',
+                title:
+                  'This action cannot be undone.\nAre you sure you want to delete this saved filter?',
+              });
             },
-          ],
-        }}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('model-filters', filter._id.toString())
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+            onPress: () => deleteFilter(filter._id.toString()),
+          },
+        ]}
       />
     );
   };
 
   return (
     <View style={theme.styles.view}>
-      <Divider />
-      <ListItemCheckboxInfo
-        title={'No Filter'}
-        subtitle={'Matches all models'}
-        position={['first', 'last']}
-        hideInfo={true}
-        checked={!selectedFilterId}
-        onPress={setFilter}
+      <FiltersListHeader
+        filterSummary={filterSummary(generalModelsFilter)}
+        itemName={'model'}
+        generalFilterId={generalModelsFilter?._id.toString()}
+        selectedFilterId={selectedFilterId}
+        useGeneralFilter={useGeneralFilter}
+        onPressEditGeneralFilter={() =>
+          navigation.navigate('ModelFilterEditor', {
+            filterId: generalModelsFilter?._id.toString() || '',
+            filterType,
+            generalFilterName: generalModelsFilterName,
+          })
+        }
+        onPressGeneralFilter={() => setFilter(generalModelsFilter)}
+        onPressNoFilter={setFilter}
       />
-      <Divider />
-      {useGeneralFilter && generalModelsFilter ? (
-        <>
-          <ListItemCheckboxInfo
-            title={'General Models Filter'}
-            subtitle={filterSummary(generalModelsFilter)}
-            // subtitle={'Matches models where any model type, any category, any last event, any total time, any logs batteries, any logs fuel, any damaged, any vendor, and any notes.'}
-            position={['first', 'last']}
-            checked={generalModelsFilter._id.toString() === selectedFilterId}
-            onPress={() => setFilter(generalModelsFilter)}
-            onPressInfo={() =>
-              navigation.navigate('ModelFilterEditor', {
-                filterId: generalModelsFilter._id.toString(),
-                filterType,
-                generalFilterName: generalModelsFilterName,
-              })
-            }
-          />
-          <Divider
-            note
-            text={
-              'You can save the General Models Filter to remember a specific filter configuration for later use.'
-            }
-          />
-        </>
-      ) : (
-        <ListItem
-          title={'Add New Filter'}
-          titleStyle={theme.styles.listItemButtonTitle}
-          position={['first', 'last']}
-          rightImage={false}
-          onPress={() =>
-            generalModelsFilter &&
-            navigation.navigate('ModelFilterEditor', {
-              filterId: generalModelsFilter._id.toString(),
-              filterType,
-              generalFilterName: generalModelsFilterName,
-              requireFilterName: true,
-            })
+      <ListEditor ref={listEditorRef}>
+        <FlatList
+          data={allModelFilters}
+          renderItem={renderFilters}
+          keyExtractor={(_item, index) => `${index}`}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={
+            allModelFilters.length ? (
+              <Divider text={'SAVED MODEL FILTERS'} />
+            ) : null
           }
         />
-      )}
-      <FlatList
-        data={allModelFilters}
-        renderItem={renderFilters}
-        keyExtractor={(_item, index) => `${index}`}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          allModelFilters.length ? (
-            <Divider text={'SAVED MODEL FILTERS'} />
-          ) : null
-        }
-      />
+      </ListEditor>
     </View>
   );
 };

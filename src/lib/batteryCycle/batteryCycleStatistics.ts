@@ -1,9 +1,8 @@
-import { Milliamps, MilliampsPerMinute, Seconds, Volts } from 'types/battery';
-
-import { BatteryCycle } from 'realmdb/BatteryCycle';
-import { DateTime } from 'luxon';
-import { ISODateString } from 'types/common';
 import { secondsToFormat } from 'lib/formatters';
+import { DateTime } from 'luxon';
+import { BatteryCycle } from 'realmdb/BatteryCycle';
+import { Milliamps, MilliampsPerMinute, Seconds, Volts } from 'types/battery';
+import { ISODateString } from 'types/common';
 
 export type BatteryCycleStaticsticsData = {
   value: {
@@ -75,9 +74,9 @@ export const batteryCycleStatisticsData = (cycle: BatteryCycle) => {
         dischargeBy80Percent,
       },
       string: {
-        averageDischargeCurrent: `${Math.trunc(averageDischargeCurrent)} mA`,
+        averageDischargeCurrent: `${Math.trunc(averageDischargeCurrent)}mA`,
         dischargeBy80Percent: secondsToFormat(dischargeBy80Percent, {
-          format: 'm:ss',
+          format: "m'm' s's'",
         }),
       },
     };
@@ -109,7 +108,7 @@ export const batteryCycleDischargeData = (cycle: BatteryCycle) => {
           'M/d/yy',
         ),
         dischargeDuration: secondsToFormat(dischargeDuration, {
-          format: 'm:ss',
+          format: "m'm' s's'",
         }),
         dischargeRestingVoltage: dischargeRestingVoltage
           ? `${dischargeRestingVoltage.toFixed(1)}V`
@@ -171,7 +170,7 @@ export const batteryCycleChargeData = (cycle: BatteryCycle) => {
             : '0%',
         chargeToCapacity: `${chargeToCapacity}`,
         chargeRestingVoltage: cycle.charge.packVoltage
-          ? `${cycle.charge.packVoltage}V`
+          ? `${cycle.charge.packVoltage.toFixed(2)}V`
           : 'unknown',
         Cr: `${Cr}C`,
         averageCurrent: `${(averageCurrent / 1000).toFixed(1)}A`,

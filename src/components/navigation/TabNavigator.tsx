@@ -1,16 +1,21 @@
-import { Platform, StatusBar } from 'react-native';
-import React, { useEffect } from 'react';
-
 import BatteriesNavigator from './BatteriesNavigator';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import LogNavigator from './LogNavigator';
 import ModelsNavigator from './ModelsNavigator';
 import ScanNavigator from './ScanNavigator';
 import SetupNavigator from './SetupNavigator';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
-import { TabNavigatorParamList } from 'types/navigation';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {
+  BatteryFull,
+  FileText,
+  Plane,
+  ScanLine,
+  Settings,
+} from 'lucide-react-native';
+import React, { useEffect } from 'react';
+import { Platform, StatusBar } from 'react-native';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { useTheme } from 'theme';
+import { TabNavigatorParamList } from 'types/navigation';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -38,12 +43,12 @@ const TabNavigator = () => {
       initialRouteName="LogTab"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: theme.colors.brandSecondary,
-        tabBarInactiveTintColor: theme.colors.lightGray,
-        tabBarActiveBackgroundColor: theme.colors.activeTabBackground,
-        tabBarInactiveBackgroundColor: theme.colors.inactiveTabBackground,
+        tabBarActiveTintColor: theme.colors.tabBarActiveTint,
+        tabBarInactiveTintColor: theme.colors.tabBarInactiveTint,
+        tabBarActiveBackgroundColor: theme.colors.tabBarBackgroundActive,
+        tabBarInactiveBackgroundColor: theme.colors.tabBarBackgroundInactive,
         tabBarStyle: {
-          backgroundColor: theme.colors.inactiveTabBackground,
+          backgroundColor: theme.colors.tabBarBackgroundInactive,
           borderTopColor: theme.colors.tabBarBorder,
         },
         tabBarItemStyle: { top: 3 },
@@ -54,10 +59,7 @@ const TabNavigator = () => {
         component={LogNavigator}
         options={{
           tabBarLabel: 'Log',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon solid name={'file-lines'} color={color} size={28} />
-          ),
+          tabBarIcon: ({ color }) => <FileText color={color} size={33} />,
         }}
       />
       <Tab.Screen
@@ -65,10 +67,7 @@ const TabNavigator = () => {
         component={ModelsNavigator}
         options={{
           tabBarLabel: 'Models',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon name={'plane-up'} color={color} size={28} />
-          ),
+          tabBarIcon: ({ color }) => <Plane color={color} size={33} />,
         }}
       />
       <Tab.Screen
@@ -76,15 +75,7 @@ const TabNavigator = () => {
         component={BatteriesNavigator}
         options={{
           tabBarLabel: 'Batteries',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon
-              name={'battery-full'}
-              color={color}
-              size={28}
-              style={{ transform: [{ rotate: '-90deg' }] }}
-            />
-          ),
+          tabBarIcon: ({ color }) => <BatteryFull color={color} size={33} />,
         }}
       />
       <Tab.Screen
@@ -92,10 +83,7 @@ const TabNavigator = () => {
         component={SetupNavigator}
         options={{
           tabBarLabel: 'Setup',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon name={'gear'} color={color} size={28} />
-          ),
+          tabBarIcon: ({ color }) => <Settings color={color} size={33} />,
         }}
       />
       <Tab.Screen
@@ -103,10 +91,7 @@ const TabNavigator = () => {
         component={ScanNavigator}
         options={{
           tabBarLabel: 'Scan',
-          // eslint-disable-next-line react/no-unstable-nested-components
-          tabBarIcon: ({ color }) => (
-            <Icon name={'qrcode'} color={color} size={28} />
-          ),
+          tabBarIcon: ({ color }) => <ScanLine color={color} size={33} />,
         }}
       />
     </Tab.Navigator>

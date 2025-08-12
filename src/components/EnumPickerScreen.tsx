@@ -1,30 +1,21 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
-import { ListItem, ListItemCheckbox } from 'components/atoms/List';
-import React, { useEffect } from 'react';
-
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { MultipleNavigatorParamList } from 'types/navigation';
+import { useSetState } from '@react-native-hello/core';
+import { Divider } from '@react-native-hello/ui';
+import { ListItem, ListItemCheckBox } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SvgXml } from 'react-native-svg';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
+import { useRealm } from '@realm/react';
 import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSetState } from '@react-native-ajp-elements/core';
-import { useRealm } from '@realm/react';
+import lodash from 'lodash';
+import React, { ReactElement, useEffect } from 'react';
+import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
+import { useTheme } from 'theme';
+import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type EnumPickerIconProps = {
-  type?: 'icon' | 'svg';
-  name: string | string[];
-  color?: string;
-  size?: number;
-  // Should be typed StyleProp<TextStyle>, not working
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  style?: any;
   hideTitle?: boolean;
+  leftContent?: ReactElement;
+  name?: string;
 } | null;
 
 export type EnumPickerInterface = {
@@ -63,8 +54,6 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     eventName,
   } = route.params;
   const theme = useTheme();
-  const s = useStyles(theme);
-
   const event = useEvent();
   const realm = useRealm();
   const setScreenEditHeader = useScreenEditHeader();
@@ -83,7 +72,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
   useEffect(() => {
     // Check if arrays contain the same elements.
-    const canSave = !lodash.isEmpty(lodash.xor(list.selected, list.initial));
+    const canSubmit = !lodash.isEmpty(lodash.xor(list.selected, list.initial));
 
     const onDone = () => {
       // For multi-selection mode we send the selected values only when done.
@@ -99,7 +88,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     });
 
     if (mode === 'many-or-none' || mode === 'many-with-actions') {
-      setScreenEditHeader({ enabled: canSave, action: onDone });
+      setScreenEditHeader({ enabled: canSubmit, action: onDone });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
@@ -141,40 +130,8 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   };
 
   const getIconEl = (value: string) => {
-    // If icons are specified then create an array of icon elements.
-    const iconArr: React.ReactElement[] = [];
-    if (icons && icons[value]) {
-      let name = icons[value]?.name || '';
-      let el;
-      name = lodash.isArray(name) ? name : [name]; // Icon names must be an array.
-      name.forEach((n, index) => {
-        if (icons[value]?.type === 'svg') {
-          el = (
-            <SvgXml
-              key={index}
-              xml={icons[value]?.color ? getColoredSvg(n) : getSvg(n)}
-              color={icons[value]?.color}
-              width={icons[value]?.size || 20}
-              height={icons[value]?.size || 20}
-              style={icons[value]?.style}
-            />
-          );
-        } else {
-          el = (
-            <Icon
-              key={index}
-              name={n}
-              color={icons[value]?.color || theme.colors.midGray}
-              size={icons[value]?.size || 20}
-              style={icons[value]?.style}
-            />
-          );
-        }
-        iconArr.push(el);
-      });
-    }
-    return iconArr.length ? (
-      <View style={s.iconArr}>{iconArr}</View>
+    return icons && icons[value] ? (
+      <View key={value}>{icons[value]?.leftContent}</View>
     ) : undefined;
   };
 
@@ -197,10 +154,10 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     }
 
     return (
-      <ListItemCheckbox
+      <ListItemCheckBox
         key={`${value}${index}`}
         title={icons && icons[value]?.hideTitle ? '' : name}
-        leftImage={getIconEl(value)}
+        leftContent={getIconEl(value)}
         position={
           mode === 'one-or-none'
             ? index === 0
@@ -215,7 +172,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
                   : []
         }
         checked={list.selected?.includes(value)}
-        onPress={() => toggleSelect(value)}
+        onChange={() => toggleSelect(value)}
       />
     );
   };
@@ -230,13 +187,11 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
           <Divider text={'ACTIONS'} />
           <ListItem
             title={'Select All'}
-            rightImage={false}
             position={['first']}
             onPress={selectAll}
           />
           <ListItem
             title={'Select None'}
-            rightImage={false}
             position={['last']}
             onPress={selectNone}
           />
@@ -251,33 +206,32 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
         scrollEnabled={false}
       />
       {mode === 'one-or-none' && (
-        <ListItemCheckbox
+        <ListItemCheckBox
           title={'None'}
           position={list.values.length === 0 ? ['first', 'last'] : ['last']}
           checked={!list.selected.length}
-          onPress={() => toggleSelect()}
+          onChange={() => toggleSelect()}
         />
       )}
       {mode === 'many-or-none' && (
         <>
           <Divider />
-          <ListItemCheckbox
+          <ListItemCheckBox
             title={'Unspecified'}
             position={['first', 'last']}
             checked={list.selected[0] === 'Unspecified'}
-            onPress={selectUnspecified}
+            onChange={selectUnspecified}
           />
         </>
       )}
-      <Divider note text={footer} />
+      <Divider
+        note
+        light
+        subHeaderStyle={theme.styles.textSmall}
+        text={footer}
+      />
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  iconArr: {
-    flexDirection: 'row',
-  },
-}));
 
 export default EnumPickerScreen;

@@ -1,5 +1,17 @@
-import { AppTheme, useTheme } from 'theme';
+import { openShareSheet } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useQuery } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { EventRating } from 'components/molecules/EventRating';
 import { rql } from 'components/molecules/filters';
+import { batteryStatistics } from 'lib/battery';
+import { batteryCycleStatisticsData } from 'lib/batteryCycle';
+import { secondsToFormat } from 'lib/formatters';
+import { Share } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import {
   FlatList,
   ListRenderItem,
@@ -8,26 +20,15 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { useObject, useQuery } from '@realm/react';
-
-import { BSON } from 'realm';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { Event } from 'realmdb/Event';
-import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { ReportViewerNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rn-vui/themed';
-import { openShareSheet } from '@react-native-ajp-elements/ui';
-import { ReportEventFilterValues } from 'types/filter';
-import { DateTime } from 'luxon';
-import { batteryCycleStatisticsData } from 'lib/batteryCycle';
-import { batteryStatistics } from 'lib/battery';
 // import RNFetchBlob from 'rn-fetch-blob';
 import ViewShot from 'react-native-view-shot';
-import { secondsToFormat } from 'lib/formatters';
-import { EventRating } from 'components/molecules/EventRating';
+import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb';
+import { Event } from 'realmdb/Event';
+import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
+import { AppTheme, useTheme } from 'theme';
+import { ReportEventFilterValues } from 'types/filter';
+import { ReportViewerNavigatorParamList } from 'types/navigation';
 
 type ColumnDef = {
   field: string;
@@ -82,10 +83,7 @@ export type Props = NativeStackScreenProps<
   'ReportEventsMaintenanceViewer'
 >;
 
-const ReportEventsMaintenanceViewerScreen = ({
-  route,
-  navigation: _navigation,
-}: Props) => {
+const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
   const { reportId } = route.params;
 
   const theme = useTheme();
@@ -100,18 +98,53 @@ const ReportEventsMaintenanceViewerScreen = ({
 
   const events = useQuery<Event>('Event', events => {
     const query = rql()
-      .and('model._id', values.model)
-      .and('model.type', values.modelType)
-      .and('model.category._id', values.category)
-      .and('date', values.date)
-      .and('duration', values.duration)
-      .and('pilot._id', values.pilot)
-      .and('location._id', values.location)
-      .and('eventStyle._id', values.eventStyle)
-      .and('outcome', values.outcome)
+      .and('model._id', values?.model)
+      .and('model.type', values?.modelType)
+      .and('model.category._id', values?.category)
+      .and('date', values?.date)
+      .and('duration', values?.duration)
+      .and('pilot._id', values?.pilot)
+      .and('location._id', values?.location)
+      .and('eventStyle._id', values?.eventStyle)
+      .and('outcome', values?.outcome)
       .string();
     return query ? events.filtered(query).sorted(['number']) : events;
   });
+
+  const viewShotRef = useRef<ViewShot>(null);
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Close'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={navigation.goBack}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            icon={<Share color={theme.colors.screenHeaderButtonText} />}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={() =>
+              viewShotRef.current?.capture
+                ? viewShotRef.current.capture()
+                : null
+            }
+          />
+        );
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    theme.colors.screenHeaderButtonText,
+    theme.styles.buttonScreenHeader,
+    theme.styles.buttonScreenHeaderTitle,
+  ]);
 
   // Create report rows from the database query.
   useEffect(() => {
@@ -123,9 +156,9 @@ const ReportEventsMaintenanceViewerScreen = ({
           eventStyle: `${e.eventStyle || '---'}`,
           modelName: `${e.model.name}`,
           batteryName: `${batteryCycleInfo(e.batteryCycles)}`,
-          duration: `${secondsToFormat(e.duration, { format: 'm:ss' })}`,
-          totalTime: `${secondsToFormat(e.model.statistics.totalTime, { format: 'h:mm:ss' })}`,
-          outcome: <EventRating style={s.outcome} value={e.outcome} />,
+          duration: `${secondsToFormat(e.duration, { format: "m'm' s's'" })}`,
+          totalTime: `${secondsToFormat(e.model.statistics.totalTime, { format: "h'h' m'm' s's'" })}`,
+          outcome: <EventRating value={e.outcome} />,
           operatorName: `${e.pilot.name}`,
           notes: `${e.notes}`,
         };
@@ -204,9 +237,9 @@ const ReportEventsMaintenanceViewerScreen = ({
   return (
     <ScrollView horizontal={true}>
       <ViewShot
+        ref={viewShotRef}
         style={s.container}
         onCapture={onCapture}
-        captureMode={'mount'}
         options={{ width: 1650 }}>
         <View style={s.reportHeader}>
           <Text style={theme.styles.textHeading5}>
@@ -269,9 +302,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   text: {
     ...theme.styles.textNormal,
-  },
-  outcome: {
-    marginTop: 5,
   },
 }));
 

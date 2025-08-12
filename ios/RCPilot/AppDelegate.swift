@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
 
-    // Firebase
-    FirebaseApp.configure()
-
     // Google Maps
     GMSServices.provideAPIKey("AIzaSyCzFAQMTJeY2LjTmF5AuGyczMc6mh9Zs6U")
+
+    // Firebase
+    FirebaseApp.configure()
 
     // Facebook SDK
     ApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)

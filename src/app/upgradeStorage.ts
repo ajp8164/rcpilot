@@ -1,10 +1,10 @@
-import { AppError } from 'lib/errors';
-import { StoreState } from 'store/initialStoreState';
+import { log } from '@react-native-hello/core';
 import { appConfig } from 'config';
+import { AppError } from 'lib/errors';
 import { dispatch } from 'store';
-import { log } from '@react-native-ajp-elements/core';
-import { saveSchemaVersion } from 'store/slices/app';
 import { store } from 'store';
+import { StoreState } from 'store/initialStoreState';
+import { saveSchemaVersion } from 'store/slices/app';
 
 export const upgradeStorage = (): void => {
   const state: StoreState = store.getState();

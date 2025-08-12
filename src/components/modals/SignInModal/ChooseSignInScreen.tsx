@@ -1,19 +1,18 @@
-import { Alert, Platform, Text, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import React, { useState } from 'react';
-import { getColoredSvg, getSvg } from '@react-native-ajp-elements/ui';
+import { SignInNavigatorParamList } from './types';
+import { getColoredSvg, getSvg } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { appConfig } from 'config';
 import {
   signInWithApple,
   signInWithFacebook,
   signInWithGoogle,
 } from 'lib/auth';
-
-import { Button } from '@rn-vui/base';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SignInNavigatorParamList } from './types';
+import React, { useState } from 'react';
+import { Alert, Platform, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { appConfig } from 'config';
-import { makeStyles } from '@rn-vui/themed';
+import { AppTheme, useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<
   SignInNavigatorParamList,
@@ -142,8 +141,8 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
       />
       <Button
         title={signInAction ? 'or Create Account' : 'Have an Account? Sign In'}
-        titleStyle={theme.styles.buttonClearTitle}
-        buttonStyle={theme.styles.buttonClear}
+        titleStyle={theme.styles.buttonScreenHeaderTitle}
+        buttonStyle={theme.styles.buttonScreenHeader}
         containerStyle={s.signInButtonContainer}
         onPress={() => setSignInAction(!signInAction)}
       />

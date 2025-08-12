@@ -1,22 +1,21 @@
+import { Divider, ListItem } from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { StackActions } from '@react-navigation/native';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rn-vui/themed';
+import { Avatar } from 'components/molecules/Avatar';
+import { signOut } from 'lib/auth';
+import { biometricAuthentication } from 'lib/biometricAuthentication';
+import { CircleUserRound } from 'lucide-react-native';
+import React, { useEffect } from 'react';
 import { Alert, ScrollView, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { selectUserProfile } from 'store/selectors/userSelectors';
 import { AppTheme, useTheme } from 'theme';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-import React, { useEffect } from 'react';
-
-import { ChatAvatar } from 'components/molecules/ChatAvatar';
-import { CompositeScreenProps } from '@react-navigation/core';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackActions } from '@react-navigation/native';
-import { biometricAuthentication } from 'lib/biometricAuthentication';
-import { makeStyles } from '@rn-vui/themed';
-import { selectUserProfile } from 'store/selectors/userSelectors';
-import { signOut } from 'lib/auth';
-import { useSelector } from 'react-redux';
 
 type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'UserAccount'>,
@@ -66,7 +65,7 @@ const UserAccountScreen = ({ navigation }: Props) => {
         style={theme.styles.view}
         showsVerticalScrollIndicator={false}
         contentInsetAdjustmentBehavior={'automatic'}>
-        <ChatAvatar
+        <Avatar
           userProfile={userProfile}
           size={'giant'}
           avatarStyle={s.avatar}
@@ -80,8 +79,7 @@ const UserAccountScreen = ({ navigation }: Props) => {
         <Divider />
         <ListItem
           title={'Edit Profile'}
-          leftImage={'account-circle-outline'}
-          leftImageType={'material-community'}
+          leftContent={<CircleUserRound color={theme.colors.listItemIcon} />}
           position={['first', 'last']}
           onPress={() =>
             navigation.navigate('UserProfile', {
@@ -95,7 +93,6 @@ const UserAccountScreen = ({ navigation }: Props) => {
           title={'Sign Out'}
           titleStyle={s.signOut}
           position={['first', 'last']}
-          rightImage={false}
           onPress={confirmSignOut}
         />
       </ScrollView>

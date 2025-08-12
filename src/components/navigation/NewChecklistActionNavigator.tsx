@@ -1,11 +1,12 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistActionHistoryScreen from 'components/ChecklistActionHistoryScreen';
-import NavContext from './NavContext';
-import { NewChecklistActionNavigatorParamList } from 'types/navigation';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'theme';
+import { NewChecklistActionNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const NewChecklistActionStack =
   createNativeStackNavigator<NewChecklistActionNavigatorParamList>();

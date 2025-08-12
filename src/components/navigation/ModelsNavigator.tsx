@@ -1,3 +1,4 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
@@ -6,30 +7,28 @@ import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatePickerScreen from 'components/ChecklistTemplatePickerScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
-import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
-import EventSequenceNavigator from 'components/navigation/EventSequenceNavigator';
 import EventsScreen from 'components/EventsScreen';
-import LocationNavigator from 'components/navigation/LocationNavigator';
 import MaintenanceActionScreen from 'components/MaintenanceActionScreen';
-import MaintenanceFiltersNavigator from 'components/navigation/MaintenanceFiltersNavigator';
 import MaintenanceHistoryEntryScreen from 'components/MaintenanceHistoryEntryScreen';
 import MaintenanceHistoryScreen from 'components/MaintenanceHistoryScreen';
 import MaintenanceScreen from 'components/MaintenanceScreen';
 import ModelChecklistsScreen from 'components/ModelChecklistsScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
-import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
-import { ModelHeader } from 'components/molecules/ModelHeader';
 import ModelStatisticsScreen from 'components/ModelStatisticsScreen';
-import { ModelsNavigatorParamList } from 'types/navigation';
 import ModelsScreen from 'components/ModelsScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
+import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
+import EventSequenceNavigator from 'components/navigation/EventSequenceNavigator';
+import LocationNavigator from 'components/navigation/LocationNavigator';
+import MaintenanceFiltersNavigator from 'components/navigation/MaintenanceFiltersNavigator';
+import ModelFiltersNavigator from 'components/navigation/ModelFiltersNavigator';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
-import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { eventKind } from 'lib/modelEvent';
+import React from 'react';
 import { useTheme } from 'theme';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 const ModelsStack = createNativeStackNavigator<ModelsNavigatorParamList>();
 
@@ -58,9 +57,7 @@ const ModelsNavigator = () => {
       <ModelsStack.Screen
         name="ModelEditor"
         component={ModelEditorScreen}
-        options={({ route }) => ({
-          // eslint-disable-next-line react/no-unstable-nested-components
-          header: () => <ModelHeader modelId={route.params.modelId} />,
+        options={() => ({
           title: 'Model',
         })}
       />

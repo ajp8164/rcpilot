@@ -1,12 +1,11 @@
-import { BSON } from 'realm';
-import { EnumRelation, rql } from 'components/molecules/filters';
 import { useObject, useQuery } from '@realm/react';
-
+import { EnumRelation, rql } from 'components/molecules/filters';
+import { useSelector } from 'react-redux';
+import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useSelector } from 'react-redux';
+import { FilterType } from 'types/filter';
 
 export const useEventsFilter = (params: {
   filterType: FilterType;
@@ -32,14 +31,12 @@ export const useEventsFilter = (params: {
       'model._id',
       modelId ? { value: [modelId], relation: EnumRelation.Is } : undefined,
     )
-    // eslint-disable-next-line prettier/prettier
     .and(
       'eventStyle._id',
       eventStyleId
         ? { value: [eventStyleId], relation: EnumRelation.Is }
         : undefined,
     )
-    // eslint-disable-next-line prettier/prettier
     .and(
       'location._id',
       locationId

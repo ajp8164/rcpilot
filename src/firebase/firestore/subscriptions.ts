@@ -1,4 +1,4 @@
-import { log } from '@react-native-ajp-elements/core';
+import { log } from '@react-native-hello/core';
 
 const firestoreSubscriptions: {
   subscription: () => void;

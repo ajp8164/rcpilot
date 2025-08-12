@@ -1,7 +1,6 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
-
-import { FilterType } from 'types/filter';
 import { revertSettings } from 'store/actions';
+import { FilterType } from 'types/filter';
 
 export interface FiltersState {
   filterId: Record<FilterType, string | undefined>;

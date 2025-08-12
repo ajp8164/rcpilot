@@ -1,3 +1,14 @@
+import { defaultDinnCardColors } from './index';
+import { ellipsis } from '@react-native-hello/core';
+import { getColoredSvg } from '@react-native-hello/ui';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import type FlipCardView from 'components/views/FlipCardView';
+import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { Bandage, Info, PlayCircle, Trophy, Wrench } from 'lucide-react-native';
+import { DateTime, Duration } from 'luxon';
+import React, { useState } from 'react';
 import {
   Image,
   LayoutChangeEvent,
@@ -6,23 +17,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import React, { useState } from 'react';
-
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rn-vui/themed';
-import { Model, Pilot } from 'realmdb';
-import { modelMaintenanceIsDue, modelTypeIcons } from 'lib/model';
-import { DateTime, Duration } from 'luxon';
-import type FlipCardView from 'components/views/FlipCardView';
-import { ellipsis } from '@react-native-ajp-elements/core';
-import { getVendorImage } from 'theme/images';
 import { SvgXml } from 'react-native-svg';
-import { getColoredSvg } from '@react-native-ajp-elements/ui';
 import { useSelector } from 'react-redux';
+import { Model, Pilot } from 'realmdb';
 import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
-import { defaultDinnCardColors } from './index';
-import { eventKind } from 'lib/modelEvent';
+import { AppTheme, useTheme } from 'theme';
+import { getVendorImage } from 'theme/images';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -36,10 +36,10 @@ interface DinnCardInterface extends FlipCardView {
 export const Front = ({
   flip,
   model,
-  onPressAchievements,
+  onPressAchievements = () => null,
   onPressEditCardProperties: _onPressEditCardProperties,
-  onPressEditModel,
-  onPressNewEventSequence,
+  onPressEditModel = () => null,
+  onPressNewEventSequence = () => null,
   pilot,
 }: DinnCardInterface) => {
   const theme = useTheme();
@@ -85,7 +85,9 @@ export const Front = ({
         ) : (
           <View style={s.defaultImage}>
             <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              xml={getColoredSvg(
+                modelTypeIconProps[model.type]?.name as string,
+              )}
               width={'100%'}
               height={'65%'}
               color={theme.colors.brandSecondary}
@@ -126,79 +128,67 @@ export const Front = ({
             )}
           </View>
           <View style={s.attributesContainer}>
-            <Pressable
-              style={[
-                s.mainIconContainer,
-                {
-                  backgroundColor: cardColors.accent2,
-                  borderColor: cardColors.accent1,
-                },
-              ]}
-              onPress={onPressNewEventSequence}>
-              <Icon
-                name={'play'}
-                size={28}
-                style={[s.newEventIcon, { color: cardColors.primary }]}
+            <View style={s.playContainer}>
+              {/* The icon behind the button create a good active press ui. */}
+              <PlayCircle
+                color={cardColors.accent2}
+                fill={cardColors.accent2}
+                size={60}
+                style={s.playBehind}
               />
-            </Pressable>
+              <Button
+                buttonStyle={{ ...theme.styles.buttonScreenHeader, height: 60 }}
+                icon={
+                  <PlayCircle
+                    color={cardColors.accent2}
+                    fill={cardColors.accent1}
+                    size={60}
+                  />
+                }
+                onPress={() => onPressNewEventSequence()}
+              />
+            </View>
             {maintenanceIsDue && (
-              <View
-                style={[
-                  s.attributeIconContainer,
-                  { borderColor: cardColors.accent1 },
-                ]}>
-                <Icon
-                  name={'wrench'}
-                  size={20}
-                  style={[s.attributeIcon, { color: cardColors.accent2 }]}
-                />
-              </View>
+              <Button
+                buttonStyle={theme.styles.buttonScreenHeader}
+                containerStyle={{
+                  ...s.attributeIconContainer,
+                  borderColor: cardColors.accent1,
+                }}
+                icon={<Wrench color={cardColors.accent1} size={20} />}
+                onPress={() => null}
+              />
             )}
             {model.damaged && (
-              <View
-                style={[
-                  s.attributeIconContainer,
-                  { borderColor: cardColors.accent1 },
-                ]}>
-                <Icon
-                  name={'bandage'}
-                  size={18}
-                  color={theme.colors.stickyWhite}
-                  style={[
-                    s.attributeIcon,
-                    {
-                      color: cardColors.accent2,
-                      transform: [{ rotate: '30deg' }],
-                    },
-                  ]}
-                />
-              </View>
-            )}
-            <Pressable
-              style={[
-                s.attributeIconContainer,
-                { borderColor: cardColors.accent1 },
-              ]}
-              onPress={onPressEditModel}>
-              <Icon
-                name={'info'}
-                size={20}
-                style={[s.attributeIcon, { color: cardColors.accent2 }]}
+              <Button
+                buttonStyle={theme.styles.buttonScreenHeader}
+                containerStyle={{
+                  ...s.attributeIconContainer,
+                  borderColor: cardColors.accent1,
+                }}
+                icon={<Bandage color={cardColors.accent1} size={20} />}
+                onPress={() => null}
               />
-            </Pressable>
+            )}
+            <Button
+              buttonStyle={theme.styles.buttonScreenHeader}
+              containerStyle={{
+                ...s.attributeIconContainer,
+                borderColor: cardColors.accent1,
+              }}
+              icon={<Info color={cardColors.accent1} size={40} />}
+              onPress={() => onPressEditModel()}
+            />
             {pilot?.achievements && pilot.achievements.length > 0 && (
-              <Pressable
-                style={[
-                  s.attributeIconContainer,
-                  { borderColor: cardColors.accent1 },
-                ]}
-                onPress={onPressAchievements}>
-                <Icon
-                  name={'medal'}
-                  size={18}
-                  style={[s.attributeIcon, { color: cardColors.accent2 }]}
-                />
-              </Pressable>
+              <Button
+                buttonStyle={theme.styles.buttonScreenHeader}
+                containerStyle={{
+                  ...s.attributeIconContainer,
+                  borderColor: cardColors.accent1,
+                }}
+                icon={<Trophy color={cardColors.accent1} size={20} />}
+                onPress={() => onPressAchievements()}
+              />
             )}
           </View>
           {vendorImage && (
@@ -250,12 +240,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     left: 40,
   },
   attributeIconContainer: {
-    width: 34,
-    height: 34,
+    width: 37,
+    height: 37,
     borderColor: theme.colors.darkGray,
-    borderWidth: 2.5,
+    borderWidth: 3.2,
     marginBottom: 5,
-    borderRadius: 50,
+    borderRadius: 37,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -287,18 +277,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.darkGray,
     marginBottom: 5,
   },
-  mainIconContainer: {
-    width: 60,
-    aspectRatio: 1,
-    borderColor: theme.colors.darkGray,
-    borderWidth: 5.5,
-    borderRadius: 50,
-    backgroundColor: theme.colors.lightGray,
-    alignItems: 'center',
-    justifyContent: 'center',
-    top: -1,
-    marginBottom: 11,
-  },
   modelImage: {
     width: '100%',
     height: '100%',
@@ -306,6 +284,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   newEventIcon: {
     left: 2,
+  },
+  playBehind: {
+    position: 'absolute',
+    left: 5,
+  },
+  playContainer: {
+    marginBottom: 3,
   },
   vendorImage: {
     position: 'absolute',

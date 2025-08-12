@@ -1,12 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleFilterEditorScreen from 'components/BatteryCycleFilterEditorScreen';
-import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 import BatteryCycleFiltersScreen from 'components/BatteryCycleFiltersScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
-import NavContext from './NavContext';
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useTheme } from 'theme';
 import NotesEditorScreen from 'components/NotesEditorScreen';
+import React from 'react';
+import { useTheme } from 'theme';
+import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const BatteryCycleFiltersStack =
   createNativeStackNavigator<BatteryCycleFiltersNavigatorParamList>();

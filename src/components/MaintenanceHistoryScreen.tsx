@@ -1,33 +1,34 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { HistoryEntry, useMaintenanceFilter } from 'lib/maintenance';
 import {
-  ListItem,
-  SectionListHeader,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItemSwipeable,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import { ListRenderItem, SectionList, SectionListData } from 'react-native';
-import React, { useEffect } from 'react';
+  useListEditor,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Button } from '@rn-vui/base';
-import { ChecklistType } from 'types/checklist';
-import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DateTime } from 'luxon';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { FilterType } from 'types/filter';
+import { actionScheduleState } from 'lib/checklist';
+import { HistoryEntry, useMaintenanceFilter } from 'lib/maintenance';
+import { groupItems } from 'lib/sectionList';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { CircleMinus, Funnel, FunnelPlus, Trash2 } from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useEffect, useRef, useState } from 'react';
+import { ListRenderItem, SectionList, SectionListData } from 'react-native';
+import { useSelector } from 'react-redux';
+import { BSON } from 'realm';
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
-import { ModelsNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { actionScheduleState } from 'lib/checklist';
-import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useSelector } from 'react-redux';
+import { AppTheme, useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { FilterType } from 'types/filter';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 type Section = {
   title?: string;
@@ -52,26 +53,24 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const entries = useMaintenanceFilter({ modelId });
   const model = useObject(Model, new BSON.ObjectId(modelId));
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <>
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!filterId && (!entries.length || listEditor.enabled)}
+              disabled={!entries.length || listEditor.enabled}
               icon={
-                <CustomIcon
-                  name={filterId ? 'filter-check' : 'filter'}
-                  style={[
-                    s.headerIcon,
-                    !filterId && (!entries.length || listEditor.enabled)
-                      ? s.headerIconDisabled
-                      : {},
-                  ]}
-                />
+                filterId ? (
+                  <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                ) : (
+                  <Funnel color={theme.colors.screenHeaderButtonText} />
+                )
               }
               onPress={() =>
                 navigation.navigate('MaintenanceFiltersNavigator', {
@@ -89,7 +88,7 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!entries.length}
-              onPress={listEditor.onEdit}
+              onPress={listEditor.onToggleEditMode}
             />
           </>
         );
@@ -141,7 +140,7 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
       subtitle = `${subtitle}\n\n${entry.action.notes}`;
     }
     return (
-      <ListItem
+      <ListItemSwipeable
         ref={ref => {
           ref &&
             listEditor.add(
@@ -150,10 +149,9 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
               entry.action.refId,
             );
         }}
-        key={`${index}`}
+        key={`${index}${entry.action.refId}`}
         title={entry.action.description}
         subtitle={subtitle}
-        titleNumberOfLines={1}
         position={listItemPosition(index, entries.length)}
         onPress={() =>
           navigation.navigate('MaintenanceHistoryEntry', {
@@ -163,39 +161,36 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
             historyRefId: entry.history.refId,
           })
         }
-        editable={{
-          item: {
-            icon: 'remove-circle',
+        rightContent={'chevron-right'}
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+        }}
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
             color: theme.colors.assertive,
-            action: 'open-swipeable',
-          },
-          reorder: true,
-        }}
-        showEditor={listEditor.show}
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () =>
-                confirmAction(deleteEntry, {
-                  label: 'Delete Log Item',
-                  title:
-                    'This action cannot be undone.\nAre you sure you want to delete this maintenance log item?',
-                  value: {
-                    index,
-                    entry,
-                  },
-                }),
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: 'Delete Log Item',
+                title:
+                  'This action cannot be undone.\nAre you sure you want to delete this maintenance log item?',
+              });
             },
-          ],
-        }}
+            onPress: () => deleteEntry({ index, entry }),
+          },
+        ]}
         onSwipeableWillOpen={() =>
           listEditor.onItemWillOpen(
             'model-maintenance-history',
             entry.action.refId,
           )
         }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+        onSwipeableWillClose={listEditorRef.current?.onItemWillClose}
       />
     );
   };
@@ -209,31 +204,25 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   }
 
   return (
-    <SectionList
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}
-      stickySectionHeadersEnabled={true}
-      style={[theme.styles.view, s.sectionList]}
-      sections={groupEntries(entries)}
-      keyExtractor={(item, index) => `${index}${item.action.refId}`}
-      renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
-      ListFooterComponent={<Divider />}
-    />
+    <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
+      <SectionList
+        showsVerticalScrollIndicator={false}
+        contentInsetAdjustmentBehavior={'automatic'}
+        stickySectionHeadersEnabled={true}
+        style={[theme.styles.view, s.sectionList]}
+        sections={groupEntries(entries)}
+        keyExtractor={(item, index) => `${index}${item.action.refId}`}
+        renderItem={renderActionHistoryEntry}
+        renderSectionHeader={({ section: { title } }) => (
+          <Divider text={title} />
+        )}
+        ListFooterComponent={<Divider />}
+      />
+    </ListEditor>
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-    marginHorizontal: 10,
-  },
-  headerIconDisabled: {
-    color: theme.colors.disabled,
-  },
+const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

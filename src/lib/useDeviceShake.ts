@@ -1,14 +1,8 @@
-import {
-  SensorData,
-  SensorTypes,
-  accelerometer,
-  setUpdateIntervalForType,
-} from 'react-native-sensors';
-import { filter, map } from 'rxjs/operators';
-import { useEffect, useState } from 'react';
-
-import { log } from '@react-native-ajp-elements/core';
+import { log } from '@react-native-hello/core';
 import { useEvent } from 'lib/event';
+import { useEffect, useState } from 'react';
+import { accelerometer } from 'react-native-sensors';
+import { filter, map } from 'rxjs/operators';
 
 const SHAKE_THRESHOLD = 26;
 const MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
@@ -20,41 +14,46 @@ export const useDeviceShake = () => {
   const event = useEvent();
 
   useEffect(() => {
-    accelerometer
-      .toPromise()
-      .then(() => {
-        setSensorAvailable(true);
-        setUpdateIntervalForType(SensorTypes.accelerometer, 200);
-      })
-      .catch(() => {
-        log.info('Sensor not available: accelerometer');
-      });
+    const subscription = accelerometer.subscribe({
+      next: () => {},
+      error: error => {
+        log.warn('Accelerometer:', error);
+        setSensorAvailable(false);
+      },
+    });
+
+    subscription.unsubscribe();
+    setSensorAvailable(true);
+    log.debug('Accelerometer available');
   }, []);
 
   useEffect(() => {
     if (!sensorAvailable) return;
 
-    const accelerometerSubscription = accelerometer
+    const subscription = accelerometer
       .pipe(
-        map(
-          ({ x, y, z }: SensorData) =>
-            Math.sqrt(
-              Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2),
-            ) /* - SensorManager.GRAVITY_EARTH */,
-        ),
-        filter(acceleration => acceleration > SHAKE_THRESHOLD),
+        map(({ x, y, z }) => Math.sqrt(x * x + y * y + z * z)),
+        filter(magnitude => {
+          const now = new Date().getTime();
+          if (
+            magnitude > SHAKE_THRESHOLD &&
+            now - lastShakeTime > MIN_TIME_BETWEEN_SHAKES_MILLISECS
+          ) {
+            setLastShakeTime(now);
+            return true;
+          }
+          return false;
+        }),
       )
-      .subscribe(acceleration => {
-        const curTime = new Date().getTime();
-        if (curTime - lastShakeTime > MIN_TIME_BETWEEN_SHAKES_MILLISECS) {
-          setLastShakeTime(curTime);
-          event.emit('deviceShake', { acceleration });
-        }
+      .subscribe({
+        next: magnitude => {
+          event.emit('deviceShake', { magnitude });
+        },
+        error: error => {
+          log.warn('Accelerometer on shake:', error);
+        },
       });
 
-    return () => {
-      accelerometerSubscription.unsubscribe();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sensorAvailable]);
+    return () => subscription.unsubscribe();
+  }, [event, lastShakeTime, sensorAvailable]);
 };

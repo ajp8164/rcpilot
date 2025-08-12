@@ -1,35 +1,53 @@
-import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
-import React, { useEffect, useRef, useState } from 'react';
-import { eqBoolean, eqString } from 'realmdb/helpers';
+import * as Yup from 'yup';
+import {
+  Divider,
+  KeyboardAccessory,
+  KeyboardAccessoryMethods,
+  ListItem,
+  ListItemSwitch,
+  ListItemSwitchCollapsible,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-
+import { Button } from 'components/atoms/Button';
+import {
+  FormikStateWatcher,
+  FormikWatcherState,
+} from 'components/atoms/FormikStateWatcher';
+import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import { Formik, FormikProps } from 'formik';
+import { filterSummary } from 'lib/filter';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
-import { Divider } from '@react-native-ajp-elements/ui';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScrollView } from 'react-native';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { filterSummary } from 'lib/filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useSelector } from 'react-redux';
 import { useTheme } from 'theme';
+import { FilterType } from 'types/filter';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
   'ReportEventsMaintenanceEditor'
 >;
 
+// Order of fields for accessory view.
+enum Fields {
+  name,
+  ordinal,
+}
+
+type FormValues = {
+  name: string;
+  ordinal: number;
+};
+
 const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const { reportId } = route.params;
 
   const theme = useTheme();
-  const setDebounced = useDebouncedRender();
-  const setScreenEditHeader = useScreenEditHeader();
-
   const realm = useRealm();
 
   const report = useObject(
@@ -43,8 +61,6 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     selectFilters(FilterType.ReportMaintenanceFilter),
   );
 
-  const name = useRef<string | undefined>(report?.name);
-  const [ordinal, _setOrdinal] = useState<number>(report?.ordinal || 999);
   const [includesSummary, setIncludesSummary] = useState(
     report ? report.includesSummary : true,
   );
@@ -58,6 +74,23 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
   const [maintenanceFilter, setMaintenanceFilter] = useState(
     report?.maintenanceFilter,
   );
+
+  const initialValues = {
+    name: report?.name,
+    ordinal: report?.ordinal || 999,
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    ordinal: Yup.number().required(),
+  });
+
+  const formikRef = useRef<FormikProps<FormValues>>(null);
+  const [formikCanSubmit, setFormikCanSubmit] = useState(false);
+  const keyboardAccessory = useRef<
+    KeyboardAccessoryMethods & KeyboardAccessory
+  >(null);
+  const nameFieldRef = useRef<ListItemInputMethods>(null);
 
   useEffect(() => {
     const filter = realm.objectForPrimaryKey(
@@ -91,143 +124,195 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reportMaintenanceFilterId]);
 
-  useEffect(() => {
-    const canSave =
-      !!name.current &&
-      (!eqString(report?.name, name.current) ||
-        !eqBoolean(report?.includesSummary, includesSummary) ||
-        !eqBoolean(report?.includesEvents, includesEvents) ||
-        !eqBoolean(report?.includesMaintenance, includesMaintenance) ||
-        !eqString(
-          report?.eventsFilter?._id.toString(),
-          eventsFilter?._id.toString(),
-        ) ||
-        !eqString(
-          report?.maintenanceFilter?._id.toString(),
-          maintenanceFilter?._id.toString(),
-        ));
+  const cancel = () => {
+    Keyboard.dismiss();
+    formikRef.current?.resetForm();
+    navigation.goBack();
+  };
 
-    const save = () => {
-      if (reportId) {
-        // Update existing report.
-        if (report) {
-          realm.write(() => {
-            report.name = name.current || 'no-name';
-            report.includesSummary = includesSummary;
-            report.includesEvents = includesEvents;
-            report.includesMaintenance = includesMaintenance;
-            report.eventsFilter = eventsFilter;
-            report.maintenanceFilter = maintenanceFilter;
-          });
-        }
-      } else {
-        // Insert new report.
+  const save = () => {
+    formikRef.current?.handleSubmit();
+    formikRef.current?.resetForm({ values: formikRef.current?.values });
+    Keyboard.dismiss();
+    navigation.goBack();
+  };
+
+  const onSubmit = (values: FormValues) => {
+    if (reportId) {
+      // Update existing report.
+      if (report) {
         realm.write(() => {
-          realm.create('EventsMaintenanceReport', {
-            name: name.current,
-            ordinal,
-            includesSummary,
-            includesEvents,
-            includesMaintenance,
-            eventsFilter,
-            maintenanceFilter,
-          });
+          report.name = values.name || 'no-name';
+          report.includesSummary = includesSummary;
+          report.includesEvents = includesEvents;
+          report.includesMaintenance = includesMaintenance;
+          report.eventsFilter = eventsFilter;
+          report.maintenanceFilter = maintenanceFilter;
         });
       }
-    };
+    } else {
+      // Insert new report.
+      realm.write(() => {
+        realm.create('EventsMaintenanceReport', {
+          name: values.name,
+          ordinal: values.ordinal,
+          includesSummary,
+          includesEvents,
+          includesMaintenance,
+          eventsFilter,
+          maintenanceFilter,
+        });
+      });
+    }
+  };
 
-    const onDone = () => {
-      save();
-      navigation.goBack();
-    };
+  // Update the header and button states.
+  const onFormikWatcherStateChange = (
+    state: FormikWatcherState<FormValues>,
+  ) => {
+    const { next, isValid = false } = state;
+    const canSubmit = next.dirty && isValid;
+    setFormikCanSubmit(canSubmit);
 
-    setScreenEditHeader(
-      { enabled: canSave, action: onDone },
-      { visible: !reportId },
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    name.current,
-    includesSummary,
-    includesEvents,
-    includesMaintenance,
-    eventsFilter,
-    maintenanceFilter,
-  ]);
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
+  };
 
   return (
-    <ScrollView style={theme.styles.view}>
-      <Divider text={'REPORT NAME'} />
-      <ListItemInput
-        value={name.current}
-        placeholder={'Report Name'}
-        position={['first', 'last']}
-        onChangeText={value => setDebounced(() => (name.current = value))}
+    <>
+      <ScrollView style={theme.styles.view}>
+        <Formik
+          innerRef={formik => {
+            if (formik) {
+              formikRef.current = formik;
+            }
+          }}
+          initialValues={initialValues}
+          validationSchema={schema}
+          validateOnMount
+          onSubmit={onSubmit}>
+          {({ handleChange, values }) => (
+            <View>
+              <FormikStateWatcher<FormValues>
+                onChange={onFormikWatcherStateChange}
+              />
+              <Divider text={'REPORT NAME'} />
+              <ListItemInput
+                ref={nameFieldRef}
+                position={['first', 'last']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('name'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.name),
+                  value: values.name,
+                  placeholder: 'Report Name',
+                  autoCapitalize: 'words',
+                }}
+              />
+              <Divider text={'CONTENTS'} />
+              <ListItemSwitch
+                title={'Includes Summary'}
+                value={includesSummary}
+                position={['first', 'last']}
+                onValueChange={setIncludesSummary}
+              />
+              <Divider />
+              <ListItemSwitchCollapsible
+                title={'Includes Events'}
+                value={includesEvents}
+                position={includesEvents ? ['first'] : ['first', 'last']}
+                onValueChange={setIncludesEvents}
+                expanded={includesEvents}>
+                <ListItem
+                  title={
+                    eventsFilter ? eventsFilter.name : 'No Filter Selected'
+                  }
+                  subtitle={
+                    eventsFilter
+                      ? filterSummary(eventsFilter)
+                      : 'Report will include all events.'
+                  }
+                  subtitleLines={0}
+                  rightContent={'chevron-right'}
+                  position={['last']}
+                  onPress={() =>
+                    navigation.navigate('ReportEventFiltersNavigator', {
+                      screen: 'ReportEventFilters',
+                      params: {
+                        filterType: FilterType.ReportEventsFilter,
+                      },
+                    })
+                  }
+                />
+              </ListItemSwitchCollapsible>
+              <Divider />
+              <ListItemSwitchCollapsible
+                title={'Includes Maintenance'}
+                value={includesMaintenance}
+                position={includesMaintenance ? ['first'] : ['first', 'last']}
+                onValueChange={setIncludesMaintenance}
+                expanded={includesMaintenance}>
+                <ListItem
+                  title={
+                    maintenanceFilter
+                      ? maintenanceFilter.name
+                      : 'No Filter Selected'
+                  }
+                  subtitle={
+                    maintenanceFilter
+                      ? filterSummary(maintenanceFilter)
+                      : 'Report will include all maintenance items.'
+                  }
+                  subtitleLines={0}
+                  rightContent={'chevron-right'}
+                  position={['last']}
+                  onPress={() =>
+                    navigation.navigate('ReportMaintenanceFiltersNavigator', {
+                      screen: 'ReportMaintenanceFilters',
+                      params: {
+                        filterType: FilterType.ReportMaintenanceFilter,
+                      },
+                    })
+                  }
+                />
+              </ListItemSwitchCollapsible>
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
+      <KeyboardAccessory
+        ref={keyboardAccessory}
+        id={'keyboardAccessory'}
+        fieldRefs={[nameFieldRef.current]}
+        doneText={'Save'}
+        disabledDone={!formikCanSubmit}
+        onDone={save}
       />
-      <Divider text={'CONTENTS'} />
-      <ListItemSwitch
-        title={'Includes Summary'}
-        value={includesSummary}
-        position={['first', 'last']}
-        onValueChange={setIncludesSummary}
-      />
-      <Divider />
-      <ListItemSwitch
-        title={'Includes Events'}
-        value={includesEvents}
-        position={includesEvents ? ['first'] : ['first', 'last']}
-        onValueChange={setIncludesEvents}
-        expanded={includesEvents}
-        ExpandableComponent={
-          <ListItem
-            title={eventsFilter ? eventsFilter.name : 'No Filter Selected'}
-            subtitle={
-              eventsFilter
-                ? filterSummary(eventsFilter)
-                : 'Report will include all events.'
-            }
-            position={['last']}
-            onPress={() =>
-              navigation.navigate('ReportEventFiltersNavigator', {
-                screen: 'ReportEventFilters',
-                params: {
-                  filterType: FilterType.ReportEventsFilter,
-                },
-              })
-            }
-          />
-        }
-      />
-      <Divider />
-      <ListItemSwitch
-        title={'Includes Maintenance'}
-        value={includesMaintenance}
-        position={includesMaintenance ? ['first'] : ['first', 'last']}
-        onValueChange={setIncludesMaintenance}
-        expanded={includesMaintenance}
-        ExpandableComponent={
-          <ListItem
-            title={
-              maintenanceFilter ? maintenanceFilter.name : 'No Filter Selected'
-            }
-            subtitle={
-              maintenanceFilter
-                ? filterSummary(maintenanceFilter)
-                : 'Report will include all maintenance items.'
-            }
-            position={['last']}
-            onPress={() =>
-              navigation.navigate('ReportMaintenanceFiltersNavigator', {
-                screen: 'ReportMaintenanceFilters',
-                params: {
-                  filterType: FilterType.ReportMaintenanceFilter,
-                },
-              })
-            }
-          />
-        }
-      />
-    </ScrollView>
+    </>
   );
 };
 

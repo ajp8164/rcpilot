@@ -1,8 +1,7 @@
 import { BSON, Object, ObjectSchema } from 'realm';
-
 import { Event } from 'realmdb/Event';
-import { ISODateString } from 'types/common';
 import { Model } from 'realmdb/Model';
+import { ISODateString } from 'types/common';
 
 export class Pilot extends Object<Pilot> {
   _id!: BSON.ObjectId;

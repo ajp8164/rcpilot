@@ -1,25 +1,19 @@
-import { AppTheme, useTheme } from 'theme';
-import {
-  ListItem,
-  SectionListHeader,
-  listItemPosition,
-} from 'components/atoms/List';
-import { ListRenderItem, SectionList, SectionListData } from 'react-native';
-
-import { BSON } from 'realm';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
-import { Model } from 'realmdb/Model';
-import { ModelsNavigatorParamList } from 'types/navigation';
+import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
+import { useObject } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { secondsToFormat } from 'lib/formatters';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
-import { secondsToFormat } from 'lib/formatters';
-import { useObject } from '@realm/react';
+import { DateTime } from 'luxon';
+import React from 'react';
+import { ListRenderItem, SectionList, SectionListData } from 'react-native';
+import { BSON } from 'realm';
+import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
+import { Model } from 'realmdb/Model';
+import { AppTheme, useTheme } from 'theme';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 type Section = {
   title?: string;
@@ -57,9 +51,8 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       <ListItem
         key={`${index}`}
         title={`${eventKind(model?.type).name} #${historyEntry.eventNumber}`}
-        subtitle={`${DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}\nModel Time ${secondsToFormat(historyEntry.modelTime, { format: 'm:ss' })}`}
+        subtitle={`${DateTime.fromISO(historyEntry.date).toFormat('M/d/yyyy h:mm a')}\nModel Time ${secondsToFormat(historyEntry.modelTime, { format: "h'h' m'm'" })}`}
         position={listItemPosition(index, action.history.length)}
-        rightImage={false}
       />
     );
   };
@@ -87,9 +80,7 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       )}
       keyExtractor={(item, index) => `${index}${item.eventNumber}`}
       renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
       ListFooterComponent={<Divider />}
     />
   );

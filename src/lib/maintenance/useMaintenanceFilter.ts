@@ -1,23 +1,22 @@
-import {
-  Checklist,
-  ChecklistAction,
-  ChecklistActionHistoryEntry,
-} from 'realmdb/Checklist';
+import { useObject } from '@realm/react';
 import {
   DateRelation,
   NumberRelation,
   StringRelation,
 } from 'components/molecules/filters';
-
-import { BSON } from 'realm';
-import { ChecklistType } from 'types/checklist';
-import { Filter } from 'realmdb/Filter';
-import { FilterType } from 'types/filter';
-import { Model } from 'realmdb/Model';
 import { getDate } from 'lib/filter';
-import { selectFilters } from 'store/selectors/filterSelectors';
-import { useObject } from '@realm/react';
 import { useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import {
+  Checklist,
+  ChecklistAction,
+  ChecklistActionHistoryEntry,
+} from 'realmdb/Checklist';
+import { Filter } from 'realmdb/Filter';
+import { Model } from 'realmdb/Model';
+import { selectFilters } from 'store/selectors/filterSelectors';
+import { ChecklistType } from 'types/checklist';
+import { FilterType } from 'types/filter';
 
 export type HistoryEntry = {
   checklist: Checklist;

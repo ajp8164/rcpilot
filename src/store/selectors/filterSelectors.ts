@@ -1,6 +1,6 @@
-import { FilterType } from 'types/filter';
-import { StoreState } from 'store/initialStoreState';
 import { createSelector } from '@reduxjs/toolkit';
+import { StoreState } from 'store/initialStoreState';
+import { FilterType } from 'types/filter';
 
 export const selectAppState = (state: StoreState): StoreState => state;
 

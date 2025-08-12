@@ -1,24 +1,25 @@
+import { useSetState } from '@react-native-hello/core';
+import {
+  ListItemDateTime,
+  ListItemSegmented,
+  WheelPicker,
+} from '@react-native-hello/ui';
+import { makeStyles } from '@rn-vui/themed';
+import {
+  ListItemSegmentedCollapsible,
+  ListItemSegmentedCollapsibleMethods,
+} from 'components/atoms/List';
+import { DateFilterState, DateRelation } from 'components/molecules/filters';
+import { DateTime } from 'luxon';
+import { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { AppTheme, useTheme } from 'theme';
-import { DateFilterState, DateRelation } from 'components/molecules/filters';
-import {
-  ListItem,
-  ListItemDate,
-  ListItemSegmented,
-  ListItemSegmentedInterface,
-} from 'components/atoms/List';
-import { useEffect, useRef, useState } from 'react';
-
-import { DateTime } from 'luxon';
 import { ISODateString } from 'types/common';
-import React from 'react';
-import WheelPicker from 'components/atoms/WheelPicker';
-import { getTimeSpanItems } from './wheelPickerHelpers';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useSetState } from '@react-native-ajp-elements/core';
 
-interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
+import { getTimeSpanItems } from './wheelPickerHelpers';
+
+interface Props extends Pick<ListItemSegmented, 'position'> {
   onValueChange: (filterState: DateFilterState) => void;
   relation: DateRelation;
   title: string;
@@ -39,7 +40,6 @@ const ListItemFilterDate = (props: Props) => {
   ];
 
   const initializing = useRef(true);
-  const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useSetState<DateFilterState>({
     relation: props.relation,
     value: props.value.length ? props.value : [],
@@ -50,12 +50,14 @@ const ListItemFilterDate = (props: Props) => {
     }),
   );
 
-  const [pickerExpanded, setPickerExpanded] = useState(false);
   const initialInThePastItems = useRef(getTimeSpanItems()).current;
   const inThePastPickerItems = useRef(initialInThePastItems.items);
   const inThePastPickerValue = useRef<string[]>(
     props.value.length > 0 ? props.value : initialInThePastItems.default.items,
   );
+
+  const collapsibleRef = useRef<ListItemSegmentedCollapsibleMethods>(null);
+  const [pickerExpanded, setPickerExpanded] = useState(false);
 
   // Controlled component state changes.
   useEffect(() => {
@@ -73,7 +75,7 @@ const ListItemFilterDate = (props: Props) => {
       props.relation === DateRelation.Any
     ) {
       // Closing
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState({ relation: props.relation, value: props.value });
         setPickerExpanded(false);
@@ -85,7 +87,7 @@ const ListItemFilterDate = (props: Props) => {
       // Opening
       setFilterState({ relation: props.relation, value: props.value });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       }, 300);
     } else {
       setFilterState({ relation: props.relation, value: props.value });
@@ -116,11 +118,11 @@ const ListItemFilterDate = (props: Props) => {
       setFilterState({ relation: newRelation, value: newValue });
       onValueChange({ relation: newRelation, value: newValue });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       });
     } else {
       // Closing
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState({ relation: newRelation, value: newValue });
         onValueChange({ relation: newRelation, value: newValue });
@@ -144,47 +146,45 @@ const ListItemFilterDate = (props: Props) => {
   };
 
   return (
-    <ListItemSegmented
+    <ListItemSegmentedCollapsible
+      ref={collapsibleRef}
       {...props}
       title={title}
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={
-        expanded && position ? lodash.without(position, 'last') : position
-      }
-      onChangeIndex={onRelationSelect}
-      expanded={expanded}
-      ExpandableComponent={
-        filterState.relation === DateRelation.After ||
-        filterState.relation === DateRelation.Before ? (
-          <ListItemDate
-            title={'Date'}
-            value={DateTime.fromISO(filterState.value[0]).toFormat(
-              "MMM d, yyyy 'at' h:mm a",
-            )}
-            rightImage={false}
-            onPress={() => setPickerExpanded(!pickerExpanded)}
+      initExpanded={props.value.length > 0}
+      onChangeIndex={onRelationSelect}>
+      <>
+        {filterState.relation !== DateRelation.Any ? (
+          <ListItemDateTime
+            title={
+              filterState.relation === DateRelation.Past
+                ? 'In Past'
+                : filterState.relation === DateRelation.After
+                  ? 'After'
+                  : 'Before'
+            }
+            value={
+              filterState.relation === DateRelation.Past
+                ? parseInt(inThePastPickerValue.current[0], 10) === 1
+                  ? inThePastPickerValue.current.join(' ').slice(0, -1)
+                  : inThePastPickerValue.current.join(' ')
+                : DateTime.fromISO(filterState.value[0]).toFormat(
+                    "MMM d, yyyy 'at' h:mm a",
+                  )
+            }
             expanded={pickerExpanded}
+            onPress={() => setPickerExpanded(!pickerExpanded)}
             expandableContainerStyle={s.datePickerExpandableContainer}
             datePickerContainerStyle={s.datePickerContainer}
             position={position?.includes('last') ? ['last'] : []}
-            onDateChange={onDateChange}
+            onChange={onDateChange}
             pickerValue={filterState.value[0]}
-          />
-        ) : filterState.relation === DateRelation.Past ? (
-          <ListItem
-            title={'In Past'}
-            value={
-              parseInt(inThePastPickerValue.current[0], 10) === 1
-                ? inThePastPickerValue.current.join(' ').slice(0, -1)
-                : inThePastPickerValue.current.join(' ')
+            mode={
+              filterState.relation === DateRelation.Past ? 'custom' : 'datetime'
             }
-            position={pickerExpanded ? [] : ['last']}
-            rightImage={false}
-            onPress={() => setPickerExpanded(!pickerExpanded)}
-            expanded={pickerExpanded}
-            ExpandableComponent={
+            customContent={
               <Animated.View
                 entering={FadeIn}
                 exiting={FadeOut}
@@ -210,9 +210,9 @@ const ListItemFilterDate = (props: Props) => {
           />
         ) : (
           <></>
-        )
-      }
-    />
+        )}
+      </>
+    </ListItemSegmentedCollapsible>
   );
 };
 
@@ -230,6 +230,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderBottomLeftRadius: 15,
     borderBottomRightRadius: 15,
     backgroundColor: theme.colors.listItem,
+    justifyContent: 'center',
+    width: '100%',
   },
 }));
 

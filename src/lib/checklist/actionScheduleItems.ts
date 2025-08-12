@@ -1,10 +1,9 @@
+import { WheelPickerItem } from '@react-native-hello/ui';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
   ChecklistActionScheduleType,
 } from 'types/checklist';
-
-import { WheelPickerItem } from 'components/atoms/WheelPicker';
 
 // Fill values from numbers and enumeration values.
 // Wheel picker array indexes as [wheel][item index in wheel]

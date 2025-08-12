@@ -3,7 +3,6 @@ import {
   EnumRelation,
   NumberRelation,
 } from 'components/molecules/filters';
-
 import { ReportEventFilterValues } from 'types/filter';
 
 export const defaultFilter: ReportEventFilterValues = {

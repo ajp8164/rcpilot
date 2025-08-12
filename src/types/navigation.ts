@@ -1,17 +1,16 @@
-import { BatteryTemplate, ListBatteries } from 'types/battery';
-import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
-import { ListModels, ModelType } from 'types/model';
-
+import { NavigatorScreenParams } from '@react-navigation/core';
 import { BatteryCellValuesEditorConfig } from 'components/BatteryCellValuesEditorScreen';
 import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
-import { ContentView } from 'types/content';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
+import { ModelPickerInterface } from 'components/ModelPickerScreen';
+import { TextStyle } from 'react-native';
+import { JChecklistAction } from 'realmdb/Checklist';
+import { BatteryTemplate, ListBatteries } from 'types/battery';
+import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
+import { ContentView } from 'types/content';
 import { EventOutcome } from 'types/event';
 import { FilterType } from 'types/filter';
-import { JChecklistAction } from 'realmdb/Checklist';
-import { ModelPickerInterface } from 'components/ModelPickerScreen';
-import { NavigatorScreenParams } from '@react-navigation/core';
-import { TextStyle } from 'react-native';
+import { ListModels, ModelType } from 'types/model';
 import { UserProfile } from 'types/user';
 
 export enum StartupScreen {

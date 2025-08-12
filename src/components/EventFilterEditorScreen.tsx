@@ -1,24 +1,21 @@
-import { AppTheme, useTheme } from 'theme';
-import { ListItem, ListItemInput, ListItemSwitch } from 'components/atoms/List';
+import { Divider } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { FilterEditorHeader } from 'components/molecules/FilterEditorHeader';
 import {
   ListItemFilterDate,
   ListItemFilterEnum,
   ListItemFilterNumber,
   ListItemFilterString,
 } from 'components/molecules/filters';
-import React, { useEffect } from 'react';
+import { Masks } from 'lib/inputMasks';
 import { defaultFilter, eventKind } from 'lib/modelEvent';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
+import { useFilterEditor } from 'lib/useFilterEditor';
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { useTheme } from 'theme';
 import { EventFilterValues } from 'types/filter';
 import { EventFiltersNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScrollView } from 'react-native';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useFilterEditor } from 'lib/useFilterEditor';
 
 const filterValueLabels: Record<string, string> = {};
 
@@ -37,8 +34,6 @@ const EventFilterEditorScreen = ({ route }: Props) => {
   } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
-  const setDebounced = useDebouncedRender();
 
   const filterEditor = useFilterEditor<EventFilterValues>({
     filterId,
@@ -48,64 +43,17 @@ const EventFilterEditorScreen = ({ route }: Props) => {
     generalFilterName,
   });
 
-  useEffect(() => {
-    if (requireFilterName) {
-      filterEditor.setCreateSavedFilter(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   if (!filterEditor.filter) {
     return <EmptyView error message={'Filter Not Found!'} />;
   }
 
   return (
     <ScrollView style={theme.styles.view}>
-      <Divider text={'FILTER NAME'} />
-      {filterEditor.name === filterEditor.generalFilterName ||
-      requireFilterName ? (
-        <ListItemSwitch
-          title={'Create a Saved Filter'}
-          position={
-            filterEditor.createSavedFilter ? ['first'] : ['first', 'last']
-          }
-          value={filterEditor.createSavedFilter}
-          disabled={requireFilterName}
-          expanded={filterEditor.createSavedFilter}
-          onValueChange={filterEditor.setCreateSavedFilter}
-          ExpandableComponent={
-            <ListItemInput
-              value={filterEditor.customName}
-              placeholder={'Filter Name'}
-              position={['last']}
-              onChangeText={value =>
-                setDebounced(() => filterEditor.setCustomName(value))
-              }
-            />
-          }
-        />
-      ) : (
-        <ListItemInput
-          value={filterEditor.name}
-          placeholder={'Filter Name'}
-          position={['first', 'last']}
-          onChangeText={value =>
-            setDebounced(() => filterEditor.setName(value))
-          }
-        />
-      )}
-      <Divider />
-      <ListItem
-        title={'Reset Filter'}
-        titleStyle={s.reset}
-        disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
-        disabledStyle={s.resetDisabled}
-        position={['first', 'last']}
-        rightImage={false}
-        onPress={filterEditor.resetFilter}
-      />
-      <Divider
-        text={`This filter shows all the ${eventKind(modelType).namePlural.toLowerCase()} that match all of these criteria.`}
+      <FilterEditorHeader
+        filterEditor={filterEditor}
+        itemName={eventKind(modelType).namePlural.toLowerCase()}
+        requireFilterName={requireFilterName}
+        defaultFilter={defaultFilter}
       />
       <ListItemFilterDate
         title={'Date'}
@@ -119,10 +67,13 @@ const EventFilterEditorScreen = ({ route }: Props) => {
       <Divider />
       <ListItemFilterNumber
         title={'Duration'}
-        label={'m:ss'}
         value={filterEditor.values.duration.value}
         relation={filterEditor.values.duration.relation}
-        numericProps={{ prefix: '', separator: ':' }}
+        numericProps={{
+          mask: Masks.MINUTES_SECONDS,
+          placeholder: '0:00',
+          units: 'm:ss',
+        }}
         position={['first', 'last']}
         onValueChange={filterState => {
           filterEditor.onFilterValueChange('duration', filterState);
@@ -197,16 +148,5 @@ const EventFilterEditorScreen = ({ route }: Props) => {
     </ScrollView>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  reset: {
-    alignSelf: 'center',
-    textAlign: 'center',
-    color: theme.colors.clearButtonText,
-  },
-  resetDisabled: {
-    opacity: 0.3,
-  },
-}));
 
 export default EventFilterEditorScreen;

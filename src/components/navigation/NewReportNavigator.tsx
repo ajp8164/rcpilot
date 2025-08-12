@@ -1,21 +1,20 @@
+import { CompositeScreenProps } from '@react-navigation/core';
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
+import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
+import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
+import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
+import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
+import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
+import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
+import React from 'react';
+import { useTheme } from 'theme';
 import {
   NewReportNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
-
-import { CompositeScreenProps } from '@react-navigation/core';
-import React from 'react';
-import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
-import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
-import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
-import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
-import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
-import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
-import { useTheme } from 'theme';
 
 const NewReportStack =
   createNativeStackNavigator<NewReportNavigatorParamList>();

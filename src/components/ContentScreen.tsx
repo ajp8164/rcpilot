@@ -1,16 +1,17 @@
-import { AppTheme, useTheme } from 'theme';
 import {
   ContentView,
   Divider,
-  ListItemAccordian,
-} from '@react-native-ajp-elements/ui';
-import React, { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
-
-import { ContentContainer } from 'types/content';
+  ListItemCollapsible,
+  ListItemCollapsibleMethods,
+  listItemPosition,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
 import { makeStyles } from '@rn-vui/themed';
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+import { AppTheme, useTheme } from 'theme';
+import { ContentContainer } from 'types/content';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Content'>;
 
@@ -19,6 +20,10 @@ const ContentScreen = ({ route, navigation }: Props) => {
   const s = useStyles(theme);
 
   const contentView = route.params.content;
+
+  const [refs, setRefs] = useState<
+    Record<string, ListItemCollapsibleMethods | null>
+  >({});
 
   useEffect(() => {
     navigation.setOptions({
@@ -48,17 +53,24 @@ const ContentScreen = ({ route, navigation }: Props) => {
           return (
             <View key={listIndex}>
               {list.map((section, index: number, arr: ContentContainer[]) => {
+                const key = `${listIndex}-${index}`;
                 return (
-                  <View key={listIndex * 100 + index}>
+                  <View key={key}>
                     {index === 0 && <Divider />}
-                    <ListItemAccordian
+                    <ListItemCollapsible
+                      ref={ref => {
+                        if (ref !== null && refs[key] === undefined) {
+                          setRefs({ ...refs, [key]: ref });
+                        }
+                      }}
                       title={section.title}
-                      position={[
-                        index === 0 ? 'first' : undefined,
-                        index === arr.length - 1 ? 'last' : undefined,
-                      ]}>
+                      position={listItemPosition(index, arr.length)}
+                      onPress={() => {
+                        // Close all collapsibles. This collapsible will open itself.
+                        Object.keys(refs).forEach(key => refs[key]?.close());
+                      }}>
                       {renderContent(section)}
-                    </ListItemAccordian>
+                    </ListItemCollapsible>
                   </View>
                 );
               })}

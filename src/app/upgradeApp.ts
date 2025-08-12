@@ -1,5 +1,6 @@
+import { log } from '@react-native-hello/core';
 import { AppError } from 'lib/errors';
-import { log } from '@react-native-ajp-elements/core';
+
 import { upgradeStorage } from './upgradeStorage';
 
 export const upgradeApp = (): void => {

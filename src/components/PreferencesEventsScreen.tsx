@@ -1,15 +1,15 @@
-import { AppTheme, useTheme } from 'theme';
-import React, { useState } from 'react';
-
-import { Divider } from '@react-native-ajp-elements/ui';
-import { ListItem } from 'components/atoms/List';
-import { ListItemSwitch } from 'components/atoms/List';
+import { Divider, ListItem, ListItemSwitch } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { ScrollView } from 'react-native';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { Slider } from 'react-native-ui-lib';
-import { TimerStartDelay } from 'types/event';
 import { makeStyles } from '@rn-vui/themed';
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native';
+import Slider from 'react-native-ui-lib/slider';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectEventPreferences } from 'store/selectors/appSettingsSelectors';
+import { saveEventPreferences } from 'store/slices/appSettings';
+import { AppTheme, useTheme } from 'theme';
+import { TimerStartDelay } from 'types/event';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -20,9 +20,11 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
 
+  const dispatch = useDispatch();
+  const preferences = useSelector(selectEventPreferences);
+
   const [atFieldSingleTapEnabled, setAtFieldSingleTapEnabled] = useState(false);
   const [atFieldUsesTimerEnabled, setFieldUsesTimerEnabled] = useState(false);
-  const [timerUsesButtonsEnabled, setTimerUsesButtonsEnabled] = useState(false);
   const [defaultFromLastEventEnabled, setDefaultFromLastEventEnabled] =
     useState(false);
 
@@ -35,7 +37,13 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
   };
 
   const toggleTimerUsesButtons = (value: boolean) => {
-    setTimerUsesButtonsEnabled(value);
+    dispatch(
+      saveEventPreferences({
+        preferences: {
+          timerUsesButtons: value,
+        },
+      }),
+    );
   };
 
   const toggleDefaultFromLastEvent = (value: boolean) => {
@@ -61,12 +69,13 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <ListItemSwitch
         title={'Timer Uses Buttons'}
-        value={timerUsesButtonsEnabled}
+        value={preferences.timerUsesButtons}
         onValueChange={toggleTimerUsesButtons}
       />
       <ListItem
         title={'Timer Start Delay'}
         value={'None'}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('EnumPicker', {
             title: 'Timer Start Delay',

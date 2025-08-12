@@ -1,21 +1,19 @@
-import { AppTheme, useTheme } from 'theme';
 import {
-  ListItemCheckbox,
-  SectionListHeader,
+  Divider,
+  ListItemCheckBox,
   listItemPosition,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import { SectionList, SectionListData, View } from 'react-native';
-
-import { BatteriesNavigatorParamList } from 'types/navigation';
-import { Battery } from 'realmdb/Battery';
-import { Divider } from '@react-native-ajp-elements/ui';
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useQuery } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
 import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
-import { useQuery } from '@realm/react';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import React, { useEffect } from 'react';
+import { SectionList, SectionListData, View } from 'react-native';
+import { Battery } from 'realmdb/Battery';
+import { AppTheme, useTheme } from 'theme';
+import { BatteriesNavigatorParamList } from 'types/navigation';
 
 type Section = {
   title?: string;
@@ -69,22 +67,23 @@ const BatteryPerformanceComparisonPickerScreen = ({
       sections={groupBatteries(batteries)}
       keyExtractor={item => item._id.toString()}
       renderItem={({ item: battery, index, section }) => (
-        <ListItemCheckbox
+        <ListItemCheckBox
           key={index}
           title={battery.name}
           subtitle={batterySummaryExtended(battery)}
-          containerStyle={s.batteryCheckbox}
           position={listItemPosition(index, section.data.length)}
           checked={true}
-          onPress={() => null}
+          onChange={() => null}
         />
       )}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
       ListHeaderComponent={
         <View style={s.listHeader}>
-          <Divider note text={'Choose up to four batteries to compare.'} />
+          <Divider
+            note
+            light
+            text={'Choose up to four batteries to compare.'}
+          />
         </View>
       }
     />
@@ -95,13 +94,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,
+    ...theme.styles.view,
   },
   listHeader: {
-    ...theme.styles.view,
+    marginTop: 15,
     height: undefined,
-  },
-  batteryCheckbox: {
-    marginHorizontal: 15,
   },
 }));
 

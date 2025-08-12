@@ -1,7 +1,7 @@
-import { Platform } from 'react-native';
+import { theme as rneulTheme } from '@react-native-hello/ui';
 import { createTheme } from '@rn-vui/themed';
 import lodash from 'lodash';
-import { theme as rneulTheme } from '@react-native-hello/ui';
+import { Platform } from 'react-native';
 
 export const theme = createTheme(
   lodash.merge({}, rneulTheme, {
@@ -25,6 +25,11 @@ export const theme = createTheme(
       listItemIcon: '#007bff',
       listItemIconNav: '#007bff',
       screenHeaderButtonText: '#007bff',
+      tabBarActiveTint: '#007bff',
+      tabBarBackgroundActive: '#000000',
+      tabBarBackgroundInactive: '#000000',
+      tabBarBorder: '#787878',
+      tabBarInactiveTint: '#787878',
 
       ...Platform.select({
         ios: {
@@ -63,6 +68,11 @@ export const theme = createTheme(
       listItemIcon: '#007bff',
       listItemIconNav: '#007bff',
       screenHeaderButtonText: '#007bff',
+      tabBarActiveTint: '#007bff',
+      tabBarBackgroundActive: '#ffffff',
+      tabBarBackgroundInactive: '#ffffff',
+      tabBarBorder: '#aaaaaa',
+      tabBarInactiveTint: '#aaaaaa',
 
       ...Platform.select({
         ios: {

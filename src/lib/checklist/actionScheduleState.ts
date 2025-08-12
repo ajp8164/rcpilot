@@ -1,19 +1,18 @@
+import { secondsToFormat } from 'lib/formatters';
+import { eventKind } from 'lib/modelEvent';
+import { DateTime } from 'luxon';
+import {
+  ChecklistActionScheduleState,
+  JChecklistAction,
+  JChecklistActionScheduleDue,
+} from 'realmdb/Checklist';
+import { Model } from 'realmdb/Model';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionRepeatingScheduleFrequency,
   ChecklistActionScheduleType,
   ChecklistType,
 } from 'types/checklist';
-import {
-  ChecklistActionScheduleState,
-  JChecklistAction,
-  JChecklistActionScheduleDue,
-} from 'realmdb/Checklist';
-
-import { DateTime } from 'luxon';
-import { Model } from 'realmdb/Model';
-import { eventKind } from 'lib/modelEvent';
-import { secondsToFormat } from 'lib/formatters';
 
 export const actionScheduleState = (
   action: JChecklistAction,
@@ -221,7 +220,7 @@ function actionNonRepeatingScheduleState(
         schedule.value === 1 ? timeframe.replace(/s$/, '') : timeframe;
 
       if (model && schedule.following !== undefined) {
-        after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToFormat(schedule.following, { format: 'm:ss' })}`;
+        after = ` after ${eventKind(model.type).name.toLowerCase()} time ${secondsToFormat(schedule.following, { format: "h'h' m'm'" })}`;
 
         const targetMinute = parseInt(schedule.following, 10) + schedule.value;
         const estMinutes =

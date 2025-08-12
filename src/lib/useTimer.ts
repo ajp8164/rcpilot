@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+import { useEffect, useRef, useState } from 'react';
 import {
   TimerEvent,
   TimerEventAlertPhrase,
@@ -5,10 +7,8 @@ import {
   TimerOptions,
   TimerState,
 } from 'types/timer';
-import { useEffect, useRef, useState } from 'react';
 
 import AlertService from './alertService';
-import { DateTime } from 'luxon';
 
 const timerModeAlertPhrase: TimerEventAlertPhrase = {
   [TimerEvent.Expired]: 'timer expired',

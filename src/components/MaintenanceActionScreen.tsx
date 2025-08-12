@@ -1,17 +1,17 @@
-import { ListItem, ListItemInput } from 'components/atoms/List';
+import { Divider, ListItem } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject } from '@realm/react';
+import { ListItemInput, ListItemNotes } from 'components/atoms/List';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { Masks } from 'lib/inputMasks';
+import { DateTime } from 'luxon';
 import React, { useRef } from 'react';
-
+import { View } from 'react-native';
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
-import { DateTime } from 'luxon';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
 import { Model } from 'realmdb/Model';
-import { ModelsNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native';
-import { useObject } from '@realm/react';
 import { useTheme } from 'theme';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   ModelsNavigatorParamList,
@@ -51,32 +51,30 @@ const MaintenanceActionScreen = ({ route }: Props) => {
         title={action?.description}
         subtitle={`From maintenance list '${checklist?.name}'`}
         position={['first', 'last']}
-        rightImage={false}
       />
       <Divider text={'ON SCHEDULE'} />
       <ListItem
         title={action.schedule.state.text}
         subtitle={`Last time was ${lastTimePerformed(action)}`}
         position={['first', 'last']}
-        rightImage={false}
       />
       <Divider text={'MAINTENANCE COSTS'} />
       <ListItemInput
         title={'Total Costs'}
-        value={`${action.cost || 0}`}
-        numeric={true}
-        numericProps={{ maxValue: 99999 }}
         position={['first', 'last']}
-        inputDisabled={true}
-        onChangeText={() => {
-          return;
+        inputProps={{
+          onChangeText: () => null,
+          value: `${action.cost || 0}`,
+          placeholder: '$0.00',
+          mask: Masks.CURRENCY,
+          rtlNumber: true,
+          keyboardType: 'number-pad',
         }}
       />
       <Divider text={'NOTES'} />
-      <ListItem
+      <ListItemNotes
         title={action.notes || 'No notes'}
         position={['first', 'last']}
-        rightImage={false}
       />
     </View>
   );

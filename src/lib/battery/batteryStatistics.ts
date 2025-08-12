@@ -1,6 +1,6 @@
+import { batteryCycleStatisticsData } from 'lib/batteryCycle';
 import { Battery } from 'realmdb/Battery';
 import { MilliampsPerMinute } from 'types/battery';
-import { batteryCycleStatisticsData } from 'lib/batteryCycle';
 
 export type BatteryStatistics = {
   value: {

@@ -1,17 +1,17 @@
-import { Platform, StatusBar } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import React, { useRef } from 'react';
-
-import { makeStyles } from '@rn-vui/themed';
-import { viewport } from '@react-native-ajp-elements/ui';
-import Carousel from 'react-native-reanimated-carousel';
-import { Model, Pilot } from 'realmdb';
-import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
-import { Realm } from '@realm/react';
+import { viewport } from '@react-native-hello/ui';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
-import { ModelCardDeckProvider } from './ModelCardDeckProvider';
+import { Realm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
 import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
+import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
+import React, { useRef } from 'react';
+import { Platform, StatusBar } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
+import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
+import { Model, Pilot } from 'realmdb';
+import { AppTheme, useTheme } from 'theme';
+
+import { ModelCardDeckProvider } from './ModelCardDeckProvider';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
@@ -84,7 +84,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   carousel: {
     justifyContent: 'center',
     marginTop:
-      Number(theme.styles.headerBarLarge.height) +
+      Number(theme.styles.headerBarLarge?.height || 20) +
       (Platform.OS === 'android'
         ? StatusBar.currentHeight || 0
         : theme.insets.top),

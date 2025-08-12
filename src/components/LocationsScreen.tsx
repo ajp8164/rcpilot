@@ -1,19 +1,17 @@
-import { FlatList, ListRenderItem } from 'react-native';
-import { ListItem, listItemPosition } from 'components/atoms/List';
-import React, { useEffect } from 'react';
-
-import { Button } from '@rn-vui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { Location } from 'realmdb';
-import { LocationNavigatorParamList } from 'types/navigation';
+import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
-import { useEvent } from 'lib/event';
 import { useQuery } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { useEvent } from 'lib/event';
+import { MapPin } from 'lucide-react-native';
+import React, { useEffect } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
 import { useSelector } from 'react-redux';
+import { Location } from 'realmdb';
+import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
 import { useTheme } from 'theme';
+import { LocationNavigatorParamList } from 'types/navigation';
 
 export type LocationPickerResult = {
   locationId: string;
@@ -35,7 +33,6 @@ const LocationsScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         return (
           <Button
@@ -58,15 +55,12 @@ const LocationsScreen = ({ navigation, route }: Props) => {
       <ListItem
         key={location._id.toString()}
         title={location.name}
-        rightImage={
-          location._id.toString() === currentLocationId && (
-            <Icon
-              name={'location-dot'}
-              solid={true}
-              size={22}
-              color={theme.colors.clearButtonText}
-            />
-          )
+        rightContent={
+          <>
+            {location._id.toString() === currentLocationId ? (
+              <MapPin color={theme.colors.listItemIcon} />
+            ) : null}
+          </>
         }
         position={listItemPosition(index, allLocations.length)}
         onPress={() => selectLocation(location)}
@@ -86,7 +80,7 @@ const LocationsScreen = ({ navigation, route }: Props) => {
       <EmptyView
         info
         message={'No Locations'}
-        details={'Create locations by dropping a pin on the map.'}
+        details={'Create a location by dropping a pin on the map.'}
       />
     );
   }

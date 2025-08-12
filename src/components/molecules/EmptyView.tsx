@@ -1,11 +1,10 @@
+import { viewport } from '@react-native-hello/ui';
+import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { makeStyles } from '@rn-vui/themed';
+import { Info, Search, TriangleAlert } from 'lucide-react-native';
+import React, { useContext, useState } from 'react';
 import { ActivityIndicator, LayoutChangeEvent, Text, View } from 'react-native';
 import { AppTheme, useTheme } from 'theme';
-import React, { useState } from 'react';
-
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { makeStyles } from '@rn-vui/themed';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { viewport } from '@react-native-ajp-elements/ui';
 
 interface EmptyViewInterface {
   error?: boolean;
@@ -25,8 +24,8 @@ export const EmptyView = ({
   const theme = useTheme();
   const s = useStyles(theme);
 
-  const tabBar = useBottomTabBarHeight();
-  const bottom = viewport.height * 0.6 - tabBar;
+  const tabBarHeight = useContext(BottomTabBarHeightContext) || 0;
+  const bottom = viewport.height * 0.6 - tabBarHeight;
   const [height, setHeight] = useState(0);
 
   const onLayout = (event: LayoutChangeEvent) => {
@@ -42,17 +41,23 @@ export const EmptyView = ({
             color={theme.colors.midGray}
             style={s.activityIndicator}
           />
+        ) : error ? (
+          <TriangleAlert
+            stroke={theme.colors.viewBackground}
+            fill={theme.colors.midGray}
+            size={60}
+          />
+        ) : info ? (
+          <Info
+            stroke={theme.colors.viewBackground}
+            fill={theme.colors.midGray}
+            size={60}
+          />
         ) : (
-          <Icon
-            name={
-              error
-                ? 'triangle-exclamation'
-                : info
-                  ? 'circle-info'
-                  : 'magnifying-glass'
-            }
-            size={45}
-            color={theme.colors.midGray}
+          <Search
+            stroke={theme.colors.midGray}
+            size={50}
+            style={{ marginTop: 10 }}
           />
         )}
         <Text style={s.message}>{message}</Text>

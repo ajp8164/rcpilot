@@ -1,31 +1,30 @@
-import { AppTheme, useTheme } from 'theme';
-import { FlatList, ListRenderItem } from 'react-native';
 import {
-  ListItemCheckboxInfo,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useQuery, useRealm } from '@realm/react';
-
-import { Button } from '@rn-vui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pilot } from 'realmdb/Pilot';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rn-vui/themed';
-import { saveSelectedPilot } from 'store/slices/pilot';
-import { selectPilot } from 'store/selectors/pilotSelectors';
-import { useConfirmAction } from 'lib/useConfirmAction';
+import { useQuery, useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { ListItemCheckBoxInfo } from 'components/atoms/List';
 import { usePilotSummary } from 'lib/pilot';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { Plus, Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, LayoutRectangle, ListRenderItem, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import { Pilot } from 'realmdb/Pilot';
+import { selectPilot } from 'store/selectors/pilotSelectors';
+import { saveSelectedPilot } from 'store/slices/pilot';
+import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilots'>;
 
 const PilotsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -41,14 +40,16 @@ const PilotsScreen = ({ navigation }: Props) => {
   const selectedPilotId = useSelector(selectPilot).pilotId;
   const pilotSummary = usePilotSummary();
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listLayout, setListLayout] = useState<LayoutRectangle>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon} />}
+            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
             onPress={() => navigation.navigate('NewPilot')}
           />
         );
@@ -65,40 +66,51 @@ const PilotsScreen = ({ navigation }: Props) => {
     );
   };
 
-  const deletePilot = (pilot: Pilot) => {
-    realm.write(() => {
-      realm.delete(pilot);
-    });
+  const deletePilot = (pilotId: string) => {
+    const pilot = realm.objectForPrimaryKey(Pilot, new BSON.ObjectId(pilotId));
+    if (pilot?.isValid()) {
+      // Select the unknown pilot if we delete the selected pilot.
+      if (pilotId === selectedPilotId) {
+        setPilot(unknownPilot);
+      }
+
+      realm.write(() => {
+        realm.delete(pilot);
+      });
+    }
   };
 
   const renderPilot: ListRenderItem<Pilot> = ({ item: pilot, index }) => {
     return (
-      <ListItemCheckboxInfo
+      <ListItemCheckBoxInfo
         key={pilot._id.toString()}
         title={pilot.name}
         subtitle={pilotSummary(pilot)}
         position={listItemPosition(index, allPilots.length)}
         checked={pilot._id.toString() === selectedPilotId}
+        listEditor={listEditorRef.current}
         onPress={() => setPilot(pilot)}
         onPressInfo={() =>
           navigation.navigate('Pilot', {
             pilotId: pilot._id.toString(),
           })
         }
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () =>
-                confirmAction(deletePilot, {
-                  label: 'Delete Pilot',
-                  title:
-                    'This action cannot be undone.\nAre you sure you want to delete this pilot?',
-                  value: pilot,
-                }),
+        swipeableActionsRight={[
+          {
+            text: 'Remove',
+            color: theme.colors.assertive,
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: 'Delete Pilot',
+                title: `This action cannot be undone.\nAre you sure you don't want to delete this pilot?`,
+              });
             },
-          ],
-        }}
+            onPress: () => deletePilot(pilot._id.toString()),
+          },
+        ]}
       />
     );
   };
@@ -107,7 +119,7 @@ const PilotsScreen = ({ navigation }: Props) => {
     return (
       <>
         {allPilots && <Divider />}
-        <ListItemCheckboxInfo
+        <ListItemCheckBoxInfo
           title={unknownPilot.name}
           subtitle={pilotSummary(unknownPilot)}
           position={['first', 'last']}
@@ -117,6 +129,7 @@ const PilotsScreen = ({ navigation }: Props) => {
         />
         <Divider
           note
+          light
           text={
             'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'
           }
@@ -126,23 +139,22 @@ const PilotsScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <FlatList
-      style={theme.styles.view}
-      data={allPilots}
-      renderItem={renderPilot}
-      keyExtractor={item => item._id.toString()}
-      showsVerticalScrollIndicator={false}
-      ListHeaderComponent={allPilots.length ? <Divider /> : null}
-      ListFooterComponent={renderFooter}
-    />
+    <ListEditor ref={listEditorRef} listLayout={listLayout}>
+      <View
+        style={[{ flex: 1 }]}
+        onLayout={e => setListLayout(e.nativeEvent.layout)}>
+        <FlatList
+          style={theme.styles.view}
+          data={allPilots.slice()}
+          renderItem={renderPilot}
+          keyExtractor={item => item._id.toString()}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={allPilots.length ? <Divider /> : null}
+          ListFooterComponent={renderFooter}
+        />
+      </View>
+    </ListEditor>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-  },
-}));
 
 export default PilotsScreen;

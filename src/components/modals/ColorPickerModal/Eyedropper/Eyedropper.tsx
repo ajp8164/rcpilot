@@ -1,14 +1,5 @@
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import { View } from 'react-native';
-import Animated, {
-  clamp,
-  runOnJS,
-  useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { viewport } from '@react-native-hello/ui';
+import { makeStyles } from '@rn-vui/themed';
 import {
   AlphaType,
   Canvas,
@@ -17,15 +8,24 @@ import {
   Image,
   ImageShader,
   Shader,
-  Skia,
   type SkImage,
+  Skia,
 } from '@shopify/react-native-skia';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import { View } from 'react-native';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Animated, {
+  clamp,
+  runOnJS,
+  useAnimatedStyle,
+  useDerivedValue,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { AppTheme, useTheme } from 'theme';
 
 import { EYE_DROPPER_SHADER } from './shader';
 import { useVector } from './useVector';
-import { viewport } from '@react-native-ajp-elements/ui';
-import { AppTheme, useTheme } from 'theme';
-import { makeStyles } from '@rn-vui/themed';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const SHADER = Skia.RuntimeEffect.Make(EYE_DROPPER_SHADER)!;

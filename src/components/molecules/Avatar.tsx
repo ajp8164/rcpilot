@@ -1,13 +1,12 @@
-import { AppTheme, useTheme } from 'theme';
-import { Avatar, Icon } from '@rn-vui/base';
-import { TextStyle, ViewStyle } from 'react-native';
-
-import { UserProfile } from 'types/user';
-import { fontFamily } from '@react-native-ajp-elements/ui';
-import { fontSizes } from 'theme/styles';
+import { Avatar as RNHAvatar, fontFamily } from '@react-native-hello/ui';
 import { makeStyles } from '@rn-vui/themed';
+import { CircleUserRound } from 'lucide-react-native';
+import { TextStyle, ViewStyle } from 'react-native';
+import { AppTheme, useTheme } from 'theme';
+import { fontSizes } from 'theme/styles';
+import { UserProfile } from 'types/user';
 
-interface ChatAvatarInterface {
+interface AvatarInterface {
   avatarStyle?: ViewStyle;
   onPress?: () => void;
   size?: 'tiny' | 'small' | 'medium' | 'large' | 'giant';
@@ -15,13 +14,15 @@ interface ChatAvatarInterface {
   userProfile?: UserProfile;
 }
 
-export const ChatAvatar = ({
-  avatarStyle,
-  onPress,
-  size = 'tiny',
-  titleStyle,
-  userProfile,
-}: ChatAvatarInterface) => {
+export const Avatar = (props: AvatarInterface) => {
+  const {
+    avatarStyle,
+    onPress,
+    size = 'tiny',
+    titleStyle,
+    userProfile,
+  } = props;
+
   const theme = useTheme();
   const s = useStyles(theme);
 
@@ -61,14 +62,8 @@ export const ChatAvatar = ({
   const renderUserAvatar = (userProfile?: UserProfile) => {
     if (!userProfile) {
       return (
-        // eslint-disable-next-line react/react-in-jsx-scope
-        <Avatar
-          icon={{
-            name: 'account-outline',
-            type: 'material-community',
-            size: _iconSize,
-            color: theme.colors.white,
-          }}
+        <RNHAvatar
+          Icon={<CircleUserRound color={theme.colors.white} size={_iconSize} />}
           imageProps={{ resizeMode: 'cover' }}
           containerStyle={{
             ..._avatarStyle,
@@ -80,8 +75,7 @@ export const ChatAvatar = ({
       );
     } else if (userProfile?.photoUrl.length) {
       return (
-        // eslint-disable-next-line react/react-in-jsx-scope
-        <Avatar
+        <RNHAvatar
           source={{ uri: userProfile.photoUrl }}
           imageProps={{ resizeMode: 'cover' }}
           containerStyle={[_avatarStyle, avatarStyle]}
@@ -90,8 +84,7 @@ export const ChatAvatar = ({
       );
     } else {
       return (
-        // eslint-disable-next-line react/react-in-jsx-scope
-        <Avatar
+        <RNHAvatar
           title={userProfile?.avatar.title}
           titleStyle={[_titleStyle, titleStyle]}
           containerStyle={{
@@ -112,10 +105,7 @@ export const ChatAvatar = ({
     // Seems to be a bug which allows the previous avatar image to remain
     // displayed. Use an icon to avoid.
     return (
-      // eslint-disable-next-line react/react-in-jsx-scope
-      <Icon
-        name={'account-circle'}
-        type={'material-community'}
+      <CircleUserRound
         color={theme.colors.brandSecondary}
         size={(avatarStyle?.width as number) || (_avatarStyle.width as number)}
         onPress={onPress}
@@ -165,7 +155,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   avatarTitleLarge: {
     color: theme.colors.stickyWhite,
-    fontSize: fontSizes.xl,
+    fontSize: fontSizes.XL,
     fontFamily,
     fontWeight: 'normal',
   },

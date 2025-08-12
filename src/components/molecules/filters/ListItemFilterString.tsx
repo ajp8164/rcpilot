@@ -1,25 +1,23 @@
-import {
-  ListItem,
-  ListItemSegmented,
-  ListItemSegmentedInterface,
-} from 'components/atoms/List';
+import { useSetState } from '@react-native-hello/core';
+import { ListItem, ListItemSegmented } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
+import { NotesEditorResult } from 'components/NotesEditorScreen';
+import {
+  ListItemSegmentedCollapsible,
+  ListItemSegmentedCollapsibleMethods,
+} from 'components/atoms/List';
 import {
   StringFilterState,
   StringRelation,
 } from 'components/molecules/filters';
-import { useEffect, useRef, useState } from 'react';
-
-import { MultipleNavigatorParamList } from 'types/navigation';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
-import React from 'react';
-import lodash from 'lodash';
 import { useEvent } from 'lib/event';
-import { useSetState } from '@react-native-ajp-elements/core';
-import { useTheme } from 'theme';
 import { uuidv4 } from 'lib/utils';
+import { useEffect, useRef, useState } from 'react';
+import React from 'react';
+import { useTheme } from 'theme';
+import { MultipleNavigatorParamList } from 'types/navigation';
 
-interface Props extends Pick<ListItemSegmentedInterface, 'position'> {
+interface Props extends Pick<ListItemSegmented, 'position'> {
   onValueChange: (filterState: StringFilterState) => void;
   relation: StringRelation;
   title: string;
@@ -42,7 +40,6 @@ const ListItemFilterString = (props: Props) => {
 
   const initializing = useRef(true);
   const eventName = useRef(`list-item-filter-string-${uuidv4()}`).current;
-  const [expanded, setExpanded] = useState(props.value.length > 0);
   const [filterState, setFilterState] = useSetState<StringFilterState>({
     relation: props.relation,
     value: props.value.length ? props.value : [],
@@ -52,6 +49,8 @@ const ListItemFilterString = (props: Props) => {
       return seg === props.relation;
     }),
   );
+
+  const collapsibleRef = useRef<ListItemSegmentedCollapsibleMethods>(null);
 
   // Controlled component state changes.
   useEffect(() => {
@@ -69,7 +68,7 @@ const ListItemFilterString = (props: Props) => {
       props.relation === StringRelation.Any
     ) {
       // Closing
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState(
           { relation: props.relation, value: props.value },
@@ -86,7 +85,7 @@ const ListItemFilterString = (props: Props) => {
         { assign: true },
       );
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       }, 300);
     } else {
       setFilterState(
@@ -130,11 +129,11 @@ const ListItemFilterString = (props: Props) => {
       );
       onValueChange({ relation: newRelation, value: newValue });
       setTimeout(() => {
-        setExpanded(true);
+        collapsibleRef.current?.open();
       });
     } else {
       // Closing
-      setExpanded(false);
+      collapsibleRef.current?.close();
       setTimeout(() => {
         setFilterState(
           { relation: newRelation, value: newValue },
@@ -146,39 +145,35 @@ const ListItemFilterString = (props: Props) => {
   };
 
   return (
-    <ListItemSegmented
+    <ListItemSegmentedCollapsible
+      ref={collapsibleRef}
       {...props}
       title={title}
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
-      position={
-        expanded && position ? lodash.without(position, 'last') : position
-      }
-      onChangeIndex={onRelationSelect}
-      expanded={expanded}
-      ExpandableComponent={
-        <ListItem
-          title={'The Text'}
-          titleStyle={
-            !filterState.value.length ? { color: theme.colors.assertive } : {}
-          }
-          subtitle={
-            !filterState.value.length
-              ? 'Matching text not specified'
-              : filterState.value[0]
-          }
-          position={position?.includes('last') ? ['last'] : []}
-          onPress={() =>
-            navigation.navigate('NotesEditor', {
-              title: 'String Value Notes',
-              text: filterState.value[0],
-              eventName,
-            })
-          }
-        />
-      }
-    />
+      initExpanded={props.value.length > 0}
+      onChangeIndex={onRelationSelect}>
+      <ListItem
+        title={'The Text'}
+        titleStyle={
+          !filterState.value.length ? { color: theme.colors.assertive } : {}
+        }
+        subtitle={
+          !filterState.value.length
+            ? 'Matching text not specified'
+            : filterState.value[0]
+        }
+        position={position?.includes('last') ? ['last'] : []}
+        onPress={() =>
+          navigation.navigate('NotesEditor', {
+            title: 'String Value Notes',
+            text: filterState.value[0],
+            eventName,
+          })
+        }
+      />
+    </ListItemSegmentedCollapsible>
   );
 };
 

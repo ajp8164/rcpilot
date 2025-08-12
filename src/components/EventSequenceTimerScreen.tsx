@@ -1,3 +1,56 @@
+import {
+  Divider,
+  ListItem,
+  ListItemSwitch,
+  SwipeButton,
+  WheelPicker,
+  WheelPickerItem,
+  getColoredSvg,
+  listItemPosition,
+  viewport,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import {
+  batteryPerformanceWithModel,
+  fuelCapacityPerformanceWithModel,
+} from 'lib/analytics';
+import { useEvent } from 'lib/event';
+import { secondsToFormat } from 'lib/formatters';
+import { modelHasChecklists, modelTypeIconProps } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { useTimer } from 'lib/useTimer';
+import {
+  BatteryFull,
+  BatteryLow,
+  CircleCheck,
+  CirclePause,
+  CirclePlay,
+  CircleStop,
+  Fuel,
+  TriangleAlert,
+} from 'lucide-react-native';
+import React, {
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  FlatList,
+  Image,
+  ListRenderItem,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import Animated, {
   Easing,
   FadeIn,
@@ -9,61 +62,21 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
-import {
-  Divider,
-  PickerItem,
-  SwipeButton,
-  getColoredSvg,
-  viewport,
-} from '@react-native-ajp-elements/ui';
-import {
-  FlatList,
-  Image,
-  ListRenderItem,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-} from 'react-native';
-import {
-  ListItem,
-  ListItemSwitch,
-  listItemPosition,
-} from 'components/atoms/List';
-import React, { ReactNode, useEffect, useMemo, useRef, useState } from 'react';
-import { TimerMode, TimerState } from 'types/timer';
-import {
-  batteryPerformanceWithModel,
-  fuelCapacityPerformanceWithModel,
-} from 'lib/analytics';
-import { modelHasChecklists, modelTypeIcons } from 'lib/model';
+import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { useObject, useRealm } from '@realm/react';
-
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
-import { Button } from '@rn-vui/base';
-import { ChecklistType } from 'types/checklist';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { EventSequenceNavigatorParamList } from 'types/navigation';
-import Icon from 'react-native-vector-icons/FontAwesome6';
 import { Model } from 'realmdb/Model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SvgXml } from 'react-native-svg';
-import WheelPicker from 'components/atoms/WheelPicker';
-import { eventKind } from 'lib/modelEvent';
-import { eventSequence } from 'store/slices/eventSequence';
-import { makeStyles } from '@rn-vui/themed';
-import { secondsToFormat } from 'lib/formatters';
+import { selectEventPreferences } from 'store/selectors/appSettingsSelectors';
 import { selectEventSequence } from 'store/selectors/eventSequence';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useEvent } from 'lib/event';
-import { useTimer } from 'lib/useTimer';
+import { eventSequence } from 'store/slices/eventSequence';
+import { AppTheme, useTheme } from 'theme';
+import { ChecklistType } from 'types/checklist';
+import { EventSequenceNavigatorParamList } from 'types/navigation';
+import { TimerMode, TimerState } from 'types/timer';
 
 type TimerButton = {
-  icon: string;
-  color: string;
+  icon: ReactElement;
   onPress?: () => void | undefined;
 };
 
@@ -82,6 +95,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
+  const eventPreferences = useSelector(selectEventPreferences);
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(
     Model,
@@ -90,7 +104,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const [kind] = useState(eventKind(model?.type));
 
-  const timerUsesButtons = true;
+  // const timerUsesButtons = false;
   const [countdownTimerEnabled, setCountdownTimerEnabled] = useState(false);
   const countdownValue = useRef(0);
 
@@ -118,19 +132,24 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions({
       headerBackVisible: timer.state.mode === TimerMode.Initial,
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (cancelable && timer.state.mode === TimerMode.Initial) {
           return (
             <Button
               title={'Cancel'}
-              titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonInvScreenHeader}
-              onPressIn={() =>
-                confirmAction(cancelEvent, {
-                  label: `Do Not Log ${kind.name}`,
-                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                })
+              titleStyle={{
+                ...theme.styles.buttonScreenHeaderTitle,
+                ...s.buttonScreenHeaderTitleLeft,
+              }}
+              buttonStyle={theme.styles.buttonScreenHeader}
+              onPress={() =>
+                confirmAction(
+                  {
+                    label: `Do Not Log ${kind.name}`,
+                    title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                  },
+                  cancelEvent,
+                )
               }
             />
           );
@@ -174,7 +193,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       event.removeListener('deviceShake', onDeviceShake);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [timer]);
 
   const cancelEvent = () => {
     dispatch(eventSequence.reset());
@@ -206,8 +225,30 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  // For testing swipe/shake for timer.
+  useEffect(() => {
+    if (__DEV__ && !eventPreferences.timerUsesButtons) {
+      if (timer.state.mode === TimerMode.Armed) {
+        setTimeout(() => {
+          event.emit('deviceShake');
+        }, 10000);
+      }
+
+      if (timer.state.mode === TimerMode.Running) {
+        setTimeout(() => {
+          timer.pause();
+        }, 10000);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timer, eventPreferences.timerUsesButtons]);
+
   const onDeviceShake = () => {
-    console.log('device shake');
+    if (timer.state.mode === TimerMode.Armed) {
+      timer.start();
+    } else if (timer.state.mode === TimerMode.Running) {
+      timer.pause();
+    }
   };
 
   const toggleCountdownTimer = (value: boolean) => {
@@ -232,8 +273,16 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     return [`${+str[0]}`, `${+str[1]}`];
   };
 
-  const onSwipeArmTimer = (isToggled: boolean) => {
-    isToggled ? timer.arm() : timer.disarm();
+  const onSwipeTimer = (isOn: boolean) => {
+    isOn ? timer.arm() : timer.disarm();
+
+    if (
+      !eventPreferences.timerUsesButtons &&
+      !isOn &&
+      timer.state.tickCount > 0
+    ) {
+      timer.stop();
+    }
   };
 
   const renderTimerButtons = (): ReactNode => {
@@ -242,91 +291,90 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
 
     if (timer.state.mode === TimerMode.Initial) {
       leftButton = {
-        icon: 'circle-check',
-        color: theme.colors.assertive,
+        icon: <CircleCheck color={theme.colors.assertive} size={60} />,
         onPress: timer.arm,
       };
       rightButton = {
-        icon: 'circle-play',
-        color: theme.colors.stickyWhite,
-        onPress: undefined,
+        icon: (
+          <CirclePlay
+            color={theme.colors.stickyWhite}
+            size={60}
+            style={s.timerButtonDisabled}
+          />
+        ),
       };
     } else if (timer.state.mode === TimerMode.Armed) {
       leftButton = {
-        icon: 'circle-stop',
-        color: theme.colors.success,
+        icon: <CircleStop color={theme.colors.success} size={60} />,
         onPress: timer.disarm,
       };
       rightButton = {
-        icon: 'circle-play',
-        color: theme.colors.stickyWhite,
+        icon: <CirclePlay color={theme.colors.stickyWhite} size={60} />,
         onPress: timer.start,
       };
     } else if (timer.state.mode === TimerMode.Running) {
       leftButton = {
-        icon: 'circle-stop',
-        color: theme.colors.stickyWhite,
-        onPress: undefined,
+        icon: (
+          <CircleStop
+            color={theme.colors.success}
+            size={60}
+            style={s.timerButtonDisabled}
+          />
+        ),
       };
       rightButton = {
-        icon: 'circle-pause',
-        color: theme.colors.stickyWhite,
+        icon: <CirclePause color={theme.colors.stickyWhite} size={60} />,
         onPress: timer.pause,
       };
     } else if (timer.state.mode === TimerMode.Paused) {
       leftButton = {
-        icon: 'circle-stop',
-        color: theme.colors.success,
+        icon: <CircleStop color={theme.colors.success} size={60} />,
         onPress: timer.stop,
       };
       rightButton = {
-        icon: 'circle-play',
-        color: theme.colors.stickyWhite,
+        icon: <CirclePlay color={theme.colors.stickyWhite} size={60} />,
         onPress: timer.start,
       };
     } else if (timer.state.mode === TimerMode.Expired) {
       leftButton = {
-        icon: 'circle-stop',
-        color: theme.colors.stickyWhite,
-        onPress: undefined,
+        icon: (
+          <CircleStop
+            color={theme.colors.success}
+            size={60}
+            style={s.timerButtonDisabled}
+          />
+        ),
       };
       rightButton = {
-        icon: 'circle-pause',
-        color: theme.colors.stickyWhite,
+        icon: <CirclePause color={theme.colors.stickyWhite} size={60} />,
         onPress: timer.pause,
       };
     } else {
       // Stopped
       leftButton = {
-        icon: 'circle-stop',
-        color: theme.colors.success,
-        onPress: undefined,
+        icon: (
+          <CircleStop
+            color={theme.colors.success}
+            size={60}
+            style={s.timerButtonDisabled}
+          />
+        ),
       };
       rightButton = {
-        icon: 'circle-play',
-        color: theme.colors.stickyWhite,
-        onPress: undefined,
+        icon: (
+          <CirclePlay
+            color={theme.colors.stickyWhite}
+            size={60}
+            style={s.timerButtonDisabled}
+          />
+        ),
       };
     }
 
     return (
       <View style={s.timerButtons}>
-        <Pressable onPress={leftButton.onPress}>
-          <Icon
-            name={leftButton.icon}
-            size={52}
-            color={leftButton.color}
-            style={leftButton.onPress ? {} : s.timerButtonDisabled}
-          />
-        </Pressable>
-        <Pressable onPress={rightButton.onPress}>
-          <Icon
-            name={rightButton.icon}
-            size={52}
-            color={rightButton.color}
-            style={rightButton.onPress ? {} : s.timerButtonDisabled}
-          />
-        </Pressable>
+        <Pressable onPress={leftButton.onPress}>{leftButton.icon}</Pressable>
+        <Pressable onPress={rightButton.onPress}>{rightButton.icon}</Pressable>
       </View>
     );
   };
@@ -344,8 +392,10 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           textStyle={s.swipeText}
           backText={
             timer.state.mode === TimerMode.Running
-              ? 'Timer running'
-              : 'Slide to disarm'
+              ? `${kind.name} in progress`
+              : !timer.state.tickCount
+                ? 'Slide to disarm'
+                : `Slide to end ${kind.name}`
           }
           backTextStyle={s.swipeText}
           padding={7}
@@ -366,15 +416,15 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               ? s.swipeThumbTimerRunning
               : {}
           }
-          onToggle={onSwipeArmTimer}
+          onToggle={onSwipeTimer}
         />
       </View>
     );
   };
 
-  const countdownTimerItems = useMemo((): PickerItem[][] => {
-    const minutes: PickerItem[] = [];
-    const seconds: PickerItem[] = [];
+  const countdownTimerItems = useMemo((): WheelPickerItem[][] => {
+    const minutes: WheelPickerItem[] = [];
+    const seconds: WheelPickerItem[] = [];
 
     for (let i = 0; i < 91; i++) {
       minutes[i] = {
@@ -408,7 +458,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             />
           ) : (
             <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              xml={getColoredSvg(
+                modelTypeIconProps[model.type]?.name as string,
+              )}
               width={100}
               height={110}
               color={theme.colors.brandSecondary}
@@ -430,7 +482,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToFormat(s.seconds, { format: 'm:ss' })} (80%)`,
+        time: `${secondsToFormat(s.seconds, { format: "m'm' s's'" })} (80%)`,
       };
     });
   };
@@ -441,7 +493,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       return {
         style: s.style,
         count: `x${s.count}`,
-        time: `${secondsToFormat(s.seconds, { format: 'm:ss' })} (80%)`,
+        time: `${secondsToFormat(s.seconds, { format: "m'm' s's'" })} (80%)`,
       };
     });
   };
@@ -451,6 +503,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     const isCharged =
       battery?.cycles[battery.cycles.length - 1]?.charge ||
       !battery?.cycles.length;
+    let position = listItemPosition(index, batteries.length);
+    position = model?.logsFuel ? position.filter(e => e !== 'first') : position;
     return (
       <ListItem
         key={`${index}`}
@@ -482,19 +536,20 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         }
         containerStyle={s.listItemContainer}
         bottomDividerColor={theme.colors.whiteTransparentLight}
-        titleStyle={[s.listItemTitle, s.batteryTitle]}
-        position={listItemPosition(index, batteries.length)}
-        rightImage={false}
-        leftImage={
-          <View style={s.batteryIconContainer}>
-            <Icon
-              name={isCharged ? 'battery-full' : 'battery-quarter'}
-              solid={true}
-              size={28}
+        titleStyle={s.listItemTitle}
+        position={position}
+        leftContent={
+          isCharged ? (
+            <BatteryFull
               color={theme.colors.brandSecondary}
               style={s.batteryIcon}
             />
-          </View>
+          ) : (
+            <BatteryLow
+              color={theme.colors.brandSecondary}
+              style={s.batteryIcon}
+            />
+          )
         }
       />
     );
@@ -505,19 +560,10 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'Battery Logging'}
         subtitle={'No batteries were selected'}
-        position={['last']}
+        position={model?.logsFuel ? ['last'] : ['first', 'last']}
         containerStyle={s.listItemContainer}
         titleStyle={s.listItemTitle}
-        rightImage={false}
-        leftImage={
-          <View>
-            <Icon
-              name={'triangle-exclamation'}
-              size={22}
-              color={theme.colors.warning}
-            />
-          </View>
-        }
+        leftContent={<TriangleAlert color={theme.colors.warning} />}
       />
     );
   };
@@ -553,20 +599,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           )
         }
         containerStyle={s.listItemContainer}
-        titleStyle={[s.listItemTitle, s.fuelTitle]}
-        position={['first', 'last']}
-        rightImage={false}
-        leftImage={
-          <View style={s.batteryIconContainer}>
-            <Icon
-              name={'gas-pump'}
-              solid={true}
-              size={26}
-              color={theme.colors.brandSecondary}
-              style={s.fuelIcon}
-            />
-          </View>
-        }
+        titleStyle={s.listItemTitle}
+        position={model?.logsBatteries ? ['first'] : ['first', 'last']}
+        leftContent={<Fuel color={theme.colors.brandSecondary} />}
       />
     );
   };
@@ -597,7 +632,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         {timer.state.mode === TimerMode.Armed && (
           <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
             <Text style={s.timerMessage}>
-              {timerUsesButtons
+              {eventPreferences.timerUsesButtons
                 ? 'Tap to Start Timer...'
                 : 'Shake to Start Timer...'}
             </Text>
@@ -632,12 +667,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       <View style={s.lower}>
         <ScrollView style={s.summary} showsVerticalScrollIndicator={false}>
           {renderModel()}
-          {model.logsFuel && (
-            <>
-              {renderFuelConsumption()}
-              <Divider />
-            </>
-          )}
+          {model.logsFuel && <>{renderFuelConsumption()}</>}
           {model.logsBatteries && (
             <FlatList
               data={batteries}
@@ -651,15 +681,41 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           )}
         </ScrollView>
       </View>
-      {timerUsesButtons ? renderTimerButtons() : renderTimerSwipe()}
+      {eventPreferences.timerUsesButtons
+        ? renderTimerButtons()
+        : renderTimerSwipe()}
     </View>
   );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  view: {
-    ...theme.styles.view,
-    backgroundColor: theme.colors.brandPrimary,
+  batteryIcon: {
+    transform: [{ rotate: '-90deg' }],
+  },
+  buttonScreenHeaderTitleLeft: {
+    color: theme.colors.stickyWhite,
+  },
+  eventKind: {
+    ...theme.styles.textSmall,
+    color: theme.colors.whiteTransparentLight,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  fuelIcon: {
+    width: '100%',
+    left: -2,
+  },
+  listItemContainer: {
+    backgroundColor: theme.colors.whiteTransparentSubtle,
+  },
+  listItemTitle: {
+    color: theme.colors.stickyWhite,
+  },
+  lower: {
+    height: '42%',
+    bottom: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: theme.colors.whiteTransparentSubtle,
   },
   modelContainer: {
     borderRadius: 10,
@@ -683,21 +739,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     textAlign: 'center',
     marginBottom: 3,
   },
-  eventKind: {
-    ...theme.styles.textSmall,
-    color: theme.colors.whiteTransparentLight,
-    textAlign: 'center',
-    marginBottom: 10,
-  },
-  batteryIconContainer: {
-    position: 'absolute',
-    top: 3,
-  },
-  batteryIcon: {
-    transform: [{ rotate: '-90deg' }],
-    width: '100%',
-    left: -8,
-  },
   performanceContainer: {
     paddingTop: 5,
   },
@@ -705,8 +746,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    paddingLeft: 25,
-    paddingRight: 5,
   },
   performanceItem: {
     ...theme.styles.textSmall,
@@ -716,27 +755,26 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     position: 'absolute',
     right: 95,
   },
-  batteryTitle: {
-    left: 25,
-  },
-  fuelIcon: {
-    width: '100%',
-    left: -2,
-  },
-  fuelTitle: {
-    left: 25,
-  },
-  listItemContainer: {
-    backgroundColor: theme.colors.whiteTransparentSubtle,
-  },
-  listItemTitle: {
-    color: theme.colors.stickyWhite,
-  },
   upper: {
     height: '42%',
     justifyContent: 'center',
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.whiteTransparentSubtle,
+  },
+  summary: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  swipeText: {
+    ...theme.styles.textXL,
+    color: theme.colors.stickyWhite,
+  },
+  swipeThumbTimerRunning: {
+    opacity: 0,
+    pointerEvents: 'none',
   },
   timerValue: {
     textAlign: 'center',
@@ -770,19 +808,6 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderWidth: 1,
     borderColor: theme.colors.whiteTransparentLight,
   },
-  lower: {
-    height: '42%',
-    bottom: 0,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.whiteTransparentSubtle,
-  },
-  summary: {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
-  },
   timerButtons: {
     position: 'absolute',
     bottom: theme.insets.bottom,
@@ -791,7 +816,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'space-around',
   },
   timerButtonDisabled: {
-    opacity: 0.3,
+    opacity: 0.6,
   },
   timerSwipeable: {
     position: 'absolute',
@@ -799,13 +824,9 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     width: viewport.width,
     alignItems: 'center',
   },
-  swipeText: {
-    ...theme.styles.textXL,
-    color: theme.colors.stickyWhite,
-  },
-  swipeThumbTimerRunning: {
-    opacity: 0,
-    pointerEvents: 'none',
+  view: {
+    ...theme.styles.view,
+    backgroundColor: theme.colors.brandPrimary,
   },
 }));
 

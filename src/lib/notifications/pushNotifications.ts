@@ -1,11 +1,11 @@
+import notifee from '@notifee/react-native';
+import messaging from '@react-native-firebase/messaging';
+import { log } from '@react-native-hello/core';
+import { updateUser } from 'firebase/firestore';
+import lodash from 'lodash';
+import { isEmulator } from 'react-native-device-info';
 import { NotificationInterface } from 'types/notification';
 import { UserProfile } from 'types/user';
-import { isEmulator } from 'react-native-device-info';
-import lodash from 'lodash';
-import { log } from '@react-native-ajp-elements/core';
-import messaging from '@react-native-firebase/messaging';
-import notifee from '@notifee/react-native';
-import { updateUser } from 'firebase/firestore';
 
 export type PushNotificationToken = {
   fcm: string;

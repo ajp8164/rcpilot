@@ -1,8 +1,8 @@
+import { AppState, initialAppState } from 'store/slices/app';
 import {
   AppSettingsState,
   initialAppSettingsState,
 } from 'store/slices/appSettings';
-import { AppState, initialAppState } from 'store/slices/app';
 import {
   EventSequenceState,
   initialEventSequenceState,

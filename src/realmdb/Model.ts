@@ -1,14 +1,14 @@
 import { BSON, Object, ObjectSchema } from 'realm';
+import { Checklist } from 'realmdb/Checklist';
 import { ISODateString, ScanCodeSize } from 'types/common';
+import { ModelType } from 'types/model';
 
 import { Battery } from './Battery';
-import { Checklist } from 'realmdb/Checklist';
 import { Event } from './Event';
 import { EventStyle } from './EventStyle';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
-import { ModelType } from 'types/model';
 
 export class Model extends Object<Model> {
   _id!: BSON.ObjectId;
@@ -29,7 +29,7 @@ export class Model extends Object<Model> {
   favoriteBatteries: Battery[] = [];
   logsFuel!: boolean;
   fuelCapacity?: number;
-  totalFuel?: number;
+  totalFuelConsumed?: number;
   defaultFuel?: ModelFuel;
   defaultPropeller?: ModelPropeller;
   defaultStyle?: EventStyle;
@@ -58,7 +58,7 @@ export class Model extends Object<Model> {
       favoriteBatteries: { type: 'list', objectType: 'Battery', default: [] },
       logsFuel: { type: 'bool', default: false },
       fuelCapacity: 'float?',
-      totalFuel: 'float?',
+      totalFuelConsumed: 'float?',
       defaultFuel: 'ModelFuel?',
       defaultPropeller: 'ModelPropeller?',
       defaultStyle: 'EventStyle?',

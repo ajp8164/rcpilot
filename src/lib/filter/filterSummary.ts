@@ -1,8 +1,9 @@
 import { Filter } from 'realmdb/Filter';
 import { FilterType } from 'types/filter';
+
 import { filterSummaryState } from './index';
 
-export const filterSummary = (filterOrFilterType: Filter | string) => {
+export const filterSummary = (filterOrFilterType?: Filter | string) => {
   let filterType: string;
   let filter: Filter | undefined;
 
@@ -10,7 +11,7 @@ export const filterSummary = (filterOrFilterType: Filter | string) => {
     filterType = filterOrFilterType;
   } else {
     filter = filterOrFilterType;
-    filterType = filter?.type;
+    filterType = filter?.type || '';
   }
 
   const kind =

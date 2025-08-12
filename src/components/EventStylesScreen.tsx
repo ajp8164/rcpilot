@@ -1,22 +1,23 @@
-import { AppTheme, useTheme } from 'theme';
-import { Divider, useListEditor } from '@react-native-ajp-elements/ui';
-import { FlatList, ListRenderItem } from 'react-native';
 import {
-  ListItem,
+  Divider,
+  ListEditor,
+  ListEditorMethods,
+  ListEditorState,
+  ListItemSwipeable,
   listItemPosition,
-  swipeableDeleteItem,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import { useQuery, useRealm } from '@realm/react';
-
-import { Button } from '@rn-vui/base';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { EventStyle } from 'realmdb/EventStyle';
-import Icon from 'react-native-vector-icons/FontAwesome6';
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { SetupNavigatorParamList } from 'types/navigation';
-import { makeStyles } from '@rn-vui/themed';
+import { useQuery, useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
+import { BSON } from 'realm';
+import { EventStyle } from 'realmdb/EventStyle';
+import { useTheme } from 'theme';
+import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,
@@ -25,21 +26,21 @@ export type Props = NativeStackScreenProps<
 
 const EventStylesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
-  const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
   const allEventStyles = useQuery(EventStyle);
 
+  const listEditorRef = useRef<ListEditorMethods>(null);
+  const [listEditorState, setListEditorState] = useState<ListEditorState>();
+
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'plus'} style={s.headerIcon} />}
+            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
             onPress={() => navigation.navigate('NewEventStyle', {})}
           />
         );
@@ -48,10 +49,16 @@ const EventStylesScreen = ({ navigation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const deleteStyle = (style: EventStyle) => {
-    realm.write(() => {
-      realm.delete(style);
-    });
+  const deleteStyle = (eventId: string) => {
+    const event = realm.objectForPrimaryKey(
+      EventStyle,
+      new BSON.ObjectId(eventId),
+    );
+    if (event?.isValid()) {
+      realm.write(() => {
+        realm.delete(event);
+      });
+    }
   };
 
   const renderEventStyle: ListRenderItem<EventStyle> = ({
@@ -59,36 +66,40 @@ const EventStylesScreen = ({ navigation }: Props) => {
     index,
   }) => {
     return (
-      <ListItem
-        ref={ref => {
-          ref && listEditor.add(ref, 'event-styles', style._id.toString());
-        }}
+      <ListItemSwipeable
         key={style._id.toString()}
         title={style.name}
         position={listItemPosition(index, allEventStyles.length)}
+        rightContent={'chevron-right'}
+        listEditor={listEditorRef.current}
         onPress={() =>
           navigation.navigate('EventStyleEditor', {
             eventStyleId: style._id.toString(),
           })
         }
-        swipeable={{
-          rightItems: [
-            {
-              ...swipeableDeleteItem[theme.mode],
-              onPress: () =>
-                confirmAction(deleteStyle, {
-                  label: 'Delete Style',
-                  title:
-                    "This action cannot be undone.\nAre you sure you don't want to log this event style?",
-                  value: style,
-                }),
-            },
-          ],
+        showEditor={listEditorState?.show}
+        editAction={{
+          ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
+          op: 'open-swipeable',
+          draggable: true,
         }}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen('event-styles', style._id.toString())
-        }
-        onSwipeableWillClose={listEditor.onItemWillClose}
+        swipeableActionsRight={[
+          {
+            text: 'Delete',
+            color: theme.colors.assertive,
+            ButtonComponent: <Trash2 color={theme.colors.stickyWhite} />,
+            op: 'remove',
+            confirmation: () => {
+              listEditorRef.current?.reset();
+              return confirmAction({
+                label: `Delete Style`,
+                title:
+                  "This action cannot be undone.\nAre you sure you don't want to log this event style?",
+              });
+            },
+            onPress: () => deleteStyle(style._id.toString()),
+          },
+        ]}
       />
     );
   };
@@ -104,22 +115,17 @@ const EventStylesScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <FlatList
-      style={theme.styles.view}
-      data={allEventStyles}
-      renderItem={renderEventStyle}
-      keyExtractor={item => item._id.toString()}
-      showsVerticalScrollIndicator={false}
-      ListHeaderComponent={allEventStyles.length ? <Divider /> : null}
-    />
+    <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
+      <FlatList
+        style={theme.styles.view}
+        data={allEventStyles}
+        renderItem={renderEventStyle}
+        keyExtractor={item => item._id.toString()}
+        showsVerticalScrollIndicator={false}
+        ListHeaderComponent={allEventStyles.length ? <Divider /> : null}
+      />
+    </ListEditor>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-  },
-}));
 
 export default EventStylesScreen;

@@ -1,32 +1,50 @@
-import { AppTheme, useTheme } from 'theme';
+import { Divider, ListItem, ListItemSwipeable } from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { Avatar } from 'components/molecules/Avatar';
+import { appConfig } from 'config';
+import { AuthContext } from 'lib/auth';
+import { useEvent } from 'lib/event';
+import { usePilotSummary } from 'lib/pilot';
+import {
+  Archive,
+  Battery,
+  Blocks,
+  CircleUserRound,
+  Database,
+  EyeOff,
+  Fan,
+  FileInput,
+  Flag,
+  Fuel,
+  IdCard,
+  Info,
+  MapPinned,
+  Route,
+  Settings,
+  Settings2,
+  TextSelect,
+  Volume2,
+} from 'lucide-react-native';
 import React, { useContext, useEffect } from 'react';
+import { ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { BSON } from 'realm';
+import { Pilot } from 'realmdb/Pilot';
+// import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
+import { selectPilot } from 'store/selectors/pilotSelectors';
+import { selectUserProfile } from 'store/selectors/userSelectors';
+import { saveDatabaseAccessWith } from 'store/slices/appSettings';
+import { saveSelectedPilot } from 'store/slices/pilot';
+import { AppTheme, useTheme } from 'theme';
+import { DatabaseAccessWith } from 'types/database';
 import {
   SetupNavigatorParamList,
   TabNavigatorParamList,
 } from 'types/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { useObject, useRealm } from '@realm/react';
-
-import { AuthContext } from 'lib/auth';
-import { BSON } from 'realm';
-import { ChatAvatar } from 'components/molecules/ChatAvatar';
-import { CompositeScreenProps } from '@react-navigation/core';
-import { DatabaseAccessWith } from 'types/database';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { ListItem } from 'components/atoms/List';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Pilot } from 'realmdb/Pilot';
-import { ScrollView } from 'react-native';
-import { appConfig } from 'config';
-import { makeStyles } from '@rn-vui/themed';
-import { saveDatabaseAccessWith } from 'store/slices/appSettings';
-import { saveSelectedPilot } from 'store/slices/pilot';
-// import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
-import { selectPilot } from 'store/selectors/pilotSelectors';
-import { selectUserProfile } from 'store/selectors/userSelectors';
-import { useEvent } from 'lib/event';
-import { usePilotSummary } from 'lib/pilot';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'Setup'>,
@@ -90,27 +108,25 @@ const SetupScreen = ({ navigation, route }: Props) => {
       contentInsetAdjustmentBehavior={'automatic'}>
       <Divider text={'PILOTS'} />
       {selectedPilot && !selectedPilot.unknownPilot && (
-        <ListItem
+        <ListItemSwipeable
           title={selectedPilot.name}
           subtitle={pilotSummary(selectedPilot)}
           position={['first']}
+          leftContent={<IdCard color={theme.colors.listItemIcon} />}
+          rightContent={'chevron-right'}
           onPress={() =>
             navigation.navigate('Pilot', {
               pilotId: selectedPilot._id.toString(),
             })
           }
-          swipeable={{
-            rightItems: [
-              {
-                icon: 'eye-slash',
-                iconType: 'font-awesome',
-                text: 'Clear',
-                color: theme.colors.brandPrimary,
-                x: 64,
-                onPress: clearPilot,
-              },
-            ],
-          }}
+          swipeableActionsRight={[
+            {
+              text: 'Clear',
+              color: theme.colors.brandPrimary,
+              ButtonComponent: <EyeOff color={theme.colors.stickyWhite} />,
+              onPress: () => clearPilot,
+            },
+          ]}
         />
       )}
       <ListItem
@@ -120,12 +136,15 @@ const SetupScreen = ({ navigation, route }: Props) => {
             ? ['last']
             : ['first', 'last']
         }
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('Pilots')}
       />
       <Divider text={'GLOBALS'} />
       <ListItem
         title={'Event Locations'}
         position={['first']}
+        leftContent={<MapPinned color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('LocationNavigator', {
             screen: 'LocationsMap',
@@ -135,29 +154,41 @@ const SetupScreen = ({ navigation, route }: Props) => {
       />
       <ListItem
         title={'Event Styles'}
+        leftContent={<Route color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('EventStyles')}
       />
       <ListItem
         title={'Model Categories'}
+        leftContent={<Blocks color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('ModelCategories')}
       />
       <ListItem
         title={'Model Fuels'}
+        leftContent={<Fuel color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('ModelFuels')}
       />
       <ListItem
         title={'Model Propellers'}
+        leftContent={<Fan color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('ModelPropellers')}
       />
       <ListItem
         title={'List Templates'}
         position={['last']}
+        leftContent={<TextSelect color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('ChecklistTemplates')}
       />
       <Divider text={'DATABASE'} />
       <ListItem
         title={'Information'}
         position={['first']}
+        leftContent={<Database color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('DatabaseInfo')}
       />
       {/* <ListItem
@@ -184,11 +215,15 @@ const SetupScreen = ({ navigation, route }: Props) => {
       )} */}
       <ListItem
         title={'Backup & Export'}
+        leftContent={<Archive color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('DatabaseBackup')}
       />
       <ListItem
         title={'Reporting'}
         position={['last']}
+        leftContent={<FileInput color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('DatabaseReporting')}
       />
       <Divider text={'PREFERENCES'} />
@@ -196,40 +231,49 @@ const SetupScreen = ({ navigation, route }: Props) => {
         title={'Basics'}
         subtitle={'Units, screen dimming, filter behavior'}
         position={['first']}
+        leftContent={<Settings2 color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesBasics')}
       />
       <ListItem
         title={'Events'}
         subtitle={'Timer, sensitivity settings'}
+        leftContent={<Flag color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesEvents')}
       />
       <ListItem
         title={'Batteries'}
         subtitle={'Convenience options'}
+        leftContent={<Battery color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesBatteries')}
       />
       <ListItem
         title={'Audio'}
         subtitle={'Sounds, vibration, scheduling'}
         position={['last']}
+        leftContent={<Volume2 color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('PreferencesAudio')}
       />
       <Divider text={'ACCOUNT'} />
       {userProfile ? (
         <ListItem
           title={userProfile.name || userProfile.email || 'My Account'}
-          leftImage={
-            <ChatAvatar userProfile={userProfile} avatarStyle={s.avatar} />
+          leftContent={
+            <Avatar userProfile={userProfile} avatarStyle={s.avatar} />
           }
           position={['first', 'last']}
+          rightContent={'chevron-right'}
           onPress={() => navigation.navigate('UserAccount')}
         />
       ) : (
         <ListItem
           title={'Sign In or Sign Up'}
-          leftImage={'account-circle-outline'}
-          leftImageType={'material-community'}
+          leftContent={<CircleUserRound color={theme.colors.listItemIcon} />}
           position={['first', 'last']}
+          rightContent={'chevron-right'}
           onPress={() => auth.presentSignInModal()}
         />
       )}
@@ -237,15 +281,15 @@ const SetupScreen = ({ navigation, route }: Props) => {
       <ListItem
         title={'App Settings'}
         position={['first']}
-        leftImage={'cog-outline'}
-        leftImageType={'material-community'}
+        leftContent={<Settings color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('AppSettings')}
       />
       <ListItem
         title={`About ${appConfig.appName}`}
         position={['last']}
-        leftImage={'information-outline'}
-        leftImageType={'material-community'}
+        leftContent={<Info color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
         onPress={() => navigation.navigate('About')}
       />
       <Divider />

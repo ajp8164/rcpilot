@@ -1,30 +1,37 @@
+import {
+  Divider,
+  ListItem,
+  ListItemInputMethods,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { CompositeScreenProps } from '@react-navigation/core';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { ListItemInput } from 'components/atoms/List';
+import { useEvent } from 'lib/event';
+import { precisionFromMask } from 'lib/inputMasks';
+import lodash from 'lodash';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Keyboard,
+  ListRenderItem,
+  Text,
+  TextStyle,
+  View,
+} from 'react-native';
 import { AppTheme, useTheme } from 'theme';
 import {
   BatteriesNavigatorParamList,
   NewBatteryCycleNavigatorParamList,
 } from 'types/navigation';
-import { FlatList, ListRenderItem, Text, TextStyle, View } from 'react-native';
-import {
-  ListItem,
-  ListItemInput,
-  ListItemInputMethods,
-  listItemPosition,
-} from 'components/atoms/List';
-import React, { useEffect, useRef, useState } from 'react';
-
-import { CompositeScreenProps } from '@react-navigation/core';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useEvent } from 'lib/event';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 
 export type BatteryCellValuesEditorConfig = {
   name: string;
   namePlural: string;
-  label: string;
-  precision: number;
+  units: string;
+  mask: string;
   headerButtonStyle?: TextStyle;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any; // Caller data that is simply passed through the editor.
@@ -58,20 +65,21 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles(theme);
   const event = useEvent();
-  const setScreenEditHeader = useScreenEditHeader();
 
-  const [packValue, setPackValue] = useState(_packValue.toFixed(3));
+  const precision = precisionFromMask(config.mask);
+  const [packValue, setPackValue] = useState(_packValue.toFixed(precision));
   // Ordering P first then S: 1P/1S, 1P/2S, 2P/1S, 2P/2S...
   const [cellValues, setCellValues] = useState(
     _cellValues.map(v => {
       return v.toString();
     }),
   );
+
   const initializing = useRef(true);
   const liRef = useRef<ListItemInputMethods[]>([]);
 
   useEffect(() => {
-    const canSave = !lodash.isEqual(
+    const canSubmit = !lodash.isEqual(
       _cellValues.map(v => {
         return v.toString();
       }),
@@ -80,7 +88,12 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       }),
     );
 
-    const onDone = () => {
+    const cancel = () => {
+      Keyboard.dismiss();
+      navigation.goBack();
+    };
+
+    const save = () => {
       event.emit(eventName, {
         cellValues: cellValues.map(v => {
           return v.length > 0 ? parseFloat(v) : 0;
@@ -89,13 +102,45 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
         extraData: config.extraData,
       } as BatteryCellValuesEditorResult);
 
+      Keyboard.dismiss();
       navigation.goBack();
     };
 
-    setScreenEditHeader(
-      { enabled: canSave, action: onDone, style: config.headerButtonStyle },
-      { visible: false },
-    );
+    navigation.setOptions({
+      headerLeft: () => {
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={{
+              ...theme.styles.buttonScreenHeaderTitle,
+              ...config.headerButtonStyle,
+            }}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
+      },
+      headerRight: () => {
+        return (
+          <Button
+            title={'Save'}
+            titleStyle={{
+              ...theme.styles.buttonScreenHeaderTitle,
+              ...config.headerButtonStyle,
+            }}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledTitleStyle={{
+              ...theme.styles.buttonScreenHeaderTitle,
+              ...config.headerButtonStyle,
+            }}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!canSubmit}
+            onPress={save}
+          />
+        );
+      },
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cellValues, packValue]);
 
@@ -109,7 +154,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     const newPackValue = cellValues.reduce((previousValue, currentValue) => {
       const pv = previousValue || '0';
       const cv = currentValue || '0';
-      return (parseFloat(pv) + parseFloat(cv)).toFixed(config.precision);
+      return (parseFloat(pv) + parseFloat(cv)).toFixed(precision);
     });
     setPackValue(newPackValue);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,15 +170,33 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       });
       if (notFilled) {
         r.fill(value);
-        // Set input component values.
-        for (let i = 1; i < _cellValues.length; i++) {
-          liRef.current[i].setValue(value);
-        }
       }
     } else {
       r[index] = value;
     }
     setCellValues(r);
+  };
+
+  const renderHeader = () => {
+    const packHasValue = parseFloat(packValue) > 0;
+    return (
+      <>
+        <Divider text={`OVERALL PACK ${config.name.toUpperCase()}`} />
+        <ListItem
+          title={'Total Pack'}
+          value={
+            <View style={s.valueContainer}>
+              <Text style={packHasValue ? s.value : s.valuePlaceholder}>
+                {packHasValue ? packValue : 'Unknown'}
+              </Text>
+              <Text style={s.units}>{` ${config.units}`}</Text>
+            </View>
+          }
+          position={['first', 'last']}
+        />
+        <Divider text={`PER-CELL ${config.namePlural.toUpperCase()}`} />
+      </>
+    );
   };
 
   const renderValue: ListRenderItem<string> = ({ item: value, index }) => {
@@ -145,23 +208,27 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
           ref && (liRef.current[index] = ref);
         }}
         title={`S Cell ${s} in P Leg ${p}`}
-        label={config.label}
-        value={parseFloat(value) === 0 || value === '' ? undefined : value}
-        placeholder={'Value'}
-        keyboardType={'decimal-pad'}
-        numeric={true}
-        numericProps={{ prefix: '', precision: config.precision }}
         position={listItemPosition(index, cellValues.length)}
-        onChangeText={value => {
-          // Cause a re-render to update total pack value.
-          setCellValues(prevState => {
-            const r = ([] as string[]).concat(prevState);
-            r[index] = value || '0';
-            return r;
-          });
-        }}
-        onBlur={() => {
-          autoFill(index, cellValues[index]);
+        units={config.units}
+        container={'right'}
+        inputProps={{
+          inputAccessoryViewID: 'keyboardAccessory',
+          value: parseFloat(value) === 0 ? '' : value,
+          onChangeText: (_, unformatted) => {
+            // Cause a re-render to update total pack value.
+            setCellValues(prevState => {
+              const r = ([] as string[]).concat(prevState);
+              r[index] = unformatted || '0';
+              return r;
+            });
+          },
+          onBlur: () => {
+            autoFill(index, cellValues[index]);
+          },
+          mask: config.mask,
+          rtlNumber: true,
+          placeholder: 'Value',
+          keyboardType: 'decimal-pad',
         }}
       />
     );
@@ -174,48 +241,30 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
         renderItem={renderValue}
         keyExtractor={(_item, index) => `${index}`}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <>
-            <Divider text={`OVERALL PACK ${config.name.toUpperCase()}`} />
-            <ListItem
-              title={'Total Pack'}
-              value={
-                <View style={s.valueContainer}>
-                  <Text style={s.value}>
-                    {parseFloat(packValue) === 0 ? 'Unknown' : packValue}
-                  </Text>
-                  <Text style={s.valueLabel}>{` ${config.label}`}</Text>
-                </View>
-              }
-              position={['first', 'last']}
-              rightImage={false}
-            />
-            <Divider text={`PER-CELL ${config.namePlural.toUpperCase()}`} />
-          </>
-        }
-        ListFooterComponent={
-          <>
-            <Divider />
-            <Divider />
-          </>
-        }
+        ListHeaderComponent={renderHeader()}
+        ListFooterComponent={<Divider style={s.divider} />}
       />
     </View>
   );
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  divider: {
+    marginBottom: 15,
+  },
   valueContainer: {
     flexDirection: 'row',
-    left: -25,
   },
   value: {
     ...theme.styles.textNormal,
-    ...theme.styles.textDim,
   },
-  valueLabel: {
+  valuePlaceholder: {
     ...theme.styles.textNormal,
-    color: theme.colors.subtleGray,
+    ...theme.styles.textPlaceholder,
+  },
+  units: {
+    ...theme.styles.textNormal,
+    color: theme.colors.listItemValue,
   },
 }));
 

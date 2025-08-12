@@ -1,10 +1,10 @@
+import React from 'react';
 import { Model } from 'realmdb/Model';
 import { Pilot } from 'realmdb/Pilot';
-import React from 'react';
 
 export declare type AchievementModal = AchievementModalMethods;
 
-declare const LegalModal: React.MemoExoticComponent<
+declare const AchievementModal: React.MemoExoticComponent<
   React.ForwardRefExoticComponent<
     AchievementModalProps & React.RefAttributes<AchievementModalMethods>
   >

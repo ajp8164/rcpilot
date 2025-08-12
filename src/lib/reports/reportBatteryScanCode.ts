@@ -1,5 +1,4 @@
 import { EnumRelation, NumberRelation } from 'components/molecules/filters';
-
 import { ReportBatteryScanCodeFilterValues } from 'types/filter';
 
 export const defaultFilter: ReportBatteryScanCodeFilterValues = {

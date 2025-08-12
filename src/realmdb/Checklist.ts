@@ -1,10 +1,9 @@
+import { Object, ObjectSchema } from 'realm';
 import {
   ChecklistActionSchedulePeriod,
   ChecklistActionScheduleType,
   ChecklistType,
 } from 'types/checklist';
-import { Object, ObjectSchema } from 'realm';
-
 import { ISODateString } from 'types/common';
 
 export class Checklist extends Object<Checklist> {

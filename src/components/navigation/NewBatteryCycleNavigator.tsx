@@ -1,12 +1,13 @@
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
-import NavContext from './NavContext';
-import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 import NewBatteryCycleScreen from 'components/NewBatteryCycleScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import lodash from 'lodash';
+import React from 'react';
 import { useTheme } from 'theme';
+import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const NewBatteryCycleStack =
   createNativeStackNavigator<NewBatteryCycleNavigatorParamList>();

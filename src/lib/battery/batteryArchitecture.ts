@@ -1,7 +1,6 @@
+import { WheelPickerItem } from '@react-native-hello/ui';
 import { BatteryCellArchitecture, BatteryChemistry } from 'types/battery';
-
 import { ExtendedWheelPickerItem } from 'types/wheelPicker';
-import { WheelPickerItem } from 'components/atoms/WheelPicker';
 
 export const batterySCellConfigurationItems: WheelPickerItem[] = [
   { label: '1 Cell', value: '1' },

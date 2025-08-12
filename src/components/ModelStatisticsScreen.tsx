@@ -1,20 +1,18 @@
-import { ListItem, listItemPosition } from 'components/atoms/List';
-import { ListRenderItem, ScrollView } from 'react-native';
-import { Model, ModelEventStyleData } from 'realmdb/Model';
-import { useObject, useRealm } from '@realm/react';
-
-import { BSON } from 'realm';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { EventStyle } from 'realmdb/EventStyle';
-import { FlatList } from 'react-native-gesture-handler';
-import { ModelsNavigatorParamList } from 'types/navigation';
+import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
-import { eventKind } from 'lib/modelEvent';
+import { useObject, useRealm } from '@realm/react';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { secondsToFormat } from 'lib/formatters';
+import { eventKind } from 'lib/modelEvent';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
+import React from 'react';
+import { ListRenderItem, ScrollView } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { BSON } from 'realm';
+import { EventStyle } from 'realmdb/EventStyle';
+import { Model, ModelEventStyleData } from 'realmdb/Model';
 import { useTheme } from 'theme';
+import { ModelsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
   ModelsNavigatorParamList,
@@ -53,13 +51,12 @@ const ModelStatisticsScreen = ({ route }: Props) => {
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}
-        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToFormat(data.eventStyleDuration, { format: 'm:ss' })}`}
-        value={`${Math.round(percentage)}%, ${secondsToFormat(average, { format: 'm:ss' })}`}
+        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToFormat(data.eventStyleDuration, { format: "h'h' m'm'" })}`}
+        value={`${Math.round(percentage)}%, ${secondsToFormat(average, { format: "m'm' s's'" })}`}
         position={listItemPosition(
           index,
           model?.statistics.eventStyleData.length || 0,
         )}
-        rightImage={false}
       />
     );
   };
@@ -96,16 +93,14 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       />
       <ListItem
         title={'Total Time'}
-        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToFormat(model.statistics.totalTime, { format: 'm:ss' })}`}
+        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToFormat(model.statistics.totalTime, { format: "h'h' m'm'" })}`}
         position={['first', 'last']}
-        rightImage={false}
       />
       <Divider text={'CRASH SUMMARY'} />
       <ListItem
         title={'Crashes'}
         value={`${model.statistics.crashCount}`}
         position={['first', 'last']}
-        rightImage={false}
       />
       <Divider text={'OPERATING COSTS'} />
       <ListItem
@@ -114,18 +109,15 @@ const ModelStatisticsScreen = ({ route }: Props) => {
           model.purchasePrice ? formatCurrency(model.purchasePrice) : 'Unknown'
         }
         position={['first']}
-        rightImage={false}
       />
       <ListItem
         title={'Maintenance'}
         value={`${formatCurrency(model.statistics.totalMaintenanceCost)}`}
-        rightImage={false}
       />
       <ListItem
         title={`Per ${eventKind(model.type).name}`}
         value={`${formatCurrency(model.statistics.perEventCost)}`}
         position={['last']}
-        rightImage={false}
       />
       {(!model.purchasePrice || model.statistics.uncertainCost) && (
         <Divider

@@ -1,4 +1,19 @@
-import { AppTheme, useTheme } from 'theme';
+import { useSetState } from '@react-native-hello/core';
+import {
+  Divider,
+  ListItemCheckBox,
+  getColoredSvg,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useQuery } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { useEvent } from 'lib/event';
+import { modelSummary, modelTypeIconProps } from 'lib/model';
+import { groupItems } from 'lib/sectionList';
+import lodash from 'lodash';
+import React, { useEffect } from 'react';
 import {
   Image,
   SectionList,
@@ -6,26 +21,10 @@ import {
   SectionListRenderItem,
   View,
 } from 'react-native';
-import {
-  ListItemCheckbox,
-  SectionListHeader,
-  listItemPosition,
-} from 'components/atoms/List';
-import React, { useEffect } from 'react';
-import { modelSummary, modelTypeIcons } from 'lib/model';
-
-import { EmptyView } from 'components/molecules/EmptyView';
-import { Model } from 'realmdb/Model';
-import { MultipleNavigatorParamList } from 'types/navigation';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { SvgXml } from 'react-native-svg';
-import { getColoredSvg } from '@react-native-ajp-elements/ui';
-import { groupItems } from 'lib/sectionList';
-import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useEvent } from 'lib/event';
-import { useQuery } from '@realm/react';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { Model } from 'realmdb/Model';
+import { AppTheme, useTheme } from 'theme';
+import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type ModelPickerInterface = {
   mode?: 'one' | 'many';
@@ -126,16 +125,15 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
     index: number;
   }) => {
     return (
-      <ListItemCheckbox
+      <ListItemCheckBox
         key={model._id.toString()}
         title={model.name}
         subtitle={modelSummary(model)}
-        titleStyle={s.modelText}
-        subtitleStyle={s.modelText}
-        subtitleNumberOfLines={2}
+        subtitleLines={2}
         position={listItemPosition(index, section.data.length)}
-        leftImage={
-          <View style={s.modelIconContainer}>
+        leftContentStyle={{ paddingLeft: 0 }}
+        leftContent={
+          <View>
             {model.image ? (
               <Image
                 source={{ uri: model.image }}
@@ -146,7 +144,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
               <View style={s.modelSvgContainer}>
                 <SvgXml
                   xml={getColoredSvg(
-                    modelTypeIcons[model.type]?.name as string,
+                    modelTypeIconProps[model.type]?.name as string,
                   )}
                   width={s.modelImage.width}
                   height={s.modelImage.height}
@@ -162,7 +160,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
             s => s._id.toString() === model._id.toString(),
           ) > -1
         }
-        onPress={() => toggleSelect(model)}
+        onChange={() => toggleSelect(model)}
       />
     );
   };
@@ -186,9 +184,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       sections={groupModels(activeModels)}
       keyExtractor={item => item._id.toString()}
       renderItem={renderItem}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
     />
   );
 };
@@ -197,20 +193,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   modelIcon: {
     transform: [{ rotate: '-45deg' }],
   },
-  modelIconContainer: {
-    position: 'absolute',
-    left: -15,
-  },
   modelImage: {
     width: 150,
     height: 85,
   },
   modelSvgContainer: {
     backgroundColor: theme.colors.subtleGray,
-  },
-  modelText: {
-    left: 108,
-    maxWidth: '60%',
   },
   sectionList: {
     flex: 1,

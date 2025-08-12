@@ -4,7 +4,6 @@ import {
   NumberRelation,
   StringRelation,
 } from 'components/molecules/filters';
-
 import { EventFilterValues } from 'types/filter';
 
 export const defaultFilter: EventFilterValues = {

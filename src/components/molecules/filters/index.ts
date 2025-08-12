@@ -72,6 +72,14 @@ export enum StringRelation {
   Missing = 'Missing',
 }
 
+export const numberRelationText = {
+  [NumberRelation.Any]: '',
+  [NumberRelation.LT]: 'Less Than',
+  [NumberRelation.GT]: 'Greater Than',
+  [NumberRelation.EQ]: 'Equal To',
+  [NumberRelation.NE]: 'Not Equal To',
+};
+
 // Type and union of all relations.
 export type FilterRelation =
   | BooleanRelation

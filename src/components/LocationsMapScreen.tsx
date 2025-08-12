@@ -1,14 +1,24 @@
-import { Alert, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import { Location, LocationCoords } from 'realmdb/Location';
-import MapView, {
-  Details,
-  MapMarker,
-  MapType,
-  MarkerDragStartEndEvent,
-  MarkerPressEvent,
-  Region,
-} from 'react-native-maps';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useQuery, useRealm } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { LocationPickerResult } from 'components/LocationsScreen';
+import ActionBar from 'components/atoms/ActionBar';
+import { Button } from 'components/atoms/Button';
+import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
+import { appConfig } from 'config';
+import { useEvent } from 'lib/event';
+import { GeoPositionContext } from 'lib/location';
+import { uuidv4 } from 'lib/utils';
+import {
+  BookOpen,
+  Map,
+  MapPinPlus,
+  MapPinned,
+  Navigation,
+  Navigation2,
+  Satellite,
+} from 'lucide-react-native';
+import { DateTime } from 'luxon';
 import React, {
   useContext,
   useEffect,
@@ -16,43 +26,31 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useQuery, useRealm } from '@realm/react';
-
-import ActionBar from 'components/atoms/ActionBar';
-import { Button } from '@rn-vui/base';
-import CustomIcon from 'theme/icomoon/CustomIcon';
-import { DateTime } from 'luxon';
-import { GeoPositionContext } from 'lib/location';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { LocationNavigatorParamList } from 'types/navigation';
-import { LocationPickerResult } from 'components/LocationsScreen';
-import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { appConfig } from 'config';
-import { makeStyles } from '@rn-vui/themed';
-import { selectLocation } from 'store/selectors/locationSelectors';
-import { useEvent } from 'lib/event';
-import { useFocusEffect } from '@react-navigation/native';
+import { Alert, View } from 'react-native';
+import MapView, {
+  Camera,
+  Details,
+  MapMarker,
+  MapType,
+  MarkerDragStartEndEvent,
+  MarkerPressEvent,
+  Region,
+} from 'react-native-maps';
 import { useSelector } from 'react-redux';
-import { uuidv4 } from 'lib/utils';
+import { Location, LocationCoords } from 'realmdb/Location';
+import { selectLocation } from 'store/selectors/locationSelectors';
+import { AppTheme, useTheme } from 'theme';
+import { LocationNavigatorParamList } from 'types/navigation';
 
-// These are icon names.
 enum RecenterButtonState {
-  Initial = 'location-arrow',
-  CurrentLocation = 'location-arrow-box',
-  CurrentLocationNorthUp = 'location-arrow-track-up',
-}
-
-// These are icon names.
-enum MapTypeButtonState {
-  Map = 'satellite',
-  Satellite = 'map',
+  Initial,
+  CurrentLocation,
+  CurrentLocationNorthUp,
 }
 
 type MapMarkerLocation = {
   mapMarker: MapMarker;
   location: Location;
-  edit: boolean;
 };
 
 export type LocationsMapResult = {
@@ -91,6 +89,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     );
   }
 
+  const initialized = useRef(false);
   const mapViewRef = useRef<MapView>(null);
   const markersRef = useRef<MapMarkerLocation[]>([]);
   const mapLocation = useRef({
@@ -98,26 +97,18 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     longitude: currentPosition.coords.longitude,
   } as LocationCoords);
 
-  const [mapPresentation, setMapPresentation] = useState<{
-    mapType: MapType;
-    icon: string;
-  }>({
-    mapType: 'standard',
-    icon: MapTypeButtonState.Map,
-  });
-
+  const [mapPresentation, setMapPresentation] = useState<MapType>('standard');
   const [recenterButtonState, setRecenterButtonState] = useState(
     RecenterButtonState.Initial,
   );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Icon name={'book-open'} style={s.headerIcon} />}
+            icon={<BookOpen color={theme.colors.screenHeaderButtonText} />}
             onPress={() =>
               navigation.navigate('Locations', { eventName: 'map-location' })
             }
@@ -155,62 +146,76 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const onChangeMapLocation = (result: LocationPickerResult) => {
+    // Position the map at the user selected location.
     const newLocation = locations.find(
       l => l._id.toString() === result.locationId,
     );
+
     if (newLocation) {
-      mapViewRef.current?.animateToRegion({
-        latitude: newLocation.coords.latitude,
-        longitude: newLocation?.coords.longitude,
-        latitudeDelta: 0.01,
-        longitudeDelta: 0.01,
-      });
+      recenterMap(newLocation.coords);
+
+      // Find and show the location callout.
+      const marker = markersRef.current.find(
+        m => m.location.name === newLocation.name,
+      );
+
+      if (marker) {
+        marker.mapMarker.showCallout();
+      }
+
+      // Broadcast the new location.
+      if (eventName) {
+        event.emit(eventName, {
+          locationId: newLocation._id.toString(),
+        } as LocationsMapResult);
+      }
     }
   };
 
-  const recenterMap = () => {
-    if (currentPosition.coords) {
-      // Set button state and heading.
-      let heading;
-
-      switch (recenterButtonState) {
-        case RecenterButtonState.Initial:
-          setRecenterButtonState(RecenterButtonState.CurrentLocation);
-          break;
-        case RecenterButtonState.CurrentLocation:
-          setRecenterButtonState(RecenterButtonState.CurrentLocationNorthUp);
-          heading = 0;
-          break;
-        case RecenterButtonState.CurrentLocationNorthUp:
-          setRecenterButtonState(RecenterButtonState.Initial);
-          break;
-      }
-
-      const partialCamera = {
-        center: {
-          latitude: currentPosition.coords.latitude,
-          longitude: currentPosition.coords.longitude,
-        },
-        heading,
-        zoom: 100,
-      };
-      mapViewRef.current?.animateCamera(partialCamera);
+  const changeRecenter = (coords: LocationCoords) => {
+    // Set button state and heading.
+    let heading;
+    switch (recenterButtonState) {
+      case RecenterButtonState.Initial:
+        setRecenterButtonState(RecenterButtonState.CurrentLocation);
+        break;
+      case RecenterButtonState.CurrentLocation:
+        setRecenterButtonState(RecenterButtonState.CurrentLocationNorthUp);
+        heading = 0;
+        break;
+      case RecenterButtonState.CurrentLocationNorthUp:
+        setRecenterButtonState(RecenterButtonState.Initial);
+        break;
     }
+    recenterMap(coords, { heading });
+  };
+
+  const recenterMap = (coords: LocationCoords, opts?: { heading?: number }) => {
+    const partialCamera: Partial<Camera> = {
+      center: {
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      },
+      heading: opts?.heading,
+      pitch: 0,
+      zoom: 1,
+    };
+    // This is a hack to get the map to center on the specified location.
+    // The first call only bring the location into the view.
+    // The second call will bring the location to the center of the screen.
+    mapViewRef.current?.animateCamera(partialCamera);
+    setTimeout(() => {
+      mapViewRef.current?.animateCamera(partialCamera);
+    });
   };
 
   const toggleMapPresenation = () => {
-    switch (mapPresentation.mapType) {
+    switch (mapPresentation) {
       case 'standard':
-        setMapPresentation({
-          mapType: 'satellite',
-          icon: MapTypeButtonState.Satellite,
-        });
+        setMapPresentation('satellite');
         break;
       case 'satellite':
-        setMapPresentation({
-          mapType: 'standard',
-          icon: MapTypeButtonState.Map,
-        });
+        setMapPresentation('standard');
         break;
     }
   };
@@ -218,21 +223,23 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const addLocation = () => {
     const now = DateTime.now().toISO();
     const id = uuidv4();
+    let newLocation: Location | undefined;
+
     realm.write(() => {
-      const newLocation = realm.create(Location, {
+      newLocation = realm.create(Location, {
         createdOn: now,
         updatedOn: now,
         name: 'Location-' + id.substring(id.length - 5),
         coords: mapLocation.current,
         notes: '',
       });
-
-      if (eventName) {
-        event.emit(eventName, {
-          locationId: newLocation._id.toString(),
-        } as LocationsMapResult);
-      }
     });
+
+    if (newLocation && eventName) {
+      event.emit(eventName, {
+        locationId: newLocation._id.toString(),
+      } as LocationsMapResult);
+    }
 
     // When a new location is added by dropping a pin the markersRef array length changes.
     // Show the callout for only the new location.
@@ -271,14 +278,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  useFocusEffect(() => {
-    const marker = markersRef.current.find(m => m.edit);
-    if (marker) {
-      marker.mapMarker.showCallout();
-      marker.edit = false;
-    }
-  });
-
   const renderMapMarkers = (): React.ReactElement[] => {
     return locations.map((location, index) => {
       if (!markersRef.current[index]) {
@@ -286,20 +285,34 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       }
       return (
         <MapMarkerCallout
-          ref={el => {
-            el ? (markersRef.current[index].mapMarker = el) : null;
+          ref={ref => {
+            // Wait to be sure this component is mounted and has a ref.
+            setTimeout(() => {
+              ref ? (markersRef.current[index].mapMarker = ref) : null;
+              markersRef.current[index].location = location;
+
+              // During view initialization the initial location shoudl show it's callout.
+              if (!initialized.current) {
+                setTimeout(() => {
+                  if (
+                    location._id.toString() === initialLocation?._id.toString()
+                  ) {
+                    markersRef.current[index].mapMarker.showCallout();
+                    initialized.current = true;
+                  }
+                }, 500); // For UX
+              }
+            });
           }}
           key={index}
           index={index}
           location={location}
           onMarkerDragEnd={onMarkerDragEnd}
-          onPressCallout={() => {
+          onPressCallout={() =>
             navigation.navigate('LocationEditor', {
               locationId: location._id.toString(),
-            });
-            markersRef.current[index].mapMarker.hideCallout();
-            markersRef.current[index].edit = true;
-          }}
+            })
+          }
         />
       );
     });
@@ -311,7 +324,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         ref={mapViewRef}
         style={s.map}
         showsUserLocation={true}
-        mapType={mapPresentation.mapType}
+        mapType={mapPresentation}
         initialRegion={{
           latitude:
             initialLocation?.coords.latitude || currentPosition.coords.latitude,
@@ -328,34 +341,32 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       <ActionBar
         actions={[
           {
-            ActionComponent: (
-              <CustomIcon
-                name={recenterButtonState}
-                size={28}
-                color={theme.colors.clearButtonText}
-              />
-            ),
-            onPress: recenterMap,
+            ActionComponent:
+              recenterButtonState === RecenterButtonState.Initial ? (
+                <Navigation color={theme.colors.clearButtonText} />
+              ) : recenterButtonState ===
+                RecenterButtonState.CurrentLocation ? (
+                <MapPinned color={theme.colors.clearButtonText} />
+              ) : (
+                <View style={s.northUp}>
+                  <Navigation2 color={theme.colors.white} size={18} />
+                </View>
+              ),
+            onPress: () => changeRecenter(currentPosition.coords),
           },
           {
             ActionComponent: (
-              <Icon
-                name={'location-dot'}
-                size={28}
-                color={theme.colors.clearButtonText}
-              />
+              <MapPinPlus color={theme.colors.clearButtonText} />
             ),
             onPress: addLocation,
           },
           {
-            ActionComponent: (
-              <Icon
-                solid
-                name={mapPresentation.icon}
-                size={28}
-                color={theme.colors.clearButtonText}
-              />
-            ),
+            ActionComponent:
+              mapPresentation === 'standard' ? (
+                <Map color={theme.colors.clearButtonText} />
+              ) : (
+                <Satellite color={theme.colors.clearButtonText} />
+              ),
             onPress: toggleMapPresenation,
           },
           {
@@ -369,13 +380,14 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  headerIcon: {
-    color: theme.colors.screenHeaderButtonText,
-    fontSize: 22,
-  },
   map: {
     width: '100%',
     height: '100%',
+  },
+  northUp: {
+    backgroundColor: theme.colors.clearButtonText,
+    borderRadius: 5,
+    padding: 3,
   },
 }));
 

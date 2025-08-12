@@ -1,3 +1,19 @@
+import { ellipsis } from '@react-native-hello/core';
+import { ListItem, getColoredSvg } from '@react-native-hello/ui';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import type FlipCardView from 'components/views/FlipCardView';
+import { secondsToFormat } from 'lib/formatters';
+import { modelTypeIconProps } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import {
+  Info,
+  Palette,
+  PlayCircle,
+  RotateCcwSquare,
+} from 'lucide-react-native';
+import { DateTime } from 'luxon';
+import React, { useState } from 'react';
 import {
   Image,
   LayoutChangeEvent,
@@ -5,23 +21,9 @@ import {
   Text,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import React, { useState } from 'react';
-
-import { makeStyles } from '@rn-vui/themed';
-import { Model } from 'realmdb';
-import { Button } from '@rn-vui/base';
-import type FlipCardView from 'components/views/FlipCardView';
-import { ListItem } from 'components/atoms/List';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import CustomIcon from 'theme/icomoon/CustomIcon';
 import { SvgXml } from 'react-native-svg';
-import { getColoredSvg } from '@react-native-ajp-elements/ui';
-import { modelTypeIcons } from 'lib/model';
-import { ellipsis } from '@react-native-ajp-elements/core';
-import { eventKind } from 'lib/modelEvent';
-import { DateTime } from 'luxon';
-import { secondsToFormat } from 'lib/formatters';
+import { Model } from 'realmdb';
+import { AppTheme, useTheme } from 'theme';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -55,7 +57,6 @@ export const Back = ({
             <Image
               source={{ uri: model.image }}
               resizeMode={'cover'}
-              // eslint-disable-next-line react-native/no-inline-styles
               style={{
                 width: cardLayout ? cardLayout.width - 30 : 0,
                 height: cardLayout ? cardLayout?.width * 0.33 : 0,
@@ -64,7 +65,9 @@ export const Back = ({
             />
           ) : (
             <SvgXml
-              xml={getColoredSvg(modelTypeIcons[model.type]?.name as string)}
+              xml={getColoredSvg(
+                modelTypeIconProps[model.type]?.name as string,
+              )}
               width={cardLayout ? cardLayout.width * 0.33 : 0}
               height={cardLayout ? cardLayout?.width * 0.33 : 0}
               color={theme.colors.whiteTransparentDark}
@@ -96,7 +99,7 @@ export const Back = ({
           <Text style={s.text}>{'Total Time'}</Text>
           <Text style={s.text}>
             {secondsToFormat(model?.statistics.totalTime, {
-              format: 'h:mm:ss',
+              format: "h'h' m'm' s's'",
             })}
           </Text>
         </View>
@@ -108,12 +111,8 @@ export const Back = ({
               backgroundColor: theme.colors.whiteTransparentDark,
             }}
             bottomDividerColor={theme.colors.darkGray}
-            rightImage={
-              <Icon
-                name={'play-circle'}
-                size={20}
-                color={theme.colors.darkGray}
-              />
+            rightContent={
+              <PlayCircle color={theme.colors.darkGray} size={33} />
             }
             position={['first']}
             onPress={onPressNewEventSequence}
@@ -124,13 +123,7 @@ export const Back = ({
             containerStyle={{
               backgroundColor: theme.colors.whiteTransparentDark,
             }}
-            rightImage={
-              <CustomIcon
-                name={'circle-info'}
-                size={20}
-                color={theme.colors.darkGray}
-              />
-            }
+            rightContent={<Info color={theme.colors.darkGray} size={33} />}
             position={['last']}
             onPress={onPressEditModel}
           />
@@ -140,13 +133,7 @@ export const Back = ({
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               icon={
-                <Icon
-                  name={'palette'}
-                  style={[
-                    s.toolbarIcon,
-                    { color: theme.colors.whiteTransparentDark },
-                  ]}
-                />
+                <Palette color={theme.colors.whiteTransparentDark} size={33} />
               }
               onPress={() => {
                 flip && flip();
@@ -156,15 +143,12 @@ export const Back = ({
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               icon={
-                <Icon
-                  name={'rotate'}
-                  style={[
-                    s.toolbarIcon,
-                    { color: theme.colors.whiteTransparentDark },
-                  ]}
+                <RotateCcwSquare
+                  color={theme.colors.whiteTransparentDark}
+                  size={33}
                 />
               }
-              onPress={flip && flip}
+              onPress={() => flip && flip()}
             />
           </View>
         </View>
@@ -214,9 +198,5 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 15,
-  },
-  toolbarIcon: {
-    fontSize: 22,
-    marginHorizontal: 10,
   },
 }));

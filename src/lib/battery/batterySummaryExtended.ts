@@ -1,5 +1,6 @@
-import { Battery } from 'realmdb/Battery';
 import { DateTime } from 'luxon';
+import { Battery } from 'realmdb/Battery';
+
 import { batterySummary } from './index';
 
 export const batterySummaryExtended = (battery: Battery) => {

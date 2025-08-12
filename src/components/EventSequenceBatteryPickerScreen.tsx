@@ -1,24 +1,23 @@
-import { AppTheme, useTheme } from 'theme';
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
-
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import BatteryPickerView from 'components/views/BatteryPickerView';
+import { modelHasChecklists } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { ChevronRight } from 'lucide-react-native';
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
-import BatteryPickerView from 'components/views/BatteryPickerView';
-import { Button } from '@rn-vui/base';
+import { Model } from 'realmdb/Model';
+import { selectEventSequence } from 'store/selectors/eventSequence';
+import { eventSequence } from 'store/slices/eventSequence';
+import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import { Model } from 'realmdb/Model';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { View } from 'react-native';
-import { eventKind } from 'lib/modelEvent';
-import { eventSequence } from 'store/slices/eventSequence';
-import { makeStyles } from '@rn-vui/themed';
-import { modelHasChecklists } from 'lib/model';
-import { selectEventSequence } from 'store/selectors/eventSequence';
-import { useConfirmAction } from 'lib/useConfirmAction';
 
 export type Props = NativeStackScreenProps<
   EventSequenceNavigatorParamList,
@@ -49,40 +48,46 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         if (cancelable) {
           return (
             <Button
               title={'Cancel'}
-              titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonInvScreenHeader}
+              titleStyle={{
+                ...theme.styles.buttonScreenHeaderTitle,
+                ...s.buttonScreenHeaderTitleLeft,
+              }}
+              buttonStyle={theme.styles.buttonScreenHeader}
               onPress={() =>
-                confirmAction(cancelEvent, {
-                  label: `Do Not Log ${kind.name}`,
-                  title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                })
+                confirmAction(
+                  {
+                    label: `Do Not Log ${kind.name}`,
+                    title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                  },
+                  cancelEvent,
+                )
               }
             />
           );
         }
       },
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         const hasChecklists =
           model && modelHasChecklists(model, ChecklistType.PreEvent);
         return (
           <Button
             title={hasChecklists ? 'Checklist' : 'Timer'}
-            titleStyle={theme.styles.buttonInvScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonInvScreenHeader}
+            titleStyle={{
+              ...theme.styles.buttonScreenHeaderTitle,
+              ...s.buttonScreenHeaderTitleRight,
+            }}
+            buttonStyle={theme.styles.buttonScreenHeader}
             iconRight
             icon={
-              <Icon
-                name={'chevron-right'}
+              <ChevronRight
                 color={theme.colors.stickyWhite}
-                size={22}
-                style={s.headerIcon}
+                size={33}
+                style={{ right: -10 }}
               />
             }
             onPress={() => {
@@ -127,9 +132,13 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
-  headerIcon: {
-    paddingLeft: 5,
+const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+  buttonScreenHeaderTitleLeft: {
+    color: theme.colors.stickyWhite,
+  },
+  buttonScreenHeaderTitleRight: {
+    right: 15,
+    color: theme.colors.stickyWhite,
   },
 }));
 

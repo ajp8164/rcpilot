@@ -1,12 +1,13 @@
-import EnumPickerScreen from 'components/EnumPickerScreen';
-import NavContext from './NavContext';
-import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
-import ReportMaintenanceFilterEditorScreen from 'components/ReportMaintenanceFilterEditorScreen';
-import { ReportMaintenanceFiltersNavigatorParamList } from 'types/navigation';
-import ReportMaintenanceFiltersScreen from 'components/ReportMaintenanceFiltersScreen';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import EnumPickerScreen from 'components/EnumPickerScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
+import ReportMaintenanceFilterEditorScreen from 'components/ReportMaintenanceFilterEditorScreen';
+import ReportMaintenanceFiltersScreen from 'components/ReportMaintenanceFiltersScreen';
+import React from 'react';
 import { useTheme } from 'theme';
+import { ReportMaintenanceFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const ReportMaintenanceFiltersStack =
   createNativeStackNavigator<ReportMaintenanceFiltersNavigatorParamList>();

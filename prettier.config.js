@@ -5,6 +5,11 @@ const config = {
   semi: true,
   singleQuote: true,
   trailingComma: 'all',
+  // importOrder: ['^@core/(.*)$', '^@server/(.*)$', '^@ui/(.*)$', '^[./]'],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+  importOrderGroupNamespaceSpecifiers: true,
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
 };
 
 export default config;

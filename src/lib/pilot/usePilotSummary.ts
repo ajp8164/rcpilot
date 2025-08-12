@@ -1,7 +1,7 @@
+import { useQuery } from '@realm/react';
+import { secondsToFormat } from 'lib/formatters';
 import { Event } from 'realmdb/Event';
 import { Pilot } from 'realmdb/Pilot';
-import { secondsToFormat } from 'lib/formatters';
-import { useQuery } from '@realm/react';
 
 export const usePilotSummary = () => {
   const events = useQuery(Event);
@@ -12,7 +12,10 @@ export const usePilotSummary = () => {
       return (accumulator += event.duration);
     }, 0);
 
-    const time = secondsToFormat(totalTime, { format: 'm:ss' });
+    let time = secondsToFormat(totalTime, { format: "h'h' m'm'" });
+    time = time.replace(/^0h /g, ''); // Remove zero values
+    time = time.replace(' 0m', '');
+
     const eventCount = `${pilotEvents.length} event${pilotEvents.length !== 1 ? 's' : ''}`;
     return `Logged ${time} over ${eventCount}`;
   };

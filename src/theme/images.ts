@@ -1,9 +1,8 @@
 import { Image, ImageSourcePropType } from 'react-native';
-
-const blade = require('theme/img/vendors/blade.png');
-const goblinHelicopter = require('theme/img/vendors/goblin-helicopter.png');
-const horizonHobby = require('theme/img/vendors/horizon-hobby.png');
-const sab = require('theme/img/vendors/sab.png');
+import blade from 'theme/img/vendors/blade.png';
+import goblinHelicopter from 'theme/img/vendors/goblin-helicopter.png';
+import horizonHobby from 'theme/img/vendors/horizon-hobby.png';
+import sab from 'theme/img/vendors/sab.png';
 
 export type VendorImage = {
   src: ImageSourcePropType;

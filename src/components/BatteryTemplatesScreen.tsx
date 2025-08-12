@@ -1,5 +1,14 @@
-import { AppTheme, useTheme } from 'theme';
-import { ListItemCheckbox, listItemPosition } from 'components/atoms/List';
+import { useSetState } from '@react-native-hello/core';
+import {
+  Divider,
+  ListItemCheckBox,
+  listItemPosition,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useQuery } from '@realm/react';
+import { makeStyles } from '@rn-vui/themed';
+import { Button } from 'components/atoms/Button';
+import { groupItems } from 'lib/sectionList';
 import React, { useEffect, useRef } from 'react';
 import {
   SectionList,
@@ -7,17 +16,10 @@ import {
   SectionListRenderItem,
   View,
 } from 'react-native';
-
-import { BatteriesNavigatorParamList } from 'types/navigation';
 import { Battery } from 'realmdb/Battery';
+import { AppTheme, useTheme } from 'theme';
 import { BatteryTemplate } from 'types/battery';
-import { Button } from '@rn-vui/base';
-import { Divider } from '@react-native-ajp-elements/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { groupItems } from 'lib/sectionList';
-import { makeStyles } from '@rn-vui/themed';
-import { useQuery } from '@realm/react';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { BatteriesNavigatorParamList } from 'types/navigation';
 
 type Section = {
   title?: string;
@@ -62,7 +64,6 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
     };
 
     navigation.setOptions({
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerLeft: () => {
         return (
           <Button
@@ -73,7 +74,6 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
           />
         );
       },
-      // eslint-disable-next-line react/no-unstable-nested-components
       headerRight: () => {
         return (
           <Button
@@ -173,13 +173,13 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
 
     const index = templateRenderIndex.current;
     return (
-      <ListItemCheckbox
+      <ListItemCheckBox
         key={`${index}`}
         title={battery.vendor || 'Unknown Vendor'}
         subtitle={templateSummary(battery)}
         position={listItemPosition(index, templateCount.current)}
         checked={list.selected === index}
-        onPress={() => setSelected(index, battery, section.nameSuggestion)}
+        onChange={() => setSelected(index, battery, section.nameSuggestion)}
       />
     );
   };

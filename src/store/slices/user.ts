@@ -1,8 +1,7 @@
-import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { User, UserProfile } from 'types/user';
-
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { revertCredentials } from 'store/actions';
+import { User, UserProfile } from 'types/user';
 
 export interface UserState {
   credentials: FirebaseAuthTypes.User | null | undefined;

@@ -1,30 +1,29 @@
-import { AppTheme, useTheme } from 'theme';
-import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
+import { useSetState } from '@react-native-hello/core';
 import {
-  ListItemCheckbox,
-  SectionListHeader,
+  Divider,
+  ListItemCheckBox,
   listItemPosition,
-} from 'components/atoms/List';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-  View,
-} from 'react-native';
+} from '@react-native-hello/ui';
+import { makeStyles } from '@rn-vui/themed';
 import {
   batteryIsCharged,
   batterySummary,
   batteryTintIcons,
 } from 'lib/battery';
-
-import { Battery } from 'realmdb/Battery';
-import { BatteryTint } from 'types/battery';
-import Icon from 'react-native-vector-icons/FontAwesome6';
-import React from 'react';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
-import { makeStyles } from '@rn-vui/themed';
-import { useSetState } from '@react-native-ajp-elements/core';
+import { BatteryFull, BatteryLow } from 'lucide-react-native';
+import React from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+import { Battery } from 'realmdb/Battery';
+import { AppTheme, useTheme } from 'theme';
+import { BatteryTint } from 'types/battery';
+
+import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
 
 type Section = {
   title?: string;
@@ -111,7 +110,7 @@ const BatteryPickerView = React.forwardRef<
     index: number;
   }) => {
     return (
-      <ListItemCheckbox
+      <ListItemCheckBox
         key={`${index}`}
         title={battery.name}
         subtitle={batterySummary(battery)}
@@ -130,20 +129,22 @@ const BatteryPickerView = React.forwardRef<
             s => s._id.toString() === battery._id.toString(),
           ) > -1
         }
-        leftImage={
-          <View>
-            <Icon
-              name={
-                batteryIsCharged(battery) ? 'battery-full' : 'battery-quarter'
-              }
-              solid={true}
-              size={45}
+        leftContent={
+          batteryIsCharged(battery) ? (
+            <BatteryFull
               color={theme.colors.brandPrimary}
-              style={s.batteryIcon}
+              size={50}
+              style={{ transform: [{ rotate: '-90deg' }] }}
             />
-          </View>
+          ) : (
+            <BatteryLow
+              color={theme.colors.brandPrimary}
+              size={50}
+              style={{ transform: [{ rotate: '-90deg' }] }}
+            />
+          )
         }
-        onPress={() => toggleSelect(battery)}
+        onChange={() => toggleSelect(battery)}
       />
     );
   };
@@ -157,9 +158,7 @@ const BatteryPickerView = React.forwardRef<
       sections={groupBatteries(batteries as Battery[])}
       keyExtractor={item => item._id.toString()}
       renderItem={renderBattery}
-      renderSectionHeader={({ section: { title } }) => (
-        <SectionListHeader title={title} />
-      )}
+      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
     />
   );
 });

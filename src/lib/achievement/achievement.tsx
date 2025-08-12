@@ -1,5 +1,6 @@
+import { Star } from 'lucide-react-native';
+import { ReactElement } from 'react';
 import { Achievement } from 'realmdb/Pilot';
-import { ColorValue } from 'react-native';
 
 type AchievementRule = {
   criteria: {
@@ -7,8 +8,7 @@ type AchievementRule = {
     value: number;
     op: '=' | '>=' | '<=';
   }[];
-  icon: string;
-  iconColor: ColorValue;
+  icon: ReactElement;
 };
 
 export const achievementConfig: Record<string, AchievementRule> = {
@@ -25,8 +25,7 @@ export const achievementConfig: Record<string, AchievementRule> = {
         op: '>=',
       },
     ],
-    icon: 'star',
-    iconColor: 'blue',
+    icon: <Star color={'#0000ff'} size={60} />,
   },
 };
 

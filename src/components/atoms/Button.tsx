@@ -1,11 +1,10 @@
-import { Button as RNHButton } from '@react-native-hello/ui';
+import { Button as RNHButton, useTheme } from '@react-native-hello/ui';
 import React from 'react';
 import {
   type GestureResponderEvent,
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
-import { useTheme } from 'theme';
 
 interface Button
   extends Omit<RNHButton, 'buttonStyle' | 'disabledStyle' | 'titleStyle'> {

@@ -1,7 +1,6 @@
 import { AchievementModalMethods, AchievementModalProps } from './types';
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { Modal } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { Modal, ThemeManager, useTheme } from '@react-native-hello/ui';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { achievementConfig } from 'lib/achievement';
 import { useEvent } from 'lib/event';
@@ -12,7 +11,6 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { FlatList, ListRenderItem, Text, View } from 'react-native';
 import { Model } from 'realmdb/Model';
 import { Achievement, Pilot } from 'realmdb/Pilot';
-import { AppTheme, useTheme } from 'theme';
 
 type AchievementModal = AchievementModalMethods;
 
@@ -23,7 +21,7 @@ const AchievementModal = React.forwardRef<
   const { onDismiss, snapPoints = ['92%'] } = props;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
   const [pilot, setPilot] = useState<Pilot>();
   const [model, setModel] = useState<Model>();
@@ -126,7 +124,7 @@ const AchievementModal = React.forwardRef<
   );
 });
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   header: {
     position: 'absolute',
     width: '100%',
@@ -136,10 +134,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'space-between',
   },
   headerLeft: {
-    ...theme.styles.textMedium,
+    ...theme.text.medium,
   },
   headerRight: {
-    ...theme.styles.textMedium,
+    ...theme.text.medium,
     textAlign: 'right',
   },
   container: {
@@ -165,7 +163,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: 5,
   },
   title: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
     width: '100%',
     position: 'absolute',
@@ -177,11 +175,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
   },
   achievementName: {
-    ...theme.styles.textTiny,
+    ...theme.text.tiny,
     marginTop: 5,
   },
   achievementDate: {
-    ...theme.styles.textTiny,
+    ...theme.text.tiny,
     ...theme.styles.textDim,
   },
   achievementListContainer: {

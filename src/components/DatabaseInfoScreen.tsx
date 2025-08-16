@@ -1,4 +1,4 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -8,7 +8,6 @@ import React, { useContext } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { store } from 'store';
 import { revertSettings } from 'store/actions';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

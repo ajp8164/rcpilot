@@ -1,10 +1,14 @@
-import { Divider, ListItem, ListItemSwitch } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ListItemSwitch,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import Slider from 'react-native-ui-lib/slider';
-import { AppTheme, useTheme } from 'theme';
 import {
   ChimeAfterExpiring,
   ChimeWhileArmed,
@@ -19,7 +23,7 @@ export type Props = NativeStackScreenProps<
 
 const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const [atFieldSingleTapEnabled, setAtFieldSingleTapEnabled] = useState(false);
   const [atFieldUsesTimerEnabled, setAtFieldUsesTimerEnabled] = useState(false);
@@ -104,7 +108,7 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sliderContainer: {
     paddingHorizontal: 5,
   },

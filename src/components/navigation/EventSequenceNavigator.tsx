@@ -1,3 +1,5 @@
+import NavContext from './NavContext';
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
@@ -14,11 +16,8 @@ import React from 'react';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
 import { store } from 'store';
-import { useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
-
-import NavContext from './NavContext';
 
 const EventSequenceStack =
   createNativeStackNavigator<EventSequenceNavigatorParamList>();
@@ -120,7 +119,9 @@ const EventSequenceNavigator = () => {
             const kind = eventKind(model ? model.type : undefined);
             return {
               title: `${kind.name} Timer`,
-              headerLargeStyle: { backgroundColor: theme.colors.brandPrimary },
+              headerLargeStyle: {
+                backgroundColor: theme.colors.brandPrimary,
+              },
               headerTitleStyle: { color: theme.colors.stickyWhite },
               headerTintColor: theme.colors.stickyWhite,
               headerShadowVisible: false,

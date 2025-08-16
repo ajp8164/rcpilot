@@ -1,5 +1,5 @@
-import React from 'react';
 import { ColorPickerModalMethods, Result } from './types';
+import React from 'react';
 import { createContext, createRef } from 'react';
 
 export type ColorPickerContext = {

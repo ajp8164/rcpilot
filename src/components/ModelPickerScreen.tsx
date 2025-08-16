@@ -2,12 +2,13 @@ import { useSetState } from '@react-native-hello/core';
 import {
   Divider,
   ListItemCheckBox,
+  ThemeManager,
   getColoredSvg,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { useEvent } from 'lib/event';
 import { modelSummary, modelTypeIconProps } from 'lib/model';
@@ -23,7 +24,6 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { Model } from 'realmdb/Model';
-import { AppTheme, useTheme } from 'theme';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type ModelPickerInterface = {
@@ -50,7 +50,7 @@ export type Props = NativeStackScreenProps<
 const ModelPickerScreen = ({ navigation, route }: Props) => {
   const { mode = 'one', title, selected, eventName } = route.params;
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
 
   const activeModels = useQuery(
@@ -143,9 +143,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
             ) : (
               <View style={s.modelSvgContainer}>
                 <SvgXml
-                  xml={getColoredSvg(
-                    modelTypeIconProps[model.type]?.name as string,
-                  )}
+                  xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
                   width={s.modelImage.width}
                   height={s.modelImage.height}
                   color={theme.colors.brandSecondary}
@@ -189,7 +187,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   modelIcon: {
     transform: [{ rotate: '-45deg' }],
   },

@@ -1,7 +1,6 @@
-import { Divider, ListItemSwitch } from '@react-native-hello/ui';
+import { Divider, ListItemSwitch, useTheme } from '@react-native-hello/ui';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
-import { useTheme } from 'theme';
 
 const PreferencesBatteriesScreen = () => {
   const theme = useTheme();

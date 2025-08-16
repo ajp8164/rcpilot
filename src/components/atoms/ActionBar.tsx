@@ -1,4 +1,5 @@
-import { AppTheme, useTheme } from 'theme';
+import { ThemeManager } from '@react-native-hello/ui';
+import React, { ReactNode } from 'react';
 import {
   FlatList,
   LayoutChangeEvent,
@@ -8,9 +9,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, { ReactNode } from 'react';
-
-import { makeStyles } from '@rn-vui/themed';
 
 const buttonSize = 44;
 
@@ -27,8 +25,7 @@ interface ActionBarInterface {
 }
 
 const ActionBar = ({ actions, onLayout }: ActionBarInterface) => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const renderActions: ListRenderItem<ActionBarItem> = ({
     item: action,
@@ -68,13 +65,13 @@ const ActionBar = ({ actions, onLayout }: ActionBarInterface) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   container: {
     position: 'absolute',
     left: 0,
     right: 0,
     bottom: 0,
-    height: buttonSize + theme.insets.bottom,
+    height: buttonSize + device.insets.bottom,
     paddingTop: 5,
     backgroundColor: theme.colors.white,
     borderTopColor: theme.colors.lightGray,
@@ -90,7 +87,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     minWidth: buttonSize,
     height: buttonSize,
     justifyContent: 'center',
-    marginTop: -theme.insets.bottom,
+    marginTop: -device.insets.bottom,
   },
   actionContainerStart: {
     paddingLeft: 15,
@@ -106,7 +103,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
   },
   label: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.clearButtonText,
   },
 }));

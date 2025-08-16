@@ -6,12 +6,13 @@ import {
   ListEditorState,
   ListItem,
   ListItemSwipeable,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Realm, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
@@ -42,7 +43,6 @@ import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { AppTheme, useTheme } from 'theme';
 import { BatteryTint } from 'types/battery';
 import { FilterType } from 'types/filter';
 import { BatteriesNavigatorParamList } from 'types/navigation';
@@ -61,7 +61,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const { listBatteries } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const headerHeight = useHeaderHeight();
   const { showActionSheetWithOptions } = useActionSheet();
   const confirmAction = useConfirmAction();
@@ -490,7 +490,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
   },

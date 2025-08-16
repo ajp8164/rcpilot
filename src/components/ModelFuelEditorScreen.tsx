@@ -3,6 +3,7 @@ import {
   Divider,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -26,7 +27,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
 import { ModelFuel } from 'realmdb/ModelFuel';
-import { useTheme } from 'theme';
 import {
   NewModelFuelNavigatorParamList,
   SetupNavigatorParamList,

@@ -1,13 +1,12 @@
+import NavContext from './NavContext';
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import ReportModelScanCodeFilterEditorScreen from 'components/ReportModelScanCodeFilterEditorScreen';
 import ReportModelScanCodeFiltersScreen from 'components/ReportModelScanCodeFiltersScreen';
 import React from 'react';
-import { useTheme } from 'theme';
 import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
-
-import NavContext from './NavContext';
 
 const ReportModelScanCodeFiltersStack =
   createNativeStackNavigator<ReportModelScanCodeFiltersNavigatorParamList>();
@@ -20,7 +19,9 @@ const ReportModelScanCodeFiltersNavigator = () => {
       <ReportModelScanCodeFiltersStack.Navigator
         initialRouteName="ReportModelScanCodeFilters"
         screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>

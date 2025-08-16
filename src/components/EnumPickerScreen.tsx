@@ -1,5 +1,5 @@
 import { useSetState } from '@react-native-hello/core';
-import { Divider } from '@react-native-hello/ui';
+import { Divider, useTheme } from '@react-native-hello/ui';
 import { ListItem, ListItemCheckBox } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
@@ -9,7 +9,6 @@ import lodash from 'lodash';
 import React, { ReactElement, useEffect } from 'react';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
-import { useTheme } from 'theme';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type EnumPickerIconProps = {
@@ -224,12 +223,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
           />
         </>
       )}
-      <Divider
-        note
-        light
-        subHeaderStyle={theme.styles.textSmall}
-        text={footer}
-      />
+      <Divider note light subHeaderStyle={theme.text.small} text={footer} />
     </ScrollView>
   );
 };

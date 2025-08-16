@@ -1,3 +1,4 @@
+import { useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -7,7 +8,6 @@ import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import React, { useEffect, useRef } from 'react';
 import { View } from 'react-native';
 import { Battery } from 'realmdb/Battery';
-import { useTheme } from 'theme';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type BatteryPickerInterface = {

@@ -1,16 +1,14 @@
-import { View } from 'react-native';
 import { BackdropContext } from './BackdropContext';
+import { ThemeManager } from '@react-native-hello/ui';
 import React, { ReactNode, useState } from 'react';
-import { makeStyles } from '@rn-vui/themed';
-import { AppTheme, useTheme } from 'theme';
+import { View } from 'react-native';
 
 export const BackdropProvider = ({
   children,
 }: {
   children: ReactNode;
 }): ReactNode => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const [enabled, setEnabled] = useState(false);
 
@@ -25,7 +23,7 @@ export const BackdropProvider = ({
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   disabled: {
     width: '100%',
     height: '100%',

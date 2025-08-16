@@ -1,5 +1,6 @@
 import { CaseReducer, PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { revertSettings } from 'store/actions';
+import { ThemeSettings } from 'types/appSettings';
 import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 import {
   EventPreferences,
@@ -7,7 +8,6 @@ import {
   ModelsLayout,
   ModelsPreferences,
 } from 'types/preferences';
-import { ThemeSettings } from 'types/theme';
 import { Tou } from 'types/tou';
 
 export interface AppSettingsState {

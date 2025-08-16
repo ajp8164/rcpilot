@@ -1,8 +1,7 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

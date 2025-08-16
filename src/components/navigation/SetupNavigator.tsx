@@ -1,3 +1,4 @@
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AboutScreen from 'components/AboutScreen';
 import AppSettingsScreen from 'components/AppSettingsScreen';
@@ -52,7 +53,6 @@ import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportMod
 import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
 import { appConfig } from 'config';
 import React from 'react';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 const SetupStack = createNativeStackNavigator<SetupNavigatorParamList>();
@@ -64,7 +64,9 @@ const SetupNavigator = () => {
     <SetupStack.Navigator
       initialRouteName="Setup"
       screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>
@@ -76,7 +78,9 @@ const SetupNavigator = () => {
           headerLeft: () => null,
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         }}
       />
       <SetupStack.Screen
@@ -423,7 +427,9 @@ const SetupNavigator = () => {
           title: 'My Account',
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         }}
       />
       <SetupStack.Screen
@@ -440,7 +446,9 @@ const SetupNavigator = () => {
           title: 'App Settings',
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         }}
       />
       <SetupStack.Screen
@@ -450,7 +458,9 @@ const SetupNavigator = () => {
           title: '',
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         }}
       />
       <SetupStack.Screen
@@ -460,7 +470,9 @@ const SetupNavigator = () => {
           title: `About ${appConfig.appName}`,
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         }}
       />
     </SetupStack.Navigator>

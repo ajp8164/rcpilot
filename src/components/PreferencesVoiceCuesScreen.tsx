@@ -1,10 +1,13 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import React from 'react';
 import { ScrollView } from 'react-native';
 import Slider from 'react-native-ui-lib/slider';
-import { AppTheme, useTheme } from 'theme';
 import { AudioVoice, VoiceAfterExpiring, VoiceWhileRunning } from 'types/event';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -15,7 +18,7 @@ export type Props = NativeStackScreenProps<
 
 const PreferencesVoiceCuesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   return (
     <ScrollView
@@ -78,7 +81,7 @@ const PreferencesVoiceCuesScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sliderContainer: {
     paddingHorizontal: 5,
   },

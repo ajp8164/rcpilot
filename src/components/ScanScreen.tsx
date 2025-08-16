@@ -1,14 +1,12 @@
-import { ScannerView } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { ScannerView, ThemeManager, useTheme } from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import { FileText, Plane, Share } from 'lucide-react-native';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 
 const ScanScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const onScan = (data: string) => {
     console.log(`scan data ${data}`);
@@ -66,7 +64,7 @@ const ScanScreen = () => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   buttonBarContainer: {
     position: 'absolute',
     bottom: 40,
@@ -89,12 +87,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     height: '100%',
   },
   text1: {
-    ...theme.styles.textXL,
+    ...theme.text.xl,
     color: theme.colors.stickyWhite,
     textAlign: 'center',
   },
   text2: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.stickyWhite,
     textAlign: 'center',
   },

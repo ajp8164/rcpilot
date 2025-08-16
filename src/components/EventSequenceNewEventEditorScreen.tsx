@@ -6,11 +6,12 @@ import {
   KeyboardAccessoryMethods,
   ListItem,
   ListItemInputMethods,
+  ThemeManager,
   getColoredSvg,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { LocationsMapResult } from 'components/LocationsMapScreen';
@@ -64,7 +65,6 @@ import { Pilot } from 'realmdb/Pilot';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { eventSequence } from 'store/slices/eventSequence';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { EventOutcome } from 'types/event';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
@@ -96,7 +96,7 @@ export type Props = NativeStackScreenProps<
 
 const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const modelEventStyleStatistics = useModelEventStyleStatistics();
   const event = useEvent();
@@ -643,9 +643,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                 ) : (
                   <View style={s.modelSvgContainer}>
                     <SvgXml
-                      xml={getColoredSvg(
-                        modelTypeIconProps[model.type]?.name as string,
-                      )}
+                      xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
                       width={s.modelImage.width}
                       height={s.modelImage.height}
                       color={theme.colors.brandSecondary}
@@ -879,7 +877,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   buttonScreenHeaderTitle: {
     color: theme.colors.stickyWhite,
   },

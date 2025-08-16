@@ -3,6 +3,7 @@ import {
   ListEditor,
   ListEditorMethods,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
@@ -21,7 +22,6 @@ import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { saveSelectedFilter } from 'store/slices/filters';
-import { useTheme } from 'theme';
 import { ReportMaintenanceFiltersNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

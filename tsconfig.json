@@ -13,7 +13,7 @@
       "components": ["./components/*", "./components/"],
       "config": ["./config/*", "./config"],
       "firestore": ["./firestore/*", "./firestore/"],
-      "img": ["./theme/img/*", "./theme/img/"],
+      "images": ["./images/*", "./images"],
       "lib": ["./lib/*", "./lib"],
       "realmdb": ["./realmdb/*", "./realmdb"],
       "store": ["./store/*", "./store"],

@@ -1,6 +1,5 @@
-import { viewport } from '@react-native-hello/ui';
+import { ThemeManager } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { makeStyles } from '@rn-vui/themed';
 import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
 import { ModelCardDeckContext } from 'components/molecules/card-deck/ModelCardDeckContext';
 import {
@@ -11,7 +10,6 @@ import FlipCardView from 'components/views/FlipCardView';
 import React, { useContext } from 'react';
 import { useSharedValue } from 'react-native-reanimated';
 import { Model, Pilot } from 'realmdb';
-import { AppTheme, useTheme } from 'theme';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 interface ModelCardDeckCardInterface {
@@ -29,8 +27,7 @@ export const ModelFlipCard = ({
   onPressAchievements,
   onStartNewEventSequence,
 }: ModelCardDeckCardInterface) => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const navigation: NavigationProp<ModelsNavigatorParamList> = useNavigation();
   const { cardState } = useContext(ModelCardDeckContext);
@@ -91,11 +88,11 @@ export const ModelFlipCard = ({
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ device }) => ({
   flipCardContainer: {
     alignSelf: 'center',
-    height: (viewport.width - 30) / 0.61,
-    width: viewport.width - 30,
+    height: (device.screen.width - 30) / 0.61,
+    width: device.screen.width - 30,
     marginTop: 10,
     borderRadius: 15,
     overflow: 'hidden',

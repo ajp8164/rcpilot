@@ -1,18 +1,17 @@
 import {
   Divider,
   ListItemCheckBox,
+  ThemeManager,
   listItemPosition,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import React, { useEffect } from 'react';
 import { SectionList, SectionListData, View } from 'react-native';
 import { Battery } from 'realmdb/Battery';
-import { AppTheme, useTheme } from 'theme';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 
 type Section = {
@@ -28,8 +27,7 @@ export type Props = NativeStackScreenProps<
 const BatteryPerformanceComparisonPickerScreen = ({
   navigation: _navigation,
 }: Props) => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const setScreenEditHeader = useScreenEditHeader();
 
   const batteries = useQuery<Battery>(Battery);
@@ -90,7 +88,7 @@ const BatteryPerformanceComparisonPickerScreen = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

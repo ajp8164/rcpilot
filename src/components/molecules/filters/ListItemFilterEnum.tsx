@@ -1,4 +1,5 @@
-import { ListItem, ListItemSegmented } from '@react-native-hello/ui';
+import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
+import { ListItem, ListItemSegmented, useTheme } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
@@ -12,10 +13,7 @@ import { uuidv4 } from 'lib/utils';
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import { BSON } from 'realm';
-import { useTheme } from 'theme';
 import { MultipleNavigatorParamList } from 'types/navigation';
-
-import { EnumName, useEnumFilterConfig } from './useEnumFilterConfig';
 
 interface Props extends Pick<ListItemSegmented, 'position'> {
   onValueChange: (filterState: EnumFilterState) => void;

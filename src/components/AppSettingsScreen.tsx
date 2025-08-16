@@ -1,4 +1,9 @@
-import { Divider, ListItem, ListItemSwitch } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ListItemSwitch,
+  ThemeManager,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
@@ -24,7 +29,6 @@ import {
   saveModelsLayout,
   saveThemeSettings,
 } from 'store/slices/appSettings';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 import { ModelsLayout } from 'types/preferences';
 
@@ -34,7 +38,7 @@ export type Props = NativeStackScreenProps<
 >;
 
 const AppSettings = ({ navigation }: Props) => {
-  const theme = useTheme();
+  const theme = ThemeManager.useTheme();
   const colorScheme = useColorScheme();
 
   const dispatch = useDispatch();
@@ -86,7 +90,7 @@ const AppSettings = ({ navigation }: Props) => {
         themeSettings: { ...themeSettings, app: value ? 'dark' : 'light' },
       }),
     );
-    theme.updateTheme({ mode: value ? 'dark' : 'light' });
+    ThemeManager.set(value ? 'dark' : 'light');
   };
 
   const toggleBiometrics = async (value: boolean) => {
@@ -112,7 +116,7 @@ const AppSettings = ({ navigation }: Props) => {
       }),
     );
     const control = value ? colorScheme : themeSettings.app;
-    theme.updateTheme({ mode: control === 'dark' ? 'dark' : 'light' });
+    ThemeManager.set(control ? 'dark' : 'light');
   };
 
   return (

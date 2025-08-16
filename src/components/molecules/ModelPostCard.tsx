@@ -1,5 +1,4 @@
-import { getColoredSvg } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { ThemeManager, getColoredSvg, useTheme } from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import { secondsToFormat } from 'lib/formatters';
 import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
@@ -10,7 +9,6 @@ import React from 'react';
 import { Image, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { Model, Pilot } from 'realmdb';
-import { AppTheme, useTheme } from 'theme';
 
 interface ModelPostCardInterface {
   model: Model;
@@ -28,7 +26,7 @@ export const ModelPostCard = ({
   pilot,
 }: ModelPostCardInterface) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const maintenanceIsDue = modelMaintenanceIsDue(model);
 
@@ -63,7 +61,7 @@ export const ModelPostCard = ({
       ) : (
         <View style={s.modelCardSvg}>
           <SvgXml
-            xml={getColoredSvg(modelTypeIconProps[model.type]?.name as string)}
+            xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
             width={s.modelImage.width}
             height={'100%'}
             color={theme.colors.brandSecondary}
@@ -102,10 +100,10 @@ export const ModelPostCard = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   achievementButtonTitle: {
-    ...theme.styles.textTiny,
-    ...theme.styles.textBold,
+    ...theme.text.tiny,
+    fontFamily: theme.fonts.bold,
     marginLeft: -30,
     color: theme.colors.stickyWhite,
     width: 30,
@@ -140,11 +138,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flex: 1,
   },
   modelCardTitleLeft: {
-    ...theme.styles.textNormal,
-    ...theme.styles.textBold,
+    ...theme.text.normal,
+    fontFamily: theme.fonts.bold,
   },
   modelCardTitleRight: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     flex: 1,
     top: 2,
     textAlign: 'right',
@@ -157,7 +155,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     justifyContent: 'space-between',
   },
   modelCardSubtitle: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
     paddingBottom: 5,
   },
@@ -185,8 +183,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginHorizontal: 10,
   },
   modelTag: {
-    ...theme.styles.textTiny,
-    ...theme.styles.textBold,
+    ...theme.text.tiny,
+    fontFamily: theme.fonts.bold,
     paddingVertical: 2,
     paddingHorizontal: 10,
     marginRight: 5,

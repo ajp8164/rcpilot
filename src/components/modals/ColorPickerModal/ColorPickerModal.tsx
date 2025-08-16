@@ -1,11 +1,22 @@
+import { Eyedropper } from './Eyedropper';
+import {
+  ColorPickerModalMethods,
+  ColorPickerModalProps,
+  PresentOptions,
+} from './types';
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { log } from '@react-native-hello/core';
-import { Modal, ModalHeader, viewport } from '@react-native-hello/ui';
+import {
+  Modal,
+  ModalHeader,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { makeStyles } from '@rn-vui/themed';
 import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
 import ModalHandle from 'components/atoms/ModalHandle';
 import { ColorPickerContext } from 'components/modals/ColorPickerModal';
+import { CircleX, Pipette } from 'lucide-react-native';
 import React, {
   useCallback,
   useContext,
@@ -27,14 +38,6 @@ import ColorPicker, {
   RedSlider,
   returnedResults,
 } from 'reanimated-color-picker';
-import { AppTheme, useTheme } from 'theme';
-
-import { Eyedropper } from './Eyedropper';
-import {
-  ColorPickerModalMethods,
-  ColorPickerModalProps,
-  PresentOptions,
-} from './types';
 
 type ColorPickerModal = ColorPickerModalMethods;
 
@@ -45,7 +48,7 @@ const ColorPickerModal = React.forwardRef<
   const { eyedropperViewRef, snapPoints = ['70%'] } = props;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const { extraData, recentColors, onDismiss, onEyedropper, setRecentColors } =
     useContext(ColorPickerContext);
 
@@ -183,11 +186,11 @@ const ColorPickerModal = React.forwardRef<
         <ModalHeader
           title={'Colors'}
           size={'small'}
-          leftButtonIcon={'eyedropper'}
-          leftButtonIconColor={theme.colors.screenHeaderButtonText}
+          leftButtonIcon={
+            <Pipette color={theme.colors.screenHeaderButtonText} />
+          }
           onLeftButtonPress={openEyedropper}
-          rightButtonIcon={'close-circle'}
-          rightButtonIconColor={theme.colors.lightGray}
+          rightButtonIcon={<CircleX color={theme.colors.lightGray} />}
           onRightButtonPress={dismiss}
         />
         <View style={s.container}>
@@ -267,7 +270,7 @@ const ColorPickerModal = React.forwardRef<
   );
 });
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -275,7 +278,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginTop: 10,
   },
   segmentedControl: {
-    width: viewport.width - 30,
+    width: device.screen.width - 30,
     marginHorizontal: 15,
   },
   segmentedFont: {
@@ -329,7 +332,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     borderRadius: 35,
   },
   sliderTitle: {
-    ...theme.styles.textTiny,
+    ...theme.text.tiny,
     marginBottom: 5,
   },
   slider: {

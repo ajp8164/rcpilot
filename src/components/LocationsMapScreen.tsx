@@ -1,6 +1,6 @@
+import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { LocationPickerResult } from 'components/LocationsScreen';
 import ActionBar from 'components/atoms/ActionBar';
 import { Button } from 'components/atoms/Button';
@@ -39,7 +39,6 @@ import MapView, {
 import { useSelector } from 'react-redux';
 import { Location, LocationCoords } from 'realmdb/Location';
 import { selectLocation } from 'store/selectors/locationSelectors';
-import { AppTheme, useTheme } from 'theme';
 import { LocationNavigatorParamList } from 'types/navigation';
 
 enum RecenterButtonState {
@@ -66,7 +65,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const { eventName, locationId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
   const realm = useRealm();
 
@@ -379,7 +378,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   map: {
     width: '100%',
     height: '100%',

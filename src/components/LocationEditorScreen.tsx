@@ -4,6 +4,7 @@ import {
   KeyboardAccessory,
   KeyboardAccessoryMethods,
   ListItem,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -30,7 +31,6 @@ import { BSON } from 'realm';
 import { Location } from 'realmdb';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { saveCurrentLocation } from 'store/slices/location';
-import { useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { LocationNavigatorParamList } from 'types/navigation';
 

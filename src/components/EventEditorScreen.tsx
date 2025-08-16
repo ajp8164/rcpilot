@@ -6,13 +6,14 @@ import {
   KeyboardAccessoryMethods,
   ListItem,
   ListItemDateTime,
+  ThemeManager,
   getColoredSvg,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { LocationsMapResult } from 'components/LocationsMapScreen';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
@@ -57,7 +58,6 @@ import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { Pilot } from 'realmdb/Pilot';
 import { toNumber } from 'realmdb/helpers';
-import { AppTheme, useTheme } from 'theme';
 import { EventOutcome } from 'types/event';
 import {
   LogNavigatorParamList,
@@ -90,7 +90,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const { eventId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
   const modelEventStyleStatistics = useModelEventStyleStatistics();
   const realm = useRealm();
@@ -430,8 +430,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
                   {modelEvent.model?.type && (
                     <SvgXml
                       xml={getColoredSvg(
-                        modelTypeIconProps[modelEvent.model.type]
-                          ?.name as string,
+                        modelTypeIconProps[modelEvent.model.type]?.name,
                       )}
                       width={s.modelImage.width}
                       height={s.modelImage.height}
@@ -687,7 +686,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   modelIcon: {
     transform: [{ rotate: '-45deg' }],
   },

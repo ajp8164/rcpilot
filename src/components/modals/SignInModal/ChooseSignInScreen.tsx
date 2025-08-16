@@ -1,7 +1,11 @@
 import { SignInNavigatorParamList } from './types';
-import { getColoredSvg, getSvg } from '@react-native-hello/ui';
+import {
+  ThemeManager,
+  getColoredSvg,
+  getSvg,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { appConfig } from 'config';
 import {
@@ -12,7 +16,6 @@ import {
 import React, { useState } from 'react';
 import { Alert, Platform, Text, View } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { AppTheme, useTheme } from 'theme';
 
 export type Props = NativeStackScreenProps<
   SignInNavigatorParamList,
@@ -21,7 +24,7 @@ export type Props = NativeStackScreenProps<
 
 const ChooseSignInScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const [signInAction, setSignInAction] = useState(true);
 
@@ -150,15 +153,15 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   description: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     ...theme.styles.textDim,
     textAlign: 'center',
     marginHorizontal: 40,
   },
   footer: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
     alignSelf: 'center',
     textAlign: 'center',
@@ -172,13 +175,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginBottom: 15,
   },
   subtitle: {
-    ...theme.styles.textHeading3,
+    ...theme.text.h3,
     textAlign: 'center',
     marginBottom: 20,
     marginTop: 20,
   },
   title: {
-    ...theme.styles.textHeading1,
+    ...theme.text.h1,
     textAlign: 'center',
     marginBottom: 20,
     marginTop: 20,

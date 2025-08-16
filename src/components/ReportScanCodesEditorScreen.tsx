@@ -5,6 +5,7 @@ import {
   KeyboardAccessoryMethods,
   ListItem,
   ListItemSwitchCollapsible,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -23,7 +24,6 @@ import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { SetupNavigatorParamList } from 'types/navigation';
 

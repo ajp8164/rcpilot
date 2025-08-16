@@ -1,9 +1,9 @@
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import LogScreen from 'components/LogScreen';
 import React from 'react';
-import { useTheme } from 'theme';
 import { LogNavigatorParamList } from 'types/navigation';
 
 const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
@@ -15,7 +15,9 @@ const LogNavigator = () => {
     <LogStack.Navigator
       initialRouteName="Log"
       screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>
@@ -26,7 +28,9 @@ const LogNavigator = () => {
           title: 'Log',
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         }}
       />
       <LogStack.Screen

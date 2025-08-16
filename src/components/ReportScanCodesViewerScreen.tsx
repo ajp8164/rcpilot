@@ -1,4 +1,4 @@
-import { openShareSheet } from '@react-native-hello/ui';
+import { openShareSheet, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -9,7 +9,6 @@ import { Text } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 import { BSON } from 'realm';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
-import { useTheme } from 'theme';
 import { ReportViewerNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

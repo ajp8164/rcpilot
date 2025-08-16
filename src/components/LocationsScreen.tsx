@@ -1,4 +1,10 @@
-import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  listItemPosition,
+  useDevice,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -10,7 +16,6 @@ import { FlatList, ListRenderItem } from 'react-native';
 import { useSelector } from 'react-redux';
 import { Location } from 'realmdb';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
-import { useTheme } from 'theme';
 import { LocationNavigatorParamList } from 'types/navigation';
 
 export type LocationPickerResult = {
@@ -26,6 +31,7 @@ const LocationsScreen = ({ navigation, route }: Props) => {
   const { eventName } = route.params;
 
   const theme = useTheme();
+  const device = useDevice();
   const event = useEvent();
 
   const currentLocationId = useSelector(_selectLocation).locationId;
@@ -97,7 +103,7 @@ const LocationsScreen = ({ navigation, route }: Props) => {
           <Divider note text={'Choose a location to view on the map.'} />
         ) : null
       }
-      ListFooterComponent={<Divider style={{ height: theme.insets.bottom }} />}
+      ListFooterComponent={<Divider style={{ height: device.insets.bottom }} />}
     />
   );
 };

@@ -1,4 +1,4 @@
-import { Divider } from '@react-native-hello/ui';
+import { Divider, useDevice, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { FilterEditorHeader } from 'components/molecules/FilterEditorHeader';
@@ -12,7 +12,6 @@ import { Masks } from 'lib/inputMasks';
 import { useFilterEditor } from 'lib/useFilterEditor';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { useTheme } from 'theme';
 import { BatteryCycleFilterValues } from 'types/filter';
 import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 
@@ -29,6 +28,7 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
   const { filterId, filterType, requireFilterName } = route.params;
 
   const theme = useTheme();
+  const device = useDevice();
 
   const filterEditor = useFilterEditor<BatteryCycleFilterValues>({
     filterId,
@@ -105,7 +105,7 @@ const BatteryCycleFilterEditorScreen = ({ route }: Props) => {
           filterEditor.onFilterValueChange('notes', filterState);
         }}
       />
-      <Divider style={{ height: theme.insets.bottom }} />
+      <Divider style={{ height: device.insets.bottom }} />
     </ScrollView>
   );
 };

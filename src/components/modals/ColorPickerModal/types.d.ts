@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ColorValue, View } from 'react-native';
 import { SharedValue } from 'react-native-reanimated';
 
 export type PresentOptions = {
@@ -9,8 +9,8 @@ export type PresentOptions = {
 };
 
 export type Result = {
-  color: string;
-  originalColor: string;
+  color: ColorValue;
+  originalColor: ColorValue;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   extraData?: any;
 };

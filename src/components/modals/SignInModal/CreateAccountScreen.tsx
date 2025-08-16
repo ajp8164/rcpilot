@@ -6,9 +6,10 @@ import {
   KeyboardAccessory,
   KeyboardAccessoryMethods,
   ListItemInput,
+  ThemeManager,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -18,16 +19,8 @@ import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { createUserWithEmailAndPassword } from 'lib/auth';
 import { Eye, EyeOff } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  Keyboard,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, Keyboard, ScrollView, Text, View } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { AppTheme, useTheme } from 'theme';
 
 enum Fields {
   firstName,
@@ -56,14 +49,14 @@ export type Props = NativeStackScreenProps<
 
 const CreateAccountScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const formikRef = useRef<FormikProps<FormValues>>(null);
   const [formikCanSubmit, setFormikCanSubmit] = useState(false);
-  const firstNameFieldRef = useRef<TextInput | null>(null);
-  const lastNameFieldRef = useRef<TextInput>(null);
-  const emailFieldRef = useRef<TextInput>(null);
-  const passwordFieldRef = useRef<TextInput>(null);
+  const firstNameFieldRef = useRef<InputMethods>(null);
+  const lastNameFieldRef = useRef<InputMethods>(null);
+  const emailFieldRef = useRef<InputMethods>(null);
+  const passwordFieldRef = useRef<InputMethods>(null);
   const keyboardAccessory = useRef<
     KeyboardAccessoryMethods & KeyboardAccessory
   >(null);
@@ -269,7 +262,7 @@ const CreateAccountScreen = () => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   avoidContainer: {
     flex: 1,
   },
@@ -288,11 +281,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginTop: 15,
   },
   forgotPassword: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
   },
   footer: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
     alignSelf: 'center',
     textAlign: 'center',

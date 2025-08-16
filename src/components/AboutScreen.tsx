@@ -1,25 +1,30 @@
-import { Divider, ListItem, viewport } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ThemeManager,
+  useDevice,
+  useTheme,
+} from '@react-native-hello/ui';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import helpContent from 'lib/content/helpContent';
 import legalContent from 'lib/content/legalContent';
 import React from 'react';
 import { ScrollView, Text } from 'react-native';
 import VersionNumber from 'react-native-version-number';
-import { AppTheme, useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 type Props = NativeStackScreenProps<SetupNavigatorParamList, 'About'>;
 
 const AboutScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
+  const device = useDevice();
 
   const tabBarHeight = useBottomTabBarHeight();
-  const headerBarLargeHeight = theme.styles.headerBarLarge.height as number;
+  const headerBarLargeHeight = device.headerBarLarge.height as number;
   const visibleViewHeight =
-    viewport.height - tabBarHeight - headerBarLargeHeight;
+    device.screen.height - tabBarHeight - headerBarLargeHeight;
 
   return (
     <ScrollView
@@ -61,11 +66,11 @@ const AboutScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   version: {
     position: 'absolute',
     bottom: 15,
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
     alignSelf: 'center',
     marginTop: 25,

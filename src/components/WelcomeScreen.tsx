@@ -1,25 +1,27 @@
-import { CheckBox, viewport } from '@react-native-hello/ui';
+import {
+  CheckBox,
+  ThemeManager,
+  useDevice,
+  useTheme,
+} from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
-import { makeStyles } from '@rn-vui/themed';
 import { LegalModal } from 'components/modals/LegalModal';
 import React, { useRef } from 'react';
 import { Platform, ScrollView, StatusBar, Text } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { useSelector } from 'react-redux';
 import { dispatch } from 'store';
 import { selectTou } from 'store/selectors/appSettingsSelectors';
 import { saveAcceptTou } from 'store/slices/appSettings';
-import { AppTheme, useTheme } from 'theme';
 
 const WelcomeScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
-  const insets = useSafeAreaInsets();
+  const s = useStyles();
+  const device = useDevice();
   const visibleHeight =
-    viewport.height -
-    insets.top -
-    insets.bottom -
+    device.screen.height -
+    device.insets.top -
+    device.insets.bottom -
     (Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0);
 
   const legalModalRef = useRef<LegalModal>(null);
@@ -60,7 +62,7 @@ const WelcomeScreen = () => {
         uncheckedIcon={'square-outline'}
         checkedColor={theme.colors.stickyWhite}
         uncheckedColor={
-          theme.mode === 'light'
+          ThemeManager.name === 'light'
             ? theme.colors.whiteTransparentMid
             : theme.colors.blackTransparentMid
         }
@@ -89,19 +91,19 @@ const WelcomeScreen = () => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   checkboxContainer: {
     backgroundColor: theme.colors.transparent,
     alignSelf: 'flex-start',
   },
   termsTextContainer: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.textInv,
     left: 5,
   },
   termsText: {
+    ...theme.text.small,
     ...theme.styles.textLink,
-    ...theme.styles.textSmall,
     color: theme.colors.textInv,
   },
 }));

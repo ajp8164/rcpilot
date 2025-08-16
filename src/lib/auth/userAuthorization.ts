@@ -1,5 +1,6 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { log } from '@react-native-hello/core';
+import { useTheme } from '@react-native-hello/ui';
 import {
   addUser,
   cancelAllFirestoreSubscriptions,
@@ -14,11 +15,11 @@ import {
 } from 'lib/notifications';
 import { getUserAvatarColor, getUserInitials } from 'lib/user';
 import lodash from 'lodash';
+import { ColorValue } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { store } from 'store';
 import { revertCredentials } from 'store/actions';
 import { saveUser } from 'store/slices/user';
-import { useTheme } from 'theme';
 import { User, UserProfile, UserRole, UserStatus } from 'types/user';
 
 export const useAuthorizeUser = () => {
@@ -41,7 +42,7 @@ export const useAuthorizeUser = () => {
             // Add user to firestore and set user.
             const profile = createProfile(
               credentials,
-              theme.colors.avatarColors,
+              theme.colors.avatarColors as string[],
             );
 
             addUser(profile)
@@ -125,7 +126,7 @@ export const useAuthorizeUser = () => {
 
 const createProfile = (
   credentials: FirebaseAuthTypes.User,
-  colors: string[],
+  colors: ColorValue[],
 ): UserProfile => {
   const firstName = credentials.displayName?.split(' ')[0] || '';
   const lastName = credentials.displayName?.split(' ')[1] || '';

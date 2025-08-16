@@ -3,13 +3,13 @@ import {
   Divider,
   ListItemCollapsible,
   ListItemCollapsibleMethods,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 import { ContentContainer } from 'types/content';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -17,7 +17,7 @@ export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Content'>;
 
 const ContentScreen = ({ route, navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const contentView = route.params.content;
 
@@ -82,7 +82,7 @@ const ContentScreen = ({ route, navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   content: {
     flex: 1,
     height: '100%',

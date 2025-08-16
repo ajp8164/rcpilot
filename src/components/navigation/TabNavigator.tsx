@@ -3,6 +3,7 @@ import LogNavigator from './LogNavigator';
 import ModelsNavigator from './ModelsNavigator';
 import ScanNavigator from './ScanNavigator';
 import SetupNavigator from './SetupNavigator';
+import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   BatteryFull,
@@ -14,7 +15,6 @@ import {
 import React, { useEffect } from 'react';
 import { Platform, StatusBar } from 'react-native';
 import SystemNavigationBar from 'react-native-system-navigation-bar';
-import { useTheme } from 'theme';
 import { TabNavigatorParamList } from 'types/navigation';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
@@ -24,19 +24,19 @@ const TabNavigator = () => {
 
   useEffect(() => {
     StatusBar.setBarStyle(
-      theme.mode === 'light' ? 'dark-content' : 'light-content',
+      ThemeManager.name === 'light' ? 'dark-content' : 'light-content',
     );
 
     if (Platform.OS === 'android') {
       StatusBar.setBackgroundColor(theme.colors.white);
       SystemNavigationBar.setNavigationColor(
         theme.colors.hintGray,
-        theme.mode === 'light' ? 'dark' : 'light',
+        ThemeManager.name === 'light' ? 'dark' : 'light',
         'navigation',
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme.mode]);
+  }, [ThemeManager.name]);
 
   return (
     <Tab.Navigator

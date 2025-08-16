@@ -1,5 +1,6 @@
-import { viewport } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { EYE_DROPPER_SHADER } from './shader';
+import { useVector } from './useVector';
+import { ThemeManager } from '@react-native-hello/ui';
 import {
   AlphaType,
   Canvas,
@@ -22,15 +23,11 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
-
-import { EYE_DROPPER_SHADER } from './shader';
-import { useVector } from './useVector';
 
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const SHADER = Skia.RuntimeEffect.Make(EYE_DROPPER_SHADER)!;
 
-const { width, height } = viewport;
+const { width, height } = ThemeManager.device.screen;
 const SIZE = width * 0.45;
 
 interface EyedropperInterface {
@@ -44,8 +41,7 @@ const Eyedropper = ({
   onSelectColor,
   setImage,
 }: EyedropperInterface) => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const translate = useVector(0, 0);
   const offset = useVector(0, 0);
@@ -155,7 +151,7 @@ const Eyedropper = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   root: {
     width,
     height,

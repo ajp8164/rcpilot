@@ -18,7 +18,6 @@
 		714A9B9E683646B791DDAE96 /* SFUIText-RegularG3.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4EADF6543A1F4E39AC03FC34 /* SFUIText-RegularG3.otf */; };
 		80DD5391B6C84580A677596C /* SFUIText-ItalicG1.otf in Resources */ = {isa = PBXBuildFile; fileRef = FBC65C468E224747836C0732 /* SFUIText-ItalicG1.otf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		81F896DCA90A4F6DB0FE2F81 /* RCPilot.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 964EBB7787C74B538761A150 /* RCPilot.ttf */; };
 		94F694F44A6CBF72FE36960C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 87C26394EC1CD5D0CA2FF9DD /* PrivacyInfo.xcprivacy */; };
 		97E5EF2D1DF840CABDF8B4A9 /* SFUIText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 750008C8717A4D0F9DCA5AD8 /* SFUIText-Regular.otf */; };
 		9E698EAE435244B683FCFF32 /* SFUIText-BoldItalicG1.otf in Resources */ = {isa = PBXBuildFile; fileRef = 777336D6D2634B96863177A1 /* SFUIText-BoldItalicG1.otf */; };
@@ -62,7 +61,6 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = RCPilot/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8517157F3F1148EB891AD68E /* SFUIText-BoldG3.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-BoldG3.otf"; path = "../assets/fonts/SFUIText/SFUIText-BoldG3.otf"; sourceTree = "<group>"; };
 		87C26394EC1CD5D0CA2FF9DD /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = RCPilot/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		964EBB7787C74B538761A150 /* RCPilot.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = RCPilot.ttf; path = ../assets/fonts/RCPilot.ttf; sourceTree = "<group>"; };
 		9D58B861FD37424CBDFE6EB2 /* SFUIText-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFUIText-LightItalic.otf"; path = "../assets/fonts/SFUIText/SFUIText-LightItalic.otf"; sourceTree = "<group>"; };
 		A10986D729A95C4900B3FBEC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "RCPilot/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A13A5BE5287C8137006FAF4A /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -158,7 +156,6 @@
 				4EADF6543A1F4E39AC03FC34 /* SFUIText-RegularG3.otf */,
 				C95BA0D099564EB0AAEFE796 /* SFUIText-Semibold.otf */,
 				32DC5F93E4B249DB91C5875B /* SFUIText-SemiboldItalic.otf */,
-				964EBB7787C74B538761A150 /* RCPilot.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -318,7 +315,6 @@
 				714A9B9E683646B791DDAE96 /* SFUIText-RegularG3.otf in Resources */,
 				C5E639C11D7A4E41B5DF2F4B /* SFUIText-Semibold.otf in Resources */,
 				A859A49A3A974761B15928E7 /* SFUIText-SemiboldItalic.otf in Resources */,
-				81F896DCA90A4F6DB0FE2F81 /* RCPilot.ttf in Resources */,
 				94F694F44A6CBF72FE36960C /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

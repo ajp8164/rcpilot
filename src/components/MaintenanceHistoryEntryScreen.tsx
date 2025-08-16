@@ -6,6 +6,7 @@ import {
   KeyboardAccessoryMethods,
   ListItem,
   ListItemInputMethods,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -29,7 +30,6 @@ import { Keyboard, View } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
-import { useTheme } from 'theme';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 // Order of fields for accessory view.

@@ -1,13 +1,12 @@
+import NavContext from './NavContext';
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import NewBatteryCycleScreen from 'components/NewBatteryCycleScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import lodash from 'lodash';
 import React from 'react';
-import { useTheme } from 'theme';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
-
-import NavContext from './NavContext';
 
 const NewBatteryCycleStack =
   createNativeStackNavigator<NewBatteryCycleNavigatorParamList>();
@@ -20,7 +19,9 @@ const NewBatteryCycleNavigator = () => {
       <NewBatteryCycleStack.Navigator
         initialRouteName="NewBatteryCycle"
         screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>

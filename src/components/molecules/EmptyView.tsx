@@ -1,10 +1,8 @@
-import { viewport } from '@react-native-hello/ui';
+import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
-import { makeStyles } from '@rn-vui/themed';
 import { Info, Search, TriangleAlert } from 'lucide-react-native';
 import React, { useContext, useState } from 'react';
 import { ActivityIndicator, LayoutChangeEvent, Text, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 
 interface EmptyViewInterface {
   error?: boolean;
@@ -22,10 +20,11 @@ export const EmptyView = ({
   isLoading,
 }: EmptyViewInterface) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
+  const device = useDevice();
 
   const tabBarHeight = useContext(BottomTabBarHeightContext) || 0;
-  const bottom = viewport.height * 0.6 - tabBarHeight;
+  const bottom = device.screen.height * 0.6 - tabBarHeight;
   const [height, setHeight] = useState(0);
 
   const onLayout = (event: LayoutChangeEvent) => {
@@ -67,7 +66,7 @@ export const EmptyView = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
     alignItems: 'center',
@@ -81,14 +80,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
   },
   message: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     ...theme.styles.textDim,
-    ...theme.styles.textBold,
+    fontFamily: theme.fonts.bold,
     marginTop: 10,
     textAlign: 'center',
   },
   details: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     ...theme.styles.textDim,
     marginTop: 10,
     textAlign: 'center',

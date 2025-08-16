@@ -1,8 +1,12 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { StackActions } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { Avatar } from 'components/molecules/Avatar';
 import { signOut } from 'lib/auth';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
@@ -11,7 +15,6 @@ import React, { useEffect } from 'react';
 import { Alert, ScrollView, Text, View } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectUserProfile } from 'store/selectors/userSelectors';
-import { AppTheme, useTheme } from 'theme';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
@@ -24,7 +27,7 @@ type Props = CompositeScreenProps<
 
 const UserAccountScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const userProfile = useSelector(selectUserProfile);
 
@@ -100,7 +103,7 @@ const UserAccountScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   avatar: {
     alignSelf: 'center',
     marginTop: 15,
@@ -108,12 +111,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     overflow: 'hidden',
   },
   profileName: {
-    ...theme.styles.textNormal,
-    ...theme.styles.textBold,
+    ...theme.text.normal,
+    fontFamily: theme.fonts.bold,
     textAlign: 'center',
   },
   profileEmail: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     textAlign: 'center',
   },
   signInButtonContainer: {
@@ -122,7 +125,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginBottom: 15,
   },
   signOut: {
-    ...theme.styles.textBold,
+    fontFamily: theme.fonts.bold,
     textAlign: 'center',
     width: '100%',
     color: theme.colors.brandPrimary,

@@ -3,6 +3,7 @@ import {
   Divider,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
@@ -16,7 +17,6 @@ import { Formik, FormikProps } from 'formik';
 import { DateTime } from 'luxon';
 import React, { useRef, useState } from 'react';
 import { Keyboard, View } from 'react-native';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'NewPilot'>;

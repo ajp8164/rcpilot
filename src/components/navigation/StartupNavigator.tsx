@@ -1,7 +1,7 @@
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from 'components/WelcomeScreen';
 import React from 'react';
-import { useTheme } from 'theme';
 import { StartupNavigatorParamList } from 'types/navigation';
 
 const StartupStack = createNativeStackNavigator<StartupNavigatorParamList>();
@@ -15,7 +15,9 @@ const StartupNavigator = () => {
       screenOptions={{
         title: undefined,
         headerBackTitle: 'Back',
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>

@@ -1,4 +1,5 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import * as Yup from 'yup';
+import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
@@ -18,9 +19,7 @@ import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
-import { useTheme } from 'theme';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
-import * as Yup from 'yup';
 
 type FormValues = {
   notes: string;

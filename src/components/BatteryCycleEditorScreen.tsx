@@ -7,10 +7,11 @@ import {
   ListItem,
   ListItemDateTime,
   ListItemSwitch,
+  ThemeManager,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
@@ -39,7 +40,6 @@ import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCharge, BatteryDischarge } from 'realmdb/BatteryCycle';
 import { toNumber } from 'realmdb/helpers';
-import { AppTheme, useTheme } from 'theme';
 import { BatteryTint } from 'types/battery';
 import { ISODateString } from 'types/common';
 import { BatteriesNavigatorParamList } from 'types/navigation';
@@ -81,7 +81,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   const { batteryId, cycleNumber } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
 
   const realm = useRealm();
@@ -789,7 +789,7 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
   },
@@ -807,10 +807,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
   },
   value: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
   },
   units: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.listItemValue,
   },
 }));

@@ -4,6 +4,7 @@ import {
   ListEditorMethods,
   ListItemSwipeable,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
@@ -26,7 +27,6 @@ import {
 import RNFS from 'react-native-fs';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'store/selectors/userSelectors';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

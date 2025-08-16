@@ -1,9 +1,8 @@
 import * as Yup from 'yup';
 import { SignInNavigatorParamList } from './types';
 import { useSetState } from '@react-native-hello/core';
-import { ListItemInput } from '@react-native-hello/ui';
+import { ListItemInput, ThemeManager, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { sendPasswordResetEmail } from 'lib/auth';
@@ -17,7 +16,6 @@ import {
   View,
 } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { AppTheme, useTheme } from 'theme';
 
 type FormValues = {
   email: string;
@@ -34,7 +32,7 @@ export type Props = NativeStackScreenProps<
 
 const ForgotPasswordScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const formikRef = useRef<FormikProps<FormValues>>(null);
   const refEmail = useRef<TextInput>(null);
@@ -126,7 +124,7 @@ const ForgotPasswordScreen = () => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   avoidContainer: {
     flex: 1,
   },

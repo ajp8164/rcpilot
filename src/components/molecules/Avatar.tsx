@@ -1,9 +1,10 @@
-import { Avatar as RNHAvatar, fontFamily } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import {
+  Avatar as RNHAvatar,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { CircleUserRound } from 'lucide-react-native';
 import { TextStyle, ViewStyle } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
-import { fontSizes } from 'theme/styles';
 import { UserProfile } from 'types/user';
 
 interface AvatarInterface {
@@ -24,7 +25,7 @@ export const Avatar = (props: AvatarInterface) => {
   } = props;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const _avatarStyle =
     size === 'tiny'
@@ -116,7 +117,7 @@ export const Avatar = (props: AvatarInterface) => {
   return renderUserAvatar(userProfile);
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   avatarGiant: {
     width: 100,
     height: 100,
@@ -148,33 +149,23 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     overflow: 'hidden',
   },
   avatarTitleGiant: {
+    ...theme.text.giant,
     color: theme.colors.stickyWhite,
-    fontSize: fontSizes.giant,
-    fontFamily,
-    fontWeight: 'normal',
   },
   avatarTitleLarge: {
+    ...theme.text.xl,
     color: theme.colors.stickyWhite,
-    fontSize: fontSizes.XL,
-    fontFamily,
-    fontWeight: 'normal',
   },
   avatarTitleMedium: {
+    ...theme.text.large,
     color: theme.colors.stickyWhite,
-    fontSize: fontSizes.large,
-    fontFamily,
-    fontWeight: 'normal',
   },
   avatarTitleSmall: {
+    ...theme.text.normal,
     color: theme.colors.stickyWhite,
-    fontSize: fontSizes.normal,
-    fontFamily,
-    fontWeight: 'normal',
   },
   avatarTitleTiny: {
+    ...theme.text.normal,
     color: theme.colors.stickyWhite,
-    fontSize: fontSizes.normal,
-    fontFamily,
-    fontWeight: 'normal',
   },
 }));

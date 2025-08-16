@@ -5,6 +5,7 @@ import {
   KeyboardAccessory,
   KeyboardAccessoryMethods,
   ListItemInputMethods,
+  useTheme,
 } from '@react-native-hello/ui';
 import {
   CollapsibleView,
@@ -58,7 +59,6 @@ import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { toNumber } from 'realmdb/helpers';
 import { deleteModelPreferences } from 'store/slices/appSettings';
-import { useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { ScanCodeSize } from 'types/common';
 import { FilterType } from 'types/filter';

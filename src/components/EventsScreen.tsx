@@ -4,12 +4,13 @@ import {
   ListEditorMethods,
   ListEditorState,
   ListItemSwipeable,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { eventKind, eventPower, eventSummary } from 'lib/modelEvent';
@@ -31,7 +32,6 @@ import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { AppTheme, useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { ModelType } from 'types/model';
 import {
@@ -54,7 +54,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
     route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
@@ -226,7 +226,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

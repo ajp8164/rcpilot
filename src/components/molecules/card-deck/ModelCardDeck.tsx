@@ -1,7 +1,7 @@
-import { viewport } from '@react-native-hello/ui';
+import { ModelCardDeckProvider } from './ModelCardDeckProvider';
+import { useDevice } from '@react-native-hello/ui';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Realm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
 import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
 import React, { useRef } from 'react';
@@ -9,9 +9,6 @@ import { Platform, StatusBar } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
 import { Model, Pilot } from 'realmdb';
-import { AppTheme, useTheme } from 'theme';
-
-import { ModelCardDeckProvider } from './ModelCardDeckProvider';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
@@ -25,17 +22,21 @@ export const ModelCardDeck = ({
   onPressAchievements,
   onStartNewEventSequence,
 }: ModelCardDeckInterface) => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const device = useDevice();
 
   const cardPropertiesModalRef = useRef<DeckCardPropertiesModal>(null);
 
   const tabBarHeight = useBottomTabBarHeight();
-  const headerBarLargeHeight = theme.styles.headerBarLarge.height as number;
+  const headerBarLargeHeight = device.headerBarLarge.height as number;
   const statusBarHeight =
-    Platform.OS === 'android' ? StatusBar.currentHeight || 0 : theme.insets.top;
+    Platform.OS === 'android'
+      ? StatusBar.currentHeight || 0
+      : device.insets.top;
   const visibleViewHeight =
-    viewport.height - tabBarHeight - headerBarLargeHeight - statusBarHeight;
+    device.screen.height -
+    tabBarHeight -
+    headerBarLargeHeight -
+    statusBarHeight;
 
   // The ModelCardDeckProvider manages card state outside of the carousel. When the carousel
   // has less than 3 cards it auto fills (see carousel autoFillData) the list so that at least
@@ -46,8 +47,15 @@ export const ModelCardDeck = ({
   return (
     <ModelCardDeckProvider>
       <Carousel
-        style={s.carousel}
-        width={viewport.width}
+        style={{
+          justifyContent: 'center',
+          marginTop:
+            Number(device.headerBarLarge?.height || 20) +
+            (Platform.OS === 'android'
+              ? StatusBar.currentHeight || 0
+              : device.insets.top),
+        }}
+        width={device.screen.width}
         height={visibleViewHeight}
         windowSize={3} // Render performance
         pagingEnabled={true}
@@ -58,7 +66,7 @@ export const ModelCardDeck = ({
         autoPlayReverse={false}
         data={[...models]}
         modeConfig={{
-          moveSize: viewport.width * 2,
+          moveSize: device.screen.width * 2,
           snapDirection: 'left',
           stackInterval: 0,
           rotateZDeg: 10,
@@ -79,14 +87,3 @@ export const ModelCardDeck = ({
     </ModelCardDeckProvider>
   );
 };
-
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
-  carousel: {
-    justifyContent: 'center',
-    marginTop:
-      Number(theme.styles.headerBarLarge?.height || 20) +
-      (Platform.OS === 'android'
-        ? StatusBar.currentHeight || 0
-        : theme.insets.top),
-  },
-}));

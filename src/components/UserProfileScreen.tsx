@@ -1,9 +1,9 @@
+import { useTheme } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import UserProfileView, { EditorState } from 'components/views/UserProfileView';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, View } from 'react-native';
-import { useTheme } from 'theme';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,

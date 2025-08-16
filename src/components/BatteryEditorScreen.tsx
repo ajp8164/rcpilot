@@ -7,12 +7,13 @@ import {
   ListItem,
   ListItemCollapsible,
   ListItemSwitch,
+  ThemeManager,
   WheelPicker,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
@@ -46,7 +47,6 @@ import { View } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
-import { AppTheme, useTheme } from 'theme';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
 import { ScanCodeSize } from 'types/common';
 import {
@@ -89,7 +89,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   const { batteryId, batteryTemplate } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const event = useEvent();
   const formatCurrency = useCurrencyFormatter();
@@ -660,7 +660,7 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   batteryTint: {
     borderLeftWidth: 8,
   },
@@ -671,7 +671,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignItems: 'center',
   },
   tintValueText: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.listItemValue,
     marginLeft: 5,
   },

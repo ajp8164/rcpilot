@@ -2,11 +2,12 @@ import { ISODateString } from '@react-native-hello/common';
 import {
   Divider,
   ListItem,
+  ThemeManager,
   getColoredSvg,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { modelTypeIconProps } from 'lib/model';
@@ -40,7 +41,6 @@ import { CalendarContextProviderImperativeMethods } from 'react-native-calendars
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { SvgXml } from 'react-native-svg';
 import { Event } from 'realmdb/Event';
-import { AppTheme, useCalendarTheme, useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { ModelType } from 'types/model';
 import { LogNavigatorParamList } from 'types/navigation';
@@ -69,9 +69,7 @@ export type Props = NativeStackScreenProps<LogNavigatorParamList, 'Log'>;
 
 const LogScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
-
-  const calendarTheme = useCalendarTheme();
+  const s = useStyles();
 
   const modelEvents = useEventsFilter({
     filterType: FilterType.EventsModelFilter,
@@ -130,11 +128,7 @@ const LogScreen = ({ navigation }: Props) => {
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    current,
-    theme.styles.buttonScreenHeader,
-    theme.styles.buttonScreenHeaderTitle,
-  ]);
+  }, [current, theme]);
 
   useEffect(() => {
     setGroupedEvents(groupEvents(modelEvents) as SectionListData<Event>[]);
@@ -265,7 +259,7 @@ const LogScreen = ({ navigation }: Props) => {
             <Text
               style={[
                 s.eventDayNumber,
-                state === 'selected' ? theme.styles.textBold : {},
+                state === 'selected' ? { fontFamily: theme.fonts.bold } : {},
                 {
                   color:
                     state === 'disabled'
@@ -326,7 +320,7 @@ const LogScreen = ({ navigation }: Props) => {
                 {logEntry.model?.type && (
                   <SvgXml
                     xml={getColoredSvg(
-                      modelTypeIconProps[logEntry.model.type]?.name as string,
+                      modelTypeIconProps[logEntry.model.type]?.name,
                     )}
                     width={s.modelImage.width}
                     height={s.modelImage.height}
@@ -361,7 +355,7 @@ const LogScreen = ({ navigation }: Props) => {
     return (
       <View>
         <View style={s.calendarHeaderDate}>
-          <Text style={[theme.styles.textHeading3]}>{monthName}</Text>
+          <Text style={[theme.text.h3]}>{monthName}</Text>
         </View>
         {/* Weekday labels */}
         <View style={s.calendarHeaderWeekdays}>
@@ -379,7 +373,11 @@ const LogScreen = ({ navigation }: Props) => {
     <CalendarProvider
       ref={calendarRef}
       date={DateTime.now().toISODate()}
-      theme={calendarTheme}>
+      theme={{
+        calendarBackground: theme.colors.viewBackground,
+        // @ts-expect-error
+        expandableKnobColor: theme.colors.brandPrimary,
+      }}>
       <View style={s.calendarContainer}>
         <ExpandableCalendar
           date={DateTime.now().toISODate()}
@@ -392,7 +390,11 @@ const LogScreen = ({ navigation }: Props) => {
             scrollToSection(sectionTitle);
           }}
           calendarStyle={s.calendar}
-          theme={calendarTheme}
+          theme={{
+            calendarBackground: theme.colors.viewBackground,
+            // @ts-expect-error
+            expandableKnobColor: theme.colors.brandPrimary,
+          }}
           animateScroll={true}
           firstDay={0}
           markedDates={marked as MarkedDates}
@@ -433,7 +435,7 @@ const LogScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   arrowsContainer: {
     flexDirection: 'row',
     right: -5,
@@ -469,7 +471,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginBottom: 5,
   },
   eventDayNumber: {
-    ...theme.styles.textMedium,
+    ...theme.text.medium,
     textAlign: 'center',
   },
   eventIcons: {
@@ -512,8 +514,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     backgroundColor: theme.colors.viewBackground,
   },
   weekdayLabel: {
-    ...theme.styles.textMedium,
-    ...theme.styles.textBold,
+    ...theme.text.small,
+    fontFamily: theme.fonts.bold,
     width: 32,
     textAlign: 'center',
   },

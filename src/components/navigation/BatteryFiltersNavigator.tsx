@@ -1,12 +1,11 @@
+import NavContext from './NavContext';
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryFilterEditorScreen from 'components/BatteryFilterEditorScreen';
 import BatteryFiltersScreen from 'components/BatteryFiltersScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import React from 'react';
-import { useTheme } from 'theme';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
-
-import NavContext from './NavContext';
 
 const BatteryFiltersStack =
   createNativeStackNavigator<BatteryFiltersNavigatorParamList>();
@@ -19,7 +18,9 @@ const BatteryFiltersNavigator = () => {
       <BatteryFiltersStack.Navigator
         initialRouteName="BatteryFilters"
         screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>

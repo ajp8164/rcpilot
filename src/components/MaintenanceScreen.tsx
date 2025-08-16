@@ -2,11 +2,12 @@ import {
   Divider,
   ListEditor,
   ListEditorMethods,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
@@ -39,7 +40,6 @@ import {
   JChecklistActionHistoryEntry,
 } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
@@ -61,7 +61,7 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
@@ -407,7 +407,7 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

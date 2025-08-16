@@ -1,13 +1,17 @@
-import { Divider, ListItem, ListItemSwitch } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ListItemSwitch,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native';
 import Slider from 'react-native-ui-lib/slider';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectEventPreferences } from 'store/selectors/appSettingsSelectors';
 import { saveEventPreferences } from 'store/slices/appSettings';
-import { AppTheme, useTheme } from 'theme';
 import { TimerStartDelay } from 'types/event';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -18,7 +22,7 @@ export type Props = NativeStackScreenProps<
 
 const PreferencesEventsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const dispatch = useDispatch();
   const preferences = useSelector(selectEventPreferences);
@@ -133,7 +137,7 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sliderContainer: {
     paddingHorizontal: 5,
   },

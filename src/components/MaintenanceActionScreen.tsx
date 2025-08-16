@@ -1,4 +1,4 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
@@ -10,7 +10,6 @@ import { View } from 'react-native';
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
-import { useTheme } from 'theme';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

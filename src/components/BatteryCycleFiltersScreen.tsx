@@ -3,6 +3,7 @@ import {
   ListEditor,
   ListEditorMethods,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
@@ -20,7 +21,6 @@ import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { saveSelectedFilter } from 'store/slices/filters';
-import { useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { BatteryCycleFiltersNavigatorParamList } from 'types/navigation';
 

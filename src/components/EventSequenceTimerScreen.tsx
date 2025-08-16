@@ -3,15 +3,16 @@ import {
   ListItem,
   ListItemSwitch,
   SwipeButton,
+  ThemeManager,
   WheelPicker,
   WheelPickerItem,
   getColoredSvg,
   listItemPosition,
-  viewport,
+  useDevice,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
@@ -70,7 +71,6 @@ import { Model } from 'realmdb/Model';
 import { selectEventPreferences } from 'store/selectors/appSettingsSelectors';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { eventSequence } from 'store/slices/eventSequence';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { TimerMode, TimerState } from 'types/timer';
@@ -89,7 +89,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const { cancelable } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
+  const device = useDevice();
   const confirmAction = useConfirmAction();
   const event = useEvent();
   const dispatch = useDispatch();
@@ -400,7 +401,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
           backTextStyle={s.swipeText}
           padding={7}
           height={60}
-          width={viewport.width - 45}
+          width={device.screen.width - 45}
           trackStartColor={
             timer.state.mode === TimerMode.Running
               ? theme.colors.blackTransparentSubtle
@@ -458,9 +459,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             />
           ) : (
             <SvgXml
-              xml={getColoredSvg(
-                modelTypeIconProps[model.type]?.name as string,
-              )}
+              xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
               width={100}
               height={110}
               color={theme.colors.brandSecondary}
@@ -688,7 +687,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
   },
@@ -696,7 +695,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.stickyWhite,
   },
   eventKind: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.whiteTransparentLight,
     textAlign: 'center',
     marginBottom: 10,
@@ -734,7 +733,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignSelf: 'center',
   },
   modelName: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.stickyWhite,
     textAlign: 'center',
     marginBottom: 3,
@@ -748,7 +747,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     width: '100%',
   },
   performanceItem: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.whiteTransparentLight,
   },
   performanceRowMid: {
@@ -769,7 +768,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     right: 0,
   },
   swipeText: {
-    ...theme.styles.textXL,
+    ...theme.text.xl,
     color: theme.colors.stickyWhite,
   },
   swipeThumbTimerRunning: {
@@ -778,7 +777,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   timerValue: {
     textAlign: 'center',
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.stickyWhite,
     fontSize: 92,
     letterSpacing: -5,
@@ -798,7 +797,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     width: '100%',
   },
   timerMessage: {
-    ...theme.styles.textLarge,
+    ...theme.text.large,
     color: theme.colors.stickyWhite,
   },
   timerOvertime: {
@@ -810,8 +809,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   timerButtons: {
     position: 'absolute',
-    bottom: theme.insets.bottom,
-    width: viewport.width,
+    bottom: device.insets.bottom,
+    width: device.screen.width,
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
@@ -820,8 +819,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
   },
   timerSwipeable: {
     position: 'absolute',
-    bottom: theme.insets.bottom,
-    width: viewport.width,
+    bottom: device.insets.bottom,
+    width: device.screen.width,
     alignItems: 'center',
   },
   view: {

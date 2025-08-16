@@ -1,3 +1,5 @@
+import NavContext from './NavContext';
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
@@ -5,10 +7,7 @@ import ReportEventFilterEditorScreen from 'components/ReportEventFilterEditorScr
 import ReportEventFiltersScreen from 'components/ReportEventFiltersScreen';
 import { eventKind } from 'lib/modelEvent';
 import React from 'react';
-import { useTheme } from 'theme';
 import { ReportEventFiltersNavigatorParamList } from 'types/navigation';
-
-import NavContext from './NavContext';
 
 const ReportEventFiltersStack =
   createNativeStackNavigator<ReportEventFiltersNavigatorParamList>();
@@ -21,7 +20,9 @@ const ReportEventFiltersNavigator = () => {
       <ReportEventFiltersStack.Navigator
         initialRouteName="ReportEventFilters"
         screenOptions={{
-          headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+          headerStyle: {
+            backgroundColor: theme.colors.screenHeaderBackground,
+          },
           headerTitleStyle: { color: theme.colors.screenHeaderTitle },
           headerTintColor: theme.colors.screenHeaderButtonText,
         }}>

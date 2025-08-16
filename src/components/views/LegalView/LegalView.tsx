@@ -1,17 +1,15 @@
 import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
-import { ContentView } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { ContentView, ThemeManager, useTheme } from '@react-native-hello/ui';
 import { appConfig } from 'config';
 import privacy from 'lib/content/privacy';
 import terms from 'lib/content/terms';
 import React from 'react';
 import { Text, View } from 'react-native';
 import TabController from 'react-native-ui-lib/tabController';
-import { AppTheme, useTheme } from 'theme';
 
 const LegalView = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   return (
     <View style={s.container}>
@@ -19,7 +17,9 @@ const LegalView = () => {
         items={[{ label: 'Service Agreement' }, { label: 'Privacy Policy' }]}>
         <TabController.TabBar
           backgroundColor={theme.colors.viewInvBackground}
-          indicatorStyle={{ backgroundColor: theme.colors.stickyWhite }}
+          indicatorStyle={{
+            backgroundColor: theme.colors.stickyWhite,
+          }}
           labelColor={theme.colors.textInv}
           selectedLabelColor={theme.colors.textInv}
         />
@@ -50,7 +50,7 @@ const LegalView = () => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
   },
@@ -59,11 +59,11 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginHorizontal: 15,
   },
   title: {
-    ...theme.styles.textHeading1,
+    ...theme.text.h1,
     color: theme.colors.textInv,
   },
   text: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.textInv,
   },
 }));

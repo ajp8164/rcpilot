@@ -89,7 +89,6 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>RCPilot.ttf</string>
 		<string>AntDesign.ttf</string>
 		<string>Entypo.ttf</string>
 		<string>EvilIcons.ttf</string>

@@ -1,4 +1,4 @@
-import { Divider } from '@react-native-hello/ui';
+import { Divider, useDevice, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { FilterEditorHeader } from 'components/molecules/FilterEditorHeader';
@@ -12,7 +12,6 @@ import { defaultFilter } from 'lib/maintenance';
 import { useFilterEditor } from 'lib/useFilterEditor';
 import React from 'react';
 import { ScrollView } from 'react-native';
-import { useTheme } from 'theme';
 import { MaintenanceFilterValues } from 'types/filter';
 import { MaintenanceFiltersNavigatorParamList } from 'types/navigation';
 
@@ -28,6 +27,7 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
     route.params;
 
   const theme = useTheme();
+  const device = useDevice();
 
   const filterEditor = useFilterEditor<MaintenanceFilterValues>({
     filterId,
@@ -79,7 +79,7 @@ const MaintenanceFilterEditorScreen = ({ route }: Props) => {
           filterEditor.onFilterValueChange('notes', filterState);
         }}
       />
-      <Divider style={{ height: theme.insets.bottom }} />
+      <Divider style={{ height: device.insets.bottom }} />
     </ScrollView>
   );
 };

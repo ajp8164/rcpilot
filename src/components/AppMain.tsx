@@ -1,10 +1,10 @@
+import '../theme';
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { log } from '@react-native-hello/core';
 import {
   CameraContext,
   CameraModal,
-  ColorModeSwitch,
   useCameraContext,
 } from '@react-native-hello/ui';
 import {
@@ -15,6 +15,7 @@ import {
 import { LinkingOptions } from '@react-navigation/native';
 import { InitStatus, useInitApp } from 'app';
 import { BackdropProvider } from 'components/atoms/Backdrop';
+import { ColorModeSwitch } from 'components/atoms/ColorModeSwitch';
 import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
 import { ColorPickerProvider } from 'components/modals/ColorPickerModal';
 import { SignInModal, SignInModalMethods } from 'components/modals/SignInModal';
@@ -31,8 +32,6 @@ import { StatusBar } from 'react-native';
 import { useColorScheme } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 import ErrorBoundary from 'react-native-error-boundary';
-import { useSelector } from 'react-redux';
-import { selectThemeSettings } from 'store/selectors/appSettingsSelectors';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 
 // See https://reactnavigation.org/docs/configuring-links
@@ -44,7 +43,6 @@ const linking: LinkingOptions<MainNavigatorParamList> = {
 };
 
 const AppMain = () => {
-  const themeSettings = useSelector(selectThemeSettings);
   const scheme = useColorScheme();
 
   const cameraModalRef = useRef<CameraModal>(null);
@@ -114,9 +112,9 @@ const AppMain = () => {
       linking={linking}
       // Removes default background (white) flash on tab change when in dark mode.
       theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <ActionSheetProvider>
-        <BottomSheetModalProvider>
-          <ColorModeSwitch themeSettings={themeSettings}>
+      <ColorModeSwitch>
+        <ActionSheetProvider>
+          <BottomSheetModalProvider>
             <ErrorBoundary onError={onError}>
               <NetworkContext.Provider value={network}>
                 <NetworkConnectionBar />
@@ -139,9 +137,9 @@ const AppMain = () => {
                 </AuthContext.Provider>
               </NetworkContext.Provider>
             </ErrorBoundary>
-          </ColorModeSwitch>
-        </BottomSheetModalProvider>
-      </ActionSheetProvider>
+          </BottomSheetModalProvider>
+        </ActionSheetProvider>
+      </ColorModeSwitch>
     </NavigationContainer>
   );
 };

@@ -2,11 +2,12 @@ import { useSetState } from '@react-native-hello/core';
 import {
   Divider,
   ListItemCheckBox,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { groupItems } from 'lib/sectionList';
 import React, { useEffect, useRef } from 'react';
@@ -17,7 +18,6 @@ import {
   View,
 } from 'react-native';
 import { Battery } from 'realmdb/Battery';
-import { AppTheme, useTheme } from 'theme';
 import { BatteryTemplate } from 'types/battery';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 
@@ -34,7 +34,7 @@ export type Props = NativeStackScreenProps<
 
 const BatteryTemplatesScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const allBatteries = useQuery(Battery);
   const templateCount = useRef(0);
@@ -200,7 +200,7 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

@@ -4,8 +4,14 @@ import {
   UserProfileViewProps,
 } from './types';
 import { useSetState } from '@react-native-hello/core';
-import { Asset, Divider, ListItem, selectImage } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import {
+  Asset,
+  Divider,
+  ListItem,
+  ThemeManager,
+  selectImage,
+  useTheme,
+} from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import { Avatar } from 'components/molecules/Avatar';
 import { appConfig } from 'config';
@@ -28,7 +34,6 @@ import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { openComposer } from 'react-native-email-link';
 import { useSelector } from 'react-redux';
 import { selectUserProfile } from 'store/selectors/userSelectors';
-import { AppTheme, useTheme } from 'theme';
 import { UserProfile } from 'types/user';
 
 type UserProfileView = UserProfileViewMethods;
@@ -42,7 +47,7 @@ const UserProfileView = React.forwardRef<UserProfileView, UserProfileViewProps>(
     } = props;
 
     const theme = useTheme();
-    const s = useStyles(theme);
+    const s = useStyles();
 
     const [userProfile, setUserProfile] = useState(userProfileProp);
     const myUserProfile = useSelector(selectUserProfile);
@@ -230,7 +235,7 @@ const UserProfileView = React.forwardRef<UserProfileView, UserProfileViewProps>(
   },
 );
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   avatar: {
     alignSelf: 'center',
     marginTop: 15,
@@ -260,12 +265,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     alignSelf: 'center',
   },
   userProfileImageDeleteTitle: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.assertive,
   },
   userProfileNameText: {
-    ...theme.styles.textXL,
-    ...theme.styles.textBold,
+    ...theme.text.xl,
+    fontFamily: theme.fonts.bold,
     textAlign: 'center',
     height: 50,
   },

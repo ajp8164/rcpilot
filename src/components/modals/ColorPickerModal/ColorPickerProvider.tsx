@@ -1,24 +1,22 @@
-import { View } from 'react-native';
 import { ColorPickerContext } from './ColorPickerContext';
-import React, { ReactNode, useRef, useState } from 'react';
 import { ColorPickerModal } from './ColorPickerModal';
-import { makeStyles } from '@rn-vui/themed';
-import { AppTheme, useTheme } from 'theme';
+import { ThemeManager } from '@react-native-hello/ui';
+import React, { ReactNode, useRef, useState } from 'react';
+import { ColorValue, View } from 'react-native';
 
 export const ColorPickerProvider = ({
   children,
 }: {
   children: ReactNode;
 }): ReactNode => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const modalRef = useRef<ColorPickerModal>(null);
   const eyedropperViewRef = useRef<View>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const extraDataRef = useRef<any>(null);
 
-  const [recentColors, setRecentColors] = useState<string[]>([]);
+  const [recentColors, setRecentColors] = useState<ColorValue[]>([]);
 
   const onDismiss = () => {
     return;
@@ -49,7 +47,7 @@ export const ColorPickerProvider = ({
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   view: {
     width: '100%',
     height: '100%',

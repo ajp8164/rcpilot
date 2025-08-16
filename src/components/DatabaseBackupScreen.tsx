@@ -1,4 +1,4 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
@@ -12,7 +12,6 @@ import React, { useContext, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'store/selectors/userSelectors';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

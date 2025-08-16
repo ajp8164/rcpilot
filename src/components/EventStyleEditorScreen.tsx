@@ -3,6 +3,7 @@ import {
   Divider,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -17,7 +18,6 @@ import React, { useRef, useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
 import { EventStyle } from 'realmdb/EventStyle';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 // CompositeScreenProps not working here since NewEventStyle is also in the SetupNavigator
@@ -37,8 +37,8 @@ type FormValues = {
 
 const EventStyleEditorScreen = ({ navigation, route }: Props) => {
   const { eventStyleId } = route.params || {};
-  const theme = useTheme();
 
+  const theme = useTheme();
   const realm = useRealm();
   const eventStyle = useObject(EventStyle, new BSON.ObjectId(eventStyleId));
 

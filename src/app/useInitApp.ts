@@ -2,7 +2,9 @@ import '@react-native-firebase/app';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { log } from '@react-native-hello/core';
 import { ReactNativeHello } from '@react-native-hello/core';
+import { useTheme } from '@react-native-hello/ui';
 import { appConfig } from 'config';
+import { svgImages } from 'images';
 import { useAchievementConveyor } from 'lib/achievement';
 import { AppError } from 'lib/errors';
 // import firestore from '@react-native-firebase/firestore';
@@ -11,9 +13,8 @@ import { useUnknownPilot } from 'lib/pilot';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { BackHandler } from 'react-native';
-import { useTheme } from 'theme';
+
 // import storage from '@react-native-firebase/storage';
-import { svgImages } from 'theme';
 
 export enum InitStatus {
   NotAuthorized = 'NotAuthorized',

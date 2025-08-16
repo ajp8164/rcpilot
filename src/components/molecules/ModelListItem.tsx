@@ -1,11 +1,12 @@
 import {
   ListEditorMethods,
   ListItemSwipeable,
+  ThemeManager,
   getColoredSvg,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import {
   modelMaintenanceIsDue,
   modelSummary,
@@ -20,7 +21,6 @@ import { useDispatch } from 'react-redux';
 import { BSON } from 'realm';
 import { Model } from 'realmdb';
 import { deleteModelPreferences } from 'store/slices/appSettings';
-import { AppTheme, useTheme } from 'theme';
 
 interface ModelListItem {
   array: Model[];
@@ -43,7 +43,7 @@ export const ModelListItem = React.memo(
     showInfo,
   }: ModelListItem) => {
     const theme = useTheme();
-    const s = useStyles(theme);
+    const s = useStyles();
     const confirmAction = useConfirmAction();
     const realm = useRealm();
     const dispatch = useDispatch();
@@ -87,9 +87,7 @@ export const ModelListItem = React.memo(
             ) : (
               <View style={s.modelSvgContainer}>
                 <SvgXml
-                  xml={getColoredSvg(
-                    modelTypeIconProps[model.type]?.name as string,
-                  )}
+                  xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
                   width={s.modelImage.width}
                   height={s.modelImage.height}
                   color={theme.colors.brandSecondary}
@@ -150,7 +148,7 @@ export const ModelListItem = React.memo(
   },
 );
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   modelIcon: {
     transform: [{ rotate: '-45deg' }],
   },

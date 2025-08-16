@@ -1,3 +1,5 @@
+import NewBatteryNavigator from './NewBatteryNavigator';
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteriesScreen from 'components/BatteriesScreen';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
@@ -16,10 +18,7 @@ import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
 import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
 import lodash from 'lodash';
 import React from 'react';
-import { useTheme } from 'theme';
 import { BatteriesNavigatorParamList } from 'types/navigation';
-
-import NewBatteryNavigator from './NewBatteryNavigator';
 
 const BatteriesStack =
   createNativeStackNavigator<BatteriesNavigatorParamList>();
@@ -31,7 +30,9 @@ const BatteriesNavigator = () => {
     <BatteriesStack.Navigator
       initialRouteName="Batteries"
       screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>
@@ -49,7 +50,9 @@ const BatteriesNavigator = () => {
           headerLeft: () => null,
           headerLargeTitle: route.params.listBatteries === 'all' ? true : false,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         })}
       />
       <BatteriesStack.Screen

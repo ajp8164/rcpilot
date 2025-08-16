@@ -1,7 +1,6 @@
-import { openShareSheet } from '@react-native-hello/ui';
+import { ThemeManager, openShareSheet, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventRating } from 'components/molecules/EventRating';
@@ -26,7 +25,6 @@ import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb';
 import { Event } from 'realmdb/Event';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
-import { AppTheme, useTheme } from 'theme';
 import { ReportEventFilterValues } from 'types/filter';
 import { ReportViewerNavigatorParamList } from 'types/navigation';
 
@@ -87,7 +85,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
   const { reportId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const report = useObject(
     EventsMaintenanceReport,
@@ -242,10 +240,8 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
         onCapture={onCapture}
         options={{ width: 1650 }}>
         <View style={s.reportHeader}>
-          <Text style={theme.styles.textHeading5}>
-            {'Event/Maintenance Report'}
-          </Text>
-          <Text style={theme.styles.textNormal}>
+          <Text style={theme.text.h5}>{'Event/Maintenance Report'}</Text>
+          <Text style={theme.text.normal}>
             {DateTime.now().toFormat("MMMM dd, yyyy 'at' h:m a")}
           </Text>
         </View>
@@ -272,7 +268,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     padding: 15,
     width: 1650,
@@ -296,12 +292,12 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingHorizontal: 5,
   },
   headerText: {
-    ...theme.styles.textNormal,
-    ...theme.styles.textBold,
+    ...theme.text.normal,
+    fontFamily: theme.fonts.bold,
     color: theme.colors.stickyWhite,
   },
   text: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
   },
 }));
 

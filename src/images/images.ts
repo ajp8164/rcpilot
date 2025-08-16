@@ -1,8 +1,8 @@
+import blade from './img/vendors/blade.png';
+import goblinHelicopter from './img/vendors/goblin-helicopter.png';
+import horizonHobby from './img/vendors/horizon-hobby.png';
+import sab from './img/vendors/sab.png';
 import { Image, ImageSourcePropType } from 'react-native';
-import blade from 'theme/img/vendors/blade.png';
-import goblinHelicopter from 'theme/img/vendors/goblin-helicopter.png';
-import horizonHobby from 'theme/img/vendors/horizon-hobby.png';
-import sab from 'theme/img/vendors/sab.png';
 
 export type VendorImage = {
   src: ImageSourcePropType;

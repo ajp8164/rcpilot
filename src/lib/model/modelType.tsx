@@ -1,7 +1,6 @@
-import { getColoredSvg } from '@react-native-hello/ui';
+import { ThemeManager, getColoredSvg } from '@react-native-hello/ui';
 import { EnumPickerIconProps } from 'components/EnumPickerScreen';
 import { SvgXml } from 'react-native-svg';
-import { theme } from 'theme';
 import { ModelType } from 'types/model';
 
 type ModelTypeIconProps = {
@@ -25,7 +24,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Airplane].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}
@@ -38,7 +37,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Boat].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}
@@ -51,7 +50,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Car].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}
@@ -64,7 +63,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Helicopter].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}
@@ -77,7 +76,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Multicopter].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}
@@ -90,7 +89,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Robot].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}
@@ -103,7 +102,7 @@ export const modelTypeIcons: { [key in ModelType]: EnumPickerIconProps } = {
     leftContent: (
       <SvgXml
         xml={getColoredSvg(modelTypeIconProps[ModelType.Sailplane].name)}
-        color={theme.lightColors?.brandSecondary}
+        color={ThemeManager.theme.colors.brandSecondary}
         width={50}
         height={50}
         style={{ transform: [{ rotate: '-45deg' }] }}

@@ -1,10 +1,7 @@
 import * as DropdownMenu from 'zeego/dropdown-menu';
-
-import { AppTheme, useTheme } from 'theme';
-
+import { ThemeManager } from '@react-native-hello/ui';
 import React from 'react';
 import { ReactNode } from 'react';
-import { makeStyles } from '@rn-vui/themed';
 
 // const itemHeight = 25;
 
@@ -29,8 +26,7 @@ const ImageEditMenu = ({
   onHeightSelect,
   onRemoveImage,
 }: ImageEditMenuInterface) => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   return (
     <DropdownMenu.Root>
@@ -93,7 +89,7 @@ const ImageEditMenu = ({
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   item: {
     // borderRadius: 3,
     // justifyContent: 'center',

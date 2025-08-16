@@ -1,3 +1,4 @@
+import { useTheme } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import {
   NativeStackScreenProps,
@@ -6,7 +7,6 @@ import {
 import ReportEventsMaintenanceViewerScreen from 'components/ReportEventsMaintenanceViewerScreen';
 import ReportScanCodesViewerScreen from 'components/ReportScanCodesViewerScreen';
 import React from 'react';
-import { useTheme } from 'theme';
 import {
   ReportViewerNavigatorParamList,
   SetupNavigatorParamList,
@@ -26,7 +26,9 @@ const ReportViewerNavigator = () => {
   return (
     <ReportViewerStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>

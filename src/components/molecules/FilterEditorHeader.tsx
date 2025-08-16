@@ -1,11 +1,14 @@
-import { Divider, ListItemSwitchCollapsible } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItemSwitchCollapsible,
+  useTheme,
+} from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import { ListItemInput } from 'components/atoms/List';
 import { FilterEditorInstance } from 'lib/useFilterEditor';
 import lodash from 'lodash';
 import { useEffect } from 'react';
 import React, { View } from 'react-native';
-import { useTheme } from 'theme';
 
 interface FilterEditorHeader<T> {
   defaultFilter: T;
@@ -89,7 +92,7 @@ function FilterEditorHeader<T>({
       <Divider
         note
         light
-        subHeaderStyle={theme.styles.textSmall}
+        subHeaderStyle={theme.text.small}
         text={`This filter shows all the ${name} that match all of these criteria.`}
       />
     </View>

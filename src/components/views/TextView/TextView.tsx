@@ -1,8 +1,7 @@
 import { TextViewMethods, TextViewProps } from './types';
-import { Input, InputMethods } from '@react-native-hello/ui';
+import { Input, InputMethods, ThemeManager } from '@react-native-hello/ui';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 // See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
-import { makeStyles } from '@rn-vui/themed';
 import NavContext from 'components/navigation/NavContext';
 import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 import React, {
@@ -18,7 +17,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 
 type TextView = TextViewMethods;
 
@@ -31,8 +29,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
     value,
   } = props;
 
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const { isModal } = useContext(NavContext);
 
@@ -115,12 +112,12 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
   );
 });
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   view: {
     backgroundColor: theme.colors.viewAltBackground,
   },
   text: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     textAlignVertical: 'top',
   },
   inputContainer: {
@@ -132,7 +129,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     backgroundColor: theme.colors.wispGray,
   },
   remaining: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
     textAlign: 'left',
     paddingLeft: 10,

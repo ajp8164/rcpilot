@@ -5,6 +5,7 @@ import {
   ListEditorState,
   ListItemSwipeable,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
@@ -16,7 +17,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FlatList, ListRenderItem } from 'react-native';
 import { BSON } from 'realm';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

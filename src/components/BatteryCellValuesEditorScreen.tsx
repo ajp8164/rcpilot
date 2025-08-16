@@ -2,11 +2,12 @@ import {
   Divider,
   ListItem,
   ListItemInputMethods,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { ListItemInput } from 'components/atoms/List';
 import { useEvent } from 'lib/event';
@@ -21,7 +22,6 @@ import {
   TextStyle,
   View,
 } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 import {
   BatteriesNavigatorParamList,
   NewBatteryCycleNavigatorParamList,
@@ -63,7 +63,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
 
   const precision = precisionFromMask(config.mask);
@@ -248,7 +248,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   divider: {
     marginBottom: 15,
   },
@@ -256,14 +256,14 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     flexDirection: 'row',
   },
   value: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
   },
   valuePlaceholder: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     ...theme.styles.textPlaceholder,
   },
   units: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.listItemValue,
   },
 }));

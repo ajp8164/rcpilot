@@ -8,12 +8,13 @@ import {
   ListEditorState,
   ListItem,
   ListItemSwipeable,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Button } from 'components/atoms/Button';
 import {
@@ -42,7 +43,6 @@ import {
 } from 'realmdb/Checklist';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { Model } from 'realmdb/Model';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import {
   ModelsNavigatorParamList,
@@ -74,7 +74,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     route.params || {};
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const event = useEvent();
   const realm = useRealm();
@@ -500,7 +500,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   actionsList: {
     overflow: 'visible',
   },

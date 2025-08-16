@@ -1,18 +1,10 @@
-import {
-  fontSizes as defaultFontSizes,
-  fontFamily,
-  fontFamilyBold,
-} from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
-import { Platform } from 'react-native';
+import { type IBaseThemeSchema, IStyles } from '@react-native-hello/ui';
 
-export const fontSizes = {
-  ...defaultFontSizes,
-  giant: 54,
-  micro: 10,
-};
-
-export const useStyles = makeStyles(theme => ({
+export const createElementsStyles = ({
+  theme,
+}: {
+  theme: IBaseThemeSchema;
+}): Partial<IStyles> => ({
   /**
    * Divider
    */
@@ -64,9 +56,9 @@ export const useStyles = makeStyles(theme => ({
     borderWidth: 2,
   },
   buttonAssertiveTitle: {
-    fontSize: fontSizes.normal,
+    fontSize: theme.fontSize.normal,
     fontWeight: '400',
-    fontFamily,
+    fontFamily: theme.fonts.regular,
     color: theme.colors.assertive,
   },
   buttonContainer: {
@@ -77,108 +69,14 @@ export const useStyles = makeStyles(theme => ({
    * Text
    */
 
-  textHeading1: {
-    color: theme.colors.text,
-    lineHeight: 48,
-    fontSize: fontSizes.heading1,
-    ...Platform.select({
-      android: {
-        fontFamily: fontFamilyBold,
-      },
-      ios: {
-        fontFamily,
-        fontWeight: '700',
-      },
-    }),
+  textPlaceholder: {
+    opacity: 0.4,
   },
-  textHeading2: {
-    color: theme.colors.text,
-    lineHeight: 36,
-    fontSize: fontSizes.heading2,
-    ...Platform.select({
-      android: {
-        fontFamily: fontFamilyBold,
-      },
-      ios: {
-        fontFamily,
-        fontWeight: '700',
-      },
-    }),
-  },
-  textHeading3: {
-    color: theme.colors.text,
-    lineHeight: 32,
-    fontSize: fontSizes.heading3,
-    ...Platform.select({
-      android: {
-        fontFamily: fontFamilyBold,
-      },
-      ios: {
-        fontFamily,
-        fontWeight: '700',
-      },
-    }),
-  },
-  textHeading4: {
-    color: theme.colors.text,
-    lineHeight: 32,
-    fontSize: fontSizes.heading4,
-    ...Platform.select({
-      android: {
-        fontFamily: fontFamilyBold,
-      },
-      ios: {
-        fontFamily,
-        fontWeight: '700',
-      },
-    }),
-  },
-  textXL: {
-    color: theme.colors.text,
-    lineHeight: 24,
-    fontSize: fontSizes.XL,
-    fontFamily,
+  textScreenTitle: {
+    color: theme.colors.black,
+    fontSize: 17,
+    fontFamily: theme.fonts.regular,
     fontWeight: '600',
-  },
-  textLarge: {
-    color: theme.colors.text,
-    lineHeight: 24,
-    fontSize: fontSizes.large,
-    fontFamily,
-    fontWeight: '400',
-  },
-  textNormal: {
-    color: theme.colors.text,
-    // lineHeight: 24,
-    fontSize: fontSizes.normal,
-    fontFamily,
-    fontWeight: '500',
-  },
-  textSmall: {
-    color: theme.colors.text,
-    lineHeight: 14,
-    fontSize: fontSizes.small,
-    fontFamily,
-    fontWeight: '500',
-  },
-  textTiny: {
-    color: theme.colors.text,
-    lineHeight: 15,
-    fontSize: fontSizes.tiny,
-    fontFamily,
-    fontWeight: '500',
-  },
-  textGiant: {
-    color: theme.colors.text,
-    fontSize: fontSizes.giant,
-    fontFamily,
-    fontWeight: 'normal',
-  },
-  textMicro: {
-    color: theme.colors.text,
-    fontSize: fontSizes.micro,
-    fontFamily,
-    fontWeight: 'normal',
   },
 
   /**
@@ -200,4 +98,4 @@ export const useStyles = makeStyles(theme => ({
     paddingHorizontal: 7,
     backgroundColor: theme.colors.viewInvBackground,
   },
-}));
+});

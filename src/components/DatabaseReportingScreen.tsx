@@ -5,12 +5,13 @@ import {
   ListEditorState,
   ListItem,
   ListItemSwipeable,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Button } from 'components/atoms/Button';
 import { useEvent } from 'lib/event';
@@ -30,7 +31,6 @@ import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { ScanCodesReport } from 'realmdb/ScanCodesReport';
 import { selectOutputReportTo } from 'store/selectors/appSettingsSelectors';
 import { saveOutputReportTo } from 'store/slices/appSettings';
-import { AppTheme, useTheme } from 'theme';
 import {
   OutputReportTo,
   OutputReportToDescription,
@@ -66,7 +66,7 @@ const reportViewer: { [key in ReportType]: any } = {
 
 const DatabaseReportingScreen = ({ navigation }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const event = useEvent();
@@ -374,7 +374,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         <Divider
           note
           light
-          subHeaderStyle={theme.styles.textSmall}
+          subHeaderStyle={theme.text.small}
           text={
             OutputReportToDescription[
               Object.keys(OutputReportTo)[
@@ -417,7 +417,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               <Divider
                 note
                 light
-                subHeaderStyle={theme.styles.textSmall}
+                subHeaderStyle={theme.text.small}
                 text={
                   'Tapping a row generates the corresponding report and outputs it to the selected destination.'
                 }
@@ -462,7 +462,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               <Divider
                 note
                 light
-                subHeaderStyle={theme.styles.textSmall}
+                subHeaderStyle={theme.text.small}
                 text={
                   'Tapping a row generates the corresponding report and outputs it to the selected destination.'
                 }
@@ -482,7 +482,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   reportsContainer: {
     flex: 1,
   },
@@ -498,7 +498,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     overflow: 'visible',
   },
   shadow: {
-    ...theme.styles.shadowGlow,
+    ...theme.shadow.glow,
     ...Platform.select({
       android: {
         borderRadius: 20,

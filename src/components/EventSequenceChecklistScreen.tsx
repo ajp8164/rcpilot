@@ -1,7 +1,11 @@
-import { Divider, listItemPosition } from '@react-native-hello/ui';
+import {
+  Divider,
+  ThemeManager,
+  listItemPosition,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import ActionBar from 'components/atoms/ActionBar';
 import { Button } from 'components/atoms/Button';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
@@ -29,7 +33,6 @@ import {
 import { Model } from 'realmdb/Model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { eventSequence } from 'store/slices/eventSequence';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 
@@ -51,7 +54,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   const { cancelable, checklistType } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
 
@@ -326,7 +329,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   buttonScreenHeaderTitleLeft: {
     color: theme.colors.stickyWhite,
   },

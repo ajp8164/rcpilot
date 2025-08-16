@@ -1,10 +1,11 @@
 import {
+  ThemeManager,
   getColoredSvg,
+  useDevice,
   useSelectAttachments,
-  viewport,
+  useTheme,
 } from '@react-native-hello/ui';
 import { useObject } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { modelTypeIconProps } from 'lib/model';
 import { Camera, ChevronLeft } from 'lucide-react-native';
@@ -19,7 +20,6 @@ import Animated, {
 import { SvgXml } from 'react-native-svg';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
-import { AppTheme, useTheme } from 'theme';
 import { ModelType } from 'types/model';
 
 interface ModelHeaderInterface {
@@ -40,7 +40,9 @@ export const ModelHeader = ({
   scrollY,
 }: ModelHeaderInterface) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
+  const device = useDevice();
+
   const selectAttachments = useSelectAttachments({
     selectFromCamera: true,
     selectFromCameraRoll: true,
@@ -50,12 +52,12 @@ export const ModelHeader = ({
   const [image, setImage] = useState(model?.image || undefined);
 
   const modelTypeName = model
-    ? (modelTypeIconProps[model.type]?.name as string)
+    ? modelTypeIconProps[model.type]?.name
     : modelType
-      ? (modelTypeIconProps[modelType]?.name as string)
+      ? modelTypeIconProps[modelType]?.name
       : 'flag-checkered';
 
-  const minHeight = theme.insets.top + 39;
+  const minHeight = device.insets.top + 39;
   const maxHeight = 200;
 
   const backgroundOpacity = useAnimatedStyle(() => {
@@ -119,7 +121,10 @@ export const ModelHeader = ({
 
   const selectModelImage = () => {
     selectAttachments({
-      cropRect: { width: viewport.width * 5 * 1.3, height: viewport.width * 5 },
+      cropRect: {
+        width: device.screen.width * 5 * 1.3,
+        height: device.screen.width * 5,
+      },
       customButtonDestructive: true,
       customButtonCallback: deletePhoto,
       customButtonLabel: image ? 'Delete Photo' : undefined,
@@ -231,19 +236,19 @@ export const ModelHeader = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   backgroundContainer: {
     height: 150,
     backgroundColor: theme.colors.lightGray,
   },
   buttonLeftContainer: {
     position: 'absolute',
-    top: theme.insets.top - 4,
+    top: device.insets.top - 4,
     left: -7,
   },
   buttonRightContainer: {
     position: 'absolute',
-    top: theme.insets.top - 4,
+    top: device.insets.top - 4,
     right: 7,
   },
   collapsedHeader: {

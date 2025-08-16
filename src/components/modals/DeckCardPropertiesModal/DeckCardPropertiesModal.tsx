@@ -1,9 +1,18 @@
+import {
+  DeckCardPropertiesModalMethods,
+  DeckCardPropertiesModalProps,
+} from './types';
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { Modal, ModalHeader } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import {
+  Modal,
+  ModalHeader,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { BackdropContext } from 'components/atoms/Backdrop';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
 import { defaultDinnCardColors } from 'components/molecules/card-deck/dinn';
+import { CircleX } from 'lucide-react-native';
 import React, {
   useContext,
   useImperativeHandle,
@@ -18,13 +27,7 @@ import Animated, {
 import { useDispatch } from 'react-redux';
 import { store } from 'store';
 import { saveModelPreferences } from 'store/slices/appSettings';
-import { AppTheme, useTheme } from 'theme';
 import { DeckCardColors } from 'types/preferences';
-
-import {
-  DeckCardPropertiesModalMethods,
-  DeckCardPropertiesModalProps,
-} from './types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
@@ -37,7 +40,7 @@ const DeckCardPropertiesModal = React.forwardRef<
   const { snapPoints = [150] } = props;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const dispatch = useDispatch();
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
@@ -143,8 +146,7 @@ const DeckCardPropertiesModal = React.forwardRef<
       onDismiss={() => backdrop.setEnabled(false)}>
       <ModalHeader
         size={'small'}
-        rightButtonIcon={'close-circle'}
-        rightButtonIconColor={theme.colors.lightGray}
+        rightButtonIcon={<CircleX color={theme.colors.lightGray} />}
         containerStyle={s.modalClose}
         onRightButtonPress={dismiss}
       />
@@ -187,7 +189,7 @@ const DeckCardPropertiesModal = React.forwardRef<
   );
 });
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   modalClose: {
     width: '100%',
     position: 'absolute',
@@ -208,7 +210,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     marginHorizontal: 5,
   },
   colorText: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     marginRight: 10,
   },
   colorSwatch: {

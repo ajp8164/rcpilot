@@ -1,8 +1,6 @@
-import { ListItem } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { ListItem, ThemeManager } from '@react-native-hello/ui';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 
 interface ListItemNotes extends ListItem {
   notes?: string;
@@ -11,8 +9,7 @@ interface ListItemNotes extends ListItem {
 const ListItemNotes = (props: ListItemNotes) => {
   const { notes, ...rest } = props;
 
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   return (
     <ListItem
@@ -27,7 +24,7 @@ const ListItemNotes = (props: ListItemNotes) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -35,7 +32,7 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     paddingVertical: 10,
   },
   content: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
   },
 }));
 

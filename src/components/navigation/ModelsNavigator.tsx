@@ -1,3 +1,4 @@
+import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
@@ -27,7 +28,6 @@ import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import { eventKind } from 'lib/modelEvent';
 import React from 'react';
-import { useTheme } from 'theme';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 const ModelsStack = createNativeStackNavigator<ModelsNavigatorParamList>();
@@ -39,7 +39,9 @@ const ModelsNavigator = () => {
     <ModelsStack.Navigator
       initialRouteName="Models"
       screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>
@@ -51,7 +53,9 @@ const ModelsNavigator = () => {
           title: route.params.listModels === 'retired' ? 'Retired' : 'Models',
           headerLargeTitle: route.params.listModels === 'all' ? true : false,
           headerLargeTitleShadowVisible: false,
-          headerLargeStyle: { backgroundColor: theme.colors.viewBackground },
+          headerLargeStyle: {
+            backgroundColor: theme.colors.viewBackground,
+          },
         })}
       />
       <ModelsStack.Screen

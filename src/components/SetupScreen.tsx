@@ -1,8 +1,13 @@
-import { Divider, ListItem, ListItemSwipeable } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ListItemSwipeable,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Avatar } from 'components/molecules/Avatar';
 import { appConfig } from 'config';
@@ -39,7 +44,6 @@ import { selectPilot } from 'store/selectors/pilotSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { saveDatabaseAccessWith } from 'store/slices/appSettings';
 import { saveSelectedPilot } from 'store/slices/pilot';
-import { AppTheme, useTheme } from 'theme';
 import { DatabaseAccessWith } from 'types/database';
 import {
   SetupNavigatorParamList,
@@ -53,7 +57,7 @@ export type Props = CompositeScreenProps<
 
 const SetupScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const dispatch = useDispatch();
   const event = useEvent();
   const realm = useRealm();
@@ -297,7 +301,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   avatar: {
     left: -3,
     top: 1,

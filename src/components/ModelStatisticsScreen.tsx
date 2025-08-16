@@ -1,4 +1,9 @@
-import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  listItemPosition,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -11,7 +16,6 @@ import { FlatList } from 'react-native-gesture-handler';
 import { BSON } from 'realm';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Model, ModelEventStyleData } from 'realmdb/Model';
-import { useTheme } from 'theme';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

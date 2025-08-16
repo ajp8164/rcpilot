@@ -8,6 +8,7 @@ import {
   ListItemCollapsible,
   ListItemSwitch,
   WheelPicker,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -38,7 +39,6 @@ import { Keyboard, ScrollView, View } from 'react-native';
 import Realm, { BSON } from 'realm';
 import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
-import { useTheme } from 'theme';
 import {
   ChecklistActionNonRepeatingScheduleTimeframe,
   ChecklistActionScheduleFollowing,

@@ -1,10 +1,13 @@
-import { Divider, ListItem } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { makeStyles } from '@rn-vui/themed';
 import { appConfig } from 'config';
 import React from 'react';
 import { Text, View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
@@ -14,7 +17,7 @@ export type Props = NativeStackScreenProps<
 
 const WebServerAccessScreen = () => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   return (
     <View style={[theme.styles.view, s.viewContainer]}>
@@ -35,16 +38,16 @@ const WebServerAccessScreen = () => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   viewContainer: {
     marginTop: '40%',
   },
   heading: {
-    ...theme.styles.textHeading5,
+    ...theme.text.h5,
     marginBottom: 15,
   },
   text: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     marginBottom: 15,
   },
   centered: {

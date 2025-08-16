@@ -2,11 +2,11 @@ import {
   CollapsibleView,
   ListItemSwipeable,
   ListItemSwipeableMethods,
+  ThemeManager,
+  useTheme,
 } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
 import { Check, Square, SquareCheckBig } from 'lucide-react-native';
 import React, { useImperativeHandle, useRef } from 'react';
-import { AppTheme, useTheme } from 'theme';
 
 interface ListItemCheckBoxInfo extends ListItemSwipeable {
   checked: boolean;
@@ -34,7 +34,7 @@ const ListItemCheckBoxInfo = React.forwardRef<
   } = props;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const liRef = useRef<ListItemSwipeableMethods>(null);
 
   useImperativeHandle(ref, () => ({
@@ -77,7 +77,7 @@ const ListItemCheckBoxInfo = React.forwardRef<
   );
 });
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   unchecked: {
     opacity: 0,
   },

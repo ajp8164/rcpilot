@@ -1,4 +1,5 @@
-import { makeStyles } from '@rn-vui/themed';
+import { FlipCardViewMethods, FlipCardViewProps } from './types';
+import { ThemeManager } from '@react-native-hello/ui';
 import React, { useImperativeHandle } from 'react';
 import Animated, {
   FadeIn,
@@ -6,9 +7,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
-
-import { FlipCardViewMethods, FlipCardViewProps } from './types';
 
 type FlipCardView = FlipCardViewMethods;
 
@@ -23,8 +21,7 @@ const FlipCardView = React.forwardRef<FlipCardView, FlipCardViewProps>(
       BackContent,
     } = props;
 
-    const theme = useTheme();
-    const s = useStyles(theme);
+    const s = useStyles();
     const isDirectionX = direction === 'x';
 
     useImperativeHandle(ref, () => ({
@@ -84,7 +81,7 @@ const FlipCardView = React.forwardRef<FlipCardView, FlipCardViewProps>(
   },
 );
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   front: {
     position: 'absolute',
   },

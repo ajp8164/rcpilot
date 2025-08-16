@@ -1,6 +1,6 @@
+import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import BatteryPickerView from 'components/views/BatteryPickerView';
 import { modelHasChecklists } from 'lib/model';
@@ -15,7 +15,6 @@ import { Battery } from 'realmdb/Battery';
 import { Model } from 'realmdb/Model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { eventSequence } from 'store/slices/eventSequence';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 
@@ -28,7 +27,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   const { cancelable } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
 
@@ -132,7 +131,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   buttonScreenHeaderTitleLeft: {
     color: theme.colors.stickyWhite,
   },

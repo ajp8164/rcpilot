@@ -1,8 +1,7 @@
-import { Divider } from '@react-native-hello/ui';
+import { Divider, useTheme } from '@react-native-hello/ui';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
 import lodash from 'lodash';
 import React, { View } from 'react-native';
-import { useTheme } from 'theme';
 
 interface FiltersListHeader {
   filterSummary: string;
@@ -57,7 +56,7 @@ const FiltersListHeader = ({
           <Divider
             note
             light
-            subHeaderStyle={theme.styles.textSmall}
+            subHeaderStyle={theme.text.small}
             text={`You can save the General ${specific} Filter to remember a specific filter configuration for later use.`}
           />
         </>

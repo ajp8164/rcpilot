@@ -4,6 +4,7 @@ import {
   ListEditorMethods,
   ListItemSwipeable,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
@@ -15,7 +16,6 @@ import React, { useEffect, useRef } from 'react';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { BSON } from 'realm';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
-import { useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { SetupNavigatorParamList } from 'types/navigation';
 

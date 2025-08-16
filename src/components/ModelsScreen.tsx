@@ -4,11 +4,12 @@ import {
   ListEditorMethods,
   ListEditorState,
   ListItem,
+  ThemeManager,
+  useTheme,
 } from '@react-native-hello/ui';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -35,7 +36,6 @@ import { selectModelsLayout } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { eventSequence } from 'store/slices/eventSequence';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { FilterType } from 'types/filter';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -52,7 +52,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const { listModels } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const dispatch = useDispatch();
   const headerHeight = useHeaderHeight();
 
@@ -414,7 +414,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   noPadding: {
     paddingHorizontal: 0,
   },

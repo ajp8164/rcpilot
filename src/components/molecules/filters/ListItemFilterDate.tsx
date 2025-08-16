@@ -1,10 +1,11 @@
+import { getTimeSpanItems } from './wheelPickerHelpers';
 import { useSetState } from '@react-native-hello/core';
 import {
   ListItemDateTime,
   ListItemSegmented,
+  ThemeManager,
   WheelPicker,
 } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
 import {
   ListItemSegmentedCollapsible,
   ListItemSegmentedCollapsibleMethods,
@@ -14,10 +15,7 @@ import { DateTime } from 'luxon';
 import { useEffect, useRef, useState } from 'react';
 import React from 'react';
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
 import { ISODateString } from 'types/common';
-
-import { getTimeSpanItems } from './wheelPickerHelpers';
 
 interface Props extends Pick<ListItemSegmented, 'position'> {
   onValueChange: (filterState: DateFilterState) => void;
@@ -29,8 +27,7 @@ interface Props extends Pick<ListItemSegmented, 'position'> {
 const ListItemFilterDate = (props: Props) => {
   const { onValueChange, position, title } = props;
 
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const segments = [
     DateRelation.Any,
@@ -216,7 +213,7 @@ const ListItemFilterDate = (props: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   datePickerContainer: {
     height: 200,
   },

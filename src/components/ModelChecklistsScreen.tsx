@@ -6,6 +6,7 @@ import {
   ListEditorState,
   ListItemSwipeable,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
@@ -23,7 +24,6 @@ import { BSON } from 'realm';
 import { Checklist, JChecklistAction } from 'realmdb/Checklist';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { Model } from 'realmdb/Model';
-import { useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
@@ -328,7 +328,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
                 <Divider
                   note
                   light
-                  subHeaderStyle={theme.styles.textSmall}
+                  subHeaderStyle={theme.text.small}
                   text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}
                 />
               ) : (

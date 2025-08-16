@@ -1,9 +1,9 @@
 import { defaultDinnCardColors } from './index';
 import { ellipsis } from '@react-native-hello/core';
-import { getColoredSvg } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import { ThemeManager, getColoredSvg, useTheme } from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import type FlipCardView from 'components/views/FlipCardView';
+import { getVendorImage } from 'images';
 import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { Bandage, Info, PlayCircle, Trophy, Wrench } from 'lucide-react-native';
@@ -21,8 +21,6 @@ import { SvgXml } from 'react-native-svg';
 import { useSelector } from 'react-redux';
 import { Model, Pilot } from 'realmdb';
 import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
-import { AppTheme, useTheme } from 'theme';
-import { getVendorImage } from 'theme/images';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -43,7 +41,7 @@ export const Front = ({
   pilot,
 }: DinnCardInterface) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const totalTime = Duration.fromMillis(
     model.statistics.totalTime * 1000,
@@ -85,9 +83,7 @@ export const Front = ({
         ) : (
           <View style={s.defaultImage}>
             <SvgXml
-              xml={getColoredSvg(
-                modelTypeIconProps[model.type]?.name as string,
-              )}
+              xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
               width={'100%'}
               height={'65%'}
               color={theme.colors.brandSecondary}
@@ -213,7 +209,7 @@ export const Front = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
     width: '100%',
@@ -258,8 +254,8 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     color: theme.colors.lightGray,
   },
   achievementCount: {
-    ...theme.styles.textNormal,
-    ...theme.styles.textBold,
+    ...theme.text.normal,
+    fontFamily: theme.fonts.bold,
     position: 'absolute',
   },
   textContainer: {
@@ -267,13 +263,13 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     top: 12,
   },
   title: {
-    ...theme.styles.textHeading2,
+    ...theme.text.h2,
     color: theme.colors.darkGray,
     marginTop: -2,
     marginBottom: 7,
   },
   text: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     color: theme.colors.darkGray,
     marginBottom: 5,
   },

@@ -1,17 +1,16 @@
-import Animated, { SlideInUp } from 'react-native-reanimated';
-import { AppTheme, useTheme } from 'theme';
+import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { useLocationSummary } from 'lib/location';
+import { ChevronRight, MapPin } from 'lucide-react-native';
+import React, { forwardRef, useState } from 'react';
+import { LayoutChangeEvent, Text, View } from 'react-native';
 import {
   Callout,
   MapMarker,
   Marker,
   MarkerDragStartEndEvent,
 } from 'react-native-maps';
-import { LayoutChangeEvent, Text, View } from 'react-native';
-import React, { forwardRef, useState } from 'react';
+import Animated, { SlideInUp } from 'react-native-reanimated';
 import { Location } from 'realmdb';
-import { makeStyles } from '@rn-vui/themed';
-import { useLocationSummary } from 'lib/location';
-import { ChevronRight, MapPin } from 'lucide-react-native';
 
 interface MapMarkerCalloutInterface {
   index: number;
@@ -31,7 +30,7 @@ export const MapMarkerCallout = forwardRef(
     ref: React.LegacyRef<MapMarker> | undefined,
   ) => {
     const theme = useTheme();
-    const s = useStyles(theme);
+    const s = useStyles();
     const locationSummary = useLocationSummary(location);
 
     const [width, setWidth] = useState(0);
@@ -84,7 +83,7 @@ export const MapMarkerCallout = forwardRef(
   },
 );
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   marker: {
     padding: 5,
   },
@@ -108,10 +107,10 @@ const useStyles = makeStyles((_theme, theme: AppTheme) => ({
     opacity: 0,
   },
   calloutText1: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
   },
   calloutText2: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     ...theme.styles.textDim,
   },
   pin: {

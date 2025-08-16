@@ -6,6 +6,7 @@ import {
   ListItem,
   ListItemSwitch,
   ListItemSwitchCollapsible,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -24,7 +25,6 @@ import { BSON } from 'realm';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { Filter } from 'realmdb/Filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { SetupNavigatorParamList } from 'types/navigation';
 

@@ -1,6 +1,10 @@
 import { ellipsis } from '@react-native-hello/core';
-import { ListItem, getColoredSvg } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
+import {
+  ListItem,
+  ThemeManager,
+  getColoredSvg,
+  useTheme,
+} from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import type FlipCardView from 'components/views/FlipCardView';
 import { secondsToFormat } from 'lib/formatters';
@@ -23,7 +27,6 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { Model } from 'realmdb';
-import { AppTheme, useTheme } from 'theme';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
@@ -40,7 +43,7 @@ export const Back = ({
   onPressNewEventSequence,
 }: DinnCardInterface) => {
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const [cardLayout, setCardLayout] = useState<LayoutRectangle>();
 
@@ -65,9 +68,7 @@ export const Back = ({
             />
           ) : (
             <SvgXml
-              xml={getColoredSvg(
-                modelTypeIconProps[model.type]?.name as string,
-              )}
+              xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
               width={cardLayout ? cardLayout.width * 0.33 : 0}
               height={cardLayout ? cardLayout?.width * 0.33 : 0}
               color={theme.colors.whiteTransparentDark}
@@ -157,24 +158,24 @@ export const Back = ({
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
     backgroundColor: theme.colors.darkGray,
     padding: 15,
   },
   title: {
-    ...theme.styles.textHeading2,
+    ...theme.text.h2,
     color: theme.colors.whiteTransparentDark,
   },
   subtitle: {
-    ...theme.styles.textSmall,
+    ...theme.text.small,
     marginTop: 15,
     marginBottom: 5,
     color: theme.colors.whiteTransparentLight,
   },
   text: {
-    ...theme.styles.textNormal,
+    ...theme.text.normal,
     color: theme.colors.whiteTransparentDark,
     lineHeight: 16,
   },

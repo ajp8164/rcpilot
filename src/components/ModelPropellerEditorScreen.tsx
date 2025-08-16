@@ -5,6 +5,7 @@ import {
   KeyboardAccessory,
   KeyboardAccessoryMethods,
   ListItem,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -29,7 +30,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { useTheme } from 'theme';
 import { MeasurementUnits, MeasurementUnitsAbbr } from 'types/common';
 import {
   NewModelPropellerNavigatorParamList,

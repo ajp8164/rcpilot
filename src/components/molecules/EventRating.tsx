@@ -1,8 +1,8 @@
+import { useTheme } from '@react-native-hello/ui';
 import { eventOutcomeIcons } from 'lib/modelEvent';
 import { ReactElement, useEffect, useState } from 'react';
 import React from 'react';
 import { Text } from 'react-native';
-import { useTheme } from 'theme';
 import { EventOutcome } from 'types/event';
 
 interface EventRatingInterface {
@@ -31,13 +31,13 @@ export const EventRating = ({ value }: EventRatingInterface) => {
     } catch (_e: any) {
       if (value === EventOutcome.Crashed) {
         outcomeEl = (
-          <Text key={'crashed'} style={theme.styles.textNormal}>
+          <Text key={'crashed'} style={theme.text.normal}>
             {'Crashed'}
           </Text>
         );
       } else {
         outcomeEl = (
-          <Text key={'unspecified'} style={theme.styles.textNormal}>
+          <Text key={'unspecified'} style={theme.text.normal}>
             {'Unspecified'}
           </Text>
         );

@@ -1,4 +1,9 @@
-import { Divider, ListItem, listItemPosition } from '@react-native-hello/ui';
+import {
+  Divider,
+  ListItem,
+  listItemPosition,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -7,7 +12,6 @@ import { useEvent } from 'lib/event';
 import React, { useEffect, useState } from 'react';
 import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
-import { useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';
 

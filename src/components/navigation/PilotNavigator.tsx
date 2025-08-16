@@ -1,10 +1,10 @@
+import { useTheme } from '@react-native-hello/ui';
 import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import ModelPickerScreen from 'components/ModelPickerScreen';
 import React from 'react';
-import { useTheme } from 'theme';
 import { PilotNavigatorParamList } from 'types/navigation';
 
 const PilotStack = createNativeStackNavigator<PilotNavigatorParamList>();
@@ -17,7 +17,9 @@ const PilotNavigator = () => {
   return (
     <PilotStack.Navigator
       screenOptions={{
-        headerStyle: { backgroundColor: theme.colors.screenHeaderBackground },
+        headerStyle: {
+          backgroundColor: theme.colors.screenHeaderBackground,
+        },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>

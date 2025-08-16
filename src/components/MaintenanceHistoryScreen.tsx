@@ -4,12 +4,13 @@ import {
   ListEditorMethods,
   ListEditorState,
   ListItemSwipeable,
+  ThemeManager,
   listItemPosition,
   useListEditor,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { actionScheduleState } from 'lib/checklist';
@@ -25,7 +26,6 @@ import { BSON } from 'realm';
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { AppTheme, useTheme } from 'theme';
 import { ChecklistType } from 'types/checklist';
 import { FilterType } from 'types/filter';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -44,7 +44,7 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const { modelId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
@@ -222,7 +222,7 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

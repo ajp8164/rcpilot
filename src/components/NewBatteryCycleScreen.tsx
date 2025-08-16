@@ -7,12 +7,13 @@ import {
   ListItem,
   ListItemInputMethods,
   ListItemSegmented,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { ListItemSwitch } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
@@ -23,7 +24,7 @@ import {
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
-import { batteryIsCharged, batteryTintIcons } from 'lib/battery';
+import { batteryIsCharged, batteryTintIconProps } from 'lib/battery';
 import { batteryCycleSummary } from 'lib/batteryCycle';
 import { useEvent } from 'lib/event';
 import { MSSToSeconds } from 'lib/formatters';
@@ -43,7 +44,6 @@ import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { toNumber } from 'realmdb/helpers';
-import { AppTheme, useTheme } from 'theme';
 import { BatteryTint } from 'types/battery';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
 
@@ -90,7 +90,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   const { batteryIds } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const event = useEvent();
   const realm = useRealm();
 
@@ -429,7 +429,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
           ...s.batteryTint,
           borderLeftColor:
             battery.tint !== BatteryTint.None
-              ? batteryTintIcons[battery.tint]?.color
+              ? batteryTintIconProps[battery.tint]?.color
               : theme.colors.transparent,
         }}
         leftContent={
@@ -704,7 +704,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   batteryTint: {
     borderLeftWidth: 8,
   },

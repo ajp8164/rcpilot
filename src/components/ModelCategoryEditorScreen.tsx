@@ -3,6 +3,7 @@ import {
   Divider,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -17,7 +18,6 @@ import React, { useRef, useState } from 'react';
 import { Keyboard, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
 import { ModelCategory } from 'realmdb/ModelCategory';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 // CompositeScreenProps not working here since NewModelCategory is also in the SetupNavigator

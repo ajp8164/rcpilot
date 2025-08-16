@@ -3,6 +3,7 @@ import {
   ListEditor,
   ListEditorMethods,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
@@ -18,7 +19,6 @@ import { BSON } from 'realm';
 import { Pilot } from 'realmdb/Pilot';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { saveSelectedPilot } from 'store/slices/pilot';
-import { useTheme } from 'theme';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilots'>;

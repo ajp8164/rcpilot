@@ -14,7 +14,7 @@ module.exports = {
           config: './src/config/',
           components: './src/components/',
           firebase: './src/firebase/',
-          img: './src/theme/img/',
+          images: './src/images/',
           lib: './src/lib/',
           realmdb: './src/realmdb/',
           store: './src/store/',

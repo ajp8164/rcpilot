@@ -4,11 +4,12 @@ import {
   ListEditorMethods,
   ListEditorState,
   ListItemSwipeable,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
@@ -31,7 +32,6 @@ import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { AppTheme, useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 
@@ -49,7 +49,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   const { batteryId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
@@ -144,7 +144,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         key={cycle._id.toString()}
         title={batteryCycleTitle(cycle)}
         subtitle={batteryCycleDescription(cycle)}
-        subtitleStyle={[theme.styles.textTiny, theme.styles.textDim]}
+        subtitleStyle={[theme.text.tiny, theme.styles.textDim]}
         subtitleLines={3}
         position={listItemPosition(index, section.data.length)}
         rightContent={'chevron-right'}
@@ -224,7 +224,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

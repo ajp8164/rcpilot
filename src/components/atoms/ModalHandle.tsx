@@ -1,16 +1,14 @@
-import { makeStyles } from '@rn-vui/themed';
+import { ThemeManager } from '@react-native-hello/ui';
 import React from 'react';
 import { View } from 'react-native';
-import { AppTheme, useTheme } from 'theme';
 
 export const ModalHandle = () => {
-  const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   return <View style={s.view} />;
 };
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   view: {
     height: 7,
   },

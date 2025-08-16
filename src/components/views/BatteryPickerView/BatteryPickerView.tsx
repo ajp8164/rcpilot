@@ -1,14 +1,16 @@
+import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
 import { useSetState } from '@react-native-hello/core';
 import {
   Divider,
   ListItemCheckBox,
+  ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
-import { makeStyles } from '@rn-vui/themed';
 import {
   batteryIsCharged,
   batterySummary,
-  batteryTintIcons,
+  batteryTintIconProps,
 } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
@@ -20,10 +22,7 @@ import {
   SectionListRenderItem,
 } from 'react-native';
 import { Battery } from 'realmdb/Battery';
-import { AppTheme, useTheme } from 'theme';
 import { BatteryTint } from 'types/battery';
-
-import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
 
 type Section = {
   title?: string;
@@ -39,7 +38,7 @@ const BatteryPickerView = React.forwardRef<
   const { batteries, favoriteBatteries, mode, selected, onSelect } = props;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const [list, setList] = useSetState<{
     selected: Battery[];
@@ -120,7 +119,7 @@ const BatteryPickerView = React.forwardRef<
           ...s.batteryTint,
           borderLeftColor:
             battery.tint !== BatteryTint.None
-              ? batteryTintIcons[battery.tint]?.color
+              ? batteryTintIconProps[battery.tint]?.color
               : theme.colors.transparent,
         }}
         position={listItemPosition(index, section.data.length)}
@@ -163,7 +162,7 @@ const BatteryPickerView = React.forwardRef<
   );
 });
 
-const useStyles = makeStyles((_theme, __theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
     width: '100%',

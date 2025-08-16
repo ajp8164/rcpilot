@@ -8,12 +8,13 @@ import {
   ListEditorState,
   ListItem,
   ListItemSwipeable,
+  ThemeManager,
   getColoredSvg,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
-import { makeStyles } from '@rn-vui/themed';
 import { ModelPickerResult } from 'components/ModelPickerScreen';
 import { Button } from 'components/atoms/Button';
 import {
@@ -50,7 +51,6 @@ import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
 import { Pilot } from 'realmdb/Pilot';
-import { AppTheme, useTheme } from 'theme';
 import { FilterType } from 'types/filter';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -69,7 +69,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   const { pilotId } = route.params;
 
   const theme = useTheme();
-  const s = useStyles(theme);
+  const s = useStyles();
 
   const event = useEvent();
   const realm = useRealm();
@@ -277,9 +277,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
             ) : (
               <View style={s.modelSvgContainer}>
                 <SvgXml
-                  xml={getColoredSvg(
-                    modelTypeIconProps[model.type]?.name as string,
-                  )}
+                  xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
                   width={s.modelImage.width}
                   height={s.modelImage.height}
                   color={theme.colors.brandSecondary}
@@ -488,7 +486,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = makeStyles((_theme, theme: AppTheme) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   favoriteModelsList: {
     overflow: 'visible',
   },

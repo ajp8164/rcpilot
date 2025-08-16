@@ -27,7 +27,13 @@ declare module '@react-native-hello/ui' {
     switchOnTrack: string;
   }
 
-  interface IFonts {}
+  interface IFonts {
+    SFUITextRegular: string;
+    SFUITextBold: string;
+    SFUITextLight: string;
+    SFUITextMedium: string;
+    SFUITextSemiBold: string;
+  }
 
   interface IFontSizes {
     giant: number;

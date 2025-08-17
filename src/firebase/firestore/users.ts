@@ -1,9 +1,3 @@
-import firestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
-import { log } from '@react-native-hello/core';
-import { UserProfile } from 'types/user';
-
 import {
   CollectionChangeListenerOptions,
   QueryOrderBy,
@@ -14,6 +8,12 @@ import {
   getDocument,
   getDocuments,
 } from './index';
+import { getApp } from '@react-native-firebase/app';
+import getFirestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import { log } from '@react-native-hello/core';
+import { UserProfile } from 'types/user';
 
 export const getUser = (id: string): Promise<UserProfile | undefined> => {
   return getDocument('Users', id);
@@ -43,11 +43,14 @@ export const getUsers = (opts?: {
 };
 
 export const addUser = (user: UserProfile): Promise<UserProfile> => {
+  const app = getApp();
+  const firestore = getFirestore(app);
+
   const added = Object.assign({}, user); // Don't mutate input.
   const id = added.id;
   delete added.id; // Not storing the doc id in the object.
   return (
-    firestore()
+    firestore
       .collection('Users')
       .doc(id)
       .set(user)
@@ -63,11 +66,14 @@ export const addUser = (user: UserProfile): Promise<UserProfile> => {
 };
 
 export const updateUser = (user: UserProfile): Promise<UserProfile> => {
+  const app = getApp();
+  const firestore = getFirestore(app);
+
   const updated = Object.assign({}, user); // Don't mutate input.
   const id = updated.id;
   delete updated.id; // Not storing the doc id in the object.
   return (
-    firestore()
+    firestore
       .collection('Users')
       .doc(id)
       .update(updated)
@@ -83,8 +89,10 @@ export const updateUser = (user: UserProfile): Promise<UserProfile> => {
 };
 
 export const deleteUser = (id: string): Promise<void> => {
+  const app = getApp();
+  const firestore = getFirestore(app);
   return (
-    firestore()
+    firestore
       .collection('Users')
       .doc(id)
       .delete()

@@ -1,5 +1,10 @@
 import { useAuthorizeUser } from './userAuthorization';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { getApp } from '@react-native-firebase/app';
+import {
+  FirebaseAuthTypes,
+  getAuth,
+  onAuthStateChanged,
+} from '@react-native-firebase/auth';
 import { SignInModalMethods } from 'components/modals/SignInModal';
 import { appConfig } from 'config';
 import lodash from 'lodash';
@@ -29,12 +34,15 @@ export const AuthContext = createContext<AuthContext>({
 export const useAuthContext = (
   signInModalRef: React.RefObject<SignInModalMethods | null>,
 ): AuthContext => {
+  const app = getApp();
+  const auth = getAuth(app);
+
   const authorizeUser = useAuthorizeUser();
   const authorizeUserDebounced = useRef(lodash.debounce(authorizeUser, 200));
   const user = useSelector(selectUser);
 
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(credentials => {
+    const unsubscribe = onAuthStateChanged(auth, credentials => {
       // This handler is called multiple times. Avoid more than one authorization.
       // See https://stackoverflow.com/a/40436769
       if (isReAuthenticationRequired(user.credentials)) {

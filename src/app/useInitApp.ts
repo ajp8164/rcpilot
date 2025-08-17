@@ -7,14 +7,15 @@ import { appConfig } from 'config';
 import { svgImages } from 'images';
 import { useAchievementConveyor } from 'lib/achievement';
 import { AppError } from 'lib/errors';
-// import firestore from '@react-native-firebase/firestore';
+// import { getApp } from '@react-native-firebase/app';
+// import getFirebase } from '@react-native-firebase/firebase';
+// import getFirestore } from '@react-native-firebase/firestore';
+// import getStorage } from '@react-native-firebase/storage';
 import { initPushNotifications } from 'lib/notifications';
 import { useUnknownPilot } from 'lib/pilot';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useDeviceShake } from 'lib/useDeviceShake';
 import { BackHandler } from 'react-native';
-
-// import storage from '@react-native-firebase/storage';
 
 export enum InitStatus {
   NotAuthorized = 'NotAuthorized',
@@ -35,10 +36,14 @@ export const useInitApp = () => {
     try {
       // Initialize firestore for dev as necessary.
       if (__DEV__) {
-        // firestore().useEmulator('10.6.9.64', 8080);
-        // storage().useEmulator('10.6.9.64', 9199);
+        // const app = getApp();
+        // const firebase = getFirebase(app);
+        // const firestore = getFirestore(app);
+        // const storage = getStorage(app);
+        // firebase.useEmulator('10.6.9.64', 8080);
+        // storage.useEmulator('10.6.9.64', 9199);
         // console.log('Firestore emulator running at 10.6.9.100:8080');
-        // firestore().clearPersistence();
+        // firestore.clearPersistence();
       }
 
       // Disable Android hardware back button.

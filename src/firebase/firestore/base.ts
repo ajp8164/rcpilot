@@ -1,9 +1,11 @@
 import { log } from '@react-native-hello/core';
-import firestore, {
+import {
+  getFirestore,
   FirebaseFirestoreTypes,
 } from '@react-native-firebase/firestore';
 import { addFirestoreSubscription } from './subscriptions';
 import { UserRole } from 'types/user';
+import { getApp } from '@react-native-firebase/app';
 
 export type ListenerAuth = {
   allowedRoles?: UserRole[];
@@ -45,8 +47,11 @@ export const getDocument = <T>(
   collectionPath: string,
   id: string,
 ): Promise<T | undefined> => {
+  const app = getApp();
+  const firestore = getFirestore(app);
+
   return (
-    firestore()
+    firestore
       .collection(collectionPath)
       .doc(id)
       .get()
@@ -88,7 +93,10 @@ export const getDocuments = <T extends { id?: string | undefined }>(
     where,
     fromCache,
   } = opts || {};
-  let query = firestore().collection(collectionPath);
+  const app = getApp();
+  const firestore = getFirestore(app);
+
+  let query = firestore.collection(collectionPath);
 
   if (where) {
     where.forEach(w => {
@@ -143,7 +151,9 @@ export const getDocuments = <T extends { id?: string | undefined }>(
 };
 
 export const getDocumentCount = (collectionPath: string): Promise<number> => {
-  return firestore()
+  const app = getApp();
+  const firestore = getFirestore(app);
+  return firestore
     .collection(collectionPath)
     .count()
     .get()
@@ -161,6 +171,8 @@ export const collectionChangeListener = (
 ): (() => void) => {
   const { lastDocument, limit, orderBy, where, subCollection, auth } =
     opts || {};
+  const app = getApp();
+  const firestore = getFirestore(app);
 
   // If not allowed then just return an empty (subscription) function.
   if (auth) {
@@ -176,7 +188,7 @@ export const collectionChangeListener = (
     }
   }
 
-  let query = firestore().collection(collectionPath);
+  let query = firestore.collection(collectionPath);
 
   if (subCollection) {
     query = query
@@ -237,7 +249,10 @@ export const documentChangeListener = (
     snapshot: FirebaseFirestoreTypes.DocumentSnapshot<FirebaseFirestoreTypes.DocumentData>,
   ) => void,
 ): (() => void) => {
-  const subscription = firestore()
+  const app = getApp();
+  const firestore = getFirestore(app);
+
+  const subscription = firestore
     .collection(collectionPath)
     .doc(documentPath)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,4 +1,5 @@
-import storage from '@react-native-firebase/storage';
+import { getApp } from '@react-native-firebase/app';
+import { getStorage } from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 
 export type File = {
@@ -25,8 +26,11 @@ export const listFiles = async (args: {
   onError?: () => void;
 }) => {
   const { storagePath, onSuccess, onError } = args;
+
+  const app = getApp();
+  const storage = getStorage(app);
   try {
-    const storageRef = storage().ref(storagePath);
+    const storageRef = storage.ref(storagePath);
 
     try {
       let allocated = 0;

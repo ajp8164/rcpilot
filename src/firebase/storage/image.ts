@@ -1,4 +1,5 @@
-import storage from '@react-native-firebase/storage';
+import { getApp } from '@react-native-firebase/app';
+import { getStorage } from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 import { uuidv4 } from 'lib/utils';
 
@@ -24,11 +25,14 @@ export const uploadImage = async (args: {
   onError: () => void;
 }) => {
   const { image, storagePath, oldImage, onSuccess, onError } = args;
+  const app = getApp();
+  const storage = getStorage(app);
+
   try {
     const imageType = image.mimeType.split('/')[1];
     const destFilename = `${storagePath}${uuidv4()}.${imageType}`;
     const sourceFilename = image.uri.replace('file://', '');
-    const storageRef = storage().ref(destFilename);
+    const storageRef = storage.ref(destFilename);
 
     try {
       await storageRef.putFile(sourceFilename).catch(() => {
@@ -61,11 +65,14 @@ export const deleteImage = async (args: {
   onSuccess?: () => void;
   onError?: () => void;
 }) => {
+  const app = getApp();
+  const storage = getStorage(app);
+
   const { filename, onError, onSuccess, storagePath } = args;
   const filenameRef = `${storagePath}${
     filename.replace(/%2F/g, '/').split('/').pop()?.split('#')[0].split('?')[0]
   }`;
-  await storage()
+  await storage
     .ref(filenameRef)
     .delete()
     .then(() => onSuccess && onSuccess())

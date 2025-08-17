@@ -1,5 +1,16 @@
 import { appleAuth } from '@invertase/react-native-apple-authentication';
-import auth from '@react-native-firebase/auth';
+import { getApp } from '@react-native-firebase/app';
+import {
+  AppleAuthProvider,
+  createUserWithEmailAndPassword as FBCreateUserWithEmailAndPassword,
+  sendPasswordResetEmail as FBSendPasswordResetEmail,
+  signOut as FBSignOut,
+  FacebookAuthProvider,
+  GoogleAuthProvider,
+  getAuth,
+  signInWithCredential,
+  signInWithEmailAndPassword,
+} from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { log } from '@react-native-hello/core';
 // import { NativeModules } from 'react-native';
@@ -10,6 +21,8 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 // const { RNTwitterSignIn } = NativeModules;
 
 export const signInWithApple = async () => {
+  const app = getApp();
+  const auth = getAuth(app);
   try {
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGIN,
@@ -21,11 +34,8 @@ export const signInWithApple = async () => {
       throw new Error('No identify token returned');
     }
     const { identityToken, nonce } = appleAuthRequestResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(
-      identityToken,
-      nonce,
-    );
-    const userCredential = await auth().signInWithCredential(appleCredential);
+    const appleCredential = AppleAuthProvider.credential(identityToken, nonce);
+    const userCredential = await signInWithCredential(auth, appleCredential);
     const name = appleAuthRequestResponse.fullName;
     userCredential.user = {
       ...userCredential.user,
@@ -50,6 +60,8 @@ export const signInWithApple = async () => {
 };
 
 export const signInWithFacebook = async () => {
+  const app = getApp();
+  const auth = getAuth(app);
   try {
     const result = await LoginManager.logInWithPermissions([
       'public_profile',
@@ -62,10 +74,10 @@ export const signInWithFacebook = async () => {
     if (!data) {
       throw new Error('Something went wrong obtaining access token');
     }
-    const facebookCredential = auth.FacebookAuthProvider.credential(
+    const facebookCredential = FacebookAuthProvider.credential(
       data.accessToken,
     );
-    return await auth().signInWithCredential(facebookCredential);
+    return await signInWithCredential(auth, facebookCredential);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (!e.message.includes('canceled')) {
@@ -79,6 +91,9 @@ export const signInWithFacebook = async () => {
 
 export const signInWithGoogle = async () => {
   try {
+    const app = getApp();
+    const auth = getAuth(app);
+
     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
     // Need to have debug keystore SHA1 in Firebase console.
@@ -87,8 +102,8 @@ export const signInWithGoogle = async () => {
 
     const { data } = await GoogleSignin.signIn();
     if (data) {
-      const googleCredential = auth.GoogleAuthProvider.credential(data.idToken);
-      return auth().signInWithCredential(googleCredential);
+      const googleCredential = GoogleAuthProvider.credential(data.idToken);
+      return signInWithCredential(auth, googleCredential);
     }
     throw 'No sign in data returned';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -134,8 +149,9 @@ export const signInwithEmailAndPassword = async (
   email: string,
   password: string,
 ) => {
-  return await auth()
-    .signInWithEmailAndPassword(email, password)
+  const app = getApp();
+  const auth = getAuth(app);
+  return await signInWithEmailAndPassword(auth, email, password)
     .then(() => {
       // Success
     })
@@ -155,12 +171,14 @@ export const signInwithEmailAndPassword = async (
 };
 
 export const signOut = async () => {
+  const app = getApp();
+  const auth = getAuth(app);
   try {
     const userProfile = await preSignOutActions();
 
     // Sign out here results in an event to auth().onAuthStateChanged() with null credentials.
     LoginManager.logOut();
-    await auth().signOut();
+    await FBSignOut(auth);
 
     log.debug(`User sign out complete: ${JSON.stringify(userProfile)}`);
 
@@ -172,9 +190,11 @@ export const signOut = async () => {
   }
 };
 
-export const sendPasswordResetEmail = async (email: string) => {
+export const sendPasswordResetEmailx = async (email: string) => {
+  const app = getApp();
+  const auth = getAuth(app);
   try {
-    return await auth().sendPasswordResetEmail(email);
+    return await FBSendPasswordResetEmail(auth, email);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.message.includes('auth/user-not-found')) {
@@ -193,14 +213,16 @@ export const createUserWithEmailAndPassword = async (
   email: string,
   password: string,
 ) => {
+  const app = getApp();
+  const auth = getAuth(app);
   try {
-    return await auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(async user => {
+    return await FBCreateUserWithEmailAndPassword(auth, email, password).then(
+      async user => {
         await user.user.updateProfile({
           displayName: `${firstName} ${lastName}`,
         });
-      });
+      },
+    );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     if (e.message.includes('auth/email-already-exists')) {

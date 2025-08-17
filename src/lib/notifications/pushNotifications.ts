@@ -1,5 +1,18 @@
 import notifee from '@notifee/react-native';
-import messaging from '@react-native-firebase/messaging';
+import { getApp } from '@react-native-firebase/app';
+import {
+  AuthorizationStatus,
+  subscribeToTopic as FBSubscribeToTopic,
+  unsubscribeFromTopic as FBUnsubscribeFromTopic,
+  getAPNSToken,
+  getMessaging,
+  getToken,
+  hasPermission,
+  isDeviceRegisteredForRemoteMessages,
+  registerDeviceForRemoteMessages,
+  requestPermission,
+  setAPNSToken,
+} from '@react-native-firebase/messaging';
 import { log } from '@react-native-hello/core';
 import { updateUser } from 'firebase/firestore';
 import lodash from 'lodash';
@@ -15,45 +28,54 @@ export type PushNotificationToken = {
 export type MessagingTopic = 'all-installs' | 'all-users';
 
 export const initPushNotifications = () => {
-  messaging()
-    .requestPermission()
-    .then(async permission => {
-      // Need to fetch token before subscribing to topic.
-      const token = await getDeviceToken();
-      subscribeToTopic('all-installs');
+  const app = getApp();
+  const messaging = getMessaging(app);
 
-      log.debug(`Push notifications permission: ${permission}`);
-      log.debug(`Push notifications token: ${JSON.stringify(token)}`);
-    });
+  requestPermission(messaging).then(async permission => {
+    // Need to fetch token before subscribing to topic.
+    const token = await getDeviceToken();
+    subscribeToTopic('all-installs');
+
+    log.debug(`Push notifications permission: ${permission}`);
+    log.debug(`Push notifications token: ${JSON.stringify(token)}`);
+  });
 };
 
 export const subscribeToTopic = (name: MessagingTopic) => {
-  messaging().subscribeToTopic(name);
+  const app = getApp();
+  const messaging = getMessaging(app);
+  FBSubscribeToTopic(messaging, name);
 };
 
 export const unsubscribeFromTopic = (name: MessagingTopic) => {
-  messaging().unsubscribeFromTopic(name);
+  const app = getApp();
+  const messaging = getMessaging(app);
+  FBUnsubscribeFromTopic(messaging, name);
 };
 
 const getDeviceToken = async (): Promise<PushNotificationToken> => {
+  const app = getApp();
+  const messaging = getMessaging(app);
   if (await isEmulator()) {
     // Running on the iOS simulator will produce an error. Setting a bogus value here avoids the error.
     // See https://github.com/invertase/react-native-firebase/issues/6893
-    await messaging().setAPNSToken('bogus');
+    await setAPNSToken(messaging, 'bogus');
   }
 
-  if (!messaging().isDeviceRegisteredForRemoteMessages) {
-    await messaging().registerDeviceForRemoteMessages();
+  if (!isDeviceRegisteredForRemoteMessages(messaging)) {
+    await registerDeviceForRemoteMessages(messaging);
   }
 
-  const fcm = await messaging().getToken();
-  const apns = await messaging().getAPNSToken();
+  const fcm = await getToken(messaging);
+  const apns = await getAPNSToken(messaging);
   return { fcm, apns };
 };
 
 export const hasPushNotificationsPermission = async () => {
-  const authStatus = await messaging().hasPermission();
-  return authStatus === messaging.AuthorizationStatus.AUTHORIZED;
+  const app = getApp();
+  const messaging = getMessaging(app);
+  const authStatus = await hasPermission(messaging);
+  return authStatus === AuthorizationStatus.AUTHORIZED;
 };
 
 export const setupPushNotificationsForUser = async (

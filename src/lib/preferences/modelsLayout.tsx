@@ -1,6 +1,6 @@
+import { ThemeManager } from '@react-native-hello/ui';
 import { EnumPickerIconProps } from 'components/EnumPickerScreen';
 import { GalleryHorizontalEnd, Images, LayoutList } from 'lucide-react-native';
-import { theme } from 'theme';
 import { ModelsLayout } from 'types/preferences';
 
 export const modelsLayoutIcons: { [key in ModelsLayout]: EnumPickerIconProps } =
@@ -8,37 +8,19 @@ export const modelsLayoutIcons: { [key in ModelsLayout]: EnumPickerIconProps } =
     [ModelsLayout.CardDeck]: {
       leftContent: (
         <GalleryHorizontalEnd
-          color={
-            theme.mode === 'light'
-              ? theme.lightColors?.listItemIcon
-              : theme.darkColors?.listItemIcon
-          }
+          color={ThemeManager.theme.colors.listItemIcon}
           size={33}
         />
       ),
     },
     [ModelsLayout.List]: {
       leftContent: (
-        <LayoutList
-          color={
-            theme.mode === 'light'
-              ? theme.lightColors?.listItemIcon
-              : theme.darkColors?.listItemIcon
-          }
-          size={33}
-        />
+        <LayoutList color={ThemeManager.theme.colors.listItemIcon} size={33} />
       ),
     },
     [ModelsLayout.PostCards]: {
       leftContent: (
-        <Images
-          color={
-            theme.mode === 'light'
-              ? theme.lightColors?.listItemIcon
-              : theme.darkColors?.listItemIcon
-          }
-          size={33}
-        />
+        <Images color={ThemeManager.theme.colors.listItemIcon} size={33} />
       ),
     },
   };

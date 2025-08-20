@@ -69,7 +69,7 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
             buttonStyle={theme.styles.buttonScreenHeader}
             headerRight
             icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
             }
             onPress={() =>
               generalReportEventsFilter &&

@@ -150,7 +150,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 disabled={listEditorState?.enabled}
                 headerRight
                 icon={
-                  <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+                  <Plus color={theme.colors.screenHeaderButtonText} size={28} />
                 }
                 onPress={addBattery}
               />

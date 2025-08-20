@@ -104,23 +104,25 @@ const LogScreen = ({ navigation }: Props) => {
         return (
           <View style={s.arrowsContainer}>
             <Button
+              buttonStyle={theme.styles.buttonScreenHeader}
+              headerRight
               icon={
                 <ChevronLeft
                   color={theme.colors.screenHeaderButtonText}
                   size={33}
                 />
               }
-              buttonStyle={theme.styles.buttonScreenHeader}
               onPress={() => subtractMonth()}
             />
             <Button
+              buttonStyle={theme.styles.buttonScreenHeader}
+              headerRight
               icon={
                 <ChevronRight
                   color={theme.colors.screenHeaderButtonText}
                   size={33}
                 />
               }
-              buttonStyle={theme.styles.buttonScreenHeader}
               onPress={() => addMonth()}
             />
           </View>

@@ -52,7 +52,7 @@ const PilotsScreen = ({ navigation }: Props) => {
             buttonStyle={theme.styles.buttonScreenHeader}
             headerRight
             icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
             }
             onPress={() => navigation.navigate('NewPilot')}
           />

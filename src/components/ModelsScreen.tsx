@@ -146,7 +146,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 disabled={!!activeModels.length && listEditorState?.enabled}
                 headerRight
                 icon={
-                  <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+                  <Plus color={theme.colors.screenHeaderButtonText} size={28} />
                 }
                 onPress={() =>
                   navigation.navigate('NewModelNavigator', {

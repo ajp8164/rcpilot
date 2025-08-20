@@ -445,7 +445,7 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
                       icon={
                         <Plus
                           color={theme.colors.screenHeaderButtonText}
-                          size={33}
+                          size={28}
                         />
                       }
                       onPress={() =>

@@ -108,7 +108,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<BookOpen color={theme.colors.screenHeaderButtonText} />}
+            headerRight
+            icon={
+              <BookOpen color={theme.colors.screenHeaderButtonText} size={28} />
+            }
             onPress={() =>
               navigation.navigate('Locations', { eventName: 'map-location' })
             }
@@ -343,29 +346,29 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           {
             ActionComponent:
               recenterButtonState === RecenterButtonState.Initial ? (
-                <Navigation color={theme.colors.clearButtonText} />
+                <Navigation color={theme.colors.clearButtonText} size={28} />
               ) : recenterButtonState ===
                 RecenterButtonState.CurrentLocation ? (
-                <MapPinned color={theme.colors.clearButtonText} />
+                <MapPinned color={theme.colors.clearButtonText} size={28} />
               ) : (
                 <View style={s.northUp}>
-                  <Navigation2 color={theme.colors.white} size={18} />
+                  <Navigation2 color={theme.colors.white} size={28} />
                 </View>
               ),
             onPress: () => changeRecenter(currentPosition.coords),
           },
           {
             ActionComponent: (
-              <MapPinPlus color={theme.colors.clearButtonText} />
+              <MapPinPlus color={theme.colors.clearButtonText} size={28} />
             ),
             onPress: addLocation,
           },
           {
             ActionComponent:
               mapPresentation === 'standard' ? (
-                <Map color={theme.colors.clearButtonText} />
+                <Map color={theme.colors.clearButtonText} size={28} />
               ) : (
-                <Satellite color={theme.colors.clearButtonText} />
+                <Satellite color={theme.colors.clearButtonText} size={28} />
               ),
             onPress: toggleMapPresenation,
           },

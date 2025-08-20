@@ -1,4 +1,3 @@
-import { ThemeManager } from '@react-native-hello/ui';
 import React, { ReactNode } from 'react';
 import {
   FlatList,
@@ -9,6 +8,8 @@ import {
   Text,
   View,
 } from 'react-native';
+
+import { ThemeManager } from '@react-native-hello/ui';
 
 const buttonSize = 44;
 
@@ -87,7 +88,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     minWidth: buttonSize,
     height: buttonSize,
     justifyContent: 'center',
-    marginTop: -device.insets.bottom,
+    marginTop: -device.insets.bottom + 10,
   },
   actionContainerStart: {
     paddingLeft: 15,
@@ -104,7 +105,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   },
   label: {
     ...theme.text.normal,
-    color: theme.colors.clearButtonText,
+    color: theme.colors.screenHeaderButtonText,
   },
 }));
 

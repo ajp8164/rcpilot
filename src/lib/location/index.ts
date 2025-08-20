@@ -1,4 +1,4 @@
 export * from './distanceBetweenLocations';
-export * from './GeoPositionContext';
+export * from './GeoPositionProvider';
 export * from './useCurrentLocation';
 export * from './useLocationSummary';

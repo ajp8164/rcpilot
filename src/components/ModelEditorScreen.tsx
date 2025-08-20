@@ -1,18 +1,25 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import Animated, {
+  useAnimatedScrollHandler,
+  useSharedValue,
+} from 'react-native-reanimated';
+import { useDispatch } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
 import {
+  CollapsibleView,
   Divider,
   InputMethods,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
-  ListItemInputMethods,
-  useTheme,
-} from '@react-native-hello/ui';
-import {
-  CollapsibleView,
   ListItem,
   ListItemDateTime,
+  ListItemInputMethods,
   ListItemSwitch,
   ListItemSwitchCollapsible,
+  useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { useFocusEffect } from '@react-navigation/native';
@@ -34,7 +41,6 @@ import {
   modelEventOutcomeStatistics,
   useModelEventStyleStatistics,
 } from 'lib/analytics';
-import { useEvent } from 'lib/event';
 import { hmsMaskToSeconds, secondsToFormat } from 'lib/formatters';
 import { Masks } from 'lib/inputMasks';
 import { modelHasPropeller, modelTypeIcons } from 'lib/model';
@@ -42,14 +48,6 @@ import { eventKind } from 'lib/modelEvent';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from 'react-native-reanimated';
-import { useDispatch } from 'react-redux';
 import { BSON } from 'realm';
 import { Battery, toPlainArray } from 'realmdb';
 import { EventStyle } from 'realmdb/EventStyle';
@@ -67,6 +65,7 @@ import {
   ModelsNavigatorParamList,
   NewModelNavigatorParamList,
 } from 'types/navigation';
+import * as Yup from 'yup';
 
 // Order of fields for accessory view.
 enum Fields {

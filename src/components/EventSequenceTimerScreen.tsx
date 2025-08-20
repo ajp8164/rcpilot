@@ -1,40 +1,3 @@
-import {
-  Divider,
-  ListItem,
-  ListItemSwitch,
-  SwipeButton,
-  ThemeManager,
-  WheelPicker,
-  WheelPickerItem,
-  getColoredSvg,
-  listItemPosition,
-  useDevice,
-  useTheme,
-} from '@react-native-hello/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useObject, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
-import { EmptyView } from 'components/molecules/EmptyView';
-import {
-  batteryPerformanceWithModel,
-  fuelCapacityPerformanceWithModel,
-} from 'lib/analytics';
-import { useEvent } from 'lib/event';
-import { secondsToFormat } from 'lib/formatters';
-import { modelHasChecklists, modelTypeIconProps } from 'lib/model';
-import { eventKind } from 'lib/modelEvent';
-import { useConfirmAction } from 'lib/useConfirmAction';
-import { useTimer } from 'lib/useTimer';
-import {
-  BatteryFull,
-  BatteryLow,
-  CircleCheck,
-  CirclePause,
-  CirclePlay,
-  CircleStop,
-  Fuel,
-  TriangleAlert,
-} from 'lucide-react-native';
 import React, {
   ReactElement,
   ReactNode,
@@ -65,6 +28,44 @@ import Animated, {
 } from 'react-native-reanimated';
 import { SvgXml } from 'react-native-svg';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
+import {
+  Divider,
+  ListItem,
+  ListItemSwitch,
+  SwipeButton,
+  ThemeManager,
+  WheelPicker,
+  WheelPickerItem,
+  getColoredSvg,
+  listItemPosition,
+  useDevice,
+  useTheme,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useObject, useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import {
+  batteryPerformanceWithModel,
+  fuelCapacityPerformanceWithModel,
+} from 'lib/analytics';
+import { secondsToFormat } from 'lib/formatters';
+import { modelHasChecklists, modelTypeIconProps } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { useConfirmAction } from 'lib/useConfirmAction';
+import { useTimer } from 'lib/useTimer';
+import {
+  BatteryFull,
+  BatteryLow,
+  CircleCheck,
+  CirclePause,
+  CirclePlay,
+  CircleStop,
+  Fuel,
+  TriangleAlert,
+} from 'lucide-react-native';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Model } from 'realmdb/Model';

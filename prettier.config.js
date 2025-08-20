@@ -5,11 +5,27 @@ const config = {
   semi: true,
   singleQuote: true,
   trailingComma: 'all',
-  // importOrder: ['^@core/(.*)$', '^@server/(.*)$', '^@ui/(.*)$', '^[./]'],
-  importOrderSeparation: true,
-  importOrderSortSpecifiers: true,
-  importOrderGroupNamespaceSpecifiers: true,
-  plugins: ['@trivago/prettier-plugin-sort-imports'],
+  plugins: ['@ianvs/prettier-plugin-sort-imports'],
+  // @ianvs/prettier-plugin-sort-imports plugin options
+  importOrder: [
+    '^react',
+    '^react-native',
+    '',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^[.]',
+  ],
+  importOrderParserPlugins: ['typescript', 'jsx'],
+  importOrderTypeScriptVersion: '5.0.0',
+  importOrderCaseSensitive: true,
+  overrides: [
+    {
+      files: ['index.js'],
+      options: {
+        importOrder: [],
+      },
+    },
+  ],
 };
 
 export default config;

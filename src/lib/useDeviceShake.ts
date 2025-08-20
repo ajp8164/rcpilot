@@ -1,15 +1,15 @@
-import { log } from '@react-native-hello/core';
-import { useEvent } from 'lib/event';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { accelerometer } from 'react-native-sensors';
+
+import { log, useEvent } from '@react-native-hello/core';
 import { filter, map } from 'rxjs/operators';
 
 const SHAKE_THRESHOLD = 26;
 const MIN_TIME_BETWEEN_SHAKES_MILLISECS = 1000;
 
 export const useDeviceShake = () => {
-  const [lastShakeTime, setLastShakeTime] = useState(0);
-  const [sensorAvailable, setSensorAvailable] = useState(false);
+  const lastShakeTime = useRef(0);
+  const sensorAvailable = useRef(false);
 
   const event = useEvent();
 
@@ -18,12 +18,12 @@ export const useDeviceShake = () => {
       next: () => {},
       error: error => {
         log.warn('Accelerometer:', error);
-        setSensorAvailable(false);
+        sensorAvailable.current = false;
       },
     });
 
     subscription.unsubscribe();
-    setSensorAvailable(true);
+    sensorAvailable.current = true;
     log.debug('Accelerometer available');
   }, []);
 
@@ -37,9 +37,9 @@ export const useDeviceShake = () => {
           const now = new Date().getTime();
           if (
             magnitude > SHAKE_THRESHOLD &&
-            now - lastShakeTime > MIN_TIME_BETWEEN_SHAKES_MILLISECS
+            now - lastShakeTime.current > MIN_TIME_BETWEEN_SHAKES_MILLISECS
           ) {
-            setLastShakeTime(now);
+            lastShakeTime.current = now;
             return true;
           }
           return false;
@@ -55,5 +55,6 @@ export const useDeviceShake = () => {
       });
 
     return () => subscription.unsubscribe();
-  }, [event, lastShakeTime, sensorAvailable]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 };

@@ -1,9 +1,10 @@
-import { NetworkContext } from 'lib/network';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import Toast from 'react-native-toast-message';
 
+import { useNetwork } from '@react-native-hello/core';
+
 const NetworkConnectionBar = () => {
-  const network = useContext(NetworkContext);
+  const network = useNetwork();
 
   useEffect(() => {
     if (!network.state?.isConnected) {

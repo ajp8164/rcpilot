@@ -1,4 +1,13 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, LayoutRectangle, View } from 'react-native';
+import {
+  DragEndParams,
+  NestableDraggableFlatList,
+  NestableScrollContainer,
+  RenderItemParams,
+} from 'react-native-draggable-flatlist';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   KeyboardAccessory,
@@ -23,18 +32,9 @@ import {
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
 import { Formik, FormikProps } from 'formik';
-import { useEvent } from 'lib/event';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { uuidv4 } from 'lib/utils';
 import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, LayoutRectangle, View } from 'react-native';
-import {
-  DragEndParams,
-  NestableDraggableFlatList,
-  NestableScrollContainer,
-  RenderItemParams,
-} from 'react-native-draggable-flatlist';
 import { BSON } from 'realm';
 import {
   Checklist,
@@ -49,6 +49,7 @@ import {
   NewChecklistNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistEditor'>,

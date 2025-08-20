@@ -1,4 +1,8 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+
 import { useActionSheet } from '@expo/react-native-action-sheet';
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListEditor,
@@ -14,12 +18,9 @@ import { ChecklistTemplatePickerResult } from 'components/ChecklistTemplatePicke
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { appConfig } from 'config';
-import { useEvent } from 'lib/event';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { uuidv4 } from 'lib/utils';
 import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { BSON } from 'realm';
 import { Checklist, JChecklistAction } from 'realmdb/Checklist';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';

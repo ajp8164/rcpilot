@@ -1,4 +1,8 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   KeyboardAccessory,
@@ -21,18 +25,15 @@ import {
 } from 'components/atoms/List';
 import formatcoords from 'formatcoords';
 import { Formik, FormikProps } from 'formik';
-import { useEvent } from 'lib/event';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, ScrollView, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Location } from 'realmdb';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { saveCurrentLocation } from 'store/slices/location';
 import { FilterType } from 'types/filter';
 import { LocationNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = NativeStackScreenProps<
   LocationNavigatorParamList,

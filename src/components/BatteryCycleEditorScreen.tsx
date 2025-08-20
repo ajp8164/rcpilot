@@ -1,4 +1,8 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, Text, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   InputMethods,
@@ -28,14 +32,10 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
 import { batterySummary, batteryTintIconProps } from 'lib/battery';
 import { batteryCycleStatisticsData } from 'lib/batteryCycle';
-import { useEvent } from 'lib/event';
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Masks } from 'lib/inputMasks';
 import { BatteryFull, BatteryLow } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, ScrollView, Text, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCharge, BatteryDischarge } from 'realmdb/BatteryCycle';
@@ -43,6 +43,7 @@ import { toNumber } from 'realmdb/helpers';
 import { BatteryTint } from 'types/battery';
 import { ISODateString } from 'types/common';
 import { BatteriesNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 // Order of fields for accessory view.
 enum Fields {

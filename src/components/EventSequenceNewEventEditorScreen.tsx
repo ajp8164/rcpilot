@@ -1,4 +1,10 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Image, Keyboard, ScrollView, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { SvgXml } from 'react-native-svg';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   InputMethods,
@@ -31,18 +37,12 @@ import {
   useModelEventStyleStatistics,
 } from 'lib/analytics';
 import { actionScheduleState } from 'lib/checklist';
-import { useEvent } from 'lib/event';
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Masks, precisionFromMask } from 'lib/inputMasks';
 import { modelHasPropeller, modelSummary, modelTypeIconProps } from 'lib/model';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Image, Keyboard, ScrollView, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { SvgXml } from 'react-native-svg';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { toPlainObject } from 'realmdb';
 import { Battery } from 'realmdb/Battery';
@@ -68,6 +68,7 @@ import { eventSequence } from 'store/slices/eventSequence';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { EventOutcome } from 'types/event';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 // Order of fields for accessory view.
 enum Fields {

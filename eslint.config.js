@@ -1,8 +1,10 @@
+// @ts-expect-error no types available for @eslint/eslintrc
 import { FlatCompat } from '@eslint/eslintrc';
+// @ts-expect-error no types available for @eslint/js
 import js from '@eslint/js';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-config-prettier';
+import eslintConfigPrettier from 'eslint-config-prettier/flat';
 import reactHooks from 'eslint-plugin-react-hooks';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -21,7 +23,7 @@ export default [
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
   ),
-  prettier,
+  eslintConfigPrettier,
   {
     // Import that `ignores` is in its own config object by itself.
     // See https://eslint.org/docs/latest/use/configure/migration-guide#ignoring-files

@@ -1,15 +1,3 @@
-import {
-  Divider,
-  ListItem,
-  ListItemSwitch,
-  ThemeManager,
-} from '@react-native-hello/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { biometricAuthentication } from 'lib/biometricAuthentication';
-import { useEvent } from 'lib/event';
-import { hasPushNotificationsPermission } from 'lib/notifications';
-import { modelsLayoutIcons } from 'lib/preferences';
 import React, { useEffect, useState } from 'react';
 import {
   AppState,
@@ -19,6 +7,19 @@ import {
   useColorScheme,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
+import {
+  Divider,
+  ListItem,
+  ListItemSwitch,
+  ThemeManager,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { EnumPickerResult } from 'components/EnumPickerScreen';
+import { biometricAuthentication } from 'lib/biometricAuthentication';
+import { hasPushNotificationsPermission } from 'lib/notifications';
+import { modelsLayoutIcons } from 'lib/preferences';
 import {
   selectBiometrics,
   selectModelsLayout,

@@ -1,4 +1,15 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  ListRenderItem,
+  ScrollView,
+  View,
+} from 'react-native';
+import { SvgXml } from 'react-native-svg';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   InputMethods,
@@ -22,8 +33,11 @@ import {
   FormikStateWatcher,
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
-import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
-import { ListItemNotes } from 'components/atoms/List';
+import {
+  ListItemInput,
+  ListItemInputMethods,
+  ListItemNotes,
+} from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventRating } from 'components/molecules/EventRating';
 import { Formik, FormikProps } from 'formik';
@@ -32,23 +46,12 @@ import {
   useModelEventStyleStatistics,
 } from 'lib/analytics';
 import { batteryCycleDescription, batteryCycleTitle } from 'lib/batteryCycle';
-import { useEvent } from 'lib/event';
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Masks } from 'lib/inputMasks';
 import { modelHasPropeller, modelSummary, modelTypeIconProps } from 'lib/model';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  Image,
-  Keyboard,
-  ListRenderItem,
-  ScrollView,
-  View,
-} from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
 import { Event } from 'realmdb/Event';
@@ -64,6 +67,7 @@ import {
   ModelsNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<ModelsNavigatorParamList, 'EventEditor'>,

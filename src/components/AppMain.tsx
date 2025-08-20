@@ -1,37 +1,28 @@
-import '../theme';
+import React, { useEffect, useState } from 'react';
+import { StatusBar, useColorScheme } from 'react-native';
+import RNBootSplash from 'react-native-bootsplash';
+import ErrorBoundary from 'react-native-error-boundary';
+
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-import { log } from '@react-native-hello/core';
-import {
-  CameraContext,
-  CameraModal,
-  useCameraContext,
-} from '@react-native-hello/ui';
+import { EventProvider, NetworkProvider, log } from '@react-native-hello/core';
+import { CameraProvider } from '@react-native-hello/ui';
 import {
   DarkTheme,
   DefaultTheme,
+  LinkingOptions,
   NavigationContainer,
 } from '@react-navigation/native';
-import { LinkingOptions } from '@react-navigation/native';
 import { InitStatus, useInitApp } from 'app';
 import { BackdropProvider } from 'components/atoms/Backdrop';
 import { ColorModeSwitch } from 'components/atoms/ColorModeSwitch';
 import NetworkConnectionBar from 'components/atoms/NetworkConnnectionBar';
 import { ColorPickerProvider } from 'components/modals/ColorPickerModal';
-import { SignInModal, SignInModalMethods } from 'components/modals/SignInModal';
 import MainNavigator from 'components/navigation/MainNavigator';
-import { AuthContext, useAuthContext } from 'lib/auth';
-import { DatabaseInfoContext, useDatabaseInfo } from 'lib/database';
+import { AuthProvider } from 'lib/auth/AuthProvider';
+import { DatabaseInfoProvider } from 'lib/database';
 import { AppError } from 'lib/errors';
-import { EventProvider } from 'lib/event';
-import { GeoPositionContext, useCurrentLocation } from 'lib/location';
-import { NetworkContext, useNetworkContext } from 'lib/network';
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
-import { StatusBar } from 'react-native';
-import { useColorScheme } from 'react-native';
-import RNBootSplash from 'react-native-bootsplash';
-import ErrorBoundary from 'react-native-error-boundary';
+import { GeoPositionProvider } from 'lib/location';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 
 // See https://reactnavigation.org/docs/configuring-links
@@ -43,15 +34,9 @@ const linking: LinkingOptions<MainNavigatorParamList> = {
 };
 
 const AppMain = () => {
-  const scheme = useColorScheme();
+  console.log('AppMain');
 
-  const cameraModalRef = useRef<CameraModal>(null);
-  const signInModalRef = useRef<SignInModalMethods>(null);
-  const auth = useAuthContext(signInModalRef);
-  const camera = useCameraContext(cameraModalRef);
-  const network = useNetworkContext();
-  const databaseInfo = useDatabaseInfo();
-  const currentPosition = useCurrentLocation();
+  const scheme = useColorScheme();
   const initApp = useInitApp();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(
@@ -97,7 +82,8 @@ const AppMain = () => {
         hideSplashScreen();
       }
     })();
-  }, [initApp]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (fatal) {
     throw new AppError(fatal);
@@ -106,6 +92,10 @@ const AppMain = () => {
   const onError = (error: Error, stack: string) => {
     log.fatal(`Unhandled app error: ${error.message}\n${stack}`);
   };
+
+  if (startupScreen === StartupScreen.None) {
+    return null;
+  }
 
   return (
     <NavigationContainer
@@ -116,26 +106,24 @@ const AppMain = () => {
         <ActionSheetProvider>
           <BottomSheetModalProvider>
             <ErrorBoundary onError={onError}>
-              <NetworkContext.Provider value={network}>
+              <NetworkProvider>
                 <NetworkConnectionBar />
-                <AuthContext.Provider value={auth}>
-                  <CameraContext.Provider value={camera}>
+                <AuthProvider>
+                  <CameraProvider>
                     <EventProvider>
-                      <DatabaseInfoContext.Provider value={databaseInfo}>
-                        <GeoPositionContext.Provider value={currentPosition}>
+                      <DatabaseInfoProvider>
+                        <GeoPositionProvider>
                           <ColorPickerProvider>
                             <BackdropProvider>
                               <MainNavigator startupScreen={startupScreen} />
                             </BackdropProvider>
                           </ColorPickerProvider>
-                        </GeoPositionContext.Provider>
-                      </DatabaseInfoContext.Provider>
-                      <SignInModal ref={signInModalRef} />
-                      <CameraModal ref={cameraModalRef} />
+                        </GeoPositionProvider>
+                      </DatabaseInfoProvider>
                     </EventProvider>
-                  </CameraContext.Provider>
-                </AuthContext.Provider>
-              </NetworkContext.Provider>
+                  </CameraProvider>
+                </AuthProvider>
+              </NetworkProvider>
             </ErrorBoundary>
           </BottomSheetModalProvider>
         </ActionSheetProvider>

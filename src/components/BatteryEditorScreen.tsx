@@ -1,4 +1,8 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, Text, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   InputMethods,
@@ -29,22 +33,17 @@ import {
 import { Formik, FormikProps } from 'formik';
 import {
   batteryCellConfigurationToString,
+  batteryStatistics,
   batterySummary,
   batteryTintIconProps,
+  batteryTintIcons,
   getBatteryCellConfigurationItems,
 } from 'lib/battery';
-import { batteryStatistics } from 'lib/battery';
-import { batteryTintIcons } from 'lib/battery';
-import { useEvent } from 'lib/event';
 import { Masks } from 'lib/inputMasks';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
 import { BatteryFull, BatteryLow, Circle } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, ScrollView, Text } from 'react-native';
-import { View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryChemistry, BatteryTint } from 'types/battery';
@@ -53,6 +52,7 @@ import {
   BatteriesNavigatorParamList,
   NewBatteryNavigatorParamList,
 } from 'types/navigation';
+import * as Yup from 'yup';
 
 // Order of fields for accessory view.
 enum Fields {

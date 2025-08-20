@@ -1,4 +1,8 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   InputMethods,
@@ -20,17 +24,14 @@ import { ListItemInput, ListItemNotes } from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
 import { modelCostStatistics } from 'lib/analytics';
-import { useEvent } from 'lib/event';
 import { Masks } from 'lib/inputMasks';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
 import { ModelsNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 // Order of fields for accessory view.
 enum Fields {

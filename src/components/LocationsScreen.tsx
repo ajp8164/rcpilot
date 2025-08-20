@@ -1,3 +1,8 @@
+import React, { useEffect } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
+import { useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListItem,
@@ -9,11 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { useEvent } from 'lib/event';
 import { MapPin } from 'lucide-react-native';
-import React, { useEffect } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
-import { useSelector } from 'react-redux';
 import { Location } from 'realmdb';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
 import { LocationNavigatorParamList } from 'types/navigation';

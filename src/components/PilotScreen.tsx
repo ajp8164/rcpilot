@@ -1,4 +1,21 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Image,
+  Keyboard,
+  LayoutRectangle,
+  ListRenderItem,
+  View,
+} from 'react-native';
+import {
+  DragEndParams,
+  NestableDraggableFlatList,
+  NestableScrollContainer,
+  RenderItemParams,
+} from 'react-native-draggable-flatlist';
+import { SvgXml } from 'react-native-svg';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   KeyboardAccessory,
@@ -24,35 +41,18 @@ import {
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
-import { useEvent } from 'lib/event';
-import { modelSummary, modelSummaryPilot } from 'lib/model';
-import { modelTypeIconProps } from 'lib/model';
+import { modelSummary, modelSummaryPilot, modelTypeIconProps } from 'lib/model';
 import { EventStyleStatistics, eventStyleSummaryPilot } from 'lib/modelEvent';
 import lodash from 'lodash';
 import { CircleMinus, Plus, StarOff } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  Image,
-  Keyboard,
-  LayoutRectangle,
-  ListRenderItem,
-  View,
-} from 'react-native';
-import {
-  DragEndParams,
-  NestableDraggableFlatList,
-  NestableScrollContainer,
-  RenderItemParams,
-} from 'react-native-draggable-flatlist';
-import { SvgXml } from 'react-native-svg';
 import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
 import { Pilot } from 'realmdb/Pilot';
 import { FilterType } from 'types/filter';
 import { SetupNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilot'>;
 

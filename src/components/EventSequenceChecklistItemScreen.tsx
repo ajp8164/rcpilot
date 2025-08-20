@@ -1,4 +1,8 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef } from 'react';
+import { View } from 'react-native';
+import { useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
 import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
@@ -10,16 +14,13 @@ import {
 import { ListItemNotes } from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
-import { useEvent } from 'lib/event';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef } from 'react';
-import { View } from 'react-native';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 type FormValues = {
   notes: string;

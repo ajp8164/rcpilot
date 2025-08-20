@@ -1,3 +1,14 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Keyboard,
+  ListRenderItem,
+  Text,
+  TextStyle,
+  View,
+} from 'react-native';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListItem,
@@ -10,18 +21,8 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from 'components/atoms/Button';
 import { ListItemInput } from 'components/atoms/List';
-import { useEvent } from 'lib/event';
 import { precisionFromMask } from 'lib/inputMasks';
 import lodash from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  Keyboard,
-  ListRenderItem,
-  Text,
-  TextStyle,
-  View,
-} from 'react-native';
 import {
   BatteriesNavigatorParamList,
   NewBatteryCycleNavigatorParamList,

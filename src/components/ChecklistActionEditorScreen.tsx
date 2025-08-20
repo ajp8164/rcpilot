@@ -1,4 +1,7 @@
-import * as Yup from 'yup';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   CollapsibleView,
   Divider,
@@ -29,13 +32,10 @@ import {
   actionScheduleState,
   getChecklistActionScheduleItems,
 } from 'lib/checklist';
-import { useEvent } from 'lib/event';
 import { secondsToFormat } from 'lib/formatters';
 import { Masks } from 'lib/inputMasks';
 import { eventKind } from 'lib/modelEvent';
 import { DateTime } from 'luxon';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { Keyboard, ScrollView, View } from 'react-native';
 import Realm, { BSON } from 'realm';
 import { ChecklistActionSchedule, JChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
@@ -53,6 +53,7 @@ import {
   NewChecklistActionNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ChecklistActionEditor'>,

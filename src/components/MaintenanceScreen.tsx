@@ -1,3 +1,11 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListEditor,
@@ -17,7 +25,6 @@ import {
 } from 'components/atoms/List';
 import { modelCostStatistics } from 'lib/analytics';
 import { actionScheduleState } from 'lib/checklist';
-import { useEvent } from 'lib/event';
 import { Masks } from 'lib/inputMasks';
 import { groupItems } from 'lib/sectionList';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -25,12 +32,6 @@ import { uuidv4 } from 'lib/utils';
 import lodash from 'lodash';
 import { Trash2 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
 import { BSON } from 'realm';
 import {
   Checklist,

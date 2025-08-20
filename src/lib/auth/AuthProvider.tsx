@@ -1,19 +1,21 @@
-import { useAuthorizeUser } from './userAuthorization';
+import { ReactNode, createContext, useEffect, useRef, useState } from 'react';
+import { Alert } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import { getApp } from '@react-native-firebase/app';
 import {
   FirebaseAuthTypes,
   getAuth,
   onAuthStateChanged,
 } from '@react-native-firebase/auth';
-import { SignInModalMethods } from 'components/modals/SignInModal';
+import { SignInModal, SignInModalMethods } from 'components/modals/SignInModal';
 import { appConfig } from 'config';
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
-import { createContext, useEffect, useRef } from 'react';
-import { Alert } from 'react-native';
-import { useSelector } from 'react-redux';
 import { selectUser } from 'store/selectors/userSelectors';
 import { UserProfile } from 'types/user';
+
+import { useAuthorizeUser } from './userAuthorization';
 
 type AuthContext = {
   dismissSignInModal: () => void;
@@ -22,36 +24,40 @@ type AuthContext = {
 };
 
 export const AuthContext = createContext<AuthContext>({
-  userIsAuthenticated: false,
   dismissSignInModal: () => {
     return;
   },
   presentSignInModal: () => {
     return;
   },
+  userIsAuthenticated: false,
 });
 
-export const useAuthContext = (
-  signInModalRef: React.RefObject<SignInModalMethods | null>,
-): AuthContext => {
+export const AuthProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}): ReactNode => {
+  const signInModalRef = useRef<SignInModalMethods>(null);
+  const [userIsAuthenticated, setUserIsAuthenticated] = useState(false);
+
   const app = getApp();
   const auth = getAuth(app);
 
   const authorizeUser = useAuthorizeUser();
-  const authorizeUserDebounced = useRef(lodash.debounce(authorizeUser, 200));
   const user = useSelector(selectUser);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, credentials => {
-      // This handler is called multiple times. Avoid more than one authorization.
-      // See https://stackoverflow.com/a/40436769
       if (isReAuthenticationRequired(user.credentials)) {
         return present(
           'You have been signed out.\nPlease sign in again to keep using all features.',
         );
       }
 
-      authorizeUserDebounced.current(credentials, {
+      setUserIsAuthenticated(!lodash.isEmpty(user.credentials));
+
+      authorizeUser(credentials, {
         onError: onAuthError,
         onAuthorized,
         onUnauthorized,
@@ -62,11 +68,11 @@ export const useAuthContext = (
   }, []);
 
   const dismiss = () => {
-    signInModalRef.current?.dismiss();
+    signInModalRef?.current?.dismiss();
   };
 
   const present = (msg?: string) => {
-    signInModalRef.current?.present(msg);
+    signInModalRef?.current?.present(msg);
   };
 
   const onAuthError = (msg: string) => {
@@ -103,28 +109,36 @@ export const useAuthContext = (
     }
   };
 
-  return {
-    dismissSignInModal: dismiss,
-    presentSignInModal: present,
-    userIsAuthenticated: !lodash.isEmpty(user.credentials),
-  };
-};
-
-const isReAuthenticationRequired = (
-  credentials?: FirebaseAuthTypes.User | null,
-) => {
-  const lastSignInTime = credentials?.metadata.lastSignInTime;
-  if (appConfig.requireReAuthDays > 0 && lastSignInTime) {
-    const daysSinceLastSignIn = DateTime.fromISO(lastSignInTime)
-      .diffNow()
-      .shiftTo('days')
-      .toObject().days;
-    if (
-      daysSinceLastSignIn &&
-      Math.abs(daysSinceLastSignIn) < appConfig.requireReAuthDays
-    ) {
-      return true;
+  const isReAuthenticationRequired = (
+    credentials?: FirebaseAuthTypes.User | null,
+  ) => {
+    const lastSignInTime = credentials?.metadata.lastSignInTime;
+    if (appConfig.requireReAuthDays > 0 && lastSignInTime) {
+      const daysSinceLastSignIn = DateTime.fromISO(lastSignInTime)
+        .diffNow()
+        .shiftTo('days')
+        .toObject().days;
+      if (
+        daysSinceLastSignIn &&
+        Math.abs(daysSinceLastSignIn) < appConfig.requireReAuthDays
+      ) {
+        return true;
+      }
     }
-  }
-  return false;
+    return false;
+  };
+
+  return (
+    <AuthContext.Provider
+      value={{
+        userIsAuthenticated,
+        dismissSignInModal: dismiss,
+        presentSignInModal: present,
+      }}>
+      <>
+        {children}
+        <SignInModal ref={signInModalRef} />
+      </>
+    </AuthContext.Provider>
+  );
 };

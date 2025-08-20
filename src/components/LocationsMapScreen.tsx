@@ -1,24 +1,3 @@
-import { ThemeManager, useTheme } from '@react-native-hello/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useQuery, useRealm } from '@realm/react';
-import { LocationPickerResult } from 'components/LocationsScreen';
-import ActionBar from 'components/atoms/ActionBar';
-import { Button } from 'components/atoms/Button';
-import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
-import { appConfig } from 'config';
-import { useEvent } from 'lib/event';
-import { GeoPositionContext } from 'lib/location';
-import { uuidv4 } from 'lib/utils';
-import {
-  BookOpen,
-  Map,
-  MapPinPlus,
-  MapPinned,
-  Navigation,
-  Navigation2,
-  Satellite,
-} from 'lucide-react-native';
-import { DateTime } from 'luxon';
 import React, {
   useContext,
   useEffect,
@@ -37,6 +16,28 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 import { useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
+import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useQuery, useRealm } from '@realm/react';
+import { LocationPickerResult } from 'components/LocationsScreen';
+import ActionBar from 'components/atoms/ActionBar';
+import { Button } from 'components/atoms/Button';
+import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
+import { appConfig } from 'config';
+import { GeoPositionContext } from 'lib/location';
+import { uuidv4 } from 'lib/utils';
+import {
+  BookOpen,
+  Map,
+  MapPinPlus,
+  MapPinned,
+  Navigation2,
+  Navigation,
+  Satellite,
+} from 'lucide-react-native';
+import { DateTime } from 'luxon';
 import { Location, LocationCoords } from 'realmdb/Location';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { LocationNavigatorParamList } from 'types/navigation';

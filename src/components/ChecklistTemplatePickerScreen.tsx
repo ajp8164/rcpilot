@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from 'react';
+import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListItem,
@@ -8,9 +12,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { useEvent } from 'lib/event';
-import React, { useEffect, useState } from 'react';
-import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';

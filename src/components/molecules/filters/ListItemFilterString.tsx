@@ -1,4 +1,6 @@
-import { useSetState } from '@react-native-hello/core';
+import React, { useEffect, useRef, useState } from 'react';
+
+import { useEvent, useSetState } from '@react-native-hello/core';
 import { ListItem, ListItemSegmented, useTheme } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { NotesEditorResult } from 'components/NotesEditorScreen';
@@ -10,10 +12,7 @@ import {
   StringFilterState,
   StringRelation,
 } from 'components/molecules/filters';
-import { useEvent } from 'lib/event';
 import { uuidv4 } from 'lib/utils';
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
 interface Props extends Pick<ListItemSegmented, 'position'> {

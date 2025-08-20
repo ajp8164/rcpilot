@@ -1,21 +1,21 @@
 import '@react-native-firebase/app';
+
+import { BackHandler } from 'react-native';
+
+// import { getApp } from '@react-native-firebase/app';
+// import { getFirebase } from '@react-native-firebase/firebase';
+// import { getFirestore } from '@react-native-firebase/firestore';
+// import { getStorage } from '@react-native-firebase/storage';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { log } from '@react-native-hello/core';
-import { ReactNativeHello } from '@react-native-hello/core';
-import { useTheme } from '@react-native-hello/ui';
+import { ReactNativeHello, log } from '@react-native-hello/core';
 import { appConfig } from 'config';
 import { svgImages } from 'images';
 import { useAchievementConveyor } from 'lib/achievement';
 import { AppError } from 'lib/errors';
-// import { getApp } from '@react-native-firebase/app';
-// import getFirebase } from '@react-native-firebase/firebase';
-// import getFirestore } from '@react-native-firebase/firestore';
-// import getStorage } from '@react-native-firebase/storage';
 import { initPushNotifications } from 'lib/notifications';
 import { useUnknownPilot } from 'lib/pilot';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useDeviceShake } from 'lib/useDeviceShake';
-import { BackHandler } from 'react-native';
 
 export enum InitStatus {
   NotAuthorized = 'NotAuthorized',
@@ -24,7 +24,6 @@ export enum InitStatus {
 }
 
 export const useInitApp = () => {
-  const theme = useTheme();
   useDeviceShake();
 
   // Order is important here.
@@ -58,7 +57,6 @@ export const useInitApp = () => {
         sentryEndpoint: appConfig.sentryEndpoint,
         sentryLoggingEnabled: appConfig.sentryLoggingEnabled,
         svgImages,
-        theme,
         // userId: '',
       });
 

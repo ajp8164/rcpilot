@@ -1,9 +1,10 @@
+import { useEffect, useRef } from 'react';
+import fs from 'react-native-fs';
+
 import { useRealm } from '@realm/react';
 import { appConfig } from 'config';
 import { DatabaseInfoContext } from 'lib/database';
 import { DateTime } from 'luxon';
-import { useEffect, useRef } from 'react';
-import fs from 'react-native-fs';
 import {
   Battery,
   BatteryCycle,
@@ -62,10 +63,12 @@ export const useDatabaseInfo = (): DatabaseInfoContext => {
   };
 
   return {
-    databaseLastUpdate: databaseLastUpdate.current,
-    databaseObjects: databaseObjects.current,
-    databaseSize: databaseSize.current,
-    databaseVersion: realm.schemaVersion,
-    databaseVersionDate: appConfig.databaseDate,
+    info: {
+      databaseLastUpdate: databaseLastUpdate.current,
+      databaseObjects: databaseObjects.current,
+      databaseSize: databaseSize.current,
+      databaseVersion: realm.schemaVersion,
+      databaseVersionDate: appConfig.databaseDate,
+    },
   };
 };

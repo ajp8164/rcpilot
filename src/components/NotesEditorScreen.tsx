@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react';
+
+import { useEvent } from '@react-native-hello/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import TextView from 'components/views/TextView';
-import { useEvent } from 'lib/event';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import React, { useEffect, useState } from 'react';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type NotesEditorResult = {

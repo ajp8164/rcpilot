@@ -1,4 +1,7 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   KeyboardAccessory,
@@ -20,17 +23,15 @@ import {
   ListItemNotes,
 } from 'components/atoms/List';
 import { Formik, FormikProps } from 'formik';
-import { useEvent } from 'lib/event';
 import { Masks } from 'lib/inputMasks';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import {
   NewModelFuelNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = CompositeScreenProps<
   NativeStackScreenProps<SetupNavigatorParamList, 'ModelFuelEditor'>,

@@ -1,17 +1,20 @@
+import React from 'react';
+import { LogBox } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider as ReduxProvider } from 'react-redux';
+
 import { ThemeProvider } from '@react-native-hello/ui';
 import { RealmProvider } from '@realm/react';
 import AppMain from 'components/AppMain';
 import { appConfig } from 'config';
-import React from 'react';
-import { LogBox } from 'react-native';
-import 'react-native-gesture-handler';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider as ReduxProvider } from 'react-redux';
 import Realm from 'realm';
 import Schema from 'realmdb/Schema';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from 'store';
+
+import 'react-native-gesture-handler';
+import 'theme'; // Update the ThemeManager with our local themes.
 
 if (__DEV__) {
   console.log(`Realm: ${Realm.defaultPath}`);
@@ -24,6 +27,7 @@ LogBox.ignoreLogs([
 ]);
 
 const App = () => {
+  console.log('App');
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

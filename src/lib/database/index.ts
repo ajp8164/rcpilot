@@ -1,2 +1,2 @@
-export * from './DatabaseInfoContext';
+export * from './DatabaseInfoProvider';
 export * from './useDatabaseInfo';

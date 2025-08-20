@@ -1,6 +1,5 @@
 import { hash } from 'lib/utils';
-import { ColorValue } from 'react-native';
 
-export const getUserAvatarColor = (userId: string, colors: ColorValue[]) => {
+export const getUserAvatarColor = (userId: string, colors: string[]) => {
   return colors[hash(userId) % colors.length];
 };

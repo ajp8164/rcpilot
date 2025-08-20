@@ -1,3 +1,8 @@
+import React, { useContext, useEffect } from 'react';
+import { ScrollView } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListItem,
@@ -12,7 +17,6 @@ import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Avatar } from 'components/molecules/Avatar';
 import { appConfig } from 'config';
 import { AuthContext } from 'lib/auth';
-import { useEvent } from 'lib/event';
 import { usePilotSummary } from 'lib/pilot';
 import {
   Archive,
@@ -29,14 +33,11 @@ import {
   Info,
   MapPinned,
   Route,
-  Settings,
   Settings2,
+  Settings,
   TextSelect,
   Volume2,
 } from 'lucide-react-native';
-import React, { useContext, useEffect } from 'react';
-import { ScrollView } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Pilot } from 'realmdb/Pilot';
 // import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';

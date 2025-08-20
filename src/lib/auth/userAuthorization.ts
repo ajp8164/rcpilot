@@ -1,6 +1,8 @@
+import { useDispatch } from 'react-redux';
+
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { log } from '@react-native-hello/core';
-import { useTheme } from '@react-native-hello/ui';
+import { ThemeManager } from '@react-native-hello/ui';
 import {
   addUser,
   cancelAllFirestoreSubscriptions,
@@ -15,8 +17,6 @@ import {
 } from 'lib/notifications';
 import { getUserAvatarColor, getUserInitials } from 'lib/user';
 import lodash from 'lodash';
-import { ColorValue } from 'react-native';
-import { useDispatch } from 'react-redux';
 import { store } from 'store';
 import { revertCredentials } from 'store/actions';
 import { saveUser } from 'store/slices/user';
@@ -24,7 +24,6 @@ import { User, UserProfile, UserRole, UserStatus } from 'types/user';
 
 export const useAuthorizeUser = () => {
   const setUser = useSetUser();
-  const theme = useTheme();
 
   return (
     credentials: FirebaseAuthTypes.User | null,
@@ -40,10 +39,7 @@ export const useAuthorizeUser = () => {
         .then(userProfile => {
           if (!userProfile) {
             // Add user to firestore and set user.
-            const profile = createProfile(
-              credentials,
-              theme.colors.avatarColors as string[],
-            );
+            const profile = createProfile(credentials);
 
             addUser(profile)
               .then(() => {
@@ -124,12 +120,10 @@ export const useAuthorizeUser = () => {
   };
 };
 
-const createProfile = (
-  credentials: FirebaseAuthTypes.User,
-  colors: ColorValue[],
-): UserProfile => {
+const createProfile = (credentials: FirebaseAuthTypes.User): UserProfile => {
   const firstName = credentials.displayName?.split(' ')[0] || '';
   const lastName = credentials.displayName?.split(' ')[1] || '';
+
   return {
     id: credentials.uid,
     name: credentials.displayName || '',
@@ -139,7 +133,10 @@ const createProfile = (
     photoUrl: credentials.photoURL !== null ? credentials.photoURL : '',
     photoUrlDefault: credentials.photoURL !== null ? credentials.photoURL : '',
     avatar: {
-      color: getUserAvatarColor(`${firstName}${lastName}`, colors),
+      color: getUserAvatarColor(
+        `${firstName}${lastName}`,
+        ThemeManager.theme.colors.avatarColors as string[],
+      ),
       title: getUserInitials(firstName || credentials.email || '', lastName),
     },
     role: UserRole.User,

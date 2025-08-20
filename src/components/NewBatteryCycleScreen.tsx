@@ -1,4 +1,14 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  Keyboard,
+  ListRenderItem,
+  ScrollView,
+  View,
+} from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+
+import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   InputMethods,
@@ -7,11 +17,11 @@ import {
   ListItem,
   ListItemInputMethods,
   ListItemSegmented,
+  ListItemSwitch,
   ThemeManager,
   listItemPosition,
   useTheme,
 } from '@react-native-hello/ui';
-import { ListItemSwitch } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
@@ -26,26 +36,17 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
 import { batteryIsCharged, batteryTintIconProps } from 'lib/battery';
 import { batteryCycleSummary } from 'lib/batteryCycle';
-import { useEvent } from 'lib/event';
 import { MSSToSeconds } from 'lib/formatters';
 import { Masks } from 'lib/inputMasks';
 import { BatteryFull, BatteryLow } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  Keyboard,
-  ListRenderItem,
-  ScrollView,
-  View,
-} from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { toNumber } from 'realmdb/helpers';
 import { BatteryTint } from 'types/battery';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 type BatteryData = {
   battery: Battery;

@@ -1,8 +1,7 @@
-import BatteriesNavigator from './BatteriesNavigator';
-import LogNavigator from './LogNavigator';
-import ModelsNavigator from './ModelsNavigator';
-import ScanNavigator from './ScanNavigator';
-import SetupNavigator from './SetupNavigator';
+import React, { useEffect } from 'react';
+import { Platform, StatusBar } from 'react-native';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
+
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
@@ -12,10 +11,13 @@ import {
   ScanLine,
   Settings,
 } from 'lucide-react-native';
-import React, { useEffect } from 'react';
-import { Platform, StatusBar } from 'react-native';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
 import { TabNavigatorParamList } from 'types/navigation';
+
+import BatteriesNavigator from './BatteriesNavigator';
+import LogNavigator from './LogNavigator';
+import ModelsNavigator from './ModelsNavigator';
+import ScanNavigator from './ScanNavigator';
+import SetupNavigator from './SetupNavigator';
 
 const Tab = createBottomTabNavigator<TabNavigatorParamList>();
 
@@ -51,14 +53,13 @@ const TabNavigator = () => {
           backgroundColor: theme.colors.tabBarBackgroundInactive,
           borderTopColor: theme.colors.tabBarBorder,
         },
-        tabBarItemStyle: { top: 3 },
-        tabBarLabelStyle: { top: 3 },
+        tabBarItemStyle: { top: 10 },
       }}>
       <Tab.Screen
         name="LogTab"
         component={LogNavigator}
         options={{
-          tabBarLabel: 'Log',
+          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <FileText color={color} size={33} />,
         }}
       />
@@ -66,7 +67,7 @@ const TabNavigator = () => {
         name="ModelsTab"
         component={ModelsNavigator}
         options={{
-          tabBarLabel: 'Models',
+          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <Plane color={color} size={33} />,
         }}
       />
@@ -74,7 +75,7 @@ const TabNavigator = () => {
         name="BatteriesTab"
         component={BatteriesNavigator}
         options={{
-          tabBarLabel: 'Batteries',
+          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <BatteryFull color={color} size={33} />,
         }}
       />
@@ -82,7 +83,7 @@ const TabNavigator = () => {
         name="SetupTab"
         component={SetupNavigator}
         options={{
-          tabBarLabel: 'Setup',
+          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <Settings color={color} size={33} />,
         }}
       />
@@ -90,7 +91,7 @@ const TabNavigator = () => {
         name="ScanTab"
         component={ScanNavigator}
         options={{
-          tabBarLabel: 'Scan',
+          tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <ScanLine color={color} size={33} />,
         }}
       />

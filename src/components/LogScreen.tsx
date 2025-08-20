@@ -1,28 +1,3 @@
-import { ISODateString } from '@react-native-hello/common';
-import {
-  Divider,
-  ListItem,
-  ThemeManager,
-  getColoredSvg,
-  listItemPosition,
-  useTheme,
-} from '@react-native-hello/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button } from 'components/atoms/Button';
-import { EmptyView } from 'components/molecules/EmptyView';
-import { modelTypeIconProps } from 'lib/model';
-import { eventSummary } from 'lib/modelEvent';
-import { useEventsFilter } from 'lib/modelEvent';
-import { groupItems } from 'lib/sectionList';
-import lodash from 'lodash';
-import isEmpty from 'lodash/isEmpty';
-import {
-  BatteryFull,
-  ChevronLeft,
-  ChevronRight,
-  Plane,
-} from 'lucide-react-native';
-import { DateTime } from 'luxon';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Image,
@@ -40,6 +15,31 @@ import { CalendarHeaderProps } from 'react-native-calendars/src/calendar/header'
 import { CalendarContextProviderImperativeMethods } from 'react-native-calendars/src/expandableCalendar/Context/Provider';
 import { DateData, MarkedDates } from 'react-native-calendars/src/types';
 import { SvgXml } from 'react-native-svg';
+
+import { ISODateString } from '@react-native-hello/common';
+import {
+  Divider,
+  ListItem,
+  ThemeManager,
+  getColoredSvg,
+  listItemPosition,
+  useTheme,
+} from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Button } from 'components/atoms/Button';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { modelTypeIconProps } from 'lib/model';
+import { eventSummary, useEventsFilter } from 'lib/modelEvent';
+import { groupItems } from 'lib/sectionList';
+import lodash from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import {
+  BatteryFull,
+  ChevronLeft,
+  ChevronRight,
+  Plane,
+} from 'lucide-react-native';
+import { DateTime } from 'luxon';
 import { Event } from 'realmdb/Event';
 import { FilterType } from 'types/filter';
 import { ModelType } from 'types/model';
@@ -370,16 +370,10 @@ const LogScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <CalendarProvider
-      ref={calendarRef}
-      date={DateTime.now().toISODate()}
-      theme={{
-        calendarBackground: theme.colors.viewBackground,
-        // @ts-expect-error
-        expandableKnobColor: theme.colors.brandPrimary,
-      }}>
+    <CalendarProvider ref={calendarRef} date={DateTime.now().toISODate()}>
       <View style={s.calendarContainer}>
         <ExpandableCalendar
+          key={ThemeManager.name}
           date={DateTime.now().toISODate()}
           headerStyle={{ display: 'none' }}
           customHeader={CalendarHeader}

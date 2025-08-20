@@ -1,3 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, LayoutRectangle, ListRenderItem, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditor,
@@ -12,9 +16,6 @@ import { ListItemCheckBoxInfo } from 'components/atoms/List';
 import { usePilotSummary } from 'lib/pilot';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Plus, Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, LayoutRectangle, ListRenderItem, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Pilot } from 'realmdb/Pilot';
 import { selectPilot } from 'store/selectors/pilotSelectors';
@@ -49,7 +50,10 @@ const PilotsScreen = ({ navigation }: Props) => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+            headerRight
+            icon={
+              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+            }
             onPress={() => navigation.navigate('NewPilot')}
           />
         );

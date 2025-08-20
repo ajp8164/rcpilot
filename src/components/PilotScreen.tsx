@@ -431,8 +431,8 @@ const PilotScreen = ({ navigation, route }: Props) => {
             text={'FAVORITE MODELS'}
             rightComponent={
               <Button
+                buttonStyle={theme.styles.dividerIconButton}
                 icon={<Plus color={theme.colors.screenHeaderButtonText} />}
-                buttonStyle={theme.styles.dividerButton}
                 onPress={() =>
                   navigation.navigate('PilotNavigator', {
                     screen: 'ModelPicker',

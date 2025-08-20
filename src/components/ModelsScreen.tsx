@@ -1,3 +1,12 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Alert,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditor,
@@ -16,19 +25,10 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelListItem } from 'components/molecules/ModelListItem';
 import { ModelPostCard } from 'components/molecules/ModelPostCard';
 import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
-import { useModelsFilter } from 'lib/model';
-import { modelMaintenanceIsDue } from 'lib/model';
+import { modelMaintenanceIsDue, useModelsFilter } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { Funnel, FunnelPlus, Plus } from 'lucide-react-native';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
 import { Pilot } from 'realmdb/Pilot';
@@ -102,11 +102,18 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               disabled={
                 !filterId && (!activeModels.length || listEditorState?.enabled)
               }
+              headerRight
               icon={
                 filterId ? (
-                  <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                  <FunnelPlus
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
                 ) : (
-                  <Funnel color={theme.colors.screenHeaderButtonText} />
+                  <Funnel
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
                 )
               }
               onPress={() =>
@@ -137,7 +144,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 disabled={!!activeModels.length && listEditorState?.enabled}
-                icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+                headerRight
+                icon={
+                  <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+                }
                 onPress={() =>
                   navigation.navigate('NewModelNavigator', {
                     screen: 'NewModel',

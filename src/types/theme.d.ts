@@ -1,4 +1,5 @@
 import '@react-native-hello/ui';
+
 import {
   IShadow,
   IStyle,
@@ -64,7 +65,8 @@ declare module '@react-native-hello/ui' {
   interface ISpacings {}
 
   interface IStyles {
-    dividerButton: IStyle;
+    dividerIconButton: IStyle;
+    dividerTextButton: IStyle;
     dividerButtonDisabled: IStyle;
     listItemButtonTitle: IStyle;
     listItemButtonDisabled: IStyle;

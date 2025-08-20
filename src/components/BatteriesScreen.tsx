@@ -1,3 +1,12 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Alert,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+import { useSelector } from 'react-redux';
+
 import { useActionSheet } from '@expo/react-native-action-sheet';
 import {
   Divider,
@@ -32,14 +41,6 @@ import {
   Plus,
   Trash2,
 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  Alert,
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -109,11 +110,18 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 !filterId &&
                 (!activeBatteries.length || listEditorState?.enabled)
               }
+              headerRight
               icon={
                 filterId ? (
-                  <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                  <FunnelPlus
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
                 ) : (
-                  <Funnel color={theme.colors.screenHeaderButtonText} />
+                  <Funnel
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
                 )
               }
               onPress={() =>
@@ -140,7 +148,10 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 disabled={listEditorState?.enabled}
-                icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+                headerRight
+                icon={
+                  <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+                }
                 onPress={addBattery}
               />
             )}

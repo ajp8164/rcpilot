@@ -54,7 +54,10 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+            headerRight
+            icon={
+              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+            }
             onPress={addChecklist}
           />
         );

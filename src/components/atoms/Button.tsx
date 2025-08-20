@@ -1,10 +1,11 @@
-import { Button as RNHButton, useTheme } from '@react-native-hello/ui';
 import React from 'react';
 import {
   type GestureResponderEvent,
   type TextStyle,
   type ViewStyle,
 } from 'react-native';
+
+import { Button as RNHButton, useTheme } from '@react-native-hello/ui';
 
 interface Button
   extends Omit<RNHButton, 'buttonStyle' | 'disabledStyle' | 'titleStyle'> {
@@ -13,6 +14,7 @@ interface Button
   containerStyle?: ViewStyle | ViewStyle[];
   disabled?: boolean;
   disabledStyle?: ViewStyle | ViewStyle[];
+  headerRight?: boolean;
   loading?: boolean;
   onPress: (event: GestureResponderEvent) => void;
   outline?: boolean;
@@ -27,6 +29,7 @@ const Button = (props: Button) => {
     containerStyle,
     disabled,
     disabledStyle,
+    headerRight,
     loading,
     onPress,
     outline,
@@ -69,6 +72,7 @@ const Button = (props: Button) => {
         disabledStyle,
       ]}
       containerStyle={[
+        headerRight ? { right: -12 } : {},
         small ? theme.styles.buttonSmallContainer : {},
         containerStyle,
       ]}

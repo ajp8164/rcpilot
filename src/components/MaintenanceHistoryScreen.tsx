@@ -1,3 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { ListRenderItem, SectionList, SectionListData } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditor,
@@ -19,9 +23,6 @@ import { groupItems } from 'lib/sectionList';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { CircleMinus, Funnel, FunnelPlus, Trash2 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import { ListRenderItem, SectionList, SectionListData } from 'react-native';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
@@ -65,11 +66,18 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!entries.length || listEditor.enabled}
+              headerRight
               icon={
                 filterId ? (
-                  <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                  <FunnelPlus
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
                 ) : (
-                  <Funnel color={theme.colors.screenHeaderButtonText} />
+                  <Funnel
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
                 )
               }
               onPress={() =>

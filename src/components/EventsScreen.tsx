@@ -1,3 +1,13 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  LayoutRectangle,
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
+import { useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditor,
@@ -13,21 +23,16 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { eventKind, eventPower, eventSummary } from 'lib/modelEvent';
-import { useEventsFilter } from 'lib/modelEvent';
+import {
+  eventKind,
+  eventPower,
+  eventSummary,
+  useEventsFilter,
+} from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { CircleMinus, Funnel, FunnelPlus, Trash2 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  LayoutRectangle,
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-  View,
-} from 'react-native';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
@@ -88,11 +93,18 @@ const EventsScreen = ({ navigation, route }: Props) => {
                   !filterId &&
                   (!model?.events.length || listEditorState?.enabled)
                 }
+                headerRight
                 icon={
                   filterId ? (
-                    <FunnelPlus color={theme.colors.screenHeaderButtonText} />
+                    <FunnelPlus
+                      color={theme.colors.screenHeaderButtonText}
+                      size={28}
+                    />
                   ) : (
-                    <Funnel color={theme.colors.screenHeaderButtonText} />
+                    <Funnel
+                      color={theme.colors.screenHeaderButtonText}
+                      size={28}
+                    />
                   )
                 }
                 onPress={() =>

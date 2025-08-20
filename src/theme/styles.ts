@@ -1,4 +1,4 @@
-import { type IBaseThemeSchema, IStyles } from '@react-native-hello/ui';
+import { IStyles, type IBaseThemeSchema } from '@react-native-hello/ui';
 
 export const createElementsStyles = ({
   theme,
@@ -9,14 +9,6 @@ export const createElementsStyles = ({
    * Divider
    */
 
-  dividerButton: {
-    backgroundColor: theme.colors.transparent,
-    height: 20,
-    paddingHorizontal: 5,
-    paddingVertical: 0,
-    marginVertical: -1,
-    justifyContent: 'flex-start',
-  },
   dividerButtonDisabled: {
     opacity: 0.4,
     backgroundColor: theme.colors.transparent,
@@ -24,6 +16,18 @@ export const createElementsStyles = ({
     paddingHorizontal: 5,
     paddingVertical: 0,
     marginVertical: -1,
+    justifyContent: 'flex-start',
+  },
+  dividerIconButton: {
+    backgroundColor: theme.colors.transparent,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    justifyContent: 'flex-start',
+  },
+  dividerTextButton: {
+    backgroundColor: theme.colors.transparent,
+    paddingHorizontal: 10,
+    paddingVertical: 0,
     justifyContent: 'flex-start',
   },
 

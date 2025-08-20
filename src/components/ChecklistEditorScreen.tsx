@@ -201,16 +201,14 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
     navigation.setOptions({
       headerLeft: () => {
-        if (next.dirty) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={cancel}
-            />
-          );
-        }
+        return (
+          <Button
+            title={'Cancel'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            onPress={cancel}
+          />
+        );
       },
       headerRight: () => {
         if (next.dirty || next.values.actions.length === 0) {
@@ -443,10 +441,13 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
                   text={'ACTIONS'}
                   rightComponent={
                     <Button
+                      buttonStyle={theme.styles.dividerIconButton}
                       icon={
-                        <Plus color={theme.colors.screenHeaderButtonText} />
+                        <Plus
+                          color={theme.colors.screenHeaderButtonText}
+                          size={33}
+                        />
                       }
-                      buttonStyle={theme.styles.dividerButton}
                       onPress={() =>
                         navigation.navigate('NewChecklistActionNavigator', {
                           screen: 'NewChecklistAction',

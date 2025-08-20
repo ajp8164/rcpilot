@@ -1,3 +1,6 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem } from 'react-native';
+
 import {
   Divider,
   ListEditor,
@@ -13,8 +16,6 @@ import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
 import { BSON } from 'realm';
 import { ModelCategory } from 'realmdb/ModelCategory';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -40,7 +41,10 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+            headerRight
+            icon={
+              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+            }
             onPress={() => navigation.navigate('NewModelCategory')}
           />
         );

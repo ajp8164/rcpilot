@@ -391,8 +391,8 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
             text={'EVENT/MAINTENANCE LOG REPORTS'}
             rightComponent={
               <Button
+                buttonStyle={theme.styles.dividerIconButton}
                 icon={<Plus color={theme.colors.screenHeaderButtonText} />}
-                buttonStyle={theme.styles.dividerButton}
                 onPress={() =>
                   navigation.navigate('NewReportNavigator', {
                     screen: 'ReportEventsMaintenanceEditor',
@@ -436,8 +436,8 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
             text={'QR CODE REPORTS'}
             rightComponent={
               <Button
+                buttonStyle={theme.styles.dividerIconButton}
                 icon={<Plus color={theme.colors.screenHeaderButtonText} />}
-                buttonStyle={theme.styles.dividerButton}
                 onPress={() =>
                   navigation.navigate('NewReportNavigator', {
                     screen: 'ReportScanCodesEditor',

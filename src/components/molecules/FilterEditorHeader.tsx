@@ -1,3 +1,6 @@
+import { useEffect } from 'react';
+import React, { View } from 'react-native';
+
 import {
   Divider,
   ListItemSwitchCollapsible,
@@ -7,8 +10,6 @@ import { Button } from 'components/atoms/Button';
 import { ListItemInput } from 'components/atoms/List';
 import { FilterEditorInstance } from 'lib/useFilterEditor';
 import lodash from 'lodash';
-import { useEffect } from 'react';
-import React, { View } from 'react-native';
 
 interface FilterEditorHeader<T> {
   defaultFilter: T;
@@ -56,7 +57,7 @@ function FilterEditorHeader<T>({
           <Button
             title={'Reset Filter'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.dividerButton}
+            buttonStyle={theme.styles.dividerTextButton}
             disabledStyle={theme.styles.dividerButtonDisabled}
             disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
             onPress={filterEditor.resetFilter}

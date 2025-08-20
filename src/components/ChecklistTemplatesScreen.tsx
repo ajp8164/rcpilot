@@ -1,3 +1,6 @@
+import React, { useEffect, useRef } from 'react';
+import { FlatList, ListRenderItem, ScrollView } from 'react-native';
+
 import {
   Divider,
   ListEditor,
@@ -12,8 +15,6 @@ import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Plus, Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef } from 'react';
-import { FlatList, ListRenderItem, ScrollView } from 'react-native';
 import { BSON } from 'realm';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistType } from 'types/checklist';
@@ -39,7 +40,10 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+            headerRight
+            icon={
+              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+            }
             onPress={() =>
               navigation.navigate('NewChecklistNavigator', {
                 screen: 'NewChecklist',

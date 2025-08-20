@@ -1,3 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditor,
@@ -15,9 +19,6 @@ import { defaultFilter } from 'lib/reports/reportEvents';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import lodash from 'lodash';
 import { Plus, Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, ListRenderItem, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
@@ -66,7 +67,10 @@ const ReportEventFiltersScreen = ({ navigation, route }: Props) => {
         return (
           <Button
             buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<Plus color={theme.colors.screenHeaderButtonText} />}
+            headerRight
+            icon={
+              <Plus color={theme.colors.screenHeaderButtonText} size={33} />
+            }
             onPress={() =>
               generalReportEventsFilter &&
               navigation.navigate('ReportEventFilterEditor', {

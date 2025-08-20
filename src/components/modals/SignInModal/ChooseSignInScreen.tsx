@@ -1,4 +1,7 @@
-import { SignInNavigatorParamList } from './types';
+import React, { useState } from 'react';
+import { Alert, Platform, Text, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+
 import {
   ThemeManager,
   getColoredSvg,
@@ -13,9 +16,8 @@ import {
   signInWithFacebook,
   signInWithGoogle,
 } from 'lib/auth';
-import React, { useState } from 'react';
-import { Alert, Platform, Text, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
+
+import { SignInNavigatorParamList } from './types';
 
 export type Props = NativeStackScreenProps<
   SignInNavigatorParamList,
@@ -29,7 +31,7 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
   const [signInAction, setSignInAction] = useState(true);
 
   return (
-    <View style={theme.styles.viewAlt}>
+    <View style={theme.styles.view}>
       <Text style={s.title}>{appConfig.appName}</Text>
       {route.params?.msg && (
         <Text style={s.description}>{route.params?.msg}</Text>

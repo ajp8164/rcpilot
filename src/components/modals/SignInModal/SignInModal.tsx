@@ -1,3 +1,13 @@
+import React, { useImperativeHandle, useRef, useState } from 'react';
+
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import { Modal, useTheme } from '@react-native-hello/ui';
+import {
+  NavigationContainer,
+  NavigationIndependentTree,
+} from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import ChooseSignInScreen from './ChooseSignInScreen';
 import CreateAccountScreen from './CreateAccountScreen';
 import EmailSignInScreen from './EmailSignInScreen';
@@ -7,14 +17,6 @@ import {
   SignInModalProps,
   SignInNavigatorParamList,
 } from './types';
-import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { Modal, useTheme } from '@react-native-hello/ui';
-import {
-  NavigationContainer,
-  NavigationIndependentTree,
-} from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useImperativeHandle, useRef, useState } from 'react';
 
 const Stack = createNativeStackNavigator<SignInNavigatorParamList>();
 
@@ -45,7 +47,7 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
     return (
       <Modal
         ref={innerRef}
-        backgroundStyle={{ backgroundColor: theme.colors.viewAltBackground }}
+        backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.black }}>
         <NavigationIndependentTree>
           <NavigationContainer>

@@ -1,3 +1,6 @@
+import React, { useRef } from 'react';
+import { View } from 'react-native';
+
 import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
@@ -5,8 +8,6 @@ import { ListItemInput, ListItemNotes } from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Masks } from 'lib/inputMasks';
 import { DateTime } from 'luxon';
-import React, { useRef } from 'react';
-import { View } from 'react-native';
 import { BSON } from 'realm';
 import { ChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';

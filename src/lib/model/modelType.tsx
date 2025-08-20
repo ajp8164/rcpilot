@@ -1,6 +1,7 @@
+import { SvgXml } from 'react-native-svg';
+
 import { ThemeManager, getColoredSvg } from '@react-native-hello/ui';
 import { EnumPickerIconProps } from 'components/EnumPickerScreen';
-import { SvgXml } from 'react-native-svg';
 import { ModelType } from 'types/model';
 
 type ModelTypeIconProps = {

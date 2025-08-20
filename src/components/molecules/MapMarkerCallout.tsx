@@ -1,6 +1,3 @@
-import { ThemeManager, useTheme } from '@react-native-hello/ui';
-import { useLocationSummary } from 'lib/location';
-import { ChevronRight, MapPin } from 'lucide-react-native';
 import React, { forwardRef, useState } from 'react';
 import { LayoutChangeEvent, Text, View } from 'react-native';
 import {
@@ -10,6 +7,10 @@ import {
   MarkerDragStartEndEvent,
 } from 'react-native-maps';
 import Animated, { SlideInUp } from 'react-native-reanimated';
+
+import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { useLocationSummary } from 'lib/location';
+import { ChevronRight, MapPin } from 'lucide-react-native';
 import { Location } from 'realmdb';
 
 interface MapMarkerCalloutInterface {

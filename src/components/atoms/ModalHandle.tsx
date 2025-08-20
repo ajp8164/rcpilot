@@ -1,6 +1,7 @@
-import { ThemeManager } from '@react-native-hello/ui';
 import React from 'react';
 import { View } from 'react-native';
+
+import { ThemeManager } from '@react-native-hello/ui';
 
 export const ModalHandle = () => {
   const s = useStyles();

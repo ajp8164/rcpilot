@@ -1,3 +1,7 @@
+import React, { useContext, useState } from 'react';
+import { Alert, ScrollView } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -8,9 +12,6 @@ import { File, saveFile } from 'firebase/storage';
 import { Directory, listFiles } from 'firebase/storage/operations';
 import { DatabaseInfoContext } from 'lib/database';
 import { DateTime } from 'luxon';
-import React, { useContext, useState } from 'react';
-import { Alert, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
 import { selectUser } from 'store/selectors/userSelectors';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -42,7 +43,7 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
         setDir(dir);
         setBackupAllowed(
           dir &&
-            dir?.allocated + databaseInfo.databaseSize <
+            dir?.allocated + databaseInfo.info.databaseSize <
               appConfig.storageAllocation,
         );
       },
@@ -53,7 +54,7 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
     setIsBackingUp(true);
     const source = realm.path;
     const timestamp = DateTime.now().toUnixInteger();
-    const filename = `backup-v${databaseInfo.databaseVersion}-${timestamp}.realm`;
+    const filename = `backup-v${databaseInfo.info.databaseVersion}-${timestamp}.realm`;
 
     saveFile({
       file: {

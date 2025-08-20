@@ -1,4 +1,6 @@
-import * as Yup from 'yup';
+import React, { useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+
 import {
   Divider,
   KeyboardAccessory,
@@ -14,11 +16,10 @@ import {
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
 import { Formik, FormikProps } from 'formik';
-import React, { useRef, useState } from 'react';
-import { Keyboard, ScrollView, View } from 'react-native';
 import { BSON } from 'realm';
 import { EventStyle } from 'realmdb/EventStyle';
 import { SetupNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 // CompositeScreenProps not working here since NewEventStyle is also in the SetupNavigator
 // just using a different presentation (didn't create a new navigator for a single screen).

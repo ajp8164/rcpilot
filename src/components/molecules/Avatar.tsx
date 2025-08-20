@@ -1,10 +1,11 @@
+import { TextStyle, ViewStyle } from 'react-native';
+
 import {
   Avatar as RNHAvatar,
   ThemeManager,
   useTheme,
 } from '@react-native-hello/ui';
 import { CircleUserRound } from 'lucide-react-native';
-import { TextStyle, ViewStyle } from 'react-native';
 import { UserProfile } from 'types/user';
 
 interface AvatarInterface {

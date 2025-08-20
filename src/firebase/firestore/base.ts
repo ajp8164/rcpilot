@@ -1,11 +1,12 @@
-import { log } from '@react-native-hello/core';
-import {
-  getFirestore,
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
-import { addFirestoreSubscription } from './subscriptions';
-import { UserRole } from 'types/user';
 import { getApp } from '@react-native-firebase/app';
+import {
+  FirebaseFirestoreTypes,
+  getFirestore,
+} from '@react-native-firebase/firestore';
+import { log } from '@react-native-hello/core';
+import { UserRole } from 'types/user';
+
+import { addFirestoreSubscription } from './subscriptions';
 
 export type ListenerAuth = {
   allowedRoles?: UserRole[];

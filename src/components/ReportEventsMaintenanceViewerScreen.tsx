@@ -1,3 +1,15 @@
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollView,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
+// import RNFetchBlob from 'rn-fetch-blob';
+import ViewShot from 'react-native-view-shot';
+
 import { ThemeManager, openShareSheet, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
@@ -10,17 +22,6 @@ import { batteryCycleStatisticsData } from 'lib/batteryCycle';
 import { secondsToFormat } from 'lib/formatters';
 import { Share } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import {
-  FlatList,
-  ListRenderItem,
-  ScrollView,
-  Text,
-  View,
-  ViewStyle,
-} from 'react-native';
-// import RNFetchBlob from 'rn-fetch-blob';
-import ViewShot from 'react-native-view-shot';
 import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb';
 import { Event } from 'realmdb/Event';

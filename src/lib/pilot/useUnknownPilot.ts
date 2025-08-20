@@ -1,7 +1,8 @@
-import { useQuery, useRealm } from '@realm/react';
-import { DateTime } from 'luxon';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+
+import { useQuery, useRealm } from '@realm/react';
+import { DateTime } from 'luxon';
 import { Pilot } from 'realmdb/Pilot';
 import { saveSelectedPilot } from 'store/slices/pilot';
 

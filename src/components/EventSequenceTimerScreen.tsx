@@ -781,7 +781,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     ...theme.text.normal,
     color: theme.colors.stickyWhite,
     fontSize: 92,
-    letterSpacing: -5,
+    lineHeight: 92,
   },
   timerValueArmed: {
     opacity: 0.1,
@@ -800,6 +800,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   timerMessage: {
     ...theme.text.large,
     color: theme.colors.stickyWhite,
+    marginTop: -15,
   },
   timerOvertime: {
     backgroundColor: theme.colors.assertive,

@@ -1,7 +1,8 @@
+import { View } from 'react-native';
+
+import { useTheme } from '@react-native-hello/ui';
 import { EnumPickerIconProps } from 'components/EnumPickerScreen';
 import { Star as LRNStar } from 'lucide-react-native';
-import { View } from 'react-native';
-import { useTheme } from 'theme';
 import { EventOutcome } from 'types/event';
 
 const Star = () => {

@@ -1,8 +1,9 @@
+import React, { useContext, useState } from 'react';
+import { ActivityIndicator, LayoutChangeEvent, Text, View } from 'react-native';
+
 import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
 import { Info, Search, TriangleAlert } from 'lucide-react-native';
-import React, { useContext, useState } from 'react';
-import { ActivityIndicator, LayoutChangeEvent, Text, View } from 'react-native';
 
 interface EmptyViewInterface {
   error?: boolean;

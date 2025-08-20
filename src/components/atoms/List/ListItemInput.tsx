@@ -1,10 +1,11 @@
+import React from 'react';
+
 import {
   InputMethods,
   ListItemInput as RNHListItemInput,
   useTheme,
 } from '@react-native-hello/ui';
 import { Pencil } from 'lucide-react-native';
-import React from 'react';
 
 export type ListItemInputMethods = InputMethods;
 

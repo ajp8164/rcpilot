@@ -1,7 +1,8 @@
+import React, { View } from 'react-native';
+
 import { Divider, useTheme } from '@react-native-hello/ui';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
 import lodash from 'lodash';
-import React, { View } from 'react-native';
 
 interface FiltersListHeader {
   filterSummary: string;

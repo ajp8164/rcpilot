@@ -1,3 +1,6 @@
+import React from 'react';
+import { ScrollView } from 'react-native';
+
 import { Divider, useDevice, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -9,8 +12,6 @@ import {
 import { defaultFilter } from 'lib/battery';
 import { Masks } from 'lib/inputMasks';
 import { useFilterEditor } from 'lib/useFilterEditor';
-import React from 'react';
-import { ScrollView } from 'react-native';
 import { BatteryFilterValues } from 'types/filter';
 import { BatteryFiltersNavigatorParamList } from 'types/navigation';
 

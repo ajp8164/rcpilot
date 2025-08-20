@@ -1,8 +1,9 @@
+import { TextStyle } from 'react-native';
+
 import { useTheme } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import { Button } from 'components/atoms/Button';
-import { TextStyle } from 'react-native';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
 export type ScreenEditHeaderAction = {

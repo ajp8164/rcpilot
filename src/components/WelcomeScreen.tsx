@@ -1,3 +1,8 @@
+import React, { useRef } from 'react';
+import { Platform, ScrollView, StatusBar, Text } from 'react-native';
+import SystemNavigationBar from 'react-native-system-navigation-bar';
+import { useSelector } from 'react-redux';
+
 import {
   CheckBox,
   ThemeManager,
@@ -6,10 +11,6 @@ import {
 } from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
 import { LegalModal } from 'components/modals/LegalModal';
-import React, { useRef } from 'react';
-import { Platform, ScrollView, StatusBar, Text } from 'react-native';
-import SystemNavigationBar from 'react-native-system-navigation-bar';
-import { useSelector } from 'react-redux';
 import { dispatch } from 'store';
 import { selectTou } from 'store/selectors/appSettingsSelectors';
 import { saveAcceptTou } from 'store/slices/appSettings';

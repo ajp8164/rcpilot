@@ -1,14 +1,16 @@
-import { ModelCardDeckProvider } from './ModelCardDeckProvider';
+import React, { useRef } from 'react';
+import { Platform, StatusBar } from 'react-native';
+import Carousel from 'react-native-reanimated-carousel';
+import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
+
 import { useDevice } from '@react-native-hello/ui';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Realm } from '@realm/react';
 import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
 import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
-import React, { useRef } from 'react';
-import { Platform, StatusBar } from 'react-native';
-import Carousel from 'react-native-reanimated-carousel';
-import { CarouselRenderItemInfo } from 'react-native-reanimated-carousel/lib/typescript/types';
 import { Model, Pilot } from 'realmdb';
+
+import { ModelCardDeckProvider } from './ModelCardDeckProvider';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;

@@ -1,8 +1,9 @@
+import React from 'react';
+import { Text, View } from 'react-native';
+
 import { ScannerView, ThemeManager, useTheme } from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import { FileText, Plane, Share } from 'lucide-react-native';
-import React from 'react';
-import { Text, View } from 'react-native';
 
 const ScanScreen = () => {
   const theme = useTheme();

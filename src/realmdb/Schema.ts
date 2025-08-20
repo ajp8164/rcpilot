@@ -1,13 +1,13 @@
 import { Battery } from './Battery';
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
 import {
+  Checklist,
   ChecklistAction,
   ChecklistActionHistoryEntry,
   ChecklistActionSchedule,
   ChecklistActionScheduleDue,
   ChecklistActionScheduleState,
 } from './Checklist';
-import { Checklist } from './Checklist';
 import { ChecklistTemplate } from './ChecklistTemplate';
 import { Event } from './Event';
 import { EventStyle } from './EventStyle';

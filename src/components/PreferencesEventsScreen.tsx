@@ -1,3 +1,8 @@
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native';
+import Slider from 'react-native-ui-lib/slider';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Divider,
   ListItem,
@@ -6,10 +11,6 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
-import Slider from 'react-native-ui-lib/slider';
-import { useDispatch, useSelector } from 'react-redux';
 import { selectEventPreferences } from 'store/selectors/appSettingsSelectors';
 import { saveEventPreferences } from 'store/slices/appSettings';
 import { TimerStartDelay } from 'types/event';

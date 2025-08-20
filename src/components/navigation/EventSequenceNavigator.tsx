@@ -1,4 +1,5 @@
-import NavContext from './NavContext';
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
@@ -12,12 +13,13 @@ import EventSequenceTimerScreen from 'components/EventSequenceTimerScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
-import React from 'react';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
 import { store } from 'store';
 import { ChecklistType } from 'types/checklist';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const EventSequenceStack =
   createNativeStackNavigator<EventSequenceNavigatorParamList>();

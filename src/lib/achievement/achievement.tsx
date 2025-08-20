@@ -1,5 +1,6 @@
-import { Star } from 'lucide-react-native';
 import { ReactElement } from 'react';
+
+import { Star } from 'lucide-react-native';
 import { Achievement } from 'realmdb/Pilot';
 
 type AchievementRule = {

@@ -1,4 +1,5 @@
 import { ContentView } from 'types/content';
+
 import ca from './ca';
 import privacy from './privacy';
 import terms from './terms';

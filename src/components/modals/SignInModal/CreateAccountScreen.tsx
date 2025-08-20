@@ -1,5 +1,7 @@
-import * as Yup from 'yup';
-import { SignInNavigatorParamList } from './types';
+import React, { useEffect, useRef, useState } from 'react';
+import { Alert, Keyboard, ScrollView, Text, View } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+
 import { useSetState } from '@react-native-hello/core';
 import {
   InputMethods,
@@ -18,9 +20,9 @@ import {
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { createUserWithEmailAndPassword } from 'lib/auth';
 import { Eye, EyeOff } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Keyboard, ScrollView, Text, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import * as Yup from 'yup';
+
+import { SignInNavigatorParamList } from './types';
 
 enum Fields {
   firstName,

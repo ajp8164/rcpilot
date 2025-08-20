@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
@@ -27,7 +29,6 @@ import NewChecklistActionNavigator from 'components/navigation/NewChecklistActio
 import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelNavigator from 'components/navigation/NewModelNavigator';
 import { eventKind } from 'lib/modelEvent';
-import React from 'react';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 const ModelsStack = createNativeStackNavigator<ModelsNavigatorParamList>();

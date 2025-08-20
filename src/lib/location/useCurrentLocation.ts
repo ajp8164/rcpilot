@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+
 import Geolocation from '@react-native-community/geolocation';
 import {
   GeolocationError,
@@ -10,8 +13,6 @@ import {
   distanceBetweenLocations,
 } from 'lib/location';
 import { useDebouncedRender } from 'lib/useDebouncedRender';
-import { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
 import { Collection, CollectionChangeSet } from 'realm';
 import { Location, LocationCoords } from 'realmdb/Location';
 import { saveCurrentLocation } from 'store/slices/location';

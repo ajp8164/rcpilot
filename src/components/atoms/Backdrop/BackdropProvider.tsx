@@ -1,7 +1,9 @@
-import { BackdropContext } from './BackdropContext';
-import { ThemeManager } from '@react-native-hello/ui';
 import React, { ReactNode, useState } from 'react';
 import { View } from 'react-native';
+
+import { ThemeManager } from '@react-native-hello/ui';
+
+import { BackdropContext } from './BackdropContext';
 
 export const BackdropProvider = ({
   children,

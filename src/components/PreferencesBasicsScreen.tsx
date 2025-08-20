@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import { ScrollView } from 'react-native';
+
 import {
   Divider,
   ListItem,
@@ -5,8 +8,6 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
-import { ScrollView } from 'react-native';
 import { UnitSystem } from 'types/common';
 import { SetupNavigatorParamList } from 'types/navigation';
 

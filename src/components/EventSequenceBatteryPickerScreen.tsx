@@ -1,3 +1,7 @@
+import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
@@ -7,9 +11,6 @@ import { modelHasChecklists } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { ChevronRight } from 'lucide-react-native';
-import React, { useEffect, useState } from 'react';
-import { View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Model } from 'realmdb/Model';

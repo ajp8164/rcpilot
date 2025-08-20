@@ -1,5 +1,6 @@
-import { ModelCardDeckContext } from './ModelCardDeckContext';
 import React, { ReactNode } from 'react';
+
+import { ModelCardDeckContext } from './ModelCardDeckContext';
 
 export const ModelCardDeckProvider = ({
   children,

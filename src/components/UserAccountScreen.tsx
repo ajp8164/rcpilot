@@ -1,3 +1,7 @@
+import React, { useEffect } from 'react';
+import { Alert, ScrollView, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import {
   Divider,
   ListItem,
@@ -11,9 +15,6 @@ import { Avatar } from 'components/molecules/Avatar';
 import { signOut } from 'lib/auth';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
 import { CircleUserRound } from 'lucide-react-native';
-import React, { useEffect } from 'react';
-import { Alert, ScrollView, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import {
   MainNavigatorParamList,

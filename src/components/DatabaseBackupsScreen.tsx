@@ -1,3 +1,15 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  ListRenderItem,
+  Platform,
+  View,
+} from 'react-native';
+import RNFS from 'react-native-fs';
+import { useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditor,
@@ -15,17 +27,6 @@ import { Directory, File, listFiles } from 'firebase/storage/operations';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Trash2 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  FlatList,
-  ListRenderItem,
-  Platform,
-  View,
-} from 'react-native';
-import RNFS from 'react-native-fs';
-import { useSelector } from 'react-redux';
 import { selectUser } from 'store/selectors/userSelectors';
 import { SetupNavigatorParamList } from 'types/navigation';
 

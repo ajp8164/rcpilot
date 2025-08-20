@@ -1,5 +1,6 @@
-import { IShadows } from '@react-native-hello/ui';
 import { Platform } from 'react-native';
+
+import { IShadows } from '@react-native-hello/ui';
 
 const light = Platform.select({
   ios: {

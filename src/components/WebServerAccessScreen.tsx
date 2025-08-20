@@ -1,3 +1,6 @@
+import React from 'react';
+import { Text, View } from 'react-native';
+
 import {
   Divider,
   ListItem,
@@ -6,8 +9,6 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { appConfig } from 'config';
-import React from 'react';
-import { Text, View } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<

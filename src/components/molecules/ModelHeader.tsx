@@ -1,3 +1,13 @@
+import React, { useState } from 'react';
+import { Image, Platform, Text, View } from 'react-native';
+import Animated, {
+  Extrapolation,
+  SharedValue,
+  interpolate,
+  useAnimatedStyle,
+} from 'react-native-reanimated';
+import { SvgXml } from 'react-native-svg';
+
 import {
   ThemeManager,
   getColoredSvg,
@@ -9,15 +19,6 @@ import { useObject } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { modelTypeIconProps } from 'lib/model';
 import { Camera, ChevronLeft } from 'lucide-react-native';
-import React, { useState } from 'react';
-import { Image, Platform, Text, View } from 'react-native';
-import Animated, {
-  Extrapolation,
-  SharedValue,
-  interpolate,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
-import { SvgXml } from 'react-native-svg';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
 import { ModelType } from 'types/model';

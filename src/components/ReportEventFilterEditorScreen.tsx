@@ -1,3 +1,6 @@
+import React from 'react';
+import { ScrollView } from 'react-native';
+
 import { Divider, useDevice, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -10,8 +13,6 @@ import {
 import { Masks } from 'lib/inputMasks';
 import { defaultFilter } from 'lib/reports/reportEvents';
 import { useFilterEditor } from 'lib/useFilterEditor';
-import React from 'react';
-import { ScrollView } from 'react-native';
 import { ReportEventFilterValues } from 'types/filter';
 import { ReportEventFiltersNavigatorParamList } from 'types/navigation';
 

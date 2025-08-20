@@ -1,11 +1,12 @@
+import React, { useContext } from 'react';
+import { Alert, ScrollView } from 'react-native';
+
 import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { DatabaseInfoContext } from 'lib/database';
 import { DateTime } from 'luxon';
-import React, { useContext } from 'react';
-import { Alert, ScrollView } from 'react-native';
 import { store } from 'store';
 import { revertSettings } from 'store/actions';
 import { SetupNavigatorParamList } from 'types/navigation';
@@ -37,20 +38,20 @@ const DatabaseInfoScreen = () => {
       <Divider text={'INFORMATION'} />
       <ListItem
         title={'Version'}
-        value={`v${databaseInfo.databaseVersion} (${DateTime.fromISO(databaseInfo.databaseVersionDate).toFormat('M/d/yyyy')})`}
+        value={`v${databaseInfo.info.databaseVersion} (${DateTime.fromISO(databaseInfo.info.databaseVersionDate).toFormat('M/d/yyyy')})`}
         position={['first']}
       />
       <ListItem
         title={'Total Records'}
-        value={`${databaseInfo.databaseObjects}`}
+        value={`${databaseInfo.info.databaseObjects}`}
       />
       <ListItem
         title={'Total Size'}
-        value={`${(databaseInfo.databaseSize / 1000000).toFixed(2)} MB`}
+        value={`${(databaseInfo.info.databaseSize / 1000000).toFixed(2)} MB`}
       />
       <ListItem
         title={'Last Modified'}
-        value={DateTime.fromISO(databaseInfo.databaseLastUpdate).toFormat(
+        value={DateTime.fromISO(databaseInfo.info.databaseLastUpdate).toFormat(
           "M/d/yyyy 'at' h:mm a",
         )}
         position={['last']}

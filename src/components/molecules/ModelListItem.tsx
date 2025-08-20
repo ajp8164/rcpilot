@@ -1,3 +1,8 @@
+import React from 'react';
+import { Image, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+import { useDispatch } from 'react-redux';
+
 import {
   ListEditorMethods,
   ListItemSwipeable,
@@ -14,10 +19,6 @@ import {
 } from 'lib/model';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Bandage, CircleMinus, Trash2, Wrench } from 'lucide-react-native';
-import React from 'react';
-import { Image, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import { useDispatch } from 'react-redux';
 import { BSON } from 'realm';
 import { Model } from 'realmdb';
 import { deleteModelPreferences } from 'store/slices/appSettings';

@@ -1,6 +1,7 @@
-import { fonts } from './fonts';
 import { IBaseThemeSchema } from '@react-native-hello/ui';
 import { DeepPartial } from 'types/custom';
+
+import { fonts } from './fonts';
 
 export const baseTheme: DeepPartial<IBaseThemeSchema> = {
   radius: {},

@@ -1,6 +1,7 @@
+import { useSelector } from 'react-redux';
+
 import { useObject, useQuery } from '@realm/react';
 import { rql } from 'components/molecules/filters';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { Model } from 'realmdb/Model';

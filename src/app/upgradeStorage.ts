@@ -1,8 +1,7 @@
 import { log } from '@react-native-hello/core';
 import { appConfig } from 'config';
 import { AppError } from 'lib/errors';
-import { dispatch } from 'store';
-import { store } from 'store';
+import { dispatch, store } from 'store';
 import { StoreState } from 'store/initialStoreState';
 import { saveSchemaVersion } from 'store/slices/app';
 

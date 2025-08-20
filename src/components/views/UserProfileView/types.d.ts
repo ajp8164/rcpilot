@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { UserProfile } from 'types/user';
 
 export declare type UserProfileView = UserProfileViewMethods;

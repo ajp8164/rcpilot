@@ -1,4 +1,10 @@
-import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
+import React from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+} from 'react-native';
+
 import { useSetState } from '@react-native-hello/core';
 import {
   Divider,
@@ -15,14 +21,10 @@ import {
 import { groupItems } from 'lib/sectionList';
 import lodash from 'lodash';
 import { BatteryFull, BatteryLow } from 'lucide-react-native';
-import React from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-} from 'react-native';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTint } from 'types/battery';
+
+import { BatteryPickerViewMethods, BatteryPickerViewProps } from './types';
 
 type Section = {
   title?: string;

@@ -1,3 +1,6 @@
+import React from 'react';
+import { ListRenderItem, SectionList, SectionListData } from 'react-native';
+
 import {
   Divider,
   ListItem,
@@ -12,8 +15,6 @@ import { secondsToFormat } from 'lib/formatters';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { DateTime } from 'luxon';
-import React from 'react';
-import { ListRenderItem, SectionList, SectionListData } from 'react-native';
 import { BSON } from 'realm';
 import { JChecklistActionHistoryEntry } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';

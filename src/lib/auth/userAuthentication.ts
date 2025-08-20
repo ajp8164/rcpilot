@@ -1,3 +1,5 @@
+import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
+
 import { appleAuth } from '@invertase/react-native-apple-authentication';
 import { getApp } from '@react-native-firebase/app';
 import {
@@ -16,7 +18,6 @@ import { log } from '@react-native-hello/core';
 // import { NativeModules } from 'react-native';
 import { appConfig } from 'config';
 import { preSignOutActions } from 'lib/auth';
-import { AccessToken, LoginManager } from 'react-native-fbsdk-next';
 
 // const { RNTwitterSignIn } = NativeModules;
 
@@ -190,7 +191,7 @@ export const signOut = async () => {
   }
 };
 
-export const sendPasswordResetEmailx = async (email: string) => {
+export const sendPasswordResetEmail = async (email: string) => {
   const app = getApp();
   const auth = getAuth(app);
   try {

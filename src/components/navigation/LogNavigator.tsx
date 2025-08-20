@@ -1,9 +1,10 @@
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import LogScreen from 'components/LogScreen';
-import React from 'react';
 import { LogNavigatorParamList } from 'types/navigation';
 
 const LogStack = createNativeStackNavigator<LogNavigatorParamList>();

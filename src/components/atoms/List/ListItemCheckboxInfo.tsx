@@ -1,3 +1,5 @@
+import React, { useImperativeHandle, useRef } from 'react';
+
 import {
   CollapsibleView,
   ListItemSwipeable,
@@ -6,7 +8,6 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { Check, Square, SquareCheckBig } from 'lucide-react-native';
-import React, { useImperativeHandle, useRef } from 'react';
 
 interface ListItemCheckBoxInfo extends ListItemSwipeable {
   checked: boolean;

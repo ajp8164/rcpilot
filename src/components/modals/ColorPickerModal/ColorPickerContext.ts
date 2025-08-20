@@ -1,6 +1,6 @@
+import React, { createContext, createRef } from 'react';
+
 import { ColorPickerModalMethods, Result } from './types';
-import React from 'react';
-import { createContext, createRef } from 'react';
 
 export type ColorPickerContext = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,7 +1,8 @@
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomeScreen from 'components/WelcomeScreen';
-import React from 'react';
 import { StartupNavigatorParamList } from 'types/navigation';
 
 const StartupStack = createNativeStackNavigator<StartupNavigatorParamList>();

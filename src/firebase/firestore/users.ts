@@ -1,3 +1,10 @@
+import { getApp } from '@react-native-firebase/app';
+import getFirestore, {
+  FirebaseFirestoreTypes,
+} from '@react-native-firebase/firestore';
+import { log } from '@react-native-hello/core';
+import { UserProfile } from 'types/user';
+
 import {
   CollectionChangeListenerOptions,
   QueryOrderBy,
@@ -8,12 +15,6 @@ import {
   getDocument,
   getDocuments,
 } from './index';
-import { getApp } from '@react-native-firebase/app';
-import getFirestore, {
-  FirebaseFirestoreTypes,
-} from '@react-native-firebase/firestore';
-import { log } from '@react-native-hello/core';
-import { UserProfile } from 'types/user';
 
 export const getUser = (id: string): Promise<UserProfile | undefined> => {
   return getDocument('Users', id);

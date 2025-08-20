@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from 'react';
+import { ScrollView, View } from 'react-native';
+
 import {
   ContentView,
   Divider,
@@ -8,8 +11,6 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React, { useEffect, useState } from 'react';
-import { ScrollView, View } from 'react-native';
 import { ContentContainer } from 'types/content';
 import { SetupNavigatorParamList } from 'types/navigation';
 

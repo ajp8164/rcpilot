@@ -1,7 +1,7 @@
-import * as DropdownMenu from 'zeego/dropdown-menu';
+import React, { ReactNode } from 'react';
+
 import { ThemeManager } from '@react-native-hello/ui';
-import React from 'react';
-import { ReactNode } from 'react';
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 // const itemHeight = 25;
 

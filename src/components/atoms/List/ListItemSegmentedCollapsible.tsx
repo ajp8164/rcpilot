@@ -1,5 +1,6 @@
-import { CollapsibleView, ListItemSegmented } from '@react-native-hello/ui';
 import React, { useImperativeHandle, useState } from 'react';
+
+import { CollapsibleView, ListItemSegmented } from '@react-native-hello/ui';
 
 export interface ListItemSegmentedCollapsible extends ListItemSegmented {
   children?: React.ReactElement;

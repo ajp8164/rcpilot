@@ -1,3 +1,7 @@
+import React from 'react';
+import { Image, Text, View } from 'react-native';
+import { SvgXml } from 'react-native-svg';
+
 import { ThemeManager, getColoredSvg, useTheme } from '@react-native-hello/ui';
 import { Button } from 'components/atoms/Button';
 import { secondsToFormat } from 'lib/formatters';
@@ -5,9 +9,6 @@ import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { CirclePlay, Info, Trophy } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React from 'react';
-import { Image, Text, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { Model, Pilot } from 'realmdb';
 
 interface ModelPostCardInterface {

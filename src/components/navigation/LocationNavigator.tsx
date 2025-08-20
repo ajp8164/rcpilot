@@ -1,4 +1,5 @@
-import NavContext from './NavContext';
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EventsScreen from 'components/EventsScreen';
@@ -6,8 +7,9 @@ import LocationEditorScreen from 'components/LocationEditorScreen';
 import LocationsMapScreen from 'components/LocationsMapScreen';
 import LocationsScreen from 'components/LocationsScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
-import React from 'react';
 import { LocationNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const LocationStack = createNativeStackNavigator<LocationNavigatorParamList>();
 

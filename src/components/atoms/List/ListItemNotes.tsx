@@ -1,6 +1,7 @@
-import { ListItem, ThemeManager } from '@react-native-hello/ui';
 import React from 'react';
 import { Text, View } from 'react-native';
+
+import { ListItem, ThemeManager } from '@react-native-hello/ui';
 
 interface ListItemNotes extends ListItem {
   notes?: string;

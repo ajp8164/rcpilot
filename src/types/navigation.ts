@@ -1,9 +1,10 @@
+import { TextStyle } from 'react-native';
+
 import { NavigatorScreenParams } from '@react-navigation/core';
 import { BatteryCellValuesEditorConfig } from 'components/BatteryCellValuesEditorScreen';
 import { BatteryPickerInterface } from 'components/BatteryPickerScreen';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { ModelPickerInterface } from 'components/ModelPickerScreen';
-import { TextStyle } from 'react-native';
 import { JChecklistAction } from 'realmdb/Checklist';
 import { BatteryTemplate, ListBatteries } from 'types/battery';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';

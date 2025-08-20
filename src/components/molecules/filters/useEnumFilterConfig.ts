@@ -1,16 +1,16 @@
-import { Battery } from 'realmdb/Battery';
-import { BatteryChemistry } from 'types/battery';
+import { useRealm } from '@realm/react';
 import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EnumRelation } from 'components/molecules/filters';
-import { EventOutcome } from 'types/event';
+import { eventOutcomeIcons } from 'lib/modelEvent';
+import { Battery } from 'realmdb/Battery';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
 import { Model } from 'realmdb/Model';
 import { ModelCategory } from 'realmdb/ModelCategory';
-import { ModelType } from 'types/model';
 import { Pilot } from 'realmdb/Pilot';
-import { eventOutcomeIcons } from 'lib/modelEvent';
-import { useRealm } from '@realm/react';
+import { BatteryChemistry } from 'types/battery';
+import { EventOutcome } from 'types/event';
+import { ModelType } from 'types/model';
 
 export type EnumName = keyof typeof enumFilterConfigs;
 type EnumPickerProps = Omit<EnumPickerInterface, 'selected' | 'eventName'>;

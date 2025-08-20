@@ -1,8 +1,15 @@
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import {
-  EditorState,
-  UserProfileViewMethods,
-  UserProfileViewProps,
-} from './types';
+  Alert,
+  ScrollView,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { openComposer } from 'react-native-email-link';
+import { useSelector } from 'react-redux';
+
 import { useSetState } from '@react-native-hello/core';
 import {
   Asset,
@@ -22,19 +29,14 @@ import {
   uploadImage,
 } from 'firebase/storage';
 import { SquarePen } from 'lucide-react-native';
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import {
-  Alert,
-  ScrollView,
-  Text,
-  TouchableWithoutFeedback,
-  View,
-} from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
-import { openComposer } from 'react-native-email-link';
-import { useSelector } from 'react-redux';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { UserProfile } from 'types/user';
+
+import {
+  EditorState,
+  UserProfileViewMethods,
+  UserProfileViewProps,
+} from './types';
 
 type UserProfileView = UserProfileViewMethods;
 

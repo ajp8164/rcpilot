@@ -1,8 +1,8 @@
+import React, { ReactElement, useEffect, useState } from 'react';
+import { Text } from 'react-native';
+
 import { useTheme } from '@react-native-hello/ui';
 import { eventOutcomeIcons } from 'lib/modelEvent';
-import { ReactElement, useEffect, useState } from 'react';
-import React from 'react';
-import { Text } from 'react-native';
 import { EventOutcome } from 'types/event';
 
 interface EventRatingInterface {

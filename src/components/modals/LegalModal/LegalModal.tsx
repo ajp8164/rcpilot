@@ -1,6 +1,7 @@
+import React, { useImperativeHandle, useRef } from 'react';
+
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
 import { Modal } from '@react-native-hello/ui';
-import React, { useImperativeHandle, useRef } from 'react';
 
 import LegalView from '../../views/LegalView';
 import { LegalModalMethods, LegalModalProps } from './types';

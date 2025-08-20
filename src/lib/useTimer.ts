@@ -1,5 +1,6 @@
-import { DateTime } from 'luxon';
 import { useEffect, useRef, useState } from 'react';
+
+import { DateTime } from 'luxon';
 import {
   TimerEvent,
   TimerEventAlertPhrase,

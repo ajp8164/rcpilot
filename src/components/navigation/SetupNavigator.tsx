@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AboutScreen from 'components/AboutScreen';
@@ -52,7 +54,6 @@ import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaint
 import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
 import { appConfig } from 'config';
-import React from 'react';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 const SetupStack = createNativeStackNavigator<SetupNavigatorParamList>();

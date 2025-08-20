@@ -1,3 +1,5 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 import {
   InputMethods,
   ListItemSegmented,
@@ -10,8 +12,6 @@ import {
   NumberRelation,
   numberRelationText,
 } from 'components/molecules/filters';
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
 
 type NumericProps = {
   placeholder?: string;

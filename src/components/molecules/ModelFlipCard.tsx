@@ -1,3 +1,6 @@
+import React, { useContext } from 'react';
+import { useSharedValue } from 'react-native-reanimated';
+
 import { ThemeManager } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
@@ -7,8 +10,6 @@ import {
   Front as DinnFront,
 } from 'components/molecules/card-deck/dinn';
 import FlipCardView from 'components/views/FlipCardView';
-import React, { useContext } from 'react';
-import { useSharedValue } from 'react-native-reanimated';
 import { Model, Pilot } from 'realmdb';
 import { ModelsNavigatorParamList } from 'types/navigation';
 

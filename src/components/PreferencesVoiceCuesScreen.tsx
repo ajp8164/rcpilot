@@ -1,3 +1,7 @@
+import React from 'react';
+import { ScrollView } from 'react-native';
+import Slider from 'react-native-ui-lib/slider';
+
 import {
   Divider,
   ListItem,
@@ -5,9 +9,6 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import React from 'react';
-import { ScrollView } from 'react-native';
-import Slider from 'react-native-ui-lib/slider';
 import { AudioVoice, VoiceAfterExpiring, VoiceWhileRunning } from 'types/event';
 import { SetupNavigatorParamList } from 'types/navigation';
 

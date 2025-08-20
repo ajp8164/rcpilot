@@ -1,3 +1,12 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Divider,
   ThemeManager,
@@ -16,14 +25,6 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import { uuidv4 } from 'lib/utils';
 import { ChevronRight } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useEffect, useRef, useState } from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-  View,
-} from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import {
   Checklist,

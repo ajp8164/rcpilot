@@ -1,10 +1,11 @@
+import React from 'react';
+import { View } from 'react-native';
+
 import { useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import ActionBar from 'components/atoms/ActionBar';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Funnel, Scale } from 'lucide-react-native';
-import React from 'react';
-import { View } from 'react-native';
 import { FilterType } from 'types/filter';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 

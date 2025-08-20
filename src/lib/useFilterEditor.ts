@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
+
 import { useSetState } from '@react-native-hello/core';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useObject, useRealm } from '@realm/react';
 import { FilterState } from 'components/molecules/filters';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import { useEffect, useState } from 'react';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { eqObject } from 'realmdb/helpers';

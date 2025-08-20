@@ -1,3 +1,13 @@
+import React, { useState } from 'react';
+import {
+  Image,
+  LayoutChangeEvent,
+  LayoutRectangle,
+  Text,
+  View,
+} from 'react-native';
+import { SvgXml } from 'react-native-svg';
+
 import { ellipsis } from '@react-native-hello/core';
 import {
   ListItem,
@@ -17,15 +27,6 @@ import {
   RotateCcwSquare,
 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
-import {
-  Image,
-  LayoutChangeEvent,
-  LayoutRectangle,
-  Text,
-  View,
-} from 'react-native';
-import { SvgXml } from 'react-native-svg';
 import { Model } from 'realmdb';
 
 interface DinnCardInterface extends FlipCardView {

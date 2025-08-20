@@ -1,5 +1,6 @@
-import lodash from 'lodash';
 import { useState } from 'react';
+
+import lodash from 'lodash';
 
 // Used to force a component re-render no more than once after being called before `wait` ms.
 // This hook is useful for text input typing so that the parent component does not re-render

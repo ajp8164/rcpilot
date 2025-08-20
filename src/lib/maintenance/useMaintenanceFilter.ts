@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import { useObject } from '@realm/react';
 import {
   DateRelation,
@@ -5,7 +7,6 @@ import {
   StringRelation,
 } from 'components/molecules/filters';
 import { getDate } from 'lib/filter';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import {
   Checklist,

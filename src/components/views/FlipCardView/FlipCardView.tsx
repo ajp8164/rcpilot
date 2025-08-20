@@ -1,5 +1,3 @@
-import { FlipCardViewMethods, FlipCardViewProps } from './types';
-import { ThemeManager } from '@react-native-hello/ui';
 import React, { useImperativeHandle } from 'react';
 import Animated, {
   FadeIn,
@@ -7,6 +5,10 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+
+import { ThemeManager } from '@react-native-hello/ui';
+
+import { FlipCardViewMethods, FlipCardViewProps } from './types';
 
 type FlipCardView = FlipCardViewMethods;
 

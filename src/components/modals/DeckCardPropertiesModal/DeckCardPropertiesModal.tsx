@@ -1,18 +1,3 @@
-import {
-  DeckCardPropertiesModalMethods,
-  DeckCardPropertiesModalProps,
-} from './types';
-import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import {
-  Modal,
-  ModalHeader,
-  ThemeManager,
-  useTheme,
-} from '@react-native-hello/ui';
-import { BackdropContext } from 'components/atoms/Backdrop';
-import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
-import { defaultDinnCardColors } from 'components/molecules/card-deck/dinn';
-import { CircleX } from 'lucide-react-native';
 import React, {
   useContext,
   useImperativeHandle,
@@ -25,9 +10,26 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { useDispatch } from 'react-redux';
+
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import {
+  Modal,
+  ModalHeader,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
+import { BackdropContext } from 'components/atoms/Backdrop';
+import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
+import { defaultDinnCardColors } from 'components/molecules/card-deck/dinn';
+import { CircleX } from 'lucide-react-native';
 import { store } from 'store';
 import { saveModelPreferences } from 'store/slices/appSettings';
 import { DeckCardColors } from 'types/preferences';
+
+import {
+  DeckCardPropertiesModalMethods,
+  DeckCardPropertiesModalProps,
+} from './types';
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 

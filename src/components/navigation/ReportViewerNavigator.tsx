@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import {
@@ -6,7 +8,6 @@ import {
 } from '@react-navigation/native-stack';
 import ReportEventsMaintenanceViewerScreen from 'components/ReportEventsMaintenanceViewerScreen';
 import ReportScanCodesViewerScreen from 'components/ReportScanCodesViewerScreen';
-import React from 'react';
 import {
   ReportViewerNavigatorParamList,
   SetupNavigatorParamList,

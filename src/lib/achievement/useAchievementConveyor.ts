@@ -1,10 +1,11 @@
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { eventKind } from 'lib/modelEvent';
 import { displayNotification } from 'lib/notifications';
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Event } from 'realmdb/Event';
 import { Achievement, Pilot } from 'realmdb/Pilot';

@@ -1,9 +1,3 @@
-import { TextViewMethods, TextViewProps } from './types';
-import { Input, InputMethods, ThemeManager } from '@react-native-hello/ui';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-// See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
-import NavContext from 'components/navigation/NavContext';
-import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 import React, {
   useContext,
   useEffect,
@@ -17,6 +11,14 @@ import {
   Text,
   View,
 } from 'react-native';
+
+import { Input, InputMethods, ThemeManager } from '@react-native-hello/ui';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+// See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
+import NavContext from 'components/navigation/NavContext';
+import { useKeyboardHeight } from 'lib/useKeyboardHeight';
+
+import { TextViewMethods, TextViewProps } from './types';
 
 type TextView = TextViewMethods;
 

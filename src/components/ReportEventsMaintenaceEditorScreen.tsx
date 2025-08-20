@@ -1,4 +1,7 @@
-import * as Yup from 'yup';
+import React, { useEffect, useRef, useState } from 'react';
+import { Keyboard, ScrollView, View } from 'react-native';
+import { useSelector } from 'react-redux';
+
 import {
   Divider,
   KeyboardAccessory,
@@ -18,15 +21,13 @@ import {
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
 import { Formik, FormikProps } from 'formik';
 import { filterSummary } from 'lib/filter';
-import React, { useEffect, useRef, useState } from 'react';
-import { Keyboard, ScrollView, View } from 'react-native';
-import { useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { EventsMaintenanceReport } from 'realmdb/EventsMaintenanceReport';
 import { Filter } from 'realmdb/Filter';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { FilterType } from 'types/filter';
 import { SetupNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = NativeStackScreenProps<
   SetupNavigatorParamList,

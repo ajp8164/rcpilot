@@ -1,8 +1,10 @@
+import React, { ReactNode, useRef, useState } from 'react';
+import { View } from 'react-native';
+
+import { ThemeManager } from '@react-native-hello/ui';
+
 import { ColorPickerContext } from './ColorPickerContext';
 import { ColorPickerModal } from './ColorPickerModal';
-import { ThemeManager } from '@react-native-hello/ui';
-import React, { ReactNode, useRef, useState } from 'react';
-import { ColorValue, View } from 'react-native';
 
 export const ColorPickerProvider = ({
   children,
@@ -16,7 +18,7 @@ export const ColorPickerProvider = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const extraDataRef = useRef<any>(null);
 
-  const [recentColors, setRecentColors] = useState<ColorValue[]>([]);
+  const [recentColors, setRecentColors] = useState<string[]>([]);
 
   const onDismiss = () => {
     return;

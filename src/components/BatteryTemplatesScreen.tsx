@@ -1,3 +1,11 @@
+import React, { useEffect, useRef } from 'react';
+import {
+  SectionList,
+  SectionListData,
+  SectionListRenderItem,
+  View,
+} from 'react-native';
+
 import { useSetState } from '@react-native-hello/core';
 import {
   Divider,
@@ -10,13 +18,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { groupItems } from 'lib/sectionList';
-import React, { useEffect, useRef } from 'react';
-import {
-  SectionList,
-  SectionListData,
-  SectionListRenderItem,
-  View,
-} from 'react-native';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTemplate } from 'types/battery';
 import { BatteriesNavigatorParamList } from 'types/navigation';

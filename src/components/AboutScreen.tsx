@@ -1,3 +1,7 @@
+import React from 'react';
+import { ScrollView, Text } from 'react-native';
+import VersionNumber from 'react-native-version-number';
+
 import {
   Divider,
   ListItem,
@@ -9,9 +13,6 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import helpContent from 'lib/content/helpContent';
 import legalContent from 'lib/content/legalContent';
-import React from 'react';
-import { ScrollView, Text } from 'react-native';
-import VersionNumber from 'react-native-version-number';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 type Props = NativeStackScreenProps<SetupNavigatorParamList, 'About'>;

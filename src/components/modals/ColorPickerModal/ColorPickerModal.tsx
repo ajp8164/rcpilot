@@ -1,22 +1,3 @@
-import { Eyedropper } from './Eyedropper';
-import {
-  ColorPickerModalMethods,
-  ColorPickerModalProps,
-  PresentOptions,
-} from './types';
-import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import { log } from '@react-native-hello/core';
-import {
-  Modal,
-  ModalHeader,
-  ThemeManager,
-  useTheme,
-} from '@react-native-hello/ui';
-import SegmentedControl from '@react-native-segmented-control/segmented-control';
-import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
-import ModalHandle from 'components/atoms/ModalHandle';
-import { ColorPickerContext } from 'components/modals/ColorPickerModal';
-import { CircleX, Pipette } from 'lucide-react-native';
 import React, {
   useCallback,
   useContext,
@@ -30,6 +11,20 @@ import Animated, {
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
+
+import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
+import { log } from '@react-native-hello/core';
+import {
+  Modal,
+  ModalHeader,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
+import SegmentedControl from '@react-native-segmented-control/segmented-control';
+import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
+import ModalHandle from 'components/atoms/ModalHandle';
+import { ColorPickerContext } from 'components/modals/ColorPickerModal';
+import { CircleX, Pipette } from 'lucide-react-native';
 import ColorPicker, {
   BlueSlider,
   GreenSlider,
@@ -38,6 +33,13 @@ import ColorPicker, {
   RedSlider,
   returnedResults,
 } from 'reanimated-color-picker';
+
+import { Eyedropper } from './Eyedropper';
+import {
+  ColorPickerModalMethods,
+  ColorPickerModalProps,
+  PresentOptions,
+} from './types';
 
 type ColorPickerModal = ColorPickerModalMethods;
 

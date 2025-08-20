@@ -1,3 +1,7 @@
+import React, { useEffect, useRef, useState } from 'react';
+import { FlatList, ListRenderItem, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
   Divider,
   ListEditorMethods,
@@ -13,9 +17,6 @@ import { defaultFilter } from 'lib/maintenance';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import lodash from 'lodash';
 import { Trash2 } from 'lucide-react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { FlatList, ListRenderItem, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { selectFilters } from 'store/selectors/filterSelectors';

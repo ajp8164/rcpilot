@@ -1,12 +1,14 @@
-import NavContext from './NavContext';
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import ReportModelScanCodeFilterEditorScreen from 'components/ReportModelScanCodeFilterEditorScreen';
 import ReportModelScanCodeFiltersScreen from 'components/ReportModelScanCodeFiltersScreen';
-import React from 'react';
 import { ReportModelScanCodeFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const ReportModelScanCodeFiltersStack =
   createNativeStackNavigator<ReportModelScanCodeFiltersNavigatorParamList>();

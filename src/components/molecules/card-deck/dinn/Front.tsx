@@ -1,13 +1,3 @@
-import { defaultDinnCardColors } from './index';
-import { ellipsis } from '@react-native-hello/core';
-import { ThemeManager, getColoredSvg, useTheme } from '@react-native-hello/ui';
-import { Button } from 'components/atoms/Button';
-import type FlipCardView from 'components/views/FlipCardView';
-import { getVendorImage } from 'images';
-import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
-import { eventKind } from 'lib/modelEvent';
-import { Bandage, Info, PlayCircle, Trophy, Wrench } from 'lucide-react-native';
-import { DateTime, Duration } from 'luxon';
 import React, { useState } from 'react';
 import {
   Image,
@@ -19,8 +9,20 @@ import {
 } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { useSelector } from 'react-redux';
+
+import { ellipsis } from '@react-native-hello/core';
+import { ThemeManager, getColoredSvg, useTheme } from '@react-native-hello/ui';
+import { Button } from 'components/atoms/Button';
+import type FlipCardView from 'components/views/FlipCardView';
+import { getVendorImage } from 'images';
+import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
+import { eventKind } from 'lib/modelEvent';
+import { Bandage, Info, PlayCircle, Trophy, Wrench } from 'lucide-react-native';
+import { DateTime, Duration } from 'luxon';
 import { Model, Pilot } from 'realmdb';
 import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
+
+import { defaultDinnCardColors } from './index';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;

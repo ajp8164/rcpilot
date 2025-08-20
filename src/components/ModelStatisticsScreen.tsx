@@ -1,3 +1,7 @@
+import React from 'react';
+import { ListRenderItem, ScrollView } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+
 import {
   Divider,
   ListItem,
@@ -10,9 +14,6 @@ import { EmptyView } from 'components/molecules/EmptyView';
 import { secondsToFormat } from 'lib/formatters';
 import { eventKind } from 'lib/modelEvent';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
-import React from 'react';
-import { ListRenderItem, ScrollView } from 'react-native';
-import { FlatList } from 'react-native-gesture-handler';
 import { BSON } from 'realm';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Model, ModelEventStyleData } from 'realmdb/Model';

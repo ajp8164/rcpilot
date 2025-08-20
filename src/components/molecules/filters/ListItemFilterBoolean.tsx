@@ -1,10 +1,10 @@
+import React, { useEffect, useRef, useState } from 'react';
+
 import { ListItemSegmented } from '@react-native-hello/ui';
 import {
   BooleanFilterState,
   BooleanRelation,
 } from 'components/molecules/filters';
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
 
 interface Props extends Pick<ListItemSegmented, 'position'> {
   label?: string;

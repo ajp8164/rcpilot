@@ -1,4 +1,5 @@
 import { ContentView } from 'types/content';
+
 import faq from './faq';
 import features from './features';
 import support from './support';

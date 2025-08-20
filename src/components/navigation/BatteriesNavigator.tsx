@@ -1,4 +1,5 @@
-import NewBatteryNavigator from './NewBatteryNavigator';
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteriesScreen from 'components/BatteriesScreen';
@@ -17,8 +18,9 @@ import BatteryFiltersNavigator from 'components/navigation/BatteryFiltersNavigat
 import EventFiltersNavigator from 'components/navigation/EventFiltersNavigator';
 import NewBatteryCycleNavigator from 'components/navigation/NewBatteryCycleNavigator';
 import lodash from 'lodash';
-import React from 'react';
 import { BatteriesNavigatorParamList } from 'types/navigation';
+
+import NewBatteryNavigator from './NewBatteryNavigator';
 
 const BatteriesStack =
   createNativeStackNavigator<BatteriesNavigatorParamList>();

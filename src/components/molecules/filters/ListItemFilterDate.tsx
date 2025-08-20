@@ -1,4 +1,6 @@
-import { getTimeSpanItems } from './wheelPickerHelpers';
+import React, { useEffect, useRef, useState } from 'react';
+import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
+
 import { useSetState } from '@react-native-hello/core';
 import {
   ListItemDateTime,
@@ -12,10 +14,9 @@ import {
 } from 'components/atoms/List';
 import { DateFilterState, DateRelation } from 'components/molecules/filters';
 import { DateTime } from 'luxon';
-import { useEffect, useRef, useState } from 'react';
-import React from 'react';
-import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 import { ISODateString } from 'types/common';
+
+import { getTimeSpanItems } from './wheelPickerHelpers';
 
 interface Props extends Pick<ListItemSegmented, 'position'> {
   onValueChange: (filterState: DateFilterState) => void;

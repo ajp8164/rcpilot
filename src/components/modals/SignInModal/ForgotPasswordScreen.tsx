@@ -1,11 +1,3 @@
-import * as Yup from 'yup';
-import { SignInNavigatorParamList } from './types';
-import { useSetState } from '@react-native-hello/core';
-import { ListItemInput, ThemeManager, useTheme } from '@react-native-hello/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button } from 'components/atoms/Button';
-import { Formik, FormikHelpers, FormikProps } from 'formik';
-import { sendPasswordResetEmail } from 'lib/auth';
 import React, { useRef } from 'react';
 import {
   Alert,
@@ -16,6 +8,16 @@ import {
   View,
 } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+
+import { useSetState } from '@react-native-hello/core';
+import { ListItemInput, ThemeManager, useTheme } from '@react-native-hello/ui';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Button } from 'components/atoms/Button';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { sendPasswordResetEmail } from 'lib/auth';
+import * as Yup from 'yup';
+
+import { SignInNavigatorParamList } from './types';
 
 type FormValues = {
   email: string;

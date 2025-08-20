@@ -1,3 +1,6 @@
+import React, { useEffect } from 'react';
+import { SectionList, SectionListData, View } from 'react-native';
+
 import {
   Divider,
   ListItemCheckBox,
@@ -9,8 +12,6 @@ import { useQuery } from '@realm/react';
 import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
-import React, { useEffect } from 'react';
-import { SectionList, SectionListData, View } from 'react-native';
 import { Battery } from 'realmdb/Battery';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 

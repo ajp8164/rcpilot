@@ -1,5 +1,6 @@
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 
 import StartupNavigator from './StartupNavigator';

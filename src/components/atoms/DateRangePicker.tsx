@@ -1,9 +1,9 @@
-import { useSetState } from '@react-native-hello/core';
-import { DateTime } from 'luxon';
-import React from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Calendar, CalendarProps } from 'react-native-calendars';
 import { DateData, MarkedDates, Theme } from 'react-native-calendars/src/types';
+
+import { useSetState } from '@react-native-hello/core';
+import { DateTime } from 'luxon';
 
 /** Example:
  * 

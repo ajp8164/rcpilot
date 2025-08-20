@@ -1,4 +1,6 @@
-import * as Yup from 'yup';
+import React, { useRef, useState } from 'react';
+import { Keyboard, View } from 'react-native';
+
 import {
   Divider,
   KeyboardAccessory,
@@ -15,9 +17,8 @@ import {
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
 import { Formik, FormikProps } from 'formik';
 import { DateTime } from 'luxon';
-import React, { useRef, useState } from 'react';
-import { Keyboard, View } from 'react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
+import * as Yup from 'yup';
 
 export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'NewPilot'>;
 

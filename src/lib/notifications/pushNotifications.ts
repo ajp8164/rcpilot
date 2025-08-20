@@ -1,3 +1,5 @@
+import { isEmulator } from 'react-native-device-info';
+
 import notifee from '@notifee/react-native';
 import { getApp } from '@react-native-firebase/app';
 import {
@@ -16,7 +18,6 @@ import {
 import { log } from '@react-native-hello/core';
 import { updateUser } from 'firebase/firestore';
 import lodash from 'lodash';
-import { isEmulator } from 'react-native-device-info';
 import { NotificationInterface } from 'types/notification';
 import { UserProfile } from 'types/user';
 

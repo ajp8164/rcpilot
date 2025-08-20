@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 import {
   FormikErrors,
   FormikTouched,
@@ -5,7 +7,6 @@ import {
   useFormikContext,
 } from 'formik';
 import lodash, { isEqual, omit } from 'lodash';
-import { useEffect, useRef } from 'react';
 
 export type FormikStateDeep<T extends FormikValues> = {
   values: T;

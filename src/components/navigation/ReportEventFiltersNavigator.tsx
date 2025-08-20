@@ -1,4 +1,5 @@
-import NavContext from './NavContext';
+import React from 'react';
+
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EnumPickerScreen from 'components/EnumPickerScreen';
@@ -6,8 +7,9 @@ import NotesEditorScreen from 'components/NotesEditorScreen';
 import ReportEventFilterEditorScreen from 'components/ReportEventFilterEditorScreen';
 import ReportEventFiltersScreen from 'components/ReportEventFiltersScreen';
 import { eventKind } from 'lib/modelEvent';
-import React from 'react';
 import { ReportEventFiltersNavigatorParamList } from 'types/navigation';
+
+import NavContext from './NavContext';
 
 const ReportEventFiltersStack =
   createNativeStackNavigator<ReportEventFiltersNavigatorParamList>();

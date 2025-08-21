@@ -37,6 +37,7 @@ export const useDatabaseInfo = (): DatabaseInfoContext => {
   }, []);
 
   const onRealmChange = () => {
+    if (realm.isClosed) return;
     databaseLastUpdate.current = DateTime.now().toISO();
 
     (async () => {
@@ -57,8 +58,13 @@ export const useDatabaseInfo = (): DatabaseInfoContext => {
       objectCount += realm.objects(ScanCodesReport).length;
       databaseObjects.current = objectCount;
 
-      const result = await fs.stat(realm.path);
-      databaseSize.current = result.size;
+      setTimeout(async () => {
+        if (realm.isClosed) return;
+        const result = await fs.stat(realm.path).catch(() => null);
+        if (result) {
+          databaseSize.current = result.size;
+        }
+      });
     })();
   };
 

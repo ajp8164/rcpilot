@@ -106,7 +106,6 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const [batteries, setBatteries] = useState<Battery[]>([]);
   const [kind] = useState(eventKind(model?.type));
 
-  // const timerUsesButtons = false;
   const [countdownTimerEnabled, setCountdownTimerEnabled] = useState(false);
   const countdownValue = useRef(0);
 
@@ -697,7 +696,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   },
   eventKind: {
     ...theme.text.small,
-    color: theme.colors.whiteTransparentLight,
+    color: theme.colors.stickyWhite,
     textAlign: 'center',
     marginBottom: 10,
   },

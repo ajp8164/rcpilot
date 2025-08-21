@@ -9,7 +9,6 @@ import {
   useDevice,
   useTheme,
 } from '@react-native-hello/ui';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import helpContent from 'lib/content/helpContent';
 import legalContent from 'lib/content/legalContent';
@@ -22,10 +21,10 @@ const AboutScreen = ({ navigation }: Props) => {
   const s = useStyles();
   const device = useDevice();
 
-  const tabBarHeight = useBottomTabBarHeight();
-  const headerBarLargeHeight = device.headerBarLarge.height as number;
   const visibleViewHeight =
-    device.screen.height - tabBarHeight - headerBarLargeHeight;
+    device.screen.height -
+    device.bottomTabBarHeight -
+    device.headerBarLarge.height;
 
   return (
     <ScrollView
@@ -54,14 +53,12 @@ const AboutScreen = ({ navigation }: Props) => {
           })
         }
       />
-      <Divider
-        note
-        text={
-          'This log shows the activity of the application and can be useful for app support.'
-        }
-      />
-      <Text style={s.version}>
-        {`App Version ${VersionNumber.appVersion}.${VersionNumber.buildVersion}`}
+      <Text
+        style={[
+          s.version,
+          { bottom: device.bottomTabBarHeight - device.insets.bottom + 15 },
+        ]}>
+        {`Release ${VersionNumber.appVersion} (${VersionNumber.buildVersion})`}
       </Text>
     </ScrollView>
   );
@@ -70,9 +67,7 @@ const AboutScreen = ({ navigation }: Props) => {
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   version: {
     position: 'absolute',
-    bottom: 15,
     ...theme.text.small,
-    ...theme.styles.textDim,
     alignSelf: 'center',
     marginTop: 25,
   },

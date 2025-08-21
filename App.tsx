@@ -27,7 +27,6 @@ LogBox.ignoreLogs([
 ]);
 
 const App = () => {
-  console.log('App');
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

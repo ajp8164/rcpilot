@@ -133,7 +133,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   // };
 
   const getIconEl = (value: string) => {
-    return icons && icons[value] ? (
+    return icons?.[value] ? (
       <View key={value}>{icons[value]?.leftContent}</View>
     ) : undefined;
   };
@@ -159,7 +159,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     return (
       <ListItemCheckBox
         key={`${value}${index}`}
-        title={icons && icons[value]?.hideTitle ? '' : name}
+        title={icons?.[value]?.hideTitle ? '' : name}
         leftContent={getIconEl(value)}
         position={
           mode === 'one-or-none'

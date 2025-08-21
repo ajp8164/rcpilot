@@ -1,5 +1,11 @@
 import { getApp } from '@react-native-firebase/app';
-import { getStorage } from '@react-native-firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  putFile,
+  ref,
+} from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 import { uuidv4 } from 'lib/utils';
 
@@ -17,8 +23,9 @@ export type Image = {
  * @param args.onSuccess - callback with a storage public url
  * @param args.onError - callback when an error occurs
  */
+
 export const uploadImage = async (args: {
-  image: Image;
+  image: { uri: string; mimeType: string };
   storagePath: string;
   oldImage?: string;
   onSuccess: (url: string) => void;
@@ -32,23 +39,29 @@ export const uploadImage = async (args: {
     const imageType = image.mimeType.split('/')[1];
     const destFilename = `${storagePath}${uuidv4()}.${imageType}`;
     const sourceFilename = image.uri.replace('file://', '');
-    const storageRef = storage.ref(destFilename);
+    const storageRef = ref(storage, destFilename);
 
     try {
-      await storageRef.putFile(sourceFilename).catch(() => {
-        // Need a handler here to swallow possible second throw inside putFile().
-      });
-      const url = await storageRef.getDownloadURL();
-      oldImage && (await deleteImage({ filename: oldImage, storagePath }));
+      await putFile(storageRef, sourceFilename);
+
+      const url = await getDownloadURL(storageRef);
+
+      if (oldImage) {
+        await deleteImage({ filename: oldImage, storagePath });
+      }
+
       onSuccess(url);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
+    } catch (e: unknown) {
       onError();
+      if (e instanceof Error) {
+        log.error(`Failed to upload image: ${e.message}`);
+      }
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    log.error(`Image save failed: ${e.message}`);
+  } catch (e: unknown) {
     onError();
+    if (e instanceof Error) {
+      log.error(`Image save failed: ${e.message}`);
+    }
   }
 };
 
@@ -59,28 +72,42 @@ export const uploadImage = async (args: {
  * @param args.onSuccess - callback when complete
  * @param args.onError - callback when an error occurs
  */
+
 export const deleteImage = async (args: {
   filename: string;
   storagePath: string;
   onSuccess?: () => void;
   onError?: () => void;
 }) => {
+  const { filename, storagePath, onSuccess, onError } = args;
   const app = getApp();
   const storage = getStorage(app);
 
-  const { filename, onError, onSuccess, storagePath } = args;
-  const filenameRef = `${storagePath}${
-    filename.replace(/%2F/g, '/').split('/').pop()?.split('#')[0].split('?')[0]
-  }`;
-  await storage
-    .ref(filenameRef)
-    .delete()
-    .then(() => onSuccess && onSuccess())
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .catch((e: any) => {
+  // Clean up filename
+  const cleanedFilename = filename
+    .replace(/%2F/g, '/')
+    .split('/')
+    .pop()
+    ?.split('#')[0]
+    .split('?')[0];
+
+  if (!cleanedFilename) {
+    log.error('Invalid filename provided to deleteImage.');
+    onError?.();
+    return;
+  }
+
+  const fileRef = ref(storage, `${storagePath}${cleanedFilename}`);
+
+  try {
+    await deleteObject(fileRef);
+    onSuccess?.();
+  } catch (e: unknown) {
+    if (e instanceof Error) {
       if (!e.message.includes('storage/object-not-found')) {
         log.error(`Failed to delete image: ${e.message}`);
       }
-      onError && onError();
-    });
+    }
+    onError?.();
+  }
 };

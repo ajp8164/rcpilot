@@ -67,7 +67,7 @@ const UserProfileView = React.forwardRef<UserProfileView, UserProfileViewProps>(
     }));
 
     useEffect(() => {
-      onEditorStateChange && onEditorStateChange(editorState);
+      onEditorStateChange?.(editorState);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editorState]);
 

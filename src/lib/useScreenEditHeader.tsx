@@ -48,9 +48,7 @@ export const useScreenEditHeader = () => {
             }
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() =>
-              leftButton && leftButton.action
-                ? leftButton.action()
-                : navigation.goBack()
+              leftButton?.action ? leftButton.action() : navigation.goBack()
             }
           />
         );
@@ -72,7 +70,7 @@ export const useScreenEditHeader = () => {
             }
             disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={() =>
-              rightButton && rightButton.action
+              rightButton?.action
                 ? rightButton.action()
                 : () => {
                     return;

@@ -49,10 +49,9 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       data.eventStyleCount > 0
         ? data.eventStyleDuration / data.eventStyleCount
         : 0;
-    const percentage =
-      model && model.statistics.totalTime
-        ? (data.eventStyleDuration / model.statistics.totalTime) * 100
-        : 0;
+    const percentage = model?.statistics.totalTime
+      ? (data.eventStyleDuration / model.statistics.totalTime) * 100
+      : 0;
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}

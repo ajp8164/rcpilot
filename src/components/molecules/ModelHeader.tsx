@@ -117,7 +117,7 @@ export const ModelHeader = ({
 
   const deletePhoto = () => {
     setImage(undefined);
-    onChangeImage && onChangeImage();
+    onChangeImage?.();
   };
 
   const selectModelImage = () => {
@@ -130,10 +130,10 @@ export const ModelHeader = ({
       customButtonCallback: deletePhoto,
       customButtonLabel: image ? 'Delete Photo' : undefined,
     }).then(attachment => {
-      if (attachment[0] && attachment[0].type === 'image') {
+      if (attachment[0]?.type === 'image') {
         const img = attachment[0].uri;
         setImage(img);
-        onChangeImage && onChangeImage(img);
+        onChangeImage?.(img);
       }
     });
   };

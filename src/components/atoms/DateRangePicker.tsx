@@ -87,7 +87,7 @@ const DateRangePicker = ({
     }
     const { fromDate: initialFromDate, toDate: initialToDate } = initialRange;
     const fromDate = initialFromDate.toISOString().split('T')[0];
-    const toDate = initialToDate && initialToDate.toISOString().split('T')[0];
+    const toDate = initialToDate?.toISOString().split('T')[0];
     const initialMarkedDates = {
       [fromDate]: {
         startingDay: true,

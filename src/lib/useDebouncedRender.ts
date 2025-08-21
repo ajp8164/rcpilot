@@ -10,7 +10,7 @@ import lodash from 'lodash';
 export const useDebouncedRender = (wait?: number, maxWait?: number) => {
   const [render, setRender] = useState(false);
   const callbackRenderer = (callback?: () => void) => {
-    callback && callback();
+    callback?.();
     setRender(!render);
   };
   return lodash.debounce(callbackRenderer, wait || 250, {

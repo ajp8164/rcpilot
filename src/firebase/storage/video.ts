@@ -1,5 +1,10 @@
 import { getApp } from '@react-native-firebase/app';
-import { getStorage } from '@react-native-firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  ref,
+} from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 import { uuidv4 } from 'lib/utils';
 
@@ -22,6 +27,7 @@ const videoTypeMap: { [key in string]: string } = {
  * @param args.onSuccess - callback with a storage public url
  * @param args.onError - callback when an error occurs
  */
+
 export const uploadVideo = async (args: {
   video: Video;
   storagePath: string;
@@ -30,30 +36,39 @@ export const uploadVideo = async (args: {
   onError: () => void;
 }) => {
   const { video, storagePath, oldVideo, onSuccess, onError } = args;
-
   const app = getApp();
   const storage = getStorage(app);
+
   try {
     const videoType = video.mimeType.split('/')[1];
     const destFilename = `${storagePath}${uuidv4()}.${videoTypeMap[videoType] || videoType}`;
-    const sourceFilename = video.uri.replace('file://', '');
-    const storageRef = storage.ref(destFilename);
+    const sourceFile = video.uri.replace('file://', '');
+    const storageRef = ref(storage, destFilename);
 
     try {
-      await storageRef.putFile(sourceFilename).catch(() => {
-        // Need a handler here to swallow possible second throw inside putFile().
+      // Upload the video
+      await storageRef.putFile(sourceFile).catch(() => {
+        // Swallow potential second throw inside putFile
       });
-      const url = await storageRef.getDownloadURL();
-      // const thumbnailUrl = await saveThumbnail(video);
-      oldVideo && (await deleteVideo({ filename: oldVideo, storagePath }));
+
+      // Get the download URL
+      const url = await getDownloadURL(storageRef);
+
+      // Delete old video if present
+      if (oldVideo) {
+        const oldVideoRef = ref(storage, `${storagePath}${oldVideo}`);
+        await deleteObject(oldVideoRef).catch(() => {
+          // Ignore errors for missing old video
+        });
+      }
+
       onSuccess(url);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
+    } catch (e: unknown) {
+      log.error('Video upload failed', e);
       onError();
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    log.error(`Video save failed: ${e.message}`);
+  } catch (e: unknown) {
+    log.error('Video save failed', e);
     onError();
   }
 };
@@ -65,28 +80,40 @@ export const uploadVideo = async (args: {
  * @param args.onSuccess - callback when complete
  * @param args.onError - callback when an error occurs
  */
+
 export const deleteVideo = async (args: {
   filename: string;
   storagePath: string;
   onSuccess?: () => void;
   onError?: () => void;
 }) => {
+  const { filename, storagePath, onSuccess, onError } = args;
   const app = getApp();
   const storage = getStorage(app);
 
-  const { filename, onError, onSuccess, storagePath } = args;
-  const filenameRef = `${storagePath}${
-    filename.replace(/%2F/g, '/').split('/').pop()?.split('#')[0].split('?')[0]
-  }`;
-  await storage
-    .ref(filenameRef)
-    .delete()
-    .then(() => onSuccess && onSuccess())
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .catch((e: any) => {
-      if (!e.message.includes('storage/object-not-found')) {
-        log.error(`Failed to delete video: ${e.message}`);
-      }
-      onError && onError();
-    });
+  // Clean up filename
+  const cleanedFilename = filename
+    .replace(/%2F/g, '/')
+    .split('/')
+    .pop()
+    ?.split('#')[0]
+    .split('?')[0];
+
+  if (!cleanedFilename) {
+    onError?.();
+    return;
+  }
+
+  const fileRef = ref(storage, `${storagePath}${cleanedFilename}`);
+
+  try {
+    await deleteObject(fileRef);
+    onSuccess?.();
+  } catch (e: unknown) {
+    // Ignore if object does not exist
+    if (e instanceof Error && !e.message.includes('storage/object-not-found')) {
+      log.error(`Failed to delete video: ${e.message}`);
+    }
+    onError?.();
+  }
 };

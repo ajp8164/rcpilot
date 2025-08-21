@@ -57,7 +57,7 @@ export const Front = ({
   const cardColors = modelPreferences?.deckCardColors || defaultDinnCardColors;
 
   const handlePress = () => {
-    flip && flip();
+    flip?.();
   };
 
   const vendorImage = getVendorImage(model.vendor);

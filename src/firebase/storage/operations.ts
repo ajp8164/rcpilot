@@ -1,5 +1,11 @@
 import { getApp } from '@react-native-firebase/app';
-import { getStorage } from '@react-native-firebase/storage';
+import {
+  getDownloadURL,
+  getMetadata,
+  getStorage,
+  listAll,
+  ref,
+} from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 
 export type File = {
@@ -20,52 +26,61 @@ export type Directory = {
  * @param args.onSuccess - callback with a storage public url
  * @param args.onError - callback when an error occurs
  */
+
 export const listFiles = async (args: {
   storagePath: string;
   onSuccess: (dir: Directory) => void;
   onError?: () => void;
 }) => {
   const { storagePath, onSuccess, onError } = args;
-
   const app = getApp();
   const storage = getStorage(app);
+
   try {
-    const storageRef = storage.ref(storagePath);
+    const storageRef = ref(storage, storagePath);
 
     try {
+      const result = await listAll(storageRef);
       let allocated = 0;
-      await storageRef.list().then(result => {
-        (async () => {
-          const files = await Promise.all(
-            result.items.map(async item => {
-              const url = await item.getDownloadURL();
-              const metadata = await item.getMetadata();
-              const size = metadata.size;
-              const date = metadata.timeCreated;
-              allocated += size;
-              return {
-                name: item.name,
-                size,
-                date,
-                url,
-              } as File;
-            }),
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          ).catch((e: any) => {
-            log.error(`Directory list failed: ${e.message}`);
-            onError && onError();
-          });
-          onSuccess({ allocated, files: files || [] });
-        })();
+
+      const files: (File | null)[] = await Promise.all(
+        result.items.map(async itemRef => {
+          try {
+            const url = await getDownloadURL(itemRef);
+            const metadata = await getMetadata(itemRef);
+            allocated += metadata.size ?? 0;
+            return {
+              name: itemRef.name,
+              size: metadata.size ?? 0,
+              date: metadata.timeCreated ?? '',
+              url,
+            } as File;
+          } catch (e: unknown) {
+            if (e instanceof Error) {
+              log.error(
+                `Failed to get file info for ${itemRef.name}: ${e.message}`,
+              );
+            }
+            onError?.();
+            return null;
+          }
+        }),
+      );
+
+      onSuccess({
+        allocated,
+        files: files.filter((f): f is File => f !== null),
       });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      log.error(`Directory list failed: ${e.message}`);
-      onError && onError();
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        log.error(`Directory list failed: ${e.message}`);
+      }
+      onError?.();
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    log.error(`Directory list failed: ${e.message}`);
-    onError && onError();
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      log.error(`Directory list failed: ${e.message}`);
+    }
+    onError?.();
   }
 };

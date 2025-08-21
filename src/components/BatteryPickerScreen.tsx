@@ -63,7 +63,7 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
     const onDone = () => {
       navigation.goBack();
       setTimeout(() => {
-        callback && callback(selectedBatteries.current);
+        callback?.(selectedBatteries.current);
       });
     };
 

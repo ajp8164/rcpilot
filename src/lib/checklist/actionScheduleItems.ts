@@ -38,7 +38,7 @@ export const getChecklistActionScheduleItems = (
   type?: ChecklistActionScheduleType,
 ) => {
   const items =
-    type && type === ChecklistActionScheduleType.NonRepeating
+    type === ChecklistActionScheduleType.NonRepeating
       ? checklistActionNonRepeatingScheduleItems
       : checklistActionRepeatingScheduleItems;
   return {

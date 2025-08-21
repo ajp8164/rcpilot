@@ -1,7 +1,20 @@
 import { getApp } from '@react-native-firebase/app';
 import {
   FirebaseFirestoreTypes,
+  collection,
+  doc,
+  limit as firestoreLimit,
+  orderBy as firestoreOrderBy,
+  query as firestoreQuery,
+  startAfter as firestoreStartAfter,
+  where as firestoreWhere,
+  getCountFromServer,
+  getDoc,
+  getDocs,
+  getDocsFromCache,
   getFirestore,
+  onSnapshot,
+  startAfter,
 } from '@react-native-firebase/firestore';
 import { log } from '@react-native-hello/core';
 import { UserRole } from 'types/user';
@@ -21,12 +34,12 @@ export type QueryResult<T> = {
 };
 
 export type QueryOrderBy = {
-  fieldPath: string | number | FirebaseFirestoreTypes.FieldPath;
+  fieldPath: string | FirebaseFirestoreTypes.FieldPath;
   directionStr?: 'asc' | 'desc' | undefined;
 };
 
 export type QueryWhere = {
-  fieldPath: string | number | FirebaseFirestoreTypes.FieldPath;
+  fieldPath: string | FirebaseFirestoreTypes.FieldPath;
   opStr: FirebaseFirestoreTypes.WhereFilterOp;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any;
@@ -44,44 +57,40 @@ export type CollectionChangeListenerOptions = {
   auth?: ListenerAuth;
 };
 
-export const getDocument = <T>(
+export const getDocument = async <T>(
   collectionPath: string,
   id: string,
 ): Promise<T | undefined> => {
   const app = getApp();
-  const firestore = getFirestore(app);
+  const db = getFirestore(app);
 
-  return (
-    firestore
-      .collection(collectionPath)
-      .doc(id)
-      .get()
-      .then(documentSnapshot => {
-        if (documentSnapshot.exists()) {
-          const result = {
-            ...documentSnapshot.data(),
-            id,
-          };
-          return result as T;
-        } else {
-          return;
-        }
-      })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch((e: any) => {
-        log.error(`Failed to get ${collectionPath} document: ${e.message}`);
-        throw e;
-      })
-  );
+  try {
+    const docRef = doc(db, collectionPath, id);
+    const documentSnapshot = await getDoc(docRef);
+    if (documentSnapshot.exists()) {
+      const result = {
+        ...documentSnapshot.data(),
+        id,
+      };
+      return result as T;
+    } else {
+      return;
+    }
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      log.error(`Failed to get ${collectionPath} document: ${e.message}`);
+    }
+    throw e;
+  }
 };
 
-export const getDocuments = <T extends { id?: string | undefined }>(
+export const getDocuments = async <T extends { id?: string }>(
   collectionPath: string,
   opts?: {
     orderBy?: QueryOrderBy;
     limit?: number;
     where?: QueryWhere[];
-    lastDocument?: FirebaseFirestoreTypes.DocumentData;
+    lastDocument?: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>;
     skipIdMap?: boolean;
     fromCache?: boolean;
   },
@@ -94,88 +103,91 @@ export const getDocuments = <T extends { id?: string | undefined }>(
     where,
     fromCache,
   } = opts || {};
-  const app = getApp();
-  const firestore = getFirestore(app);
 
-  let query = firestore.collection(collectionPath);
+  const db = getFirestore(getApp());
+  let q: FirebaseFirestoreTypes.Query<FirebaseFirestoreTypes.DocumentData> =
+    collection(db, collectionPath);
 
+  // Apply where filters
   if (where) {
     where.forEach(w => {
-      query = query.where(
-        w.fieldPath,
-        w.opStr,
-        w.value,
-      ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
+      q = firestoreQuery(q, firestoreWhere(w.fieldPath, w.opStr, w.value));
     });
   }
 
+  // Apply orderBy
   if (orderBy) {
-    query = query.orderBy(
-      orderBy.fieldPath,
-      orderBy.directionStr,
-    ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
+    q = firestoreQuery(
+      q,
+      firestoreOrderBy(orderBy.fieldPath, orderBy.directionStr),
+    );
   }
 
+  // Apply pagination
   if (lastDocument) {
-    query = query.startAfter(
-      lastDocument,
-    ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
+    q = firestoreQuery(q, startAfter(lastDocument));
   }
 
-  return (
-    query
-      // Limit must be positive value. Load one more than requested to detect end of list.
-      .limit(limit + 1 || 2)
-      .get({ source: fromCache ? 'cache' : 'default' })
-      .then(querySnapshot => {
-        const result: T[] = [];
-        querySnapshot.forEach((doc, index) => {
-          if (index < limit) {
-            const data = <T>doc.data();
-            !skipIdMap && (data.id = doc.id);
-            result.push(data);
-          }
-        });
-        return <QueryResult<T>>{
-          allLoaded: querySnapshot.docs.length < limit + 1,
-          lastDocument: querySnapshot.docs[querySnapshot.docs.length - 1],
-          result,
-          snapshot: querySnapshot,
-        };
-      })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch((e: any) => {
-        log.error(`Failed to get ${collectionPath} documents: ${e.message}`);
-        throw e;
-      })
-  );
+  // Apply limit (+1 to detect end)
+  q = firestoreQuery(q, firestoreLimit(limit + 1));
+
+  try {
+    const getDocsFn = fromCache ? getDocsFromCache : getDocs;
+
+    const querySnapshot = await getDocsFn(q);
+    const result: T[] = [];
+
+    querySnapshot.forEach(
+      (
+        doc: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>,
+        index: number,
+      ) => {
+        if (index < limit) {
+          const data = doc.data() as T;
+          if (!skipIdMap) data.id = doc.id;
+          result.push(data);
+        }
+      },
+    );
+
+    return {
+      allLoaded: querySnapshot.docs.length <= limit,
+      lastDocument: querySnapshot.docs[querySnapshot.docs.length - 1],
+      result,
+      snapshot: querySnapshot,
+    };
+  } catch (e: unknown) {
+    if (e instanceof Error) {
+      log.error(`Failed to get ${collectionPath} documents: ${e.message}`);
+    }
+    throw e;
+  }
 };
 
-export const getDocumentCount = (collectionPath: string): Promise<number> => {
-  const app = getApp();
-  const firestore = getFirestore(app);
-  return firestore
-    .collection(collectionPath)
-    .count()
-    .get()
-    .then(snapshot => {
-      return snapshot.data().count;
-    });
-};
-
-export const collectionChangeListener = (
+export const getDocumentCount = async (
   collectionPath: string,
-  handler: (
-    snapshot: FirebaseFirestoreTypes.QuerySnapshot<FirebaseFirestoreTypes.DocumentData>,
-  ) => void,
+): Promise<number> => {
+  const app = getApp();
+  const db = getFirestore(app);
+
+  const collRef = collection(db, collectionPath);
+  const snapshot = await getCountFromServer(collRef);
+  return snapshot.data().count;
+};
+
+export const collectionChangeListener = <
+  T extends FirebaseFirestoreTypes.DocumentData,
+>(
+  collectionPath: string,
+  handler: (snapshot: FirebaseFirestoreTypes.QuerySnapshot<T>) => void,
   opts?: CollectionChangeListenerOptions,
 ): (() => void) => {
   const { lastDocument, limit, orderBy, where, subCollection, auth } =
     opts || {};
   const app = getApp();
-  const firestore = getFirestore(app);
+  const db = getFirestore(app);
 
-  // If not allowed then just return an empty (subscription) function.
+  // Permission check
   if (auth) {
     auth.allowedRoles = auth.allowedRoles || [
       UserRole.Admin,
@@ -183,55 +195,58 @@ export const collectionChangeListener = (
       UserRole.User,
     ];
     if (!auth.userRole || !auth.allowedRoles.includes(auth.userRole)) {
-      return () => {
-        return;
-      };
+      return () => {};
     }
   }
 
-  let query = firestore.collection(collectionPath);
+  // Base collection
+  let collRef:
+    | FirebaseFirestoreTypes.CollectionReference<T>
+    | FirebaseFirestoreTypes.Query<T> = collection(
+    db,
+    collectionPath,
+  ) as FirebaseFirestoreTypes.CollectionReference<T>;
 
+  // Subcollection
   if (subCollection) {
-    query = query
-      .doc(subCollection.documentPath)
-      .collection(subCollection.name);
+    collRef = doc(collRef, subCollection.documentPath).collection(
+      subCollection.name,
+    ) as FirebaseFirestoreTypes.CollectionReference<T>;
   }
 
-  if (orderBy) {
-    query = query.orderBy(
-      orderBy.fieldPath,
-      orderBy.directionStr,
-    ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
-  }
-
+  // Apply filters
+  let q: FirebaseFirestoreTypes.Query<T> = collRef;
   if (where) {
     where.forEach(w => {
-      query = query.where(
-        w.fieldPath,
-        w.opStr,
-        w.value,
-      ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
+      q = firestoreQuery(q, firestoreWhere(w.fieldPath, w.opStr, w.value));
     });
   }
 
+  if (orderBy) {
+    q = firestoreQuery(
+      q,
+      firestoreOrderBy(orderBy.fieldPath, orderBy.directionStr),
+    );
+  }
+
   if (limit) {
-    query = query.limit(
-      limit,
-    ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
+    q = firestoreQuery(q, firestoreLimit(limit));
   }
 
   if (lastDocument) {
-    query = query.startAfter(
-      lastDocument,
-    ) as FirebaseFirestoreTypes.CollectionReference<FirebaseFirestoreTypes.DocumentData>;
+    q = firestoreQuery(q, firestoreStartAfter(lastDocument));
   }
 
-  const subscription = query.onSnapshot(
+  // Listen to changes
+  const unsubscribe = onSnapshot(
+    q,
     { includeMetadataChanges: true },
     handler,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (e: any) => {
-      if (!e.message.includes('firestore/permission-denied')) {
+    (e: unknown) => {
+      if (
+        e instanceof Error &&
+        !e.message.includes('firestore/permission-denied')
+      ) {
         log.error(
           `Failed onSnapshot for ${collectionPath} collection: ${e.message}`,
         );
@@ -239,32 +254,42 @@ export const collectionChangeListener = (
     },
   );
 
-  addFirestoreSubscription(subscription, collectionPath);
-  return subscription;
+  addFirestoreSubscription(unsubscribe, collectionPath);
+  return unsubscribe;
 };
 
-export const documentChangeListener = (
+export const documentChangeListener = <
+  T extends FirebaseFirestoreTypes.DocumentData,
+>(
   collectionPath: string,
   documentPath: string,
-  handler: (
-    snapshot: FirebaseFirestoreTypes.DocumentSnapshot<FirebaseFirestoreTypes.DocumentData>,
-  ) => void,
+  handler: (snapshot: FirebaseFirestoreTypes.DocumentSnapshot<T>) => void,
 ): (() => void) => {
   const app = getApp();
-  const firestore = getFirestore(app);
+  const db = getFirestore(app);
 
-  const subscription = firestore
-    .collection(collectionPath)
-    .doc(documentPath)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .onSnapshot({ includeMetadataChanges: true }, handler, (e: any) => {
-      if (!e.message.includes('firestore/permission-denied')) {
+  const docRef: FirebaseFirestoreTypes.DocumentReference<T> = doc(
+    db,
+    collectionPath,
+    documentPath,
+  ) as FirebaseFirestoreTypes.DocumentReference<T>;
+
+  const unsubscribe = onSnapshot(
+    docRef,
+    { includeMetadataChanges: true },
+    handler,
+    (e: unknown) => {
+      if (
+        e instanceof Error &&
+        !e.message.includes('firestore/permission-denied')
+      ) {
         log.error(
           `Failed onSnapshot for ${collectionPath}.${documentPath} document: ${e.message}`,
         );
       }
-    });
+    },
+  );
 
-  addFirestoreSubscription(subscription, collectionPath);
-  return subscription;
+  addFirestoreSubscription(unsubscribe, collectionPath);
+  return unsubscribe;
 };

@@ -181,16 +181,16 @@ const LogScreen = ({ navigation }: Props) => {
   const getMarkedDates = (groupedEvents: SectionListData<Event, Section>[]) => {
     const _marked: ExtendedMarkedDates = marked;
     groupedEvents.forEach(event => {
-      if (event.data && event.data.length > 0 && !isEmpty(event.data[0])) {
+      if (event.data?.length > 0 && !isEmpty(event.data[0])) {
         // Check for events and/or battery cycles on this day. Return an indication
         // for each in the marked data.
         const hasEvent =
           event.data.findIndex(e => {
-            return e && e.model?._id;
+            return e?.model?._id;
           }) >= 0;
         const hasBatteryCycle =
           event.data.findIndex(e => {
-            return e && e.batteryCycles.length;
+            return e?.batteryCycles.length;
           }) >= 0;
 
         const d = event.data[0].date.split('T')[0];

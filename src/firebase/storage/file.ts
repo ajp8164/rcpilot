@@ -1,5 +1,11 @@
 import { getApp } from '@react-native-firebase/app';
-import { getStorage } from '@react-native-firebase/storage';
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  putFile,
+  ref,
+} from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 import { uuidv4 } from 'lib/utils';
 
@@ -42,30 +48,34 @@ export const saveFile = async (args: {
     const destFilename = dest
       ? `${storagePath}${dest}`
       : `${storagePath}${uuidv4()}.${fileType}`;
+
     const sourceFilename = file.uri.replace('file://', '');
-    const storageRef = storage.ref(destFilename);
+    const storageRef = ref(storage, destFilename);
 
     try {
-      await storageRef.putFile(sourceFilename).catch(() => {
-        // Need a handler here to swallow possible second throw inside putFile().
-      });
-      const url = await storageRef.getDownloadURL();
-      oldFile &&
-        (await deleteFile({
+      await putFile(storageRef, sourceFilename);
+
+      const url = await getDownloadURL(storageRef);
+
+      if (oldFile) {
+        await deleteFile({
           filename: oldFile,
           storagePath,
           onSuccess: () => {
             onSuccess(url);
           },
-        }));
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-      onError && onError();
+          onError,
+        });
+      } else {
+        onSuccess(url);
+      }
+    } catch (e: unknown) {
+      onError?.();
+      if (e instanceof Error) log.error(`File save failed: ${e.message}`);
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    log.error(`File save failed: ${e.message}`);
-    onError && onError();
+  } catch (e: unknown) {
+    if (e instanceof Error) log.error(`File save failed: ${e.message}`);
+    onError?.();
   }
 };
 
@@ -86,18 +96,20 @@ export const deleteFile = async (args: {
   const storage = getStorage(app);
 
   const { filename, onError, onSuccess, storagePath } = args;
+
   const filenameRef = `${storagePath}${
     filename.replace(/%2F/g, '/').split('/').pop()?.split('#')[0].split('?')[0]
   }`;
-  await storage
-    .ref(filenameRef)
-    .delete()
-    .then(() => onSuccess())
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .catch((e: any) => {
-      if (!e.message.includes('storage/object-not-found')) {
-        log.error(`Failed to delete file: ${e.message}`);
-      }
-      onError && onError();
-    });
+
+  const fileRef = ref(storage, filenameRef);
+
+  try {
+    await deleteObject(fileRef);
+    onSuccess();
+  } catch (e: unknown) {
+    if (e instanceof Error && !e.message.includes('storage/object-not-found')) {
+      log.error(`Failed to delete file: ${e.message}`);
+    }
+    onError?.();
+  }
 };

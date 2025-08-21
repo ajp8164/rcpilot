@@ -46,7 +46,7 @@ export const useAuthorizeUser = () => {
                 log.debug(`User profile created: ${JSON.stringify(profile)}`);
                 const user = setUser(credentials, profile);
                 postSignInActions(user.profile).then(userProfile => {
-                  result?.onAuthorized && result.onAuthorized(userProfile);
+                  result?.onAuthorized?.(userProfile);
                   log.debug(
                     `User sign in complete: ${JSON.stringify(userProfile)}`,
                   );
@@ -55,7 +55,7 @@ export const useAuthorizeUser = () => {
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               .catch((e: any) => {
                 log.error(`Failed to add user to firestore: ${e.message}`);
-                result?.onError && result.onError(e.message);
+                result?.onError?.(e.message);
               });
           } else {
             // User exists. Update user in firestore (if needed) and set user.
@@ -78,7 +78,7 @@ export const useAuthorizeUser = () => {
                     );
                     const user = setUser(credentials, updatedProfile);
                     postSignInActions(user.profile).then(userProfile => {
-                      result?.onAuthorized && result.onAuthorized(userProfile);
+                      result?.onAuthorized?.(userProfile);
                       log.debug(
                         `User sign in complete: ${JSON.stringify(userProfile)}`,
                       );
@@ -87,12 +87,12 @@ export const useAuthorizeUser = () => {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   .catch((e: any) => {
                     log.error(`Failed to add user to firestore: ${e.message}`);
-                    result?.onError && result.onError(e.message);
+                    result?.onError?.(e.message);
                   });
               } else {
                 const user = setUser(credentials, userProfile);
                 postSignInActions(user.profile).then(userProfile => {
-                  result?.onAuthorized && result.onAuthorized(userProfile);
+                  result?.onAuthorized?.(userProfile);
                   log.debug(
                     `User sign in complete: ${JSON.stringify(userProfile)}`,
                   );
@@ -101,7 +101,7 @@ export const useAuthorizeUser = () => {
             } else {
               // User is not allowed to sign in.
               signOut().then(() => {
-                result?.onUnauthorized && result.onUnauthorized(true);
+                result?.onUnauthorized?.(true);
               });
             }
           }
@@ -109,12 +109,12 @@ export const useAuthorizeUser = () => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .catch((e: any) => {
           log.error(`Failed to authenticate credentialed user: ${e.message}`);
-          result?.onError && result.onError(e.message);
+          result?.onError?.(e.message);
         });
     } else {
       // Ensure a clean state.
       preSignOutActions().then(() => {
-        result?.onUnauthorized && result.onUnauthorized();
+        result?.onUnauthorized?.();
       });
     }
   };

@@ -150,7 +150,7 @@ export const useTimer = (
       ]).milliseconds;
 
       if (drift > interval.current) {
-        errorCallback && errorCallback();
+        errorCallback?.();
       }
     }
 

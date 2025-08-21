@@ -1,6 +1,10 @@
 import { getApp } from '@react-native-firebase/app';
 import getFirestore, {
   FirebaseFirestoreTypes,
+  deleteDoc,
+  doc,
+  setDoc,
+  updateDoc,
 } from '@react-native-firebase/firestore';
 import { log } from '@react-native-hello/core';
 import { UserProfile } from 'types/user';
@@ -22,7 +26,7 @@ export const getUser = (id: string): Promise<UserProfile | undefined> => {
 
 export const getUsers = (opts?: {
   limit?: number;
-  lastDocument?: FirebaseFirestoreTypes.DocumentData;
+  lastDocument?: FirebaseFirestoreTypes.QueryDocumentSnapshot<FirebaseFirestoreTypes.DocumentData>;
   orderBy?: QueryOrderBy;
   where?: QueryWhere[];
   fromCache?: boolean;
@@ -42,67 +46,71 @@ export const getUsers = (opts?: {
     fromCache,
   });
 };
-
-export const addUser = (user: UserProfile): Promise<UserProfile> => {
+export const addUser = async (user: UserProfile): Promise<UserProfile> => {
   const app = getApp();
-  const firestore = getFirestore(app);
+  const db = getFirestore(app);
 
-  const added = Object.assign({}, user); // Don't mutate input.
+  const added = { ...user }; // Don't mutate input
   const id = added.id;
-  delete added.id; // Not storing the doc id in the object.
-  return (
-    firestore
-      .collection('Users')
-      .doc(id)
-      .set(user)
-      .then(() => {
-        return user;
-      })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch((e: any) => {
-        log.error(`Failed to add user document: ${e.message}`);
-        throw e;
-      })
-  );
+  if (!id) throw 'Failed to add user: no id';
+
+  delete (added as Partial<UserProfile>).id; // Remove id from object before storing
+
+  const docRef: FirebaseFirestoreTypes.DocumentReference<Partial<UserProfile>> =
+    doc(db, 'Users', id);
+
+  try {
+    await setDoc(docRef, added);
+    return user;
+  } catch (e) {
+    if (e instanceof Error) {
+      log.error(`Failed to add user document: ${e.message}`);
+    } else {
+      log.error(`Failed to add user document: ${String(e)}`);
+    }
+    throw e;
+  }
 };
 
 export const updateUser = (user: UserProfile): Promise<UserProfile> => {
   const app = getApp();
-  const firestore = getFirestore(app);
+  const db = getFirestore(app);
 
-  const updated = Object.assign({}, user); // Don't mutate input.
+  const updated = { ...user }; // Don't mutate input
   const id = updated.id;
-  delete updated.id; // Not storing the doc id in the object.
-  return (
-    firestore
-      .collection('Users')
-      .doc(id)
-      .update(updated)
-      .then(() => {
-        return user;
-      })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch((e: any) => {
+  if (!id) throw 'Failed to update user: no id';
+
+  delete (updated as Partial<UserProfile>).id; // Remove id from object before storing
+
+  const docRef: FirebaseFirestoreTypes.DocumentReference<Partial<UserProfile>> =
+    doc(db, 'Users', id);
+
+  return updateDoc(docRef, updated)
+    .then(() => user)
+    .catch((e: unknown) => {
+      if (e instanceof Error) {
         log.error(`Failed to update user document: ${e.message}`);
-        throw e;
-      })
-  );
+      } else {
+        log.error(`Failed to update user document: ${String(e)}`);
+      }
+      throw e;
+    });
 };
 
 export const deleteUser = (id: string): Promise<void> => {
   const app = getApp();
-  const firestore = getFirestore(app);
-  return (
-    firestore
-      .collection('Users')
-      .doc(id)
-      .delete()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .catch((e: any) => {
-        log.error(`Failed to delete user document: ${e.message}`);
-        throw e;
-      })
-  );
+  const db = getFirestore(app);
+
+  const docRef: FirebaseFirestoreTypes.DocumentReference = doc(db, 'Users', id);
+
+  return deleteDoc(docRef).catch((e: unknown) => {
+    if (e instanceof Error) {
+      log.error(`Failed to delete user document: ${e.message}`);
+    } else {
+      log.error(`Failed to delete user document: ${String(e)}`);
+    }
+    throw e;
+  });
 };
 
 export const usersCollectionChangeListener = (

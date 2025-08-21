@@ -247,7 +247,7 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
           let newDate = now;
           let updateLastDischargePhase = false;
 
-          if (lastCycle && lastCycle.discharge && !lastCycle.charge) {
+          if (lastCycle?.discharge && !lastCycle.charge) {
             newDuration = newDuration + lastCycle.discharge.duration;
             newDate = lastCycle.discharge.date;
             cycleNumber = lastCycle.cycleNumber;

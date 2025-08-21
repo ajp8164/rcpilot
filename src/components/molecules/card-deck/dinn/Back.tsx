@@ -138,8 +138,8 @@ export const Back = ({
                 <Palette color={theme.colors.deckCardDinnBackIcon} size={33} />
               }
               onPress={() => {
-                flip && flip();
-                onPressEditCardProperties && onPressEditCardProperties();
+                flip?.();
+                onPressEditCardProperties?.();
               }}
             />
             <Button
@@ -150,7 +150,7 @@ export const Back = ({
                   size={33}
                 />
               }
-              onPress={() => flip && flip()}
+              onPress={() => flip?.()}
             />
           </View>
         </View>

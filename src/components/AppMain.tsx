@@ -34,8 +34,6 @@ const linking: LinkingOptions<MainNavigatorParamList> = {
 };
 
 const AppMain = () => {
-  console.log('AppMain');
-
   const scheme = useColorScheme();
   const initApp = useInitApp();
 

@@ -72,7 +72,7 @@ export const Back = ({
               xml={getColoredSvg(modelTypeIconProps[model.type]?.name)}
               width={cardLayout ? cardLayout.width * 0.33 : 0}
               height={cardLayout ? cardLayout?.width * 0.33 : 0}
-              color={theme.colors.whiteTransparentDark}
+              color={theme.colors.midGray}
               style={{
                 transform: [{ rotate: '-45deg' }],
               }}
@@ -87,7 +87,9 @@ export const Back = ({
               ? DateTime.fromISO(model.lastEvent).toFormat(
                   "MMM d, yyyy 'at' h:mm a",
                 )
-              : 'Unknown'}
+              : model.events.length
+                ? 'Unknown'
+                : 'N/A'}
           </Text>
         </View>
         <View style={s.statRow}>
@@ -110,12 +112,10 @@ export const Back = ({
             title={'New Flight'}
             titleStyle={s.listItemText}
             containerStyle={{
-              backgroundColor: theme.colors.whiteTransparentDark,
+              backgroundColor: theme.colors.deckCardDinnBackListItem,
             }}
             bottomDividerColor={theme.colors.darkGray}
-            rightContent={
-              <PlayCircle color={theme.colors.darkGray} size={33} />
-            }
+            rightContent={<PlayCircle color={theme.colors.midGray} size={33} />}
             position={['first']}
             onPress={onPressNewEventSequence}
           />
@@ -123,9 +123,9 @@ export const Back = ({
             title={'Model Details'}
             titleStyle={s.listItemText}
             containerStyle={{
-              backgroundColor: theme.colors.whiteTransparentDark,
+              backgroundColor: theme.colors.deckCardDinnBackListItem,
             }}
-            rightContent={<Info color={theme.colors.darkGray} size={33} />}
+            rightContent={<Info color={theme.colors.midGray} size={33} />}
             position={['last']}
             onPress={onPressEditModel}
           />
@@ -135,7 +135,7 @@ export const Back = ({
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               icon={
-                <Palette color={theme.colors.whiteTransparentDark} size={33} />
+                <Palette color={theme.colors.deckCardDinnBackIcon} size={33} />
               }
               onPress={() => {
                 flip && flip();
@@ -146,7 +146,7 @@ export const Back = ({
               buttonStyle={theme.styles.buttonScreenHeader}
               icon={
                 <RotateCcwSquare
-                  color={theme.colors.whiteTransparentDark}
+                  color={theme.colors.deckCardDinnBackIcon}
                   size={33}
                 />
               }
@@ -162,22 +162,25 @@ export const Back = ({
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
-    backgroundColor: theme.colors.darkGray,
+    backgroundColor: theme.colors.deckCardDinnBack,
     padding: 15,
   },
   title: {
     ...theme.text.h2,
-    color: theme.colors.whiteTransparentDark,
+    // color: theme.colors.lightGray,
+    color: theme.colors.deckCardDinnBackText,
   },
   subtitle: {
     ...theme.text.small,
     marginTop: 15,
     marginBottom: 5,
-    color: theme.colors.whiteTransparentLight,
+    // color: theme.colors.lightGray,
+    color: theme.colors.deckCardDinnBackText,
   },
   text: {
     ...theme.text.normal,
-    color: theme.colors.whiteTransparentDark,
+    // color: theme.colors.lightGray,
+    color: theme.colors.deckCardDinnBackText,
     lineHeight: 16,
   },
   statRow: {
@@ -187,7 +190,8 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
   image: {},
   listItemText: {
-    color: theme.colors.darkGray,
+    // color: theme.colors.midGray,
+    color: theme.colors.deckCardDinnBackText,
   },
   actions: {
     flex: 1,

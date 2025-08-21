@@ -4,6 +4,7 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItem,
+  View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -374,14 +375,16 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   return (
     <>
       {modelsLayout === ModelsLayout.CardDeck ? (
-        <ModelCardDeck
-          models={activeModels}
-          pilot={pilot}
-          onStartNewEventSequence={confirmStartNewEventSequence}
-          onPressAchievements={(pilot, model) =>
-            achievementModalRef.current?.present(pilot, model)
-          }
-        />
+        <View style={[theme.styles.view, s.noPadding]}>
+          <ModelCardDeck
+            models={activeModels}
+            pilot={pilot}
+            onStartNewEventSequence={confirmStartNewEventSequence}
+            onPressAchievements={(pilot, model) =>
+              achievementModalRef.current?.present(pilot, model)
+            }
+          />
+        </View>
       ) : (
         <ListEditor ref={listEditorRef} onChangeState={setListEditorState}>
           <>

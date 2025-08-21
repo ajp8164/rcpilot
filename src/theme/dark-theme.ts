@@ -2,6 +2,7 @@ import { Platform } from 'react-native';
 
 import {
   IBaseThemeSchema,
+  IColor,
   IThemeManagerSchema,
   ThemeManager,
 } from '@react-native-hello/ui';
@@ -32,6 +33,11 @@ export const themeBase: DeepPartial<IBaseThemeSchema> = {
       ],
       brandPrimary: palette.secondary,
       brandSecondary: palette.primary,
+      deckCardDinnBack: '#202020',
+      deckCardDinnBackIcon: '#787878',
+      deckCardDinnBackListItem: '#151515',
+      deckCardDinnBackListItemIcon: '#787878',
+      deckCardDinnBackText: '#787878',
       disabled: '#787878',
       listItemBackgroundAlt: '#101010',
       listItemIcon: palette.primary,
@@ -58,7 +64,7 @@ export const themeBase: DeepPartial<IBaseThemeSchema> = {
           switchOnTrack: `${palette.primary}40`,
         },
       }),
-    },
+    } as IColor,
   }),
 };
 

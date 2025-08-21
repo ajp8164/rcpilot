@@ -11,6 +11,11 @@ declare module '@react-native-hello/ui' {
     avatarColors: string | string[];
     brandPrimary: string;
     brandSecondary: string;
+    deckCardDinnBack: string;
+    deckCardDinnBackIcon: string;
+    deckCardDinnBackListItem: string;
+    deckCardDinnBackListItemIcon: string;
+    deckCardDinnBackText: string;
     disabled: string;
     listItemBackgroundAlt: string;
     listItemIcon: string;

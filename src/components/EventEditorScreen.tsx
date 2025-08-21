@@ -209,7 +209,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     const { previous } = props ?? {};
 
     // Battery statistics.
-    if (previous && previous.duration !== modelEvent.duration) {
+    if (previous?.duration !== modelEvent.duration) {
       // Model events do not affect battery charge phase.
       modelEvent.batteryCycles.forEach(c => {
         if (c.discharge) {
@@ -239,7 +239,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     }
 
     // Outcome statistics.
-    if (previous && previous?.outcome !== modelEvent.outcome) {
+    if (previous?.outcome !== modelEvent.outcome) {
       modelEvent.model.statistics = lodash.merge(
         modelEvent.model.statistics,
         modelEventOutcomeStatistics(modelEvent.model, modelEvent.outcome),

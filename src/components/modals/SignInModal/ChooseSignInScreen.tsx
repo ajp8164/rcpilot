@@ -47,6 +47,7 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
         titleStyle={theme.styles.buttonOutlineTitle}
         buttonStyle={theme.styles.buttonOutline}
         containerStyle={s.signInButtonContainer}
+        iconContainerStyle={s.signInIconContainer}
         icon={
           <SvgXml
             width={28}
@@ -69,10 +70,11 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
         titleStyle={theme.styles.buttonOutlineTitle}
         buttonStyle={theme.styles.buttonOutline}
         containerStyle={s.signInButtonContainer}
+        iconContainerStyle={s.signInIconContainer}
         icon={
           <SvgXml
-            width={45}
-            height={45}
+            width={42}
+            height={42}
             style={s.facebookIcon}
             xml={getSvg('facebookIcon')}
           />
@@ -114,10 +116,11 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
           titleStyle={theme.styles.buttonOutlineTitle}
           buttonStyle={theme.styles.buttonOutline}
           containerStyle={s.signInButtonContainer}
+          iconContainerStyle={s.signInIconContainer}
           icon={
             <SvgXml
-              width={30}
-              height={30}
+              width={32}
+              height={32}
               style={s.appleIcon}
               color={theme.colors.black}
               xml={getColoredSvg('appleIcon')}
@@ -147,7 +150,7 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
       <Button
         title={signInAction ? 'or Create Account' : 'Have an Account? Sign In'}
         titleStyle={theme.styles.buttonScreenHeaderTitle}
-        buttonStyle={theme.styles.buttonScreenHeader}
+        buttonStyle={theme.styles.buttonClear}
         containerStyle={s.signInButtonContainer}
         onPress={() => setSignInAction(!signInAction)}
       />
@@ -156,14 +159,22 @@ const ChooseSignInScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+  appleIcon: {
+    top: -4,
+    left: -7,
+  },
   description: {
     ...theme.text.normal,
     ...theme.styles.textDim,
     textAlign: 'center',
     marginHorizontal: 40,
   },
+  facebookIcon: {
+    top: -8,
+    left: -8,
+  },
   footer: {
-    ...theme.text.small,
+    ...theme.text.medium,
     ...theme.styles.textDim,
     alignSelf: 'center',
     textAlign: 'center',
@@ -171,35 +182,30 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     bottom: 40,
     marginHorizontal: 40,
   },
+  googleIcon: {},
   signInButtonContainer: {
     width: '80%',
     alignSelf: 'center',
     marginBottom: 15,
   },
+  signInIconContainer: {
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+  },
   subtitle: {
-    ...theme.text.h3,
+    ...theme.text.h4,
+    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
     marginTop: 20,
   },
   title: {
-    ...theme.text.h1,
+    ...theme.text.h2,
+    fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
     marginTop: 20,
-  },
-  googleIcon: {
-    position: 'absolute',
-    left: 5,
-  },
-  facebookIcon: {
-    position: 'absolute',
-    left: -3,
-  },
-  appleIcon: {
-    position: 'absolute',
-    left: 3,
-    top: 2,
   },
 }));
 

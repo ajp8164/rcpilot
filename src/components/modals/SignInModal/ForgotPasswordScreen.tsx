@@ -1,18 +1,12 @@
 import React, { useRef } from 'react';
-import {
-  Alert,
-  Keyboard,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import { Alert, Keyboard, ScrollView, Text, View } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 
 import { useSetState } from '@react-native-hello/core';
-import { ListItemInput, ThemeManager, useTheme } from '@react-native-hello/ui';
+import { InputMethods, ThemeManager, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from 'components/atoms/Button';
+import { ListItemInput } from 'components/atoms/List';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { sendPasswordResetEmail } from 'lib/auth';
 import * as Yup from 'yup';
@@ -37,7 +31,7 @@ const ForgotPasswordScreen = () => {
   const s = useStyles();
 
   const formikRef = useRef<FormikProps<FormValues>>(null);
-  const refEmail = useRef<TextInput>(null);
+  const emailFieldRef = useRef<InputMethods>(null);
 
   const [editorState, setEditorState] = useSetState<EditorState>({
     isSubmitting: false,
@@ -87,17 +81,16 @@ const ForgotPasswordScreen = () => {
             validationSchema={validationSchema}
             onSubmit={sendEmail}>
             {formik => (
-              <View style={[theme.styles.viewAlt, s.view]}>
+              <View style={[theme.styles.view, s.view]}>
                 <Text style={s.description}>
                   {
                     "Enter your email address and we'll send a link to reset your password."
                   }
                 </Text>
                 <ListItemInput
-                  ref={ref => {
-                    ref && (refEmail.current = ref);
-                  }}
+                  ref={emailFieldRef}
                   error={!!formik.errors.email}
+                  position={['first', 'last']}
                   inputProps={{
                     value: formik.values.email,
                     onChangeText: formik.handleChange('email'),
@@ -126,7 +119,7 @@ const ForgotPasswordScreen = () => {
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(() => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   avoidContainer: {
     flex: 1,
   },
@@ -142,6 +135,7 @@ const useStyles = ThemeManager.createStyleSheet(() => ({
     marginTop: 30,
   },
   description: {
+    ...theme.text.normal,
     alignSelf: 'center',
     textAlign: 'center',
     marginHorizontal: 40,

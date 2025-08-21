@@ -28,6 +28,7 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
     const innerRef = useRef<BottomSheetModalMethods>(null);
 
     const [signInMsg, setSignInMsg] = useState<string>();
+    const [bgColor, setBgColor] = useState(theme.colors.viewBackground);
 
     useImperativeHandle(ref, () => ({
       //  These functions exposed to the parent component through the ref.
@@ -47,17 +48,22 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
     return (
       <Modal
         ref={innerRef}
-        backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
+        // backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
+        backgroundStyle={{ backgroundColor: bgColor }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.black }}>
         <NavigationIndependentTree>
           <NavigationContainer>
-            <Stack.Navigator screenOptions={{}}>
+            <Stack.Navigator>
               <Stack.Screen
                 name="ChooseSignInScreen"
                 component={ChooseSignInScreen}
                 initialParams={{ msg: signInMsg }}
                 options={{
                   headerShown: false,
+                }}
+                listeners={{
+                  transitionStart: () =>
+                    setBgColor(theme.colors.viewBackground),
                 }}
               />
               <Stack.Screen
@@ -67,6 +73,10 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
                   headerTitle: 'Sign In',
                   headerBackTitle: 'Back',
                   headerShadowVisible: false,
+                }}
+                listeners={{
+                  transitionStart: () =>
+                    setBgColor(theme.colors.viewAltBackground),
                 }}
               />
               <Stack.Screen
@@ -85,6 +95,10 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
                   headerTitle: 'Create Account',
                   headerBackTitle: 'Back',
                   headerShadowVisible: false,
+                }}
+                listeners={{
+                  transitionStart: () =>
+                    setBgColor(theme.colors.viewAltBackground),
                 }}
               />
             </Stack.Navigator>

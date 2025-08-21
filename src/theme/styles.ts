@@ -9,15 +9,6 @@ export const createElementsStyles = ({
    * Divider
    */
 
-  dividerButtonDisabled: {
-    opacity: 0.4,
-    backgroundColor: theme.colors.transparent,
-    height: 20,
-    paddingHorizontal: 5,
-    paddingVertical: 0,
-    marginVertical: -1,
-    justifyContent: 'flex-start',
-  },
   dividerIconButton: {
     backgroundColor: theme.colors.transparent,
     paddingHorizontal: 0,
@@ -29,6 +20,13 @@ export const createElementsStyles = ({
     paddingHorizontal: 10,
     paddingVertical: 0,
     justifyContent: 'flex-start',
+  },
+  dividerTextButtonDisabled: {
+    backgroundColor: theme.colors.transparent,
+    paddingHorizontal: 10,
+    paddingVertical: 0,
+    justifyContent: 'flex-start',
+    opacity: 0.4,
   },
 
   /**

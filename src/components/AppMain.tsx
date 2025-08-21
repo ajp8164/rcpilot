@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar, useColorScheme } from 'react-native';
+import { StatusBar } from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 import ErrorBoundary from 'react-native-error-boundary';
 
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { EventProvider, NetworkProvider, log } from '@react-native-hello/core';
-import { CameraProvider } from '@react-native-hello/ui';
+import { CameraProvider, ThemeManager } from '@react-native-hello/ui';
 import {
   DarkTheme,
   DefaultTheme,
@@ -34,7 +34,7 @@ const linking: LinkingOptions<MainNavigatorParamList> = {
 };
 
 const AppMain = () => {
-  const scheme = useColorScheme();
+  const themeName = ThemeManager.name;
   const initApp = useInitApp();
 
   const [startupScreen, setStartupScreen] = useState<StartupScreen>(
@@ -99,7 +99,7 @@ const AppMain = () => {
     <NavigationContainer
       linking={linking}
       // Removes default background (white) flash on tab change when in dark mode.
-      theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+      theme={themeName === 'dark' ? DarkTheme : DefaultTheme}>
       <ColorModeSwitch>
         <ActionSheetProvider>
           <BottomSheetModalProvider>

@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  AppState,
-  Linking,
-  ScrollView,
-  View,
-  useColorScheme,
-} from 'react-native';
+import { AppState, Linking, ScrollView, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
@@ -40,7 +34,6 @@ export type Props = NativeStackScreenProps<
 
 const AppSettings = ({ navigation }: Props) => {
   const theme = ThemeManager.useTheme();
-  const colorScheme = useColorScheme();
 
   const dispatch = useDispatch();
   const themeSettings = useSelector(selectThemeSettings);
@@ -116,8 +109,6 @@ const AppSettings = ({ navigation }: Props) => {
         themeSettings: { ...themeSettings, followDevice: value },
       }),
     );
-    const control = value ? colorScheme : themeSettings.app;
-    ThemeManager.set(control ? 'dark' : 'light');
   };
 
   return (

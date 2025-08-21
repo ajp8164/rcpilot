@@ -140,7 +140,11 @@ const ListItemFilterEnum = (props: Props) => {
     if (newRelation !== EnumRelation.Any) {
       // Opening
       setFilterState({ relation: newRelation, value: newValue });
-      onValueChange({ relation: newRelation, value: newValue });
+      // Notify relation changed only of values are selected. Avoids a filter setting
+      // with a relation and no value(s).
+      newValue.length
+        ? onValueChange({ relation: newRelation, value: newValue })
+        : null;
       setTimeout(() => {
         collapsibleRef.current?.open();
       });

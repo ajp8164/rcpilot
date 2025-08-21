@@ -58,7 +58,7 @@ function FilterEditorHeader<T>({
             title={'Reset Filter'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={theme.styles.dividerTextButton}
-            disabledStyle={theme.styles.dividerButtonDisabled}
+            disabledStyle={theme.styles.dividerTextButtonDisabled}
             disabled={lodash.isEqual(filterEditor.values, defaultFilter)}
             onPress={filterEditor.resetFilter}
           />

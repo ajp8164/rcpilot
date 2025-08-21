@@ -106,10 +106,10 @@ export const signInWithGoogle = async () => {
       const googleCredential = GoogleAuthProvider.credential(data.idToken);
       return signInWithCredential(auth, googleCredential);
     }
-    throw 'No sign in data returned';
+    throw { message: 'No sign in data returned' };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    if (!e.message.includes('canceled')) {
+    if (!e.message?.includes('No sign in data returned')) {
       log.error(`Google sign in error: ${e.message}`);
       throw new Error(
         'An internal error occurred while trying to sign in. Please try again.',
@@ -137,7 +137,7 @@ export const signInWithTwitter = async () => {
     throw 'Twitter sign in not supported';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
-    if (!e.message.includes('canceled')) {
+    if (!e.message?.includes('No sign in data returned')) {
       log.error(`Twitter sign in error: ${e.message}`);
       throw new Error(
         'An internal error occurred while trying to sign in. Please try again.',

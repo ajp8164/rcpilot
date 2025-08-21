@@ -72,7 +72,7 @@ declare module '@react-native-hello/ui' {
   interface IStyles {
     dividerIconButton: IStyle;
     dividerTextButton: IStyle;
-    dividerButtonDisabled: IStyle;
+    dividerTextButtonDisabled: IStyle;
     listItemButtonTitle: IStyle;
     listItemButtonDisabled: IStyle;
     swipeableListItemContainer: IStyle;

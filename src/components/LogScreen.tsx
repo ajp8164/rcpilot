@@ -23,6 +23,7 @@ import {
   ThemeManager,
   getColoredSvg,
   listItemPosition,
+  useDevice,
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -70,6 +71,7 @@ export type Props = NativeStackScreenProps<LogNavigatorParamList, 'Log'>;
 const LogScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
+  const device = useDevice();
 
   const modelEvents = useEventsFilter({
     filterType: FilterType.EventsModelFilter,
@@ -373,7 +375,7 @@ const LogScreen = ({ navigation }: Props) => {
 
   return (
     <CalendarProvider ref={calendarRef} date={DateTime.now().toISODate()}>
-      <View style={s.calendarContainer}>
+      <View style={{ marginTop: device.headerBar.height }}>
         <ExpandableCalendar
           key={ThemeManager.name}
           date={DateTime.now().toISODate()}
@@ -439,9 +441,6 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   calendar: {
     paddingLeft: 5,
     paddingRight: 5,
-  },
-  calendarContainer: {
-    marginTop: 150, // Height of the large title header
   },
   calendarHeaderDate: {
     flexDirection: 'row',

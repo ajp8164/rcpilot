@@ -119,7 +119,7 @@ export const rql = () => {
 
       // Boolean queries
       if (relation === FilterRelation.No || relation === FilterRelation.Yes) {
-        result = `${propertyName} == ${value}`;
+        result = `${propertyName} == ${relation === FilterRelation.Yes ? 'true' : 'false'}`;
       }
 
       // Enum/object queries

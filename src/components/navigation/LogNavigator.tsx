@@ -3,6 +3,7 @@ import React from 'react';
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
+import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import LogScreen from 'components/LogScreen';
 import { LogNavigatorParamList } from 'types/navigation';
@@ -46,6 +47,13 @@ const LogNavigator = () => {
         component={BatteryCycleEditorScreen}
         options={{
           title: 'Cycle Details',
+        }}
+      />
+      <LogStack.Screen
+        name="EnumPicker"
+        component={EnumPickerScreen}
+        options={{
+          title: '',
         }}
       />
     </LogStack.Navigator>

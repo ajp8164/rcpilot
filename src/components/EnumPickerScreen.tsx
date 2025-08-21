@@ -128,9 +128,9 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     setList({ selected: [] }, { assign: true });
   };
 
-  const selectUnspecified = () => {
-    setList({ selected: ['Unspecified'] }, { assign: true });
-  };
+  // const selectUnspecified = () => {
+  //   setList({ selected: ['Unspecified'] }, { assign: true });
+  // };
 
   const getIconEl = (value: string) => {
     return icons && icons[value] ? (
@@ -216,7 +216,23 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
           onChange={() => toggleSelect()}
         />
       )}
-      {mode === 'many-or-none' && (
+      {!list.values.length && (
+        <Divider
+          note
+          light
+          subHeaderStyle={{ ...theme.text.normal, alignSelf: 'center' }}
+          text={`No ${title} available`}
+        />
+      )}
+      <Divider note light subHeaderStyle={theme.text.small} text={footer} />
+    </ScrollView>
+  );
+};
+
+export default EnumPickerScreen;
+
+{
+  /* {mode === 'many-or-none' && (
         <>
           <Divider />
           <ListItemCheckBox
@@ -226,10 +242,5 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
             onChange={selectUnspecified}
           />
         </>
-      )}
-      <Divider note light subHeaderStyle={theme.text.small} text={footer} />
-    </ScrollView>
-  );
-};
-
-export default EnumPickerScreen;
+      )} */
+}

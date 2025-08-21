@@ -7,7 +7,6 @@ import {
   InputMethods,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
-  ListItemInput,
   ThemeManager,
   useTheme,
 } from '@react-native-hello/ui';
@@ -17,6 +16,7 @@ import {
   FormikStateWatcher,
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
+import { ListItemInput } from 'components/atoms/List';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { createUserWithEmailAndPassword } from 'lib/auth';
 import { Eye, EyeOff } from 'lucide-react-native';
@@ -159,12 +159,11 @@ const CreateAccountScreen = () => {
                 <FormikStateWatcher<FormValues>
                   onChange={onFormikWatcherStateChange}
                 />
-                <View style={[theme.styles.viewAlt, s.view]}>
+                <View style={[theme.styles.view, s.view]}>
                   <ListItemInput
-                    ref={ref => {
-                      ref && (firstNameFieldRef.current = ref);
-                    }}
+                    ref={firstNameFieldRef}
                     error={!!errors.firstName}
+                    position={['first']}
                     inputProps={{
                       value: values.firstName,
                       onChangeText: handleChange('firstName'),
@@ -178,9 +177,7 @@ const CreateAccountScreen = () => {
                     }}
                   />
                   <ListItemInput
-                    ref={ref => {
-                      ref && (lastNameFieldRef.current = ref);
-                    }}
+                    ref={lastNameFieldRef}
                     error={!!errors.lastName}
                     inputProps={{
                       value: values.lastName,
@@ -195,9 +192,7 @@ const CreateAccountScreen = () => {
                     }}
                   />
                   <ListItemInput
-                    ref={ref => {
-                      ref && (emailFieldRef.current = ref);
-                    }}
+                    ref={emailFieldRef}
                     error={!!errors.email}
                     inputProps={{
                       value: values.email,
@@ -211,9 +206,7 @@ const CreateAccountScreen = () => {
                     }}
                   />
                   <ListItemInput
-                    ref={ref => {
-                      ref && (passwordFieldRef.current = ref);
-                    }}
+                    ref={passwordFieldRef}
                     error={!!errors.password}
                     rightContent={
                       passwordVisible ? (
@@ -223,6 +216,7 @@ const CreateAccountScreen = () => {
                       )
                     }
                     onPressRight={() => setPasswordVisible(!passwordVisible)}
+                    position={['last']}
                     inputProps={{
                       value: values.password,
                       onChangeText: handleChange('password'),

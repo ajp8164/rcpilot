@@ -8,7 +8,6 @@ import {
   InputMethods,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
-  ListItemInput,
   ThemeManager,
   useTheme,
 } from '@react-native-hello/ui';
@@ -18,6 +17,7 @@ import {
   FormikStateWatcher,
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
+import { ListItemInput } from 'components/atoms/List';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { signInwithEmailAndPassword } from 'lib/auth';
 import { Eye, EyeOff } from 'lucide-react-native';
@@ -140,12 +140,11 @@ const EmailSignInScreen = ({ navigation }: Props) => {
                 <FormikStateWatcher<FormValues>
                   onChange={onFormikWatcherStateChange}
                 />
-                <View style={[theme.styles.viewAlt, s.view]}>
+                <View style={[theme.styles.view, s.view]}>
                   <ListItemInput
-                    ref={ref => {
-                      ref && (emailFieldRef.current = ref);
-                    }}
+                    ref={emailFieldRef}
                     error={!!errors.email}
+                    position={['first']}
                     inputProps={{
                       value: values.email,
                       onChangeText: handleChange('email'),
@@ -158,9 +157,7 @@ const EmailSignInScreen = ({ navigation }: Props) => {
                     }}
                   />
                   <ListItemInput
-                    ref={ref => {
-                      ref && (passwordFieldRef.current = ref);
-                    }}
+                    ref={passwordFieldRef}
                     error={!!errors.password}
                     rightContent={
                       passwordVisible ? (
@@ -170,6 +167,7 @@ const EmailSignInScreen = ({ navigation }: Props) => {
                       )
                     }
                     onPressRight={() => setPasswordVisible(!passwordVisible)}
+                    position={['last']}
                     inputProps={{
                       value: values.password,
                       onChangeText: handleChange('password'),
@@ -195,7 +193,7 @@ const EmailSignInScreen = ({ navigation }: Props) => {
                   <Button
                     title={'Forgot Password?'}
                     titleStyle={s.forgotPassword}
-                    buttonStyle={theme.styles.buttonOutline}
+                    buttonStyle={theme.styles.buttonClear}
                     containerStyle={theme.styles.buttonContainer}
                     onPress={() => navigation.navigate('ForgotPasswordScreen')}
                   />
@@ -231,7 +229,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     paddingTop: 30,
   },
   forgotPassword: {
-    ...theme.text.small,
+    ...theme.text.normal,
     ...theme.styles.textDim,
   },
   footer: {

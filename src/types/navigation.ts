@@ -93,6 +93,7 @@ export type LogNavigatorParamList = {
     batteryId: string;
     cycleNumber: number;
   };
+  EnumPicker: EnumPickerInterface;
 };
 
 export type MainNavigatorParamList = {

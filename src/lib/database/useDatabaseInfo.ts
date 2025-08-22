@@ -31,6 +31,7 @@ export const useDatabaseInfo = (): DatabaseInfoContext => {
   useEffect(() => {
     realm.addListener('change', onRealmChange);
     return () => {
+      if (realm.isClosed) return;
       realm.removeListener('change', onRealmChange);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

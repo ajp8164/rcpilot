@@ -173,9 +173,13 @@ const LogScreen = ({ navigation }: Props) => {
   const groupEvents = (
     events: Realm.Results<Event>,
   ): SectionListData<Event, Section>[] => {
-    return groupItems<Event, Section>(events, modelEvent => {
-      return DateTime.fromISO(modelEvent.createdOn).toFormat('MMMM dd, yyyy');
-    }).sort();
+    return groupItems<Event, Section>(
+      events,
+      modelEvent => {
+        return DateTime.fromISO(modelEvent.createdOn).toFormat('MMMM dd, yyyy');
+      },
+      { reverseSectionData: true },
+    ).sort();
   };
 
   const getMarkedDates = (groupedEvents: SectionListData<Event, Section>[]) => {

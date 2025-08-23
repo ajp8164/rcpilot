@@ -191,7 +191,7 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
   };
 
   if (!battery) {
-    return <EmptyView error message={'Battery not found!'} />;
+    return <EmptyView error message={'Battery Not Found!'} />;
   }
 
   if (filterId && !batteryCycles.length) {
@@ -199,6 +199,15 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
       <EmptyView
         message={'No Battery Cycles Match Your Filter'}
         details={'Adjust your filter settings to see your battery cycles.'}
+        buttonTitle={'Adjust Filter'}
+        onButtonPress={() =>
+          navigation.navigate('BatteryCycleFiltersNavigator', {
+            screen: 'BatteryCycleFilters',
+            params: {
+              useGeneralFilter: true,
+            },
+          })
+        }
       />
     );
   }

@@ -452,6 +452,16 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       <EmptyView
         message={'No Batteries Match Your Filter'}
         details={'Adjust your filter settings to see your batteries.'}
+        buttonTitle={'Adjust Filter'}
+        onButtonPress={() =>
+          navigation.navigate('BatteryFiltersNavigator', {
+            screen: 'BatteryFilters',
+            params: {
+              filterType: FilterType.BatteriesFilter,
+              useGeneralFilter: true,
+            },
+          })
+        }
       />
     );
   }
@@ -466,7 +476,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       <EmptyView
         info
         message={'No Batteries'}
-        details={'Tap the + button to add your first battery.'}
+        details={'Tap the + button to a add battery.'}
+        buttonTitle={'Add Battery'}
+        onButtonPress={addBattery}
       />
     );
   }

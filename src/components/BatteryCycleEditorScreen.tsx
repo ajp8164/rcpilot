@@ -387,9 +387,9 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   };
 
   if (!battery) {
-    return <EmptyView error message={'Battery not found!'} />;
+    return <EmptyView error message={'Battery Not Found!'} />;
   } else if (!cycle) {
-    return <EmptyView error message={'Battery cycle not found!'} />;
+    return <EmptyView error message={'Battery Cycle Not Found!'} />;
   }
 
   return (

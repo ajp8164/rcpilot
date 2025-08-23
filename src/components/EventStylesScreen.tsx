@@ -113,7 +113,9 @@ const EventStylesScreen = ({ navigation }: Props) => {
       <EmptyView
         info
         message={'No Event Styles'}
-        details={'Tap the + button to add your first event style.'}
+        details={'Tap the + button to add an event style.'}
+        buttonTitle={'Add Event Style'}
+        onButtonPress={() => navigation.navigate('NewEventStyle', {})}
       />
     );
   }

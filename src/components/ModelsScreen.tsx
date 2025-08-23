@@ -358,6 +358,16 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <EmptyView
         message={'No Models Match Your Filter'}
         details={'Adjust your filter settings to see your models.'}
+        buttonTitle={'Adjust Filter'}
+        onButtonPress={() =>
+          navigation.navigate('ModelFiltersNavigator', {
+            screen: 'ModelFilters',
+            params: {
+              filterType: FilterType.ModelsFilter,
+              useGeneralFilter: true,
+            },
+          })
+        }
       />
     );
   }
@@ -367,7 +377,14 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <EmptyView
         info
         message={'No Models'}
-        details={'Tap the + button to add your first model.'}
+        details={'Tap the + button to a add model.'}
+        buttonTitle={'Add Model'}
+        onButtonPress={() =>
+          navigation.navigate('NewModelNavigator', {
+            screen: 'NewModel',
+            params: {},
+          })
+        }
       />
     );
   }

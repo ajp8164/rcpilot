@@ -205,6 +205,17 @@ const EventsScreen = ({ navigation, route }: Props) => {
       <EmptyView
         message={`No ${eventKind(model?.type).namePlural} Match Your Filter`}
         details={`Adjust your filter settings to see your ${eventKind(model?.type).namePlural}.`}
+        buttonTitle={'Adjust Filter'}
+        onButtonPress={() =>
+          navigation.navigate('EventFiltersNavigator', {
+            screen: 'EventFilters',
+            params: {
+              filterType: FilterType.EventsModelFilter,
+              modelType: model?.type,
+              useGeneralFilter: true,
+            },
+          })
+        }
       />
     );
   }

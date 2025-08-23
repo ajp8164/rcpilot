@@ -204,7 +204,22 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   };
 
   if (filterId && !entries.length) {
-    return <EmptyView message={`No Maintenance Logs Match Your Filter`} />;
+    return (
+      <EmptyView
+        message={`No Maintenance Logs Match Your Filter`}
+        details={'Adjust your filter settings to see maintenance logs.'}
+        buttonTitle={'Adjust Filter'}
+        onButtonPress={() =>
+          navigation.navigate('MaintenanceFiltersNavigator', {
+            screen: 'MaintenanceFilters',
+            params: {
+              filterType: FilterType.MaintenanceFilter,
+              useGeneralFilter: true,
+            },
+          })
+        }
+      />
+    );
   }
 
   if (!entries.length) {

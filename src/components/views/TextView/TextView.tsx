@@ -118,6 +118,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   input: {
     height: '100%',
+    borderRadius: 0,
   },
   inputContainer: {
     borderBottomWidth: 0,

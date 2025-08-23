@@ -163,7 +163,7 @@ const DatabaseBackupsScreen = () => {
         info
         message={'No Database Backups'}
         details={
-          'Tap Create Backup on the previous screen to backup your database.'
+          'Tap Create Full Backup on the previous screen to backup your database.'
         }
       />
     );

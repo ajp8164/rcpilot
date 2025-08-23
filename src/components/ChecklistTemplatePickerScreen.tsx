@@ -142,13 +142,7 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
   };
 
   if (!checklistTemplates.length) {
-    return (
-      <EmptyView
-        info
-        message={'No List Templates'}
-        details={'Tap the + button to add your first list template.'}
-      />
-    );
+    return <EmptyView info message={'No List Templates'} />;
   }
 
   return (

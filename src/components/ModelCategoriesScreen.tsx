@@ -113,7 +113,9 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
       <EmptyView
         info
         message={'No Model Categories'}
-        details={'Tap the + button to add your first model category.'}
+        details={'Tap the + button to add a model category.'}
+        buttonTitle={'Add Model Category'}
+        onButtonPress={() => navigation.navigate('NewModelCategory')}
       />
     );
   }

@@ -117,7 +117,13 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
       <EmptyView
         info
         message={'No Model Propellers'}
-        details={'Tap the + button to add your first model propeller.'}
+        details={'Tap the + button to add a model propeller.'}
+        buttonTitle={'Add Model Propeller'}
+        onButtonPress={() =>
+          navigation.navigate('NewModelPropellerNavigator', {
+            screen: 'NewModelPropeller',
+          })
+        }
       />
     );
   }

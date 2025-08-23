@@ -3,6 +3,7 @@ import { ActivityIndicator, LayoutChangeEvent, Text, View } from 'react-native';
 
 import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
 import { BottomTabBarHeightContext } from '@react-navigation/bottom-tabs';
+import { Button } from 'components/atoms/Button';
 import { Info, Search, TriangleAlert } from 'lucide-react-native';
 
 interface EmptyViewInterface {
@@ -11,6 +12,8 @@ interface EmptyViewInterface {
   message?: string;
   details?: string;
   isLoading?: boolean;
+  buttonTitle?: string;
+  onButtonPress?: () => void;
 }
 
 export const EmptyView = ({
@@ -19,6 +22,8 @@ export const EmptyView = ({
   message = 'Nothing here!',
   details,
   isLoading,
+  buttonTitle,
+  onButtonPress,
 }: EmptyViewInterface) => {
   const theme = useTheme();
   const s = useStyles();
@@ -62,6 +67,15 @@ export const EmptyView = ({
         )}
         <Text style={s.message}>{message}</Text>
         <Text style={s.details}>{details}</Text>
+        {buttonTitle && onButtonPress ? (
+          <Button
+            title={buttonTitle}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonClear}
+            containerStyle={s.buttonContainer}
+            onPress={() => onButtonPress()}
+          />
+        ) : null}
       </View>
     </View>
   );
@@ -69,9 +83,9 @@ export const EmptyView = ({
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
+    ...theme.styles.view,
     height: '100%',
     alignItems: 'center',
-    marginHorizontal: 15,
   },
   activityIndicator: {
     height: 45,
@@ -92,5 +106,9 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     ...theme.styles.textDim,
     marginTop: 10,
     textAlign: 'center',
+  },
+  buttonContainer: {
+    width: '80%',
+    alignSelf: 'center',
   },
 }));

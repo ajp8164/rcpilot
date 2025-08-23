@@ -48,13 +48,19 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
     return (
       <Modal
         ref={innerRef}
-        // backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
         backgroundStyle={{ backgroundColor: bgColor }}
         handleIndicatorStyle={{ backgroundColor: theme.colors.black }}
         keyboardBehavior="extend">
         <NavigationIndependentTree>
           <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator
+              screenOptions={{
+                headerStyle: {
+                  backgroundColor: theme.colors.screenHeaderBackground,
+                },
+                headerTitleStyle: { color: theme.colors.screenHeaderTitle },
+                headerTintColor: theme.colors.screenHeaderButtonText,
+              }}>
               <Stack.Screen
                 name="ChooseSignInScreen"
                 component={ChooseSignInScreen}
@@ -77,7 +83,7 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
                 }}
                 listeners={{
                   transitionStart: () =>
-                    setBgColor(theme.colors.viewAltBackground),
+                    setBgColor(theme.colors.screenHeaderBackground),
                 }}
               />
               <Stack.Screen
@@ -99,7 +105,7 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
                 }}
                 listeners={{
                   transitionStart: () =>
-                    setBgColor(theme.colors.viewAltBackground),
+                    setBgColor(theme.colors.screenHeaderBackground),
                 }}
               />
             </Stack.Navigator>

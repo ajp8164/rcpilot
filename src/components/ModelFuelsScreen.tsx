@@ -116,7 +116,13 @@ const ModelFuelsScreen = ({ navigation }: Props) => {
       <EmptyView
         info
         message={'No Model Fuels'}
-        details={'Tap the + button to add your first model fuel.'}
+        details={'Tap the + button to add model fuel.'}
+        buttonTitle={'Add Model Fuel'}
+        onButtonPress={() =>
+          navigation.navigate('NewModelFuelNavigator', {
+            screen: 'NewModelFuel',
+          })
+        }
       />
     );
   }

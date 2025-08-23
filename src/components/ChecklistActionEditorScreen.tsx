@@ -419,6 +419,7 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.description),
                   value: values.description,
+                  label: 'Action Description',
                   placeholder: 'Brief action description',
                   autoCapitalize: 'words',
                 }}

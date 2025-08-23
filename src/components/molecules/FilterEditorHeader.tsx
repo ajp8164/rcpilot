@@ -43,6 +43,7 @@ function FilterEditorHeader<T>({
       inputProps={{
         onChangeText: value => filterEditor.setCustomName(value),
         value: filterEditor.customName || '',
+        label: 'Filter Name',
         placeholder: 'Filter Name',
         autoCapitalize: 'words',
       }}
@@ -85,6 +86,7 @@ function FilterEditorHeader<T>({
           inputProps={{
             onChangeText: value => filterEditor.setName(value),
             value: filterEditor.name || '',
+            label: 'Filter Name',
             placeholder: 'Filter Name',
             autoCapitalize: 'words',
           }}

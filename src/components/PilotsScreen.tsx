@@ -135,7 +135,7 @@ const PilotsScreen = ({ navigation }: Props) => {
           note
           light
           text={
-            'Includes events logged with an "Unknown" pilot and model time not directly associated with an event.'
+            'The Unknown Pilot logs events not associated with a specific pilot and model time not created by an app tracked event.'
           }
         />
       </>

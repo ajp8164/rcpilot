@@ -255,12 +255,12 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
                 position={['first', 'last']}
                 error={!!errors.name}
                 inputProps={{
-                  label: 'Propeller Name',
                   inputAccessoryViewID: 'keyboardAccessory',
                   onChangeText: handleChange('name'),
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
+                  label: 'Propeller Name',
                   placeholder: 'Propeller Name',
                   autoCapitalize: 'words',
                 }}
@@ -275,7 +275,8 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.vendor),
                   value: values.vendor,
-                  placeholder: 'Vendor Name',
+                  label: 'Vendor',
+                  placeholder: 'Vendor',
                   autoCapitalize: 'words',
                 }}
               />

@@ -161,6 +161,7 @@ const ModelCategoryEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
+                  label: 'Category Name',
                   placeholder: 'Category Name',
                   autoCapitalize: 'words',
                 }}

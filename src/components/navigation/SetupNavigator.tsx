@@ -96,7 +96,7 @@ const SetupNavigator = () => {
         name="NewPilot"
         component={NewPilotScreen}
         options={{
-          title: "Pilot's Name",
+          title: 'New Pilot',
           presentation: 'modal',
           gestureEnabled: false,
         }}

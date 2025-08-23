@@ -392,6 +392,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
                     onFocus: () =>
                       keyboardAccessory.current?.focusedField(Fields.name),
                     value: values.name,
+                    label: 'Pilot Name',
                     placeholder: 'Pilot Name',
                     autoCapitalize: 'words',
                   }}

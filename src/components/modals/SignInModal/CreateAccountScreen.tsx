@@ -4,6 +4,7 @@ import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 
 import { useSetState } from '@react-native-hello/core';
 import {
+  Divider,
   InputMethods,
   KeyboardAccessory,
   KeyboardAccessoryMethods,
@@ -19,7 +20,6 @@ import {
 import { ListItemInput } from 'components/atoms/List';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { createUserWithEmailAndPassword } from 'lib/auth';
-import { Eye, EyeOff } from 'lucide-react-native';
 import * as Yup from 'yup';
 
 import { SignInNavigatorParamList } from './types';
@@ -67,7 +67,6 @@ const CreateAccountScreen = () => {
   // Same order as on form.
   const fieldRefs = [emailFieldRef.current, passwordFieldRef.current];
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [editorState, setEditorState] = useSetState<EditorState>({
     fieldCount: fieldRefs.length,
     focusedField: undefined,
@@ -112,20 +111,22 @@ const CreateAccountScreen = () => {
       });
   };
 
-  const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required('First name is required'),
+  const schema = Yup.object().shape({
+    firstName: Yup.string().required('Required field'),
     lastName: Yup.string().required('Last name is required'),
     email: Yup.string()
-      .email('Not a valid email address')
-      .matches(/\..{2,}$/, 'Email domain needs min 2 characters') // Email domain at least 2 chars
-      .required('Email address is required'),
+      .email('Enter a valid email address')
+      .matches(/\..{2,}$/, 'Email domain needs min 2 characters')
+      .required('Required field'),
     password: Yup.string()
-      .required('Password is required')
-      .min(8, 'Minimum length 8 characters')
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])/, 'Include upper/lowercase characters')
+      .matches(/^(?=.*[0-9])/, 'Include at least one number')
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-        'Include uppercase, lowercase, number and one of !@#$%^&*',
-      ),
+        /^(?=.*[!@#$%^&*])/,
+        'Include at least one special char from !@#$%^&*',
+      )
+      .min(8, 'Minimum length 8 characters')
+      .required('Required field'),
   });
 
   // Update the header and button states.
@@ -152,17 +153,19 @@ const CreateAccountScreen = () => {
               password: '',
             }}
             validateOnMount={true}
-            validationSchema={validationSchema}
+            validationSchema={schema}
             onSubmit={signIn}>
             {({ dirty, errors, handleChange, isValid, submitForm, values }) => (
               <View>
                 <FormikStateWatcher<FormValues>
                   onChange={onFormikWatcherStateChange}
                 />
-                <View style={[theme.styles.view, s.view]}>
+                <View style={theme.styles.view}>
+                  <Divider />
                   <ListItemInput
                     ref={firstNameFieldRef}
                     error={!!errors.firstName}
+                    errorMessage={errors.firstName}
                     position={['first']}
                     inputProps={{
                       value: values.firstName,
@@ -171,6 +174,7 @@ const CreateAccountScreen = () => {
                         keyboardAccessory.current?.focusedField(
                           Fields.firstName,
                         ),
+                      label: 'First Name',
                       placeholder: 'First Name',
                       autoCapitalize: 'none',
                       autoCorrect: false,
@@ -179,6 +183,7 @@ const CreateAccountScreen = () => {
                   <ListItemInput
                     ref={lastNameFieldRef}
                     error={!!errors.lastName}
+                    errorMessage={errors.lastName}
                     inputProps={{
                       value: values.lastName,
                       onChangeText: handleChange('lastName'),
@@ -186,6 +191,7 @@ const CreateAccountScreen = () => {
                         keyboardAccessory.current?.focusedField(
                           Fields.lastName,
                         ),
+                      label: 'Last Name',
                       placeholder: 'Last Name',
                       autoCapitalize: 'none',
                       autoCorrect: false,
@@ -194,11 +200,13 @@ const CreateAccountScreen = () => {
                   <ListItemInput
                     ref={emailFieldRef}
                     error={!!errors.email}
+                    errorMessage={errors.email}
                     inputProps={{
                       value: values.email,
                       onChangeText: handleChange('email'),
                       onFocus: () =>
                         keyboardAccessory.current?.focusedField(Fields.email),
+                      label: 'Email',
                       placeholder: 'Email',
                       keyboardType: 'email-address',
                       autoCapitalize: 'none',
@@ -208,14 +216,7 @@ const CreateAccountScreen = () => {
                   <ListItemInput
                     ref={passwordFieldRef}
                     error={!!errors.password}
-                    rightContent={
-                      passwordVisible ? (
-                        <EyeOff color={theme.colors.black} />
-                      ) : (
-                        <Eye color={theme.colors.black} />
-                      )
-                    }
-                    onPressRight={() => setPasswordVisible(!passwordVisible)}
+                    errorMessage={errors.password}
                     position={['last']}
                     inputProps={{
                       value: values.password,
@@ -224,8 +225,9 @@ const CreateAccountScreen = () => {
                         keyboardAccessory.current?.focusedField(
                           Fields.password,
                         ),
+                      label: 'Password',
                       placeholder: 'Password',
-                      secureTextEntry: !passwordVisible,
+                      secureTextEntry: true,
                     }}
                   />
                   <Button
@@ -264,9 +266,6 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
   container: {
     height: '100%',
-  },
-  view: {
-    paddingTop: 30,
   },
   continueButtonContainer: {
     width: '80%',

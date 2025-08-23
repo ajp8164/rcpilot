@@ -220,7 +220,7 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
               <FormikStateWatcher<FormValues>
                 onChange={onFormikWatcherStateChange}
               />
-              <Divider text={'REPORT NAME'} />
+              <Divider />
               <ListItemInput
                 ref={nameFieldRef}
                 position={['first', 'last']}
@@ -230,11 +230,12 @@ const ReportEventsMaintenanceEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
+                  label: 'Report Name',
                   placeholder: 'Report Name',
                   autoCapitalize: 'words',
                 }}
               />
-              <Divider text={'CONTENTS'} />
+              <Divider text={'CONTENT'} />
               <ListItemSwitch
                 title={'Includes Summary'}
                 value={includesSummary}

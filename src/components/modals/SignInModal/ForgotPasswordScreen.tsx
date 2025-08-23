@@ -1,9 +1,14 @@
 import React, { useRef } from 'react';
-import { Alert, Keyboard, ScrollView, Text, View } from 'react-native';
+import { Alert, Keyboard, ScrollView, View } from 'react-native';
 import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 
 import { useSetState } from '@react-native-hello/core';
-import { InputMethods, ThemeManager, useTheme } from '@react-native-hello/ui';
+import {
+  Divider,
+  InputMethods,
+  ThemeManager,
+  useTheme,
+} from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from 'components/atoms/Button';
 import { ListItemInput } from 'components/atoms/List';
@@ -59,11 +64,11 @@ const ForgotPasswordScreen = () => {
       });
   };
 
-  const validationSchema = Yup.object().shape({
+  const schema = Yup.object().shape({
     email: Yup.string()
-      .email('Not a valid email address')
-      .matches(/\..{2,}$/, 'Email domain needs min 2 characters') // Email domain at least 2 chars
-      .required('Email address is required'),
+      .email('Enter a valid email address')
+      .matches(/\..{2,}$/, 'Email domain needs min 2 characters')
+      .required('Required field'),
   });
 
   return (
@@ -78,23 +83,26 @@ const ForgotPasswordScreen = () => {
               email: '',
             }}
             validateOnMount={true}
-            validationSchema={validationSchema}
+            validationSchema={schema}
             onSubmit={sendEmail}>
-            {formik => (
-              <View style={[theme.styles.view, s.view]}>
-                <Text style={s.description}>
-                  {
+            {({ dirty, errors, handleChange, isValid, submitForm, values }) => (
+              <View style={theme.styles.view}>
+                <Divider
+                  note
+                  text={
                     "Enter your email address and we'll send a link to reset your password."
                   }
-                </Text>
+                  style={s.divider}
+                />
                 <ListItemInput
                   ref={emailFieldRef}
-                  error={!!formik.errors.email}
+                  error={!!errors.email}
+                  errorMessage={errors.email}
                   position={['first', 'last']}
                   inputProps={{
-                    value: formik.values.email,
-                    onChangeText: formik.handleChange('email'),
-                    onBlur: formik.handleBlur('email'),
+                    value: values.email,
+                    onChangeText: handleChange('email'),
+                    label: 'Email',
                     placeholder: 'Email',
                     keyboardType: 'email-address',
                     autoCapitalize: 'none',
@@ -106,9 +114,9 @@ const ForgotPasswordScreen = () => {
                   titleStyle={theme.styles.buttonTitle}
                   buttonStyle={theme.styles.button}
                   containerStyle={s.sendButtonContainer}
-                  disabled={!(formik.dirty && formik.isValid)}
+                  disabled={!(dirty && isValid)}
                   loading={editorState.isSubmitting}
-                  onPress={() => formikRef.current?.submitForm()}
+                  onPress={() => submitForm()}
                 />
               </View>
             )}
@@ -126,8 +134,8 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
   },
-  view: {
-    paddingTop: 30,
+  divider: {
+    marginTop: 30,
   },
   sendButtonContainer: {
     width: '80%',

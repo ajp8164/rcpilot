@@ -198,6 +198,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
+                  label: 'Fuel Name',
                   placeholder: 'Fuel Name',
                   autoCapitalize: 'words',
                 }}

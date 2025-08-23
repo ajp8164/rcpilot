@@ -62,6 +62,7 @@ const MaintenanceActionScreen = ({ route }: Props) => {
       <ListItemInput
         title={'Total Costs'}
         position={['first', 'last']}
+        container={'right'}
         inputProps={{
           onChangeText: () => null,
           value: `${action.cost || 0}`,

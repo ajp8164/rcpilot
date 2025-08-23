@@ -217,6 +217,7 @@ const LocationEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
+                  label: 'Location Name',
                   placeholder: 'Location Name',
                   autoCapitalize: 'words',
                 }}

@@ -533,12 +533,12 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                     position={['first']}
                     error={!!errors.name}
                     inputProps={{
-                      label: 'Model Name',
                       inputAccessoryViewID: 'keyboardAccessory',
                       onChangeText: handleChange('name'),
                       onFocus: () =>
                         keyboardAccessory.current?.focusedField(Fields.name),
                       value: values.name,
+                      label: 'Model Name',
                       placeholder: 'Model Name',
                       autoCapitalize: 'words',
                     }}
@@ -548,12 +548,12 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                     position={['last']}
                     error={!!errors.vendor}
                     inputProps={{
-                      label: 'Vendor',
                       inputAccessoryViewID: 'keyboardAccessory',
                       onChangeText: handleChange('vendor'),
                       onFocus: () =>
                         keyboardAccessory.current?.focusedField(Fields.vendor),
                       value: values.vendor,
+                      label: 'Vendor',
                       placeholder: 'Vendor',
                       autoCapitalize: 'words',
                     }}

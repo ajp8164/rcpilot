@@ -222,6 +222,7 @@ const ReportScanCodesEditorScreen = ({ navigation, route }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
+                  label: 'Report Name',
                   placeholder: 'Report Name',
                   autoCapitalize: 'words',
                 }}

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Keyboard, ScrollView, Text, View } from 'react-native';
-import { AvoidSoftInputView } from 'react-native-avoid-softinput';
+import { Alert, Keyboard, Text, View } from 'react-native';
 
 import { useSetState } from '@react-native-hello/core';
 import {
@@ -20,7 +19,6 @@ import {
 import { ListItemInput } from 'components/atoms/List';
 import { Formik, FormikHelpers, FormikProps } from 'formik';
 import { signInwithEmailAndPassword } from 'lib/auth';
-import { Eye, EyeOff } from 'lucide-react-native';
 import * as Yup from 'yup';
 
 import { SignInNavigatorParamList } from './types';
@@ -62,7 +60,6 @@ const EmailSignInScreen = ({ navigation }: Props) => {
   // Same order as on form.
   const fieldRefs = [emailFieldRef.current, passwordFieldRef.current];
 
-  const [passwordVisible, setPasswordVisible] = useState(false);
   const [editorState, setEditorState] = useSetState<EditorState>({
     fieldCount: fieldRefs.length,
     focusedField: undefined,
@@ -76,6 +73,27 @@ const EmailSignInScreen = ({ navigation }: Props) => {
       [emailFieldRef.current, passwordFieldRef.current].filter(Boolean),
     );
   }, []);
+
+  const initialValues = {
+    email: '',
+    password: '',
+  } as FormValues;
+
+  const schema = Yup.object().shape({
+    email: Yup.string()
+      .email('Enter a valid email address')
+      .matches(/\..{2,}$/, 'Email domain needs min 2 characters')
+      .required('Required field'),
+    password: Yup.string()
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])/, 'Include upper/lowercase characters')
+      .matches(/^(?=.*[0-9])/, 'Include at least one number')
+      .matches(
+        /^(?=.*[!@#$%^&*])/,
+        'Include at least one special char from !@#$%^&*',
+      )
+      .min(8, 'Minimum length 8 characters')
+      .required('Required field'),
+  });
 
   const signIn = (
     values: FormValues,
@@ -97,21 +115,6 @@ const EmailSignInScreen = ({ navigation }: Props) => {
       });
   };
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .email('Not a valid email address')
-      .matches(/\..{2,}$/, 'Email domain needs min 2 characters') // Email domain at least 2 chars
-      .required('Email address is required'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(8, 'Minimum length 8 characters')
-      .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
-        'Include uppercase, lowercase, number and special character',
-      ),
-  });
-
-  // Update the header and button states.
   const onFormikWatcherStateChange = (
     state: FormikWatcherState<FormValues>,
   ) => {
@@ -122,90 +125,85 @@ const EmailSignInScreen = ({ navigation }: Props) => {
 
   return (
     <>
-      <AvoidSoftInputView style={s.avoidContainer}>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={s.container}>
-          <Formik
-            innerRef={formikRef}
-            initialValues={{
-              email: '',
-              password: '',
-            }}
-            validateOnMount={true}
-            validationSchema={validationSchema}
-            onSubmit={signIn}>
-            {({ dirty, errors, handleChange, isValid, submitForm, values }) => (
-              <View>
-                <FormikStateWatcher<FormValues>
-                  onChange={onFormikWatcherStateChange}
-                />
-                <View style={[theme.styles.view, s.view]}>
-                  <ListItemInput
-                    ref={emailFieldRef}
-                    error={!!errors.email}
-                    position={['first']}
-                    inputProps={{
-                      value: values.email,
-                      onChangeText: handleChange('email'),
-                      onFocus: () =>
-                        keyboardAccessory.current?.focusedField(Fields.email),
-                      placeholder: 'Email',
-                      keyboardType: 'email-address',
-                      autoCapitalize: 'none',
-                      autoCorrect: false,
-                    }}
-                  />
-                  <ListItemInput
-                    ref={passwordFieldRef}
-                    error={!!errors.password}
-                    rightContent={
-                      passwordVisible ? (
-                        <EyeOff color={theme.colors.black} />
-                      ) : (
-                        <Eye color={theme.colors.black} />
-                      )
-                    }
-                    onPressRight={() => setPasswordVisible(!passwordVisible)}
-                    position={['last']}
-                    inputProps={{
-                      value: values.password,
-                      onChangeText: handleChange('password'),
-                      onFocus: () =>
-                        keyboardAccessory.current?.focusedField(
-                          Fields.password,
-                        ),
-                      placeholder: 'Password',
-                      secureTextEntry: !passwordVisible,
-                    }}
-                  />
-                  <Divider />
-                  <Button
-                    title={'Continue'}
-                    titleStyle={theme.styles.buttonTitle}
-                    buttonStyle={theme.styles.button}
-                    containerStyle={theme.styles.buttonContainer}
-                    disabled={!(dirty && isValid)}
-                    loading={editorState.isSubmitting}
-                    onPress={() => submitForm()}
-                  />
-                  <Divider />
-                  <Button
-                    title={'Forgot Password?'}
-                    titleStyle={s.forgotPassword}
-                    buttonStyle={theme.styles.buttonClear}
-                    containerStyle={theme.styles.buttonContainer}
-                    onPress={() => navigation.navigate('ForgotPasswordScreen')}
-                  />
-                  <Text style={s.footer}>
-                    {'By signing up you agree to our Terms and Privacy Policy'}
-                  </Text>
-                </View>
-              </View>
-            )}
-          </Formik>
-        </ScrollView>
-      </AvoidSoftInputView>
+      <Formik
+        innerRef={formik => {
+          if (formik) {
+            formikRef.current = formik;
+          }
+        }}
+        initialValues={initialValues}
+        validateOnMount
+        validationSchema={schema}
+        onSubmit={signIn}>
+        {({ dirty, errors, handleChange, isValid, submitForm, values }) => (
+          <View>
+            <FormikStateWatcher<FormValues>
+              onChange={onFormikWatcherStateChange}
+            />
+            <View style={theme.styles.view}>
+              <Divider />
+              <ListItemInput
+                ref={emailFieldRef}
+                error={!!errors.email}
+                errorMessage={errors.email}
+                position={['first']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('email'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.email),
+                  value: values.email,
+                  label: 'Email',
+                  placeholder: 'Email',
+                  insideModal: true,
+                  keyboardType: 'email-address',
+                  autoCapitalize: 'none',
+                  autoCorrect: false,
+                }}
+              />
+              <ListItemInput
+                ref={passwordFieldRef}
+                error={!!errors.password}
+                errorMessage={errors.password}
+                position={['last']}
+                inputProps={{
+                  inputAccessoryViewID: 'keyboardAccessory',
+                  onChangeText: handleChange('password'),
+                  onFocus: () =>
+                    keyboardAccessory.current?.focusedField(Fields.password),
+                  value: values.password,
+                  label: 'Password',
+                  placeholder: 'Password',
+                  insideModal: true,
+                  autoCorrect: false,
+                  secureTextEntry: true,
+                }}
+              />
+              <Divider />
+              <Button
+                title={'Continue'}
+                titleStyle={theme.styles.buttonTitle}
+                buttonStyle={theme.styles.button}
+                containerStyle={theme.styles.buttonContainer}
+                disabled={!(dirty && isValid)}
+                loading={editorState.isSubmitting}
+                onPress={() => submitForm()}
+              />
+              <Divider />
+              <Button
+                title={'Forgot Password?'}
+                titleStyle={s.forgotPassword}
+                buttonStyle={theme.styles.buttonClear}
+                containerStyle={theme.styles.buttonContainer}
+                onPress={() => navigation.navigate('ForgotPasswordScreen')}
+              />
+              <Text style={s.footer}>
+                {'By signing up you agree to our Terms and Privacy Policy'}
+              </Text>
+            </View>
+          </View>
+        )}
+      </Formik>
       <KeyboardAccessory
         ref={keyboardAccessory}
         id={'keyboardAccessory'}
@@ -225,20 +223,15 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
     height: '100%',
   },
-  view: {
-    paddingTop: 30,
-  },
   forgotPassword: {
     ...theme.text.normal,
-    ...theme.styles.textDim,
+    color: theme.colors.button,
   },
   footer: {
     ...theme.text.small,
     ...theme.styles.textDim,
     alignSelf: 'center',
     textAlign: 'center',
-    position: 'absolute',
-    bottom: 40,
     marginHorizontal: 40,
   },
 }));

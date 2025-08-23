@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Pressable, View } from 'react-native';
 
 import {
   InputMethods,
   ListItemInput as RNHListItemInput,
+  ThemeManager,
   useTheme,
 } from '@react-native-hello/ui';
-import { Pencil } from 'lucide-react-native';
+import { Eye, EyeOff, Pencil } from 'lucide-react-native';
 
 export type ListItemInputMethods = InputMethods;
 
@@ -16,6 +18,9 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, ListItemInput>(
     const { ...rest } = props;
 
     const theme = useTheme();
+    const s = useStyles();
+
+    const [secureVisible, setSecureVisible] = useState(false);
 
     return (
       <RNHListItemInput
@@ -23,14 +28,47 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, ListItemInput>(
         {...rest}
         inputProps={{
           ...rest.inputProps,
-          ComponentRight:
-            rest.inputProps.editable === false ? null : (
-              <Pencil color={theme.colors.listItemIcon} size={18} />
-            ),
+          secureTextEntry: rest.inputProps.secureTextEntry && !secureVisible,
+          ComponentRight: (
+            <View style={s.rightContentContainer}>
+              {rest.inputProps.secureTextEntry ? (
+                <Pressable
+                  style={{
+                    height: rest.inputProps.inputStyle?.height || 48,
+                    paddingHorizontal: 5,
+                    justifyContent: 'center',
+                  }}
+                  onPress={() => setSecureVisible(prev => !prev)}>
+                  {secureVisible ? (
+                    <Eye color={theme.colors.listItemIcon} size={22} />
+                  ) : (
+                    <EyeOff color={theme.colors.listItemIcon} size={22} />
+                  )}
+                </Pressable>
+              ) : null}
+              {rest.rightContent ? (
+                <View style={s.rightContent}>{rest.rightContent}</View>
+              ) : null}
+              {rest.inputProps.editable === false ? null : (
+                <Pencil color={theme.colors.lightGray} size={18} />
+              )}
+            </View>
+          ),
         }}
       />
     );
   },
 );
+
+const useStyles = ThemeManager.createStyleSheet(() => ({
+  rightContent: {
+    marginRight: 5,
+  },
+  rightContentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 10,
+  },
+}));
 
 export { ListItemInput };

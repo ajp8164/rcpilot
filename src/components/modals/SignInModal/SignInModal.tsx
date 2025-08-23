@@ -50,7 +50,8 @@ const SignInModal = React.forwardRef<SignInModal, SignInModalProps>(
         ref={innerRef}
         // backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
         backgroundStyle={{ backgroundColor: bgColor }}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.black }}>
+        handleIndicatorStyle={{ backgroundColor: theme.colors.black }}
+        keyboardBehavior="extend">
         <NavigationIndependentTree>
           <NavigationContainer>
             <Stack.Navigator>

@@ -89,6 +89,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
           ref={refInput}
           style={[s.text]}
           inputContainerStyle={s.inputContainer}
+          inputStyle={s.input}
           multiline={true}
           placeholder={placeholder}
           inputAccessoryViewID={'inputAccessoryViewID'}
@@ -101,7 +102,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         />
         {characterLimit ? (
           <InputAccessoryView nativeID={'inputAccessoryViewID'}>
-            <View style={s.remainingView}>
+            <View style={s.remainingContainer}>
               <Text
                 style={
                   s.remaining
@@ -115,26 +116,29 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 });
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  view: {
-    backgroundColor: theme.colors.viewAltBackground,
-  },
-  text: {
-    ...theme.text.normal,
-    textAlignVertical: 'top',
+  input: {
+    height: '100%',
   },
   inputContainer: {
     borderBottomWidth: 0,
-  },
-  remainingView: {
-    justifyContent: 'center',
-    height: 20,
-    backgroundColor: theme.colors.wispGray,
   },
   remaining: {
     ...theme.text.small,
     ...theme.styles.textDim,
     textAlign: 'left',
     paddingLeft: 10,
+  },
+  remainingContainer: {
+    justifyContent: 'center',
+    height: 20,
+    backgroundColor: theme.colors.wispGray,
+  },
+  text: {
+    ...theme.text.normal,
+    textAlignVertical: 'top',
+  },
+  view: {
+    backgroundColor: theme.colors.viewAltBackground,
   },
 }));
 

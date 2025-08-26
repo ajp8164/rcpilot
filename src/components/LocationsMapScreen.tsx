@@ -305,7 +305,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         <Button
           containerStyle={s.button}
           buttonStyle={theme.styles.buttonScreenHeader}
-          icon={<CircleX color={theme.colors.lightGray} size={28} />}
+          icon={<CircleX color={theme.colors.clearButtonText} size={28} />}
           onPress={() => navigation.goBack()}
         />
         <Button

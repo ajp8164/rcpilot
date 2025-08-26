@@ -6,6 +6,7 @@ import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import LogScreen from 'components/LogScreen';
+import LocationNavigator from 'components/navigation/LocationNavigator';
 import { LogNavigatorParamList } from 'types/navigation';
 
 const LogStack = createNativeStackNavigator<LogNavigatorParamList>();
@@ -40,6 +41,14 @@ const LogNavigator = () => {
         component={EventEditorScreen}
         options={{
           title: 'Event Details',
+        }}
+      />
+      <LogStack.Screen
+        name="LocationNavigator"
+        component={LocationNavigator}
+        options={{
+          headerShown: false,
+          presentation: 'fullScreenModal',
         }}
       />
       <LogStack.Screen

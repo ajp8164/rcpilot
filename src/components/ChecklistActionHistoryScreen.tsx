@@ -1,5 +1,10 @@
 import React from 'react';
-import { ListRenderItem, SectionList, SectionListData } from 'react-native';
+import {
+  ListRenderItem,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
 
 import {
   Divider,
@@ -85,7 +90,11 @@ const ChecklistActionHistoryScreen = ({ route }: Props) => {
       )}
       keyExtractor={(item, index) => `${index}${item.eventNumber}`}
       renderItem={renderActionHistoryEntry}
-      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <View style={theme.styles.listSectionHeader}>
+          <Divider text={title} />
+        </View>
+      )}
       ListFooterComponent={<Divider />}
     />
   );

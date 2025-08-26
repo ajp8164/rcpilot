@@ -12,9 +12,12 @@ import {
   View,
 } from 'react-native';
 
-import { Input, InputMethods, ThemeManager } from '@react-native-hello/ui';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-// See https://github.com/react-native-elements/react-native-elements/issues/3202#issuecomment-1505878539
+import {
+  Input,
+  InputMethods,
+  ThemeManager,
+  useDevice,
+} from '@react-native-hello/ui';
 import NavContext from 'components/navigation/NavContext';
 import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 
@@ -26,11 +29,14 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
   const {
     characterLimit,
     containerStyle,
+    enableAutoKeyboard = true,
     onTextChanged,
     placeholder = 'Enter text here',
     value,
+    height,
   } = props;
 
+  const device = useDevice();
   const s = useStyles();
 
   const { isModal } = useContext(NavContext);
@@ -41,28 +47,42 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 
   const kbHeight = useKeyboardHeight();
   const viewHeight = useRef(0);
-  const tabBarHeight = useBottomTabBarHeight();
+  const tabBarHeight = device.bottomTabBarHeight;
   const [visibleHeight, setVisibleHeight] = useState(0);
 
   useEffect(() => {
-    if (visibleHeight === 0 && kbHeight > 0) {
-      if (isModal) {
-        setVisibleHeight(viewHeight.current - kbHeight);
-      } else {
-        setVisibleHeight(viewHeight.current + tabBarHeight - kbHeight);
+    setText(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (height) {
+      setVisibleHeight(height - kbHeight);
+    } else {
+      if (visibleHeight === 0 && kbHeight > 0) {
+        if (isModal) {
+          setVisibleHeight(viewHeight.current - kbHeight);
+        } else {
+          setVisibleHeight(viewHeight.current + tabBarHeight - kbHeight);
+        }
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kbHeight, viewHeight.current]);
+  }, [height, kbHeight, viewHeight.current]);
 
   // Open the keyboard after the view has animated in.
   useEffect(() => {
-    setTimeout(() => {
+    if (enableAutoKeyboard) {
+      setTimeout(() => {
+        if (refInput.current) {
+          refInput.current.focus();
+        }
+      }, 600);
+    } else {
       if (refInput.current) {
-        refInput.current.focus();
+        refInput.current.blur();
       }
-    }, 600);
-  }, []);
+    }
+  }, [enableAutoKeyboard]);
 
   useImperativeHandle(ref, () => ({
     //  These functions exposed to the parent component through the ref.
@@ -87,7 +107,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
       <View>
         <Input
           ref={refInput}
-          style={[s.text]}
+          style={s.text}
           inputContainerStyle={s.inputContainer}
           inputStyle={s.input}
           multiline={true}

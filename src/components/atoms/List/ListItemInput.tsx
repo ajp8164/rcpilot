@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
 import {
@@ -11,11 +11,13 @@ import { Eye, EyeOff, Pencil } from 'lucide-react-native';
 
 export type ListItemInputMethods = InputMethods;
 
-interface ListItemInput extends RNHListItemInput {}
+interface ListItemInput extends RNHListItemInput {
+  actionsContent?: ReactElement;
+}
 
 const ListItemInput = React.forwardRef<ListItemInputMethods, ListItemInput>(
   (props, ref) => {
-    const { ...rest } = props;
+    const { actionsContent, ...rest } = props;
 
     const theme = useTheme();
     const s = useStyles();
@@ -46,12 +48,15 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, ListItemInput>(
                   )}
                 </Pressable>
               ) : null}
-              {rest.rightContent ? (
-                <View style={s.rightContent}>{rest.rightContent}</View>
+              {actionsContent ? (
+                <View style={s.actionsContent}>{actionsContent}</View>
               ) : null}
               {rest.inputProps.editable === false ? null : (
                 <Pencil color={theme.colors.lightGray} size={18} />
               )}
+              {rest.rightContent ? (
+                <View style={s.rightContent}>{rest.rightContent}</View>
+              ) : null}
             </View>
           ),
         }}
@@ -61,8 +66,11 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, ListItemInput>(
 );
 
 const useStyles = ThemeManager.createStyleSheet(() => ({
-  rightContent: {
+  actionsContent: {
     marginRight: 5,
+  },
+  rightContent: {
+    marginLeft: 5,
   },
   rightContentContainer: {
     flexDirection: 'row',

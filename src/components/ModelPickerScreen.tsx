@@ -182,7 +182,11 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
       sections={groupModels(activeModels)}
       keyExtractor={item => item._id.toString()}
       renderItem={renderItem}
-      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <View style={theme.styles.listSectionHeader}>
+          <Divider text={title} />
+        </View>
+      )}
     />
   );
 };

@@ -43,7 +43,6 @@ import {
 import { DateTime } from 'luxon';
 import { Event } from 'realmdb/Event';
 import { FilterType } from 'types/filter';
-import { ModelType } from 'types/model';
 import { LogNavigatorParamList } from 'types/navigation';
 
 const sectionItemHeight = 80;
@@ -344,7 +343,6 @@ const LogScreen = ({ navigation }: Props) => {
           logEntry.model._id
             ? navigation.navigate('EventEditor', {
                 eventId: logEntry._id.toString(),
-                modelType: ModelType.Car,
               })
             : navigation.navigate('BatteryCycleEditor', {
                 batteryId: logEntry.batteryCycles[0]._id.toString(), // TODO

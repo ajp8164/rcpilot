@@ -21,7 +21,6 @@ import { useObject, useQuery, useRealm } from '@realm/react';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { LocationsMapResult } from 'components/LocationsMapScreen';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -68,6 +67,7 @@ import { eventSequence } from 'store/slices/eventSequence';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { EventOutcome } from 'types/event';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
 
 // Order of fields for accessory view.

@@ -4,6 +4,7 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItem,
+  View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -505,7 +506,9 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
         keyExtractor={item => item._id.toString()}
         renderItem={renderBattery}
         renderSectionHeader={({ section: { title } }) => (
-          <Divider text={title} />
+          <View style={theme.styles.listSectionHeader}>
+            <Divider text={title} />
+          </View>
         )}
         ListFooterComponent={renderInactive()}
       />

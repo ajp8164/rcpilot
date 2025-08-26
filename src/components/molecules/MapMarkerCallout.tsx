@@ -1,5 +1,5 @@
-import React, { forwardRef, useState } from 'react';
-import { LayoutChangeEvent, Text, View } from 'react-native';
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import { Text, View } from 'react-native';
 import {
   Callout,
   MapMarker,
@@ -10,7 +10,7 @@ import Animated, { SlideInUp } from 'react-native-reanimated';
 
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { useLocationSummary } from 'lib/location';
-import { ChevronRight, MapPin } from 'lucide-react-native';
+import { MapPin } from 'lucide-react-native';
 import { Location } from 'realmdb';
 
 interface MapMarkerCalloutInterface {
@@ -18,65 +18,56 @@ interface MapMarkerCalloutInterface {
   location: Location;
   onMarkerDragEnd: (event: MarkerDragStartEndEvent, location: Location) => void;
   onPressCallout: () => void;
+  onPressMarker: () => void;
 }
 
 export const MapMarkerCallout = forwardRef(
-  (
-    {
-      index,
-      location,
-      onMarkerDragEnd,
-      onPressCallout,
-    }: MapMarkerCalloutInterface,
-    ref: React.LegacyRef<MapMarker> | undefined,
-  ) => {
+  (props: MapMarkerCalloutInterface, ref: React.Ref<MapMarker> | undefined) => {
+    const { index, location, onMarkerDragEnd, onPressCallout, onPressMarker } =
+      props;
     const theme = useTheme();
     const s = useStyles();
     const locationSummary = useLocationSummary(location);
 
-    const [width, setWidth] = useState(0);
-    const onLayout = (event: LayoutChangeEvent) => {
-      setWidth(event.nativeEvent.layout.width);
-    };
+    const internalRef = useRef<MapMarker>(null);
+
+    // Expose internalRef to parent if they passed a ref.
+    useImperativeHandle(ref, () => internalRef.current as MapMarker);
 
     return (
       <>
-        {/* This text is not visible and is used to measure the location name width. */}
-        <Text
-          numberOfLines={1}
-          style={[s.calloutText1, s.calloutText1Hidden]}
-          onLayout={onLayout}>
-          {location.name}
-        </Text>
         <Marker
-          ref={ref}
+          ref={internalRef}
           key={index}
-          identifier={location._id.toString()}
           coordinate={{
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           }}
-          style={s.marker}
-          calloutOffset={{ x: 0, y: -7 }}
-          calloutAnchor={{ x: 0, y: 10 }}
           draggable
-          onDragEnd={event => onMarkerDragEnd(event, location)}>
+          onDragEnd={event => {
+            onMarkerDragEnd(event, location);
+          }}
+          onPress={() => onPressMarker()}>
           <Animated.View entering={SlideInUp.duration(400)}>
-            <MapPin color={'red'} fill={'white'} size={30} style={s.pin} />
-          </Animated.View>
-          <Callout style={[s.callout, { width }]} onPress={onPressCallout}>
-            <View style={s.calloutTextContainer}>
-              <Text numberOfLines={1} style={s.calloutText1}>
-                {location.name}
-              </Text>
-              <Text numberOfLines={1} style={s.calloutText2}>
-                {locationSummary}
-              </Text>
-            </View>
-            <ChevronRight
-              color={theme.colors.listItemIcon}
-              style={{ right: 15 }}
+            <MapPin
+              color={theme.colors.assertive}
+              fill={theme.colors.white}
+              size={30}
             />
+          </Animated.View>
+          <Callout tooltip={false} style={s.callout} onPress={onPressCallout}>
+            <View style={s.calloutContainer}>
+              <View style={s.calloutContent}>
+                <View style={s.calloutTextContainer}>
+                  <Text numberOfLines={1} style={s.calloutText1}>
+                    {location.name}
+                  </Text>
+                  <Text numberOfLines={1} style={s.calloutText2}>
+                    {locationSummary}
+                  </Text>
+                </View>
+              </View>
+            </View>
           </Callout>
         </Marker>
       </>
@@ -85,38 +76,27 @@ export const MapMarkerCallout = forwardRef(
 );
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  marker: {
-    padding: 5,
-  },
   callout: {
-    height: 26,
-    width: '100%',
-    minWidth: 175,
-    maxWidth: 250,
-    marginVertical: -12,
-    paddingRight: 10,
-    flexDirection: 'row',
+    minWidth: 180,
+    maxWidth: 275,
+  },
+  calloutContainer: {
     alignItems: 'center',
-    justifyContent: 'space-between',
+    marginBottom: -8, // Moves the callout down toward the pin
+    marginTop: -8, // Moves the callout down toward the pin
+  },
+  calloutContent: {
+    backgroundColor: theme.colors.stickyWhite,
   },
   calloutTextContainer: {
-    width: '100%',
-    paddingRight: 10,
-  },
-  calloutText1Hidden: {
-    position: 'absolute',
-    opacity: 0,
+    alignItems: 'center',
   },
   calloutText1: {
     ...theme.text.normal,
+    color: theme.colors.stickyText,
   },
   calloutText2: {
-    ...theme.text.small,
-    ...theme.styles.textDim,
-  },
-  pin: {
-    height: 30,
-    top: -14,
-    left: -5,
+    ...theme.text.tiny,
+    color: theme.colors.stickyText,
   },
 }));

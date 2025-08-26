@@ -431,7 +431,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                     : renderModelListItem(section)
                 }
                 renderSectionHeader={({ section: { title } }) => (
-                  <Divider text={title} />
+                  <View style={theme.styles.listSectionHeader}>
+                    <Divider text={title} />
+                  </View>
                 )}
                 ListFooterComponent={renderInactive()}
               />

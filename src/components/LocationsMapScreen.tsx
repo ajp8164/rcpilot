@@ -1,35 +1,29 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
 import MapView, {
   Camera,
   Details,
   MapMarker,
+  MapPressEvent,
   MapType,
   MarkerDragStartEndEvent,
-  MarkerPressEvent,
   Region,
 } from 'react-native-maps';
-import { useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { LocationPickerResult } from 'components/LocationsScreen';
-import ActionBar from 'components/atoms/ActionBar';
 import { Button } from 'components/atoms/Button';
+import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
+import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
+import { NotesBottomSheet } from 'components/bottomSheets/NotesBottomSheet';
 import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
 import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
 import {
-  BookOpen,
+  CircleX,
   Map,
   MapPinPlus,
   MapPinned,
@@ -39,7 +33,7 @@ import {
 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { Location, LocationCoords } from 'realmdb/Location';
-import { selectLocation } from 'store/selectors/locationSelectors';
+import { LocationPickerResult } from 'types/location';
 import { LocationNavigatorParamList } from 'types/navigation';
 
 enum RecenterButtonState {
@@ -76,18 +70,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   // location is specified then use an available closest location to our current position. Failing
   // to get any location record just set the map to our current position.
   const currentPosition = useContext(GeoPositionContext);
-  let initialLocation = locations.find(
+  const initialLocation = locations.find(
     location => location._id.toString() === locationId,
   );
 
-  const currentLocationId = useSelector(selectLocation).locationId;
-  if (!initialLocation) {
-    // Get closest the location closest to our current position.
-    // Note: Current location is set using a radius around our current position.
-    initialLocation = locations.find(
-      l => l._id.toString() === currentLocationId,
-    );
-  }
+  // This is the current selection by the user.
+  const userSelectedLocationId = useRef<string>(null);
 
   const initialized = useRef(false);
   const mapViewRef = useRef<MapView>(null);
@@ -102,25 +90,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     RecenterButtonState.Initial,
   );
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            headerRight
-            icon={
-              <BookOpen color={theme.colors.screenHeaderButtonText} size={28} />
-            }
-            onPress={() =>
-              navigation.navigate('Locations', { eventName: 'map-location' })
-            }
-          />
-        );
-      },
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigation]);
+  const mapBottomSheetRef = useRef<MapBottomSheet>(null);
+  const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
+  const notesBottomSheetRef = useRef<NotesBottomSheet>(null);
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -141,9 +113,16 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    event.on('map-location', onChangeMapLocation);
+    if (locationId) {
+      onChangeMapLocation({ locationId });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    event.on('select-map-location', onChangeMapLocation);
     return () => {
-      event.removeListener('map-location', onChangeMapLocation);
+      event.removeListener('select-map-location', onChangeMapLocation);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -157,21 +136,33 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     if (newLocation) {
       recenterMap(newLocation.coords);
 
+      // Show the bottom sheet for the new location.
+      mapBottomSheetRef.current?.dismiss();
+      locationBottomSheetRef.current?.present(result.locationId);
+
       // Find and show the location callout.
       const marker = markersRef.current.find(
-        m => m.location.name === newLocation.name,
+        m => m.location?.name === newLocation.name,
       );
 
       if (marker) {
         marker.mapMarker.showCallout();
       }
 
+      const newLocationId = newLocation._id.toString();
+
       // Broadcast the new location.
       if (eventName) {
         event.emit(eventName, {
-          locationId: newLocation._id.toString(),
+          locationId: newLocationId,
         } as LocationsMapResult);
       }
+
+      event.emit('map-location', {
+        locationId: newLocationId,
+      } as LocationsMapResult);
+
+      userSelectedLocationId.current = newLocationId;
     }
   };
 
@@ -273,12 +264,76 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const onMarkerPress = (markerEvent: MarkerPressEvent) => {
-    if (eventName) {
-      event.emit(eventName, {
-        locationId: markerEvent.nativeEvent.id,
-      } as LocationsMapResult);
+  const onPressMap = (event: MapPressEvent) => {
+    // Perform only if press is not on a marker.
+    if (event.nativeEvent.action === 'press') {
+      locationBottomSheetRef.current?.dismiss(true);
     }
+  };
+
+  const onPressMarker = (locationId: string) => {
+    if (locationId !== userSelectedLocationId.current) {
+      onChangeMapLocation({ locationId });
+
+      mapBottomSheetRef.current?.dismiss();
+      requestAnimationFrame(() => {
+        locationBottomSheetRef.current?.present(locationId);
+      });
+    }
+  };
+
+  const onPressCallout = (_locationId: string) => {};
+
+  const renderActionButtons = (): React.ReactElement => {
+    return (
+      <View style={s.buttons}>
+        <Button
+          containerStyle={s.button}
+          buttonStyle={theme.styles.buttonScreenHeader}
+          icon={<CircleX color={theme.colors.lightGray} size={28} />}
+          onPress={() => navigation.goBack()}
+        />
+        <Button
+          containerStyle={[s.button, s.buttonFirst]}
+          buttonStyle={theme.styles.buttonScreenHeader}
+          icon={
+            <>
+              {recenterButtonState === RecenterButtonState.Initial ? (
+                <Navigation color={theme.colors.clearButtonText} size={28} />
+              ) : recenterButtonState ===
+                RecenterButtonState.CurrentLocation ? (
+                <MapPinned color={theme.colors.clearButtonText} size={28} />
+              ) : (
+                <View style={s.northUp}>
+                  <Navigation2 color={theme.colors.white} size={28} />
+                </View>
+              )}
+            </>
+          }
+          onPress={() => changeRecenter(currentPosition.coords)}
+        />
+        <Button
+          containerStyle={[s.button, s.buttonLast]}
+          buttonStyle={theme.styles.buttonScreenHeader}
+          icon={
+            mapPresentation === 'standard' ? (
+              <Map color={theme.colors.clearButtonText} size={28} />
+            ) : (
+              <Satellite color={theme.colors.clearButtonText} size={28} />
+            )
+          }
+          onPress={() => toggleMapPresenation()}
+        />
+        <Button
+          containerStyle={s.button}
+          buttonStyle={theme.styles.buttonScreenHeader}
+          icon={
+            <MapPinPlus color={theme.colors.screenHeaderButtonText} size={28} />
+          }
+          onPress={() => addLocation()}
+        />
+      </View>
+    );
   };
 
   const renderMapMarkers = (): React.ReactElement[] => {
@@ -294,13 +349,21 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
               ref ? (markersRef.current[index].mapMarker = ref) : null;
               markersRef.current[index].location = location;
 
-              // During view initialization the initial location shoudl show it's callout.
+              // During view initialization the initial location should show it's callout.
               if (!initialized.current) {
                 setTimeout(() => {
                   if (
                     location._id.toString() === initialLocation?._id.toString()
                   ) {
                     markersRef.current[index].mapMarker.showCallout();
+
+                    locationBottomSheetRef.current?.present(
+                      location._id.toString(),
+                    );
+                    requestAnimationFrame(() => {
+                      mapBottomSheetRef.current?.dismiss();
+                    });
+
                     initialized.current = true;
                   }
                 }, 500); // For UX
@@ -311,23 +374,25 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           index={index}
           location={location}
           onMarkerDragEnd={onMarkerDragEnd}
-          onPressCallout={() =>
-            navigation.navigate('LocationEditor', {
-              locationId: location._id.toString(),
-            })
-          }
+          onPressMarker={() => {
+            onPressMarker(location._id.toString());
+          }}
+          onPressCallout={() => {
+            onPressCallout(location._id.toString());
+          }}
         />
       );
     });
   };
 
   return (
-    <View>
+    <>
       <MapView
         ref={mapViewRef}
         style={s.map}
         showsUserLocation={true}
         mapType={mapPresentation}
+        userInterfaceStyle={ThemeManager.name}
         initialRegion={{
           latitude:
             initialLocation?.coords.latitude || currentPosition.coords.latitude,
@@ -338,51 +403,62 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           longitudeDelta: currentPosition.error ? 10 : 0.01,
         }}
         onRegionChangeComplete={onRegionChangeComplete}
-        onMarkerPress={onMarkerPress}>
+        onPress={onPressMap}>
         {renderMapMarkers()}
       </MapView>
-      <ActionBar
-        actions={[
-          {
-            ActionComponent:
-              recenterButtonState === RecenterButtonState.Initial ? (
-                <Navigation color={theme.colors.clearButtonText} size={28} />
-              ) : recenterButtonState ===
-                RecenterButtonState.CurrentLocation ? (
-                <MapPinned color={theme.colors.clearButtonText} size={28} />
-              ) : (
-                <View style={s.northUp}>
-                  <Navigation2 color={theme.colors.white} size={28} />
-                </View>
-              ),
-            onPress: () => changeRecenter(currentPosition.coords),
-          },
-          {
-            ActionComponent: (
-              <MapPinPlus color={theme.colors.clearButtonText} size={28} />
-            ),
-            onPress: addLocation,
-          },
-          {
-            ActionComponent:
-              mapPresentation === 'standard' ? (
-                <Map color={theme.colors.clearButtonText} size={28} />
-              ) : (
-                <Satellite color={theme.colors.clearButtonText} size={28} />
-              ),
-            onPress: toggleMapPresenation,
-          },
-          {
-            label: 'Done',
-            onPress: navigation.goBack,
-          },
-        ]}
+      {renderActionButtons()}
+      <MapBottomSheet
+        ref={mapBottomSheetRef}
+        initialIndex={locationId ? -1 : undefined}
       />
-    </View>
+      <LocationBottomSheet
+        ref={locationBottomSheetRef}
+        onDismiss={byUser => {
+          if (byUser) {
+            // Re-present the "main" map bottom sheet.
+            mapBottomSheetRef.current?.present();
+
+            // When the bottom sheet is dismissed by the user (close button) then
+            // no other marker has been selected so we hide all the markers (includes
+            // the marker for the location bottom sheet just closed).
+            markersRef.current.forEach(m => m.mapMarker.hideCallout());
+          }
+        }}
+        onPressNotes={(text, title) =>
+          notesBottomSheetRef.current?.present(text, title)
+        }
+      />
+      <NotesBottomSheet
+        ref={notesBottomSheetRef}
+        eventName={'location-notes'}
+      />
+    </>
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
+  button: {
+    width: 40,
+    height: 40,
+    backgroundColor: theme.colors.white,
+  },
+  buttonFirst: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderBottomColor: theme.colors.listItemBorder,
+    borderBottomWidth: 1,
+    marginTop: 10,
+  },
+  buttonLast: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    marginBottom: 10,
+  },
+  buttons: {
+    position: 'absolute',
+    top: device.insets.top,
+    right: 15,
+  },
   map: {
     width: '100%',
     height: '100%',

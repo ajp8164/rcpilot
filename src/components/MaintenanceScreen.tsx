@@ -3,6 +3,7 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItem,
+  View,
 } from 'react-native';
 
 import { useEvent } from '@react-native-hello/core';
@@ -16,7 +17,6 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
   ListItemCheckBoxInfo,
@@ -43,6 +43,7 @@ import {
 import { Model } from 'realmdb/Model';
 import { ChecklistActionScheduleType, ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 
 type ChecklistActionItemData = {
   checklist: Checklist;
@@ -378,7 +379,9 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
         keyExtractor={item => item.action.refId}
         renderItem={renderChecklistAction}
         renderSectionHeader={({ section: { title } }) => (
-          <Divider text={title} />
+          <View style={theme.styles.listSectionHeader}>
+            <Divider text={title} />
+          </View>
         )}
         ListFooterComponent={
           <>

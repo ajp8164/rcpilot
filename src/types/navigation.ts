@@ -87,13 +87,13 @@ export type LogNavigatorParamList = {
   Log: undefined;
   EventEditor: {
     eventId: string;
-    modelType: ModelType;
   };
   BatteryCycleEditor: {
     batteryId: string;
     cycleNumber: number;
   };
   EnumPicker: EnumPickerInterface;
+  LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
 };
 
 export type MainNavigatorParamList = {
@@ -134,10 +134,11 @@ export type ModelsNavigatorParamList = {
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;
+    readOnly?: boolean;
   };
+
   EventEditor: {
     eventId: string;
-    modelType: ModelType;
   };
   EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
   EventOutcome: {
@@ -473,16 +474,11 @@ export type LocationNavigatorParamList = {
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;
-  };
-  Locations: {
-    eventName: string;
+    readOnly?: boolean;
   };
   LocationsMap: {
     eventName?: string;
     locationId?: string;
-  };
-  LocationEditor: {
-    locationId: string;
   };
   NotesEditor: {
     title?: string;
@@ -598,10 +594,10 @@ export type SetupNavigatorParamList = {
     modelId?: string;
     modelType?: ModelType;
     pilotId?: string;
+    readOnly?: boolean;
   };
   EventEditor: {
     eventId: string;
-    modelType: ModelType;
   };
   EventOutcome: {
     eventOutcome: EventOutcome;

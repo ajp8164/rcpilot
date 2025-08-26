@@ -6,7 +6,6 @@ import { useEvent } from '@react-native-hello/core';
 import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import {
   FormikStateWatcher,
   FormikWatcherState,
@@ -20,6 +19,7 @@ import { ChecklistAction } from 'realmdb/Checklist';
 import { Model } from 'realmdb/Model';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
 
 type FormValues = {

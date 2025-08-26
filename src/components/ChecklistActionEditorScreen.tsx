@@ -16,7 +16,6 @@ import {
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -53,6 +52,7 @@ import {
   NewChecklistActionNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
 
 export type Props = CompositeScreenProps<

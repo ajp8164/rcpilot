@@ -3,6 +3,7 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItem,
+  View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -233,7 +234,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         keyExtractor={(item, index) => `${index}${item.cycleNumber}`}
         renderItem={renderBatteryCycle}
         renderSectionHeader={({ section: { title } }) => (
-          <Divider text={title} />
+          <View style={theme.styles.listSectionHeader}>
+            <Divider text={title} />
+          </View>
         )}
         ListFooterComponent={<Divider />}
       />

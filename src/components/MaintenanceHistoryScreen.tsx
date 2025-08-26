@@ -1,5 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ListRenderItem, SectionList, SectionListData } from 'react-native';
+import {
+  ListRenderItem,
+  SectionList,
+  SectionListData,
+  View,
+} from 'react-native';
 import { useSelector } from 'react-redux';
 
 import {
@@ -237,7 +242,9 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
         keyExtractor={(item, index) => `${index}${item.action.refId}`}
         renderItem={renderActionHistoryEntry}
         renderSectionHeader={({ section: { title } }) => (
-          <Divider text={title} />
+          <View style={theme.styles.listSectionHeader}>
+            <Divider text={title} />
+          </View>
         )}
         ListFooterComponent={<Divider />}
       />

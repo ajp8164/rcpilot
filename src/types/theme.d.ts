@@ -21,6 +21,7 @@ declare module '@react-native-hello/ui' {
     listItemIcon: string;
     listItemIconNav: string;
     screenHeaderButtonText: string;
+    stickyText: string;
     tabBarActiveTint: string;
     tabBarBackgroundActive: string;
     tabBarBackgroundInactive: string;
@@ -75,6 +76,7 @@ declare module '@react-native-hello/ui' {
     dividerTextButtonDisabled: IStyle;
     listItemButtonTitle: IStyle;
     listItemButtonDisabled: IStyle;
+    listSectionHeader: IStyle;
     swipeableListItemContainer: IStyle;
     buttonAssertive: IStyle;
     buttonAssertiveTitle: IStyle;

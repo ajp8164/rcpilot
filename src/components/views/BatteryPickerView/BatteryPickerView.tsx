@@ -3,6 +3,7 @@ import {
   SectionList,
   SectionListData,
   SectionListRenderItem,
+  View,
 } from 'react-native';
 
 import { useSetState } from '@react-native-hello/core';
@@ -159,7 +160,11 @@ const BatteryPickerView = React.forwardRef<
       sections={groupBatteries(batteries as Battery[])}
       keyExtractor={item => item._id.toString()}
       renderItem={renderBattery}
-      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <View style={theme.styles.listSectionHeader}>
+          <Divider text={title} />
+        </View>
+      )}
     />
   );
 });

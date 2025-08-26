@@ -6,6 +6,7 @@ import {
   ListItemCheckBox,
   ThemeManager,
   listItemPosition,
+  useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
@@ -28,6 +29,7 @@ export type Props = NativeStackScreenProps<
 const BatteryPerformanceComparisonPickerScreen = ({
   navigation: _navigation,
 }: Props) => {
+  const theme = useTheme();
   const s = useStyles();
   const setScreenEditHeader = useScreenEditHeader();
 
@@ -75,7 +77,11 @@ const BatteryPerformanceComparisonPickerScreen = ({
           onChange={() => null}
         />
       )}
-      renderSectionHeader={({ section: { title } }) => <Divider text={title} />}
+      renderSectionHeader={({ section: { title } }) => (
+        <View style={theme.styles.listSectionHeader}>
+          <Divider text={title} />
+        </View>
+      )}
       ListHeaderComponent={
         <View style={s.listHeader}>
           <Divider

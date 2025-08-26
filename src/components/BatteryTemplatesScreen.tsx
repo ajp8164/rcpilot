@@ -193,7 +193,11 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
         sections={groupBatteries(allBatteries)}
         keyExtractor={(_item, index) => `${index}`}
         renderItem={renderBatteryTemplate}
-        renderSectionHeader={() => <></>}
+        renderSectionHeader={({ section: { title } }) => (
+          <View style={theme.styles.listSectionHeader}>
+            <Divider text={title} />
+          </View>
+        )}
         ListHeaderComponent={allBatteries.length ? <Divider /> : null}
         ListFooterComponent={allBatteries.length ? <Divider /> : null}
       />

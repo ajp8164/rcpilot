@@ -27,7 +27,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { LocationsMapResult } from 'components/LocationsMapScreen';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -67,6 +66,7 @@ import {
   ModelsNavigatorParamList,
   SetupNavigatorParamList,
 } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
 
 export type Props = CompositeScreenProps<

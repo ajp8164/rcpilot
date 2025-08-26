@@ -27,7 +27,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { BatteryPickerResult } from 'components/BatteryPickerScreen';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -65,6 +64,7 @@ import {
   ModelsNavigatorParamList,
   NewModelNavigatorParamList,
 } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
 
 // Order of fields for accessory view.

@@ -38,7 +38,6 @@ import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { FilterType } from 'types/filter';
-import { ModelType } from 'types/model';
 import {
   ModelsNavigatorParamList,
   SetupNavigatorParamList,
@@ -55,8 +54,15 @@ export type Props = CompositeScreenProps<
 >;
 
 const EventsScreen = ({ navigation, route }: Props) => {
-  const { filterType, batteryId, eventStyleId, locationId, modelId, pilotId } =
-    route.params;
+  const {
+    filterType,
+    batteryId,
+    eventStyleId,
+    locationId,
+    modelId,
+    pilotId,
+    readOnly,
+  } = route.params;
 
   const theme = useTheme();
   const s = useStyles();
@@ -83,6 +89,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => {
+        if (readOnly) return null;
         return (
           <>
             {filterType !== FilterType.BypassFilter && (
@@ -90,10 +97,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
                 buttonStyle={theme.styles.buttonScreenHeader}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 disabled={
-                  !filterId &&
-                  (!model?.events.length || listEditorState?.enabled)
+                  (!filterId && !model?.events.length) ||
+                  listEditorState?.enabled
                 }
-                headerRight
                 icon={
                   filterId ? (
                     <FunnelPlus
@@ -166,14 +172,16 @@ const EventsScreen = ({ navigation, route }: Props) => {
         title={eventSummary(event, { includeNumber: true })}
         subtitle={eventPower(event)}
         position={listItemPosition(index, section.data.length)}
-        rightContent={'chevron-right'}
+        rightContent={readOnly ? undefined : 'chevron-right'}
         listEditor={listEditorRef.current}
         onPress={() => {
-          navigation.navigate('EventEditor', {
-            eventId: event._id.toString(),
-            modelType: model?.type || ModelType.Airplane,
-          });
+          if (!readOnly) {
+            navigation.navigate('EventEditor', {
+              eventId: event._id.toString(),
+            });
+          }
         }}
+        swipeEnabled={!readOnly}
         showEditor={listEditorState?.show}
         editAction={{
           ButtonComponent: <CircleMinus color={theme.colors.assertive} />,
@@ -241,7 +249,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
           keyExtractor={item => item._id.toString()}
           renderItem={renderEvent}
           renderSectionHeader={({ section: { title } }) => (
-            <Divider text={title} />
+            <View style={theme.styles.listSectionHeader}>
+              <Divider text={title} />
+            </View>
           )}
         />
       </View>

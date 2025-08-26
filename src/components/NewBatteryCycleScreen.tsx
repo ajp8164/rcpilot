@@ -25,7 +25,6 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
-import { NotesEditorResult } from 'components/NotesEditorScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -46,6 +45,7 @@ import { BatteryCharge, BatteryCycle } from 'realmdb/BatteryCycle';
 import { toNumber } from 'realmdb/helpers';
 import { BatteryTint } from 'types/battery';
 import { NewBatteryCycleNavigatorParamList } from 'types/navigation';
+import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
 
 type BatteryData = {

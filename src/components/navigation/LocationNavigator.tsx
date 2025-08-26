@@ -3,9 +3,7 @@ import React from 'react';
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import EventsScreen from 'components/EventsScreen';
-import LocationEditorScreen from 'components/LocationEditorScreen';
 import LocationsMapScreen from 'components/LocationsMapScreen';
-import LocationsScreen from 'components/LocationsScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import { LocationNavigatorParamList } from 'types/navigation';
 
@@ -32,23 +30,8 @@ const LocationNavigator = () => {
           component={LocationsMapScreen}
           options={{
             title: 'Map',
+            headerShown: false,
             presentation: 'fullScreenModal',
-          }}
-        />
-        <LocationStack.Screen
-          name="Locations"
-          component={LocationsScreen}
-          options={{
-            title: 'Locations',
-            presentation: 'modal',
-          }}
-        />
-        <LocationStack.Screen
-          name="LocationEditor"
-          component={LocationEditorScreen}
-          options={{
-            title: 'Location',
-            headerBackTitle: 'Map',
           }}
         />
         <LocationStack.Screen name="Events" component={EventsScreen} />

@@ -5,12 +5,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import TextView from 'components/views/TextView';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import { MultipleNavigatorParamList } from 'types/navigation';
-
-export type NotesEditorResult = {
-  text: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  extraData?: any;
-};
+import { NotesEditorResult } from 'types/notes';
 
 export type Props = NativeStackScreenProps<
   MultipleNavigatorParamList,

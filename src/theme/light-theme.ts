@@ -44,6 +44,7 @@ export const themeBase: DeepPartial<IBaseThemeSchema> = {
       listItemIcon: palette.primary,
       listItemIconNav: palette.primary,
       screenHeaderButtonText: palette.primary,
+      stickyText: '#303030',
       tabBarActiveTint: palette.primary,
       tabBarBackgroundActive: palette.white,
       tabBarBackgroundInactive: palette.white,

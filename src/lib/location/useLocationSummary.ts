@@ -9,8 +9,12 @@ export const useLocationSummary = (location: Location) => {
     .filtered('location == $0', location)
     .sorted('date');
   const count =
-    allEvents.length > 0 ? `${allEvents.length} events, ` : 'No events';
+    allEvents.length > 0
+      ? `${allEvents.length} event${allEvents.length !== 1 ? 's' : ''}, `
+      : 'No events';
   const date =
-    allEvents.length > 0 ? `last ${DateTime.fromISO(allEvents[0].date)}` : '';
+    allEvents.length > 0
+      ? `last on ${DateTime.fromISO(allEvents[0].date).toFormat('M/d/yyyy')}`
+      : '';
   return `${count}${date}`;
 };

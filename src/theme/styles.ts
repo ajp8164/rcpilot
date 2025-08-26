@@ -30,6 +30,14 @@ export const createElementsStyles = ({
   },
 
   /**
+   * List
+   */
+
+  listSectionHeader: {
+    backgroundColor: theme.colors.viewBackground,
+  },
+
+  /**
    * List Item
    */
 

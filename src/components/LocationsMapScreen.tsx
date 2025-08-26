@@ -47,17 +47,17 @@ type MapMarkerLocation = {
   location: Location;
 };
 
-export type LocationsMapResult = {
-  locationId: string;
-};
-
 export type Props = NativeStackScreenProps<
   LocationNavigatorParamList,
   'LocationsMap'
 >;
 
 const LocationsMapScreen = ({ navigation, route }: Props) => {
-  const { eventName, locationId } = route.params;
+  const {
+    enableLocationSelection = true,
+    eventName,
+    locationId,
+  } = route.params;
 
   const theme = useTheme();
   const s = useStyles();
@@ -75,7 +75,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
 
   // This is the current selection by the user.
-  const userSelectedLocationId = useRef<string>(null);
+  const userTappedLocationId = useRef<string>(null);
 
   const initialized = useRef(false);
   const mapViewRef = useRef<MapView>(null);
@@ -151,18 +151,11 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
       const newLocationId = newLocation._id.toString();
 
-      // Broadcast the new location.
-      if (eventName) {
-        event.emit(eventName, {
-          locationId: newLocationId,
-        } as LocationsMapResult);
-      }
-
       event.emit('map-location', {
         locationId: newLocationId,
-      } as LocationsMapResult);
+      } as LocationPickerResult);
 
-      userSelectedLocationId.current = newLocationId;
+      userTappedLocationId.current = newLocationId;
     }
   };
 
@@ -232,12 +225,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     if (newLocation) {
       const newLocationId = newLocation._id.toString();
 
-      if (eventName) {
-        event.emit(eventName, {
-          locationId: newLocationId,
-        } as LocationsMapResult);
-      }
-
       // When a new location is added by dropping a pin the markersRef array length changes.
       // Show the callout for only the new location.
       setTimeout(() => {
@@ -258,9 +245,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       // Update our user selection.
       event.emit('map-location', {
         locationId: newLocationId,
-      } as LocationsMapResult);
+      } as LocationPickerResult);
 
-      userSelectedLocationId.current = newLocationId;
+      userTappedLocationId.current = newLocationId;
     }
   };
 
@@ -289,7 +276,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressMarker = (locationId: string) => {
-    if (locationId !== userSelectedLocationId.current) {
+    if (locationId !== userTappedLocationId.current) {
       onChangeMapLocation({ locationId });
 
       mapBottomSheetRef.current?.dismiss();
@@ -300,6 +287,17 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressCallout = (_locationId: string) => {};
+
+  const onLocationSelect = (locationId: string) => {
+    // Broadcast the users selected location.
+    if (enableLocationSelection && eventName) {
+      event.emit(eventName, {
+        locationId,
+      } as LocationPickerResult);
+    }
+
+    navigation.goBack();
+  };
 
   const renderActionButtons = (): React.ReactElement => {
     return (
@@ -431,6 +429,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       />
       <LocationBottomSheet
         ref={locationBottomSheetRef}
+        enableSelection={enableLocationSelection}
+        onLocationSelect={onLocationSelect}
         onDismiss={byUser => {
           if (byUser) {
             // Re-present the "main" map bottom sheet.

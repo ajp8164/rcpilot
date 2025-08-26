@@ -26,7 +26,6 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { LocationsMapResult } from 'components/LocationsMapScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -61,6 +60,7 @@ import { ModelPropeller } from 'realmdb/ModelPropeller';
 import { Pilot } from 'realmdb/Pilot';
 import { toNumber } from 'realmdb/helpers';
 import { EventOutcome } from 'types/event';
+import { LocationPickerResult } from 'types/location';
 import {
   LogNavigatorParamList,
   ModelsNavigatorParamList,
@@ -334,7 +334,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const onChangeLocation = (result: LocationsMapResult) => {
+  const onChangeLocation = (result: LocationPickerResult) => {
     if (!modelEvent) return;
     const l = locations.find(l => {
       return l._id.toString() === result.locationId;

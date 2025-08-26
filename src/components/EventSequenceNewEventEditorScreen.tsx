@@ -20,7 +20,6 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { LocationsMapResult } from 'components/LocationsMapScreen';
 import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
@@ -66,6 +65,7 @@ import { selectPilot } from 'store/selectors/pilotSelectors';
 import { eventSequence } from 'store/slices/eventSequence';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { EventOutcome } from 'types/event';
+import { LocationPickerResult } from 'types/location';
 import { EventSequenceNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'types/notes';
 import * as Yup from 'yup';
@@ -439,7 +439,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     formikRef.current?.setFieldValue('eventStyle', toPlainObject(s));
   };
 
-  const onChangeLocation = (result: LocationsMapResult) => {
+  const onChangeLocation = (result: LocationPickerResult) => {
     const l = locations.find(l => {
       return l._id.toString() === result.locationId;
     });

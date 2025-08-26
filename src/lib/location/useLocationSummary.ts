@@ -3,7 +3,6 @@ import { DateTime } from 'luxon';
 import { Event, Location } from 'realmdb';
 
 export const useLocationSummary = (location?: Location) => {
-  console.log('ULS', location);
   const realm = useRealm();
 
   let count = 0;

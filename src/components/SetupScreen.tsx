@@ -153,7 +153,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
         onPress={() =>
           navigation.navigate('LocationNavigator', {
             screen: 'LocationsMap',
-            params: {},
+            params: { enableLocationSelection: false },
           })
         }
       />

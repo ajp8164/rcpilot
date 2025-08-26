@@ -9,7 +9,9 @@ declare const LocationBottomSheet: React.MemoExoticComponent<
 >;
 
 export interface LocationBottomSheetProps {
+  enableSelection?: boolean;
   onDismiss?: (byUser?: boolean) => void;
+  onLocationSelect?: (locationId: string) => void;
   onPressNotes: (text?: string, title?: string) => void;
   snapPoints?: (string | number)[];
 }

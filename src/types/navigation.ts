@@ -477,6 +477,7 @@ export type LocationNavigatorParamList = {
     readOnly?: boolean;
   };
   LocationsMap: {
+    enableLocationSelection?: boolean;
     eventName?: string;
     locationId?: string;
   };

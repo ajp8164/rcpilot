@@ -1,6 +1,7 @@
 import { SectionListData } from 'react-native';
 
 export type Options = {
+  reverse?: boolean;
   reverseSectionData?: boolean;
 };
 
@@ -34,5 +35,5 @@ export const groupItems = <T, S>(
     } as unknown as SectionListData<T, S>);
   });
 
-  return sectionData;
+  return options?.reverse ? sectionData.reverse() : sectionData;
 };

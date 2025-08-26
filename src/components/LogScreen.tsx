@@ -177,7 +177,7 @@ const LogScreen = ({ navigation }: Props) => {
       modelEvent => {
         return DateTime.fromISO(modelEvent.createdOn).toFormat('MMMM dd, yyyy');
       },
-      { reverseSectionData: true },
+      { reverse: true, reverseSectionData: true },
     ).sort();
   };
 

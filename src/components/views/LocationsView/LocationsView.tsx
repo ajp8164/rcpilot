@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
+import { ListRenderItem } from 'react-native';
 import { useSelector } from 'react-redux';
 
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
@@ -75,11 +76,10 @@ const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
     };
 
     return (
-      <FlatList
+      <BottomSheetFlatList
         data={allLocations}
         renderItem={renderLocation}
         keyExtractor={item => item._id.toString()}
-        scrollEnabled={false}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           allLocations.length ? (

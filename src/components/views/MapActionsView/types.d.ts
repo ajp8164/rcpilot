@@ -8,6 +8,8 @@ declare const MapActionsView: React.MemoExoticComponent<
   >
 >;
 
-export interface MapActionsViewProps {}
+export interface MapActionsViewProps {
+  onPressAddLocation: () => void;
+}
 
 export interface MapActionsViewMethods {}

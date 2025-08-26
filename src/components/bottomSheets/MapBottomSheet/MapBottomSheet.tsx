@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useRef } from 'react';
 
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 import { useTheme } from '@react-native-hello/ui';
 import MapActionsView from 'components/views/MapActionsView';
 
@@ -10,7 +10,11 @@ type MapBottomSheet = MapBottomSheetMethods;
 
 const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
   (props, ref) => {
-    const { initialIndex = 0, snapPoints = [150, '45%', '92%'] } = props;
+    const {
+      initialIndex = 0,
+      onPressAddLocation,
+      snapPoints = [150, '45%', '92%'],
+    } = props;
 
     const theme = useTheme();
 
@@ -41,9 +45,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
         snapPoints={snapPoints}
         index={initialIndex}
         backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}>
-        <BottomSheetScrollView>
-          <MapActionsView />
-        </BottomSheetScrollView>
+        <MapActionsView onPressAddLocation={onPressAddLocation} />
       </BottomSheet>
     );
   },

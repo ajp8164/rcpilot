@@ -8,13 +8,21 @@ export const useLocationSummary = (location: Location) => {
     .objects(Event)
     .filtered('location == $0', location)
     .sorted('date');
-  const count =
+
+  const count = allEvents.length;
+  const countStr =
     allEvents.length > 0
-      ? `${allEvents.length} event${allEvents.length !== 1 ? 's' : ''}, `
+      ? `${count} event${count !== 1 ? 's' : ''}, `
       : 'No events';
-  const date =
-    allEvents.length > 0
-      ? `last on ${DateTime.fromISO(allEvents[0].date).toFormat('M/d/yyyy')}`
-      : '';
-  return `${count}${date}`;
+
+  const date = allEvents.length
+    ? DateTime.fromISO(allEvents[0].date).toFormat('M/d/yyyy')
+    : 'None';
+  const dateStr = allEvents.length > 0 ? `last on ${date}` : '';
+
+  return {
+    count,
+    date,
+    text: `${countStr}${dateStr}`,
+  };
 };

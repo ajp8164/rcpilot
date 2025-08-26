@@ -427,6 +427,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       <MapBottomSheet
         ref={mapBottomSheetRef}
         initialIndex={locationId ? -1 : undefined}
+        onPressAddLocation={addLocation}
       />
       <LocationBottomSheet
         ref={locationBottomSheetRef}

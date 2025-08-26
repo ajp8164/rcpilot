@@ -14,6 +14,7 @@ import { useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
 import formatcoords from 'formatcoords';
+import { useLocationSummary } from 'lib/location';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
@@ -47,8 +48,15 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
 
     const navigation: NavigationProp<SetupNavigatorParamList> = useNavigation();
 
-    const [location, setLocation] = useState<Location>();
+    const _location = realm.objectForPrimaryKey(
+      'Location',
+      new BSON.ObjectId(locationId),
+    ) as Location;
+
+    const [location, setLocation] = useState<Location>(_location);
     const currentLocationId = useSelector(selectLocation).locationId;
+
+    const locationSummary = useLocationSummary(location);
 
     const coords =
       location &&
@@ -146,10 +154,11 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
               <ListItem
                 title={'Last Event'}
                 position={['first']}
-                value={'Nov 4, 2023 at 11:49PM'}
+                value={locationSummary.date}
               />
               <ListItem
                 title={'Events'}
+                value={`${locationSummary.count}`}
                 position={['last']}
                 rightContent={'chevron-right'}
                 onPress={() =>
@@ -195,6 +204,7 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
                   );
                 }}
               />
+              <Divider />
             </>
           ) : (
             <View>

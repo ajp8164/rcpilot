@@ -63,7 +63,7 @@ export const MapMarkerCallout = forwardRef(
                     {location.name}
                   </Text>
                   <Text numberOfLines={1} style={s.calloutText2}>
-                    {locationSummary}
+                    {locationSummary.text}
                   </Text>
                 </View>
               </View>

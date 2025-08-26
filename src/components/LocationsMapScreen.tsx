@@ -229,22 +229,39 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       });
     });
 
-    if (newLocation && eventName) {
-      event.emit(eventName, {
-        locationId: newLocation._id.toString(),
-      } as LocationsMapResult);
-    }
+    if (newLocation) {
+      const newLocationId = newLocation._id.toString();
 
-    // When a new location is added by dropping a pin the markersRef array length changes.
-    // Show the callout for only the new location.
-    setTimeout(() => {
-      markersRef.current.forEach(marker => {
-        marker.mapMarker.hideCallout();
+      if (eventName) {
+        event.emit(eventName, {
+          locationId: newLocationId,
+        } as LocationsMapResult);
+      }
+
+      // When a new location is added by dropping a pin the markersRef array length changes.
+      // Show the callout for only the new location.
+      setTimeout(() => {
+        markersRef.current.forEach(marker => {
+          marker.mapMarker.hideCallout();
+        });
+        markersRef.current[
+          markersRef.current.length - 1
+        ]?.mapMarker.showCallout();
+      }, 500); // Add for UX.
+
+      // Show location bottom sheet for the new location.
+      mapBottomSheetRef.current?.dismiss();
+      requestAnimationFrame(() => {
+        locationBottomSheetRef.current?.present(newLocationId);
       });
-      markersRef.current[
-        markersRef.current.length - 1
-      ]?.mapMarker.showCallout();
-    }, 500); // Add for UX.
+
+      // Update our user selection.
+      event.emit('map-location', {
+        locationId: newLocationId,
+      } as LocationsMapResult);
+
+      userSelectedLocationId.current = newLocationId;
+    }
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {

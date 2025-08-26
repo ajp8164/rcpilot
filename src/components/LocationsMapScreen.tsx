@@ -207,7 +207,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const addLocation = () => {
+  const addLocation = (coords?: LocationCoords) => {
     const now = DateTime.now().toISO();
     const id = uuidv4();
     let newLocation: Location | undefined;
@@ -217,7 +217,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         createdOn: now,
         updatedOn: now,
         name: 'Location-' + id.substring(id.length - 5),
-        coords: mapLocation.current,
+        coords: coords || mapLocation.current,
         notes: '',
       });
     });
@@ -418,7 +418,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           longitudeDelta: currentPosition.error ? 10 : 0.01,
         }}
         onRegionChangeComplete={onRegionChangeComplete}
-        onPress={onPressMap}>
+        onPress={onPressMap}
+        onLongPress={e =>
+          addLocation(e.nativeEvent.coordinate as LocationCoords)
+        }>
         {renderMapMarkers()}
       </MapView>
       {renderActionButtons()}

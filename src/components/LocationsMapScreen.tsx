@@ -239,7 +239,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       // Show location bottom sheet for the new location.
       mapBottomSheetRef.current?.dismiss();
       requestAnimationFrame(() => {
-        locationBottomSheetRef.current?.present(newLocationId);
+        locationBottomSheetRef.current?.present(newLocationId, 1);
       });
 
       // Update our user selection.

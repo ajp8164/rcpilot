@@ -18,5 +18,5 @@ export interface LocationBottomSheetProps {
 
 export interface LocationBottomSheetMethods {
   dismiss: (byUser?: boolean) => void;
-  present: (locationId: string) => void;
+  present: (locationId: string, index?: number) => void;
 }

@@ -46,9 +46,9 @@ const LocationBottomSheet = React.forwardRef<
     setClosed(true);
   };
 
-  const present = (locationId: string) => {
+  const present = (locationId: string, index?: number) => {
     setLocationId(locationId);
-    innerRef.current?.snapToIndex(0);
+    innerRef.current?.snapToIndex(index || 0);
     setClosed(false);
   };
 

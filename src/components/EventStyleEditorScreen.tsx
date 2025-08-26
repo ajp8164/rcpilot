@@ -144,7 +144,7 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
           validationSchema={schema}
           validateOnMount
           onSubmit={onSubmit}>
-          {({ handleChange, values }) => (
+          {({ errors, handleChange, values }) => (
             <View>
               <FormikStateWatcher<FormValues>
                 onChange={onFormikWatcherStateChange}
@@ -152,6 +152,7 @@ const EventStyleEditorScreen = ({ navigation, route }: Props) => {
               <ListItemInput
                 ref={nameFieldRef}
                 position={['first', 'last']}
+                error={!!errors.name}
                 inputProps={{
                   inputAccessoryViewID: 'keyboardAccessory',
                   onChangeText: handleChange('name'),

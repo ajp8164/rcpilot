@@ -184,7 +184,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
           validationSchema={schema}
           validateOnMount
           onSubmit={onSubmit}>
-          {({ handleChange, values }) => (
+          {({ errors, handleChange, values }) => (
             <View>
               <FormikStateWatcher<FormValues>
                 onChange={onFormikWatcherStateChange}
@@ -192,6 +192,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
               <ListItemInput
                 ref={nameFieldRef}
                 position={['first', 'last']}
+                error={!!errors.name}
                 inputProps={{
                   inputAccessoryViewID: 'keyboardAccessory',
                   onChangeText: handleChange('name'),
@@ -210,6 +211,7 @@ const ModelFuelEditorScreen = ({ navigation, route }: Props) => {
                 title={'Fuel Cost'}
                 units={'per gal'}
                 container={'right'}
+                error={!!errors.cost}
                 inputProps={{
                   inputAccessoryViewID: 'keyboardAccessory',
                   onChangeText: (_, unformatted) =>

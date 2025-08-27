@@ -87,6 +87,7 @@ export type LogNavigatorParamList = {
   Log: undefined;
   EventEditor: {
     eventId: string;
+    modelType?: ModelType;
   };
   BatteryCycleEditor: {
     batteryId: string;
@@ -139,6 +140,7 @@ export type ModelsNavigatorParamList = {
 
   EventEditor: {
     eventId: string;
+    modelType?: ModelType;
   };
   EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
   EventOutcome: {
@@ -599,6 +601,7 @@ export type SetupNavigatorParamList = {
   };
   EventEditor: {
     eventId: string;
+    modelType?: ModelType;
   };
   EventOutcome: {
     eventOutcome: EventOutcome;

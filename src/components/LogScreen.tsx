@@ -343,6 +343,7 @@ const LogScreen = ({ navigation }: Props) => {
           logEntry.model._id
             ? navigation.navigate('EventEditor', {
                 eventId: logEntry._id.toString(),
+                modelType: logEntry.model.type,
               })
             : navigation.navigate('BatteryCycleEditor', {
                 batteryId: logEntry.batteryCycles[0]._id.toString(), // TODO

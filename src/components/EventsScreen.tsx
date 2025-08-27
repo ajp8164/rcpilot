@@ -178,6 +178,7 @@ const EventsScreen = ({ navigation, route }: Props) => {
           if (!readOnly) {
             navigation.navigate('EventEditor', {
               eventId: event._id.toString(),
+              modelType: model?.type,
             });
           }
         }}

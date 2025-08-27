@@ -379,7 +379,7 @@ const LogScreen = ({ navigation }: Props) => {
     <CalendarProvider ref={calendarRef} date={DateTime.now().toISODate()}>
       <View style={{ marginTop: device.headerBar.height }}>
         <ExpandableCalendar
-          key={ThemeManager.name}
+          key={`${ThemeManager.name}${modelEvents.length}`}
           date={DateTime.now().toISODate()}
           headerStyle={{ display: 'none' }}
           customHeader={CalendarHeader}

@@ -87,6 +87,7 @@ const BatteryPerformanceComparisonPickerScreen = ({
           <Divider
             note
             light
+            subHeaderStyle={theme.text.medium}
             text={'Choose up to four batteries to compare.'}
           />
         </View>

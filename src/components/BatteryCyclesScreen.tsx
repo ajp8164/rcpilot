@@ -73,7 +73,6 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               disabled={
                 !filterId && (!batteryCycles.length || listEditorState?.enabled)
               }
-              headerRight
               icon={
                 filterId ? (
                   <FunnelPlus

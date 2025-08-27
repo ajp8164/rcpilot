@@ -173,6 +173,8 @@ const DatabaseBackupsScreen = () => {
     <View style={theme.styles.view}>
       <Divider
         note
+        light
+        subHeaderStyle={theme.text.medium}
         text={`You are provided with ${appConfig.storageAllocation / 1000000}MB of database backup storage. Your current allocation is ${dir && (dir?.allocated / 1000000).toFixed(3)}MB across ${dir?.files.length} backups. Tap a backup to restore, swipe left to delete.`}
       />
       <ListEditor ref={listEditorRef}>

@@ -95,7 +95,7 @@ function FilterEditorHeader<T>({
       <Divider
         note
         light
-        subHeaderStyle={theme.text.small}
+        subHeaderStyle={theme.text.medium}
         text={`This filter shows all the ${name} that match all of these criteria.`}
       />
     </View>

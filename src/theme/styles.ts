@@ -79,6 +79,10 @@ export const createElementsStyles = ({
    * Text
    */
 
+  textDim: {
+    opacity: 0.6,
+  },
+
   textPlaceholder: {
     opacity: 0.4,
   },

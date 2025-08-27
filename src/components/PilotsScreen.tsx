@@ -134,6 +134,7 @@ const PilotsScreen = ({ navigation }: Props) => {
         <Divider
           note
           light
+          subHeaderStyle={theme.text.medium}
           text={
             'The Unknown Pilot logs events not associated with a specific pilot and model time not created by an app tracked event.'
           }

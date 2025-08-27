@@ -89,6 +89,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
             <Divider
               note
               light
+              subHeaderStyle={theme.text.medium}
               text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`}
             />
           ) : (
@@ -128,6 +129,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         <Divider
           note
           light
+          subHeaderStyle={theme.text.medium}
           text={
             'Costs are uncertain due to gaps in the underlying pricing or cost data.'
           }

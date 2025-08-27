@@ -410,6 +410,8 @@ const PilotScreen = ({ navigation, route }: Props) => {
               />
               <Divider
                 note
+                light
+                subHeaderStyle={theme.text.medium}
                 text={`Total duration and number of flights for each model piloted by ${pilot.name}.`}
               />
             </>
@@ -424,6 +426,8 @@ const PilotScreen = ({ navigation, route }: Props) => {
               />
               <Divider
                 note
+                light
+                subHeaderStyle={theme.text.medium}
                 text={`Total duration and number of events for each style piloted by ${pilot.name}.`}
               />
             </>

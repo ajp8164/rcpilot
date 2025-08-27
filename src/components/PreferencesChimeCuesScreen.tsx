@@ -104,7 +104,12 @@ const PreferencesChimeCuesScreen = ({ navigation }: Props) => {
           })
         }
       />
-      <Divider note text={'Vibration is not supported on all devices.'} />
+      <Divider
+        note
+        light
+        subHeaderStyle={theme.text.medium}
+        text={'Vibration is not supported on all devices.'}
+      />
     </ScrollView>
   );
 };

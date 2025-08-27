@@ -480,6 +480,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
               {checklistType === ChecklistType.OneTimeMaintenance ? (
                 <Divider
                   note
+                  light
+                  subHeaderStyle={theme.text.medium}
                   text={
                     'Changes to the action are limited. This is a one-time maintenance action.'
                   }
@@ -487,6 +489,8 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
               ) : action?.history.length ? (
                 <Divider
                   note
+                  light
+                  subHeaderStyle={theme.text.medium}
                   text={
                     'Changes to the action are limited. This action has been performed at least once.'
                   }

@@ -334,7 +334,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
                 <Divider
                   note
                   light
-                  subHeaderStyle={theme.text.small}
+                  subHeaderStyle={theme.text.medium}
                   text={`The One-Time Maintenance list is maintained by ${appConfig.appName} and cannot be deleted or changed.`}
                 />
               ) : (

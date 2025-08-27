@@ -133,6 +133,8 @@ const AppSettings = ({ navigation }: Props) => {
         />
         <Divider
           note
+          light
+          subHeaderStyle={theme.text.medium}
           text={
             'Biometrics enable face recognition or fingerprint. When enabled biometrics protects changes to your information.'
           }

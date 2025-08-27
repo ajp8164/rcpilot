@@ -101,7 +101,7 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
         disabled={isBackingUp || !backupAllowed}
         onPress={createBackup}
       />
-      <Divider note text={note} />
+      <Divider note light subHeaderStyle={theme.text.medium} text={note} />
       <Divider text={'TEXT EXPORT & IMPORT'} />
       <ListItem title={'Export to Text File...'} position={['first', 'last']} />
       <Divider />

@@ -71,7 +71,6 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!entries.length || listEditor.enabled}
-              headerRight
               icon={
                 filterId ? (
                   <FunnelPlus

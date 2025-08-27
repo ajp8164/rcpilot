@@ -67,6 +67,8 @@ const PreferencesClickTrackScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
+        light
+        subHeaderStyle={theme.text.medium}
         text={
           'Higher BPM values may not aloways operate smoothly  on older devices.'
         }

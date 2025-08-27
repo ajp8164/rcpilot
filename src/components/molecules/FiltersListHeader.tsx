@@ -57,7 +57,7 @@ const FiltersListHeader = ({
           <Divider
             note
             light
-            subHeaderStyle={theme.text.small}
+            subHeaderStyle={theme.text.medium}
             text={`You can save the General ${specific} Filter to remember a specific filter configuration for later use.`}
           />
         </>

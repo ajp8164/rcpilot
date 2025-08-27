@@ -375,7 +375,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
         <Divider
           note
           light
-          subHeaderStyle={theme.text.small}
+          subHeaderStyle={theme.text.medium}
           text={
             OutputReportToDescription[
               Object.keys(OutputReportTo)[
@@ -418,7 +418,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               <Divider
                 note
                 light
-                subHeaderStyle={theme.text.small}
+                subHeaderStyle={theme.text.medium}
                 text={
                   'Tapping a row generates the corresponding report and outputs it to the selected destination.'
                 }
@@ -463,7 +463,7 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
               <Divider
                 note
                 light
-                subHeaderStyle={theme.text.small}
+                subHeaderStyle={theme.text.medium}
                 text={
                   'Tapping a row generates the corresponding report and outputs it to the selected destination.'
                 }

@@ -98,6 +98,8 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
+        light
+        subHeaderStyle={theme.text.medium}
         text={
           'Default from last event will only apply when you are not using the event timer.'
         }
@@ -114,6 +116,8 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
+        light
+        subHeaderStyle={theme.text.medium}
         text={
           'Adjusts the sensitivity of the application to shake gestures to operate the timer.'
         }
@@ -130,6 +134,8 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <Divider
         note
+        light
+        subHeaderStyle={theme.text.medium}
         text={
           'Adjusts the sensitivity of database locations. Lower implies locations cover a larger area.'
         }

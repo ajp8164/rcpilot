@@ -201,7 +201,15 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider note light text={sectionName} style={s.divider} />
+      {sectionName ? (
+        <Divider
+          note
+          light
+          style={s.divider}
+          subHeaderStyle={theme.text.medium}
+          text={sectionName}
+        />
+      ) : null}
       <Divider
         text={title}
         rightComponent={
@@ -238,7 +246,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
           onChange={() => toggleSelect()}
         />
       )}
-      <Divider note light subHeaderStyle={theme.text.small} text={footer} />
+      <Divider note light subHeaderStyle={theme.text.medium} text={footer} />
     </ScrollView>
   );
 };

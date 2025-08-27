@@ -150,6 +150,7 @@ const ListItemFilterString = (props: Props) => {
       value={undefined} // Prevent propagation of this components props.value
       index={index}
       segments={segments}
+      segmentWidth={65}
       initExpanded={props.value.length > 0}
       onChangeIndex={onRelationSelect}>
       <ListItem

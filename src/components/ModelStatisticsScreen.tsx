@@ -55,7 +55,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
     return (
       <ListItem
         title={eventStyle?.name || 'Unspecified'}
-        subtitle={`${data.eventStyleCount} ${eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToFormat(data.eventStyleDuration, { format: "h'h' m'm'" })}`}
+        subtitle={`${data.eventStyleCount} ${data.eventStyleCount === 1 ? eventKind(model?.type).name.toLowerCase() : eventKind(model?.type).namePlural.toLowerCase()}, total ${secondsToFormat(data.eventStyleDuration, { format: "h'h' m'm'" })}`}
         value={`${Math.round(percentage)}%, ${secondsToFormat(average, { format: "m'm' s's'" })}`}
         position={listItemPosition(
           index,
@@ -80,7 +80,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
         ListHeaderComponent={
           model.statistics.eventStyleData.length ? (
             <Divider
-              text={`${eventKind(model.type).name.toUpperCase()} DURATION AVERAGE BY STYLE`}
+              text={`AVERAGE ${eventKind(model.type).name.toUpperCase()} DURATION BY STYLE`}
             />
           ) : null
         }
@@ -88,7 +88,8 @@ const ModelStatisticsScreen = ({ route }: Props) => {
           model.statistics.eventStyleData.length ? (
             <Divider
               note
-              text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration (M:SS) of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`}
+              light
+              text={`Shows percentage of ${eventKind(model.type).namePlural.toLowerCase()} and average duration of logged ${eventKind(model.type).namePlural.toLowerCase()} for each style.`}
             />
           ) : (
             <Divider />
@@ -97,7 +98,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       />
       <ListItem
         title={'Total Time'}
-        value={`${model.statistics.totalEvents} ${eventKind(model.type).namePlural.toLowerCase()}, ${secondsToFormat(model.statistics.totalTime, { format: "h'h' m'm'" })}`}
+        value={`${model.statistics.totalEvents} ${model.statistics.totalEvents === 1 ? eventKind(model.type).name.toLowerCase() : eventKind(model.type).namePlural.toLowerCase()}, ${secondsToFormat(model.statistics.totalTime, { format: "h'h' m'm'" })}`}
         position={['first', 'last']}
       />
       <Divider text={'CRASH SUMMARY'} />
@@ -126,6 +127,7 @@ const ModelStatisticsScreen = ({ route }: Props) => {
       {(!model.purchasePrice || model.statistics.uncertainCost) && (
         <Divider
           note
+          light
           text={
             'Costs are uncertain due to gaps in the underlying pricing or cost data.'
           }

@@ -45,7 +45,7 @@ export const ModelPostCard = ({
           </View>
           <View style={s.modelCardSubtitleContainer}>
             <Text style={s.modelCardSubtitle}>
-              {`${model.statistics.totalEvents || 0} ${eventKind(model.type).namePlural.toLowerCase()}`}
+              {`${model.statistics.totalEvents || 0} ${model.statistics.totalEvents === 1 ? eventKind(model.type).name.toLowerCase() : eventKind(model.type).namePlural.toLowerCase()}`}
             </Text>
             <Text style={s.modelCardSubtitle}>
               {`${secondsToFormat(model.statistics.totalTime, { format: "h'h' m'm'" })} total time`}

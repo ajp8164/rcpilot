@@ -237,7 +237,7 @@ function actionNonRepeatingScheduleState(
             model.statistics.totalTime / model.statistics.totalEvents;
           const estEvents = modelAverageEventDuration / (estMinutes * 60);
 
-          dueStr = `Past due by about ${Math.abs(estEvents)} ${eventKind(model.type).namePlural.toLowerCase()}`;
+          dueStr = `Past due by about ${Math.abs(estEvents)} ${Math.abs(estEvents) === 1 ? eventKind(model.type).name.toLowerCase() : eventKind(model.type).namePlural.toLowerCase()}`;
           dueStr = estMinutes === 1 ? dueStr.replace(/s$/, '') : dueStr;
           due = { value: estEvents, units: 'events', now: true };
         } else {
@@ -255,7 +255,7 @@ function actionNonRepeatingScheduleState(
             // Due object value indicates calculation could not be performed.
             due = { value: -1, units: 'events', now: false };
           } else {
-            dueStr = `Due in about ${estEvents} ${eventKind(model.type).namePlural.toLowerCase()}`;
+            dueStr = `Due in about ${estEvents} ${estEvents === 1 ? eventKind(model.type).name.toLowerCase() : eventKind(model.type).namePlural.toLowerCase()}`;
             dueStr = estMinutes === 1 ? dueStr.replace(/s$/, '') : dueStr;
             due = { value: estEvents, units: 'events', now: false };
           }
@@ -282,12 +282,12 @@ function actionNonRepeatingScheduleState(
           dueStr = 'Due today';
           due = { value: 0, units: 'events', now: true };
         } else if (estEvents < 0) {
-          dueStr = `Past due by ${Math.abs(estEvents)} ${eventKind(model.type).namePlural.toLowerCase()}`;
+          dueStr = `Past due by ${Math.abs(estEvents)} ${Math.abs(estEvents) === 1 ? eventKind(model.type).name.toLowerCase() : eventKind(model.type).namePlural.toLowerCase()}`;
           dueStr =
             Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
           due = { value: estEvents, units: 'events', now: true };
         } else {
-          dueStr = `Due in ${estEvents} ${eventKind(model.type).namePlural.toLowerCase()}`;
+          dueStr = `Due in ${estEvents} ${estEvents === 1 ? eventKind(model.type).name.toLowerCase() : eventKind(model.type).namePlural.toLowerCase()}`;
           dueStr =
             Math.abs(estEvents) === 1 ? dueStr.replace(/s$/, '') : dueStr;
           due = { value: estEvents, units: 'events', now: false };

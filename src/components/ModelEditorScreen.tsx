@@ -653,7 +653,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                       <Divider text={kind.namePlural.toUpperCase()} />
                       <ListItem
                         title={'Statistics'}
-                        value={`${secondsToFormat(model?.statistics.totalTime, { format: "h'h' m'm'" })} in ${model?.statistics.totalEvents} ${eventKind(model?.type).namePlural.toLowerCase()}`}
+                        value={`${secondsToFormat(model?.statistics.totalTime, { format: "h'h' m'm'" })} in ${model?.statistics.totalEvents || 0} ${model?.statistics.totalEvents === 1 ? eventKind(model?.type).name.toLowerCase() : eventKind(model?.type).namePlural.toLowerCase()}`}
                         position={['first']}
                         rightContent={'chevron-right'}
                         onPress={() =>
@@ -695,7 +695,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                       />
                       <ListItem
                         title={`${kind.name} Log`}
-                        value={`${model?.events.length || 0} ${kind.namePlural.toLowerCase()}`}
+                        value={`${model?.events.length || 0} ${model?.events.length === 1 ? kind.name.toLowerCase() : kind.namePlural.toLowerCase()}`}
                         position={['last']}
                         rightContent={'chevron-right'}
                         onPress={() =>

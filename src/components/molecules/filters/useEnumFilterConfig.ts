@@ -28,56 +28,56 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     enumName: 'Battery',
     mode: 'many-or-none',
     title: 'Batteries',
-    sectionName: 'BATTERIES TO {0} RESULTS',
+    sectionName: '{0} the selected Batteries {1} the results.',
     values: [],
   },
   ModelCategory: {
     enumName: 'ModelCategory',
     mode: 'many-or-none',
     title: 'Categories',
-    sectionName: 'CATEGORIES TO {0} RESULTS',
+    sectionName: '{0} the selected Model Categories {1} the results.',
     values: [],
   },
   BatteryChemistry: {
     enumName: 'BatteryChemistry',
     mode: 'many-with-actions',
     title: 'Chemistries',
-    sectionName: 'CHEMISTRIES TO {0} RESULTS',
+    sectionName: '{0} the selected Chemistries {1} the results.',
     values: Object.values(BatteryChemistry),
   },
   Location: {
     enumName: 'Location',
     mode: 'many-or-none',
     title: 'Locations',
-    sectionName: 'LOCATIONS TO {0} RESULTS',
+    sectionName: '{0} the selected Locations {1} the results.',
     values: [],
   },
   Model: {
     enumName: 'Model',
     mode: 'many-or-none',
     title: 'Models',
-    sectionName: 'MODELS TO {0} RESULTS',
+    sectionName: '{0} the selected Models {1} the results.',
     values: [],
   },
   EventStyle: {
     enumName: 'EventStyle',
     mode: 'many-or-none',
     title: 'Event Styles',
-    sectionName: 'STYLES TO {0} RESULTS',
+    sectionName: '{0} the selected Event Styles {1} the results.',
     values: [],
   },
   ModelType: {
     enumName: 'ModelType',
     mode: 'many-with-actions',
     title: 'Model Types',
-    sectionName: 'MODEL TYPES TO {0} RESULTS',
+    sectionName: '{0} the selected Model Types {1} the results.',
     values: Object.values(ModelType),
   },
   EventOutcome: {
     enumName: 'EventOutcome',
     mode: 'one-or-none',
     title: 'Outcomes',
-    sectionName: 'OUTCOMES TO {0} RESULTS',
+    sectionName: '{0} the selected Outcomes {1} the results.',
     icons: eventOutcomeIcons,
     values: Object.values(EventOutcome),
   },
@@ -85,7 +85,7 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     enumName: 'Pilot',
     mode: 'many-or-none',
     title: 'Pilots',
-    sectionName: 'PILOTS TO {0} RESULTS',
+    sectionName: '{0} the selected Pilots {1} the results.',
     values: [],
   },
 });
@@ -100,7 +100,11 @@ export const useEnumFilterConfig = (
   const config = Object.assign({}, enumFilterConfigs[enumName]);
   config.sectionName = config.sectionName?.replace(
     '{0}',
-    relation === EnumRelation.Is ? 'INCLUDE IN' : 'EXCLUDE FROM',
+    relation === EnumRelation.Is ? 'Include' : 'Exclude',
+  );
+  config.sectionName = config.sectionName?.replace(
+    '{1}',
+    relation === EnumRelation.Is ? 'in' : 'from',
   );
 
   // Dynamic list of values. These enum names capture a user entered list of values.

@@ -4,12 +4,13 @@ import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 import { useEvent, useSetState } from '@react-native-hello/core';
 import {
   Divider,
-  ListItem,
   ListItemCheckBox,
+  ThemeManager,
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
+import { Button } from 'components/atoms/Button';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import lodash from 'lodash';
@@ -59,7 +60,9 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     selected,
     eventName,
   } = route.params;
+
   const theme = useTheme();
+  const s = useStyles();
   const event = useEvent();
   const realm = useRealm();
   const setScreenEditHeader = useScreenEditHeader();
@@ -198,22 +201,28 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      {(mode === 'many-with-actions' || mode === 'many-or-none') && (
-        <>
-          <Divider text={'ACTIONS'} />
-          <ListItem
-            title={'Select All'}
-            position={['first']}
-            onPress={selectAll}
-          />
-          <ListItem
-            title={'Select None'}
-            position={['last']}
-            onPress={selectNone}
-          />
-        </>
-      )}
-      <Divider text={sectionName} />
+      <Divider note light text={sectionName} style={s.divider} />
+      <Divider
+        text={title}
+        rightComponent={
+          mode === 'many-with-actions' || mode === 'many-or-none' ? (
+            <View style={{ flexDirection: 'row' }}>
+              <Button
+                title={'All'}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={theme.styles.dividerTextButton}
+                onPress={selectAll}
+              />
+              <Button
+                title={'None'}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={theme.styles.dividerTextButton}
+                onPress={selectNone}
+              />
+            </View>
+          ) : null
+        }
+      />
       <FlatList
         data={list.values}
         renderItem={renderValue}
@@ -234,18 +243,10 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   );
 };
 
-export default EnumPickerScreen;
+const useStyles = ThemeManager.createStyleSheet(() => ({
+  divider: {
+    marginBottom: 15,
+  },
+}));
 
-{
-  /* {mode === 'many-or-none' && (
-        <>
-          <Divider />
-          <ListItemCheckBox
-            title={'Unspecified'}
-            position={['first', 'last']}
-            checked={list.selected[0] === 'Unspecified'}
-            onChange={selectUnspecified}
-          />
-        </>
-      )} */
-}
+export default EnumPickerScreen;

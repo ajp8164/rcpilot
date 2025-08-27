@@ -400,6 +400,7 @@ const LogScreen = ({ navigation }: Props) => {
           markedDates={marked as MarkedDates}
           dayComponent={renderDay}
         />
+        <View style={s.shadow} />
       </View>
       {/* This view create separation between the scrolling list and the large title header.
       This separation decouples the scrolling list from collapsing the large title header. */}
@@ -509,6 +510,13 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
   sectionHeader: {
     backgroundColor: theme.colors.viewBackground,
+  },
+  shadow: {
+    width: '100%',
+    height: 5,
+    marginBottom: 17,
+    backgroundColor: theme.colors.viewBackground,
+    ...theme.shadow.glow,
   },
   weekdayLabel: {
     ...theme.text.small,

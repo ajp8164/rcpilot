@@ -252,9 +252,9 @@ const CreateAccountScreen = () => {
         ref={keyboardAccessory}
         id={'keyboardAccessory'}
         fieldRefs={resolvedRefs}
-        doneText={'Submit'}
+        doneText={'Done'}
         disabledDone={!formikCanSubmit}
-        onDone={() => formikRef.current?.handleSubmit()}
+        onDone={Keyboard.dismiss}
       />
     </>
   );

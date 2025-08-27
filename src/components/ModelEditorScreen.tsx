@@ -998,9 +998,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         ref={keyboardAccessory}
         id={'keyboardAccessory'}
         fieldRefs={resolvedRefs}
-        doneText={'Save'}
+        doneText={'Done'}
         disabledDone={!formikCanSubmit}
-        onDone={save}
+        onDone={Keyboard.dismiss}
       />
     </>
   );

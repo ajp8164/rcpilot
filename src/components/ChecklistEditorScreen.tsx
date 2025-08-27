@@ -494,9 +494,9 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
         ref={keyboardAccessory}
         id={'keyboardAccessory'}
         fieldRefs={[nameFieldRef.current]}
-        doneText={'Save'}
+        doneText={'Done'}
         disabledDone={!formikCanSubmit}
-        onDone={save}
+        onDone={Keyboard.dismiss}
       />
     </>
   );

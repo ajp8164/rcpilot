@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScrollView } from 'react-native';
+import { AvoidSoftInputView } from 'react-native-avoid-softinput';
 
 import { Divider, useDevice, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -42,36 +43,38 @@ const ReportBatteryScanCodeFilterEditorScreen = ({ route }: Props) => {
   }
 
   return (
-    <ScrollView style={theme.styles.view}>
-      <FilterEditorHeader
-        filterEditor={filterEditor}
-        itemName={'battery'}
-        requireFilterName={requireFilterName}
-        defaultFilter={defaultFilter}
-      />
-      <ListItemFilterEnum
-        title={'Chemistry'}
-        value={filterEditor.values.chemistry.value}
-        relation={filterEditor.values.chemistry.relation}
-        enumName={'BatteryChemistry'}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('chemistry', filterState);
-        }}
-      />
-      <Divider />
-      <ListItemFilterNumber
-        title={'Capacity'}
-        value={filterEditor.values.capacity.value}
-        relation={filterEditor.values.capacity.relation}
-        numericProps={{ mask: Masks.MAH, placeholder: '0', units: 'mAh' }}
-        position={['first', 'last']}
-        onValueChange={filterState => {
-          filterEditor.onFilterValueChange('capacity', filterState);
-        }}
-      />
-      <Divider style={{ height: device.insets.bottom }} />
-    </ScrollView>
+    <AvoidSoftInputView>
+      <ScrollView style={theme.styles.view}>
+        <FilterEditorHeader
+          filterEditor={filterEditor}
+          itemName={'battery'}
+          requireFilterName={requireFilterName}
+          defaultFilter={defaultFilter}
+        />
+        <ListItemFilterEnum
+          title={'Chemistry'}
+          value={filterEditor.values.chemistry.value}
+          relation={filterEditor.values.chemistry.relation}
+          enumName={'BatteryChemistry'}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            filterEditor.onFilterValueChange('chemistry', filterState);
+          }}
+        />
+        <Divider />
+        <ListItemFilterNumber
+          title={'Capacity'}
+          value={filterEditor.values.capacity.value}
+          relation={filterEditor.values.capacity.relation}
+          numericProps={{ mask: Masks.MAH, placeholder: '0', units: 'mAh' }}
+          position={['first', 'last']}
+          onValueChange={filterState => {
+            filterEditor.onFilterValueChange('capacity', filterState);
+          }}
+        />
+        <Divider style={{ height: device.insets.bottom }} />
+      </ScrollView>
+    </AvoidSoftInputView>
   );
 };
 

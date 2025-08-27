@@ -96,7 +96,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
             confirmation: () => {
               listEditorRef.current?.reset();
               return confirmAction({
-                label: `Delete Style`,
+                label: `Delete Model Category`,
                 title:
                   "This action cannot be undone.\nAre you sure you don't want to log this model category?",
               });
@@ -113,7 +113,7 @@ const ModelCategoriesScreen = ({ navigation }: Props) => {
       <EmptyView
         info
         message={'No Model Categories'}
-        details={'Tap the + button to add a model category.'}
+        details={'Tap the + button to add a Model Category.'}
         buttonTitle={'Add Model Category'}
         onButtonPress={() => navigation.navigate('NewModelCategory')}
       />

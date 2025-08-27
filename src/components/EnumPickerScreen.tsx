@@ -10,6 +10,7 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import lodash from 'lodash';
 import { BSON } from 'realm';
@@ -25,6 +26,7 @@ export type EnumPickerInterface = {
   enumName?: string; // Only required for realm objects
   mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none' | 'many-with-actions';
   title: string;
+  itemPlural?: string;
   headerBackTitle?: string;
   icons?: { [key in string]: EnumPickerIconProps }; // Key is a enum value as 'name:id'
   sectionName?: string;
@@ -48,6 +50,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     enumName,
     mode = 'one',
     title,
+    itemPlural = 'Items',
     headerBackTitle,
     icons,
     sectionName,
@@ -180,6 +183,16 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     );
   };
 
+  if (!list.values.length) {
+    return (
+      <EmptyView
+        info
+        message={`No ${itemPlural}`}
+        details={`Create ${itemPlural} on the Setup tab.`}
+      />
+    );
+  }
+
   return (
     <ScrollView
       style={theme.styles.view}
@@ -214,14 +227,6 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
           position={list.values.length === 0 ? ['first', 'last'] : ['last']}
           checked={!list.selected.length}
           onChange={() => toggleSelect()}
-        />
-      )}
-      {!list.values.length && (
-        <Divider
-          note
-          light
-          subHeaderStyle={{ ...theme.text.normal, alignSelf: 'center' }}
-          text={`No ${title} available`}
         />
       )}
       <Divider note light subHeaderStyle={theme.text.small} text={footer} />

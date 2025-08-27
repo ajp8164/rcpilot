@@ -259,7 +259,7 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
         <EmptyView
           info
           message={'No Checklists'}
-          details={'Tap the + button to add a checklist.'}
+          details={'Tap the + button to add a Checklist.'}
           buttonTitle={'Add Checklist'}
           onButtonPress={addChecklist}
         />

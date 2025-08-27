@@ -586,9 +586,10 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                       navigation.navigate('EnumPicker', {
                         enumName: 'ModelCategory',
                         title: 'Model Category',
+                        itemPlural: 'Model Categories',
                         headerBackTitle: 'Model',
                         footer:
-                          'You can manage categories through the Globals section in the Setup tab.',
+                          'You can manage Model Categories through the Globals section in the Setup tab.',
                         values: modelCategories.map(c => {
                           return c.name;
                         }),
@@ -829,7 +830,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                   </ListItemSwitchCollapsible>
                   <Divider />
                   <ListItem
-                    title={'Default Style'}
+                    title={'Default Event Style'}
                     value={values.defaultStyle?.name || 'None'}
                     position={
                       !modelHasPropeller(values.type) && !values.logsFuel
@@ -840,10 +841,11 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                     onPress={() =>
                       navigation.navigate('EnumPicker', {
                         enumName: 'EventStyle',
-                        title: 'Default Style',
+                        title: 'Default Event Style',
+                        itemPlural: 'Event Styles',
                         headerBackTitle: 'Model',
                         footer:
-                          'You can manage styles through the Globals section in the Setup tab.',
+                          'You can manage Event Styles through the Globals section in the Setup tab.',
                         values: eventStyles.map(s => {
                           return s.name;
                         }),
@@ -863,6 +865,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                         navigation.navigate('EnumPicker', {
                           enumName: 'ModelPropeller',
                           title: 'Default Propeller',
+                          itemPlural: 'Propellers',
                           headerBackTitle: 'Model',
                           footer:
                             'You can manage propellers through the Globals section in the Setup tab.',
@@ -886,6 +889,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                         navigation.navigate('EnumPicker', {
                           enumName: 'ModelFuel',
                           title: 'Default Fuel',
+                          itemPlural: 'Fuel',
                           headerBackTitle: 'Model',
                           footer:
                             'You can manage fuel through the Globals section in the Setup tab.',

@@ -168,7 +168,7 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
       <EmptyView
         info
         message={'No List Templates'}
-        details={'Tap the + button to add a list template.'}
+        details={'Tap the + button to add a List Template.'}
         buttonTitle={'Add List Template'}
         onButtonPress={() =>
           navigation.navigate('NewChecklistNavigator', {

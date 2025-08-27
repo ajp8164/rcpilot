@@ -150,6 +150,7 @@ const BatteryFiltersScreen = ({ navigation, route }: Props) => {
       <FiltersListHeader
         filterSummary={filterSummary(generalBatteriesFilter)}
         itemName={'battery'}
+        specificItemName={'batteries'}
         generalFilterId={generalBatteriesFilter?._id.toString()}
         selectedFilterId={selectedFilterId}
         useGeneralFilter={useGeneralFilter}

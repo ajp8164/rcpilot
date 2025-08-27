@@ -187,6 +187,7 @@ const ReportBatteryScanCodeFiltersScreen = ({ navigation, route }: Props) => {
       <FiltersListHeader
         filterSummary={filterSummary(generalReportBatteryScanCodesFilter)}
         itemName={'battery'}
+        specificItemName={'batteries'}
         generalFilterId={generalReportBatteryScanCodesFilter?._id.toString()}
         selectedFilterId={selectedFilterId}
         useGeneralFilter={useGeneralFilter}

@@ -377,7 +377,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       <EmptyView
         info
         message={'No Models'}
-        details={'Tap the + button to a add model.'}
+        details={'Tap the + button to a add Model.'}
         buttonTitle={'Add Model'}
         onButtonPress={() =>
           navigation.navigate('NewModelNavigator', {

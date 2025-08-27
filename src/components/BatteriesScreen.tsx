@@ -477,7 +477,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
       <EmptyView
         info
         message={'No Batteries'}
-        details={'Tap the + button to a add battery.'}
+        details={'Tap the + button to a add Battery.'}
         buttonTitle={'Add Battery'}
         onButtonPress={addBattery}
       />

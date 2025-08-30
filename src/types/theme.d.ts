@@ -8,6 +8,7 @@ import {
 
 declare module '@react-native-hello/ui' {
   interface IColor {
+    assertiveMuted: string;
     avatarColors: string | string[];
     brandPrimary: string;
     brandSecondary: string;

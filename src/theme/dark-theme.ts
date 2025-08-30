@@ -19,6 +19,7 @@ export const themeBase: DeepPartial<IBaseThemeSchema> = {
   // Merge the parent theme for our styles to use while building.
   ...lodash.merge({}, ThemeManager.get('dark'), baseTheme, {
     colors: {
+      assertiveMuted: '#802539',
       avatarColors: [
         '#ff6767',
         '#66e0da',

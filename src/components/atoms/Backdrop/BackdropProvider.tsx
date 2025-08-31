@@ -1,9 +1,19 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, createContext, useState } from 'react';
 import { View } from 'react-native';
 
 import { ThemeManager } from '@react-native-hello/ui';
 
-import { BackdropContext } from './BackdropContext';
+export type BackdropContext = {
+  enabled: boolean;
+  setEnabled: (enabled: boolean) => void;
+};
+
+export const BackdropContext = createContext<BackdropContext>({
+  enabled: false,
+  setEnabled: () => {
+    return;
+  },
+});
 
 export const BackdropProvider = ({
   children,

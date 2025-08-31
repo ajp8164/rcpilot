@@ -60,12 +60,9 @@ const ModelFilterEditorScreen = ({ route }: Props) => {
           relation={filterEditor.values.modelType.relation}
           enumName={'ModelType'}
           position={['first', 'last']}
-          onValueChange={filterState => {
-            {
-              console.log(filterState);
-              filterEditor.onFilterValueChange('modelType', filterState);
-            }
-          }}
+          onValueChange={filterState =>
+            filterEditor.onFilterValueChange('modelType', filterState)
+          }
         />
         <Divider />
         <ListItemFilterEnum

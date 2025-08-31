@@ -48,7 +48,7 @@ import { useConfirmAction } from 'lib/useConfirmAction';
 import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
-import { Battery, toPlainArray } from 'realmdb';
+import { Battery, toPlainArray, toPlainObject } from 'realmdb';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Model, ModelStatistics } from 'realmdb/Model';
 import { ModelCategory } from 'realmdb/ModelCategory';
@@ -137,12 +137,13 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
   const [expandedLastEvent, setExpandedLastEvent] = useState(false);
   const scrollY = useSharedValue(0);
 
+  // Don't send realm objects into formik. Object serialization will fail.
   const initialValues = {
     name: model?.name || '',
     image: model?.image || undefined,
     type: model?.type || ModelType.Airplane,
     vendor: model?.vendor || '',
-    category: model?.category || undefined,
+    category: toPlainObject(model?.category),
     purchasePrice: model?.purchasePrice?.toString() || '',
     damaged: model?.damaged || false,
     retired: model?.retired || false,
@@ -150,14 +151,13 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     totalTime: model?.statistics.totalTime?.toString() || '',
     lastEvent: model?.lastEvent || '',
     logsBatteries: model?.logsBatteries || false,
-    // Don't send realm objects into formik. Object serialization will fail.
     favoriteBatteries: toPlainArray<Battery>(model?.favoriteBatteries),
     logsFuel: model?.logsFuel || false,
     fuelCapacity: model?.fuelCapacity?.toString() || '',
     totalFuelConsumed: model?.totalFuelConsumed?.toString() || '',
-    defaultFuel: model?.defaultFuel || undefined,
-    defaultPropeller: model?.defaultPropeller || undefined,
-    defaultStyle: model?.defaultStyle || undefined,
+    defaultFuel: toPlainObject(model?.defaultFuel),
+    defaultPropeller: toPlainObject(model?.defaultPropeller),
+    defaultStyle: toPlainObject(model?.defaultStyle),
     scanCodeSize: model?.scanCodeSize || ScanCodeSize.None,
     notes: model?.notes || '',
     statistics: {},
@@ -168,7 +168,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     image: Yup.string(),
     type: Yup.string().required(),
     vendor: Yup.string(),
-    category: Yup.object(),
+    category: Yup.object().nullable(),
     purchasePrice: Yup.string(),
     damaged: Yup.boolean(),
     retired: Yup.boolean(),
@@ -180,9 +180,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     logsFuel: Yup.boolean(),
     fuelCapacity: Yup.string(),
     totalFuelConsumed: Yup.string(),
-    defaultFuel: Yup.object(),
-    defaultPropeller: Yup.object(),
-    defaultStyle: Yup.object(),
+    defaultFuel: Yup.object().nullable(),
+    defaultPropeller: Yup.object().nullable(),
+    defaultStyle: Yup.object().nullable(),
     scanCodeSize: Yup.string(),
     notes: Yup.string(),
     statistics: Yup.object(),
@@ -304,10 +304,34 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     const now = DateTime.now().toISO();
 
     // Rehydrate realm objects.
-    const ids = values.favoriteBatteries.map(b => b._id.toString());
+    const batteryIds = values.favoriteBatteries.map(b => b._id.toString());
     const favoriteBatteries = realm
       .objects(Battery)
-      .filter(b => ids.includes(b._id.toString()));
+      .filter(b => batteryIds.includes(b._id.toString()));
+
+    const category =
+      realm.objectForPrimaryKey<ModelCategory>(
+        'ModelCategory',
+        new BSON.ObjectId(values.category?._id),
+      ) || undefined;
+
+    const defaultFuel =
+      realm.objectForPrimaryKey<ModelFuel>(
+        'ModelFuel',
+        new BSON.ObjectId(values.defaultFuel?._id),
+      ) || undefined;
+
+    const defaultPropeller =
+      realm.objectForPrimaryKey<ModelPropeller>(
+        'ModelPropeller',
+        new BSON.ObjectId(values.defaultPropeller?._id),
+      ) || undefined;
+
+    const defaultStyle =
+      realm.objectForPrimaryKey<EventStyle>(
+        'EventStyle',
+        new BSON.ObjectId(values.defaultStyle?._id),
+      ) || undefined;
 
     if (model) {
       realm.write(() => {
@@ -315,7 +339,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.name = values.name || 'no-name';
         model.image = values.image;
         model.vendor = values.vendor;
-        model.category = values.category;
+        model.category = category;
         model.purchasePrice = toNumber(values.purchasePrice);
         model.retired = values.retired;
         model.damaged = values.damaged;
@@ -324,9 +348,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
         model.logsFuel = values.logsFuel;
         model.fuelCapacity = toNumber(values.fuelCapacity);
         model.totalFuelConsumed = toNumber(values.totalFuelConsumed);
-        model.defaultFuel = values.defaultFuel;
-        model.defaultPropeller = values.defaultPropeller;
-        model.defaultStyle = values.defaultStyle;
+        model.defaultFuel = defaultFuel;
+        model.defaultPropeller = defaultPropeller;
+        model.defaultStyle = defaultStyle;
         model.scanCodeSize = values.scanCodeSize;
         model.notes = values.notes;
         model.statistics = lodash.merge(
@@ -347,7 +371,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           image: values.image,
           type: values.type,
           vendor: values.vendor,
-          category: values.category,
+          category,
           purchasePrice: toNumber(values.purchasePrice),
           retired: values.retired,
           damaged: values.damaged,
@@ -357,9 +381,9 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
           logsFuel: values.logsFuel,
           fuelCapacity: toNumber(values.fuelCapacity),
           totalFuelConsumed: toNumber(values.totalFuelConsumed),
-          defaultFuel: values.defaultFuel,
-          defaultPropeller: values.defaultPropeller,
-          defaultStyle: values.defaultStyle,
+          defaultFuel,
+          defaultPropeller,
+          defaultStyle,
           scanCodeSize: values.scanCodeSize,
           notes: values.notes,
           statistics: {},
@@ -388,7 +412,7 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     const c = modelCategories.find(c => {
       return c.name === result.value[0];
     });
-    formikRef.current?.setFieldValue('category', c);
+    formikRef.current?.setFieldValue('category', toPlainObject(c));
   };
 
   const onChangeFavoriteBatteries = (result: BatteryPickerResult) => {
@@ -402,21 +426,21 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
     const p = modelPropellers.find(p => {
       return p.name === result.value[0];
     });
-    formikRef.current?.setFieldValue('defaultPropeller', p);
+    formikRef.current?.setFieldValue('defaultPropeller', toPlainObject(p));
   };
 
   const onChangeDefaultStyle = (result: EnumPickerResult) => {
     const s = eventStyles.find(s => {
       return s.name === result.value[0];
     });
-    formikRef.current?.setFieldValue('defaultStyle', s);
+    formikRef.current?.setFieldValue('defaultStyle', toPlainObject(s));
   };
 
   const onChangeDefaultFuel = (result: EnumPickerResult) => {
     const f = modelFuels.find(f => {
       return f.name === result.value[0];
     });
-    formikRef.current?.setFieldValue('defaultFuel', f);
+    formikRef.current?.setFieldValue('defaultFuel', toPlainObject(f));
   };
 
   const onLastEventChange = (date?: Date) => {
@@ -464,9 +488,6 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
 
     navigation.setOptions({
       title: model ? formikRef.current?.values.type || 'Model' : 'New Model',
-    });
-
-    navigation.setOptions({
       headerLeft: () => {
         return (
           <Button

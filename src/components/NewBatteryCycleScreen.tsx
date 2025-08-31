@@ -338,8 +338,14 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
     formikRef.current?.setFieldValue('duration', '');
     formikRef.current?.setFieldValue('packVoltage', '');
     formikRef.current?.setFieldValue('packResistance', '');
-    formikRef.current?.setFieldValue('cellVoltages', []);
-    formikRef.current?.setFieldValue('cellResistances', []);
+    formikRef.current?.setFieldValue(
+      'cellVoltages',
+      initialValues.cellVoltages,
+    );
+    formikRef.current?.setFieldValue(
+      'cellResistances',
+      initialValues.cellResistances,
+    );
     requestAnimationFrame(() => formikRef.current?.validateForm());
   };
 
@@ -562,8 +568,11 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
                   container={'right'}
                   inputProps={{
                     inputAccessoryViewID: 'keyboardAccessory',
-                    onChangeText: (_, unformatted) =>
-                      handleChange('packVoltage')(unformatted),
+                    onChangeText: (_, unformatted) => {
+                      handleChange('packVoltage')(unformatted);
+                      // Reset cell voltages if the pack value is changed.
+                      setFieldValue('cellVoltages', initialValues.cellVoltages);
+                    },
                     onFocus: () =>
                       keyboardAccessory.current?.focusedField(
                         Fields.packVoltage,
@@ -583,8 +592,14 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
                   container={'right'}
                   inputProps={{
                     inputAccessoryViewID: 'keyboardAccessory',
-                    onChangeText: (_, unformatted) =>
-                      handleChange('packResistance')(unformatted),
+                    onChangeText: (_, unformatted) => {
+                      handleChange('packResistance')(unformatted);
+                      // Reset cell resistances if the pack value is changed.
+                      setFieldValue(
+                        'cellResistances',
+                        initialValues.cellResistances,
+                      );
+                    },
                     onFocus: () =>
                       keyboardAccessory.current?.focusedField(
                         Fields.packResistance,

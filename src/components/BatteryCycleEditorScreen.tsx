@@ -495,8 +495,14 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
                   container={'right'}
                   inputProps={{
                     inputAccessoryViewID: 'keyboardAccessory',
-                    onChangeText: (_, unformatted) =>
-                      handleChange('dischargePackVoltage')(unformatted),
+                    onChangeText: (_, unformatted) => {
+                      handleChange('dischargePackVoltage')(unformatted);
+                      // Reset cell voltages if the pack value is changed.
+                      setFieldValue(
+                        'dischargeCellVoltages',
+                        initialValues.dischargeCellVoltages,
+                      );
+                    },
                     onFocus: () =>
                       keyboardAccessory.current?.focusedField(
                         Fields.dischargePackVoltage,
@@ -517,8 +523,14 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
                   container={'right'}
                   inputProps={{
                     inputAccessoryViewID: 'keyboardAccessory',
-                    onChangeText: (_, unformatted) =>
-                      handleChange('dischargePackResistance')(unformatted),
+                    onChangeText: (_, unformatted) => {
+                      handleChange('dischargePackResistance')(unformatted);
+                      // Reset cell resistances if the pack value is changed.
+                      setFieldValue(
+                        'dischargeCellResistances',
+                        initialValues.dischargeCellResistances,
+                      );
+                    },
                     onFocus: () =>
                       keyboardAccessory.current?.focusedField(
                         Fields.dischargePackResistance,
@@ -635,8 +647,14 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
                       container={'right'}
                       inputProps={{
                         inputAccessoryViewID: 'keyboardAccessory',
-                        onChangeText: (_, unformatted) =>
-                          handleChange('chargePackVoltage')(unformatted),
+                        onChangeText: (_, unformatted) => {
+                          handleChange('chargePackVoltage')(unformatted);
+                          // Reset cell voltages if the pack value is changed.
+                          setFieldValue(
+                            'chargeCellVoltages',
+                            initialValues.chargeCellVoltages,
+                          );
+                        },
                         onFocus: () =>
                           keyboardAccessory.current?.focusedField(
                             Fields.chargePackVoltage,
@@ -657,8 +675,14 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
                       container={'right'}
                       inputProps={{
                         inputAccessoryViewID: 'keyboardAccessory',
-                        onChangeText: (_, unformatted) =>
-                          handleChange('chargePackResistance')(unformatted),
+                        onChangeText: (_, unformatted) => {
+                          handleChange('chargePackResistance')(unformatted);
+                          // Reset cell resistances if the pack value is changed.
+                          setFieldValue(
+                            'chargeCellResistances',
+                            initialValues.chargeCellResistances,
+                          );
+                        },
                         onFocus: () =>
                           keyboardAccessory.current?.focusedField(
                             Fields.chargePackResistance,

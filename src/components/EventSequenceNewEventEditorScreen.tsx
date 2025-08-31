@@ -488,7 +488,8 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     const batteryDischarges = ([] as JBatteryDischarge[]).concat(
       allBatteryDischarges,
     );
-    batteryDischarges[index][property] = value as number & number[];
+    batteryDischarges[index][property] = (value ||
+      new Array(batteries[index].sCells).fill(0)) as number & number[];
     setAllBatteryDischarges(batteryDischarges);
   };
 
@@ -536,12 +537,15 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           container={'right'}
           inputProps={{
             inputAccessoryViewID: 'keyboardAccessory',
-            onChangeText: (_, unformatted) =>
+            onChangeText: (_, unformatted) => {
               setDischargeValue(
                 'packVoltage',
                 index,
                 unformatted ? parseFloat(unformatted) : undefined,
-              ),
+              );
+              // Reset cell voltages if the pack value is changed.
+              setDischargeValue('cellVoltage', index);
+            },
             onFocus: () =>
               keyboardAccessory.current?.focusedField(
                 Fields.dischargePackVoltage,
@@ -564,12 +568,15 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           container={'right'}
           inputProps={{
             inputAccessoryViewID: 'keyboardAccessory',
-            onChangeText: (_, unformatted) =>
+            onChangeText: (_, unformatted) => {
               setDischargeValue(
                 'packResistance',
                 index,
                 unformatted ? parseFloat(unformatted) : undefined,
-              ),
+              );
+              // Reset cell resistances if the pack value is changed.
+              setDischargeValue('cellResistance', index);
+            },
             onFocus: () =>
               keyboardAccessory.current?.focusedField(
                 Fields.dischargePackResistance,
@@ -695,7 +702,6 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                 <FormikStateWatcher<FormValues>
                   onChange={onFormikWatcherStateChange}
                 />
-
                 <Divider />
                 <ListItem
                   title={'Date'}

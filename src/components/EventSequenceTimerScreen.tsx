@@ -53,7 +53,6 @@ import {
 import { secondsToFormat } from 'lib/formatters';
 import { modelHasChecklists, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
-import { useConfirmAction } from 'lib/useConfirmAction';
 import { useTimer } from 'lib/useTimer';
 import {
   Battery as BatteryEmpty,
@@ -92,7 +91,6 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles();
   const device = useDevice();
-  const confirmAction = useConfirmAction();
   const event = useEvent();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -143,15 +141,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
                 ...s.buttonScreenHeaderTitleLeft,
               }}
               buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={() =>
-                confirmAction(
-                  {
-                    label: `Do Not Log ${kind.name}`,
-                    title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                  },
-                  cancelEvent,
-                )
-              }
+              onPress={cancelEvent}
             />
           );
         }

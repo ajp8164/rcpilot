@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -8,8 +8,6 @@ import { useObject, useQuery } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import BatteryPickerView from 'components/views/BatteryPickerView';
 import { modelHasChecklists } from 'lib/model';
-import { eventKind } from 'lib/modelEvent';
-import { useConfirmAction } from 'lib/useConfirmAction';
 import { ChevronRight } from 'lucide-react-native';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
@@ -29,7 +27,6 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles();
-  const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
 
   const activeBatteries = useQuery(
@@ -44,7 +41,6 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
     Model,
     new BSON.ObjectId(currentEventSequence.modelId),
   );
-  const [kind] = useState(eventKind(model?.type));
 
   useEffect(() => {
     navigation.setOptions({
@@ -58,15 +54,16 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
                 ...s.buttonScreenHeaderTitleLeft,
               }}
               buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={() =>
-                confirmAction(
-                  {
-                    label: `Do Not Log ${kind.name}`,
-                    title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                  },
-                  cancelEvent,
-                )
-              }
+              onPress={cancelEvent}
+              // onPress={() =>
+              //   confirmAction(
+              //     {
+              //       label: `Do Not Log ${kind.name}`,
+              //       title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+              //     },
+              //     cancelEvent,
+              //   )
+              // }
             />
           );
         }

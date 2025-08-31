@@ -7,7 +7,7 @@ import { Button } from 'components/atoms/Button';
 import { secondsToFormat } from 'lib/formatters';
 import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
-import { CirclePlay, Info, Trophy } from 'lucide-react-native';
+import { CirclePlay, Info, Star, Trophy } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { Model, Pilot } from 'realmdb';
 
@@ -15,6 +15,7 @@ interface ModelPostCardInterface {
   model: Model;
   onPressAchievements: (pilot: Pilot, model: Model) => void;
   onPressEditModel: (model: Model) => void;
+  onPressFavoriteModel: (pilot: Pilot, model: Model) => void;
   onPressNewEvent: (model: Model) => void;
   pilot?: Pilot;
 }
@@ -22,6 +23,7 @@ interface ModelPostCardInterface {
 export const ModelPostCard = ({
   model,
   onPressEditModel,
+  onPressFavoriteModel,
   onPressNewEvent,
   onPressAchievements,
   pilot,
@@ -30,6 +32,9 @@ export const ModelPostCard = ({
   const s = useStyles();
 
   const maintenanceIsDue = modelMaintenanceIsDue(model);
+  const isFavorite = !!pilot?.favoriteModels.filter(m =>
+    m._id.equals(model._id),
+  ).length;
 
   return (
     <View style={s.modelCard}>
@@ -79,23 +84,42 @@ export const ModelPostCard = ({
         </View>
       )}
       <View style={s.modelCardFooter}>
-        {pilot && (
+        {pilot && !pilot?.unknownPilot && (
           <Button
             buttonStyle={s.modelCardButton}
-            icon={<Trophy color={theme.colors.clearButtonText} size={33} />}
+            icon={<Trophy color={theme.colors.clearButtonText} size={28} />}
             onPress={() => onPressAchievements(pilot, model)}
+          />
+        )}
+        {pilot && !pilot?.unknownPilot && (
+          <Button
+            buttonStyle={s.modelCardButton}
+            icon={
+              isFavorite ? (
+                <Star
+                  color={theme.colors.clearButtonText}
+                  size={28}
+                  fill={theme.colors.clearButtonText}
+                />
+              ) : (
+                <Star color={theme.colors.clearButtonText} size={28} />
+              )
+            }
+            onPress={() => onPressFavoriteModel(pilot, model)}
           />
         )}
         <Button
           buttonStyle={s.modelCardButton}
-          icon={<Info color={theme.colors.clearButtonText} size={33} />}
+          icon={<Info color={theme.colors.clearButtonText} size={28} />}
           onPress={() => onPressEditModel(model)}
         />
-        <Button
-          buttonStyle={s.modelCardButton}
-          icon={<CirclePlay color={theme.colors.clearButtonText} size={33} />}
-          onPress={() => onPressNewEvent(model)}
-        />
+        <View style={s.footerRight}>
+          <Button
+            buttonStyle={s.modelCardButton}
+            icon={<CirclePlay color={theme.colors.clearButtonText} size={28} />}
+            onPress={() => onPressNewEvent(model)}
+          />
+        </View>
       </View>
     </View>
   );
@@ -108,6 +132,10 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     marginLeft: -30,
     color: theme.colors.stickyWhite,
     width: 30,
+  },
+  footerRight: {
+    alignItems: 'flex-end',
+    flex: 1,
   },
   modelCardButton: {
     ...theme.styles.buttonScreenHeader,

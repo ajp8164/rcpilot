@@ -19,7 +19,7 @@ import {
 } from '@react-native-hello/ui';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { useObject } from '@realm/react';
+import { useObject, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -30,6 +30,7 @@ import { modelMaintenanceIsDue, useModelsFilter } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { Funnel, FunnelPlus, Plus } from 'lucide-react-native';
+import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
 import { Pilot } from 'realmdb/Pilot';
@@ -55,6 +56,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles();
   const dispatch = useDispatch();
+  const realm = useRealm();
   const headerHeight = useHeaderHeight();
 
   const _pilot = useSelector(selectPilot);
@@ -249,6 +251,24 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  const toggleFavoriteModel = (pilot: Pilot, model: Model) => {
+    const isFavorite = !!pilot.favoriteModels.filter(m =>
+      m._id.equals(model._id),
+    ).length;
+
+    realm.write(() => {
+      pilot.updatedOn = DateTime.now().toISO();
+      if (isFavorite) {
+        // Remove
+        pilot.favoriteModels =
+          pilot.favoriteModels.filter(m => !m._id.equals(model._id)) || [];
+      } else {
+        // Add
+        pilot.favoriteModels = [...pilot.favoriteModels, model];
+      }
+    });
+  };
+
   const renderModelPostCard: SectionListRenderItem<Model, Section> = ({
     item: model,
     section: _model,
@@ -270,6 +290,7 @@ const ModelsScreen = ({ navigation, route }: Props) => {
             modelId: model._id.toString(),
           })
         }
+        onPressFavoriteModel={toggleFavoriteModel}
         onPressNewEvent={() => {
           if (listModels !== 'all') {
             navigation.navigate('ModelEditor', {

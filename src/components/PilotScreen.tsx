@@ -170,7 +170,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
       realm.write(() => {
         pilot.updatedOn = DateTime.now().toISO();
         pilot.favoriteModels =
-          pilot.favoriteModels.filter(m => m._id.toString() !== modelId) || [];
+          pilot.favoriteModels.filter(m => !m._id.equals(modelId)) || [];
       });
 
       // Exit edit mode if no more favorites in the list.

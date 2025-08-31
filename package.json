@@ -42,7 +42,7 @@
     "@react-native-google-signin/google-signin": "^14.0.1",
     "@react-native-hello/common": "^0.0.16",
     "@react-native-hello/core": "^0.0.19",
-    "@react-native-hello/ui": "^0.0.146",
+    "@react-native-hello/ui": "^0.0.147",
     "@react-native-masked-view/masked-view": "^0.3.0",
     "@react-native-picker/picker": "^2.4.8",
     "@react-native-segmented-control/segmented-control": "^2.5.0",

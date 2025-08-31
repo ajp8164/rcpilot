@@ -58,10 +58,14 @@ import {
   Battery as BatteryEmpty,
   BatteryFull,
   BatteryLow,
+  ChevronsLeft,
+  ChevronsRight,
   CircleGauge,
   CirclePause,
   CirclePlay,
   CircleStop,
+  ClockArrowDown,
+  ClockArrowUp,
   Fuel,
   TriangleAlert,
 } from 'lucide-react-native';
@@ -150,12 +154,14 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         if (timer.state.mode === TimerMode.Initial) {
           return (
             <Button
-              title={countdownTimerEnabled ? 'Countdown' : 'Count Up'}
-              titleStyle={{
-                ...theme.styles.buttonScreenHeaderTitle,
-                ...s.buttonScreenHeaderTitleLeft,
-              }}
               buttonStyle={theme.styles.buttonScreenHeader}
+              icon={
+                countdownTimerEnabled ? (
+                  <ClockArrowDown color={theme.colors.stickyWhite} size={28} />
+                ) : (
+                  <ClockArrowUp color={theme.colors.stickyWhite} size={28} />
+                )
+              }
               onPress={() => toggleCountdownTimer()}
             />
           );
@@ -417,6 +423,20 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
             timer.state.mode === TimerMode.Running
               ? s.swipeThumbTimerRunning
               : {}
+          }
+          thumbComponent={
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {timer.state.mode === TimerMode.Initial ? (
+                <ChevronsRight color={theme.colors.assertive} size={33} />
+              ) : (
+                <ChevronsLeft color={theme.colors.success} size={33} />
+              )}
+            </View>
           }
           onToggle={onSwipeTimer}
         />

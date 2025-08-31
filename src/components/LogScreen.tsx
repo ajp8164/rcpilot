@@ -95,9 +95,11 @@ const LogScreen = ({ navigation }: Props) => {
             title={'Today'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={() =>
-              calendarRef.current?.setDate(DateTime.now().toISODate())
-            }
+            onPress={() => {
+              const now = DateTime.now();
+              calendarRef.current?.setDate(now.toISODate());
+              scrollToSection(now.toFormat('MMMM dd, yyyy'));
+            }}
           />
         );
       },

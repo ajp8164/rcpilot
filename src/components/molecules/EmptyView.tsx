@@ -13,6 +13,7 @@ interface EmptyViewInterface {
   details?: string;
   isLoading?: boolean;
   buttonTitle?: string;
+  positionTop?: boolean;
   onButtonPress?: () => void;
 }
 
@@ -23,6 +24,7 @@ export const EmptyView = ({
   details,
   isLoading,
   buttonTitle,
+  positionTop,
   onButtonPress,
 }: EmptyViewInterface) => {
   const theme = useTheme();
@@ -39,7 +41,9 @@ export const EmptyView = ({
 
   return (
     <View style={s.container}>
-      <View style={[s.items, { bottom: bottom - height }]} onLayout={onLayout}>
+      <View
+        style={[s.items, { bottom: positionTop ? undefined : bottom - height }]}
+        onLayout={onLayout}>
         {isLoading ? (
           <ActivityIndicator
             size={'large'}

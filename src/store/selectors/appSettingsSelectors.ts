@@ -25,6 +25,10 @@ export const selectEventPreferences = createSelector(
   },
 );
 
+export const selectMapPreferences = createSelector(selectAppState, appState => {
+  return appState.appSettings.mapPreferences;
+});
+
 export const selectModelPreferences = (modelId: string) =>
   createSelector(selectAppState, appState => {
     return appState.appSettings.modelsPreferences[modelId];

@@ -9,6 +9,7 @@ import MapView, {
   MarkerDragStartEndEvent,
   Region,
 } from 'react-native-maps';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
@@ -33,6 +34,8 @@ import {
 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { Location, LocationCoords } from 'realmdb/Location';
+import { selectMapPreferences } from 'store/selectors/appSettingsSelectors';
+import { saveMapPreferences } from 'store/slices/appSettings';
 import { LocationPickerResult } from 'types/location';
 import { LocationNavigatorParamList } from 'types/navigation';
 
@@ -63,6 +66,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const s = useStyles();
   const event = useEvent();
   const realm = useRealm();
+  const dispatch = useDispatch();
 
   const locations = useQuery(Location);
 
@@ -85,7 +89,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     longitude: currentPosition.coords.longitude,
   } as LocationCoords);
 
-  const [mapPresentation, setMapPresentation] = useState<MapType>('standard');
+  const mapPreferences = useSelector(selectMapPreferences);
+  const [mapPresentation, setMapPresentation] = useState<MapType>(
+    mapPreferences.presentation,
+  );
   const [recenterButtonState, setRecenterButtonState] = useState(
     RecenterButtonState.Initial,
   );
@@ -126,6 +133,13 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    dispatch(
+      saveMapPreferences({ preferences: { presentation: mapPresentation } }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapPresentation]);
 
   const onChangeMapLocation = (result: LocationPickerResult) => {
     // Position the map at the user selected location.
@@ -332,9 +346,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           buttonStyle={theme.styles.buttonScreenHeader}
           icon={
             mapPresentation === 'standard' ? (
-              <Map color={theme.colors.clearButtonText} size={28} />
-            ) : (
               <Satellite color={theme.colors.clearButtonText} size={28} />
+            ) : (
+              <Map color={theme.colors.clearButtonText} size={28} />
             )
           }
           onPress={() => toggleMapPresenation()}
@@ -427,7 +441,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       {renderActionButtons()}
       <MapBottomSheet
         ref={mapBottomSheetRef}
-        initialIndex={locationId ? -1 : undefined}
+        initialIndex={locationId ? -1 : 2}
         onPressAddLocation={addLocation}
       />
       <LocationBottomSheet

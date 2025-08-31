@@ -1,5 +1,11 @@
+import { MapType } from 'react-native-maps';
+
 export type EventPreferences = {
   timerUsesButtons: boolean;
+};
+
+export type MapPreferences = {
+  presentation: MapType;
 };
 
 export enum ModelsLayout {

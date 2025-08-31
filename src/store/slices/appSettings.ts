@@ -4,6 +4,7 @@ import { ThemeSettings } from 'types/appSettings';
 import { DatabaseAccessWith, OutputReportTo } from 'types/database';
 import {
   EventPreferences,
+  MapPreferences,
   ModelPreferences,
   ModelsLayout,
   ModelsPreferences,
@@ -15,6 +16,7 @@ export interface AppSettingsState {
   databaseAccessWith: DatabaseAccessWith;
   eventPreferences: EventPreferences;
   outputReportTo: OutputReportTo;
+  mapPreferences: MapPreferences;
   modelsLayout: ModelsLayout;
   modelsPreferences: ModelsPreferences;
   themeSettings: ThemeSettings;
@@ -26,6 +28,9 @@ export const initialAppSettingsState = Object.freeze<AppSettingsState>({
   databaseAccessWith: DatabaseAccessWith.WebServer,
   eventPreferences: {
     timerUsesButtons: false,
+  },
+  mapPreferences: {
+    presentation: 'standard',
   },
   outputReportTo: OutputReportTo.WebServer,
   modelsLayout: ModelsLayout.List,
@@ -67,6 +72,19 @@ const handleSaveEventPreferences: CaseReducer<
     ...state,
     eventPreferences: {
       ...state.eventPreferences,
+      ...payload.preferences,
+    },
+  };
+};
+
+const handleSaveMapPreferences: CaseReducer<
+  AppSettingsState,
+  PayloadAction<{ preferences: MapPreferences }>
+> = (state, { payload }) => {
+  return {
+    ...state,
+    mapPreferences: {
+      ...state.mapPreferences,
       ...payload.preferences,
     },
   };
@@ -147,6 +165,7 @@ const appSettingsSlice = createSlice({
     saveBiometrics: handleSaveBiometrics,
     saveDatabaseAccessWith: handleSaveDatabaseAccessWith,
     saveEventPreferences: handleSaveEventPreferences,
+    saveMapPreferences: handleSaveMapPreferences,
     saveOutputReportTo: handleSaveOutputReportTo,
     saveModelsLayout: handleSaveModelsLayout,
     saveModelPreferences: handleSaveModelPreferences,
@@ -163,6 +182,7 @@ export const saveDatabaseAccessWith =
   appSettingsSlice.actions.saveDatabaseAccessWith;
 export const saveEventPreferences =
   appSettingsSlice.actions.saveEventPreferences;
+export const saveMapPreferences = appSettingsSlice.actions.saveMapPreferences;
 export const saveOutputReportTo = appSettingsSlice.actions.saveOutputReportTo;
 export const saveModelsLayout = appSettingsSlice.actions.saveModelsLayout;
 export const saveModelPreferences =

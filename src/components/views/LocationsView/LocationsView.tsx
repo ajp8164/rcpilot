@@ -5,12 +5,12 @@ import { useSelector } from 'react-redux';
 import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { useEvent } from '@react-native-hello/core';
 import {
-  Divider,
   ListItemCheckBox,
   listItemPosition,
   useTheme,
 } from '@react-native-hello/ui';
 import { useQuery } from '@realm/react';
+import { EmptyView } from 'components/molecules/EmptyView';
 import { Goal } from 'lucide-react-native';
 import { Location } from 'realmdb';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
@@ -82,12 +82,12 @@ const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
         keyExtractor={item => item._id.toString()}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={
-          allLocations.length ? (
-            <Divider
-              note
-              text={'Create a location by dropping a pin on the map.'}
-            />
-          ) : null
+          <EmptyView
+            info
+            message={'No Locations'}
+            details={'Tap button or press map to add a Location.'}
+            positionTop
+          />
         }
       />
     );

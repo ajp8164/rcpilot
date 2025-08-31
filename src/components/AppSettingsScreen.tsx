@@ -13,10 +13,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
 import { hasPushNotificationsPermission } from 'lib/notifications';
-import { modelsLayoutIcons } from 'lib/preferences';
 import {
   selectBiometrics,
-  selectModelsLayout,
   selectThemeSettings,
 } from 'store/selectors/appSettingsSelectors';
 import {
@@ -32,13 +30,12 @@ export type Props = NativeStackScreenProps<
   'AppSettings'
 >;
 
-const AppSettings = ({ navigation }: Props) => {
+const AppSettings = () => {
   const theme = ThemeManager.useTheme();
 
   const dispatch = useDispatch();
   const themeSettings = useSelector(selectThemeSettings);
   const biometrics = useSelector(selectBiometrics);
-  const modelsLayout = useSelector(selectModelsLayout);
   const event = useEvent();
 
   const [biometricsValue, setBiometricsValue] = useState(biometrics);
@@ -152,22 +149,6 @@ const AppSettings = ({ navigation }: Props) => {
           value={themeSettings.followDevice}
           position={['last']}
           onValueChange={toggleUseDevice}
-        />
-        <Divider text={'VIEW OPTIONS'} />
-        <ListItem
-          title={'Models Screen Layout'}
-          position={['first', 'last']}
-          rightContent={'chevron-right'}
-          value={modelsLayout}
-          onPress={() =>
-            navigation.navigate('EnumPicker', {
-              title: 'Models Layout',
-              values: Object.values(ModelsLayout),
-              selected: modelsLayout,
-              icons: modelsLayoutIcons,
-              eventName: 'models-layout',
-            })
-          }
         />
         <Divider />
       </ScrollView>

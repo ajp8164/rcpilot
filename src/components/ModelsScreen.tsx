@@ -29,7 +29,14 @@ import { ModelCardDeck } from 'components/molecules/card-deck/ModelCardDeck';
 import { modelMaintenanceIsDue, useModelsFilter } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
-import { Funnel, FunnelPlus, Plus } from 'lucide-react-native';
+import {
+  Funnel,
+  FunnelPlus,
+  GalleryHorizontalEnd,
+  Images,
+  LayoutList,
+  Plus,
+} from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
@@ -37,6 +44,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { selectModelsLayout } from 'store/selectors/appSettingsSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
 import { selectPilot } from 'store/selectors/pilotSelectors';
+import { saveModelsLayout } from 'store/slices/appSettings';
 import { eventSequence } from 'store/slices/eventSequence';
 import { ChecklistType } from 'types/checklist';
 import { FilterType } from 'types/filter';
@@ -99,6 +107,44 @@ const ModelsScreen = ({ navigation, route }: Props) => {
       headerRight: () => {
         return (
           <>
+            <Button
+              buttonStyle={theme.styles.buttonScreenHeader}
+              headerRight
+              icon={
+                modelsLayout === ModelsLayout.CardDeck ? (
+                  <GalleryHorizontalEnd
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
+                ) : modelsLayout === ModelsLayout.List ? (
+                  <LayoutList
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
+                ) : modelsLayout === ModelsLayout.PostCards ? (
+                  <Images
+                    color={theme.colors.screenHeaderButtonText}
+                    size={28}
+                  />
+                ) : (
+                  <></>
+                )
+              }
+              onPress={() => {
+                let presentation = modelsLayout;
+                modelsLayout === ModelsLayout.CardDeck ? (
+                  (presentation = ModelsLayout.List)
+                ) : modelsLayout === ModelsLayout.List ? (
+                  (presentation = ModelsLayout.PostCards)
+                ) : modelsLayout === ModelsLayout.PostCards ? (
+                  (presentation = ModelsLayout.CardDeck)
+                ) : (
+                  <></>
+                );
+
+                dispatch(saveModelsLayout({ presentation }));
+              }}
+            />
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}

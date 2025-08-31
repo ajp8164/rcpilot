@@ -34,12 +34,14 @@ import {
   modelEventOutcomeStatistics,
   useModelEventStyleStatistics,
 } from 'lib/analytics';
+import { batterySummary, batteryTintIconProps } from 'lib/battery';
 import { actionScheduleState } from 'lib/checklist';
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Masks, precisionFromMask } from 'lib/inputMasks';
 import { modelHasPropeller, modelSummary, modelTypeIconProps } from 'lib/model';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { useConfirmAction } from 'lib/useConfirmAction';
+import { BatteryLow } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { toPlainObject } from 'realmdb';
@@ -63,6 +65,7 @@ import { Pilot } from 'realmdb/Pilot';
 import { selectEventSequence } from 'store/selectors/eventSequence';
 import { selectPilot } from 'store/selectors/pilotSelectors';
 import { eventSequence } from 'store/slices/eventSequence';
+import { BatteryTint } from 'types/battery';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
 import { EventOutcome } from 'types/event';
 import { LocationPickerResult } from 'types/location';
@@ -503,7 +506,29 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     const cellResistance = batteryDischarge.cellResistance;
     return (
       <View key={battery._id.toString()}>
-        <Divider text={`POST-EVENT FOR ${battery.name.toLocaleUpperCase()}`} />
+        <ListItem
+          title={battery.name}
+          value={batterySummary(battery)}
+          valueStyle={theme.text.small}
+          containerStyle={{
+            ...s.batteryTint,
+            borderLeftColor:
+              battery.tint !== BatteryTint.None
+                ? batteryTintIconProps[battery.tint].color
+                : theme.colors.transparent,
+          }}
+          titleStyle={s.batteryText}
+          subtitleStyle={s.batteryText}
+          position={['first']}
+          leftContentStyle={{ paddingHorizontal: 0 }}
+          leftContent={
+            <BatteryLow
+              color={theme.colors.brandPrimary}
+              style={s.batteryIcon}
+              size={33}
+            />
+          }
+        />
         <ListItemInput
           ref={dischargePackVoltageFieldRef}
           title={'Pack Voltage'}
@@ -726,79 +751,85 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                     })
                   }
                 />
-                <Divider />
                 {modelHasPropeller(model.type) && (
-                  <ListItem
-                    title={'Propeller'}
-                    value={values.propeller?.name || 'None'}
-                    position={['first', 'last']}
-                    rightContent={'chevron-right'}
-                    onPress={() =>
-                      navigation.navigate('EnumPicker', {
-                        enumName: 'ModelPropeller',
-                        itemPlural: 'Propellers',
-                        title: 'Default Propeller',
-                        headerBackTitle: 'Model',
-                        footer:
-                          'You can manage propellers through the Globals section in the Setup tab.',
-                        values: modelPropellers.map(p => {
-                          return p.name;
-                        }),
-                        selected: values.propeller?.name,
-                        mode: 'one-or-none',
-                        eventName: 'event-model-propeller',
-                      })
-                    }
-                  />
+                  <>
+                    <Divider />
+                    <ListItem
+                      title={'Propeller'}
+                      value={values.propeller?.name || 'None'}
+                      position={['first', 'last']}
+                      rightContent={'chevron-right'}
+                      onPress={() =>
+                        navigation.navigate('EnumPicker', {
+                          enumName: 'ModelPropeller',
+                          itemPlural: 'Propellers',
+                          title: 'Default Propeller',
+                          headerBackTitle: 'Model',
+                          footer:
+                            'You can manage propellers through the Globals section in the Setup tab.',
+                          values: modelPropellers.map(p => {
+                            return p.name;
+                          }),
+                          selected: values.propeller?.name,
+                          mode: 'one-or-none',
+                          eventName: 'event-model-propeller',
+                        })
+                      }
+                    />
+                  </>
                 )}
-                <Divider />
-                <ListItem
-                  title={'Fuel'}
-                  position={['first']}
-                  value={values.fuel?.name || 'Unspecified'}
-                  rightContent={'chevron-right'}
-                  onPress={() =>
-                    navigation.navigate('EnumPicker', {
-                      enumName: 'ModelFuel',
-                      itemPlural: 'Fuel',
-                      title: 'Fuel',
-                      headerBackTitle: `${kind.name}`,
-                      footer:
-                        'You can manage fuels through the Globals section in the Setup tab.',
-                      values: modelFuels.map(f => {
-                        return f.name;
-                      }),
-                      selected: values.fuel?.name,
-                      mode: 'one-or-none',
-                      eventName: 'event-model-fuel',
-                    })
-                  }
-                />
-                <ListItemInput
-                  ref={fuelConsumedFieldRef}
-                  position={['last']}
-                  title={'Fuel Consumed'}
-                  units={'oz'}
-                  container={'right'}
-                  inputProps={{
-                    inputAccessoryViewID: 'keyboardAccessory',
-                    inputStyle: {
-                      backgroundColor: theme.colors.transparent,
-                      textAlign: 'right',
-                    },
-                    onChangeText: (_, unformatted) =>
-                      handleChange('fuelConsumed')(unformatted),
-                    onFocus: () =>
-                      keyboardAccessory.current?.focusedField(
-                        Fields.fuelConsumed,
-                      ),
-                    value: values.fuelConsumed,
-                    placeholder: '0.00',
-                    mask: Masks.OUNCES,
-                    rtlNumber: true,
-                    keyboardType: 'number-pad',
-                  }}
-                />
+                {model.logsFuel ? (
+                  <>
+                    <Divider />
+                    <ListItem
+                      title={'Fuel'}
+                      position={['first']}
+                      value={values.fuel?.name || 'Unspecified'}
+                      rightContent={'chevron-right'}
+                      onPress={() =>
+                        navigation.navigate('EnumPicker', {
+                          enumName: 'ModelFuel',
+                          itemPlural: 'Fuel',
+                          title: 'Fuel',
+                          headerBackTitle: `${kind.name}`,
+                          footer:
+                            'You can manage fuels through the Globals section in the Setup tab.',
+                          values: modelFuels.map(f => {
+                            return f.name;
+                          }),
+                          selected: values.fuel?.name,
+                          mode: 'one-or-none',
+                          eventName: 'event-model-fuel',
+                        })
+                      }
+                    />
+                    <ListItemInput
+                      ref={fuelConsumedFieldRef}
+                      position={['last']}
+                      title={'Fuel Consumed'}
+                      units={'oz'}
+                      container={'right'}
+                      inputProps={{
+                        inputAccessoryViewID: 'keyboardAccessory',
+                        inputStyle: {
+                          backgroundColor: theme.colors.transparent,
+                          textAlign: 'right',
+                        },
+                        onChangeText: (_, unformatted) =>
+                          handleChange('fuelConsumed')(unformatted),
+                        onFocus: () =>
+                          keyboardAccessory.current?.focusedField(
+                            Fields.fuelConsumed,
+                          ),
+                        value: values.fuelConsumed,
+                        placeholder: '0.00',
+                        mask: Masks.OUNCES,
+                        rtlNumber: true,
+                        keyboardType: 'number-pad',
+                      }}
+                    />
+                  </>
+                ) : null}
                 <Divider />
                 <ListItem
                   title={'Pilot'}
@@ -861,12 +892,14 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
               </View>
             )}
           </Formik>
-          <View>
-            {model.logsBatteries &&
-              batteries.map((battery, index) => {
+          {model.logsBatteries ? (
+            <>
+              <Divider text={'BATTERIES POST-EVENT'} />
+              {batteries.map((battery, index) => {
                 return renderBatteryPostEvent({ battery, index });
               })}
-          </View>
+            </>
+          ) : null}
           <Divider />
         </ScrollView>
       </AvoidSoftInputView>
@@ -883,6 +916,16 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+  batteryIcon: {
+    transform: [{ rotate: '-90deg' }],
+  },
+  batteryText: {
+    left: 10,
+    maxWidth: '90%',
+  },
+  batteryTint: {
+    borderLeftWidth: 8,
+  },
   buttonScreenHeaderTitle: {
     color: theme.colors.stickyWhite,
   },

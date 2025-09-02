@@ -12,7 +12,6 @@ import { ContentView } from 'types/content';
 import { EventOutcome } from 'types/event';
 import { FilterType } from 'types/filter';
 import { ListModels, ModelType } from 'types/model';
-import { UserProfile } from 'types/user';
 
 export enum StartupScreen {
   None = 'None',
@@ -668,9 +667,7 @@ export type SetupNavigatorParamList = {
   };
   ReportViewerNavigator: NavigatorScreenParams<ReportViewerNavigatorParamList>;
   UserAccount: undefined;
-  UserProfile: {
-    userProfile: UserProfile;
-  };
+  UserProfileEditor: undefined;
   WebServerAccess: undefined;
 };
 

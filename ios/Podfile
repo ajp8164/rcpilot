@@ -16,8 +16,7 @@ end
 
 target 'RCPilot' do
   # React Native Maps dependencies
-  rn_maps_path = '../node_modules/react-native-maps'
-  pod 'react-native-maps/Google', :path => rn_maps_path
+  pod 'react-native-maps/Google', :path => '../node_modules/react-native-maps'
 
   # React Native Sensors dependencies
   pod 'RNSensors', :path => '../node_modules/react-native-sensors'

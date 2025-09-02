@@ -1,5 +1,6 @@
 import { getApp } from '@react-native-firebase/app';
 import {
+  FirebaseStorageTypes,
   deleteObject,
   getDownloadURL,
   getStorage,
@@ -7,7 +8,6 @@ import {
   ref,
 } from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
-import { uuidv4 } from 'lib/utils';
 
 export type Image = {
   mimeType: string;
@@ -36,27 +36,36 @@ export const uploadImage = async (args: {
   const storage = getStorage(app);
 
   try {
-    const imageType = image.mimeType.split('/')[1];
-    const destFilename = `${storagePath}${uuidv4()}.${imageType}`;
-    const sourceFilename = image.uri.replace('file://', '');
+    const destFilename = `${storagePath}${image.uri.split('/').pop()}`;
+    const sourceFilename = `file://${image.uri.replace('file://', '')}`;
     const storageRef = ref(storage, destFilename);
 
-    try {
-      await putFile(storageRef, sourceFilename);
+    const task = putFile(storageRef, sourceFilename);
 
-      const url = await getDownloadURL(storageRef);
+    await new Promise<void>((resolve, reject) => {
+      task.on(
+        'state_changed',
+        () => {
+          return;
+        },
+        reject,
+        resolve,
+      );
+    });
 
-      if (oldImage) {
-        await deleteImage({ filename: oldImage, storagePath });
-      }
+    const url = await getUrlWithRetry(storageRef);
 
-      onSuccess(url);
-    } catch (e: unknown) {
-      onError();
-      if (e instanceof Error) {
-        log.error(`Failed to upload image: ${e.message}`);
+    // Clean up the old image if provided (ignore if it does not exist)
+    if (oldImage) {
+      try {
+        await deleteObject(ref(storage, oldImage));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (e: any) {
+        if (e?.code !== 'storage/object-not-found') throw e;
       }
     }
+
+    onSuccess(url);
   } catch (e: unknown) {
     onError();
     if (e instanceof Error) {
@@ -98,7 +107,6 @@ export const deleteImage = async (args: {
   }
 
   const fileRef = ref(storage, `${storagePath}${cleanedFilename}`);
-
   try {
     await deleteObject(fileRef);
     onSuccess?.();
@@ -111,3 +119,18 @@ export const deleteImage = async (args: {
     onError?.();
   }
 };
+
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
+
+async function getUrlWithRetry(r: FirebaseStorageTypes.Reference, tries = 4) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await getDownloadURL(r);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      if (e?.code !== 'storage/object-not-found' || i === tries - 1) throw e;
+      await sleep(200 * (i + 1));
+    }
+  }
+  throw new Error('Could not get download URL');
+}

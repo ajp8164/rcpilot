@@ -39,7 +39,7 @@ import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenac
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
-import UserProfileScreen from 'components/UserProfileScreen';
+import UserProfileEditorScreen from 'components/UserProfileEditorScreen';
 import WebServerAccessScreen from 'components/WebServerAccessScreen';
 import LocationNavigator from 'components/navigation/LocationNavigator';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
@@ -426,16 +426,11 @@ const SetupNavigator = () => {
         component={UserAccountScreen}
         options={{
           title: 'My Account',
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
-          headerLargeStyle: {
-            backgroundColor: theme.colors.viewBackground,
-          },
         }}
       />
       <SetupStack.Screen
-        name="UserProfile"
-        component={UserProfileScreen}
+        name="UserProfileEditor"
+        component={UserProfileEditorScreen}
         options={{
           title: '',
         }}

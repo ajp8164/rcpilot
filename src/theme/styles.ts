@@ -60,16 +60,27 @@ export const createElementsStyles = ({
    * Button
    */
 
-  buttonAssertive: {
+  buttonOutlineAssertive: {
     backgroundColor: theme.colors.transparent,
     borderColor: theme.colors.assertive,
     borderWidth: 2,
   },
-  buttonAssertiveTitle: {
+  buttonOutlineAssertiveTitle: {
     fontSize: theme.fontSize.normal,
     fontWeight: '400',
     fontFamily: theme.fonts.regular,
     color: theme.colors.assertive,
+  },
+  buttonOutlineLight: {
+    backgroundColor: theme.colors.transparent,
+    borderColor: theme.colors.lightGray,
+    borderWidth: 2,
+  },
+  buttonOutlineLightTitle: {
+    fontSize: theme.fontSize.normal,
+    fontWeight: '400',
+    fontFamily: theme.fonts.regular,
+    color: theme.colors.lightGray,
   },
   buttonContainer: {
     marginHorizontal: 15,

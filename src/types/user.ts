@@ -1,4 +1,5 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import { ISODateString } from 'types/common';
 
 export enum UserRole {
   Owner = 'Owner',
@@ -13,6 +14,7 @@ export enum UserStatus {
 
 export type UserProfile = {
   id?: string;
+  createdOn: ISODateString;
   name: string;
   firstName: string;
   lastName: string;

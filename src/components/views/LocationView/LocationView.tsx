@@ -189,8 +189,8 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
               <Divider />
               <Button
                 title={'Delete Location'}
-                titleStyle={theme.styles.buttonAssertiveTitle}
-                buttonStyle={theme.styles.buttonAssertive}
+                titleStyle={theme.styles.buttonOutlineAssertiveTitle}
+                buttonStyle={theme.styles.buttonOutlineAssertive}
                 containerStyle={theme.styles.buttonContainer}
                 outline
                 onPress={() => {

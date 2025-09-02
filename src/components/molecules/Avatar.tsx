@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react';
 import { TextStyle, ViewStyle } from 'react-native';
+import RNFS from 'react-native-fs';
 
 import {
   Avatar as RNHAvatar,
@@ -11,7 +13,7 @@ import { UserProfile } from 'types/user';
 interface AvatarInterface {
   avatarStyle?: ViewStyle;
   onPress?: () => void;
-  size?: 'tiny' | 'small' | 'medium' | 'large' | 'giant';
+  size?: 'tiny' | 'small' | 'medium' | 'large' | 'giant' | 'list';
   titleStyle?: TextStyle;
   userProfile?: UserProfile;
 }
@@ -20,7 +22,7 @@ export const Avatar = (props: AvatarInterface) => {
   const {
     avatarStyle,
     onPress,
-    size = 'tiny',
+    size = 'list',
     titleStyle,
     userProfile,
   } = props;
@@ -28,44 +30,55 @@ export const Avatar = (props: AvatarInterface) => {
   const theme = useTheme();
   const s = useStyles();
 
+  const [profileImageExists, setProfileImageExists] = useState(true);
+
   const _avatarStyle =
-    size === 'tiny'
-      ? s.avatarTiny
-      : size === 'small'
-        ? s.avatarSmall
-        : size === 'medium'
-          ? s.avatarMedium
-          : size === 'large'
-            ? s.avatarLarge
-            : s.avatarGiant;
+    size === 'list'
+      ? s.avatarList
+      : size === 'tiny'
+        ? s.avatarTiny
+        : size === 'small'
+          ? s.avatarSmall
+          : size === 'medium'
+            ? s.avatarMedium
+            : size === 'large'
+              ? s.avatarLarge
+              : s.avatarGiant;
 
   const _titleStyle =
-    size === 'tiny'
-      ? s.avatarTitleTiny
-      : size === 'small'
-        ? s.avatarTitleSmall
-        : size === 'medium'
-          ? s.avatarTitleMedium
-          : size === 'large'
-            ? s.avatarTitleLarge
-            : s.avatarTitleGiant;
+    size === 'list'
+      ? s.avatarTitleList
+      : size === 'tiny'
+        ? s.avatarTitleTiny
+        : size === 'small'
+          ? s.avatarTitleSmall
+          : size === 'medium'
+            ? s.avatarTitleMedium
+            : size === 'large'
+              ? s.avatarTitleLarge
+              : s.avatarTitleGiant;
 
-  const _iconSize =
-    size === 'tiny'
-      ? 20
-      : size === 'small'
-        ? 24
-        : size === 'medium'
-          ? 28
-          : size === 'large'
-            ? 36
-            : 60;
+  useEffect(() => {
+    if (!userProfile || !userProfile.photoUrl) return;
+
+    RNFS.exists(userProfile.photoUrl)
+      .then(setProfileImageExists)
+      .catch(() => {
+        // Ignore errors
+      });
+  }, [userProfile]);
 
   const renderUserAvatar = (userProfile?: UserProfile) => {
     if (!userProfile) {
+      // Icon image
       return (
         <RNHAvatar
-          Icon={<CircleUserRound color={theme.colors.white} size={_iconSize} />}
+          Icon={
+            <CircleUserRound
+              color={theme.colors.white}
+              size={_avatarStyle.width}
+            />
+          }
           imageProps={{ resizeMode: 'cover' }}
           containerStyle={{
             ..._avatarStyle,
@@ -75,50 +88,58 @@ export const Avatar = (props: AvatarInterface) => {
           onPress={onPress}
         />
       );
-    } else if (userProfile?.photoUrl.length) {
-      return (
-        <RNHAvatar
-          source={{ uri: userProfile.photoUrl }}
-          imageProps={{ resizeMode: 'cover' }}
-          containerStyle={[_avatarStyle, avatarStyle]}
-          onPress={onPress}
-        />
-      );
     } else {
-      return (
-        <RNHAvatar
-          title={userProfile?.avatar.title}
-          titleStyle={[_titleStyle, titleStyle]}
-          containerStyle={{
-            ..._avatarStyle,
-            backgroundColor:
-              userProfile?.avatar.color || theme.colors.subtleGray,
-            ...avatarStyle,
-          }}
-          onPress={onPress}
-        />
-      );
+      if (userProfile.photoUrl.length && profileImageExists) {
+        // A profile image
+        return (
+          <RNHAvatar
+            source={{
+              uri: userProfile.photoUrl,
+            }}
+            imageProps={{ resizeMode: 'cover' }}
+            containerStyle={[_avatarStyle, avatarStyle]}
+            onPress={onPress}
+          />
+        );
+      } else if (userProfile.photoUrlDefault.length) {
+        // A profile image
+        return (
+          <RNHAvatar
+            source={{
+              uri: userProfile.photoUrlDefault,
+            }}
+            imageProps={{ resizeMode: 'cover' }}
+            containerStyle={[_avatarStyle, avatarStyle]}
+            onPress={onPress}
+          />
+        );
+      } else {
+        // A default avatar (name initials)
+        return (
+          <RNHAvatar
+            title={userProfile?.avatar.title}
+            titleStyle={[_titleStyle, titleStyle]}
+            containerStyle={{
+              ..._avatarStyle,
+              ...s.avatarPlaceholder,
+              backgroundColor:
+                userProfile?.avatar.color || theme.colors.subtleGray,
+              ...avatarStyle,
+            }}
+            onPress={onPress}
+          />
+        );
+      }
     }
   };
-
-  // Request is for single user
-
-  if (!userProfile) {
-    // Seems to be a bug which allows the previous avatar image to remain
-    // displayed. Use an icon to avoid.
-    return (
-      <CircleUserRound
-        color={theme.colors.brandSecondary}
-        size={(avatarStyle?.width as number) || (_avatarStyle.width as number)}
-        onPress={onPress}
-      />
-    );
-  }
 
   return renderUserAvatar(userProfile);
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+  avatarPlaceholder: {
+    alignItems: 'center',
+  },
   avatarGiant: {
     width: 100,
     height: 100,
@@ -129,6 +150,12 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     width: 55,
     height: 55,
     borderRadius: 55,
+    overflow: 'hidden',
+  },
+  avatarList: {
+    width: 24,
+    height: 24,
+    borderRadius: 24,
     overflow: 'hidden',
   },
   avatarMedium: {
@@ -151,10 +178,15 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
   avatarTitleGiant: {
     ...theme.text.giant,
+    lineHeight: 0,
     color: theme.colors.stickyWhite,
   },
   avatarTitleLarge: {
     ...theme.text.xl,
+    color: theme.colors.stickyWhite,
+  },
+  avatarTitleList: {
+    ...theme.text.small,
     color: theme.colors.stickyWhite,
   },
   avatarTitleMedium: {

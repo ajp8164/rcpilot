@@ -5,10 +5,11 @@ import {
   getStorage,
   listAll,
   ref,
+  refFromURL,
 } from '@react-native-firebase/storage';
 import { log } from '@react-native-hello/core';
 
-export type File = {
+export type DirectoryFile = {
   name: string;
   size: number;
   date: string;
@@ -16,8 +17,31 @@ export type File = {
 };
 
 export type Directory = {
-  files: File[];
+  files: DirectoryFile[];
   allocated: number;
+};
+
+/**
+ * Check if a file exists remotely.
+ * @param path - path to the file
+ * @returns true if the file exists, otherwise false
+ */
+export const fileExists = async (path: string): Promise<boolean> => {
+  const app = getApp();
+  const storage = getStorage(app);
+  const fileRef = ref(storage, refFromURL(storage, path).fullPath);
+
+  try {
+    await getMetadata(fileRef);
+    return true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    if (e?.code === 'storage/object-not-found') {
+      return false;
+    }
+    // If some other error occurs just return false.
+    return false;
+  }
 };
 
 /**
@@ -43,7 +67,7 @@ export const listFiles = async (args: {
       const result = await listAll(storageRef);
       let allocated = 0;
 
-      const files: (File | null)[] = await Promise.all(
+      const files: (DirectoryFile | null)[] = await Promise.all(
         result.items.map(async itemRef => {
           try {
             const url = await getDownloadURL(itemRef);
@@ -54,7 +78,7 @@ export const listFiles = async (args: {
               size: metadata.size ?? 0,
               date: metadata.timeCreated ?? '',
               url,
-            } as File;
+            } as DirectoryFile;
           } catch (e: unknown) {
             if (e instanceof Error) {
               log.error(
@@ -69,7 +93,7 @@ export const listFiles = async (args: {
 
       onSuccess({
         allocated,
-        files: files.filter((f): f is File => f !== null),
+        files: files.filter((f): f is DirectoryFile => f !== null),
       });
     } catch (e: unknown) {
       if (e instanceof Error) {

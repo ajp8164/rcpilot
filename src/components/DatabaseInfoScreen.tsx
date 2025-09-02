@@ -59,8 +59,8 @@ const DatabaseInfoScreen = () => {
       <Divider />
       <Button
         title={'Reset Database'}
-        titleStyle={theme.styles.buttonAssertiveTitle}
-        buttonStyle={theme.styles.buttonAssertive}
+        titleStyle={theme.styles.buttonOutlineAssertiveTitle}
+        buttonStyle={theme.styles.buttonOutlineAssertive}
         containerStyle={theme.styles.buttonContainer}
         outline
         onPress={() => {

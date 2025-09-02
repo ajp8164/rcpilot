@@ -29,6 +29,7 @@ const ListItemInput = React.forwardRef<ListItemInputMethods, ListItemInput>(
         ref={ref}
         {...rest}
         inputProps={{
+          returnKeyType: 'done',
           ...rest.inputProps,
           secureTextEntry: rest.inputProps.secureTextEntry && !secureVisible,
           ComponentRight: (

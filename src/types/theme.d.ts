@@ -79,8 +79,10 @@ declare module '@react-native-hello/ui' {
     listItemButtonDisabled: IStyle;
     listSectionHeader: IStyle;
     swipeableListItemContainer: IStyle;
-    buttonAssertive: IStyle;
-    buttonAssertiveTitle: IStyle;
+    buttonOutlineAssertive: IStyle;
+    buttonOutlineAssertiveTitle: IStyle;
+    buttonOutlineLight: IStyle;
+    buttonOutlineLightTitle: IStyle;
     buttonContainer: IStyle;
     textPlaceholder: IStyle;
     textScreenTitle: IStyle;

@@ -351,7 +351,6 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     formikRef.current?.setFieldValue('notes', result.text);
   };
 
-  // Update the header and button states.
   const onFormikWatcherStateChange = (
     state: FormikWatcherState<FormValues>,
   ) => {

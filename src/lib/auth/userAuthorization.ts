@@ -2,7 +2,6 @@ import { useDispatch } from 'react-redux';
 
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import { log } from '@react-native-hello/core';
-import { ThemeManager } from '@react-native-hello/ui';
 import {
   addUser,
   cancelAllFirestoreSubscriptions,
@@ -17,6 +16,7 @@ import {
 } from 'lib/notifications';
 import { getUserAvatarColor, getUserInitials } from 'lib/user';
 import lodash from 'lodash';
+import { DateTime } from 'luxon';
 import { store } from 'store';
 import { revertCredentials } from 'store/actions';
 import { saveUser } from 'store/slices/user';
@@ -126,6 +126,7 @@ const createProfile = (credentials: FirebaseAuthTypes.User): UserProfile => {
 
   return {
     id: credentials.uid,
+    createdOn: DateTime.now().toISO(),
     name: credentials.displayName || '',
     firstName,
     lastName,
@@ -133,10 +134,7 @@ const createProfile = (credentials: FirebaseAuthTypes.User): UserProfile => {
     photoUrl: credentials.photoURL !== null ? credentials.photoURL : '',
     photoUrlDefault: credentials.photoURL !== null ? credentials.photoURL : '',
     avatar: {
-      color: getUserAvatarColor(
-        `${firstName}${lastName}`,
-        ThemeManager.theme.colors.avatarColors as string[],
-      ),
+      color: getUserAvatarColor(`${firstName}${lastName}`),
       title: getUserInitials(firstName || credentials.email || '', lastName),
     },
     role: UserRole.User,

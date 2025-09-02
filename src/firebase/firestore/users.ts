@@ -7,6 +7,7 @@ import getFirestore, {
   updateDoc,
 } from '@react-native-firebase/firestore';
 import { log } from '@react-native-hello/core';
+import { DateTime } from 'luxon';
 import { UserProfile } from 'types/user';
 
 import {
@@ -55,6 +56,8 @@ export const addUser = async (user: UserProfile): Promise<UserProfile> => {
   if (!id) throw 'Failed to add user: no id';
 
   delete (added as Partial<UserProfile>).id; // Remove id from object before storing
+
+  added.createdOn = DateTime.now().toISODate();
 
   const docRef: FirebaseFirestoreTypes.DocumentReference<Partial<UserProfile>> =
     doc(db, 'Users', id);

@@ -7,7 +7,6 @@ import {
   Divider,
   ListItem,
   ListItemSwipeable,
-  ThemeManager,
   useTheme,
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
@@ -58,7 +57,6 @@ export type Props = CompositeScreenProps<
 
 const SetupScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
-  const s = useStyles();
   const dispatch = useDispatch();
   const event = useEvent();
   const realm = useRealm();
@@ -266,9 +264,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
       {userProfile ? (
         <ListItem
           title={userProfile.name || userProfile.email || 'My Account'}
-          leftContent={
-            <Avatar userProfile={userProfile} avatarStyle={s.avatar} />
-          }
+          leftContent={<Avatar userProfile={userProfile} size={'list'} />}
           position={['first', 'last']}
           rightContent={'chevron-right'}
           onPress={() => navigation.navigate('UserAccount')}
@@ -301,12 +297,5 @@ const SetupScreen = ({ navigation, route }: Props) => {
     </ScrollView>
   );
 };
-
-const useStyles = ThemeManager.createStyleSheet(() => ({
-  avatar: {
-    left: -3,
-    top: 1,
-  },
-}));
 
 export default SetupScreen;

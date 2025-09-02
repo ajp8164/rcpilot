@@ -628,8 +628,8 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
               <Divider />
               <Button
                 title={'Delete Battery'}
-                titleStyle={theme.styles.buttonAssertiveTitle}
-                buttonStyle={theme.styles.buttonAssertive}
+                titleStyle={theme.styles.buttonOutlineAssertiveTitle}
+                buttonStyle={theme.styles.buttonOutlineAssertive}
                 containerStyle={theme.styles.buttonContainer}
                 outline
                 onPress={() => {

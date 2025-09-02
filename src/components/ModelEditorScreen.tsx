@@ -992,8 +992,8 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
                       <Divider />
                       <Button
                         title={`Delete ${model?.type}`}
-                        titleStyle={theme.styles.buttonAssertiveTitle}
-                        buttonStyle={theme.styles.buttonAssertive}
+                        titleStyle={theme.styles.buttonOutlineAssertiveTitle}
+                        buttonStyle={theme.styles.buttonOutlineAssertive}
                         containerStyle={theme.styles.buttonContainer}
                         outline
                         onPress={() => {

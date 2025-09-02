@@ -1,5 +1,6 @@
 import React, {
   useContext,
+  useEffect,
   useImperativeHandle,
   useRef,
   useState,
@@ -12,16 +13,11 @@ import Animated, {
 import { useDispatch } from 'react-redux';
 
 import { BottomSheetModalMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
-import {
-  Modal,
-  ModalHeader,
-  ThemeManager,
-  useTheme,
-} from '@react-native-hello/ui';
+import { Modal, ModalHeader, ThemeManager } from '@react-native-hello/ui';
 import { BackdropContext } from 'components/atoms/Backdrop';
+import IconCloseX from 'components/atoms/IconCloseX';
 import { ColorPickerContext, Result } from 'components/modals/ColorPickerModal';
 import { defaultDinnCardColors } from 'components/molecules/card-deck/dinn';
-import { CircleX } from 'lucide-react-native';
 import { store } from 'store';
 import { saveModelPreferences } from 'store/slices/appSettings';
 import { DeckCardColors } from 'types/preferences';
@@ -39,9 +35,8 @@ const DeckCardPropertiesModal = React.forwardRef<
   DeckCardPropertiesModal,
   DeckCardPropertiesModalProps
 >((props, ref) => {
-  const { snapPoints = [150] } = props;
+  const { snapPoints = [200] } = props;
 
-  const theme = useTheme();
   const s = useStyles();
   const dispatch = useDispatch();
 
@@ -55,9 +50,9 @@ const DeckCardPropertiesModal = React.forwardRef<
   const sharedAccent2 = useSharedValue('#000000');
 
   const [deckCardColors, setDeckCardColors] = useState<DeckCardColors>({
-    primary: sharedPrimary.value,
-    accent1: sharedAccent1.value,
-    accent2: sharedAccent2.value,
+    primary: '#000000',
+    accent1: '#000000',
+    accent2: '#000000',
   });
 
   const primaryStyle = useAnimatedStyle(() => {
@@ -69,6 +64,15 @@ const DeckCardPropertiesModal = React.forwardRef<
   const accent2Style = useAnimatedStyle(() => {
     return { backgroundColor: sharedAccent2.value };
   });
+
+  useEffect(() => {
+    setDeckCardColors({
+      primary: sharedPrimary.value,
+      accent1: sharedAccent1.value,
+      accent2: sharedAccent2.value,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useImperativeHandle(ref, () => ({
     // These functions exposed to the parent component through the ref.
@@ -109,18 +113,10 @@ const DeckCardPropertiesModal = React.forwardRef<
     };
     setDeckCardColors(updated);
     onChangeColors(updated);
-  };
 
-  colorPicker.onEyedropper = (active: boolean) => {
-    if (active) {
-      setTimeout(() => {
-        innerRef.current?.snapToPosition(1);
-      }, 100);
-    } else {
-      setTimeout(() => {
-        innerRef.current?.snapToIndex(0);
-      }, 100);
-    }
+    setTimeout(() => {
+      innerRef.current?.present();
+    }, 100);
   };
 
   const onChangeColors = (colors: DeckCardColors) => {
@@ -142,49 +138,53 @@ const DeckCardPropertiesModal = React.forwardRef<
     <Modal
       ref={innerRef}
       snapPoints={snapPoints}
-      scrollEnabled={false}
       enableGestureBehavior={true}
       backdrop={false}
       onDismiss={() => backdrop.setEnabled(false)}>
       <ModalHeader
         size={'small'}
-        rightButtonIcon={<CircleX color={theme.colors.lightGray} />}
-        containerStyle={s.modalClose}
+        title={'Card Preferences'}
+        rightButtonIcon={<IconCloseX />}
         onRightButtonPress={dismiss}
       />
       <View style={s.container}>
-        <View style={s.colorContainer}>
-          <AnimatedPressable
-            style={[s.colorSwatch, primaryStyle]}
-            onPress={() =>
-              colorPicker.modal.current?.present({
-                color: sharedPrimary,
-                extraData: { name: 'primary' },
-              })
-            }
-          />
-        </View>
-        <View style={s.colorContainer}>
-          <AnimatedPressable
-            style={[s.colorSwatch, accent1Style]}
-            onPress={() =>
-              colorPicker.modal.current?.present({
-                color: sharedAccent1,
-                extraData: { name: 'accent1' },
-              })
-            }
-          />
-        </View>
-        <View style={s.colorContainer}>
-          <AnimatedPressable
-            style={[s.colorSwatch, accent2Style]}
-            onPress={() =>
-              colorPicker.modal.current?.present({
-                color: sharedAccent2,
-                extraData: { name: 'accent2' },
-              })
-            }
-          />
+        <View style={s.colorBar}>
+          <View style={s.colorContainer}>
+            <AnimatedPressable
+              style={[s.colorSwatch, primaryStyle]}
+              onPress={() => {
+                colorPicker.modal.current?.present({
+                  color: sharedPrimary,
+                  extraData: { name: 'primary' },
+                });
+                dismiss();
+              }}
+            />
+          </View>
+          <View style={s.colorContainer}>
+            <AnimatedPressable
+              style={[s.colorSwatch, accent1Style]}
+              onPress={() => {
+                colorPicker.modal.current?.present({
+                  color: sharedAccent1,
+                  extraData: { name: 'accent1' },
+                });
+                dismiss();
+              }}
+            />
+          </View>
+          <View style={s.colorContainer}>
+            <AnimatedPressable
+              style={[s.colorSwatch, accent2Style]}
+              onPress={() => {
+                colorPicker.modal.current?.present({
+                  color: sharedAccent2,
+                  extraData: { name: 'accent2' },
+                });
+                dismiss();
+              }}
+            />
+          </View>
         </View>
       </View>
     </Modal>
@@ -192,16 +192,12 @@ const DeckCardPropertiesModal = React.forwardRef<
 });
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  modalClose: {
-    width: '100%',
-    position: 'absolute',
-    right: 0,
-    marginTop: 20,
-  },
   container: {
+    marginHorizontal: 15,
+  },
+  colorBar: {
     alignSelf: 'flex-start',
     marginTop: 10,
-    marginHorizontal: 15,
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 10,

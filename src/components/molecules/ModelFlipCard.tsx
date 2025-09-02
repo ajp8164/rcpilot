@@ -74,7 +74,6 @@ export const ModelFlipCard = ({
           onPressAchievements={
             commander?.achievements.length ? onAchievements : undefined
           }
-          onPressEditCardProperties={onEditCardProperties}
         />
       }
       BackContent={

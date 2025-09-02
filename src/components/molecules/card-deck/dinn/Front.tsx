@@ -37,7 +37,6 @@ export const Front = ({
   flip,
   model,
   onPressAchievements = () => null,
-  onPressEditCardProperties: _onPressEditCardProperties,
   onPressEditModel = () => null,
   onPressNewEventSequence = () => null,
   commander,

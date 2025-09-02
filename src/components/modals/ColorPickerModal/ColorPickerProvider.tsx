@@ -24,10 +24,6 @@ export const ColorPickerProvider = ({
     return;
   };
 
-  const onEyedropper = () => {
-    return;
-  };
-
   return (
     <ColorPickerContext.Provider
       value={{
@@ -35,16 +31,18 @@ export const ColorPickerProvider = ({
         modal: modalRef,
         recentColors,
         onDismiss,
-        onEyedropper,
         setRecentColors,
       }}>
-      <View ref={eyedropperViewRef} style={s.view}>
+      {/* Collapsible must be false to allow skia to create a screenshot for the color picker
+       eyedropper. Without being false the view is optimized out of the view stack and is not
+       accessible by skia. */}
+      <View ref={eyedropperViewRef} style={s.view} collapsable={false}>
         {children}
-        <ColorPickerModal
-          ref={modalRef}
-          eyedropperViewRef={eyedropperViewRef as React.RefObject<View>}
-        />
       </View>
+      <ColorPickerModal
+        ref={modalRef}
+        eyedropperViewRef={eyedropperViewRef as React.RefObject<View>}
+      />
     </ColorPickerContext.Provider>
   );
 };

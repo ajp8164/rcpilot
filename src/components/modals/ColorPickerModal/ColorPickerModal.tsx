@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useContext,
   useImperativeHandle,
   useRef,
@@ -22,9 +21,10 @@ import {
 } from '@react-native-hello/ui';
 import SegmentedControl from '@react-native-segmented-control/segmented-control';
 import { SkImage, makeImageFromView } from '@shopify/react-native-skia';
+import IconCloseX from 'components/atoms/IconCloseX';
 import ModalHandle from 'components/atoms/ModalHandle';
 import { ColorPickerContext } from 'components/modals/ColorPickerModal';
-import { CircleX, Pipette } from 'lucide-react-native';
+import { Pipette } from 'lucide-react-native';
 import ColorPicker, {
   BlueSlider,
   GreenSlider,
@@ -51,7 +51,7 @@ const ColorPickerModal = React.forwardRef<
 
   const theme = useTheme();
   const s = useStyles();
-  const { extraData, recentColors, onDismiss, onEyedropper, setRecentColors } =
+  const { extraData, recentColors, onDismiss, setRecentColors } =
     useContext(ColorPickerContext);
 
   const innerRef = useRef<BottomSheetModalMethods>(null);
@@ -121,11 +121,10 @@ const ColorPickerModal = React.forwardRef<
     innerRef.current?.present();
   };
 
-  const openEyedropper = useCallback(() => {
+  const openEyedropper = () => {
     // Dismiss (hide) modal while using the eyedropper.
     eyedropperActive.current = true;
     dismiss();
-    onEyedropper(true);
 
     if (!eyedropperViewRef) return;
     makeImageFromView(eyedropperViewRef)
@@ -133,7 +132,7 @@ const ColorPickerModal = React.forwardRef<
         setEyedropperImage(snapshot);
       })
       .catch(() => log.debug('No image for color picker eyedropper'));
-  }, [eyedropperViewRef, onEyedropper]);
+  };
 
   const onChangeColor = (color: returnedResults | string) => {
     let selectedColor;
@@ -158,7 +157,6 @@ const ColorPickerModal = React.forwardRef<
     if (eyedropperActive.current) {
       eyedropperActive.current = false;
       present();
-      onEyedropper(false);
     }
   };
 
@@ -181,7 +179,6 @@ const ColorPickerModal = React.forwardRef<
       <Modal
         ref={innerRef}
         snapPoints={snapPoints}
-        scrollEnabled={false}
         enableGestureBehavior={true}
         handleComponent={ModalHandle}
         onDismiss={returnResult}>
@@ -192,7 +189,7 @@ const ColorPickerModal = React.forwardRef<
             <Pipette color={theme.colors.screenHeaderButtonText} />
           }
           onLeftButtonPress={openEyedropper}
-          rightButtonIcon={<CircleX color={theme.colors.lightGray} />}
+          rightButtonIcon={<IconCloseX />}
           onRightButtonPress={dismiss}
         />
         <View style={s.container}>

@@ -112,7 +112,7 @@ export const AuthProvider = ({
   const isReAuthenticationRequired = (
     credentials?: FirebaseAuthTypes.User | null,
   ) => {
-    const lastSignInTime = credentials?.metadata.lastSignInTime;
+    const lastSignInTime = credentials?.metadata?.lastSignInTime;
     if (appConfig.requireReAuthDays > 0 && lastSignInTime) {
       const daysSinceLastSignIn = DateTime.fromISO(lastSignInTime)
         .diffNow()

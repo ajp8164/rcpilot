@@ -147,11 +147,27 @@ const createProfile = (credentials: FirebaseAuthTypes.User): UserProfile => {
   } as UserProfile;
 };
 
+const safeCredentials = (user: FirebaseAuthTypes.User) => {
+  return {
+    uid: user.uid,
+    email: user.email,
+    displayName: user.displayName,
+    phoneNumber: user.phoneNumber,
+    photoURL: user.photoURL,
+    emailVerified: user.emailVerified,
+    isAnonymous: user.isAnonymous,
+    providerId: user.providerId,
+    metadata: user.metadata,
+    providerData: user.providerData,
+    multiFactor: user.multiFactor,
+  };
+};
+
 const useSetUser = () => {
   const dispatch = useDispatch();
   return (credentials: FirebaseAuthTypes.User, profile: UserProfile) => {
     const user = {
-      credentials: JSON.parse(JSON.stringify(credentials)), // Remove non-serializable properties (functions).
+      credentials: safeCredentials(credentials), // Remove non-serializable properties (functions).
       profile: {
         ...profile,
         id: credentials.uid, // Store the user id locally.

@@ -112,7 +112,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'COMMANDER'} />
+      <Divider text={'COMMANDERS'} />
       {selectedCommander && !selectedCommander.unknownCommander && (
         <ListItemSwipeable
           title={selectedCommander.name}

@@ -453,7 +453,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   calendarHeaderDate: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingVertical: 5,
+    paddingVertical: 6,
     paddingHorizontal: 10,
   },
   calendarHeaderWeekdays: {

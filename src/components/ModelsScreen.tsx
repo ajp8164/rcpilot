@@ -110,6 +110,8 @@ const ModelsScreen = ({ navigation, route }: Props) => {
           <>
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
+              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              disabled={!activeModels.length}
               headerRight
               icon={
                 modelsLayout === ModelsLayout.CardDeck ? (

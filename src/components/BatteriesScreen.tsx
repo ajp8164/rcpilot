@@ -111,6 +111,7 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 !filterId &&
                 (!activeBatteries.length || listEditorState?.enabled)
               }
+              headerRight
               icon={
                 filterId ? (
                   <FunnelPlus

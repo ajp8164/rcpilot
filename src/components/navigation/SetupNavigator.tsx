@@ -8,6 +8,8 @@ import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistEditorScreen from 'components/ChecklistEditorScreen';
 import ChecklistTemplatesScreen from 'components/ChecklistTemplatesScreen';
+import CommanderScreen from 'components/CommanderScreen';
+import CommandersScreen from 'components/CommandersScreen';
 import ContentScreen from 'components/ContentScreen';
 import DatabaseBackupScreen from 'components/DatabaseBackupScreen';
 import DatabaseBackupsScreen from 'components/DatabaseBackupsScreen';
@@ -24,10 +26,8 @@ import ModelFuelEditorScreen from 'components/ModelFuelEditorScreen';
 import ModelFuelsScreen from 'components/ModelFuelsScreen';
 import ModelPropellerEditorScreen from 'components/ModelPropellerEditorScreen';
 import ModelPropellersScreen from 'components/ModelPropellersScreen';
-import NewPilotScreen from 'components/NewPilotScreen';
+import NewCommanderScreen from 'components/NewCommanderScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
-import PilotScreen from 'components/PilotScreen';
-import PilotsScreen from 'components/PilotsScreen';
 import PreferencesAudioScreen from 'components/PreferencesAudioScreen';
 import PreferencesBasicsScreen from 'components/PreferencesBasicsScreen';
 import PreferencesBatteriesScreen from 'components/PreferencesBatteriesScreen';
@@ -41,13 +41,13 @@ import SetupScreen from 'components/SetupScreen';
 import UserAccountScreen from 'components/UserAccountScreen';
 import UserProfileEditorScreen from 'components/UserProfileEditorScreen';
 import WebServerAccessScreen from 'components/WebServerAccessScreen';
+import CommanderNavigator from 'components/navigation/CommanderNavigator';
 import LocationNavigator from 'components/navigation/LocationNavigator';
 import NewChecklistActionNavigator from 'components/navigation/NewChecklistActionNavigator';
 import NewChecklistNavigator from 'components/navigation/NewChecklistNavigator';
 import NewModelFuelNavigator from 'components/navigation/NewModelFuelNavigator';
 import NewModelPropellerNavigator from 'components/navigation/NewModelPropellerNavigator';
 import NewReportNavigator from 'components/navigation/NewReportNavigator';
-import PilotNavigator from 'components/navigation/PilotNavigator';
 import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
 import ReportEventFiltersNavigator from 'components/navigation/ReportEventFiltersNavigator';
 import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
@@ -85,25 +85,25 @@ const SetupNavigator = () => {
         }}
       />
       <SetupStack.Screen
-        name="Pilot"
-        component={PilotScreen}
+        name="Commander"
+        component={CommanderScreen}
         options={{
           title: '',
         }}
       />
-      <SetupStack.Screen name="Pilots" component={PilotsScreen} />
+      <SetupStack.Screen name="Commanders" component={CommandersScreen} />
       <SetupStack.Screen
-        name="NewPilot"
-        component={NewPilotScreen}
+        name="NewCommander"
+        component={NewCommanderScreen}
         options={{
-          title: 'New Pilot',
+          title: 'New Commander',
           presentation: 'modal',
           gestureEnabled: false,
         }}
       />
       <SetupStack.Screen
-        name="PilotNavigator"
-        component={PilotNavigator}
+        name="CommanderNavigator"
+        component={CommanderNavigator}
         options={{
           headerShown: false,
           presentation: 'modal',

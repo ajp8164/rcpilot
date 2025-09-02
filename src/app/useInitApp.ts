@@ -11,9 +11,9 @@ import { ReactNativeHello, log } from '@react-native-hello/core';
 import { appConfig } from 'config';
 import { svgImages } from 'images';
 import { useAchievementConveyor } from 'lib/achievement';
+import { useUnknownCommander } from 'lib/commander';
 import { AppError } from 'lib/errors';
 import { initPushNotifications } from 'lib/notifications';
-import { useUnknownPilot } from 'lib/pilot';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
 import { useDeviceShake } from 'lib/useDeviceShake';
 
@@ -27,7 +27,7 @@ export const useInitApp = () => {
   useDeviceShake();
 
   // Order is important here.
-  useUnknownPilot();
+  useUnknownCommander();
   useAchievementConveyor();
   useChecklistActionScheduleUpdater();
 

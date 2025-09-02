@@ -6,17 +6,18 @@ import {
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
 import ModelPickerScreen from 'components/ModelPickerScreen';
-import { PilotNavigatorParamList } from 'types/navigation';
+import { CommanderNavigatorParamList } from 'types/navigation';
 
-const PilotStack = createNativeStackNavigator<PilotNavigatorParamList>();
+const CommanderStack =
+  createNativeStackNavigator<CommanderNavigatorParamList>();
 
-export type Props = NativeStackScreenProps<PilotNavigatorParamList>;
+export type Props = NativeStackScreenProps<CommanderNavigatorParamList>;
 
-const PilotNavigator = () => {
+const CommanderNavigator = () => {
   const theme = useTheme();
 
   return (
-    <PilotStack.Navigator
+    <CommanderStack.Navigator
       screenOptions={{
         headerStyle: {
           backgroundColor: theme.colors.screenHeaderBackground,
@@ -24,7 +25,7 @@ const PilotNavigator = () => {
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
       }}>
-      <PilotStack.Screen
+      <CommanderStack.Screen
         name="ModelPicker"
         component={ModelPickerScreen}
         options={{
@@ -32,8 +33,8 @@ const PilotNavigator = () => {
           headerBackTitle: '',
         }}
       />
-    </PilotStack.Navigator>
+    </CommanderStack.Navigator>
   );
 };
 
-export default PilotNavigator;
+export default CommanderNavigator;

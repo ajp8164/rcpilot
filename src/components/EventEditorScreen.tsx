@@ -52,12 +52,12 @@ import lodash from 'lodash';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
+import { Commander } from 'realmdb/Commander';
 import { Event } from 'realmdb/Event';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { Pilot } from 'realmdb/Pilot';
 import { toNumber } from 'realmdb/helpers';
 import { EventOutcome } from 'types/event';
 import { LocationPickerResult } from 'types/location';
@@ -105,7 +105,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
   const modelPropellers = useQuery(ModelPropeller);
   const eventStyles = useQuery(EventStyle);
   const locations = useQuery(Location);
-  const pilots = useQuery(Pilot);
+  const commanders = useQuery(Commander);
 
   const [expandedDate, setExpandedDate] = useState(false);
   const [kind] = useState(eventKind(modelEvent?.model?.type));
@@ -141,7 +141,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     event.on('event-model-propeller', onChangeModelPropeller);
     event.on('event-model-style', onChangeEventStyle);
     event.on('event-location', onChangeLocation);
-    event.on('event-pilot', onChangePilot);
+    event.on('event-commander', onChangeCommander);
     event.on('event-outcome', onChangeOutcome);
     event.on('event-notes', onChangeNotes);
 
@@ -149,7 +149,7 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
       event.removeListener('event-model-fuel', onChangeModelFuel);
       event.removeListener('event-model-propeller', onChangeModelPropeller);
       event.removeListener('event-model-style', onChangeEventStyle);
-      event.removeListener('event-pilot', onChangePilot);
+      event.removeListener('event-commander', onChangeCommander);
       event.removeListener('event-location', onChangeLocation);
       event.removeListener('event-outcome', onChangeOutcome);
       event.removeListener('event-notes', onChangeNotes);
@@ -346,15 +346,15 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     });
   };
 
-  const onChangePilot = (result: EnumPickerResult) => {
+  const onChangeCommander = (result: EnumPickerResult) => {
     if (!modelEvent) return;
-    const p = pilots.find(p => {
-      return p.name === result.value[0];
+    const c = commanders.find(c => {
+      return c.name === result.value[0];
     });
-    if (p) {
+    if (c) {
       realm.write(() => {
         modelEvent.updatedOn = DateTime.now().toISO();
-        modelEvent.pilot = p;
+        modelEvent.commander = c;
         updateStatistics();
       });
     }
@@ -605,23 +605,23 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
               )}
               <Divider />
               <ListItem
-                title={'Pilot'}
+                title={'Commander'}
                 position={['first']}
                 rightContent={'chevron-right'}
-                value={modelEvent.pilot?.name || 'Unknown'}
+                value={modelEvent.commander?.name || 'Unknown'}
                 onPress={() =>
                   navigation.navigate('EnumPicker', {
-                    enumName: 'Pilot',
-                    title: 'Pilot',
-                    itemPlural: 'Pilots',
+                    enumName: 'Commander',
+                    title: 'Commander',
+                    itemPlural: 'Commanders',
                     headerBackTitle: `${kind.name}`,
                     footer:
-                      'You can manage pilots through the Globals section in the Setup tab.',
-                    values: pilots.map(p => {
-                      return p.name;
+                      'You can manage commanders through the Globals section in the Setup tab.',
+                    values: commanders.map(c => {
+                      return c.name;
                     }),
-                    selected: modelEvent.pilot?.name,
-                    eventName: 'event-pilot',
+                    selected: modelEvent.commander?.name,
+                    eventName: 'event-commander',
                   })
                 }
               />

@@ -24,11 +24,11 @@ const persistConfig = {
   whitelist: [
     'app',
     'appSettings',
+    'commander',
     'eventSequence',
     'filters',
     'location',
     'networkStatus',
-    'pilot',
     'user',
   ],
 };
@@ -37,7 +37,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
-  devTools: { name: 'RCPilot' },
+  devTools: { name: 'RCCommander' },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {

@@ -27,7 +27,7 @@ import { MainNavigatorParamList, StartupScreen } from 'types/navigation';
 
 // See https://reactnavigation.org/docs/configuring-links
 const linking: LinkingOptions<MainNavigatorParamList> = {
-  prefixes: ['rcpilot://', 'https://rcpilot.app'],
+  prefixes: ['rccommander://', 'https://rccommander.app'],
   config: {
     screens: {},
   },

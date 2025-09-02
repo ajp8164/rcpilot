@@ -23,7 +23,11 @@ import { useRealm } from '@realm/react';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { appConfig } from 'config';
 import { deleteFile as storageDeleteFile } from 'firebase/storage/file';
-import { Directory, File, listFiles } from 'firebase/storage/operations';
+import {
+  Directory,
+  DirectoryFile,
+  listFiles,
+} from 'firebase/storage/operations';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Trash2 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
@@ -66,7 +70,7 @@ const DatabaseBackupsScreen = () => {
     });
   };
 
-  const restoreFromBackup = (file: File) => {
+  const restoreFromBackup = (file: DirectoryFile) => {
     setIsRestoring(file.name);
     const path = `${Platform.OS === 'android' ? RNFS.DownloadDirectoryPath : RNFS.DocumentDirectoryPath}`;
 
@@ -94,7 +98,7 @@ const DatabaseBackupsScreen = () => {
       });
   };
 
-  const deleteFile = (file: File) => {
+  const deleteFile = (file: DirectoryFile) => {
     storageDeleteFile({
       filename: file.name,
       storagePath: `users/${user.profile?.id}/backups/`,
@@ -110,7 +114,10 @@ const DatabaseBackupsScreen = () => {
     });
   };
 
-  const renderBackup: ListRenderItem<File> = ({ item: file, index }) => {
+  const renderBackup: ListRenderItem<DirectoryFile> = ({
+    item: file,
+    index,
+  }) => {
     const dbVersion = file.name.split('-')[1];
     return (
       <ListItemSwipeable

@@ -3,23 +3,23 @@ import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
 import { ISODateString } from 'types/common';
 
-export class Pilot extends Object<Pilot> {
+export class Commander extends Object<Commander> {
   _id!: BSON.ObjectId;
   createdOn!: ISODateString;
   updatedOn!: ISODateString;
   name!: string;
-  unknownPilot!: boolean;
+  unknownCommander!: boolean;
   favoriteModels: Model[] = [];
   achievements: Achievement[] = [];
 
   static schema: ObjectSchema = {
-    name: 'Pilot',
+    name: 'Commander',
     properties: {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       createdOn: 'string',
       updatedOn: 'string',
       name: 'string',
-      unknownPilot: { type: 'bool', default: false },
+      unknownCommander: { type: 'bool', default: false },
       favoriteModels: { type: 'list', objectType: 'Model', default: [] },
       achievements: { type: 'list', objectType: 'Achievement', default: [] },
     },

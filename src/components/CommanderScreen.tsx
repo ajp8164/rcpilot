@@ -41,20 +41,30 @@ import {
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
-import { modelSummary, modelSummaryPilot, modelTypeIconProps } from 'lib/model';
-import { EventStyleStatistics, eventStyleSummaryPilot } from 'lib/modelEvent';
+import {
+  modelSummary,
+  modelSummaryCommander,
+  modelTypeIconProps,
+} from 'lib/model';
+import {
+  EventStyleStatistics,
+  eventStyleSummaryCommander,
+} from 'lib/modelEvent';
 import lodash from 'lodash';
 import { CircleMinus, Plus, StarOff } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
+import { Commander } from 'realmdb/Commander';
 import { Event } from 'realmdb/Event';
 import { Model } from 'realmdb/Model';
-import { Pilot } from 'realmdb/Pilot';
 import { FilterType } from 'types/filter';
 import { SetupNavigatorParamList } from 'types/navigation';
 import * as Yup from 'yup';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilot'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'Commander'
+>;
 
 // Order of fields for accessory view.
 enum Fields {
@@ -65,8 +75,8 @@ type FormValues = {
   name: string;
 };
 
-const PilotScreen = ({ navigation, route }: Props) => {
-  const { pilotId } = route.params;
+const CommanderScreen = ({ navigation, route }: Props) => {
+  const { commanderId } = route.params;
 
   const theme = useTheme();
   const s = useStyles();
@@ -74,23 +84,23 @@ const PilotScreen = ({ navigation, route }: Props) => {
   const event = useEvent();
   const realm = useRealm();
 
-  const pilot = useObject(Pilot, new BSON.ObjectId(pilotId));
-  const allPilotModels = useQuery(Model, models =>
-    models.filtered(`events.pilot._id == $0`, pilot?._id),
+  const commander = useObject(Commander, new BSON.ObjectId(commanderId));
+  const allCommanderModels = useQuery(Model, models =>
+    models.filtered(`events.commander._id == $0`, commander?._id),
   );
-  const allPilotEventStyles = useQuery(Event, events =>
-    events.filtered(`pilot._id == $0`, pilot?._id),
+  const allCommanderEventStyles = useQuery(Event, events =>
+    events.filtered(`commander._id == $0`, commander?._id),
   );
 
-  // Compute event count and event duration stats for each event involving the pilot.
+  // Compute event count and event duration stats for each event involving the commander.
   const eventStyleStatistics: Record<string, EventStyleStatistics> = {};
-  const groupedPilotEventStyles = lodash.groupBy(
-    allPilotEventStyles,
+  const groupedCommanderEventStyles = lodash.groupBy(
+    allCommanderEventStyles,
     s => s.eventStyle?.name || 'Unspecified',
   );
-  Object.keys(groupedPilotEventStyles).forEach(eventStyleName => {
-    const count = groupedPilotEventStyles[eventStyleName].length;
-    const duration = groupedPilotEventStyles[eventStyleName].reduce(
+  Object.keys(groupedCommanderEventStyles).forEach(eventStyleName => {
+    const count = groupedCommanderEventStyles[eventStyleName].length;
+    const duration = groupedCommanderEventStyles[eventStyleName].reduce(
       (accumulator, event) => {
         return (accumulator += event.duration);
       },
@@ -100,7 +110,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   });
 
   const initialValues = {
-    name: pilot?.name,
+    name: commander?.name,
   } as FormValues;
 
   const schema = Yup.object().shape({
@@ -120,18 +130,18 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     navigation.setOptions({
-      title: pilot?.name,
+      title: commander?.name,
       headerRight: renderListEditButton,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listEditorState, pilot?.favoriteModels.length]);
+  }, [listEditorState, commander?.favoriteModels.length]);
 
   useEffect(() => {
     // Event handlers for EnumPicker
-    event.on('pilot-favorite-models', onChangeFavoriteModels);
+    event.on('commander-favorite-models', onChangeFavoriteModels);
 
     return () => {
-      event.removeListener('pilot-favorite-models', onChangeFavoriteModels);
+      event.removeListener('commander-favorite-models', onChangeFavoriteModels);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -148,33 +158,33 @@ const PilotScreen = ({ navigation, route }: Props) => {
   };
 
   const onSubmit = (values: FormValues) => {
-    if (pilot) {
+    if (commander) {
       realm.write(() => {
-        pilot.updatedOn = DateTime.now().toISO();
-        pilot.name = values.name || 'no-name';
+        commander.updatedOn = DateTime.now().toISO();
+        commander.name = values.name || 'no-name';
       });
     }
   };
 
   const onChangeFavoriteModels = (result: ModelPickerResult) => {
-    if (pilot) {
+    if (commander) {
       realm.write(() => {
-        pilot.updatedOn = DateTime.now().toISO();
-        pilot.favoriteModels = [...result.models];
+        commander.updatedOn = DateTime.now().toISO();
+        commander.favoriteModels = [...result.models];
       });
     }
   };
 
   const removeFavoriteModel = (modelId: string) => {
-    if (pilot) {
+    if (commander) {
       realm.write(() => {
-        pilot.updatedOn = DateTime.now().toISO();
-        pilot.favoriteModels =
-          pilot.favoriteModels.filter(m => !m._id.equals(modelId)) || [];
+        commander.updatedOn = DateTime.now().toISO();
+        commander.favoriteModels =
+          commander.favoriteModels.filter(m => !m._id.equals(modelId)) || [];
       });
 
       // Exit edit mode if no more favorites in the list.
-      if (!pilot.favoriteModels.length) {
+      if (!commander.favoriteModels.length) {
         listEditorRef.current?.onToggleEditMode();
       }
     }
@@ -182,9 +192,9 @@ const PilotScreen = ({ navigation, route }: Props) => {
 
   const reorderFavoriteModels = (params: DragEndParams<Model>) => {
     const { data } = params;
-    if (pilot) {
+    if (commander) {
       realm.write(() => {
-        pilot.favoriteModels = data;
+        commander.favoriteModels = data;
       });
     }
   };
@@ -230,7 +240,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
               onPress={save}
             />
           );
-        } else if (pilot?.favoriteModels && pilot.favoriteModels.length > 0) {
+        } else if (
+          commander?.favoriteModels &&
+          commander.favoriteModels.length > 0
+        ) {
           return renderListEditButton();
         }
       },
@@ -238,7 +251,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
   };
 
   const renderListEditButton = () => {
-    if (!pilot?.favoriteModels.length) return null;
+    if (!commander?.favoriteModels.length) return null;
     return (
       <Button
         title={listEditorState?.enabled ? 'Done' : 'Edit'}
@@ -263,7 +276,10 @@ const PilotScreen = ({ navigation, route }: Props) => {
         title={model.name}
         subtitle={modelSummary(model)}
         subtitleLines={2}
-        position={listItemPosition(index, pilot?.favoriteModels.length || 0)}
+        position={listItemPosition(
+          index,
+          commander?.favoriteModels.length || 0,
+        )}
         listEditor={listEditorRef.current}
         leftContentStyle={{ paddingLeft: 0 }}
         leftContent={
@@ -317,14 +333,14 @@ const PilotScreen = ({ navigation, route }: Props) => {
     return (
       <ListItem
         title={model.name}
-        value={pilot ? modelSummaryPilot(model, pilot) : ''}
-        position={listItemPosition(index, allPilotModels.length)}
+        value={commander ? modelSummaryCommander(model, commander) : ''}
+        position={listItemPosition(index, allCommanderModels.length)}
         rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Events', {
             filterType: FilterType.BypassFilter,
             modelId: model._id.toString(),
-            pilotId: pilot?._id.toString(),
+            commanderId: commander?._id.toString(),
           })
         }
       />
@@ -335,26 +351,26 @@ const PilotScreen = ({ navigation, route }: Props) => {
     item: eventStyleName,
     index,
   }) => {
-    const event = groupedPilotEventStyles[eventStyleName][0];
+    const event = groupedCommanderEventStyles[eventStyleName][0];
     return (
       <ListItem
         title={eventStyleName || 'Unspecified'}
-        value={eventStyleSummaryPilot(eventStyleStatistics[eventStyleName])}
-        position={listItemPosition(index, allPilotEventStyles.length)}
+        value={eventStyleSummaryCommander(eventStyleStatistics[eventStyleName])}
+        position={listItemPosition(index, allCommanderEventStyles.length)}
         rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Events', {
             filterType: FilterType.BypassFilter,
             eventStyleId: event.eventStyle?._id.toString(),
-            pilotId: pilot?._id.toString(),
+            commanderId: commander?._id.toString(),
           })
         }
       />
     );
   };
 
-  if (!pilot) {
-    return <EmptyView error message={'Pilot not found!'} />;
+  if (!commander) {
+    return <EmptyView error message={'Commander not found!'} />;
   }
 
   return (
@@ -382,7 +398,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
                 <FormikStateWatcher<FormValues>
                   onChange={onFormikWatcherStateChange}
                 />
-                <Divider text={"PILOT'S NAME"} />
+                <Divider />
                 <ListItemInput
                   ref={nameFieldRef}
                   position={['first', 'last']}
@@ -392,19 +408,19 @@ const PilotScreen = ({ navigation, route }: Props) => {
                     onFocus: () =>
                       keyboardAccessory.current?.focusedField(Fields.name),
                     value: values.name,
-                    label: 'Pilot Name',
-                    placeholder: 'Pilot Name',
+                    label: 'Name',
+                    placeholder: 'Name',
                     autoCapitalize: 'words',
                   }}
                 />
               </View>
             )}
           </Formik>
-          {allPilotModels.length ? (
+          {allCommanderModels.length ? (
             <>
               <Divider text={'MODEL USAGE'} />
               <FlatList
-                data={allPilotModels}
+                data={allCommanderModels}
                 renderItem={renderModel}
                 scrollEnabled={false}
               />
@@ -412,15 +428,15 @@ const PilotScreen = ({ navigation, route }: Props) => {
                 note
                 light
                 subHeaderStyle={theme.text.medium}
-                text={`Total duration and number of flights for each model piloted by ${pilot.name}.`}
+                text={`Total duration and number of events for each model.`}
               />
             </>
           ) : null}
-          {allPilotModels.length ? (
+          {allCommanderModels.length ? (
             <>
               <Divider text={'EVENT STYLES'} />
               <FlatList
-                data={Object.keys(groupedPilotEventStyles).sort()}
+                data={Object.keys(groupedCommanderEventStyles).sort()}
                 renderItem={renderEventStyle}
                 scrollEnabled={false}
               />
@@ -428,7 +444,7 @@ const PilotScreen = ({ navigation, route }: Props) => {
                 note
                 light
                 subHeaderStyle={theme.text.medium}
-                text={`Total duration and number of events for each style piloted by ${pilot.name}.`}
+                text={`Total duration and number of events for each style.`}
               />
             </>
           ) : null}
@@ -439,26 +455,26 @@ const PilotScreen = ({ navigation, route }: Props) => {
                 buttonStyle={theme.styles.dividerIconButton}
                 icon={<Plus color={theme.colors.screenHeaderButtonText} />}
                 onPress={() =>
-                  navigation.navigate('PilotNavigator', {
+                  navigation.navigate('CommanderNavigator', {
                     screen: 'ModelPicker',
                     params: {
                       title: 'Models',
-                      selected: pilot.favoriteModels,
+                      selected: commander.favoriteModels,
                       mode: 'many',
-                      eventName: 'pilot-favorite-models',
+                      eventName: 'commander-favorite-models',
                     },
                   })
                 }
               />
             }
           />
-          {pilot?.favoriteModels && pilot.favoriteModels.length > 0 ? (
+          {commander?.favoriteModels && commander.favoriteModels.length > 0 ? (
             <>
               <View
                 style={[{ flex: 1 }]}
                 onLayout={e => setListLayout(e.nativeEvent.layout)}>
                 <NestableDraggableFlatList
-                  data={[...pilot.favoriteModels]}
+                  data={[...commander.favoriteModels]}
                   renderItem={renderFavoriteModel}
                   keyExtractor={item => `${item._id.toString()}`}
                   showsVerticalScrollIndicator={false}
@@ -507,4 +523,4 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
 }));
 
-export default PilotScreen;
+export default CommanderScreen;

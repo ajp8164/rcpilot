@@ -9,8 +9,8 @@ import { achievementConfig } from 'lib/achievement';
 import { eventKind } from 'lib/modelEvent';
 import { Trophy } from 'lucide-react-native';
 import { DateTime } from 'luxon';
+import { Achievement, Commander } from 'realmdb/Commander';
 import { Model } from 'realmdb/Model';
-import { Achievement, Pilot } from 'realmdb/Pilot';
 
 import { AchievementModalMethods, AchievementModalProps } from './types';
 
@@ -25,7 +25,7 @@ const AchievementModal = React.forwardRef<
   const theme = useTheme();
   const s = useStyles();
   const event = useEvent();
-  const [pilot, setPilot] = useState<Pilot>();
+  const [commander, setCommander] = useState<Commander>();
   const [model, setModel] = useState<Model>();
   const [achievements, setAchievements] = useState<Achievement[]>([]);
 
@@ -39,16 +39,16 @@ const AchievementModal = React.forwardRef<
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Get the list of achievements for the pilot/model combination.
+  // Get the list of achievements for the commander/model combination.
   useEffect(() => {
-    const pilotModelAchievements: Achievement[] = [];
-    pilot?.achievements.forEach(a => {
+    const commanderModelAchievements: Achievement[] = [];
+    commander?.achievements.forEach(a => {
       if (a.event.model._id.toString() === model?._id.toString()) {
-        pilotModelAchievements.push(a);
+        commanderModelAchievements.push(a);
       }
     });
-    setAchievements(pilotModelAchievements);
-  }, [model, pilot]);
+    setAchievements(commanderModelAchievements);
+  }, [model, commander]);
 
   useImperativeHandle(ref, () => ({
     // These functions exposed to the parent component through the ref.
@@ -60,8 +60,8 @@ const AchievementModal = React.forwardRef<
     innerRef.current?.dismiss();
   };
 
-  const present = (pilot: Pilot, model: Model) => {
-    setPilot(pilot);
+  const present = (commander: Commander, model: Model) => {
+    setCommander(commander);
     setModel(model);
     innerRef.current?.present();
   };
@@ -88,15 +88,15 @@ const AchievementModal = React.forwardRef<
 
   return (
     <Modal ref={innerRef} snapPoints={snapPoints} onDismiss={onDismiss}>
-      {pilot && (
+      {commander && (
         <View style={s.header}>
           <View>
-            <Text style={s.headerLeft}>{`${pilot.name}`}</Text>
+            <Text style={s.headerLeft}>{`${commander.name}`}</Text>
             <Text style={s.headerLeft}>{`${model?.name}`}</Text>
           </View>
           <View>
             <Text style={s.headerRight}>
-              {`Since: ${DateTime.fromISO(pilot.createdOn).toFormat('M/d/yy')}`}
+              {`Since: ${DateTime.fromISO(commander.createdOn).toFormat('M/d/yy')}`}
             </Text>
           </View>
         </View>

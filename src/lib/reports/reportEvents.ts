@@ -11,7 +11,7 @@ export const defaultFilter: ReportEventFilterValues = {
   category: { relation: EnumRelation.Any, value: [] },
   date: { relation: DateRelation.Any, value: [] },
   duration: { relation: NumberRelation.Any, value: [] },
-  pilot: { relation: EnumRelation.Any, value: [] },
+  commander: { relation: EnumRelation.Any, value: [] },
   location: { relation: EnumRelation.Any, value: [] },
   eventStyle: { relation: EnumRelation.Any, value: [] },
   outcome: { relation: EnumRelation.Any, value: [] },

@@ -17,6 +17,11 @@ export const baseTheme: DeepPartial<IBaseThemeSchema> = {
     regular: fonts.regular,
     light: fonts.light,
   },
+  letterSpacing: {
+    giant: 0,
+    medium: 0,
+    micro: 0,
+  },
   lineHeight: {
     giant: 56,
     medium: 18,

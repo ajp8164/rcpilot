@@ -8,19 +8,19 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Realm } from '@realm/react';
 import { DeckCardPropertiesModal } from 'components/modals/DeckCardPropertiesModal';
 import { ModelFlipCard } from 'components/molecules/ModelFlipCard';
-import { Model, Pilot } from 'realmdb';
+import { Commander, Model } from 'realmdb';
 
 import { ModelCardDeckProvider } from './ModelCardDeckProvider';
 
 interface ModelCardDeckInterface {
   models: Model[] | Realm.Results<Model>;
-  pilot?: Pilot;
-  onPressAchievements: (pilot: Pilot, model: Model) => void;
+  commander?: Commander;
+  onPressAchievements: (commander: Commander, model: Model) => void;
   onStartNewEventSequence: (model: Model) => void;
 }
 export const ModelCardDeck = ({
   models,
-  pilot,
+  commander,
   onPressAchievements,
   onStartNewEventSequence,
 }: ModelCardDeckInterface) => {
@@ -78,7 +78,7 @@ export const ModelCardDeck = ({
           <ModelFlipCard
             key={index}
             model={model}
-            pilot={pilot}
+            commander={commander}
             propertiesModal={cardPropertiesModalRef}
             onPressAchievements={onPressAchievements}
             onStartNewEventSequence={onStartNewEventSequence}

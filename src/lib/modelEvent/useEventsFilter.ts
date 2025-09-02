@@ -11,13 +11,19 @@ import { FilterType } from 'types/filter';
 export const useEventsFilter = (params: {
   filterType: FilterType;
   batteryId?: string;
+  commanderId?: string;
   eventStyleId?: string;
   locationId?: string;
   modelId?: string;
-  pilotId?: string;
 }) => {
-  const { filterType, batteryId, eventStyleId, locationId, modelId, pilotId } =
-    params;
+  const {
+    filterType,
+    batteryId,
+    commanderId,
+    eventStyleId,
+    locationId,
+    modelId,
+  } = params;
 
   const filterId = useSelector(selectFilters(filterType));
   const values = useObject(Filter, new BSON.ObjectId(filterId))?.values;
@@ -45,13 +51,15 @@ export const useEventsFilter = (params: {
         : undefined,
     )
     .and(
-      'pilot._id',
-      pilotId ? { value: [pilotId], relation: EnumRelation.Is } : undefined,
+      'commander._id',
+      commanderId
+        ? { value: [commanderId], relation: EnumRelation.Is }
+        : undefined,
     )
     .and('date', values?.date)
     .and('duration', values?.duration)
     .and('location.name', values?.location)
-    .and('pilot.name', values?.pilot)
+    .and('commander.name', values?.commander)
     .and('outcome', values?.outcome)
     .and('notes', values?.notes)
     .string();

@@ -3,6 +3,6 @@ export * from './modelMaintenanceIsDue';
 export * from './modelFilter';
 export * from './modelHasPropeller';
 export * from './modelSummary';
-export * from './modelSummaryPilot';
+export * from './modelSummaryCommander';
 export * from './modelType';
 export * from './useModelsFilter';

@@ -5,6 +5,7 @@ export * from './Battery';
 export * from './BatteryCycle';
 export * from './Checklist';
 export * from './ChecklistTemplate';
+export * from './Commander';
 export * from './Event';
 export * from './EventsMaintenanceReport';
 export * from './EventStyle';
@@ -14,7 +15,6 @@ export * from './ModelCategory';
 export * from './ModelFuel';
 export * from './ModelPropeller';
 export * from './Model';
-export * from './Pilot';
 export * from './ScanCodesReport';
 export * from './Schema';
 /**

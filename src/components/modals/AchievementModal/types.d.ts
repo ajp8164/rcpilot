@@ -1,7 +1,7 @@
 import React from 'react';
 
+import { Commander } from 'realmdb/Commander';
 import { Model } from 'realmdb/Model';
-import { Pilot } from 'realmdb/Pilot';
 
 export declare type AchievementModal = AchievementModalMethods;
 
@@ -18,5 +18,5 @@ export interface AchievementModalProps {
 
 export interface AchievementModalMethods {
   dismiss: () => void;
-  present: (pilot: Pilot, model: Model) => void;
+  present: (commander: Commander, model: Model) => void;
 }

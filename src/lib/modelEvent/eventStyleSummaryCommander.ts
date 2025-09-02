@@ -6,7 +6,7 @@ export type EventStyleStatistics = {
   duration: number;
 };
 
-export const eventStyleSummaryPilot = (
+export const eventStyleSummaryCommander = (
   eventStyleStatistics: EventStyleStatistics,
 ) => {
   let time = secondsToFormat(eventStyleStatistics.duration, {

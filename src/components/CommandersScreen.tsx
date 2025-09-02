@@ -13,33 +13,36 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
-import { usePilotSummary } from 'lib/pilot';
+import { useCommanderSummary } from 'lib/commander';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Plus, Trash2 } from 'lucide-react-native';
 import { BSON } from 'realm';
-import { Pilot } from 'realmdb/Pilot';
-import { selectPilot } from 'store/selectors/pilotSelectors';
-import { saveSelectedPilot } from 'store/slices/pilot';
+import { Commander } from 'realmdb/Commander';
+import { selectCommander } from 'store/selectors/commanderSelectors';
+import { saveSelectedCommander } from 'store/slices/commander';
 import { SetupNavigatorParamList } from 'types/navigation';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'Pilots'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'Commanders'
+>;
 
-const PilotsScreen = ({ navigation }: Props) => {
+const CommandersScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const confirmAction = useConfirmAction();
   const dispatch = useDispatch();
   const realm = useRealm();
 
-  const unknownPilots = useQuery(Pilot, pilots =>
-    pilots.filtered('unknownPilot == $0', true),
+  const unknownCommanders = useQuery(Commander, commanders =>
+    commanders.filtered('unknownCommander == $0', true),
   );
-  const unknownPilot = unknownPilots[0];
+  const unknownCommander = unknownCommanders[0];
 
-  const allPilots = useQuery(Pilot, pilots =>
-    pilots.filtered('unknownPilot == $0', false),
+  const allCommanders = useQuery(Commander, commanders =>
+    commanders.filtered('unknownCommander == $0', false),
   );
-  const selectedPilotId = useSelector(selectPilot).pilotId;
-  const pilotSummary = usePilotSummary();
+  const selectedCommanderId = useSelector(selectCommander).commanderId;
+  const commanderSummary = useCommanderSummary();
 
   const listEditorRef = useRef<ListEditorMethods>(null);
   const [listLayout, setListLayout] = useState<LayoutRectangle>();
@@ -54,7 +57,7 @@ const PilotsScreen = ({ navigation }: Props) => {
             icon={
               <Plus color={theme.colors.screenHeaderButtonText} size={28} />
             }
-            onPress={() => navigation.navigate('NewPilot')}
+            onPress={() => navigation.navigate('NewCommander')}
           />
         );
       },
@@ -62,41 +65,47 @@ const PilotsScreen = ({ navigation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setPilot = (pilot?: Pilot) => {
+  const setCommander = (commander?: Commander) => {
     dispatch(
-      saveSelectedPilot({
-        pilotId: pilot?._id?.toString(),
+      saveSelectedCommander({
+        commanderId: commander?._id?.toString(),
       }),
     );
   };
 
-  const deletePilot = (pilotId: string) => {
-    const pilot = realm.objectForPrimaryKey(Pilot, new BSON.ObjectId(pilotId));
-    if (pilot?.isValid()) {
-      // Select the unknown pilot if we delete the selected pilot.
-      if (pilotId === selectedPilotId) {
-        setPilot(unknownPilot);
+  const deleteCommander = (commanderId: string) => {
+    const commander = realm.objectForPrimaryKey(
+      Commander,
+      new BSON.ObjectId(commanderId),
+    );
+    if (commander?.isValid()) {
+      // Select the unknown commander if we delete the selected commander.
+      if (commanderId === selectedCommanderId) {
+        setCommander(unknownCommander);
       }
 
       realm.write(() => {
-        realm.delete(pilot);
+        realm.delete(commander);
       });
     }
   };
 
-  const renderPilot: ListRenderItem<Pilot> = ({ item: pilot, index }) => {
+  const renderCommander: ListRenderItem<Commander> = ({
+    item: commander,
+    index,
+  }) => {
     return (
       <ListItemCheckBoxInfo
-        key={pilot._id.toString()}
-        title={pilot.name}
-        subtitle={pilotSummary(pilot)}
-        position={listItemPosition(index, allPilots.length)}
-        checked={pilot._id.toString() === selectedPilotId}
+        key={commander._id.toString()}
+        title={commander.name}
+        subtitle={commanderSummary(commander)}
+        position={listItemPosition(index, allCommanders.length)}
+        checked={commander._id.toString() === selectedCommanderId}
         listEditor={listEditorRef.current}
-        onPress={() => setPilot(pilot)}
+        onPress={() => setCommander(commander)}
         onPressInfo={() =>
-          navigation.navigate('Pilot', {
-            pilotId: pilot._id.toString(),
+          navigation.navigate('Commander', {
+            commanderId: commander._id.toString(),
           })
         }
         swipeableActionsRight={[
@@ -108,11 +117,11 @@ const PilotsScreen = ({ navigation }: Props) => {
             confirmation: () => {
               listEditorRef.current?.reset();
               return confirmAction({
-                label: 'Delete Pilot',
-                title: `This action cannot be undone.\nAre you sure you don't want to delete this pilot?`,
+                label: 'Delete Commander',
+                title: `This action cannot be undone.\nAre you sure you don't want to delete this commander?`,
               });
             },
-            onPress: () => deletePilot(pilot._id.toString()),
+            onPress: () => deleteCommander(commander._id.toString()),
           },
         ]}
       />
@@ -122,21 +131,21 @@ const PilotsScreen = ({ navigation }: Props) => {
   const renderFooter = () => {
     return (
       <>
-        {allPilots && <Divider />}
+        {allCommanders && <Divider />}
         <ListItemCheckBoxInfo
-          title={unknownPilot.name}
-          subtitle={pilotSummary(unknownPilot)}
+          title={unknownCommander.name}
+          subtitle={commanderSummary(unknownCommander)}
           position={['first', 'last']}
           hideInfo={true}
-          checked={unknownPilot._id.toString() === selectedPilotId}
-          onPress={() => setPilot(unknownPilot)}
+          checked={unknownCommander._id.toString() === selectedCommanderId}
+          onPress={() => setCommander(unknownCommander)}
         />
         <Divider
           note
           light
           subHeaderStyle={theme.text.medium}
           text={
-            'The Unknown Pilot logs events not associated with a specific pilot and model time not created by an app tracked event.'
+            'The Unknown Commander logs events not associated with a specific commander and model time not created by an app tracked event.'
           }
         />
       </>
@@ -150,11 +159,11 @@ const PilotsScreen = ({ navigation }: Props) => {
         onLayout={e => setListLayout(e.nativeEvent.layout)}>
         <FlatList
           style={theme.styles.view}
-          data={allPilots.slice()}
-          renderItem={renderPilot}
+          data={allCommanders.slice()}
+          renderItem={renderCommander}
           keyExtractor={item => item._id.toString()}
           showsVerticalScrollIndicator={false}
-          ListHeaderComponent={allPilots.length ? <Divider /> : null}
+          ListHeaderComponent={allCommanders.length ? <Divider /> : null}
           ListFooterComponent={renderFooter}
         />
       </View>
@@ -162,4 +171,4 @@ const PilotsScreen = ({ navigation }: Props) => {
   );
 };
 
-export default PilotsScreen;
+export default CommandersScreen;

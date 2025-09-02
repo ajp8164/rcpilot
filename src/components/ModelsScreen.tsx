@@ -39,11 +39,11 @@ import {
 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
+import { Commander } from 'realmdb/Commander';
 import { Model } from 'realmdb/Model';
-import { Pilot } from 'realmdb/Pilot';
 import { selectModelsLayout } from 'store/selectors/appSettingsSelectors';
+import { selectCommander } from 'store/selectors/commanderSelectors';
 import { selectFilters } from 'store/selectors/filterSelectors';
-import { selectPilot } from 'store/selectors/pilotSelectors';
 import { saveModelsLayout } from 'store/slices/appSettings';
 import { eventSequence } from 'store/slices/eventSequence';
 import { ChecklistType } from 'types/checklist';
@@ -67,15 +67,16 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
   const headerHeight = useHeaderHeight();
 
-  const _pilot = useSelector(selectPilot);
+  const _commander = useSelector(selectCommander);
   const modelsLayout = useSelector(selectModelsLayout);
   const filterId = useSelector(selectFilters(FilterType.ModelsFilter));
 
   const models = useModelsFilter();
   const activeModels = models.filtered('retired == $0', false);
   const retiredModels = models.filtered('retired == $0', true);
-  const pilot =
-    useObject(Pilot, new BSON.ObjectId(_pilot.pilotId)) || undefined;
+  const commander =
+    useObject(Commander, new BSON.ObjectId(_commander.commanderId)) ||
+    undefined;
 
   const achievementModalRef = useRef<AchievementModal>(null);
 
@@ -223,12 +224,12 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   ): SectionListData<Model, Section>[] => {
     const groups = groupItems<Model, Section>(models, model => {
       if (
-        pilot &&
-        pilot.favoriteModels.find(
+        commander &&
+        commander.favoriteModels.find(
           m => m._id.toString() === model._id.toString(),
         )
       ) {
-        return `FAVORITE MODELS FOR ${pilot.name.toUpperCase()}`;
+        return `FAVORITE MODELS FOR ${commander.name.toUpperCase()}`;
       }
       if (model.category) {
         return `${model.type.toUpperCase()} - ${model.category.name.toUpperCase()}`;
@@ -297,20 +298,20 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const toggleFavoriteModel = (pilot: Pilot, model: Model) => {
-    const isFavorite = !!pilot.favoriteModels.filter(m =>
+  const toggleFavoriteModel = (commander: Commander, model: Model) => {
+    const isFavorite = !!commander.favoriteModels.filter(m =>
       m._id.equals(model._id),
     ).length;
 
     realm.write(() => {
-      pilot.updatedOn = DateTime.now().toISO();
+      commander.updatedOn = DateTime.now().toISO();
       if (isFavorite) {
         // Remove
-        pilot.favoriteModels =
-          pilot.favoriteModels.filter(m => !m._id.equals(model._id)) || [];
+        commander.favoriteModels =
+          commander.favoriteModels.filter(m => !m._id.equals(model._id)) || [];
       } else {
         // Add
-        pilot.favoriteModels = [...pilot.favoriteModels, model];
+        commander.favoriteModels = [...commander.favoriteModels, model];
       }
     });
   };
@@ -327,9 +328,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
     return (
       <ModelPostCard
         model={model}
-        pilot={pilot}
-        onPressAchievements={(pilot, model) =>
-          achievementModalRef.current?.present(pilot, model)
+        commander={commander}
+        onPressAchievements={(commander, model) =>
+          achievementModalRef.current?.present(commander, model)
         }
         onPressEditModel={() =>
           navigation.navigate('ModelEditor', {
@@ -462,10 +463,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
         <View style={[theme.styles.view, s.noPadding]}>
           <ModelCardDeck
             models={activeModels}
-            pilot={pilot}
+            commander={commander}
             onStartNewEventSequence={confirmStartNewEventSequence}
-            onPressAchievements={(pilot, model) =>
-              achievementModalRef.current?.present(pilot, model)
+            onPressAchievements={(commander, model) =>
+              achievementModalRef.current?.present(commander, model)
             }
           />
         </View>

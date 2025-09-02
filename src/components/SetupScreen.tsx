@@ -16,7 +16,7 @@ import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Avatar } from 'components/molecules/Avatar';
 import { appConfig } from 'config';
 import { AuthContext } from 'lib/auth';
-import { usePilotSummary } from 'lib/pilot';
+import { useCommanderSummary } from 'lib/commander';
 import {
   Archive,
   Battery,
@@ -38,12 +38,12 @@ import {
   Volume2,
 } from 'lucide-react-native';
 import { BSON } from 'realm';
-import { Pilot } from 'realmdb/Pilot';
+import { Commander } from 'realmdb/Commander';
 // import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
-import { selectPilot } from 'store/selectors/pilotSelectors';
+import { selectCommander } from 'store/selectors/commanderSelectors';
 import { selectUserProfile } from 'store/selectors/userSelectors';
 import { saveDatabaseAccessWith } from 'store/slices/appSettings';
-import { saveSelectedPilot } from 'store/slices/pilot';
+import { saveSelectedCommander } from 'store/slices/commander';
 import { DatabaseAccessWith } from 'types/database';
 import {
   SetupNavigatorParamList,
@@ -63,9 +63,12 @@ const SetupScreen = ({ navigation, route }: Props) => {
 
   const auth = useContext(AuthContext);
   const userProfile = useSelector(selectUserProfile);
-  const selectedPilotId = useSelector(selectPilot).pilotId;
-  const selectedPilot = useObject(Pilot, new BSON.ObjectId(selectedPilotId));
-  const pilotSummary = usePilotSummary();
+  const selectedCommanderId = useSelector(selectCommander).commanderId;
+  const selectedCommander = useObject(
+    Commander,
+    new BSON.ObjectId(selectedCommanderId),
+  );
+  const commanderSummary = useCommanderSummary();
 
   // const databaseAccessWith = useSelector(selectDatabaseAccessWith);
 
@@ -92,14 +95,14 @@ const SetupScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const clearPilot = () => {
-    // Replace current pilot with unknown pilot.
-    const unknownPilot = realm
-      .objects(Pilot)
-      .filtered('unknownPilot == true')[0];
+  const clearCommander = () => {
+    // Replace current commander with unknown commander.
+    const unknownCommander = realm
+      .objects(Commander)
+      .filtered('unknownCommander == true')[0];
     dispatch(
-      saveSelectedPilot({
-        pilotId: unknownPilot._id.toString(),
+      saveSelectedCommander({
+        commanderId: unknownCommander._id.toString(),
       }),
     );
   };
@@ -109,17 +112,17 @@ const SetupScreen = ({ navigation, route }: Props) => {
       style={theme.styles.view}
       showsVerticalScrollIndicator={false}
       contentInsetAdjustmentBehavior={'automatic'}>
-      <Divider text={'PILOTS'} />
-      {selectedPilot && !selectedPilot.unknownPilot && (
+      <Divider text={'COMMANDER'} />
+      {selectedCommander && !selectedCommander.unknownCommander && (
         <ListItemSwipeable
-          title={selectedPilot.name}
-          subtitle={pilotSummary(selectedPilot)}
+          title={selectedCommander.name}
+          subtitle={commanderSummary(selectedCommander)}
           position={['first']}
           leftContent={<IdCard color={theme.colors.listItemIcon} />}
           rightContent={'chevron-right'}
           onPress={() =>
-            navigation.navigate('Pilot', {
-              pilotId: selectedPilot._id.toString(),
+            navigation.navigate('Commander', {
+              commanderId: selectedCommander._id.toString(),
             })
           }
           swipeableActionsRight={[
@@ -127,20 +130,20 @@ const SetupScreen = ({ navigation, route }: Props) => {
               text: 'Clear',
               color: theme.colors.brandPrimary,
               ButtonComponent: <EyeOff color={theme.colors.stickyWhite} />,
-              onPress: () => clearPilot,
+              onPress: () => clearCommander,
             },
           ]}
         />
       )}
       <ListItem
-        title={'Select or Create a Pilot...'}
+        title={'Select or Create a Commander...'}
         position={
-          selectedPilot && !selectedPilot.unknownPilot
+          selectedCommander && !selectedCommander.unknownCommander
             ? ['last']
             : ['first', 'last']
         }
         rightContent={'chevron-right'}
-        onPress={() => navigation.navigate('Pilots')}
+        onPress={() => navigation.navigate('Commanders')}
       />
       <Divider text={'GLOBALS'} />
       <ListItem
@@ -186,6 +189,37 @@ const SetupScreen = ({ navigation, route }: Props) => {
         rightContent={'chevron-right'}
         onPress={() => navigation.navigate('ChecklistTemplates')}
       />
+      <Divider text={'PREFERENCES'} />
+      <ListItem
+        title={'Basics'}
+        subtitle={'Units, screen dimming, filter behavior'}
+        position={['first']}
+        leftContent={<Settings2 color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
+        onPress={() => navigation.navigate('PreferencesBasics')}
+      />
+      <ListItem
+        title={'Events'}
+        subtitle={'Timer, sensitivity settings'}
+        leftContent={<Flag color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
+        onPress={() => navigation.navigate('PreferencesEvents')}
+      />
+      <ListItem
+        title={'Batteries'}
+        subtitle={'Convenience options'}
+        leftContent={<Battery color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
+        onPress={() => navigation.navigate('PreferencesBatteries')}
+      />
+      <ListItem
+        title={'Audio'}
+        subtitle={'Sounds, vibration, scheduling'}
+        position={['last']}
+        leftContent={<Volume2 color={theme.colors.listItemIcon} />}
+        rightContent={'chevron-right'}
+        onPress={() => navigation.navigate('PreferencesAudio')}
+      />
       <Divider text={'DATABASE'} />
       <ListItem
         title={'Information'}
@@ -229,37 +263,6 @@ const SetupScreen = ({ navigation, route }: Props) => {
         rightContent={'chevron-right'}
         onPress={() => navigation.navigate('DatabaseReporting')}
       />
-      <Divider text={'PREFERENCES'} />
-      <ListItem
-        title={'Basics'}
-        subtitle={'Units, screen dimming, filter behavior'}
-        position={['first']}
-        leftContent={<Settings2 color={theme.colors.listItemIcon} />}
-        rightContent={'chevron-right'}
-        onPress={() => navigation.navigate('PreferencesBasics')}
-      />
-      <ListItem
-        title={'Events'}
-        subtitle={'Timer, sensitivity settings'}
-        leftContent={<Flag color={theme.colors.listItemIcon} />}
-        rightContent={'chevron-right'}
-        onPress={() => navigation.navigate('PreferencesEvents')}
-      />
-      <ListItem
-        title={'Batteries'}
-        subtitle={'Convenience options'}
-        leftContent={<Battery color={theme.colors.listItemIcon} />}
-        rightContent={'chevron-right'}
-        onPress={() => navigation.navigate('PreferencesBatteries')}
-      />
-      <ListItem
-        title={'Audio'}
-        subtitle={'Sounds, vibration, scheduling'}
-        position={['last']}
-        leftContent={<Volume2 color={theme.colors.listItemIcon} />}
-        rightContent={'chevron-right'}
-        onPress={() => navigation.navigate('PreferencesAudio')}
-      />
       <Divider text={'ACCOUNT'} />
       {userProfile ? (
         <ListItem
@@ -278,7 +281,7 @@ const SetupScreen = ({ navigation, route }: Props) => {
           onPress={() => auth.presentSignInModal()}
         />
       )}
-      <Divider text={'MISCELLANEOUS'} />
+      <Divider />
       <ListItem
         title={'App Settings'}
         position={['first']}

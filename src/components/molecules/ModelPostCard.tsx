@@ -9,15 +9,15 @@ import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { CirclePlay, Info, Star, Trophy } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import { Model, Pilot } from 'realmdb';
+import { Commander, Model } from 'realmdb';
 
 interface ModelPostCardInterface {
   model: Model;
-  onPressAchievements: (pilot: Pilot, model: Model) => void;
+  onPressAchievements: (commander: Commander, model: Model) => void;
   onPressEditModel: (model: Model) => void;
-  onPressFavoriteModel: (pilot: Pilot, model: Model) => void;
+  onPressFavoriteModel: (commander: Commander, model: Model) => void;
   onPressNewEvent: (model: Model) => void;
-  pilot?: Pilot;
+  commander?: Commander;
 }
 
 export const ModelPostCard = ({
@@ -26,13 +26,13 @@ export const ModelPostCard = ({
   onPressFavoriteModel,
   onPressNewEvent,
   onPressAchievements,
-  pilot,
+  commander,
 }: ModelPostCardInterface) => {
   const theme = useTheme();
   const s = useStyles();
 
   const maintenanceIsDue = modelMaintenanceIsDue(model);
-  const isFavorite = !!pilot?.favoriteModels.filter(m =>
+  const isFavorite = !!commander?.favoriteModels.filter(m =>
     m._id.equals(model._id),
   ).length;
 
@@ -84,14 +84,14 @@ export const ModelPostCard = ({
         </View>
       )}
       <View style={s.modelCardFooter}>
-        {pilot && !pilot?.unknownPilot && (
+        {commander && !commander?.unknownCommander && (
           <Button
             buttonStyle={s.modelCardButton}
             icon={<Trophy color={theme.colors.clearButtonText} size={28} />}
-            onPress={() => onPressAchievements(pilot, model)}
+            onPress={() => onPressAchievements(commander, model)}
           />
         )}
-        {pilot && !pilot?.unknownPilot && (
+        {commander && !commander?.unknownCommander && (
           <Button
             buttonStyle={s.modelCardButton}
             icon={
@@ -105,7 +105,7 @@ export const ModelPostCard = ({
                 <Star color={theme.colors.clearButtonText} size={28} />
               )
             }
-            onPress={() => onPressFavoriteModel(pilot, model)}
+            onPress={() => onPressFavoriteModel(commander, model)}
           />
         )}
         <Button

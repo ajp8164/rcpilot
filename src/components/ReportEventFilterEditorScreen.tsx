@@ -111,13 +111,13 @@ const ReportEventFilterEditorScreen = ({ route }: Props) => {
         />
         <Divider />
         <ListItemFilterEnum
-          title={'Pilot'}
-          value={filterEditor.values.pilot.value}
-          relation={filterEditor.values.pilot.relation}
-          enumName={'Pilot'}
+          title={'Commander'}
+          value={filterEditor.values.commander.value}
+          relation={filterEditor.values.commander.relation}
+          enumName={'Commander'}
           position={['first', 'last']}
           onValueChange={filterState => {
-            filterEditor.onFilterValueChange('pilot', filterState);
+            filterEditor.onFilterValueChange('commander', filterState);
           }}
         />
         <Divider />

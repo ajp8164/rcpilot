@@ -3,11 +3,11 @@ import { EnumPickerInterface } from 'components/EnumPickerScreen';
 import { EnumRelation } from 'components/molecules/filters';
 import { eventOutcomeIcons } from 'lib/modelEvent';
 import { Battery } from 'realmdb/Battery';
+import { Commander } from 'realmdb/Commander';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
 import { Model } from 'realmdb/Model';
 import { ModelCategory } from 'realmdb/ModelCategory';
-import { Pilot } from 'realmdb/Pilot';
 import { BatteryChemistry } from 'types/battery';
 import { EventOutcome } from 'types/event';
 import { ModelType } from 'types/model';
@@ -81,11 +81,11 @@ const enumFilterConfigs = satisfiesRecord<EnumPickerProps>()({
     icons: eventOutcomeIcons,
     values: Object.values(EventOutcome),
   },
-  Pilot: {
-    enumName: 'Pilot',
+  Commander: {
+    enumName: 'Commander',
     mode: 'many-or-none',
-    title: 'Pilots',
-    sectionName: '{0} the selected Pilots {1} the results.',
+    title: 'Commanders',
+    sectionName: '{0} the selected Commanders {1} the results.',
     values: [],
   },
 });
@@ -114,7 +114,7 @@ export const useEnumFilterConfig = (
   let eventStyles;
   let locations;
   let models;
-  let pilots;
+  let commanders;
 
   switch (enumName) {
     case 'Battery':
@@ -137,9 +137,9 @@ export const useEnumFilterConfig = (
       models = realm.objects(Model);
       config.values = models.sorted('name').map(m => m._id.toString());
       break;
-    case 'Pilot':
-      pilots = realm.objects(Pilot);
-      config.values = pilots.sorted('name').map(p => p._id.toString());
+    case 'Commander':
+      commanders = realm.objects(Commander);
+      config.values = commanders.sorted('name').map(c => c._id.toString());
       break;
   }
   return config;

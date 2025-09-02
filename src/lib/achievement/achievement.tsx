@@ -1,7 +1,7 @@
 import { ReactElement } from 'react';
 
 import { Star } from 'lucide-react-native';
-import { Achievement } from 'realmdb/Pilot';
+import { Achievement } from 'realmdb/Commander';
 
 type AchievementRule = {
   criteria: {
@@ -31,7 +31,7 @@ export const achievementConfig: Record<string, AchievementRule> = {
 };
 
 export type AchievementNotification = {
-  pilotName: string;
+  commanderName: string;
   modelName: string;
   achievement: Achievement;
 };

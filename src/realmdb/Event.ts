@@ -1,10 +1,10 @@
 import { BSON, Object, ObjectSchema } from 'realm';
+import { Commander } from 'realmdb/Commander';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
 import { Model } from 'realmdb/Model';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { Pilot } from 'realmdb/Pilot';
 import { ISODateString } from 'types/common';
 import { EventOutcome } from 'types/event';
 
@@ -19,7 +19,7 @@ export class Event extends Object<Event> {
   outcome?: EventOutcome;
   duration!: number;
   model!: Model;
-  pilot!: Pilot;
+  commander!: Commander;
   location?: Location;
   fuel?: ModelFuel;
   fuelConsumed?: number;
@@ -39,7 +39,7 @@ export class Event extends Object<Event> {
       outcome: 'string?',
       duration: 'float',
       model: 'Model',
-      pilot: 'Pilot',
+      commander: 'Commander',
       location: 'Location?',
       fuel: 'ModelFuel?',
       fuelConsumed: 'float?',

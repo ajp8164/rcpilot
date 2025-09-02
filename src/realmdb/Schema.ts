@@ -9,6 +9,7 @@ import {
   ChecklistActionScheduleState,
 } from './Checklist';
 import { ChecklistTemplate } from './ChecklistTemplate';
+import { Achievement, Commander } from './Commander';
 import { Event } from './Event';
 import { EventStyle } from './EventStyle';
 import { EventsMaintenanceReport } from './EventsMaintenanceReport';
@@ -18,13 +19,13 @@ import { Model, ModelEventStyleData, ModelStatistics } from './Model';
 import { ModelCategory } from './ModelCategory';
 import { ModelFuel } from './ModelFuel';
 import { ModelPropeller } from './ModelPropeller';
-import { Achievement, Pilot } from './Pilot';
 import { ScanCodesReport } from './ScanCodesReport';
 
 const Schema = [
   Battery,
   BatteryCycle,
   ChecklistTemplate,
+  Commander,
   Event,
   EventsMaintenanceReport,
   EventStyle,
@@ -34,7 +35,6 @@ const Schema = [
   ModelFuel,
   ModelPropeller,
   Model,
-  Pilot,
   ScanCodesReport,
 
   // Embedded objects

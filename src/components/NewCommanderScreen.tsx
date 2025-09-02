@@ -20,7 +20,10 @@ import { DateTime } from 'luxon';
 import { SetupNavigatorParamList } from 'types/navigation';
 import * as Yup from 'yup';
 
-export type Props = NativeStackScreenProps<SetupNavigatorParamList, 'NewPilot'>;
+export type Props = NativeStackScreenProps<
+  SetupNavigatorParamList,
+  'NewCommander'
+>;
 
 // Order of fields for accessory view.
 enum Fields {
@@ -31,7 +34,7 @@ type FormValues = {
   name: string;
 };
 
-const NewPilotScreen = ({ navigation }: Props) => {
+const NewCommanderScreen = ({ navigation }: Props) => {
   const theme = useTheme();
 
   const realm = useRealm();
@@ -66,7 +69,7 @@ const NewPilotScreen = ({ navigation }: Props) => {
   const onSubmit = (values: FormValues) => {
     const now = DateTime.now().toISO();
     realm.write(() => {
-      realm.create('Pilot', {
+      realm.create('Commander', {
         createdOn: now,
         updatedOn: now,
         name: values.name,
@@ -144,8 +147,8 @@ const NewPilotScreen = ({ navigation }: Props) => {
                   onFocus: () =>
                     keyboardAccessory.current?.focusedField(Fields.name),
                   value: values.name,
-                  label: 'Pilot Name',
-                  placeholder: 'Pilot Name',
+                  label: 'Commander Name',
+                  placeholder: 'Commander Name',
                   autoCapitalize: 'words',
                 }}
               />
@@ -165,4 +168,4 @@ const NewPilotScreen = ({ navigation }: Props) => {
   );
 };
 
-export default NewPilotScreen;
+export default NewCommanderScreen;

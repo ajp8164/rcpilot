@@ -133,7 +133,7 @@ export type ModelsNavigatorParamList = {
     locationId?: string;
     modelId?: string;
     modelType?: ModelType;
-    pilotId?: string;
+    commanderId?: string;
     readOnly?: boolean;
   };
 
@@ -474,7 +474,7 @@ export type LocationNavigatorParamList = {
     locationId?: string;
     modelId?: string;
     modelType?: ModelType;
-    pilotId?: string;
+    commanderId?: string;
     readOnly?: boolean;
   };
   LocationsMap: {
@@ -595,7 +595,7 @@ export type SetupNavigatorParamList = {
     locationId?: string;
     modelId?: string;
     modelType?: ModelType;
-    pilotId?: string;
+    commanderId?: string;
     readOnly?: boolean;
   };
   EventEditor: {
@@ -606,11 +606,11 @@ export type SetupNavigatorParamList = {
     eventOutcome: EventOutcome;
   };
   LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
-  Pilot: {
-    pilotId: string;
+  Commander: {
+    commanderId: string;
   };
-  Pilots: undefined;
-  PilotNavigator: NavigatorScreenParams<PilotNavigatorParamList>;
+  Commanders: undefined;
+  CommanderNavigator: NavigatorScreenParams<CommanderNavigatorParamList>;
   PreferencesBasics: undefined;
   PreferencesEvents: undefined;
   PreferencesBatteries: undefined;
@@ -618,7 +618,7 @@ export type SetupNavigatorParamList = {
   PreferencesChimeCues: undefined;
   PreferencesVoiceCues: undefined;
   PreferencesClickTrack: undefined;
-  NewPilot: undefined;
+  NewCommander: undefined;
   Setup: {
     subNav?: string;
   };
@@ -671,7 +671,7 @@ export type SetupNavigatorParamList = {
   WebServerAccess: undefined;
 };
 
-export type PilotNavigatorParamList = {
+export type CommanderNavigatorParamList = {
   ModelPicker: ModelPickerInterface;
 };
 

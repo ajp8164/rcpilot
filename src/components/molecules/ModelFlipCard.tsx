@@ -10,20 +10,20 @@ import {
   Front as DinnFront,
 } from 'components/molecules/card-deck/dinn';
 import FlipCardView from 'components/views/FlipCardView';
-import { Model, Pilot } from 'realmdb';
+import { Commander, Model } from 'realmdb';
 import { ModelsNavigatorParamList } from 'types/navigation';
 
 interface ModelCardDeckCardInterface {
   model: Model;
-  pilot?: Pilot;
+  commander?: Commander;
   propertiesModal: React.RefObject<DeckCardPropertiesModal | null>;
-  onPressAchievements: (pilot: Pilot, model: Model) => void;
+  onPressAchievements: (commander: Commander, model: Model) => void;
   onStartNewEventSequence: (model: Model) => void;
 }
 
 export const ModelFlipCard = ({
   model,
-  pilot,
+  commander,
   propertiesModal,
   onPressAchievements,
   onStartNewEventSequence,
@@ -53,7 +53,7 @@ export const ModelFlipCard = ({
   };
 
   const onAchievements = () => {
-    pilot && onPressAchievements(pilot, model);
+    commander && onPressAchievements(commander, model);
   };
 
   const onEditCardProperties = () => {
@@ -68,11 +68,11 @@ export const ModelFlipCard = ({
       FrontContent={
         <DinnFront
           model={model}
-          pilot={pilot}
+          commander={commander}
           onPressEditModel={editModel}
           onPressNewEventSequence={onNewEventSequence}
           onPressAchievements={
-            pilot?.achievements.length ? onAchievements : undefined
+            commander?.achievements.length ? onAchievements : undefined
           }
           onPressEditCardProperties={onEditCardProperties}
         />

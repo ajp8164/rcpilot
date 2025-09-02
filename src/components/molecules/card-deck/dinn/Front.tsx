@@ -19,14 +19,14 @@ import { modelMaintenanceIsDue, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { Bandage, Info, PlayCircle, Trophy, Wrench } from 'lucide-react-native';
 import { DateTime, Duration } from 'luxon';
-import { Model, Pilot } from 'realmdb';
+import { Commander, Model } from 'realmdb';
 import { selectModelPreferences } from 'store/selectors/appSettingsSelectors';
 
 import { defaultDinnCardColors } from './index';
 
 interface DinnCardInterface extends FlipCardView {
   model: Model;
-  pilot?: Pilot;
+  commander?: Commander;
   onPressAchievements?: () => void;
   onPressEditCardProperties?: () => void;
   onPressEditModel?: () => void;
@@ -40,7 +40,7 @@ export const Front = ({
   onPressEditCardProperties: _onPressEditCardProperties,
   onPressEditModel = () => null,
   onPressNewEventSequence = () => null,
-  pilot,
+  commander,
 }: DinnCardInterface) => {
   const theme = useTheme();
   const s = useStyles();
@@ -177,7 +177,7 @@ export const Front = ({
               icon={<Info color={cardColors.accent1} size={40} />}
               onPress={() => onPressEditModel()}
             />
-            {pilot?.achievements && pilot.achievements.length > 0 && (
+            {commander?.achievements && commander.achievements.length > 0 && (
               <Button
                 buttonStyle={theme.styles.buttonScreenHeader}
                 containerStyle={{

@@ -95,7 +95,7 @@ export type EventFilterValues = {
   eventStyle: EnumFilterState;
   location: EnumFilterState;
   battery: EnumFilterState;
-  pilot: EnumFilterState;
+  commander: EnumFilterState;
   outcome: EnumFilterState;
   notes: StringFilterState;
 };
@@ -116,7 +116,7 @@ export type ReportEventFilterValues = {
   category: EnumFilterState;
   date: DateFilterState;
   duration: NumberFilterState;
-  pilot: EnumFilterState;
+  commander: EnumFilterState;
   location: EnumFilterState;
   eventStyle: EnumFilterState;
   outcome: EnumFilterState;

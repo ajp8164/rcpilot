@@ -55,15 +55,15 @@ import {
   ChecklistActionHistoryEntry,
   JChecklistAction,
 } from 'realmdb/Checklist';
+import { Commander } from 'realmdb/Commander';
 import { Event } from 'realmdb/Event';
 import { EventStyle } from 'realmdb/EventStyle';
 import { Location } from 'realmdb/Location';
 import { Model, ModelStatistics } from 'realmdb/Model';
 import { ModelFuel } from 'realmdb/ModelFuel';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
-import { Pilot } from 'realmdb/Pilot';
+import { selectCommander } from 'store/selectors/commanderSelectors';
 import { selectEventSequence } from 'store/selectors/eventSequence';
-import { selectPilot } from 'store/selectors/pilotSelectors';
 import { eventSequence } from 'store/slices/eventSequence';
 import { BatteryTint } from 'types/battery';
 import { ChecklistType, EventSequenceChecklistType } from 'types/checklist';
@@ -88,7 +88,7 @@ type FormValues = {
   propeller: ModelPropeller;
   eventStyle: EventStyle;
   location: Location;
-  pilot: Pilot;
+  commander: Commander;
   outcome: EventOutcome;
   notes: string;
 };
@@ -124,10 +124,13 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
   const modelPropellers = useQuery(ModelPropeller);
   const eventStyles = useQuery(EventStyle);
   const locations = useQuery(Location);
-  const pilots = useQuery(Pilot);
+  const commanders = useQuery(Commander);
 
-  const _pilot = useSelector(selectPilot);
-  const currentPilot = useObject(Pilot, new BSON.ObjectId(_pilot.pilotId));
+  const _commander = useSelector(selectCommander);
+  const currentCommander = useObject(
+    Commander,
+    new BSON.ObjectId(_commander.commanderId),
+  );
 
   const [now] = useState(DateTime.now());
 
@@ -156,7 +159,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     propeller: toPlainObject(model?.defaultPropeller),
     eventStyle: toPlainObject(model?.defaultStyle),
     location: {},
-    pilot: currentPilot ? toPlainObject(currentPilot) : undefined,
+    commander: currentCommander ? toPlainObject(currentCommander) : undefined,
     outcome: EventOutcome.Unspecified,
     notes: '',
   } as FormValues;
@@ -208,7 +211,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     event.on('event-model-propeller', onChangeModelPropeller);
     event.on('event-model-style', onChangeEventStyle);
     event.on('event-location', onChangeLocation);
-    event.on('event-pilot', onChangePilot);
+    event.on('event-commander', onChangeCommander);
     event.on('event-outcome', onChangeOutcome);
     event.on('event-notes', onChangeNotes);
     event.on(`event-battery-cell-voltages`, onChangeDischargeCellVoltages);
@@ -222,7 +225,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
       event.removeListener('event-model-fuel', onChangeModelFuel);
       event.removeListener('event-model-propeller', onChangeModelPropeller);
       event.removeListener('event-model-style', onChangeEventStyle);
-      event.removeListener('event-pilot', onChangePilot);
+      event.removeListener('event-commander', onChangeCommander);
       event.removeListener('event-location', onChangeLocation);
       event.removeListener('event-outcome', onChangeOutcome);
       event.removeListener('event-notes', onChangeNotes);
@@ -246,7 +249,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     propeller: Yup.object().nullable(),
     eventStyle: Yup.object().nullable(),
     location: Yup.object().nullable(),
-    pilot: Yup.object().nullable(),
+    commander: Yup.object().nullable(),
     outcome: Yup.string(),
     notes: Yup.string(),
   });
@@ -340,7 +343,10 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
           outcome: values.outcome,
           duration: eventDuration,
           model,
-          pilot: realm.objectForPrimaryKey('Pilot', values.pilot._id),
+          commander: realm.objectForPrimaryKey(
+            'Commander',
+            values.commander._id,
+          ),
           location: values.location?._id
             ? realm.objectForPrimaryKey('Location', values.location._id)
             : null,
@@ -449,11 +455,11 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     formikRef.current?.setFieldValue('location', toPlainObject(l));
   };
 
-  const onChangePilot = (result: EnumPickerResult) => {
-    const p = pilots.find(p => {
-      return p.name === result.value[0];
+  const onChangeCommander = (result: EnumPickerResult) => {
+    const c = commanders.find(c => {
+      return c.name === result.value[0];
     });
-    formikRef.current?.setFieldValue('pilot', toPlainObject(p));
+    formikRef.current?.setFieldValue('commander', toPlainObject(c));
   };
 
   const onChangeOutcome = (result: EnumPickerResult) => {
@@ -838,23 +844,23 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                 ) : null}
                 <Divider />
                 <ListItem
-                  title={'Pilot'}
+                  title={'Commander'}
                   position={['first']}
-                  value={values.pilot?.name || 'Unknown'}
+                  value={values.commander?.name || 'Unknown'}
                   rightContent={'chevron-right'}
                   onPress={() =>
                     navigation.navigate('EnumPicker', {
-                      enumName: 'Pilot',
-                      title: 'Pilot',
-                      itemPlural: 'Pilots',
+                      enumName: 'Commander',
+                      title: 'Commander',
+                      itemPlural: 'Commanders',
                       headerBackTitle: `${kind.name}`,
                       footer:
-                        'You can manage pilots through the Globals section in the Setup tab.',
-                      values: pilots.map(p => {
-                        return p.name;
+                        'You can manage commanders through the Globals section in the Setup tab.',
+                      values: commanders.map(c => {
+                        return c.name;
                       }),
-                      selected: values.pilot?.name,
-                      eventName: 'event-pilot',
+                      selected: values.commander?.name,
+                      eventName: 'event-commander',
                     })
                   }
                 />

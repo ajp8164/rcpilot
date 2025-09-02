@@ -102,7 +102,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
       .and('model.category._id', values?.category)
       .and('date', values?.date)
       .and('duration', values?.duration)
-      .and('pilot._id', values?.pilot)
+      .and('commander._id', values?.commander)
       .and('location._id', values?.location)
       .and('eventStyle._id', values?.eventStyle)
       .and('outcome', values?.outcome)
@@ -158,7 +158,7 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
           duration: `${secondsToFormat(e.duration, { format: "m'm' s's'" })}`,
           totalTime: `${secondsToFormat(e.model.statistics.totalTime, { format: "h'h' m'm' s's'" })}`,
           outcome: <EventRating value={e.outcome} />,
-          operatorName: `${e.pilot.name}`,
+          operatorName: `${e.commander.name}`,
           notes: `${e.notes}`,
         };
       });

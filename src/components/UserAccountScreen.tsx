@@ -89,7 +89,7 @@ const UserAccountScreen = ({ navigation }: Props) => {
       </View>
       <Divider />
       <ListItem
-        title={'Edit Profile'}
+        title={'Edit User Profile'}
         leftContent={<UserRoundPen color={theme.colors.listItemIcon} />}
         rightContent={'chevron-right'}
         position={['first', 'last']}

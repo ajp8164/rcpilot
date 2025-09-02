@@ -57,10 +57,10 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const {
     filterType,
     batteryId,
+    commanderId,
     eventStyleId,
     locationId,
     modelId,
-    pilotId,
     readOnly,
   } = route.params;
 
@@ -73,10 +73,10 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const events = useEventsFilter({
     filterType: filterType || FilterType.BypassFilter,
     batteryId,
+    commanderId,
     eventStyleId,
     locationId,
     modelId,
-    pilotId,
   });
 
   const model = useObject(Model, new BSON.ObjectId(modelId));

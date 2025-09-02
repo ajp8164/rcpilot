@@ -9,6 +9,7 @@ import {
   Battery,
   BatteryCycle,
   ChecklistTemplate,
+  Commander,
   Event,
   EventStyle,
   EventsMaintenanceReport,
@@ -18,7 +19,6 @@ import {
   ModelCategory,
   ModelFuel,
   ModelPropeller,
-  Pilot,
   ScanCodesReport,
 } from 'realmdb';
 
@@ -46,6 +46,7 @@ export const useDatabaseInfo = (): DatabaseInfoContext => {
       objectCount += realm.objects(Battery).length;
       objectCount += realm.objects(BatteryCycle).length;
       objectCount += realm.objects(ChecklistTemplate).length;
+      objectCount += realm.objects(Commander).length;
       objectCount += realm.objects(Event).length;
       objectCount += realm.objects(EventsMaintenanceReport).length;
       objectCount += realm.objects(EventStyle).length;
@@ -55,7 +56,6 @@ export const useDatabaseInfo = (): DatabaseInfoContext => {
       objectCount += realm.objects(ModelFuel).length;
       objectCount += realm.objects(ModelPropeller).length;
       objectCount += realm.objects(Model).length;
-      objectCount += realm.objects(Pilot).length;
       objectCount += realm.objects(ScanCodesReport).length;
       databaseObjects.current = objectCount;
 

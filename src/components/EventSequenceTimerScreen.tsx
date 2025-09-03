@@ -200,9 +200,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    event.on('deviceShake', onDeviceShake);
+    event.on('device-shake', onDeviceShake);
     return () => {
-      event.removeListener('deviceShake', onDeviceShake);
+      event.removeListener('device-shake', onDeviceShake);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timer]);
@@ -227,24 +227,6 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       navigation.navigate('EventSequenceNewEventEditor');
     }
   };
-
-  // For testing swipe/shake for timer.
-  useEffect(() => {
-    if (__DEV__ && !eventPreferences.timerUsesButtons) {
-      if (timer.state.mode === TimerMode.Armed) {
-        setTimeout(() => {
-          event.emit('deviceShake');
-        }, 10000);
-      }
-
-      if (timer.state.mode === TimerMode.Running) {
-        setTimeout(() => {
-          timer.pause();
-        }, 10000);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timer, eventPreferences.timerUsesButtons]);
 
   const onDeviceShake = () => {
     if (timer.state.mode === TimerMode.Armed) {

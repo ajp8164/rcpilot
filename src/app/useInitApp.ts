@@ -15,7 +15,6 @@ import { useUnknownCommander } from 'lib/commander';
 import { AppError } from 'lib/errors';
 import { initPushNotifications } from 'lib/notifications';
 import { useChecklistActionScheduleUpdater } from 'lib/useChecklistActionScheduleUpdater';
-import { useDeviceShake } from 'lib/useDeviceShake';
 
 export enum InitStatus {
   NotAuthorized = 'NotAuthorized',
@@ -24,8 +23,6 @@ export enum InitStatus {
 }
 
 export const useInitApp = () => {
-  useDeviceShake();
-
   // Order is important here.
   useUnknownCommander();
   useAchievementConveyor();

@@ -1,38 +1,48 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Platform, Vibration } from 'react-native';
 import { accelerometer } from 'react-native-sensors';
 
 import { log, useEvent } from '@react-native-hello/core';
 import { DateTime } from 'luxon';
+import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
 const SHAKE_THRESHOLD = 8;
 const MIN_TIME_BETWEEN_SHAKES = 1000; // ms
 
 export const useDeviceShake = () => {
-  const lastShakeTime = useRef<DateTime<true>>(DateTime.now());
-  const sensorAvailable = useRef(false);
-
   const event = useEvent();
 
+  const lastShakeTime = useRef<DateTime<true>>(DateTime.now());
+  const sensorAvailable = useRef(true);
+  const subscription = useRef<Subscription>(null);
+
+  const [enabled, setEnabled] = useState(false);
+
+  // Simple check to see if device shake is available.
   useEffect(() => {
     const subscription = accelerometer.subscribe({
-      next: () => {},
+      next: () => {
+        sensorAvailable.current = true;
+        subscription.unsubscribe();
+        log.debug('Accelerometer available');
+      },
       error: error => {
-        log.warn('Accelerometer:', error);
         sensorAvailable.current = false;
+        log.warn('Accelerometer:', error);
       },
     });
 
-    subscription.unsubscribe();
-    sensorAvailable.current = true;
-    log.debug('Accelerometer available');
+    return () => subscription.unsubscribe();
   }, []);
 
   useEffect(() => {
-    if (!sensorAvailable.current) return;
+    if (!sensorAvailable.current || !enabled) {
+      subscription.current?.unsubscribe();
+      return;
+    }
 
-    const subscription = accelerometer
+    subscription.current = accelerometer
       .pipe(
         map(({ x, y, z }) => Math.sqrt(x * x + y * y + z * z)),
         filter(magnitude => {
@@ -50,7 +60,7 @@ export const useDeviceShake = () => {
       )
       .subscribe({
         next: magnitude => {
-          vibrate(3);
+          runVibrate(2);
           event.emit('device-shake', { magnitude });
         },
         error: error => {
@@ -58,12 +68,19 @@ export const useDeviceShake = () => {
         },
       });
 
-    return () => subscription.unsubscribe();
+    return () => subscription.current?.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [enabled]);
+
+  return {
+    isAvailable: sensorAvailable.current,
+    isEnabled: enabled,
+    disable: () => setEnabled(false),
+    enable: () => setEnabled(true),
+  };
 };
 
-const vibrate = (times = 3, duration = 200, gap = 300) => {
+const runVibrate = (times = 3, duration = 200, gap = 100) => {
   if (Platform.OS === 'android') {
     const pattern: number[] = [0];
     for (let i = 0; i < times; i++) {

@@ -18,7 +18,6 @@ import Animated, {
   Easing,
   FadeIn,
   FadeOut,
-  useAnimatedStyle,
   useSharedValue,
   withDelay,
   withRepeat,
@@ -53,6 +52,7 @@ import {
 import { secondsToFormat } from 'lib/formatters';
 import { modelHasChecklists, modelTypeIconProps } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
+import { useDeviceShake } from 'lib/useDeviceShake';
 import { useTimer } from 'lib/useTimer';
 import {
   Battery as BatteryEmpty,
@@ -99,6 +99,9 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const dispatch = useDispatch();
   const realm = useRealm();
 
+  const { enable: enableVibration, disable: disableVibration } =
+    useDeviceShake();
+
   const eventPreferences = useSelector(selectEventPreferences);
   const currentEventSequence = useSelector(selectEventSequence);
   const model = useObject(
@@ -114,10 +117,6 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const timerMessageAnim = useSharedValue(1);
   const duration = 850;
   const easing = Easing.linear;
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: timerMessageAnim.value,
-    transform: [{ scale: timerMessageAnim.value / 6 + 1 }],
-  }));
 
   const timer = useTimer(tick, {
     initialValue: 0,
@@ -170,6 +169,25 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdownTimerEnabled, timer.state.mode]);
+
+  useEffect(() => {
+    if (eventPreferences.timerUsesButtons) return;
+
+    switch (timer.state.mode) {
+      case TimerMode.Armed:
+      case TimerMode.Paused:
+      case TimerMode.Running:
+        enableVibration();
+        break;
+      default:
+        disableVibration();
+    }
+  }, [
+    disableVibration,
+    enableVibration,
+    eventPreferences.timerUsesButtons,
+    timer.state.mode,
+  ]);
 
   useEffect(() => {
     // Get all the batteries for this event.
@@ -233,6 +251,8 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
       timer.start();
     } else if (timer.state.mode === TimerMode.Running) {
       timer.pause();
+    } else if (timer.state.mode === TimerMode.Paused) {
+      timer.resume();
     }
   };
 
@@ -683,10 +703,6 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
                 style={[
                   s.timerValue,
                   timer.state.inOvertime ? s.timerValueOvertime : {},
-                  timer.state.mode === TimerMode.Armed &&
-                  !eventPreferences.timerUsesButtons
-                    ? s.timerValueArmed
-                    : {},
                 ]}>
                 {secondsToFormat(
                   Math.abs(Math.trunc(timer.state.value / 1000)),
@@ -695,11 +711,19 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               </Animated.Text>
             )}
             {timer.state.mode === TimerMode.Armed &&
-            !eventPreferences.timerUsesButtons ? (
-              <Animated.View style={[s.timerMessageContainer, animatedStyle]}>
-                <Text style={s.timerMessage}>{'Shake to Start Timer...'}</Text>
-              </Animated.View>
-            ) : null}
+              !eventPreferences.timerUsesButtons && (
+                <Text style={s.timerInfoMessage}>{'Shake to Start Timer'}</Text>
+              )}
+            {timer.state.mode === TimerMode.Running &&
+              !eventPreferences.timerUsesButtons && (
+                <Text style={s.timerInfoMessage}>{'Shake to Pause Timer'}</Text>
+              )}
+            {timer.state.mode === TimerMode.Paused &&
+              !eventPreferences.timerUsesButtons && (
+                <Text style={s.timerInfoMessage}>
+                  {'Shake to Resume Timer'}
+                </Text>
+              )}
           </>
         </TimerFace>
         <View style={s.countdownSetupContainer}>
@@ -855,6 +879,13 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     position: 'absolute',
     justifyContent: 'center',
     height: '100%',
+  },
+  timerInfoMessage: {
+    position: 'absolute',
+    bottom: -15,
+    ...theme.text.medium,
+    color: theme.colors.stickyWhite,
+    opacity: 0.3,
   },
   timerSwipeable: {
     position: 'absolute',

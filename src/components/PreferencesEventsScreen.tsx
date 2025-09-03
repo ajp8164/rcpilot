@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import Slider from 'react-native-ui-lib/slider';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,6 +11,7 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useDeviceShake } from 'lib/useDeviceShake';
 import { selectEventPreferences } from 'store/selectors/appSettingsSelectors';
 import { saveEventPreferences } from 'store/slices/appSettings';
 import { TimerStartDelay } from 'types/event';
@@ -25,6 +26,8 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
 
+  const { isAvailable: vibrationAvailable } = useDeviceShake();
+
   const dispatch = useDispatch();
   const preferences = useSelector(selectEventPreferences);
 
@@ -32,6 +35,15 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
   const [atFieldUsesTimerEnabled, setFieldUsesTimerEnabled] = useState(false);
   const [defaultFromLastEventEnabled, setDefaultFromLastEventEnabled] =
     useState(false);
+
+  // Shake is required for using slide-to-arm.
+  // Force use of buttons when vibration is not available.
+  useEffect(() => {
+    if (!vibrationAvailable) {
+      toggleTimerUsesButtons(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vibrationAvailable]);
 
   const toggleAtFieldSingleTap = (value: boolean) => {
     setAtFieldSingleTapEnabled(value);
@@ -74,7 +86,13 @@ const PreferencesEventsScreen = ({ navigation }: Props) => {
       />
       <ListItemSwitch
         title={'Timer Uses Buttons'}
+        subtitle={
+          !vibrationAvailable
+            ? 'Vibration not available on this device'
+            : undefined
+        }
         value={preferences.timerUsesButtons}
+        disabled={!vibrationAvailable}
         onValueChange={toggleTimerUsesButtons}
       />
       <ListItem

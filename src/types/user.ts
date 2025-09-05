@@ -1,5 +1,5 @@
 import { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import { ISODateString } from 'types/common';
+import { ISODateString } from '@react-native-hello/common';
 
 export enum UserRole {
   Owner = 'Owner',
@@ -37,4 +37,10 @@ export type UserProfile = {
 export type User = {
   credentials: FirebaseAuthTypes.User;
   profile: UserProfile;
+};
+
+// Used to pass data collected during use of the email/password signin provider.
+export type EmailPasswordAuthData = {
+  firstName: string;
+  lastName: string;
 };

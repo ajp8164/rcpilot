@@ -26,7 +26,7 @@ import { Avatar } from 'components/molecules/Avatar';
 import { updateUser as remoteUpdateUser } from 'firebase/firestore';
 import { Formik, FormikProps } from 'formik';
 import { Camera } from 'lucide-react-native';
-import { selectUserProfile } from 'store/selectors/userSelectors';
+import { selectUser } from 'store/selectors/userSelectors';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
@@ -56,7 +56,7 @@ const UserProfileEditorScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
 
-  const userProfile = useSelector(selectUserProfile);
+  const { profile: userProfile } = useSelector(selectUser);
 
   const [photoUrl, setPhotoUrl] = useState(userProfile?.photoUrl || '');
 

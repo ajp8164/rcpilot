@@ -82,6 +82,13 @@ export type BatteriesNavigatorParamList = {
   };
 };
 
+export type ClubsNavigatorParamList = {
+  Clubs: undefined;
+  Club: {
+    clubId: string;
+  };
+};
+
 export type LogNavigatorParamList = {
   Log: undefined;
   EventEditor: {
@@ -707,6 +714,7 @@ export type StartupNavigatorParamList = {
 
 export type TabNavigatorParamList = {
   BatteriesTab: undefined;
+  ClubsTab: undefined;
   LogTab: undefined;
   ModelsTab: undefined;
   ScanTab: undefined;

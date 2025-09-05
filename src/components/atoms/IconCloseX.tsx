@@ -4,7 +4,7 @@ import { View } from 'react-native';
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
 import { X } from 'lucide-react-native';
 
-export const ModalHandle = () => {
+export const IconCloseX = () => {
   const theme = useTheme();
   const s = useStyles();
 
@@ -23,4 +23,4 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
 }));
 
-export default ModalHandle;
+export default IconCloseX;

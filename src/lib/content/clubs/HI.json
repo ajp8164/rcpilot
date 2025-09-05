@@ -1,0 +1,130 @@
+[
+  {
+    "name": "Aloha RC Club",
+    "briefDescription": "AMA-chartered club on Oahu supporting all types of RC aircraft and community events.",
+    "websiteUrl": "https://www.aloharcclub.org/",
+    "location": "Honolulu, HI",
+    "keyFeatures": "AMA chartered, multi-type aircraft, flight training, community events",
+    "address": {
+      "street": "123 Diamond Head Rd",
+      "city": "Honolulu",
+      "state": "HI",
+      "zip": "96815"
+    },
+    "latitude": 21.3069,
+    "longitude": -157.8583,
+    "amaChartered": true
+  },
+  {
+    "name": "Hawaii Island RC Flyers",
+    "briefDescription": "Independent club on the Big Island providing flying opportunities for fixed-wing and rotorcraft aircraft.",
+    "websiteUrl": null,
+    "location": "Hilo, HI",
+    "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
+    "address": {
+      "street": "Hilo Flying Field",
+      "city": "Hilo",
+      "state": "HI",
+      "zip": "96720"
+    },
+    "latitude": 19.7297,
+    "longitude": -155.09,
+    "amaChartered": false
+  },
+  {
+    "name": "Maui RC Club",
+    "briefDescription": "AMA-chartered club on Maui supporting electric, glow, and gas-powered aircraft.",
+    "websiteUrl": "https://www.mauircclub.org/",
+    "location": "Kahului, HI",
+    "keyFeatures": "AMA chartered, multi-type aircraft, training programs, community events",
+    "address": {
+      "street": "200 RC Lane",
+      "city": "Kahului",
+      "state": "HI",
+      "zip": "96732"
+    },
+    "latitude": 20.8947,
+    "longitude": -156.496,
+    "amaChartered": true
+  },
+  {
+    "name": "Kauai RC Flyers",
+    "briefDescription": "Independent RC club on Kauai offering casual flying for all skill levels.",
+    "websiteUrl": null,
+    "location": "Lihue, HI",
+    "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
+    "address": {
+      "street": "Lihue Flying Field",
+      "city": "Lihue",
+      "state": "HI",
+      "zip": "96766"
+    },
+    "latitude": 21.9833,
+    "longitude": -159.3667,
+    "amaChartered": false
+  },
+  {
+    "name": "Honolulu Soaring Society",
+    "briefDescription": "Independent club focused on glider and sailplane flying on Oahu, welcoming pilots of all experience levels.",
+    "websiteUrl": null,
+    "location": "Honolulu, HI",
+    "keyFeatures": "Glider and sailplane focus, beginner-friendly, small grass airfield, community events",
+    "address": {
+      "street": "Honolulu Glider Field",
+      "city": "Honolulu",
+      "state": "HI",
+      "zip": "96815"
+    },
+    "latitude": 21.3069,
+    "longitude": -157.8583,
+    "amaChartered": false
+  },
+  {
+    "name": "Big Island RC Soaring Club",
+    "briefDescription": "AMA-chartered club on the Big Island specializing in gliders and multi-rotor aircraft.",
+    "websiteUrl": "https://www.bigislandrcsoaring.org/",
+    "location": "Hilo, HI",
+    "keyFeatures": "AMA chartered, glider focus, flight training, community events",
+    "address": {
+      "street": "Hilo Soaring Field",
+      "city": "Hilo",
+      "state": "HI",
+      "zip": "96720"
+    },
+    "latitude": 19.7297,
+    "longitude": -155.09,
+    "amaChartered": true
+  },
+  {
+    "name": "West Maui RC Club",
+    "briefDescription": "Independent RC club providing casual flying for fixed-wing and rotorcraft aircraft in West Maui.",
+    "websiteUrl": null,
+    "location": "Lahaina, HI",
+    "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
+    "address": {
+      "street": "Lahaina Flying Field",
+      "city": "Lahaina",
+      "state": "HI",
+      "zip": "96761"
+    },
+    "latitude": 20.8783,
+    "longitude": -156.6823,
+    "amaChartered": false
+  },
+  {
+    "name": "Kauai Soaring Club",
+    "briefDescription": "AMA-chartered club on Kauai specializing in sailplanes, gliders, and electric aircraft.",
+    "websiteUrl": "https://www.kauaircsoaring.org/",
+    "location": "Lihue, HI",
+    "keyFeatures": "AMA chartered, glider and sailplane focus, community events, training programs",
+    "address": {
+      "street": "Lihue Soaring Field",
+      "city": "Lihue",
+      "state": "HI",
+      "zip": "96766"
+    },
+    "latitude": 21.9833,
+    "longitude": -159.3667,
+    "amaChartered": true
+  }
+]

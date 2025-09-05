@@ -1,0 +1,178 @@
+[
+  {
+    "name": "Mid-Arkansas Radio Control Society (MARCS)",
+    "briefDescription": "Arkansas' oldest AMA chartered club, offering a variety of RC activities including airshows and training.",
+    "websiteUrl": "https://www.themarcs.org/",
+    "location": "Little Rock, AR",
+    "keyFeatures": "Airshows, training, FAA FRIA, club meetings",
+    "address": {
+      "street": "Bishop Field",
+      "city": "Little Rock",
+      "state": "AR",
+      "zip": "72209"
+    },
+    "latitude": 34.7465,
+    "longitude": -92.2896,
+    "amaChartered": true
+  },
+  {
+    "name": "Ozark Flyers Club",
+    "briefDescription": "An AMA chartered club in Fayetteville, dedicated to enjoying all aspects of building and flying model aircraft.",
+    "websiteUrl": "https://www.fayetteville-ar.gov/278/Ozark-Flyers-Club",
+    "location": "Fayetteville, AR",
+    "keyFeatures": "Diverse aircraft types, community events, safety-focused",
+    "address": {
+      "street": "Chanault Field",
+      "city": "Fayetteville",
+      "state": "AR",
+      "zip": "72701"
+    },
+    "latitude": 36.0626,
+    "longitude": -94.1574,
+    "amaChartered": true
+  },
+  {
+    "name": "Hot Springs RC Flying Club",
+    "briefDescription": "A non-profit, open membership AMA chartered club located in Hot Springs National Park, Arkansas.",
+    "websiteUrl": "https://www.hsrcfc.com/",
+    "location": "Hot Springs, AR",
+    "keyFeatures": "Open membership, airfield maintenance, social activities",
+    "address": {
+      "street": "461 Wildcat Road",
+      "city": "Hot Springs",
+      "state": "AR",
+      "zip": "71901"
+    },
+    "latitude": 34.5016,
+    "longitude": -93.0703,
+    "amaChartered": true
+  },
+  {
+    "name": "Arkansas Sky Tigers",
+    "briefDescription": "An AMA chartered club located in Mayflower, welcoming all types of RC models.",
+    "websiteUrl": "https://www.arskytigers.com/",
+    "location": "Mayflower, AR",
+    "keyFeatures": "Weekend flying, FAA approved flying site, community engagement",
+    "address": {
+      "street": "Arkansas River Trail Rd",
+      "city": "Mayflower",
+      "state": "AR",
+      "zip": "72106"
+    },
+    "latitude": 34.9816,
+    "longitude": -92.4284,
+    "amaChartered": true
+  },
+  {
+    "name": "Flightmasters Model Airplane Club",
+    "briefDescription": "An AMA chartered club located in Barling, Arkansas, offering a variety of RC flying activities.",
+    "websiteUrl": "https://www.facebook.com/groups/1054610201228315/",
+    "location": "Barling, AR",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "US Hwy 71 & Treece Road",
+      "city": "Barling",
+      "state": "AR",
+      "zip": "72923"
+    },
+    "latitude": 35.3014,
+    "longitude": -94.273,
+    "amaChartered": true
+  },
+  {
+    "name": "River Valley Radio Control Club",
+    "briefDescription": "An AMA chartered club located in Russellville, Arkansas, offering a variety of RC flying activities.",
+    "websiteUrl": "https://www.facebook.com/groups/177292750830/",
+    "location": "Russellville, AR",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Orbit Lane",
+      "city": "Russellville",
+      "state": "AR",
+      "zip": "72802"
+    },
+    "latitude": 35.2803,
+    "longitude": -93.1349,
+    "amaChartered": true
+  },
+  {
+    "name": "Mena Radio Control Flying Club",
+    "briefDescription": "An AMA chartered club located in Mena, Arkansas, offering a variety of RC flying activities.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mena-radio-control-flying-club",
+    "location": "Mena, AR",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Polk Rd",
+      "city": "Mena",
+      "state": "AR",
+      "zip": "71953"
+    },
+    "latitude": 34.5891,
+    "longitude": -94.2352,
+    "amaChartered": true
+  },
+  {
+    "name": "Conway RC Club",
+    "briefDescription": "A group of radio control pilots who fly in Conway, Arkansas, welcoming spectators to watch anytime.",
+    "websiteUrl": "https://www.conwayrc.com/",
+    "location": "Conway, AR",
+    "keyFeatures": "Open membership, spectator-friendly, community events",
+    "address": {
+      "street": "Conway, AR",
+      "city": "Conway",
+      "state": "AR",
+      "zip": "72032"
+    },
+    "latitude": 35.0887,
+    "longitude": -92.4421,
+    "amaChartered": false
+  },
+  {
+    "name": "Benton County Flying Tigers",
+    "briefDescription": "An independent RC flying club located in Rogers, Arkansas, offering a variety of flying activities.",
+    "websiteUrl": null,
+    "location": "Rogers, AR",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Rogers, AR",
+      "city": "Rogers",
+      "state": "AR",
+      "zip": "72756"
+    },
+    "latitude": 36.332,
+    "longitude": -94.1185,
+    "amaChartered": false
+  },
+  {
+    "name": "Fly NWA-RC Club",
+    "briefDescription": "An independent RC flying club located in Rogers, Arkansas, offering a variety of flying activities.",
+    "websiteUrl": null,
+    "location": "Rogers, AR",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "11036 High Sky Inn Rd, Hindsville",
+      "city": "Rogers",
+      "state": "AR",
+      "zip": "72738"
+    },
+    "latitude": 36.2061,
+    "longitude": -93.9397,
+    "amaChartered": false
+  },
+  {
+    "name": "Siloam Springs R/C Modelers",
+    "briefDescription": "An independent RC flying club located in Siloam Springs, Arkansas, offering a variety of flying activities.",
+    "websiteUrl": null,
+    "location": "Siloam Springs, AR",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Allen Field, 2500 block of Waukesha Road",
+      "city": "Siloam Springs",
+      "state": "AR",
+      "zip": "72761"
+    },
+    "latitude": 36.1854,
+    "longitude": -94.5393,
+    "amaChartered": false
+  }
+]

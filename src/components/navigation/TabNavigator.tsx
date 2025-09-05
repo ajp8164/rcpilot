@@ -14,6 +14,7 @@ import {
 import { TabNavigatorParamList } from 'types/navigation';
 
 import BatteriesNavigator from './BatteriesNavigator';
+import ClubsNavigator from './ClubsNavigator';
 import LogNavigator from './LogNavigator';
 import ModelsNavigator from './ModelsNavigator';
 import ScanNavigator from './ScanNavigator';
@@ -58,6 +59,14 @@ const TabNavigator = () => {
       <Tab.Screen
         name="LogTab"
         component={LogNavigator}
+        options={{
+          tabBarShowLabel: false,
+          tabBarIcon: ({ color }) => <FileText color={color} size={33} />,
+        }}
+      />
+      <Tab.Screen
+        name="ClubsTab"
+        component={ClubsNavigator}
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <FileText color={color} size={33} />,

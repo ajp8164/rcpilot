@@ -1,0 +1,240 @@
+[
+  {
+    "id": "1",
+    "name": "Atlanta RC Club",
+    "briefDescription": "AMA-chartered club flying inside the I-285 perimeter at the DeKalb County field.",
+    "websiteUrl": "https://www.atlrcclub.org/",
+    "location": "Atlanta, GA",
+    "keyFeatures": "Paved runway; AMA #223; FRIA field; community events.",
+    "address": {
+      "street": "1600 Constitution Rd SE",
+      "city": "Atlanta",
+      "state": "GA",
+      "zip": "30316"
+    },
+    "latitude": 33.690382,
+    "longitude": -84.326219,
+    "amaChartered": true
+  },
+  {
+    "id": "2",
+    "name": "Cobb County Radio Control Modelers (CCRC)",
+    "briefDescription": "Large, long-running club at Cobb County’s Sport Aviation Complex.",
+    "websiteUrl": "https://ccrc.clubexpress.com/",
+    "location": "Acworth, GA",
+    "keyFeatures": "Multiple runways; cameras; training; float-fly site.",
+    "address": {
+      "street": "2302 Pitner Rd",
+      "city": "Acworth",
+      "state": "GA",
+      "zip": "30101"
+    },
+    "latitude": 34.001389,
+    "longitude": -84.693889,
+    "amaChartered": true
+  },
+  {
+    "id": "3",
+    "name": "Georgia Jets Flying Club",
+    "briefDescription": "Premier turbine/EDF-focused site with a long asphalt runway in Meriwether County.",
+    "websiteUrl": "https://georgiajets.org/",
+    "location": "Gay, GA",
+    "keyFeatures": "1000’×60’ asphalt runway; adjacent 1400’ grass runway; major jet events.",
+    "address": {
+      "street": "1443 Lillie Patrick Rd",
+      "city": "Gay",
+      "state": "GA",
+      "zip": "30218"
+    },
+    "latitude": 33.16461,
+    "longitude": -84.53326,
+    "amaChartered": true
+  },
+  {
+    "id": "4",
+    "name": "North Georgia Model Aviators (NGMA)",
+    "briefDescription": "Family-oriented club serving Dawsonville and the North Georgia mountains.",
+    "websiteUrl": "https://www.ngmarc.org/",
+    "location": "Dawsonville, GA",
+    "keyFeatures": "Training, events, on-site cameras, FRIA.",
+    "address": {
+      "street": "553 Geirrein Rd",
+      "city": "Dawsonville",
+      "state": "GA",
+      "zip": "30534"
+    },
+    "latitude": 34.37671,
+    "longitude": -84.10177,
+    "amaChartered": true
+  },
+  {
+    "id": "5",
+    "name": "Fayette Flyers of Georgia",
+    "briefDescription": "Active AMA club at Brooks Field with grass and fabric runways.",
+    "websiteUrl": "https://www.fayetteflyers.com/",
+    "location": "Brooks, GA",
+    "keyFeatures": "FRIA field; instruction program; hosts large electric events; family friendly.",
+    "address": {
+      "street": "139 Woods Rd",
+      "city": "Brooks",
+      "state": "GA",
+      "zip": "30205"
+    },
+    "latitude": 33.29954,
+    "longitude": -84.48326,
+    "amaChartered": true
+  },
+  {
+    "id": "6",
+    "name": "Flying Griffins RC Club",
+    "briefDescription": "Regional club serving Spalding/Pike counties from its Williamson field.",
+    "websiteUrl": "https://www.flyinggriffins.club/",
+    "location": "Williamson, GA",
+    "keyFeatures": "FRIA field; welcoming to visitors; regular meetings and events.",
+    "address": {
+      "street": "423 Ward Rd",
+      "city": "Williamson",
+      "state": "GA",
+      "zip": "30292"
+    },
+    "latitude": 33.179425,
+    "longitude": -84.436017,
+    "amaChartered": true
+  },
+  {
+    "id": "7",
+    "name": "Henry County RC Club",
+    "briefDescription": "Community RC field southeast of Atlanta near McDonough.",
+    "websiteUrl": "https://henrycountyrc.org/",
+    "location": "McDonough, GA",
+    "keyFeatures": "AMA-chartered; club field with regular flying and events.",
+    "address": {
+      "street": "West Asbury Rd",
+      "city": "McDonough",
+      "state": "GA",
+      "zip": "30253"
+    },
+    "latitude": 33.429757,
+    "longitude": -84.169893,
+    "amaChartered": true
+  },
+  {
+    "id": "8",
+    "name": "Newton County RC Flyers",
+    "briefDescription": "Active club east of Atlanta with a grass runway near Covington.",
+    "websiteUrl": "https://newtoncountyrcflyers.org/",
+    "location": "Covington, GA",
+    "keyFeatures": "FRIA-status club; training; family-friendly environment.",
+    "address": {
+      "street": "236 Lackey Rd",
+      "city": "Covington",
+      "state": "GA",
+      "zip": "30014"
+    },
+    "latitude": 33.51484,
+    "longitude": -83.822708,
+    "amaChartered": true
+  },
+  {
+    "id": "9",
+    "name": "Tri-County RC Flyers",
+    "briefDescription": "Savannah-area club near Oglethorpe Speedway Park.",
+    "websiteUrl": "https://www.facebook.com/TriCountyRCFliers/",
+    "location": "Savannah, GA",
+    "keyFeatures": "Grass field; community events; convenient to Savannah/Chatham area.",
+    "address": {
+      "street": "Speedway Blvd",
+      "city": "Savannah",
+      "state": "GA",
+      "zip": "31408"
+    },
+    "latitude": 32.059059,
+    "longitude": -81.169248,
+    "amaChartered": false
+  },
+  {
+    "id": "10",
+    "name": "CSRA Flyers – Carl Walker Memorial RC Airfield",
+    "briefDescription": "Augusta club with a long-established flying site south of the city.",
+    "websiteUrl": "https://www.csraflyers.club/",
+    "location": "Augusta, GA",
+    "keyFeatures": "AMA #226; weekend flying; club events and community outreach.",
+    "address": {
+      "street": "1199 Horseshoe Rd",
+      "city": "Augusta",
+      "state": "GA",
+      "zip": "30906"
+    },
+    "latitude": 33.287312,
+    "longitude": -81.958626,
+    "amaChartered": true
+  },
+  {
+    "id": "11",
+    "name": "Saraf Farms RC",
+    "briefDescription": "Private FRIA RC facility in Good Hope with a full-length paved runway.",
+    "websiteUrl": "https://www.saraffarmsrc.com/",
+    "location": "Good Hope, GA",
+    "keyFeatures": "1000’×60’ paved runway; hosts jet and mixed fly-ins; open space.",
+    "address": {
+      "street": "300 Indian Creek Rd",
+      "city": "Good Hope",
+      "state": "GA",
+      "zip": "30641"
+    },
+    "latitude": 33.722729,
+    "longitude": -83.467101,
+    "amaChartered": false
+  },
+  {
+    "id": "12",
+    "name": "Georgia Aircraft Modelers Association (GAMA)",
+    "briefDescription": "Middle-Georgia club serving Fort Valley and the surrounding area.",
+    "websiteUrl": "https://www.modelaircraft.org/club/georgia-aircraft-modelers-association-inc",
+    "location": "Fort Valley, GA",
+    "keyFeatures": "Club field at Camp John Hope; AMA-chartered; community events.",
+    "address": {
+      "street": "985 Camp John Hope Rd",
+      "city": "Fort Valley",
+      "state": "GA",
+      "zip": "31030"
+    },
+    "latitude": 32.464889,
+    "longitude": -83.832189,
+    "amaChartered": true
+  },
+  {
+    "id": "13",
+    "name": "Southwest Georgia RC Club",
+    "briefDescription": "SW Georgia club with a rural flying site west of Moultrie.",
+    "websiteUrl": "https://www.modelaircraft.org/club/southwest-georgia-rc-club",
+    "location": "Coolidge, GA",
+    "keyFeatures": "Grass runway; AMA-chartered; relaxed flying environment.",
+    "address": {
+      "street": "500 Mitchell Suber Rd",
+      "city": "Coolidge",
+      "state": "GA",
+      "zip": "31738"
+    },
+    "latitude": 31.07155,
+    "longitude": -83.8009,
+    "amaChartered": true
+  },
+  {
+    "id": "14",
+    "name": "Georgia Mountain RC Club",
+    "briefDescription": "Hall County club serving Gainesville and Lake Lanier area.",
+    "websiteUrl": "https://www.facebook.com/GeorgiaMountainRCClub/",
+    "location": "Gainesville, GA",
+    "keyFeatures": "Grass field; active membership; training and community events.",
+    "address": {
+      "street": "3310 Brookton Lula Rd",
+      "city": "Gainesville",
+      "state": "GA",
+      "zip": "30506"
+    },
+    "latitude": 34.423252,
+    "longitude": -83.737458,
+    "amaChartered": false
+  }
+]

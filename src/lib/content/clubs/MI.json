@@ -1,0 +1,466 @@
+[
+  {
+    "name": "Aero R/C Club, Inc.",
+    "briefDescription": "Established in the early 1960s, this club promotes radio-controlled flying and is AMA chartered.",
+    "websiteUrl": "https://aerorcclub.com/",
+    "location": "Lennon, MI",
+    "keyFeatures": "Monthly meetings, community events, training programs",
+    "address": {
+      "street": "2039 South Sheridan Road (M-13)",
+      "city": "Lennon",
+      "state": "MI",
+      "zip": "48449"
+    },
+    "latitude": 42.914,
+    "longitude": -83.907,
+    "amaChartered": true
+  },
+  {
+    "name": "Bay City Flyers",
+    "briefDescription": "A non-profit RC flying club chartered by the AMA, recognized as a Gold Leader Club.",
+    "websiteUrl": "https://baycityflyers.org/",
+    "location": "Bay City, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Bay City",
+      "state": "MI",
+      "zip": "48706"
+    },
+    "latitude": 43.589,
+    "longitude": -83.888,
+    "amaChartered": true
+  },
+  {
+    "name": "Fraser Flying Club",
+    "briefDescription": "Founded in 1974, this club provides a safe and relaxed place to fly and is AMA chartered.",
+    "websiteUrl": "https://www.fraserflyingclub.com/a/r/szz/rc/home",
+    "location": "Fraser, MI",
+    "keyFeatures": "Diverse flying disciplines, community events, training programs",
+    "address": {
+      "street": "Not specified",
+      "city": "Fraser",
+      "state": "MI",
+      "zip": "48026"
+    },
+    "latitude": 42.586,
+    "longitude": -82.939,
+    "amaChartered": true
+  },
+  {
+    "name": "Radio Control Club of Detroit",
+    "briefDescription": "A non-profit organization dedicated to the preservation and advancement of model aviation.",
+    "websiteUrl": "https://rccd.org/",
+    "location": "Detroit, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Detroit",
+      "state": "MI",
+      "zip": "48226"
+    },
+    "latitude": 42.331,
+    "longitude": -83.045,
+    "amaChartered": true
+  },
+  {
+    "name": "Scio Flyers",
+    "briefDescription": "An AMA chartered club in Ann Arbor, MI, promoting RC flying experiences and events.",
+    "websiteUrl": "https://www.scioflyers.com/about.html",
+    "location": "Ann Arbor, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Ann Arbor",
+      "state": "MI",
+      "zip": "48103"
+    },
+    "latitude": 42.28,
+    "longitude": -83.748,
+    "amaChartered": true
+  },
+  {
+    "name": "Midwest RC Society",
+    "briefDescription": "An AMA chartered club in Salem Township, MI, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.theampeer.org/midwest/",
+    "location": "Salem Township, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "7 Mile Road just east of Tower Road",
+      "city": "Salem Township",
+      "state": "MI",
+      "zip": "48167"
+    },
+    "latitude": 42.338,
+    "longitude": -83.531,
+    "amaChartered": true
+  },
+  {
+    "name": "Signal Seekers RC Club",
+    "briefDescription": "A community-centered, non-profit organization promoting model aircraft flying.",
+    "websiteUrl": "https://www.signalseekers.org/",
+    "location": "Not specified",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Not specified",
+      "state": "MI",
+      "zip": "Not specified"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Jackson RC Club",
+    "briefDescription": "One of the oldest AMA chartered clubs in Michigan, promoting model aircraft construction and flying.",
+    "websiteUrl": "https://jacksonrc.com/",
+    "location": "Jackson, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Jackson",
+      "state": "MI",
+      "zip": "49201"
+    },
+    "latitude": 42.24,
+    "longitude": -84.409,
+    "amaChartered": true
+  },
+  {
+    "name": "Grand Haven Memorial Airpark",
+    "briefDescription": "A public airport in Grand Haven, MI, allowing RC aircraft operations for AMA members.",
+    "websiteUrl": "https://en.wikipedia.org/wiki/Grand_Haven_Memorial_Airpark",
+    "location": "Grand Haven, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "16446 Comstock St.",
+      "city": "Grand Haven",
+      "state": "MI",
+      "zip": "49417"
+    },
+    "latitude": 43.067,
+    "longitude": -86.226,
+    "amaChartered": false
+  },
+  {
+    "name": "Baldwin Municipal Airport",
+    "briefDescription": "Hosts the annual Western Michigan Remote Control Expo and other RC events.",
+    "websiteUrl": "https://en.wikipedia.org/wiki/Baldwin_Municipal_Airport",
+    "location": "Baldwin, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Baldwin",
+      "state": "MI",
+      "zip": "49304"
+    },
+    "latitude": 43.955,
+    "longitude": -85.849,
+    "amaChartered": false
+  },
+  {
+    "name": "Romeo Skyhawks",
+    "briefDescription": "Located within the Wolcott Mill Metropark, near Ray, MI, offering RC flying experiences.",
+    "websiteUrl": "https://www.romeoskyhawks.org/",
+    "location": "Ray, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Ray",
+      "state": "MI",
+      "zip": "48096"
+    },
+    "latitude": 42.748,
+    "longitude": -83.026,
+    "amaChartered": false
+  },
+  {
+    "name": "Skymasters RC Club of Michigan",
+    "briefDescription": "Offers pilot instruction training, youth programs, and is AMA chartered.",
+    "websiteUrl": "https://www.modelaircraft.org/club/skymasters-rc-club-michigan",
+    "location": "Not specified",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Not specified",
+      "state": "MI",
+      "zip": "Not specified"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true
+  },
+  {
+    "name": "Great Lakes Signal Aces",
+    "briefDescription": "Located in Alcona County, MI, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/michigan-rc-airplane-clubs.html",
+    "location": "Alcona County, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Not specified",
+      "state": "MI",
+      "zip": "Not specified"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Allegan County RC Club",
+    "briefDescription": "Located in Allegan County, MI, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/michigan-rc-airplane-clubs.html",
+    "location": "Allegan County, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Not specified",
+      "state": "MI",
+      "zip": "Not specified"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Alpena County RC Club",
+    "briefDescription": "Located in Alpena County, MI, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/michigan-rc-airplane-clubs.html",
+    "location": "Alpena County, MI",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Not specified",
+      "city": "Not specified",
+      "state": "MI",
+      "zip": "Not specified"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Aero R/C Club, Inc.",
+    "briefDescription": "Established in the early 1960s, this AMA Charter Club #350 serves the Greater Flint Area, promoting radio-controlled flying.",
+    "websiteUrl": "https://aerorcclub.com/about.php",
+    "location": "Lennon, MI",
+    "keyFeatures": "Owned field, monthly meetings, community events",
+    "address": {
+      "street": "2039 South Sheridan Road (M-13)",
+      "city": "Lennon",
+      "state": "MI",
+      "zip": "48449"
+    },
+    "latitude": 42.9825,
+    "longitude": -83.8772,
+    "amaChartered": true
+  },
+  {
+    "name": "Scio Flyers",
+    "briefDescription": "An AMA-chartered club in Ann Arbor, MI, dedicated to model aviation and community engagement.",
+    "websiteUrl": "https://www.scioflyers.com/about.html",
+    "location": "Ann Arbor, MI",
+    "keyFeatures": "Training programs, community events, safety-focused",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Ann Arbor",
+      "state": "MI",
+      "zip": "48103"
+    },
+    "latitude": 42.2808,
+    "longitude": -83.743,
+    "amaChartered": true
+  },
+  {
+    "name": "Midwest RC Society",
+    "briefDescription": "AMA Charter Club #711, located in Salem Township, MI, focusing on radio-controlled aircraft flying.",
+    "websiteUrl": "https://www.theampeer.org/midwest/",
+    "location": "Salem Township, MI",
+    "keyFeatures": "Regular meetings, flying events, community involvement",
+    "address": {
+      "street": "7 Mile Road just east of Tower Road",
+      "city": "Salem Township",
+      "state": "MI",
+      "zip": "48168"
+    },
+    "latitude": 42.3625,
+    "longitude": -83.5125,
+    "amaChartered": true
+  },
+  {
+    "name": "Pontiac Miniature Aircraft Club (PMAC)",
+    "briefDescription": "One of the longest-established RC clubs in Southeast Michigan, an AMA Gold Leader club.",
+    "websiteUrl": "https://www.pmac-rc.com/",
+    "location": "Clarkston, MI",
+    "keyFeatures": "Diverse membership, training programs, community events",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Clarkston",
+      "state": "MI",
+      "zip": "48348"
+    },
+    "latitude": 42.7347,
+    "longitude": -83.4195,
+    "amaChartered": true
+  },
+  {
+    "name": "Benzie Area RC Club (BARC)",
+    "briefDescription": "A growing club with over 55 members, offering both outdoor and indoor flying opportunities.",
+    "websiteUrl": "https://www.benziearearc.com/",
+    "location": "Thompsonville, MI",
+    "keyFeatures": "Indoor flying sessions, trainer aircraft, community events",
+    "address": {
+      "street": "Thompsonville Airport, Lindy Rd",
+      "city": "Thompsonville",
+      "state": "MI",
+      "zip": "49683"
+    },
+    "latitude": 44.5725,
+    "longitude": -85.99,
+    "amaChartered": true
+  },
+  {
+    "name": "Signal Seekers RC Club",
+    "briefDescription": "A community-centered, non-profit organization promoting model aviation in Michigan.",
+    "websiteUrl": "https://www.signalseekers.org/",
+    "location": "Westland, MI",
+    "keyFeatures": "Building workshops, instructional programs, flying events",
+    "address": {
+      "street": "Between Merriman Rd. and Henry Ruff",
+      "city": "Westland",
+      "state": "MI",
+      "zip": "48185"
+    },
+    "latitude": 42.32,
+    "longitude": -83.4,
+    "amaChartered": false
+  },
+  {
+    "name": "Jackson RC Club",
+    "briefDescription": "One of the oldest AMA-chartered clubs in Michigan, dedicated to model aircraft construction and flying.",
+    "websiteUrl": "https://jacksonrc.com/",
+    "location": "Jackson, MI",
+    "keyFeatures": "Community engagement, training programs, flying events",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Jackson",
+      "state": "MI",
+      "zip": "49201"
+    },
+    "latitude": 42.245,
+    "longitude": -84.409,
+    "amaChartered": true
+  },
+  {
+    "name": "Radio Control Flying Club AMA #375",
+    "briefDescription": "Located between Baroda and Bridgeman, MI, offering a dedicated flying field for RC enthusiasts.",
+    "websiteUrl": "https://wwswmi.org/wordpress/",
+    "location": "Baroda, MI",
+    "keyFeatures": "Dedicated flying field, community events, member support",
+    "address": {
+      "street": "9974 Miller Road",
+      "city": "Baroda",
+      "state": "MI",
+      "zip": "49101"
+    },
+    "latitude": 41.95,
+    "longitude": -86.563,
+    "amaChartered": true
+  },
+  {
+    "name": "Warped Wings R/C",
+    "briefDescription": "An RC club in Allendale, MI, offering training and flying sessions for enthusiasts.",
+    "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
+    "location": "Allendale, MI",
+    "keyFeatures": "New pilot training, community events, flying sessions",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Allendale",
+      "state": "MI",
+      "zip": "49401"
+    },
+    "latitude": 42.965,
+    "longitude": -85.939,
+    "amaChartered": false
+  },
+  {
+    "name": "Ionia County Model Aircraft",
+    "briefDescription": "A model aircraft club in Saranac, MI, focusing on RC flying and community engagement.",
+    "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
+    "location": "Saranac, MI",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Saranac",
+      "state": "MI",
+      "zip": "48881"
+    },
+    "latitude": 42.978,
+    "longitude": -85.16,
+    "amaChartered": false
+  },
+  {
+    "name": "Wolverine Sky Hawks",
+    "briefDescription": "An RC club in Grand Rapids, MI, offering flying sessions and community events.",
+    "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
+    "location": "Grand Rapids, MI",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Grand Rapids",
+      "state": "MI",
+      "zip": "49503"
+    },
+    "latitude": 42.9634,
+    "longitude": -85.6681,
+    "amaChartered": false
+  },
+  {
+    "name": "Western Mich Radio Aircraft Flyers",
+    "briefDescription": "An RC club in Wyoming, MI, focusing on radio-controlled aircraft flying.",
+    "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
+    "location": "Wyoming, MI",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Wyoming",
+      "state": "MI",
+      "zip": "49509"
+    },
+    "latitude": 42.9135,
+    "longitude": -85.7053,
+    "amaChartered": false
+  },
+  {
+    "name": "Right Field Flyers",
+    "briefDescription": "An RC club in Grand Rapids, MI, offering flying sessions and community events.",
+    "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
+    "location": "Grand Rapids, MI",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Grand Rapids",
+      "state": "MI",
+      "zip": "49504"
+    },
+    "latitude": 42.9634,
+    "longitude": -85.6681,
+    "amaChartered": false
+  },
+  {
+    "name": "Kent Radio Aeromodelers",
+    "briefDescription": "An RC club in Alto, MI, focusing on radio-controlled aircraft flying.",
+    "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
+    "location": "Alto, MI",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Alto",
+      "state": "MI",
+      "zip": "49302"
+    },
+    "latitude": 42.876,
+    "longitude": -85.5145,
+    "amaChartered": false
+  }
+]

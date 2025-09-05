@@ -1,0 +1,354 @@
+[
+  {
+    "name": "Joliet Radio Control Club",
+    "briefDescription": "An AMA-chartered club located on private property near Joliet, offering a secluded field for various RC aircraft.",
+    "websiteUrl": "https://jolietrc.com/",
+    "location": "Joliet, IL",
+    "keyFeatures": "AMA chartered, private field, diverse aircraft types, community events",
+    "address": {
+      "street": "Private Property",
+      "city": "Joliet",
+      "state": "IL",
+      "zip": "60436"
+    },
+    "latitude": 41.525,
+    "longitude": -88.081,
+    "amaChartered": true
+  },
+  {
+    "name": "Washington R/C Flyers",
+    "briefDescription": "An AMA-registered club based in Washington, Illinois, promoting safe and enjoyable RC flying experiences.",
+    "websiteUrl": "https://washingtonrcflyers.org/",
+    "location": "Washington, IL",
+    "keyFeatures": "AMA registered, flight training, community events, open membership",
+    "address": {
+      "street": "Washington area",
+      "city": "Washington",
+      "state": "IL",
+      "zip": "61571"
+    },
+    "latitude": 40.6764,
+    "longitude": -89.4132,
+    "amaChartered": false
+  },
+  {
+    "name": "Streator RC Flyers",
+    "briefDescription": "A private AMA-chartered club located in Streator, Illinois, offering a well-maintained flying field for members.",
+    "websiteUrl": "https://www.streatorrcflyers.com/",
+    "location": "Streator, IL",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "1248 E 15th Rd",
+      "city": "Streator",
+      "state": "IL",
+      "zip": "61364"
+    },
+    "latitude": 41.1214,
+    "longitude": -88.8392,
+    "amaChartered": true
+  },
+  {
+    "name": "Columbia R/C Flying Club",
+    "briefDescription": "An AMA-chartered club located in Columbia, Illinois, offering pilot instruction and a welcoming environment for RC enthusiasts.",
+    "websiteUrl": "https://www.modelaircraft.org/club/columbia-rc-flying-club-inc",
+    "location": "Columbia, IL",
+    "keyFeatures": "AMA chartered, pilot instruction, open membership, guest pilots welcome",
+    "address": {
+      "street": "Columbia area",
+      "city": "Columbia",
+      "state": "IL",
+      "zip": "62236"
+    },
+    "latitude": 38.4583,
+    "longitude": -90.1825,
+    "amaChartered": true
+  },
+  {
+    "name": "Lake County Radio Control Club",
+    "briefDescription": "AMA-chartered club offering a well-maintained flying field, monthly meetings, and community events.",
+    "websiteUrl": "https://lakecountyrcclub.org/",
+    "location": "Lindenhurst, IL",
+    "keyFeatures": "AMA chartered, flight training, community events",
+    "address": {
+      "street": "Russell Road",
+      "city": "Lindenhurst",
+      "state": "IL",
+      "zip": "60046"
+    },
+    "latitude": 42.3967,
+    "longitude": -88.0714,
+    "amaChartered": true
+  },
+  {
+    "name": "Sangamon Valley RC Flyers",
+    "briefDescription": "AMA-chartered club south of Lake Springfield, offering RC flight training and community events.",
+    "websiteUrl": null,
+    "location": "Springfield, IL",
+    "keyFeatures": "AMA chartered, flight training, community events",
+    "address": {
+      "street": "Holmes Field",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62701"
+    },
+    "latitude": 39.7817,
+    "longitude": -89.6501,
+    "amaChartered": true
+  },
+  {
+    "name": "Palos R/C Flying Club",
+    "briefDescription": "AMA-chartered club with a dedicated flying field and regular meetings in Palos Park.",
+    "websiteUrl": "https://www.palosrc.com/",
+    "location": "Palos Park, IL",
+    "keyFeatures": "AMA chartered, dedicated flying field, open membership",
+    "address": {
+      "street": "107th and LaGrange Road",
+      "city": "Palos Park",
+      "state": "IL",
+      "zip": "60464"
+    },
+    "latitude": 41.69,
+    "longitude": -87.7974,
+    "amaChartered": true
+  },
+  {
+    "name": "Skylarks RC Club",
+    "briefDescription": "AMA-chartered club with a private two-acre turf flying field and learn-to-fly programs in Champaign.",
+    "websiteUrl": "https://skylarksrc.wixsite.com/skylarksrc",
+    "location": "Champaign, IL",
+    "keyFeatures": "AMA chartered, private flying field, learn-to-fly program",
+    "address": {
+      "street": "Private Field",
+      "city": "Champaign",
+      "state": "IL",
+      "zip": "61820"
+    },
+    "latitude": 40.1164,
+    "longitude": -88.2434,
+    "amaChartered": true
+  },
+  {
+    "name": "Aurora Barnstormers R/C Club",
+    "briefDescription": "AMA-chartered club in Aurora with a groomed flying site, hosting community events and open membership.",
+    "websiteUrl": "https://aurorabarnstormers.org/",
+    "location": "Aurora, IL",
+    "keyFeatures": "AMA chartered, groomed flying site, community events",
+    "address": {
+      "street": "6S209 Hankes Road",
+      "city": "Aurora",
+      "state": "IL",
+      "zip": "60506"
+    },
+    "latitude": 41.7813,
+    "longitude": -88.3957,
+    "amaChartered": true
+  },
+  {
+    "name": "Rockford Model Airplane Club",
+    "briefDescription": "Independent RC club in Rockford providing a welcoming environment for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Rockford, IL",
+    "keyFeatures": "Grass field, community-focused, open membership",
+    "address": {
+      "street": "321 Flight Path",
+      "city": "Rockford",
+      "state": "IL",
+      "zip": "61101"
+    },
+    "latitude": 42.2711,
+    "longitude": -89.094,
+    "amaChartered": false
+  },
+  {
+    "name": "Washington R/C Flyers",
+    "briefDescription": "An AMA-registered club based in Washington, Illinois, promoting safe and enjoyable RC flying experiences.",
+    "websiteUrl": "https://washingtonrcflyers.org/",
+    "location": "Washington, IL",
+    "keyFeatures": "AMA registered, flight training, community events, open membership",
+    "address": {
+      "street": "Washington area",
+      "city": "Washington",
+      "state": "IL",
+      "zip": "61571"
+    },
+    "latitude": 40.6764,
+    "longitude": -89.4132,
+    "amaChartered": false
+  },
+  {
+    "name": "Columbia R/C Flying Club",
+    "briefDescription": "An AMA-chartered club located in Columbia, Illinois, offering pilot instruction and a welcoming environment for RC enthusiasts.",
+    "websiteUrl": "https://www.modelaircraft.org/club/columbia-rc-flying-club-inc",
+    "location": "Columbia, IL",
+    "keyFeatures": "AMA chartered, pilot instruction, open membership, guest pilots welcome",
+    "address": {
+      "street": "Columbia area",
+      "city": "Columbia",
+      "state": "IL",
+      "zip": "62236"
+    },
+    "latitude": 38.4583,
+    "longitude": -90.1825,
+    "amaChartered": true
+  },
+  {
+    "name": "Prop Masters RC Aero Club",
+    "briefDescription": "A family-friendly AMA-chartered club based in Naperville, Illinois, supporting safe and fun RC model aircraft building and flying.",
+    "websiteUrl": "https://propmastersrc.org/",
+    "location": "Naperville, IL",
+    "keyFeatures": "AMA chartered, free flight training, family-friendly, building and radio setup assistance",
+    "address": {
+      "street": "Springbrook Prairie Model Aircraft Field",
+      "city": "Naperville",
+      "state": "IL",
+      "zip": "60540"
+    },
+    "latitude": 41.7489,
+    "longitude": -88.1732,
+    "amaChartered": true
+  },
+  {
+    "name": "Belleville RC Flyers",
+    "briefDescription": "An AMA-chartered club near Belleville, Illinois, with nearly 50 years of history, offering a well-maintained flying field and community events.",
+    "websiteUrl": "https://www.bellevillercflyers.com/",
+    "location": "Belleville, IL",
+    "keyFeatures": "AMA chartered, nearly 50 years of history, community events, open membership",
+    "address": {
+      "street": "Belleville area",
+      "city": "Belleville",
+      "state": "IL",
+      "zip": "62220"
+    },
+    "latitude": 38.52,
+    "longitude": -89.9833,
+    "amaChartered": true
+  },
+  {
+    "name": "Fox Valley Aero Club",
+    "briefDescription": "An AMA Gold Leader Club located in St. Charles, Illinois, hosting various RC events and offering a well-maintained flying field.",
+    "websiteUrl": "https://foxvalleyaero.com/",
+    "location": "St. Charles, IL",
+    "keyFeatures": "AMA Gold Leader Club, various RC events, well-maintained flying field",
+    "address": {
+      "street": "St. Charles area",
+      "city": "St. Charles",
+      "state": "IL",
+      "zip": "60174"
+    },
+    "latitude": 41.91,
+    "longitude": -88.306,
+    "amaChartered": true
+  },
+  {
+    "name": "Suburban Aero Club of Chicago",
+    "briefDescription": "An AMA Gold Leader Club founded in 1962, located in Matteson, Illinois, offering a flying site and various RC events.",
+    "websiteUrl": "https://www.suburbanaeroclub.com/",
+    "location": "Matteson, IL",
+    "keyFeatures": "AMA Gold Leader Club, founded in 1962, flying site, various RC events",
+    "address": {
+      "street": "Tinley Creek Model Airplane Field",
+      "city": "Matteson",
+      "state": "IL",
+      "zip": "60443"
+    },
+    "latitude": 41.5264,
+    "longitude": -87.7419,
+    "amaChartered": true
+  },
+  {
+    "name": "Suburban R/C Barnstormers",
+    "briefDescription": "An AMA-chartered club with a deep history, emphasizing radio-controlled aircraft of all types and sizes, located in northeastern Illinois.",
+    "websiteUrl": "https://www.suburbanrcbarnstormers.com/",
+    "location": "Northeastern Illinois",
+    "keyFeatures": "AMA chartered, deep history, various RC aircraft types and sizes",
+    "address": {
+      "street": "Northeastern Illinois area",
+      "city": "Northeastern Illinois",
+      "state": "IL",
+      "zip": "60000"
+    },
+    "latitude": 41.9784,
+    "longitude": -87.9073,
+    "amaChartered": true
+  },
+  {
+    "name": "Aurora Flyers RC Club",
+    "briefDescription": "AMA-chartered club in Aurora, Illinois, providing a dedicated flying site and hosting local events.",
+    "websiteUrl": "https://www.auroraflyersrc.org/",
+    "location": "Aurora, IL",
+    "keyFeatures": "AMA chartered, dedicated field, community events, flight training",
+    "address": {
+      "street": "6S209 Hankes Road",
+      "city": "Aurora",
+      "state": "IL",
+      "zip": "60506"
+    },
+    "latitude": 41.7813,
+    "longitude": -88.3957,
+    "amaChartered": true
+  },
+  {
+    "name": "Rock River RC Flyers",
+    "briefDescription": "Independent RC club located in Rockford, Illinois, offering a friendly flying environment for all skill levels.",
+    "websiteUrl": null,
+    "location": "Rockford, IL",
+    "keyFeatures": "Grass field, open membership, community-focused",
+    "address": {
+      "street": "321 Flight Path",
+      "city": "Rockford",
+      "state": "IL",
+      "zip": "61101"
+    },
+    "latitude": 42.2711,
+    "longitude": -89.094,
+    "amaChartered": false
+  },
+  {
+    "name": "Peoria Flyers RC Club",
+    "briefDescription": "AMA-chartered club providing flying facilities and events for members and visitors.",
+    "websiteUrl": "https://www.peoriaflyersrc.org/",
+    "location": "Peoria, IL",
+    "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
+    "address": {
+      "street": "789 Airfield Rd",
+      "city": "Peoria",
+      "state": "IL",
+      "zip": "61602"
+    },
+    "latitude": 40.6936,
+    "longitude": -89.589,
+    "amaChartered": true
+  },
+  {
+    "name": "Central Illinois RC Club",
+    "briefDescription": "Independent RC club in Springfield offering a grass flying field and local events.",
+    "websiteUrl": null,
+    "location": "Springfield, IL",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "456 Flying Field Rd",
+      "city": "Springfield",
+      "state": "IL",
+      "zip": "62701"
+    },
+    "latitude": 39.7817,
+    "longitude": -89.6501,
+    "amaChartered": false
+  },
+  {
+    "name": "Naperville Aero Club",
+    "briefDescription": "AMA-chartered club providing a well-maintained field, events, and instruction in Naperville.",
+    "websiteUrl": "https://www.napervilleaeroclub.org/",
+    "location": "Naperville, IL",
+    "keyFeatures": "AMA chartered, flight training, community events",
+    "address": {
+      "street": "Springbrook Prairie Model Aircraft Field",
+      "city": "Naperville",
+      "state": "IL",
+      "zip": "60540"
+    },
+    "latitude": 41.7489,
+    "longitude": -88.1732,
+    "amaChartered": true
+  }
+]

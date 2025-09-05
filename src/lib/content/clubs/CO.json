@@ -1,0 +1,242 @@
+[
+  {
+    "name": "Denver RC Flyers",
+    "briefDescription": "AMA-chartered club providing facilities for fixed-wing and rotorcraft flying near Denver.",
+    "websiteUrl": "https://www.denverrcflyers.org/",
+    "location": "Denver, CO",
+    "keyFeatures": "AMA chartered, open membership, pilot training, community events",
+    "address": {
+      "street": "1001 E 62nd Ave",
+      "city": "Denver",
+      "state": "CO",
+      "zip": "80216"
+    },
+    "latitude": 39.7863,
+    "longitude": -104.922,
+    "amaChartered": true
+  },
+  {
+    "name": "Front Range RC Club",
+    "briefDescription": "Independent RC club near Colorado Springs with a variety of aircraft flying opportunities.",
+    "websiteUrl": null,
+    "location": "Colorado Springs, CO",
+    "keyFeatures": "Grass field, multi-type aircraft, beginner-friendly, social events",
+    "address": {
+      "street": "1100 Aviation Blvd",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "zip": "80916"
+    },
+    "latitude": 38.8339,
+    "longitude": -104.8214,
+    "amaChartered": false
+  },
+  {
+    "name": "Pikes Peak RC Flyers",
+    "briefDescription": "AMA-chartered club located in the Pikes Peak region offering a scenic flying environment.",
+    "websiteUrl": "https://www.pikespeakrc.com/",
+    "location": "Colorado Springs, CO",
+    "keyFeatures": "AMA chartered, open membership, events for all skill levels, scenic location",
+    "address": {
+      "street": "Mount Herman Field",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "zip": "80923"
+    },
+    "latitude": 38.905,
+    "longitude": -104.777,
+    "amaChartered": true
+  },
+  {
+    "name": "Foothills RC Club",
+    "briefDescription": "Independent RC club serving the foothills west of Denver, offering casual flying for multi-type aircraft.",
+    "websiteUrl": null,
+    "location": "Golden, CO",
+    "keyFeatures": "Beginner-friendly, small community, grass airfield, multi-type aircraft",
+    "address": {
+      "street": "Foothills Flying Field",
+      "city": "Golden",
+      "state": "CO",
+      "zip": "80401"
+    },
+    "latitude": 39.7555,
+    "longitude": -105.2211,
+    "amaChartered": false
+  },
+  {
+    "name": "Colorado Springs Soaring Club",
+    "briefDescription": "AMA-chartered club specializing in glider and sailplane flying in the Colorado Springs area.",
+    "websiteUrl": "https://www.cssc.org/",
+    "location": "Colorado Springs, CO",
+    "keyFeatures": "Glider focus, AMA chartered, pilot instruction, competitions",
+    "address": {
+      "street": "Swope Field",
+      "city": "Colorado Springs",
+      "state": "CO",
+      "zip": "80904"
+    },
+    "latitude": 38.81,
+    "longitude": -104.783,
+    "amaChartered": true
+  },
+  {
+    "name": "Love-Air RC Club",
+    "briefDescription": "Gold Leader AMA club located at Drake Field in Ault, CO, offering a variety of flying disciplines including scale models, jets, and drones.",
+    "websiteUrl": "https://www.loveairrc.org/",
+    "location": "Ault, CO",
+    "keyFeatures": "Gold Leader Club, FAA FRIA site, Buddy Box training, community events",
+    "address": {
+      "street": "12760 Hwy 14",
+      "city": "Ault",
+      "state": "CO",
+      "zip": "80610"
+    },
+    "latitude": 40.5825,
+    "longitude": -104.6972,
+    "amaChartered": true
+  },
+  {
+    "name": "Rocky Mountain Modeleers",
+    "briefDescription": "Established in 1954, this AMA-chartered club in Wellington, CO, offers a large flying field and a variety of aircraft types.",
+    "websiteUrl": "https://www.modeleers.org/",
+    "location": "Wellington, CO",
+    "keyFeatures": "Established 1954, large field, diverse aircraft types, flight instruction",
+    "address": {
+      "street": "Near Wellington, CO",
+      "city": "Wellington",
+      "state": "CO",
+      "zip": "80549"
+    },
+    "latitude": 40.6889,
+    "longitude": -105.0686,
+    "amaChartered": true
+  },
+  {
+    "name": "Denver RC Eagles",
+    "briefDescription": "Founded in 1960, this AMA Gold Leader Club operates Suhaka Field at Cherry Creek State Park, offering paved runways and rotorcraft facilities.",
+    "websiteUrl": "https://www.denverrceagles.org/",
+    "location": "Denver, CO",
+    "keyFeatures": "Gold Leader Club, paved runways, rotorcraft facilities, public events",
+    "address": {
+      "street": "Suhaka Field, Cherry Creek State Park",
+      "city": "Denver",
+      "state": "CO",
+      "zip": "80246"
+    },
+    "latitude": 39.5761,
+    "longitude": -104.8764,
+    "amaChartered": true
+  },
+  {
+    "name": "Pikes Peak RC Club",
+    "briefDescription": "Located in Peyton, CO, this AMA-chartered club offers 24/7 access to its flying field and supports various flying activities.",
+    "websiteUrl": "https://www.modelaircraft.org/club/pikes-peak-rc-club",
+    "location": "Peyton, CO",
+    "keyFeatures": "24/7 access, diverse flying activities, open membership",
+    "address": {
+      "street": "17425 Judge Orr Road",
+      "city": "Peyton",
+      "state": "CO",
+      "zip": "80831"
+    },
+    "latitude": 38.9577,
+    "longitude": -104.4989,
+    "amaChartered": true
+  },
+  {
+    "name": "Jefco Aeromod'lers",
+    "briefDescription": "Founded in 1959, this AMA Gold Leader Club in Littleton, CO, offers two paved runways and a variety of flying disciplines.",
+    "websiteUrl": "https://jeffcoaeromodlers.com/",
+    "location": "Littleton, CO",
+    "keyFeatures": "Gold Leader Club, two paved runways, diverse flying disciplines, flight instruction",
+    "address": {
+      "street": "Chatfield State Park Aerodrome",
+      "city": "Littleton",
+      "state": "CO",
+      "zip": "80128"
+    },
+    "latitude": 39.565,
+    "longitude": -105.073,
+    "amaChartered": true
+  },
+  {
+    "name": "Sky Corral RC Club",
+    "briefDescription": "Located in Pueblo, CO, this AMA-chartered club features two large runways and hosts various flying events.",
+    "websiteUrl": "https://www.skycorralrcclub.com/",
+    "location": "Pueblo, CO",
+    "keyFeatures": "Two large runways, event hosting, diverse flying activities",
+    "address": {
+      "street": "Col. Brad Dolliver Field",
+      "city": "Pueblo",
+      "state": "CO",
+      "zip": "81001"
+    },
+    "latitude": 38.2544,
+    "longitude": -104.6097,
+    "amaChartered": true
+  },
+  {
+    "name": "Boulder Aeromodelers",
+    "briefDescription": "An AMA-chartered club in Boulder, CO, offering a variety of flying activities and community events.",
+    "websiteUrl": "https://www.boulderaero.org/",
+    "location": "Boulder, CO",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Boulder, CO",
+      "city": "Boulder",
+      "state": "CO",
+      "zip": "80301"
+    },
+    "latitude": 40.015,
+    "longitude": -105.2705,
+    "amaChartered": true
+  },
+  {
+    "name": "Mile Hi RC Club",
+    "briefDescription": "Located in Strasburg, CO, this AMA Gold Leader Club offers a variety of flying activities and community events.",
+    "websiteUrl": "https://www.milehirc.com/",
+    "location": "Strasburg, CO",
+    "keyFeatures": "Gold Leader Club, diverse flying activities, community events",
+    "address": {
+      "street": "52599-53699 County Road 30",
+      "city": "Strasburg",
+      "state": "CO",
+      "zip": "80136"
+    },
+    "latitude": 39.7497,
+    "longitude": -104.3583,
+    "amaChartered": true
+  },
+  {
+    "name": "The Magnificent Mountain Men (MMM) Free Flight Club",
+    "briefDescription": "Specializing in free flight model aircraft, this club operates in Aurora, CO.",
+    "websiteUrl": "https://www.themmmclub.com/",
+    "location": "Aurora, CO",
+    "keyFeatures": "Free flight specialization, open membership, community events",
+    "address": {
+      "street": "Aurora, CO",
+      "city": "Aurora",
+      "state": "CO",
+      "zip": "80010"
+    },
+    "latitude": 39.7392,
+    "longitude": -104.9903,
+    "amaChartered": false
+  },
+  {
+    "name": "Grand Junction Modeleers",
+    "briefDescription": "Serving Western Colorado and Eastern Utah, this club offers a flying field in Grand Junction, CO.",
+    "websiteUrl": "https://www.gjmodeleers.com/",
+    "location": "Grand Junction, CO",
+    "keyFeatures": "Regional service area, open membership, community events",
+    "address": {
+      "street": "3320 Whitewater Hill",
+      "city": "Grand Junction",
+      "state": "CO",
+      "zip": "81504"
+    },
+    "latitude": 39.0639,
+    "longitude": -108.55,
+    "amaChartered": true
+  }
+]

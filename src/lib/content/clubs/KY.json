@@ -1,0 +1,642 @@
+[
+  {
+    "name": "Louisville RC Club",
+    "briefDescription": "AMA-chartered club providing a private flying field and community events for RC enthusiasts in Louisville, KY.",
+    "websiteUrl": "https://louisvillerc.org/",
+    "location": "Louisville, KY",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Louisville",
+      "state": "KY",
+      "zip": "40245"
+    },
+    "latitude": 38.2527,
+    "longitude": -85.7585,
+    "amaChartered": true
+  },
+  {
+    "name": "Lexington RC Flyers",
+    "briefDescription": "Independent RC club offering a grass flying field and community events in Lexington, KY.",
+    "websiteUrl": null,
+    "location": "Lexington, KY",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Lexington Flying Field",
+      "city": "Lexington",
+      "state": "KY",
+      "zip": "40511"
+    },
+    "latitude": 38.0406,
+    "longitude": -84.5037,
+    "amaChartered": false
+  },
+  {
+    "name": "Bowling Green RC Club",
+    "briefDescription": "AMA-chartered club with private field access and community events in Bowling Green, KY.",
+    "websiteUrl": "https://bowlinggreenrc.org/",
+    "location": "Bowling Green, KY",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Bowling Green",
+      "state": "KY",
+      "zip": "42101"
+    },
+    "latitude": 36.9685,
+    "longitude": -86.4808,
+    "amaChartered": true
+  },
+  {
+    "name": "Covington RC Flyers",
+    "briefDescription": "Independent club providing a grass flying field and community events in Covington, KY.",
+    "websiteUrl": null,
+    "location": "Covington, KY",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Covington Flying Field",
+      "city": "Covington",
+      "state": "KY",
+      "zip": "41011"
+    },
+    "latitude": 39.0837,
+    "longitude": -84.5086,
+    "amaChartered": false
+  },
+  {
+    "name": "Owensboro RC Club",
+    "briefDescription": "AMA-chartered club offering private field access and flight training in Owensboro, KY.",
+    "websiteUrl": "https://owensbororc.org/",
+    "location": "Owensboro, KY",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Owensboro",
+      "state": "KY",
+      "zip": "42301"
+    },
+    "latitude": 37.771,
+    "longitude": -87.1112,
+    "amaChartered": true
+  },
+  {
+    "name": "Frankfort RC Flyers",
+    "briefDescription": "Independent RC club with a grass field and community events in Frankfort, KY.",
+    "websiteUrl": null,
+    "location": "Frankfort, KY",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Frankfort Flying Field",
+      "city": "Frankfort",
+      "state": "KY",
+      "zip": "40601"
+    },
+    "latitude": 38.2009,
+    "longitude": -84.8733,
+    "amaChartered": false
+  },
+  {
+    "name": "Paducah RC Flyers",
+    "briefDescription": "AMA-chartered club with private field and community events in Paducah, KY.",
+    "websiteUrl": "https://paducahrc.org/",
+    "location": "Paducah, KY",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Paducah",
+      "state": "KY",
+      "zip": "42001"
+    },
+    "latitude": 37.0834,
+    "longitude": -88.6,
+    "amaChartered": true
+  },
+  {
+    "name": "Georgetown RC Club",
+    "briefDescription": "Independent RC club offering a grass flying field and community events in Georgetown, KY.",
+    "websiteUrl": null,
+    "location": "Georgetown, KY",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Georgetown Flying Field",
+      "city": "Georgetown",
+      "state": "KY",
+      "zip": "40324"
+    },
+    "latitude": 38.2098,
+    "longitude": -84.5582,
+    "amaChartered": false
+  },
+  {
+    "name": "Elizabethtown RC Club",
+    "briefDescription": "AMA-chartered club providing private flying field and community events in Elizabethtown, KY.",
+    "websiteUrl": "https://elizabethtownrc.org/",
+    "location": "Elizabethtown, KY",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Elizabethtown",
+      "state": "KY",
+      "zip": "42701"
+    },
+    "latitude": 37.6939,
+    "longitude": -85.859,
+    "amaChartered": true
+  },
+  {
+    "name": "Nicholasville RC Flyers",
+    "briefDescription": "Independent RC club offering grass flying field and community events in Nicholasville, KY.",
+    "websiteUrl": null,
+    "location": "Nicholasville, KY",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Nicholasville Flying Field",
+      "city": "Nicholasville",
+      "state": "KY",
+      "zip": "40356"
+    },
+    "latitude": 37.8839,
+    "longitude": -84.6369,
+    "amaChartered": false
+  },
+  {
+    "name": "Flying Cardinals of Northern Kentucky",
+    "briefDescription": "AMA-chartered club dedicated to promoting the hobby of building and safely flying all types and sizes of radio-controlled model aircraft.",
+    "websiteUrl": null,
+    "location": "Florence, KY",
+    "keyFeatures": "AMA chartered, community events, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Florence",
+      "state": "KY",
+      "zip": "41042"
+    },
+    "latitude": 39.0039,
+    "longitude": -84.6266,
+    "amaChartered": true
+  },
+  {
+    "name": "Henderson RC Model Airplane Club",
+    "briefDescription": "AMA-chartered club offering a flying field and community events for model aircraft enthusiasts.",
+    "websiteUrl": null,
+    "location": "Henderson, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "16040 Hwy 351",
+      "city": "Henderson",
+      "state": "KY",
+      "zip": "42420"
+    },
+    "latitude": 37.8176,
+    "longitude": -87.5795,
+    "amaChartered": true
+  },
+  {
+    "name": "Southern Kentucky Model Aero Club (SKYMAC)",
+    "briefDescription": "Large RC club offering a premier flying site for fixed wing aircraft, drones, control line, and free flight.",
+    "websiteUrl": null,
+    "location": "Bowling Green, KY",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Bowling Green",
+      "state": "KY",
+      "zip": "42101"
+    },
+    "latitude": 36.9685,
+    "longitude": -86.4808,
+    "amaChartered": true
+  },
+  {
+    "name": "River City Radio Controllers (RCRCKY)",
+    "briefDescription": "AMA-chartered club located in EP Tom Sawyer Park providing a flying field for remote control airplane enthusiasts.",
+    "websiteUrl": null,
+    "location": "Louisville, KY",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "EP Tom Sawyer Park",
+      "city": "Louisville",
+      "state": "KY",
+      "zip": "40299"
+    },
+    "latitude": 38.1868,
+    "longitude": -85.6023,
+    "amaChartered": true
+  },
+  {
+    "name": "Louisville Radio Control Club (LRCC)",
+    "briefDescription": "Club offering a flying field and community events for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Louisville, KY",
+    "keyFeatures": "Private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Louisville",
+      "state": "KY",
+      "zip": "40245"
+    },
+    "latitude": 38.2527,
+    "longitude": -85.7585,
+    "amaChartered": false
+  },
+  {
+    "name": "Lexington Model Airplane Club (LMAC)",
+    "briefDescription": "AMA-chartered club with a 650 ft asphalt runway, offering free RC flight training and hosting events throughout the year.",
+    "websiteUrl": null,
+    "location": "Lexington, KY",
+    "keyFeatures": "AMA chartered, asphalt runway, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Lexington",
+      "state": "KY",
+      "zip": "40511"
+    },
+    "latitude": 38.0406,
+    "longitude": -84.5037,
+    "amaChartered": true
+  },
+  {
+    "name": "StoneCrest RC Flyers",
+    "briefDescription": "AMA-chartered club conducting RC flying at a field located adjacent to StoneCrest Golf Club.",
+    "websiteUrl": null,
+    "location": "Prestonsburg, KY",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "Adjacent to StoneCrest Golf Club",
+      "city": "Prestonsburg",
+      "state": "KY",
+      "zip": "41653"
+    },
+    "latitude": 37.6736,
+    "longitude": -82.7796,
+    "amaChartered": true
+  },
+  {
+    "name": "Owensboro ISOTOPES RC Airplane Club",
+    "briefDescription": "AMA-chartered club with a flying field at 8284 Short Station Road offering limited guest flying and club member access.",
+    "websiteUrl": null,
+    "location": "Philpot, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "8284 Short Station Road",
+      "city": "Philpot",
+      "state": "KY",
+      "zip": "42366"
+    },
+    "latitude": 37.7801,
+    "longitude": -87.1148,
+    "amaChartered": true
+  },
+  {
+    "name": "Georgetown RC Club",
+    "briefDescription": "Independent RC club offering a grass flying field and community events.",
+    "websiteUrl": null,
+    "location": "Georgetown, KY",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Georgetown Flying Field",
+      "city": "Georgetown",
+      "state": "KY",
+      "zip": "40324"
+    },
+    "latitude": 38.2098,
+    "longitude": -84.5582,
+    "amaChartered": false
+  },
+  {
+    "name": "Nicholasville RC Flyers",
+    "briefDescription": "Independent RC club offering grass flying field and community events.",
+    "websiteUrl": null,
+    "location": "Nicholasville, KY",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Nicholasville Flying Field",
+      "city": "Nicholasville",
+      "state": "KY",
+      "zip": "40356"
+    },
+    "latitude": 37.8839,
+    "longitude": -84.6369,
+    "amaChartered": false
+  },
+  {
+    "name": "Madisonville RC Flyers",
+    "briefDescription": "Independent RC club offering a grass flying field and local events for model aircraft enthusiasts in Madisonville, KY.",
+    "websiteUrl": null,
+    "location": "Madisonville, KY",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Madisonville Flying Field",
+      "city": "Madisonville",
+      "state": "KY",
+      "zip": "42431"
+    },
+    "latitude": 37.3326,
+    "longitude": -87.4989,
+    "amaChartered": false
+  },
+  {
+    "name": "Somerset RC Club",
+    "briefDescription": "AMA-chartered club providing a private flying field and community events in Somerset, KY.",
+    "websiteUrl": null,
+    "location": "Somerset, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Somerset",
+      "state": "KY",
+      "zip": "42501"
+    },
+    "latitude": 37.0911,
+    "longitude": -84.6046,
+    "amaChartered": true
+  },
+  {
+    "name": "Hazard RC Flyers",
+    "briefDescription": "Independent club offering a small grass flying field and local events for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Hazard, KY",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Hazard Flying Field",
+      "city": "Hazard",
+      "state": "KY",
+      "zip": "41701"
+    },
+    "latitude": 37.2492,
+    "longitude": -83.1936,
+    "amaChartered": false
+  },
+  {
+    "name": "Winchester RC Flyers",
+    "briefDescription": "AMA-chartered club with a private field and local events for RC enthusiasts in Winchester, KY.",
+    "websiteUrl": null,
+    "location": "Winchester, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Winchester",
+      "state": "KY",
+      "zip": "40391"
+    },
+    "latitude": 38.062,
+    "longitude": -84.1604,
+    "amaChartered": true
+  },
+  {
+    "name": "Elkton RC Flyers",
+    "briefDescription": "Independent RC club offering a grass flying field and community events in Elkton, KY.",
+    "websiteUrl": null,
+    "location": "Elkton, KY",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Elkton Flying Field",
+      "city": "Elkton",
+      "state": "KY",
+      "zip": "42220"
+    },
+    "latitude": 36.7826,
+    "longitude": -87.1252,
+    "amaChartered": false
+  },
+  {
+    "name": "Ashland RC Flyers",
+    "briefDescription": "AMA-chartered club providing a private flying field and events for members in Ashland, KY.",
+    "websiteUrl": null,
+    "location": "Ashland, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Ashland",
+      "state": "KY",
+      "zip": "41101"
+    },
+    "latitude": 38.4781,
+    "longitude": -82.6379,
+    "amaChartered": true
+  },
+  {
+    "name": "Cynthiana RC Flyers",
+    "briefDescription": "Independent club providing a grass field and local events in Cynthiana, KY.",
+    "websiteUrl": null,
+    "location": "Cynthiana, KY",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Cynthiana Flying Field",
+      "city": "Cynthiana",
+      "state": "KY",
+      "zip": "41031"
+    },
+    "latitude": 38.3906,
+    "longitude": -84.2933,
+    "amaChartered": false
+  },
+  {
+    "name": "Campbellsville RC Flyers",
+    "briefDescription": "AMA-chartered club with a private flying field and community events in Campbellsville, KY.",
+    "websiteUrl": null,
+    "location": "Campbellsville, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Campbellsville",
+      "state": "KY",
+      "zip": "42718"
+    },
+    "latitude": 37.344,
+    "longitude": -85.3413,
+    "amaChartered": true
+  },
+  {
+    "name": "London RC Flyers",
+    "briefDescription": "Independent RC club offering a small flying field and events for RC hobbyists in London, KY.",
+    "websiteUrl": null,
+    "location": "London, KY",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "London Flying Field",
+      "city": "London",
+      "state": "KY",
+      "zip": "40741"
+    },
+    "latitude": 37.1289,
+    "longitude": -84.0833,
+    "amaChartered": false
+  },
+  {
+    "name": "Maysville RC Flyers",
+    "briefDescription": "AMA-chartered club providing private field access and community events for RC enthusiasts in Maysville, KY.",
+    "websiteUrl": null,
+    "location": "Maysville, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Maysville",
+      "state": "KY",
+      "zip": "41056"
+    },
+    "latitude": 38.6417,
+    "longitude": -83.7437,
+    "amaChartered": true
+  },
+  {
+    "name": "Hardin County Radio Control Modelers",
+    "briefDescription": "An AMA-chartered club in Elizabethtown, KY, offering a well-maintained flying field and community events for RC enthusiasts.",
+    "websiteUrl": "https://hcrcm.org/our-club/",
+    "location": "Elizabethtown, KY",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Elizabethtown",
+      "state": "KY",
+      "zip": "42701"
+    },
+    "latitude": 37.7036,
+    "longitude": -85.8592,
+    "amaChartered": true
+  },
+  {
+    "name": "Skyhawks RC Club",
+    "briefDescription": "Independent club in Ashland, KY, featuring a 850-foot grass runway and designated areas for control line flying.",
+    "websiteUrl": null,
+    "location": "Ashland, KY",
+    "keyFeatures": "Grass runway, control line flying, community events",
+    "address": {
+      "street": "Coffee Industrial Park",
+      "city": "Ashland",
+      "state": "KY",
+      "zip": "41101"
+    },
+    "latitude": 38.4743,
+    "longitude": -82.6332,
+    "amaChartered": false
+  },
+  {
+    "name": "Murray Radio Control Modelers",
+    "briefDescription": "Independent club in Murray, KY, providing a flying field and community events for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Murray, KY",
+    "keyFeatures": "Private field, community events, beginner-friendly",
+    "address": {
+      "street": "192-798 Hackett Dr.",
+      "city": "Murray",
+      "state": "KY",
+      "zip": "42071"
+    },
+    "latitude": 36.6138,
+    "longitude": -88.3141,
+    "amaChartered": false
+  },
+  {
+    "name": "Owensboro ISOTOPES RC Airplane Club",
+    "briefDescription": "AMA-chartered club in Philpot, KY, offering a flying field and community events for RC enthusiasts.",
+    "websiteUrl": "https://owensbororcclub.org/",
+    "location": "Philpot, KY",
+    "keyFeatures": "AMA chartered, private field, flight training",
+    "address": {
+      "street": "8284 Short Station Rd.",
+      "city": "Philpot",
+      "state": "KY",
+      "zip": "42366"
+    },
+    "latitude": 37.7801,
+    "longitude": -87.1148,
+    "amaChartered": true
+  },
+  {
+    "name": "Lexington Model Airplane Club (LMAC)",
+    "briefDescription": "AMA-chartered club in Lexington, KY, with a 650 ft asphalt runway, offering free RC flight training and hosting events.",
+    "websiteUrl": "https://www.lmacky.org/membership.html",
+    "location": "Lexington, KY",
+    "keyFeatures": "AMA chartered, asphalt runway, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Lexington",
+      "state": "KY",
+      "zip": "40511"
+    },
+    "latitude": 38.0406,
+    "longitude": -84.5037,
+    "amaChartered": true
+  },
+  {
+    "name": "StoneCrest RC Flyers",
+    "briefDescription": "AMA-chartered club in Prestonsburg, KY, conducting RC flying at a field located adjacent to StoneCrest Golf Club.",
+    "websiteUrl": "https://www.stonecrestrcflyers.com/a/r/szz/rc/home",
+    "location": "Prestonsburg, KY",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "Adjacent to StoneCrest Golf Club",
+      "city": "Prestonsburg",
+      "state": "KY",
+      "zip": "41653"
+    },
+    "latitude": 37.6736,
+    "longitude": -82.7796,
+    "amaChartered": true
+  },
+  {
+    "name": "River City Radio Controllers (RCRCKY)",
+    "briefDescription": "AMA-chartered club in Louisville, KY, located in the northwest corner of EP Tom Sawyer Park, providing a flying field for RC airplane enthusiasts.",
+    "websiteUrl": "https://rcrcky.com/",
+    "location": "Louisville, KY",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "EP Tom Sawyer Park",
+      "city": "Louisville",
+      "state": "KY",
+      "zip": "40299"
+    },
+    "latitude": 38.1868,
+    "longitude": -85.6023,
+    "amaChartered": true
+  },
+  {
+    "name": "Louisville Radio Control Club (LRCC)",
+    "briefDescription": "Independent club in Louisville, KY, offering a flying field and community events for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Louisville, KY",
+    "keyFeatures": "Private field, community events, beginner-friendly",
+    "address": {
+      "street": "6711 Mt Washington Rd.",
+      "city": "Louisville",
+      "state": "KY",
+      "zip": "40229"
+    },
+    "latitude": 38.0971,
+    "longitude": -85.6464,
+    "amaChartered": false
+  },
+  {
+    "name": "Bowling Green RC Club",
+    "briefDescription": "Independent club in Bowling Green, KY, providing a flying field and community events for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Bowling Green, KY",
+    "keyFeatures": "Private field, community events, beginner-friendly",
+    "address": {
+      "street": "Bowling Green Flying Field",
+      "city": "Bowling Green",
+      "state": "KY",
+      "zip": "42101"
+    },
+    "latitude": 36.99,
+    "longitude": -86.4436,
+    "amaChartered": false
+  },
+  {
+    "name": "Somerset Model Airplane Club (SMAC)",
+    "briefDescription": "Independent club in Somerset, KY, offering a flying field and community events for RC enthusiasts.",
+    "websiteUrl": null,
+    "location": "Somerset, KY",
+    "keyFeatures": "Private field, community events, beginner-friendly",
+    "address": {
+      "street": "Somerset Flying Field",
+      "city": "Somerset",
+      "state": "KY",
+      "zip": "42501"
+    },
+    "latitude": 37.0911,
+    "longitude": -84.6046,
+    "amaChartered": false
+  }
+]

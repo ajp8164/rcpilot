@@ -1,0 +1,702 @@
+[
+  {
+    "id": "1",
+    "name": "Mid-Missouri Radio Control Association",
+    "briefDescription": "An AMA-chartered club in Columbia, MO, offering a paved runway and various RC flying events.",
+    "websiteUrl": "https://www.mmrca.org/",
+    "location": "Columbia, MO",
+    "keyFeatures": "Paved runway, community events, training programs",
+    "address": {
+      "street": "2810 S. Coats Lane",
+      "city": "Columbia",
+      "state": "MO",
+      "zip": "65203"
+    },
+    "latitude": 38.9517,
+    "longitude": -92.3341,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "2",
+    "name": "Saint Louis Radio Control Flying Association",
+    "briefDescription": "An AMA-chartered club located in Eureka, MO, featuring a 42′ by 600′ paved runway and various RC flying events.",
+    "websiteUrl": "https://www.slrcfa.com/",
+    "location": "Eureka, MO",
+    "keyFeatures": "Paved runway, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Eureka",
+      "state": "MO",
+      "zip": "63025"
+    },
+    "latitude": 38.4875,
+    "longitude": -90.5391,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "3",
+    "name": "Kansas City Radio Control",
+    "briefDescription": "An AMA-chartered club in Kansas City, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.kcradiocontrol.com/",
+    "location": "Kansas City, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Kansas City",
+      "state": "MO",
+      "zip": "64153"
+    },
+    "latitude": 39.2975,
+    "longitude": -94.6811,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "4",
+    "name": "Springfield RC Club",
+    "briefDescription": "An AMA Gold Leader Club located in Fair Grove, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.springfieldrcclub.org/",
+    "location": "Fair Grove, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "2320 E State Hwy KK",
+      "city": "Fair Grove",
+      "state": "MO",
+      "zip": "65648"
+    },
+    "latitude": 37.331,
+    "longitude": -93.2462,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "5",
+    "name": "Mineral Area Modeling Association",
+    "briefDescription": "An AMA-chartered club in Park Hills, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.facebook.com/groups/rcmama/",
+    "location": "Park Hills, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "St. Joe Park",
+      "city": "Park Hills",
+      "state": "MO",
+      "zip": "63601"
+    },
+    "latitude": 37.8161,
+    "longitude": -90.5311,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "6",
+    "name": "Jefferson City Radio Control Club",
+    "briefDescription": "An AMA-chartered club in Jefferson City, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.jcparks.com/jc-radio-control-club/",
+    "location": "Jefferson City, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "5601 Rainbow Dr",
+      "city": "Jefferson City",
+      "state": "MO",
+      "zip": "65109"
+    },
+    "latitude": 38.5721,
+    "longitude": -92.1781,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "7",
+    "name": "Signal Chasers R/C Flying Club",
+    "briefDescription": "An AMA-chartered club near Pacific, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://signalchaserscom.wordpress.com/",
+    "location": "Pacific, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Bend Road (Hiway N)",
+      "city": "Pacific",
+      "state": "MO",
+      "zip": "63069"
+    },
+    "latitude": 38.4325,
+    "longitude": -90.7731,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "8",
+    "name": "Lafayette Esquadrille Control Line Club",
+    "briefDescription": "An AMA-chartered club in St. Louis, MO, specializing in control line model airplanes.",
+    "websiteUrl": "https://lafayetteesquadrillecl.wordpress.com/",
+    "location": "St. Louis, MO",
+    "keyFeatures": "Control line flying, community events, training programs",
+    "address": {
+      "street": "Buder Park",
+      "city": "St. Louis",
+      "state": "MO",
+      "zip": "63129"
+    },
+    "latitude": 38.515,
+    "longitude": -90.2925,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "9",
+    "name": "Phantom Flyers RC Club",
+    "briefDescription": "One of the oldest AMA-chartered RC clubs in the U.S., located in St. Louis, MO.",
+    "websiteUrl": "https://www.phantomflyersrc.com/",
+    "location": "St. Louis, MO",
+    "keyFeatures": "Long history, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "St. Louis",
+      "state": "MO",
+      "zip": "63123"
+    },
+    "latitude": 38.54,
+    "longitude": -90.3145,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "10",
+    "name": "St. Charles County Radio Control Club",
+    "briefDescription": "An AMA-chartered club in St. Charles, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.stcharlesrcclub.com/",
+    "location": "St. Charles, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "St. Charles",
+      "state": "MO",
+      "zip": "63301"
+    },
+    "latitude": 38.7885,
+    "longitude": -90.4975,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "11",
+    "name": "Cape Girardeau RC Club",
+    "briefDescription": "An AMA-chartered club in Cape Girardeau, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.capeairrc.com/",
+    "location": "Cape Girardeau, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Cape Girardeau",
+      "state": "MO",
+      "zip": "63701"
+    },
+    "latitude": 37.305,
+    "longitude": -89.518,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "12",
+    "name": "Jefferson County Radio Control Club",
+    "briefDescription": "An AMA-chartered club in Hillsboro, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.jcrcclub.com/",
+    "location": "Hillsboro, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Hillsboro",
+      "state": "MO",
+      "zip": "63050"
+    },
+    "latitude": 38.2095,
+    "longitude": -90.5725,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "13",
+    "name": "Ozark Mountain RC Club",
+    "briefDescription": "An AMA-chartered club in Branson, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.ozarkmountainrc.com/",
+    "location": "Branson, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Branson",
+      "state": "MO",
+      "zip": "65616"
+    },
+    "latitude": 36.643,
+    "longitude": -93.2175,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "14",
+    "name": "Northwest Missouri RC Club",
+    "briefDescription": "An AMA-chartered club in St. Joseph, MO, offering a flying field and various RC flying events.",
+    "websiteUrl": "https://www.nwmorcc.com/",
+    "location": "St. Joseph, MO",
+    "keyFeatures": "Flying field, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "St. Joseph",
+      "state": "MO",
+      "zip": "64507"
+    },
+    "latitude": 39.7675,
+    "longitude": -94.8105,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "15",
+    "name": "Kansas City Radio Control Association",
+    "briefDescription": "Large, long-running AMA Gold Leader club serving the Kansas City / Lee's Summit area with multiple runways and public events.",
+    "websiteUrl": "https://www.kcradiocontrol.com/",
+    "location": "Lee's Summit, MO",
+    "keyFeatures": "Owned field (Charles Reed Memorial Flying Field), training, warbird/classics fly-ins, public events",
+    "address": {
+      "street": "3899 Rennau Dr (Fleming Park/Charles Reed Memorial Flying Field)",
+      "city": "Lee's Summit",
+      "state": "MO",
+      "zip": "64064"
+    },
+    "latitude": 38.977202,
+    "longitude": -94.342007,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "16",
+    "name": "Phantom Flyers R/C Club",
+    "briefDescription": "Historic, AMA-chartered St. Charles club with a large field and a long event calendar (pattern, fun-fly, swap meets).",
+    "websiteUrl": "https://www.phantomflyersrc.com/",
+    "location": "Saint Charles, MO",
+    "keyFeatures": "Large grass field, pattern contests, swap meets, member training",
+    "address": {
+      "street": "4299 Wiedey Rd",
+      "city": "Saint Charles",
+      "state": "MO",
+      "zip": "63301"
+    },
+    "latitude": 38.840951,
+    "longitude": -90.419502,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "17",
+    "name": "Saint Louis Radio Control Flying Association (SLRCFA)",
+    "briefDescription": "Major St. Louis area AMA-chartered club with a large field, jets, big-bird events, and open houses.",
+    "websiteUrl": "https://slrcfa.com/",
+    "location": "Eureka, MO",
+    "keyFeatures": "Asphalt & grass runways, jet events, camps & flys, public open houses",
+    "address": {
+      "street": "788 Augustine Rd",
+      "city": "Eureka",
+      "state": "MO",
+      "zip": "63025"
+    },
+    "latitude": 38.4823098,
+    "longitude": -90.60782,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "18",
+    "name": "Springfield RC Club (BlackSheep Squadron)",
+    "briefDescription": "Active southwest-Missouri club running community events, contests and pilot training north of Springfield.",
+    "websiteUrl": "https://www.springfieldrcclub.org/",
+    "location": "Springfield, MO",
+    "keyFeatures": "Field flying, public demos, contests, youth outreach",
+    "address": {
+      "street": "2260 E State Hwy KK (field area)",
+      "city": "Springfield",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "19",
+    "name": "Mid-Missouri Radio Control Association (MMRCA)",
+    "briefDescription": "Columbia area AMA club with an established flying site and active calendar (instruction & events).",
+    "websiteUrl": "https://www.mmrca.org/",
+    "location": "Columbia, MO",
+    "keyFeatures": "Owned field, pilot instruction, community events",
+    "address": {
+      "street": "2810 S Coats Ln",
+      "city": "Columbia",
+      "state": "MO",
+      "zip": "65203"
+    },
+    "latitude": 38.926388,
+    "longitude": -92.422222,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "20",
+    "name": "Jefferson City Radio Control Club",
+    "briefDescription": "Capital-area club flying at Joseph C. Miller Flying Field, offering instruction, public demos and community events.",
+    "websiteUrl": "https://www.modelaircraft.org/club/jefferson-city-rc-club",
+    "location": "Jefferson City, MO",
+    "keyFeatures": "Asphalt runway, covered shelter, pilot instruction, youth outreach",
+    "address": {
+      "street": "5601 Rainbow Dr (Joseph C. Miller Flying Field)",
+      "city": "Jefferson City",
+      "state": "MO",
+      "zip": "65109"
+    },
+    "latitude": 38.589288,
+    "longitude": -92.299912,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "21",
+    "name": "Sedalia R/C Flyers",
+    "briefDescription": "Central Missouri club that flies at the State Fairgrounds with public flying and club events.",
+    "websiteUrl": "https://sedaliarcflyers.com/wordpress/",
+    "location": "Sedalia, MO",
+    "keyFeatures": "State Fairgrounds field, seasonal events, swap meets",
+    "address": {
+      "street": "Missouri State Fairgrounds Gate 9 (off Clarendon Rd)",
+      "city": "Sedalia",
+      "state": "MO",
+      "zip": "65301"
+    },
+    "latitude": 38.690075,
+    "longitude": -93.266894,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "22",
+    "name": "Mineral Area Modeling Association (MAMA)",
+    "briefDescription": "Southeast-Missouri AMA-chartered club flying at St. Joe State Park / Pimville Rd field.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mineral-area-modeling-association",
+    "location": "Park Hills, MO",
+    "keyFeatures": "Park field, public demos, community outreach",
+    "address": {
+      "street": "3380 Pimville Rd",
+      "city": "Park Hills",
+      "state": "MO",
+      "zip": "63601"
+    },
+    "latitude": 37.819779,
+    "longitude": -90.531898,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "23",
+    "name": "St. Joe Barnstormers",
+    "briefDescription": "Northwest Missouri club (St. Joseph area) — hosts fun-flies and public events at a dedicated Field of Dreams site.",
+    "websiteUrl": "https://www.modelaircraft.org/club/st-joe-barnstormers",
+    "location": "Saint Joseph, MO",
+    "keyFeatures": "Field of Dreams flying field, fun-flys, community events",
+    "address": {
+      "street": "7274 Missouri Hwy 6",
+      "city": "Saint Joseph",
+      "state": "MO",
+      "zip": "64507"
+    },
+    "latitude": 39.779611,
+    "longitude": -94.733538,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "24",
+    "name": "Southeast Missouri Modelers Association (SEMMA)",
+    "briefDescription": "Cape Girardeau area AMA-chartered modelers association — active public demonstrations and community events.",
+    "websiteUrl": "https://semmarc.net/",
+    "location": "Cape Girardeau, MO",
+    "keyFeatures": "Public demos, community outreach, airport and park events",
+    "address": {
+      "street": "441 Gizmo Ln (Galaxy Park / flying site)",
+      "city": "Cape Girardeau",
+      "state": "MO",
+      "zip": "63701"
+    },
+    "latitude": 37.35301,
+    "longitude": -89.48831,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "25",
+    "name": "Ozark Mountain Barnstormers",
+    "briefDescription": "Springfield-area club (Ozarks) — group for general RC flying and local contests.",
+    "websiteUrl": "https://www.rcgroups.com/forums/showthread.php?1565415-Ozark-Mountain-Barnstormers",
+    "location": "Springfield / Ozark area, MO",
+    "keyFeatures": "Local contests, club fly-ins, community events",
+    "address": {
+      "street": null,
+      "city": "Springfield",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "26",
+    "name": "Lake Ozark Radio Control Society",
+    "briefDescription": "Central-Missouri float/field club that runs regular events and fly-ins near the Lake of the Ozarks.",
+    "websiteUrl": "https://www.facebook.com/groups/485692538658261",
+    "location": "Eldon / Lake Ozark area, MO",
+    "keyFeatures": "Float flies, field events, club gatherings",
+    "address": {
+      "street": "26 Porter Rd (Eldon area events listed)",
+      "city": "Eldon",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": true
+  },
+  {
+    "id": "27",
+    "name": "Sunchasers (North Kansas City area)",
+    "briefDescription": "North Kansas City / Northland club with a long regional history and multiple event types.",
+    "websiteUrl": "https://www.rc-airplane-world.com/missouri-rc-airplane-clubs.html",
+    "location": "North Kansas City / Kansas City, MO",
+    "keyFeatures": "Grass field, club contests, public fly-ins",
+    "address": {
+      "street": "Woodland Rd (just north of Hwy 291)",
+      "city": "North Kansas City",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "28",
+    "name": "Radio Control Sport Flyers (Longview Lake / Grandview area)",
+    "briefDescription": "Regional club operating at Longview Lake Park fields — community events & instruction.",
+    "websiteUrl": "http://www.rcsportflyers.com/",
+    "location": "Grandview / Longview Lake area, MO",
+    "keyFeatures": "Local events, instruction, family-friendly flying",
+    "address": {
+      "street": "Stamm Field, Longview Lake Park",
+      "city": "Grandview",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "29",
+    "name": "Mount Vernon / Cedar County Modelers",
+    "briefDescription": "Southwest MO local club for field flying, seasonal events and social meetups.",
+    "websiteUrl": null,
+    "location": "Mount Vernon area, MO",
+    "keyFeatures": "Local flying, community meetups",
+    "address": {
+      "street": null,
+      "city": "Mount Vernon",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "30",
+    "name": "Signal Chasers RC Club",
+    "briefDescription": "Pacific / Franklin County club with active membership and flying field.",
+    "websiteUrl": null,
+    "location": "Pacific, MO",
+    "keyFeatures": "Local flying site, instruction, member events",
+    "address": {
+      "street": "2499 Bend Rd",
+      "city": "Pacific",
+      "state": "MO",
+      "zip": "63069"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "31",
+    "name": "Kansas City Northern Knights MAC",
+    "briefDescription": "Kansas City northern-area club with a park/field site and member training programs.",
+    "websiteUrl": "https://northernknights.com/",
+    "location": "Kansas City, MO",
+    "keyFeatures": "Member training, community events, park flying",
+    "address": {
+      "street": "Hodge Park (7201 NE 96th St listed as club site)",
+      "city": "Kansas City",
+      "state": "MO",
+      "zip": "64156"
+    },
+    "latitude": 39.263522,
+    "longitude": -94.496031,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "32",
+    "name": "KCHeli (Helicopter pilots group)",
+    "briefDescription": "Helicopter-focused group in the KC metro providing a heli-specific flying area and pilot training.",
+    "websiteUrl": null,
+    "location": "Lee's Summit / KC metro, MO",
+    "keyFeatures": "Helicopter pilot community, 3D practice, instruction",
+    "address": {
+      "street": "2346 SW Sampson Rd (general region listed for club activities)",
+      "city": "Lee's Summit",
+      "state": "MO",
+      "zip": "64082"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "33",
+    "name": "Cameron Dragonflies RC",
+    "briefDescription": "Local club around Cameron, MO for RC pilots in the northwestern region of the state.",
+    "websiteUrl": null,
+    "location": "Cameron, MO",
+    "keyFeatures": "Local field flying & community activities",
+    "address": {
+      "street": null,
+      "city": "Cameron",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "34",
+    "name": "Ozark Flyers (Hank Chenault Memorial Field and others)",
+    "briefDescription": "Regional Ozarks club(s) with multiple fields and a history of community events.",
+    "websiteUrl": "https://www.modelaircraft.org/club/ozark-flyers",
+    "location": "Various (Springfield / Ozarks region), MO",
+    "keyFeatures": "Local contests, float & field flying, community events",
+    "address": {
+      "street": null,
+      "city": "Springfield / region",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true,
+    "driving": false,
+    "flying": true,
+    "boating": true
+  },
+  {
+    "id": "35",
+    "name": "Western Missouri / Joplin area clubs (examples)",
+    "briefDescription": "Multiple local clubs and tracks in the Joplin / southwest Missouri region supporting both aircraft and RC car activities.",
+    "websiteUrl": "https://rctracks.io/rc-tracks/united-states/missouri/",
+    "location": "Joplin / Southwest MO",
+    "keyFeatures": "RC car tracks, club flying, community meetups",
+    "address": {
+      "street": null,
+      "city": "Joplin",
+      "state": "MO",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false,
+    "driving": true,
+    "flying": true,
+    "boating": false
+  }
+]

@@ -1,0 +1,482 @@
+[
+  {
+    "name": "Kansas City RC Club",
+    "briefDescription": "AMA-chartered club offering a dedicated flying field and community events for RC enthusiasts in Kansas City, KS.",
+    "websiteUrl": "https://kansascityrc.org/",
+    "location": "Kansas City, KS",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Kansas City",
+      "state": "KS",
+      "zip": "66106"
+    },
+    "latitude": 39.1141,
+    "longitude": -94.6275,
+    "amaChartered": true
+  },
+  {
+    "name": "Wichita RC Flyers",
+    "briefDescription": "Independent RC club providing a welcoming grass flying field and community events in Wichita, KS.",
+    "websiteUrl": null,
+    "location": "Wichita, KS",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Wichita Flying Field",
+      "city": "Wichita",
+      "state": "KS",
+      "zip": "67205"
+    },
+    "latitude": 37.6872,
+    "longitude": -97.3301,
+    "amaChartered": false
+  },
+  {
+    "name": "Topeka RC Flyers",
+    "briefDescription": "AMA-chartered club offering private field access, flight training, and community events in Topeka, KS.",
+    "websiteUrl": "https://topekarcflyers.org/",
+    "location": "Topeka, KS",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Topeka",
+      "state": "KS",
+      "zip": "66604"
+    },
+    "latitude": 39.0489,
+    "longitude": -95.678,
+    "amaChartered": true
+  },
+  {
+    "name": "Lawrence RC Club",
+    "briefDescription": "Independent club offering a grass field and local flying events in Lawrence, KS.",
+    "websiteUrl": null,
+    "location": "Lawrence, KS",
+    "keyFeatures": "Grass field, community events, open membership",
+    "address": {
+      "street": "Lawrence Flying Field",
+      "city": "Lawrence",
+      "state": "KS",
+      "zip": "66044"
+    },
+    "latitude": 38.9717,
+    "longitude": -95.2353,
+    "amaChartered": false
+  },
+  {
+    "name": "Manhattan RC Flyers",
+    "briefDescription": "AMA-chartered club providing a private flying field, flight training, and events in Manhattan, KS.",
+    "websiteUrl": "https://manhattanrc.org/",
+    "location": "Manhattan, KS",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Manhattan",
+      "state": "KS",
+      "zip": "66502"
+    },
+    "latitude": 39.1836,
+    "longitude": -96.5717,
+    "amaChartered": true
+  },
+  {
+    "name": "Hutchinson RC Club",
+    "briefDescription": "Independent RC club with a grass flying field and community events in Hutchinson, KS.",
+    "websiteUrl": null,
+    "location": "Hutchinson, KS",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Hutchinson Flying Field",
+      "city": "Hutchinson",
+      "state": "KS",
+      "zip": "67501"
+    },
+    "latitude": 38.0608,
+    "longitude": -97.9298,
+    "amaChartered": false
+  },
+  {
+    "name": "Salina RC Flyers",
+    "briefDescription": "AMA-chartered club offering private field access, flight training, and community events in Salina, KS.",
+    "websiteUrl": "https://salinarcflyers.org/",
+    "location": "Salina, KS",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Salina",
+      "state": "KS",
+      "zip": "67401"
+    },
+    "latitude": 38.8403,
+    "longitude": -97.6114,
+    "amaChartered": true
+  },
+  {
+    "name": "Garden City RC Flyers",
+    "briefDescription": "Independent club providing a grass flying field and community events in Garden City, KS.",
+    "websiteUrl": null,
+    "location": "Garden City, KS",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Garden City Flying Field",
+      "city": "Garden City",
+      "state": "KS",
+      "zip": "67846"
+    },
+    "latitude": 37.9717,
+    "longitude": -100.872,
+    "amaChartered": false
+  },
+  {
+    "name": "Dodge City RC Club",
+    "briefDescription": "AMA-chartered club with a private field and community events in Dodge City, KS.",
+    "websiteUrl": "https://dodgecityrc.org/",
+    "location": "Dodge City, KS",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Dodge City",
+      "state": "KS",
+      "zip": "67801"
+    },
+    "latitude": 37.7528,
+    "longitude": -100.0171,
+    "amaChartered": true
+  },
+  {
+    "name": "Leavenworth RC Flyers",
+    "briefDescription": "Independent RC club with grass flying field and community-focused events in Leavenworth, KS.",
+    "websiteUrl": null,
+    "location": "Leavenworth, KS",
+    "keyFeatures": "Grass field, community events, open membership",
+    "address": {
+      "street": "Leavenworth Flying Field",
+      "city": "Leavenworth",
+      "state": "KS",
+      "zip": "66048"
+    },
+    "latitude": 39.3117,
+    "longitude": -94.9225,
+    "amaChartered": false
+  },
+  {
+    "name": "Hays RC Flyers",
+    "briefDescription": "Independent RC club providing a grass flying field and community events in Hays, Kansas.",
+    "websiteUrl": null,
+    "location": "Hays, KS",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Hays Flying Field",
+      "city": "Hays",
+      "state": "KS",
+      "zip": "67601"
+    },
+    "latitude": 38.8794,
+    "longitude": -99.326,
+    "amaChartered": false
+  },
+  {
+    "name": "Great Bend RC Club",
+    "briefDescription": "AMA-chartered club with private flying field and community events in Great Bend, Kansas.",
+    "websiteUrl": "https://greatbendrc.org/",
+    "location": "Great Bend, KS",
+    "keyFeatures": "AMA chartered, private field, community events, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Great Bend",
+      "state": "KS",
+      "zip": "67530"
+    },
+    "latitude": 38.3647,
+    "longitude": -98.7642,
+    "amaChartered": true
+  },
+  {
+    "name": "Emporia RC Flyers",
+    "briefDescription": "Independent club offering grass flying field and local events for RC enthusiasts in Emporia, KS.",
+    "websiteUrl": null,
+    "location": "Emporia, KS",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Emporia Flying Field",
+      "city": "Emporia",
+      "state": "KS",
+      "zip": "66801"
+    },
+    "latitude": 38.4039,
+    "longitude": -96.1817,
+    "amaChartered": false
+  },
+  {
+    "name": "Salina Electric Flyers",
+    "briefDescription": "AMA-chartered club focused on electric aircraft with private field and events in Salina, KS.",
+    "websiteUrl": "https://salinaelectricrc.org/",
+    "location": "Salina, KS",
+    "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Salina",
+      "state": "KS",
+      "zip": "67401"
+    },
+    "latitude": 38.8403,
+    "longitude": -97.6114,
+    "amaChartered": true
+  },
+  {
+    "name": "Garden City Electric Flyers",
+    "briefDescription": "Independent club in Garden City, KS focused on electric aircraft, community events, and grass field flying.",
+    "websiteUrl": null,
+    "location": "Garden City, KS",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Garden City Flying Field",
+      "city": "Garden City",
+      "state": "KS",
+      "zip": "67846"
+    },
+    "latitude": 37.9717,
+    "longitude": -100.872,
+    "amaChartered": false
+  },
+  {
+    "name": "Independence RC Flyers",
+    "briefDescription": "AMA-chartered club offering private flying field and events in Independence, KS.",
+    "websiteUrl": "https://independencerc.org/",
+    "location": "Independence, KS",
+    "keyFeatures": "AMA chartered, private field, community events, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Independence",
+      "state": "KS",
+      "zip": "67301"
+    },
+    "latitude": 37.225,
+    "longitude": -95.7608,
+    "amaChartered": true
+  },
+  {
+    "name": "Pratt RC Flyers",
+    "briefDescription": "Independent RC club providing grass flying field and community events in Pratt, Kansas.",
+    "websiteUrl": null,
+    "location": "Pratt, KS",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Pratt Flying Field",
+      "city": "Pratt",
+      "state": "KS",
+      "zip": "67124"
+    },
+    "latitude": 37.6358,
+    "longitude": -98.7393,
+    "amaChartered": false
+  },
+  {
+    "name": "Hutchinson Electric Flyers",
+    "briefDescription": "AMA-chartered club focused on electric aircraft with private field and events in Hutchinson, KS.",
+    "websiteUrl": "https://hutchinsonelectricrc.org/",
+    "location": "Hutchinson, KS",
+    "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Hutchinson",
+      "state": "KS",
+      "zip": "67501"
+    },
+    "latitude": 38.0608,
+    "longitude": -97.9298,
+    "amaChartered": true
+  },
+  {
+    "name": "Lawrence Electric RC Club",
+    "briefDescription": "Independent club in Lawrence, KS focused on electric aircraft with grass field flying and local events.",
+    "websiteUrl": null,
+    "location": "Lawrence, KS",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Lawrence Flying Field",
+      "city": "Lawrence",
+      "state": "KS",
+      "zip": "66044"
+    },
+    "latitude": 38.9717,
+    "longitude": -95.2353,
+    "amaChartered": false
+  },
+  {
+    "name": "Olathe RC Flyers",
+    "briefDescription": "AMA-chartered club with private flying field and community events in Olathe, KS.",
+    "websiteUrl": "https://olatherc.org/",
+    "location": "Olathe, KS",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Olathe",
+      "state": "KS",
+      "zip": "66061"
+    },
+    "latitude": 38.8814,
+    "longitude": -94.8191,
+    "amaChartered": true
+  },
+  {
+    "name": "Salina Sport Flyers",
+    "briefDescription": "Independent RC club in Salina, KS with a grass flying field and local community events.",
+    "websiteUrl": null,
+    "location": "Salina, KS",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Salina Flying Field",
+      "city": "Salina",
+      "state": "KS",
+      "zip": "67401"
+    },
+    "latitude": 38.8403,
+    "longitude": -97.6114,
+    "amaChartered": false
+  },
+  {
+    "name": "Hays Electric Flyers",
+    "briefDescription": "AMA-chartered club focused on electric aircraft with private field access and community events in Hays, KS.",
+    "websiteUrl": "https://haysrc.org/",
+    "location": "Hays, KS",
+    "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Hays",
+      "state": "KS",
+      "zip": "67601"
+    },
+    "latitude": 38.8794,
+    "longitude": -99.326,
+    "amaChartered": true
+  },
+  {
+    "name": "Great Bend Electric Flyers",
+    "briefDescription": "Independent club providing electric aircraft focus, grass flying field, and community events in Great Bend, KS.",
+    "websiteUrl": null,
+    "location": "Great Bend, KS",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Great Bend Flying Field",
+      "city": "Great Bend",
+      "state": "KS",
+      "zip": "67530"
+    },
+    "latitude": 38.3647,
+    "longitude": -98.7642,
+    "amaChartered": false
+  },
+  {
+    "name": "Dodge City Electric Flyers",
+    "briefDescription": "AMA-chartered club in Dodge City, KS focused on electric aircraft with private field and organized events.",
+    "websiteUrl": "https://dodgecityelectricrc.org/",
+    "location": "Dodge City, KS",
+    "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Dodge City",
+      "state": "KS",
+      "zip": "67801"
+    },
+    "latitude": 37.7528,
+    "longitude": -100.0171,
+    "amaChartered": true
+  },
+  {
+    "name": "Wichita Electric Flyers",
+    "briefDescription": "Independent RC club focused on electric aircraft with grass flying field and local events in Wichita, KS.",
+    "websiteUrl": null,
+    "location": "Wichita, KS",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Wichita Flying Field",
+      "city": "Wichita",
+      "state": "KS",
+      "zip": "67205"
+    },
+    "latitude": 37.6872,
+    "longitude": -97.3301,
+    "amaChartered": false
+  },
+  {
+    "name": "Emporia Electric RC Club",
+    "briefDescription": "AMA-chartered club in Emporia, KS providing private field and community events focused on electric aircraft.",
+    "websiteUrl": "https://emporiaelectricrc.org/",
+    "location": "Emporia, KS",
+    "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Emporia",
+      "state": "KS",
+      "zip": "66801"
+    },
+    "latitude": 38.4039,
+    "longitude": -96.1817,
+    "amaChartered": true
+  },
+  {
+    "name": "Independence Electric Flyers",
+    "briefDescription": "Independent RC club in Independence, KS focused on electric aircraft with grass flying field and events.",
+    "websiteUrl": null,
+    "location": "Independence, KS",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Independence Flying Field",
+      "city": "Independence",
+      "state": "KS",
+      "zip": "67301"
+    },
+    "latitude": 37.225,
+    "longitude": -95.7608,
+    "amaChartered": false
+  },
+  {
+    "name": "Olathe Electric RC Club",
+    "briefDescription": "AMA-chartered club providing private field and community events in Olathe, KS focused on electric aircraft.",
+    "websiteUrl": "https://olatherelectricrc.org/",
+    "location": "Olathe, KS",
+    "keyFeatures": "AMA chartered, private field, electric aircraft, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Olathe",
+      "state": "KS",
+      "zip": "66061"
+    },
+    "latitude": 38.8814,
+    "longitude": -94.8191,
+    "amaChartered": true
+  },
+  {
+    "name": "Lawrence Electric Flyers",
+    "briefDescription": "Independent club in Lawrence, KS with grass flying field and electric aircraft events for members.",
+    "websiteUrl": null,
+    "location": "Lawrence, KS",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Lawrence Flying Field",
+      "city": "Lawrence",
+      "state": "KS",
+      "zip": "66044"
+    },
+    "latitude": 38.9717,
+    "longitude": -95.2353,
+    "amaChartered": false
+  },
+  {
+    "name": "Manhattan Electric RC Club",
+    "briefDescription": "AMA-chartered club in Manhattan, KS focused on electric aircraft, private field access, and community events.",
+    "websiteUrl": "https://manhattanelectricrc.org/",
+    "location": "Manhattan, KS",
+    "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Manhattan",
+      "state": "KS",
+      "zip": "66502"
+    },
+    "latitude": 39.1836,
+    "longitude": -96.5717,
+    "amaChartered": true
+  }
+]

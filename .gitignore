@@ -33,6 +33,7 @@ local.properties
 .cxx/
 *.keystore
 !debug.keystore
+.kotlin/
 
 # node.js
 #
@@ -56,6 +57,10 @@ npm-debug.log
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
+
+# Google Cloud
+**/google-services.json
+**/GoogleService-Info.plist
 
 # testing
 /coverage

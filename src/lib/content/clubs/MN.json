@@ -1,0 +1,226 @@
+[
+  {
+    "name": "Anoka County Radio Control Club",
+    "briefDescription": "An AMA Chartered Club #1255 located in Blaine, MN, dedicated to promoting the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.anoka-rc.com/",
+    "location": "Blaine, MN",
+    "keyFeatures": "Paved runway, flight training, community events",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Blaine",
+      "state": "MN",
+      "zip": "55434"
+    },
+    "latitude": 45.1449,
+    "longitude": -93.2102,
+    "amaChartered": true
+  },
+  {
+    "name": "Owatonna R/C Modelers",
+    "briefDescription": "An AMA Charter #2367 club located in Owatonna, MN, offering a world-class flying facility for RC enthusiasts.",
+    "websiteUrl": "https://owatonna-rc-modelers.com/",
+    "location": "Owatonna, MN",
+    "keyFeatures": "Family-oriented, training programs, community events",
+    "address": {
+      "street": "Robert & Corinne Reul Memorial Field",
+      "city": "Owatonna",
+      "state": "MN",
+      "zip": "55060"
+    },
+    "latitude": 44.0785,
+    "longitude": -93.2276,
+    "amaChartered": true
+  },
+  {
+    "name": "Grassfield RC Club",
+    "briefDescription": "An AMA Charter #1405 club located in Brooklyn Park, MN, offering various RC flying activities and events.",
+    "websiteUrl": "https://grassfieldrc.org/",
+    "location": "Brooklyn Park, MN",
+    "keyFeatures": "Pylon racing, combat flying, training sessions",
+    "address": {
+      "street": "8901 101st Ave N",
+      "city": "Brooklyn Park",
+      "state": "MN",
+      "zip": "55445"
+    },
+    "latitude": 45.0944,
+    "longitude": -93.3663,
+    "amaChartered": true
+  },
+  {
+    "name": "Rochester Aero Model Society (RAMS)",
+    "briefDescription": "An AMA Chartered club in Rochester, MN, promoting the building and flying of model aircraft.",
+    "websiteUrl": "https://www.ramsminnesota.org/",
+    "location": "Rochester, MN",
+    "keyFeatures": "Fuel and electric powered airplanes, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Rochester",
+      "state": "MN",
+      "zip": "55901"
+    },
+    "latitude": 44.0121,
+    "longitude": -92.4802,
+    "amaChartered": true
+  },
+  {
+    "name": "Minnesota Afterburners",
+    "briefDescription": "An AMA Charter #5457 club located in Minnesota, welcoming all types of RC aircraft enthusiasts.",
+    "websiteUrl": "https://minnesota-afterburners.com/",
+    "location": "Minnesota",
+    "keyFeatures": "Multi-interest, scale models, helicopters, electric aircraft",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": true
+  },
+  {
+    "name": "Minnesota Area Radio Control Electric Enthusiasts (MARCEE)",
+    "briefDescription": "An AMA Charter #4118 club dedicated to electric-powered RC aircraft in Minnesota.",
+    "websiteUrl": "https://www.facebook.com/marceeflyers/",
+    "location": "Minnesota",
+    "keyFeatures": "Electric aircraft, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": true
+  },
+  {
+    "name": "Headwaters Radio Control Club",
+    "briefDescription": "A club in Minnesota dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://headwatersrcclub.org/",
+    "location": "Minnesota",
+    "keyFeatures": "Community events, training programs, flying sessions",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": false
+  },
+  {
+    "name": "Princeton Flying Tigers R/C Club",
+    "briefDescription": "An RC airplane club located in Princeton, MN, offering training and flying sessions for enthusiasts.",
+    "websiteUrl": "https://sites.google.com/site/princetonflyingtigers/home",
+    "location": "Princeton, MN",
+    "keyFeatures": "Training programs, community events, flying sessions",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Princeton",
+      "state": "MN",
+      "zip": "55371"
+    },
+    "latitude": 45.5891,
+    "longitude": -93.5872,
+    "amaChartered": false
+  },
+  {
+    "name": "Crow River Aeromodelers",
+    "briefDescription": "An RC club located in Waverly, MN, dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "location": "Waverly, MN",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Waverly",
+      "state": "MN",
+      "zip": "55390"
+    },
+    "latitude": 45.1463,
+    "longitude": -93.7864,
+    "amaChartered": false
+  },
+  {
+    "name": "Wright Flyers",
+    "briefDescription": "An RC club located in Monticello, MN, offering flying sessions and community events for enthusiasts.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "location": "Monticello, MN",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Monticello",
+      "state": "MN",
+      "zip": "55362"
+    },
+    "latitude": 45.2994,
+    "longitude": -93.7912,
+    "amaChartered": false
+  },
+  {
+    "name": "Third Dimension Radio Control",
+    "briefDescription": "An RC club located in Nowthen, MN, dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "location": "Nowthen, MN",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Nowthen",
+      "state": "MN",
+      "zip": "55303"
+    },
+    "latitude": 45.3035,
+    "longitude": -93.5532,
+    "amaChartered": false
+  },
+  {
+    "name": "St. Paul RC Club",
+    "briefDescription": "An RC club located in Blaine, MN, offering flying sessions and community events for enthusiasts.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "location": "Blaine, MN",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Blaine",
+      "state": "MN",
+      "zip": "55449"
+    },
+    "latitude": 45.1451,
+    "longitude": -93.2203,
+    "amaChartered": false
+  },
+  {
+    "name": "Sodbusters",
+    "briefDescription": "An RC club located in Lake Elmo, MN, dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "location": "Lake Elmo, MN",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Lake Elmo",
+      "state": "MN",
+      "zip": "55042"
+    },
+    "latitude": 45.0291,
+    "longitude": -92.8903,
+    "amaChartered": false
+  },
+  {
+    "name": "Wilkin County Flyers",
+    "briefDescription": "An RC club located in Minnesota, offering flying sessions and community events for enthusiasts.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "location": "Minnesota",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": false
+  }
+]

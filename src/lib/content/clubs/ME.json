@@ -1,0 +1,546 @@
+[
+  {
+    "name": "Mid Coast RC Club",
+    "briefDescription": "AMA-chartered club in Swanville, ME, offering a dedicated flying field and training programs.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mid-coast-rc-club",
+    "location": "Swanville, ME",
+    "keyFeatures": "Dedicated flying field, training programs, community events",
+    "address": {
+      "street": "64 East Bryant Lane",
+      "city": "Swanville",
+      "state": "ME",
+      "zip": "04915"
+    },
+    "latitude": 44.546351,
+    "longitude": -68.980635,
+    "amaChartered": true
+  },
+  {
+    "name": "Kennebec Valley Model Aviators",
+    "briefDescription": "AMA-chartered club in Sidney, ME, promoting RC flying through community engagement.",
+    "websiteUrl": "https://www.modelaviators.org/a/r/szz/rc/home",
+    "location": "Sidney, ME",
+    "keyFeatures": "Community outreach, training programs, diverse aircraft activities",
+    "address": {
+      "street": "Church Rd",
+      "city": "Sidney",
+      "state": "ME",
+      "zip": "04330"
+    },
+    "latitude": 44.3794,
+    "longitude": -69.6256,
+    "amaChartered": true
+  },
+  {
+    "name": "Propsnappers RC Model Club",
+    "briefDescription": "AMA-chartered club in Portland, ME, established in 1963 to promote and encourage the hobby of building and flying radio-controlled model airplanes.",
+    "websiteUrl": "https://www.propsnappers.org/",
+    "location": "Portland, ME",
+    "keyFeatures": "Established in 1963, community events, training programs",
+    "address": {
+      "street": "One Green Road",
+      "city": "Portland",
+      "state": "ME",
+      "zip": "04103"
+    },
+    "latitude": 43.6615,
+    "longitude": -70.2553,
+    "amaChartered": true
+  },
+  {
+    "name": "Skystreakers RC Club",
+    "briefDescription": "AMA-chartered club in New Gloucester, ME, promoting all RC models with a field in New Gloucester.",
+    "websiteUrl": "https://www.skystreakers.org/a/r/szz/rc/home",
+    "location": "New Gloucester, ME",
+    "keyFeatures": "Diverse aircraft disciplines, community events, training programs",
+    "address": {
+      "street": "262 Bald Hill Rd",
+      "city": "New Gloucester",
+      "state": "ME",
+      "zip": "04260"
+    },
+    "latitude": 43.8262,
+    "longitude": -70.2833,
+    "amaChartered": true
+  },
+  {
+    "name": "Down East Soaring Club",
+    "briefDescription": "Non-profit club in Maine, offering training and float fly events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Various locations, ME",
+    "keyFeatures": "Training, float fly events, community engagement",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Various",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Aroostook County Flyers",
+    "briefDescription": "Club in Presque Isle, ME, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Presque Isle, ME",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Presque Isle",
+      "state": "ME",
+      "zip": "04769"
+    },
+    "latitude": 46.6806,
+    "longitude": -67.9933,
+    "amaChartered": false
+  },
+  {
+    "name": "Eastern Maine R/C Gulls",
+    "briefDescription": "Club in Hampden, ME, focusing on RC flying activities.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Hampden, ME",
+    "keyFeatures": "Diverse aircraft activities, community events, training programs",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Hampden",
+      "state": "ME",
+      "zip": "04444"
+    },
+    "latitude": 44.7469,
+    "longitude": -68.9067,
+    "amaChartered": false
+  },
+  {
+    "name": "Brunswick Area Modelers",
+    "briefDescription": "Club in Brunswick, ME, promoting RC flying through community engagement.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Brunswick, ME",
+    "keyFeatures": "Community outreach, training programs, diverse aircraft activities",
+    "address": {
+      "street": "201 Topsham Maine",
+      "city": "Brunswick",
+      "state": "ME",
+      "zip": "04011"
+    },
+    "latitude": 43.9148,
+    "longitude": -69.9658,
+    "amaChartered": false
+  },
+  {
+    "name": "Waldo County Flyers",
+    "briefDescription": "Club in Waldo County, ME, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Waldo County, ME",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Waldo County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Oxford County Flyers",
+    "briefDescription": "Club in Oxford County, ME, focusing on RC flying activities.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Oxford County, ME",
+    "keyFeatures": "Diverse aircraft activities, community events, training programs",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Oxford County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Piscataquis County Flyers",
+    "briefDescription": "Club in Piscataquis County, ME, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Piscataquis County, ME",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Piscataquis County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Sagadahoc County Flyers",
+    "briefDescription": "Club in Sagadahoc County, ME, focusing on RC flying activities.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Sagadahoc County, ME",
+    "keyFeatures": "Diverse aircraft activities, community events, training programs",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Sagadahoc County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Somerset County Flyers",
+    "briefDescription": "Club in Somerset County, ME, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Somerset County, ME",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Somerset County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Washington County Flyers",
+    "briefDescription": "Club in Washington County, ME, focusing on RC flying activities.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "Washington County, ME",
+    "keyFeatures": "Diverse aircraft activities, community events, training programs",
+    "address": {
+      "street": "Various flying sites",
+      "city": "Washington County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "York County Flyers",
+    "briefDescription": "Club in York County, ME, offering RC flying experiences and events.",
+    "websiteUrl": "https://www.rc-airplane-world.com/maine-rc-airplane-clubs.html",
+    "location": "York County, ME",
+    "keyFeatures": "Public demonstrations, training programs, community events",
+    "address": {
+      "street": "Various flying sites",
+      "city": "York County",
+      "state": "ME",
+      "zip": "Various"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Propsnappers RC Model Club",
+    "briefDescription": "Well-established club near Portland offering public events, training and swap meets.",
+    "websiteUrl": "https://www.propsnappers.org/",
+    "location": "Scarborough, ME",
+    "keyFeatures": "Open houses, training program, annual swap meet, public demos",
+    "address": {
+      "street": "One Green Road",
+      "city": "Scarborough",
+      "state": "ME",
+      "zip": "04074"
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true
+  },
+  {
+    "name": "Skystreakers RC Club",
+    "briefDescription": "AMA-chartered club with paved & grass runways; hosts IMAC and other events.",
+    "websiteUrl": "https://www.skystreakers.org/",
+    "location": "New Gloucester, ME",
+    "keyFeatures": "300' paved runway, 650' grass runway, IMAC events, member training",
+    "address": {
+      "street": null,
+      "city": "New Gloucester",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true
+  },
+  {
+    "name": "Kennebec Valley Model Aviators",
+    "briefDescription": "KVMA flying site serving central Maine — family friendly with instruction.",
+    "websiteUrl": "https://www.modelaviators.org/",
+    "location": "Sidney, ME",
+    "keyFeatures": "Pilot instruction, grass/asphalt runway, club events",
+    "address": {
+      "street": "Church Road",
+      "city": "Sidney",
+      "state": "ME",
+      "zip": "04330"
+    },
+    "latitude": 44.44166,
+    "longitude": -69.7111,
+    "amaChartered": true
+  },
+  {
+    "name": "Mid Coast RC Club",
+    "briefDescription": "Midcoast radio-control club (sailplanes & electrics common) with a Bryant Lane site.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mid-coast-rc-club",
+    "location": "Swanville / Union area, ME",
+    "keyFeatures": "Soaring & general RC, local contests, welcoming to newcomers",
+    "address": {
+      "street": "64 East Bryant Lane",
+      "city": "Swanville",
+      "state": "ME",
+      "zip": "04915"
+    },
+    "latitude": 44.546351,
+    "longitude": -68.980635,
+    "amaChartered": true
+  },
+  {
+    "name": "Franklin County Aircraft Modelers (FCAM)",
+    "briefDescription": "Western Maine club flying at Whispering Pines and Lily Pond (float & field).",
+    "websiteUrl": "https://rcflyer.org/",
+    "location": "Anson / Farmington area, ME",
+    "keyFeatures": "Float flies, field flying, indoor winter flying schedule",
+    "address": {
+      "street": "120 Embden Pond Road (Whispering Pines site)",
+      "city": "Anson",
+      "state": "ME",
+      "zip": "04958"
+    },
+    "latitude": 44.861282,
+    "longitude": -69.911075,
+    "amaChartered": true
+  },
+  {
+    "name": "Aroostook County Flyers",
+    "briefDescription": "Northern Maine club near Presque Isle supporting local public events & youth outreach.",
+    "websiteUrl": "https://www.modelaircraft.org/club/aroostook-county-flyers",
+    "location": "Presque Isle, ME",
+    "keyFeatures": "Local fly-ins, youth outreach, public demos",
+    "address": {
+      "street": "57 Lathrop Road",
+      "city": "Presque Isle",
+      "state": "ME",
+      "zip": "04769"
+    },
+    "latitude": 46.62716,
+    "longitude": -68.0472,
+    "amaChartered": true
+  },
+  {
+    "name": "Down East / Downeast Soaring Club",
+    "briefDescription": "Soaring/glider-focused club that flies at multiple eastern-Maine sites.",
+    "websiteUrl": "https://www.downeastsoaring.org/",
+    "location": "Downeast / Hancock County (various sites)",
+    "keyFeatures": "Slope and thermal soaring, contests, club workshops",
+    "address": {
+      "street": null,
+      "city": "Various sites (see club)",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true
+  },
+  {
+    "name": "Eastern Maine R/C Gulls",
+    "briefDescription": "Local Penobscot-area club (near Hampden/Bangor) with flying and community events.",
+    "websiteUrl": "http://rcgulls.tripod.com/",
+    "location": "Hampden (near Bangor), ME",
+    "keyFeatures": "Club flying sessions, community demonstrations",
+    "address": {
+      "street": null,
+      "city": "Hampden",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Brunswick Area Modelers",
+    "briefDescription": "Topsham/Brunswick area modelers; long-running local club with field activities.",
+    "websiteUrl": "https://www.modelaircraft.org/club/brunswick-area-modelers",
+    "location": "Topsham / Brunswick area, ME",
+    "keyFeatures": "Local fly-ins, instruction, community engagement",
+    "address": {
+      "street": "Route 201 (field area)",
+      "city": "Topsham",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true
+  },
+  {
+    "name": "Southern Maine R/C Helicopter Association",
+    "briefDescription": "Helicopter-specialty club in southern Maine — pilots of all skill levels.",
+    "websiteUrl": "https://www.modelaircraft.org/club/southern-maine-rc-helicopter-association",
+    "location": "Gorham / Saco area, ME",
+    "keyFeatures": "Heli pilot training, competitions, dedicated heli field",
+    "address": {
+      "street": "Huston Road (site listed on AMA site)",
+      "city": "Gorham",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": true
+  },
+  {
+    "name": "Penobscot Fun Flyers",
+    "briefDescription": "Local Penobscot-area RC club flying at Sargent's Field in Alton, ME.",
+    "websiteUrl": "https://www.facebook.com/PenobscotFunFlyers/",
+    "location": "Alton, ME",
+    "keyFeatures": "Grass-field flying, local fly-ins, family-friendly",
+    "address": {
+      "street": "Sargent's Field",
+      "city": "Alton",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Strawberry Patch RC Pilots",
+    "briefDescription": "Sanford-area club flying from Lavigne Farm — active calendar & training.",
+    "websiteUrl": "https://strawberrypatchrcpilots.org/",
+    "location": "Sanford, ME",
+    "keyFeatures": "Large runway, club training, community events",
+    "address": {
+      "street": "158 Whichers Mills Road (Lavigne Farm)",
+      "city": "Sanford",
+      "state": "ME",
+      "zip": "04073"
+    },
+    "latitude": 43.4119,
+    "longitude": -70.6735,
+    "amaChartered": true
+  },
+  {
+    "name": "Bridgton / Lakes Region RC (Bridgton-Lakes Region RC)",
+    "briefDescription": "Local Lakes Region club serving Bridgton / Naples area — community events & fundraisers.",
+    "websiteUrl": null,
+    "location": "Bridgton / Lakes Region, ME",
+    "keyFeatures": "Local fundraisers, lake/field flying depending on season",
+    "address": {
+      "street": null,
+      "city": "Bridgton",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Maine RC Bush Pilots",
+    "briefDescription": "Casual/grass-roots bush-flying group active around Arundel and southern Maine.",
+    "websiteUrl": null,
+    "location": "Arundel / Southern Maine",
+    "keyFeatures": "Bush-style/sport flying, casual meetups and picnics",
+    "address": {
+      "street": null,
+      "city": "Arundel",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Maine Model Yacht Club",
+    "briefDescription": "Model yacht / RC boating group that runs races and regattas at area ponds.",
+    "websiteUrl": null,
+    "location": "Various (coastal / inland ponds), ME",
+    "keyFeatures": "RC yacht racing, regattas, club meetups",
+    "address": {
+      "street": null,
+      "city": "Various",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Lakes Region RC Club",
+    "briefDescription": "Club serving the Naples / Bridgton lakes region with local flying and community events.",
+    "websiteUrl": null,
+    "location": "Naples / Lakes Region, ME",
+    "keyFeatures": "Local fly-ins, family events, float flying in season",
+    "address": {
+      "street": null,
+      "city": "Naples",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Western Maine RC Club",
+    "briefDescription": "Western Maine club (Bethel / Oxford County) for general RC flying and seasonal events.",
+    "websiteUrl": null,
+    "location": "Bethel / Oxford County, ME",
+    "keyFeatures": "Mountain/valley flying, community events, local training",
+    "address": {
+      "street": null,
+      "city": "Bethel",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Northern Maine RC Club",
+    "briefDescription": "Northern-Aroostook club around Caribou / Houlton area supporting northern pilots.",
+    "websiteUrl": null,
+    "location": "Caribou / Northern Maine",
+    "keyFeatures": "Cold-weather season planning, community meetups",
+    "address": {
+      "street": null,
+      "city": "Caribou",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  },
+  {
+    "name": "Seacoast RC Club (southern York County area)",
+    "briefDescription": "Seacoast-area community club serving Kittery and southern York County pilots.",
+    "websiteUrl": null,
+    "location": "Kittery / Seacoast, ME",
+    "keyFeatures": "Seacoast flying, community demos, family-friendly events",
+    "address": {
+      "street": null,
+      "city": "Kittery",
+      "state": "ME",
+      "zip": null
+    },
+    "latitude": null,
+    "longitude": null,
+    "amaChartered": false
+  }
+]

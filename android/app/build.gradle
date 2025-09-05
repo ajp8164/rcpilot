@@ -124,20 +124,20 @@ android {
         }
         release {
             if (Os.isFamily(Os.FAMILY_MAC)) {
-                def keystore_pwd = getPassword("RCPilotApp", "android_keystore")
-                def signing_pwd = getPassword("RCPilotApp", "android_app_play")
+                def keystore_pwd = getPassword("TennisRobin", "android_keystore")
+                def signing_pwd = getPassword("TennisRobin", "android_app_play")
                 def keychain_error = false
 
                 if (!keystore_pwd) {
                     println "${styler['red']('ERROR: Keystore password not found in Keychain.')}"
-                    println "${styler['red']('Check Keychain for key name \"android_keystore\" using account \"RCPilotApp\"')}"
+                    println "${styler['red']('Check Keychain for key name \"android_keystore\" using account \"TennisRobin\"')}"
                     println ""
                     keychain_error = true
                 }
 
                 if (!signing_pwd) {
                     println "${styler['red']('ERROR: App signing password not found in Keychain.')}"
-                    println "${styler['red']('Check Keychain for key name \"android_signing\" using account \"RCPilotApp\"')}"
+                    println "${styler['red']('Check Keychain for key name \"android_signing\" using account \"TennisRobin\"')}"
                     keychain_error = true
                 }
 
@@ -145,7 +145,7 @@ android {
 //                    throw new GradleException('Error getting app signing password(s)')
                 }
 
-                storeFile file('../../../.keystore')
+                storeFile file('../.keystore')
                 storePassword keystore_pwd
                 keyAlias 'app_play'
                 keyPassword signing_pwd

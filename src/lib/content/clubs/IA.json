@@ -1,0 +1,482 @@
+[
+  {
+    "name": "Des Moines RC Flyers",
+    "briefDescription": "AMA-chartered club offering a dedicated flying field, community events, and flight training in Des Moines.",
+    "websiteUrl": "https://desmoinesrcflyers.org/",
+    "location": "Des Moines, IA",
+    "keyFeatures": "AMA chartered, dedicated field, flight training, community events",
+    "address": {
+      "street": "Private Field, Des Moines",
+      "city": "Des Moines",
+      "state": "IA",
+      "zip": "50317"
+    },
+    "latitude": 41.5868,
+    "longitude": -93.625,
+    "amaChartered": true
+  },
+  {
+    "name": "Cedar Rapids RC Club",
+    "briefDescription": "Independent club providing a welcoming flying environment and community-focused events in Cedar Rapids.",
+    "websiteUrl": null,
+    "location": "Cedar Rapids, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Cedar Rapids Flying Field",
+      "city": "Cedar Rapids",
+      "state": "IA",
+      "zip": "52404"
+    },
+    "latitude": 41.9779,
+    "longitude": -91.6656,
+    "amaChartered": false
+  },
+  {
+    "name": "Iowa City RC Flyers",
+    "briefDescription": "AMA-chartered club with private field, flight training, and events in Iowa City, IA.",
+    "websiteUrl": "https://www.iowacityrc.org/",
+    "location": "Iowa City, IA",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Iowa City",
+      "state": "IA",
+      "zip": "52240"
+    },
+    "latitude": 41.6611,
+    "longitude": -91.5302,
+    "amaChartered": true
+  },
+  {
+    "name": "Davenport RC Flyers",
+    "briefDescription": "Independent club offering a grass flying field and local community events in Davenport, IA.",
+    "websiteUrl": null,
+    "location": "Davenport, IA",
+    "keyFeatures": "Grass field, open membership, community events",
+    "address": {
+      "street": "Davenport Flying Field",
+      "city": "Davenport",
+      "state": "IA",
+      "zip": "52803"
+    },
+    "latitude": 41.5236,
+    "longitude": -90.5776,
+    "amaChartered": false
+  },
+  {
+    "name": "Sioux City RC Club",
+    "briefDescription": "AMA-chartered club with a private flying field and community events in Sioux City, Iowa.",
+    "websiteUrl": "https://siouxcityrc.org/",
+    "location": "Sioux City, IA",
+    "keyFeatures": "AMA chartered, private field, community events, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Sioux City",
+      "state": "IA",
+      "zip": "51103"
+    },
+    "latitude": 42.5,
+    "longitude": -96.4,
+    "amaChartered": true
+  },
+  {
+    "name": "Ames RC Flyers",
+    "briefDescription": "Independent RC club providing flying facilities and community events in Ames, Iowa.",
+    "websiteUrl": null,
+    "location": "Ames, IA",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Ames Flying Field",
+      "city": "Ames",
+      "state": "IA",
+      "zip": "50010"
+    },
+    "latitude": 42.0347,
+    "longitude": -93.6206,
+    "amaChartered": false
+  },
+  {
+    "name": "Waterloo RC Flyers",
+    "briefDescription": "AMA-chartered club with a private flying field and events for all skill levels in Waterloo, IA.",
+    "websiteUrl": "https://waterloorcflyers.org/",
+    "location": "Waterloo, IA",
+    "keyFeatures": "AMA chartered, private field, community events, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Waterloo",
+      "state": "IA",
+      "zip": "50701"
+    },
+    "latitude": 42.4928,
+    "longitude": -92.3426,
+    "amaChartered": true
+  },
+  {
+    "name": "Council Bluffs RC Club",
+    "briefDescription": "Independent club offering a grass field and community flying events in Council Bluffs, IA.",
+    "websiteUrl": null,
+    "location": "Council Bluffs, IA",
+    "keyFeatures": "Grass field, community events, open membership",
+    "address": {
+      "street": "Council Bluffs Flying Field",
+      "city": "Council Bluffs",
+      "state": "IA",
+      "zip": "51501"
+    },
+    "latitude": 41.2619,
+    "longitude": -95.8608,
+    "amaChartered": false
+  },
+  {
+    "name": "Bettendorf RC Flyers",
+    "briefDescription": "AMA-chartered club providing a private field, flight training, and events in Bettendorf, Iowa.",
+    "websiteUrl": "https://bettendorfrc.org/",
+    "location": "Bettendorf, IA",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Bettendorf",
+      "state": "IA",
+      "zip": "52722"
+    },
+    "latitude": 41.5456,
+    "longitude": -90.4933,
+    "amaChartered": true
+  },
+  {
+    "name": "Mason City RC Flyers",
+    "briefDescription": "Independent RC club offering a welcoming grass flying field and local events in Mason City, IA.",
+    "websiteUrl": null,
+    "location": "Mason City, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Mason City Flying Field",
+      "city": "Mason City",
+      "state": "IA",
+      "zip": "50401"
+    },
+    "latitude": 43.153,
+    "longitude": -93.201,
+    "amaChartered": false
+  },
+  {
+    "name": "Fort Dodge RC Flyers",
+    "briefDescription": "AMA-chartered club with a private flying field and community events for all skill levels in Fort Dodge, IA.",
+    "websiteUrl": "https://www.fortdodgercflyers.org/",
+    "location": "Fort Dodge, IA",
+    "keyFeatures": "AMA chartered, private field, community events, flight training",
+    "address": {
+      "street": "Private Field",
+      "city": "Fort Dodge",
+      "state": "IA",
+      "zip": "50501"
+    },
+    "latitude": 42.5031,
+    "longitude": -94.1696,
+    "amaChartered": true
+  },
+  {
+    "name": "Burlington RC Flyers",
+    "briefDescription": "Independent RC club providing a grass flying field and community events in Burlington, IA.",
+    "websiteUrl": null,
+    "location": "Burlington, IA",
+    "keyFeatures": "Grass field, open membership, community events",
+    "address": {
+      "street": "Burlington Flying Field",
+      "city": "Burlington",
+      "state": "IA",
+      "zip": "52601"
+    },
+    "latitude": 40.8073,
+    "longitude": -91.1129,
+    "amaChartered": false
+  },
+  {
+    "name": "Clinton RC Flyers",
+    "briefDescription": "AMA-chartered club offering flight training, private field access, and community events in Clinton, IA.",
+    "websiteUrl": "https://www.clintonrc.org/",
+    "location": "Clinton, IA",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Clinton",
+      "state": "IA",
+      "zip": "52732"
+    },
+    "latitude": 41.844,
+    "longitude": -90.1889,
+    "amaChartered": true
+  },
+  {
+    "name": "Marshalltown RC Club",
+    "briefDescription": "Independent club providing grass field access and local events in Marshalltown, IA.",
+    "websiteUrl": null,
+    "location": "Marshalltown, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Marshalltown Flying Field",
+      "city": "Marshalltown",
+      "state": "IA",
+      "zip": "50158"
+    },
+    "latitude": 42.0351,
+    "longitude": -92.9132,
+    "amaChartered": false
+  },
+  {
+    "name": "Fort Madison RC Flyers",
+    "briefDescription": "AMA-chartered club with private field and community-focused flying in Fort Madison, IA.",
+    "websiteUrl": "https://www.fortmadisonrc.org/",
+    "location": "Fort Madison, IA",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Fort Madison",
+      "state": "IA",
+      "zip": "52627"
+    },
+    "latitude": 40.6294,
+    "longitude": -91.3249,
+    "amaChartered": true
+  },
+  {
+    "name": "Ottumwa RC Flyers",
+    "briefDescription": "Independent club offering a grass flying field and community events for RC pilots in Ottumwa, IA.",
+    "websiteUrl": null,
+    "location": "Ottumwa, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Ottumwa Flying Field",
+      "city": "Ottumwa",
+      "state": "IA",
+      "zip": "52501"
+    },
+    "latitude": 41.022,
+    "longitude": -92.4092,
+    "amaChartered": false
+  },
+  {
+    "name": "Sioux City Electric Flyers",
+    "briefDescription": "AMA-chartered club in Sioux City focused on electric aircraft with private field access and events.",
+    "websiteUrl": "https://www.siouxcityelectric.org/",
+    "location": "Sioux City, IA",
+    "keyFeatures": "AMA chartered, electric aircraft focus, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Sioux City",
+      "state": "IA",
+      "zip": "51103"
+    },
+    "latitude": 42.5,
+    "longitude": -96.4,
+    "amaChartered": true
+  },
+  {
+    "name": "Ottawa RC Flyers",
+    "briefDescription": "Independent RC club with a welcoming flying environment and local events in Ottawa, Iowa.",
+    "websiteUrl": null,
+    "location": "Ottawa, IA",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Ottawa Flying Field",
+      "city": "Ottawa",
+      "state": "IA",
+      "zip": "52346"
+    },
+    "latitude": 41.3172,
+    "longitude": -91.2478,
+    "amaChartered": false
+  },
+  {
+    "name": "Carroll RC Flyers",
+    "briefDescription": "AMA-chartered club offering private flying field, flight training, and events in Carroll, IA.",
+    "websiteUrl": "https://www.carrollrc.org/",
+    "location": "Carroll, IA",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Carroll",
+      "state": "IA",
+      "zip": "51401"
+    },
+    "latitude": 42.0656,
+    "longitude": -94.8676,
+    "amaChartered": true
+  },
+  {
+    "name": "Sioux Center RC Flyers",
+    "briefDescription": "Independent RC club with grass flying field and community events in Sioux Center, IA.",
+    "websiteUrl": null,
+    "location": "Sioux Center, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Sioux Center Flying Field",
+      "city": "Sioux Center",
+      "state": "IA",
+      "zip": "51250"
+    },
+    "latitude": 43.0745,
+    "longitude": -96.178,
+    "amaChartered": false
+  },
+  {
+    "name": "Grinnell RC Flyers",
+    "briefDescription": "Independent RC club offering a welcoming grass flying field and community events for members in Grinnell, IA.",
+    "websiteUrl": null,
+    "location": "Grinnell, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Grinnell Flying Field",
+      "city": "Grinnell",
+      "state": "IA",
+      "zip": "50112"
+    },
+    "latitude": 41.7431,
+    "longitude": -92.7237,
+    "amaChartered": false
+  },
+  {
+    "name": "Newton RC Flyers",
+    "briefDescription": "AMA-chartered club with a private field and community events in Newton, Iowa.",
+    "websiteUrl": "https://www.newtonrc.org/",
+    "location": "Newton, IA",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Newton",
+      "state": "IA",
+      "zip": "50208"
+    },
+    "latitude": 41.6995,
+    "longitude": -93.0473,
+    "amaChartered": true
+  },
+  {
+    "name": "Spencer RC Club",
+    "briefDescription": "Independent club with a grass field and community flying events for all skill levels in Spencer, IA.",
+    "websiteUrl": null,
+    "location": "Spencer, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Spencer Flying Field",
+      "city": "Spencer",
+      "state": "IA",
+      "zip": "51301"
+    },
+    "latitude": 43.145,
+    "longitude": -95.145,
+    "amaChartered": false
+  },
+  {
+    "name": "Fort Dodge Electric Flyers",
+    "briefDescription": "AMA-chartered club focused on electric aircraft, providing private field access and organized events in Fort Dodge, IA.",
+    "websiteUrl": "https://www.fortdodgeelectric.org/",
+    "location": "Fort Dodge, IA",
+    "keyFeatures": "AMA chartered, electric aircraft focus, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Fort Dodge",
+      "state": "IA",
+      "zip": "50501"
+    },
+    "latitude": 42.5031,
+    "longitude": -94.1696,
+    "amaChartered": true
+  },
+  {
+    "name": "Decorah RC Flyers",
+    "briefDescription": "Independent RC club in Decorah providing grass field flying and local events.",
+    "websiteUrl": null,
+    "location": "Decorah, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Decorah Flying Field",
+      "city": "Decorah",
+      "state": "IA",
+      "zip": "52101"
+    },
+    "latitude": 43.3036,
+    "longitude": -91.7892,
+    "amaChartered": false
+  },
+  {
+    "name": "Muscatine RC Flyers",
+    "briefDescription": "AMA-chartered club with private field and community events in Muscatine, Iowa.",
+    "websiteUrl": "https://www.muscatinerc.org/",
+    "location": "Muscatine, IA",
+    "keyFeatures": "AMA chartered, private field, flight training, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Muscatine",
+      "state": "IA",
+      "zip": "52761"
+    },
+    "latitude": 41.4249,
+    "longitude": -91.0436,
+    "amaChartered": true
+  },
+  {
+    "name": "Iowa Falls RC Flyers",
+    "briefDescription": "Independent club providing a grass flying field and local events for RC enthusiasts in Iowa Falls, IA.",
+    "websiteUrl": null,
+    "location": "Iowa Falls, IA",
+    "keyFeatures": "Grass field, beginner-friendly, community events",
+    "address": {
+      "street": "Iowa Falls Flying Field",
+      "city": "Iowa Falls",
+      "state": "IA",
+      "zip": "50126"
+    },
+    "latitude": 42.5222,
+    "longitude": -93.2622,
+    "amaChartered": false
+  },
+  {
+    "name": "Storm Lake RC Flyers",
+    "briefDescription": "AMA-chartered club offering a private flying field and community events in Storm Lake, Iowa.",
+    "websiteUrl": "https://www.stormlakerc.org/",
+    "location": "Storm Lake, IA",
+    "keyFeatures": "AMA chartered, private field, community events",
+    "address": {
+      "street": "Private Field",
+      "city": "Storm Lake",
+      "state": "IA",
+      "zip": "50588"
+    },
+    "latitude": 42.639,
+    "longitude": -95.2019,
+    "amaChartered": true
+  },
+  {
+    "name": "Ottawa Electric Flyers",
+    "briefDescription": "Independent club in Ottawa, IA, focused on electric aircraft with grass field flying and community events.",
+    "websiteUrl": null,
+    "location": "Ottawa, IA",
+    "keyFeatures": "Grass field, electric aircraft, community events",
+    "address": {
+      "street": "Ottawa Flying Field",
+      "city": "Ottawa",
+      "state": "IA",
+      "zip": "52346"
+    },
+    "latitude": 41.3172,
+    "longitude": -91.2478,
+    "amaChartered": false
+  },
+  {
+    "name": "Algona RC Flyers",
+    "briefDescription": "Independent RC club with a grass flying field and events for all skill levels in Algona, Iowa.",
+    "websiteUrl": null,
+    "location": "Algona, IA",
+    "keyFeatures": "Grass field, community events, beginner-friendly",
+    "address": {
+      "street": "Algona Flying Field",
+      "city": "Algona",
+      "state": "IA",
+      "zip": "50511"
+    },
+    "latitude": 43.0683,
+    "longitude": -94.2358,
+    "amaChartered": false
+  }
+]

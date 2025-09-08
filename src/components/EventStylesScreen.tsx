@@ -98,7 +98,7 @@ const EventStylesScreen = ({ navigation }: Props) => {
               return confirmAction({
                 label: `Delete Style`,
                 title:
-                  "This action cannot be undone.\nAre you sure you don't want to log this event style?",
+                  'This action cannot be undone.\nAre you sure you want to delete this event style?',
               });
             },
             onPress: () => deleteStyle(style._id.toString()),

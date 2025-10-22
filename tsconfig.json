@@ -22,7 +22,7 @@
     },
     "types": ["react-native", "react"]
   },
-  "exclude": ["node_modules"],
+  "exclude": ["**/node_modules", "**/Pods"],
   "include": [
     "**/*.ts",
     "**/*.tsx",

@@ -25,7 +25,7 @@ export type EnumPickerIconProps = {
 
 export type EnumPickerInterface = {
   enumName?: string; // Only required for realm objects
-  mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none' | 'many-with-actions';
+  mode?: 'one' | 'one-or-none' | 'many' | 'many-or-none';
   title: string;
   itemPlural?: string;
   headerBackTitle?: string;
@@ -96,7 +96,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
       headerBackTitle,
     });
 
-    if (mode === 'many-or-none' || mode === 'many-with-actions') {
+    if (mode.includes('many')) {
       setScreenEditHeader({ enabled: canSubmit, action: onDone });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -213,7 +213,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
       <Divider
         text={title}
         rightComponent={
-          mode === 'many-with-actions' || mode === 'many-or-none' ? (
+          mode === 'many-or-none' ? (
             <View style={{ flexDirection: 'row' }}>
               <Button
                 title={'All'}

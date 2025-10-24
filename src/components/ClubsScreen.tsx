@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
 
 import {
@@ -7,9 +7,11 @@ import {
   ListItem,
   ThemeManager,
   listItemPosition,
+  useDevice,
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import SearchBar from 'components/atoms/SearchBar';
 // import clubs from 'lib/content/clubs/GA.json';
 import clubs from 'lib/content/clubs/MO.json';
 import { Club } from 'types/club';
@@ -20,6 +22,21 @@ export type Props = NativeStackScreenProps<ClubsNavigatorParamList, 'Clubs'>;
 const ClubsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
+  const device = useDevice();
+
+  const [query, setQuery] = useState('');
+
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerTitle: () => (
+  //       <SearchBar
+  //         value={query}
+  //         onChangeText={setQuery}
+  //         placeholder={'Find a Club'}
+  //       />
+  //     ),
+  //   });
+  // }, [navigation, query]);
 
   console.log(clubs);
   const renderClub: ListRenderItem<Club> = ({ item: club, index }) => {
@@ -76,21 +93,26 @@ const ClubsScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <ScrollView
-      style={theme.styles.view}
-      showsVerticalScrollIndicator={false}
-      contentInsetAdjustmentBehavior={'automatic'}>
-      <FlatList
-        data={(clubs as Club[]).sort((a, b) => {
-          return a.name < b.name ? -1 : 1;
-        })}
-        renderItem={renderClub}
-        keyExtractor={(_item, index) => `${index}`}
-        scrollEnabled={false}
-        showsVerticalScrollIndicator={false}
-        ListFooterComponent={<Divider style={s.divider} />}
+    <View style={[theme.styles.view, { marginTop: device.insets.top }]}>
+      <SearchBar
+        value={query}
+        onChangeText={setQuery}
+        placeholder={'Find a Club'}
+        style={{}}
       />
-    </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <FlatList
+          data={(clubs as Club[]).sort((a, b) => {
+            return a.name < b.name ? -1 : 1;
+          })}
+          renderItem={renderClub}
+          keyExtractor={(_item, index) => `${index}`}
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}
+          ListFooterComponent={<Divider style={s.divider} />}
+        />
+      </ScrollView>
+    </View>
   );
 };
 

@@ -41,11 +41,14 @@ export const filterSummary = (filterOrFilterType?: Filter | string) => {
     let s = '';
     const filterValues = Object.keys(filter.values);
     filterValues.forEach((property, index) => {
-      s.length > 0
-        ? index === filterValues.length - 1
-          ? (s += ', and ')
-          : (s += ', ')
-        : null;
+      if (s.length > 0) {
+        if (index === filterValues.length - 1) {
+          s += ', and ';
+        } else {
+          s += ', ';
+        }
+      }
+
       // Checking filter here to satisfy the 'keyof typeof' type cast.
       s += filter
         ? `${filterSummaryState(property, filter.values[property as keyof typeof filter.values])}`

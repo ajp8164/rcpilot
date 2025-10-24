@@ -108,14 +108,14 @@ const ListItemFilterEnum = (props: Props) => {
       let objId;
       try {
         objId = new BSON.ObjectId(new BSON.ObjectId(v));
-      } catch (e) {
+      } catch {
         // Using exception to determine if value is a valid object id.
       }
 
       if (objId) {
         // Get the enum names using the filter saved enum id's and specified enumName.
         const obj = realm.objectForPrimaryKey(enumName, objId);
-        obj?.name && value.push(obj.name as string);
+        if (obj?.name) value.push(obj.name as string);
       } else {
         // Not a database enum, use the enum value in place of an id.
         value.push(v);
@@ -142,9 +142,10 @@ const ListItemFilterEnum = (props: Props) => {
       setFilterState({ relation: newRelation, value: newValue });
       // Notify relation changed only of values are selected. Avoids a filter setting
       // with a relation and no value(s).
-      newValue.length
-        ? onValueChange({ relation: newRelation, value: newValue })
-        : null;
+      if (newValue.length) {
+        onValueChange({ relation: newRelation, value: newValue });
+      }
+
       setTimeout(() => {
         collapsibleRef.current?.open();
       });

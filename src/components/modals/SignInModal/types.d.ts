@@ -8,7 +8,7 @@ declare const SignInModal: React.MemoExoticComponent<
   >
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-empty-object-type
 export interface SignInModalProps {}
 
 export interface SignInModalMethods {

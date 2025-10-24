@@ -130,9 +130,9 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
         if (index !== undefined && index >= 0) {
           // Make sure to decrement the battery's total cycle count.
           realm.delete(batteryCycles[index]);
-          battery.totalCycles
-            ? (battery.totalCycles = battery.totalCycles - 1)
-            : null;
+          if (battery.totalCycles) {
+            battery.totalCycles = battery.totalCycles - 1;
+          }
         }
       });
     }

@@ -217,7 +217,7 @@ export const preSignOutActions = async () => {
   // When a user is unauthorized (e.g. on sign out) remove the users push tokens.
   // This avoids sending notifications to a device that used to have the user signed
   // in but is no longer. Could get here with no previously authorized user.
-  userId && (await removePushNotificationsFromUser(userId));
+  if (userId) await removePushNotificationsFromUser(userId);
 
   // Clear our redux store.
   store.dispatch(revertCredentials());

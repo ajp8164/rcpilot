@@ -98,9 +98,10 @@ export const useFilterEditor = <T extends AnyFilterValues>(
 
   const onFilterValueChange = (property: keyof T, filterState: FilterState) => {
     // If there is a value label then add it to the filter state value as position [1].
-    filterValueLabels[property] && filterState.value
-      ? (filterState.value[1] = filterValueLabels[property])
-      : null;
+    if (filterValueLabels[property] && filterState.value) {
+      filterState.value[1] = filterValueLabels[property];
+    }
+
     setValues({ [property]: filterState }, { assign: true });
   };
 

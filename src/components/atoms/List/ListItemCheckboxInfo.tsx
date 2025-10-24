@@ -19,6 +19,7 @@ interface ListItemCheckBoxInfo extends ListItemSwipeable {
   hideInfo?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ListItemCheckBoxInfoMethods extends ListItemSwipeableMethods {}
 
 const ListItemCheckBoxInfo = React.forwardRef<

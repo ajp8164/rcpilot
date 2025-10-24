@@ -342,15 +342,17 @@ const LogScreen = ({ navigation }: Props) => {
           </View>
         }
         onPress={() => {
-          logEntry.model._id
-            ? navigation.navigate('EventEditor', {
-                eventId: logEntry._id.toString(),
-                modelType: logEntry.model.type,
-              })
-            : navigation.navigate('BatteryCycleEditor', {
-                batteryId: logEntry.batteryCycles[0]._id.toString(), // TODO
-                cycleNumber: 0, // TODO
-              });
+          if (logEntry.model._id) {
+            navigation.navigate('EventEditor', {
+              eventId: logEntry._id.toString(),
+              modelType: logEntry.model.type,
+            });
+          } else {
+            navigation.navigate('BatteryCycleEditor', {
+              batteryId: logEntry.batteryCycles[0]._id.toString(), // TODO
+              cycleNumber: 0, // TODO
+            });
+          }
         }}
       />
     );

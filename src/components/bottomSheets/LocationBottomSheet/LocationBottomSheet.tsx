@@ -53,7 +53,7 @@ const LocationBottomSheet = React.forwardRef<
   };
 
   const selectLocation = () => {
-    locationId && onLocationSelect?.(locationId);
+    if (locationId) onLocationSelect?.(locationId);
   };
 
   return (

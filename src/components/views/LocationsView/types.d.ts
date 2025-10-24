@@ -8,6 +8,8 @@ declare const LocationsView: React.MemoExoticComponent<
   >
 >;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LocationsViewProps {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LocationsViewMethods {}

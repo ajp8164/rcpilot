@@ -319,9 +319,9 @@ const CommanderScreen = ({ navigation, route }: Props) => {
             op: 'remove',
             onPress: () => {
               removeFavoriteModel(modelId);
-              listEditorState?.enabled
-                ? listEditorRef.current?.onToggleEditMode()
-                : null;
+              if (listEditorState?.enabled) {
+                listEditorRef.current?.onToggleEditMode();
+              }
             },
           },
         ]}

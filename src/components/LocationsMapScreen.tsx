@@ -375,7 +375,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           ref={ref => {
             // Wait to be sure this component is mounted and has a ref.
             setTimeout(() => {
-              ref ? (markersRef.current[index].mapMarker = ref) : null;
+              if (ref) markersRef.current[index].mapMarker = ref;
               markersRef.current[index].location = location;
 
               // During view initialization the initial location should show it's callout.

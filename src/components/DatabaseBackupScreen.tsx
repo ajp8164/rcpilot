@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react';
 import { Alert, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import { Divider, ListItem, useTheme } from '@react-native-hello/ui';
 import { useFocusEffect } from '@react-navigation/native';
@@ -10,9 +9,9 @@ import { Button } from 'components/atoms/Button';
 import { appConfig } from 'config';
 import { File, saveFile } from 'firebase/storage';
 import { Directory, listFiles } from 'firebase/storage/operations';
+import { useUserProfile } from 'lib/auth';
 import { DatabaseInfoContext } from 'lib/database';
 import { DateTime } from 'luxon';
-import { selectUser } from 'store/selectors/userSelectors';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
@@ -23,7 +22,8 @@ export type Props = NativeStackScreenProps<
 const DatabaseBackupScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const realm = useRealm();
-  const user = useSelector(selectUser);
+  // const user = useSelector(selectUser);
+  const userProfile = useUserProfile();
   const databaseInfo = useContext(DatabaseInfoContext);
 
   const [isBackingUp, setIsBackingUp] = useState(false);
@@ -38,7 +38,7 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
 
   const getFiles = () => {
     listFiles({
-      storagePath: `users/${user.profile?.id}/backups/`,
+      storagePath: `users/${userProfile?.id}/backups/`,
       onSuccess: dir => {
         setDir(dir);
         setBackupAllowed(
@@ -61,7 +61,7 @@ const DatabaseBackupScreen = ({ navigation }: Props) => {
         mimeType: 'application/octet-stream',
         uri: source,
       } as File,
-      storagePath: `users/${user.profile?.id}/backups/`,
+      storagePath: `users/${userProfile?.id}/backups/`,
       destFilename: filename,
       onSuccess: () => {
         setIsBackingUp(false);

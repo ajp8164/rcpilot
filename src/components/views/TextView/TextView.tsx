@@ -116,7 +116,7 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
           value={text || ''}
           onChangeText={t => {
             setText(t.slice(0, characterLimit));
-            characterLimit && setCountRemaining(characterLimit - t.length);
+            if (characterLimit) setCountRemaining(characterLimit - t.length);
             onTextChanged(t);
           }}
         />

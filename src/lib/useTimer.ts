@@ -211,9 +211,15 @@ export const useTimer = (
         }
 
         if (alertPhrase) {
-          !alert.voice && AlertService.play(alert.sound);
-          alert.voice && AlertService.say(alertPhrase);
-          alert.vibrate && AlertService.vibrate();
+          if (!alert.voice) {
+            AlertService.play(alert.sound);
+          }
+          if (alert.voice) {
+            AlertService.say(alertPhrase);
+          }
+          if (alert.vibrate) {
+            AlertService.vibrate();
+          }
         }
       }
     });

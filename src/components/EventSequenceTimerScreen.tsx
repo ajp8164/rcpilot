@@ -197,7 +197,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
         Battery,
         new BSON.ObjectId(new BSON.ObjectId(id)),
       );
-      b && eventBatteries.push(b);
+      if (b) eventBatteries.push(b);
     });
     setBatteries(eventBatteries);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -279,7 +279,11 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   };
 
   const onSwipeTimer = (isOn: boolean) => {
-    isOn ? timer.arm() : timer.disarm();
+    if (isOn) {
+      timer.arm();
+    } else {
+      timer.disarm();
+    }
 
     if (
       !eventPreferences.timerUsesButtons &&

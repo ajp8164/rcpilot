@@ -185,7 +185,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
         Battery,
         new BSON.ObjectId(new BSON.ObjectId(id)),
       );
-      b && eventBatteries.push(b);
+      if (b) eventBatteries.push(b);
     });
     setBatteries(eventBatteries);
 

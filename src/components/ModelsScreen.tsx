@@ -134,16 +134,14 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 )
               }
               onPress={() => {
-                let presentation = modelsLayout;
-                modelsLayout === ModelsLayout.CardDeck ? (
-                  (presentation = ModelsLayout.List)
-                ) : modelsLayout === ModelsLayout.List ? (
-                  (presentation = ModelsLayout.PostCards)
-                ) : modelsLayout === ModelsLayout.PostCards ? (
-                  (presentation = ModelsLayout.CardDeck)
-                ) : (
-                  <></>
-                );
+                const presentation =
+                  modelsLayout === ModelsLayout.CardDeck
+                    ? ModelsLayout.List
+                    : modelsLayout === ModelsLayout.List
+                      ? ModelsLayout.PostCards
+                      : modelsLayout === ModelsLayout.PostCards
+                        ? ModelsLayout.CardDeck
+                        : ModelsLayout.List;
 
                 dispatch(saveModelsLayout({ presentation }));
               }}

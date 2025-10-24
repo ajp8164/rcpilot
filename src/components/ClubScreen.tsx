@@ -39,7 +39,7 @@ const ClubScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     const club = clubs.find(c => {
       return c.id === clubId;
-    });
+    }) as Club;
     setClub(club);
 
     navigation.setOptions({

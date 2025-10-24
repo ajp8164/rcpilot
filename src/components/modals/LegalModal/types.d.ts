@@ -8,7 +8,7 @@ declare const LegalModal: React.MemoExoticComponent<
   >
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-empty-object-type
 export interface LegalModalProps {}
 
 export interface LegalModalMethods {

@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 import RNFS from 'react-native-fs';
-import { useSelector } from 'react-redux';
 
 import {
   Divider,
@@ -28,10 +27,10 @@ import {
   DirectoryFile,
   listFiles,
 } from 'firebase/storage/operations';
+import { useUserProfile } from 'lib/auth';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Trash2 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import { selectUser } from 'store/selectors/userSelectors';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
@@ -43,7 +42,7 @@ const DatabaseBackupsScreen = () => {
   const theme = useTheme();
   const realm = useRealm();
   const confirmAction = useConfirmAction();
-  const user = useSelector(selectUser);
+  const userProfile = useUserProfile();
 
   const [dir, setDir] = useState<Directory>();
   const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +58,7 @@ const DatabaseBackupsScreen = () => {
   const getFiles = () => {
     setIsLoading(true);
     listFiles({
-      storagePath: `users/${user.profile?.id}/backups/`,
+      storagePath: `users/${userProfile?.id}/backups/`,
       onSuccess: dir => {
         setDir(dir);
         setIsLoading(false);
@@ -101,7 +100,7 @@ const DatabaseBackupsScreen = () => {
   const deleteFile = (file: DirectoryFile) => {
     storageDeleteFile({
       filename: file.name,
-      storagePath: `users/${user.profile?.id}/backups/`,
+      storagePath: `users/${userProfile?.id}/backups/`,
       onSuccess: () => {
         getFiles();
       },

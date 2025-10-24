@@ -104,9 +104,11 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
   const toggleSelect = (value?: string) => {
     if (mode === 'one' || mode === 'one-or-none') {
-      value
-        ? setList({ selected: [value] })
-        : setList({ selected: [] }, { assign: true });
+      if (value) {
+        setList({ selected: [value] });
+      } else {
+        setList({ selected: [] }, { assign: true });
+      }
     } else if (value) {
       if (list.selected.includes(value)) {
         setList(
@@ -149,7 +151,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     let objId;
     try {
       objId = new BSON.ObjectId(new BSON.ObjectId(value));
-    } catch (e) {
+    } catch {
       // Using exception to determine if value is a valid object id.
     }
 

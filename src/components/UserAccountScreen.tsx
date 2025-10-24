@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Alert, ScrollView, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
 
 import {
   Divider,
@@ -14,11 +13,10 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from 'components/atoms/Button';
 import { Avatar } from 'components/molecules/Avatar';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { signOut } from 'lib/auth';
+import { signOut, useUserProfile } from 'lib/auth';
 import { biometricAuthentication } from 'lib/biometricAuthentication';
 import { UserRoundPen } from 'lucide-react-native';
 import { DateTime } from 'luxon';
-import { selectUserProfile } from 'store/selectors/userSelectors';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
@@ -33,7 +31,7 @@ const UserAccountScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
 
-  const userProfile = useSelector(selectUserProfile);
+  const userProfile = useUserProfile();
 
   useEffect(() => {
     // Wait for sign out to complete before navigating away.

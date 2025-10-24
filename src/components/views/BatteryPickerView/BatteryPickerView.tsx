@@ -63,7 +63,7 @@ const BatteryPickerView = React.forwardRef<
   const toggleSelect = (battery?: Battery) => {
     let selected: Battery[] = [];
     if (mode === 'one') {
-      battery ? (selected = [battery]) : (selected = []);
+      selected = battery ? [battery] : [];
       setList({ selected }, { assign: true });
     } else if (battery) {
       if (

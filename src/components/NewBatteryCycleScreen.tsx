@@ -151,15 +151,11 @@ const NewBatteryCycleScreen = ({ navigation, route }: Props) => {
 
   const schema = Yup.object().shape({
     action: Yup.number(),
-    amount: Yup.string().when('action', {
-      is: Action.Charge,
-      then: Yup.string().required(),
-      otherwise: Yup.string(),
+    amount: Yup.string().when(['action'], ([action], schema) => {
+      return action === Action.Charge ? schema.required() : schema;
     }),
-    duration: Yup.string().when('action', {
-      is: Action.Discharge,
-      then: Yup.string().required(),
-      otherwise: Yup.string(),
+    duration: Yup.string().when(['action'], ([action], schema) => {
+      return action === Action.Discharge ? schema.required() : schema;
     }),
     packVoltage: Yup.string(),
     packResistance: Yup.string(),

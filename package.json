@@ -134,6 +134,7 @@
     "@react-native/typescript-config": "0.82.1",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/formatcoords": "^1.1.2",
+    "@types/lodash": "^4.17.20",
     "@types/luxon": "^3.1.0",
     "@types/react": "^19.1.1",
     "@welldone-software/why-did-you-render": "^10.0.1",

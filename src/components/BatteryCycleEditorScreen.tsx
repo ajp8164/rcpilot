@@ -135,17 +135,13 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
   } as FormValues;
 
   const schema = Yup.object().shape({
-    chargeAmount: Yup.string().when('isCharged', {
-      is: true,
-      then: Yup.string().required(),
-      otherwise: Yup.string(),
+    chargeAmount: Yup.string().when(['isCharged'], ([isCharged], schema) => {
+      return isCharged ? schema.required() : schema;
     }),
     chargeCellResistances: Yup.array().of(Yup.string()),
     chargeCellVoltages: Yup.array().of(Yup.string()),
-    chargeDate: Yup.string().when('isCharged', {
-      is: true,
-      then: Yup.string().required(),
-      otherwise: Yup.string(),
+    chargeDate: Yup.string().when(['isCharged'], ([isCharged], schema) => {
+      return isCharged ? schema.required() : schema;
     }),
     chargePackResistance: Yup.string(),
     chargePackVoltage: Yup.string(),

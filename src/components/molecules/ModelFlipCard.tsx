@@ -53,7 +53,7 @@ export const ModelFlipCard = ({
   };
 
   const onAchievements = () => {
-    commander && onPressAchievements(commander, model);
+    if (commander) onPressAchievements(commander, model);
   };
 
   const onEditCardProperties = () => {

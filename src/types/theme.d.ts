@@ -63,12 +63,14 @@ declare module '@react-native-hello/ui' {
     secondary: string;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface IRadius {}
 
   interface IShadows {
     light: IShadow;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   interface ISpacings {}
 
   interface IStyles {

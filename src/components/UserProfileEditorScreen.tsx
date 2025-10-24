@@ -110,7 +110,7 @@ const UserProfileEditorScreen = ({ navigation }: Props) => {
     formikRef.current?.handleSubmit();
     formikRef.current?.resetForm({ values: formikRef.current?.values });
     Keyboard.dismiss();
-    opts?.nav && navigation.goBack();
+    if (opts?.nav) navigation.goBack();
   };
 
   const onSubmit = async (values: FormValues) => {
@@ -125,7 +125,7 @@ const UserProfileEditorScreen = ({ navigation }: Props) => {
     try {
       await updateDocument<UserProfile>('Users', u);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
+    } catch {
       Alert.alert('Profile Not Saved', 'Please try again.', [{ text: 'OK' }], {
         cancelable: false,
       });

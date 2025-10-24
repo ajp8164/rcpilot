@@ -83,7 +83,7 @@ const ModelPickerScreen = ({ navigation, route }: Props) => {
   const toggleSelect = (model?: Model) => {
     let selected: Model[] = [];
     if (mode === 'one') {
-      model ? (selected = [model]) : (selected = []);
+      selected = model ? [model] : [];
       setList({ selected }, { assign: true });
     } else if (model) {
       if (

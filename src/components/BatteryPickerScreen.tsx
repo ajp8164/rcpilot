@@ -76,8 +76,9 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
 
   const onSelect = (selected: Battery[]) => {
     selectedBatteries.current = selected;
-    eventName &&
+    if (eventName) {
       event.emit(eventName, { batteries: selected } as BatteryPickerResult);
+    }
   };
 
   if (!pickerBatteries.length) {

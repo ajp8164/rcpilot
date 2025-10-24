@@ -26,11 +26,12 @@ const ClubsNavigator = () => {
         component={ClubsScreen}
         options={{
           title: 'Clubs',
-          headerLargeTitle: true,
-          headerLargeTitleShadowVisible: false,
-          headerLargeStyle: {
-            backgroundColor: theme.colors.viewBackground,
-          },
+          headerShown: false,
+          // headerLargeTitle: true,
+          // headerLargeTitleShadowVisible: false,
+          // headerLargeStyle: {
+          //   backgroundColor: theme.colors.viewBackground,
+          // },
         }}
       />
       <ClubsStack.Screen

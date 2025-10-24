@@ -206,7 +206,7 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
     return (
       <ListItemInput
         ref={ref => {
-          ref && (liRef.current[index] = ref);
+          if (ref) liRef.current[index] = ref;
         }}
         title={`S Cell ${s} in P Leg ${p}`}
         position={listItemPosition(index, cellValues.length)}

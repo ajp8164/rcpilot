@@ -15,7 +15,7 @@ import { useObject, useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Avatar } from 'components/molecules/Avatar';
 import { appConfig } from 'config';
-import { AuthContext } from 'lib/auth';
+import { AuthContext, useUserProfile } from 'lib/auth';
 import { useCommanderSummary } from 'lib/commander';
 import {
   Archive,
@@ -41,7 +41,6 @@ import { BSON } from 'realm';
 import { Commander } from 'realmdb/Commander';
 // import { selectDatabaseAccessWith } from 'store/selectors/appSettingsSelectors';
 import { selectCommander } from 'store/selectors/commanderSelectors';
-import { selectUserProfile } from 'store/selectors/userSelectors';
 import { saveDatabaseAccessWith } from 'store/slices/appSettings';
 import { saveSelectedCommander } from 'store/slices/commander';
 import { DatabaseAccessWith } from 'types/database';
@@ -62,7 +61,8 @@ const SetupScreen = ({ navigation, route }: Props) => {
   const realm = useRealm();
 
   const auth = useContext(AuthContext);
-  const userProfile = useSelector(selectUserProfile);
+  const userProfile = useUserProfile();
+
   const selectedCommanderId = useSelector(selectCommander).commanderId;
   const selectedCommander = useObject(
     Commander,

@@ -168,9 +168,11 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
     index: number;
   }) => {
     // Keep an index over all the sections for the list item position.
-    templateRenderIndex.current + 1 === templateCount.current
-      ? (templateRenderIndex.current = 0)
-      : templateRenderIndex.current++;
+    if (templateRenderIndex.current + 1 === templateCount.current) {
+      templateRenderIndex.current = 0;
+    } else {
+      templateRenderIndex.current++;
+    }
 
     const index = templateRenderIndex.current;
     return (

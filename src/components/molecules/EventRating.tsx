@@ -27,8 +27,7 @@ export const EventRating = ({ value }: EventRatingInterface) => {
       }
 
       outcomeEl = eventOutcomeIcons[value]?.leftContent || <></>;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (_e: any) {
+    } catch {
       if (value === EventOutcome.Crashed) {
         outcomeEl = (
           <Text key={'crashed'} style={theme.text.normal}>

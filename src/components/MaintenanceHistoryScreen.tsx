@@ -15,7 +15,7 @@ import {
   ListItemSwipeable,
   ThemeManager,
   listItemPosition,
-  useListEditor,
+  // useListEditor,
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -51,7 +51,7 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles();
-  const listEditor = useListEditor();
+  // const listEditor = useListEditor();
   const confirmAction = useConfirmAction();
   const realm = useRealm();
 
@@ -70,7 +70,7 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
             <Button
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!entries.length || listEditor.enabled}
+              disabled={!entries.length || listEditorState?.enabled}
               icon={
                 filterId ? (
                   <FunnelPlus
@@ -95,19 +95,19 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
               }
             />
             <Button
-              title={listEditor.enabled ? 'Done' : 'Edit'}
+              title={listEditorState?.enabled ? 'Done' : 'Edit'}
               titleStyle={theme.styles.buttonScreenHeaderTitle}
               buttonStyle={theme.styles.buttonScreenHeader}
               disabledStyle={theme.styles.buttonScreenHeaderDisabled}
               disabled={!entries.length}
-              onPress={listEditor.onToggleEditMode}
+              onPress={() => listEditorRef.current?.onToggleEditMode()}
             />
           </>
         );
       },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterId, listEditor.enabled, entries]);
+  }, [filterId, listEditorState?.enabled, entries]);
 
   const groupEntries = (
     entries?: HistoryEntry[],
@@ -153,14 +153,14 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
     }
     return (
       <ListItemSwipeable
-        ref={ref => {
-          ref &&
-            listEditor.add(
-              ref,
-              'model-maintenance-history',
-              entry.action.refId,
-            );
-        }}
+        // ref={ref => {
+        //   if (ref)
+        //     listEditor.add(
+        //       ref,
+        //       'model-maintenance-history',
+        //       entry.action.refId,
+        //     );
+        // }}
         key={`${index}${entry.action.refId}`}
         title={entry.action.description}
         subtitle={subtitle}
@@ -196,13 +196,12 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
             onPress: () => deleteEntry({ index, entry }),
           },
         ]}
-        onSwipeableWillOpen={() =>
-          listEditor.onItemWillOpen(
-            'model-maintenance-history',
-            entry.action.refId,
-          )
-        }
-        onSwipeableWillClose={listEditorRef.current?.onItemWillClose}
+        // onSwipeableWillOpen={() =>
+        //   listEditor.onItemWillOpen(
+        //     'model-maintenance-history',
+        //     entry.action.refId,
+        //   )
+        // }
       />
     );
   };

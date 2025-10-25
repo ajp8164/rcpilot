@@ -26,7 +26,8 @@ const MapActionsView = React.forwardRef<MapActionsView, MapActionsViewProps>(
         <View style={{}}>
           <Button
             containerStyle={s.button}
-            buttonStyle={theme.styles.buttonScreenHeader}
+            buttonStyle={s.actionButton}
+            iconContainerStyle={{ marginLeft: 0 }}
             icon={
               <View style={{ width: '100%', alignItems: 'center' }}>
                 <MapPinPlus color={theme.colors.stickyWhite} size={24} />
@@ -58,6 +59,10 @@ const MapActionsView = React.forwardRef<MapActionsView, MapActionsViewProps>(
 );
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+  actionButton: {
+    ...theme.styles.button,
+    paddingHorizontal: 0,
+  },
   button: {
     width: 80,
     height: 50,

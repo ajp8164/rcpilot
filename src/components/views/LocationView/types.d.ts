@@ -12,8 +12,8 @@ export interface LocationViewProps {
   locationId?: string;
   onFocusName: () => void;
   onBlurName: () => void;
+  onDelete: () => void;
   onPressNotes: (text?: string, title?: string) => void;
-  presentWithEditor?: boolean;
   titleRightContent?: ReactElement;
 }
 

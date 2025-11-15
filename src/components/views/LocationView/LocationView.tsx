@@ -34,13 +34,8 @@ type LocationView = LocationViewMethods;
 
 const LocationView = React.forwardRef<LocationView, LocationViewProps>(
   (props, ref) => {
-    const {
-      locationId,
-      onBlurName,
-      onFocusName,
-      onPressNotes,
-      presentWithEditor = false,
-    } = props;
+    const { locationId, onBlurName, onDelete, onFocusName, onPressNotes } =
+      props;
 
     const theme = useTheme();
     const s = useStyles();
@@ -74,7 +69,7 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
         })
         .split('|');
 
-    const [showEditor, setShowEditor] = useState(presentWithEditor);
+    const [showEditor, setShowEditor] = useState(false);
 
     const locationActionsViewRef = useRef<LocationActionsViewMethods>(null);
 
@@ -86,10 +81,6 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
     const setEditMode = (value: boolean) => {
       setShowEditor(value);
     };
-
-    useEffect(() => {
-      setShowEditor(presentWithEditor);
-    }, [presentWithEditor]);
 
     useEffect(() => {
       refreshLocation();
@@ -141,6 +132,7 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
       if (location?._id.toString() === currentLocationId) {
         dispatch(saveCurrentLocation({}));
       }
+      onDelete();
 
       realm.write(() => {
         realm.delete(location);
@@ -179,9 +171,9 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
           />
           <Divider text={'NOTES'} />
           <ListItemNotes
-            notes={location.notes}
+            notes={location?.notes}
             position={['first', 'last']}
-            onPress={() => onPressNotes(location.notes, 'Notes')}
+            onPress={() => onPressNotes(location?.notes, 'Notes')}
           />
         </>
       );
@@ -199,7 +191,7 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
               onChangeText: onChangeName,
               onFocus: () => onFocusName(),
               onBlur: () => onBlurName(),
-              value: location.name,
+              value: location?.name || '',
               placeholder: 'Location Name',
               autoCapitalize: 'words',
             }}

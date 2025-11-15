@@ -21,11 +21,7 @@ export const useConfirmAction = () => {
         },
         buttonIndex => {
           if (buttonIndex === 0) {
-            if (onConfirm) {
-              setTimeout(() => {
-                onConfirm();
-              }, 1000);
-            }
+            onConfirm?.();
             resolve(true);
           } else {
             resolve(false);

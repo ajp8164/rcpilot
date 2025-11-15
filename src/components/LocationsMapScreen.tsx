@@ -173,10 +173,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       pitch: 0,
       zoom: 1,
     };
+
     // This is a hack to get the map to center on the specified location.
     // The first call only bring the location into the view.
     // The second call will bring the location to the center of the screen.
-
     mapViewRef.current?.animateCamera(partialCamera);
     setTimeout(() => {
       mapViewRef.current?.animateCamera(partialCamera);
@@ -403,6 +403,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const renderMapMarkers = (): React.ReactElement[] => {
     return locations.map((location, index) => {
+      const locationId = location._id.toString();
+
       if (!markersRef.current[index]) {
         markersRef.current[index] = {} as MapMarkerLocation;
       }
@@ -417,14 +419,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
               // During view initialization the initial location should show it's callout.
               if (!initialized.current) {
                 setTimeout(() => {
-                  if (
-                    location._id.toString() === initialLocation?._id.toString()
-                  ) {
+                  if (locationId === initialLocation?._id.toString()) {
                     markersRef.current[index].mapMarker.showCallout();
 
-                    locationBottomSheetRef.current?.present(
-                      location._id.toString(),
-                    );
+                    locationBottomSheetRef.current?.present(locationId);
                     requestAnimationFrame(() => {
                       mapBottomSheetRef.current?.dismiss();
                     });
@@ -488,9 +486,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         onLocationSelect={onLocationSelect}
         onDismiss={byUser => {
           if (byUser) {
-            // Re-present the "main" map bottom sheet.
-            // mapBottomSheetRef.current?.present();
-
             // When the bottom sheet is dismissed by the user (close button) then
             // no other marker has been selected so we hide all the markers (includes
             // the marker for the location bottom sheet just closed).

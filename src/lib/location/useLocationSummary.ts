@@ -10,7 +10,7 @@ export const useLocationSummary = (location?: Location) => {
   let date = '';
   let dateStr = '';
 
-  if (location) {
+  if (location?.isValid()) {
     const allEvents = realm
       .objects(Event)
       .filtered('location._id == $0', location._id)

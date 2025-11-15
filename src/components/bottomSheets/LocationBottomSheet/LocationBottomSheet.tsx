@@ -40,7 +40,6 @@ const LocationBottomSheet = React.forwardRef<
   const innerRef = useRef<BottomSheet>(null);
   const locationViewRef = useRef<LocationViewMethods>(null);
   const animatedPosition = useSharedValue(0);
-  const [showEditor, setShowEditor] = useState(false);
   const [closed, setClosed] = useState(true);
 
   useImperativeHandle(ref, () => ({
@@ -72,9 +71,13 @@ const LocationBottomSheet = React.forwardRef<
     ) as Location;
 
     setLocation(location);
-    setShowEditor(!!showEditor);
     innerRef.current?.snapToIndex(index || 0);
     setClosed(false);
+
+    // Wait for the view to appear before applying edit mode.
+    requestAnimationFrame(() => {
+      locationViewRef.current?.setEditMode(!!showEditor);
+    });
   };
 
   // Returns the location id for this sheet if it is presented.
@@ -107,14 +110,16 @@ const LocationBottomSheet = React.forwardRef<
         <BottomSheetScrollView
           style={s.container}
           showsVerticalScrollIndicator={false}>
-          <LocationView
-            ref={locationViewRef}
-            locationId={location?._id.toString()}
-            presentWithEditor={showEditor}
-            onFocusName={() => innerRef.current?.expand()}
-            onBlurName={() => innerRef.current?.snapToIndex(1)}
-            onPressNotes={(text, title) => onPressNotes(text, title)}
-          />
+          {location?.isValid() ? (
+            <LocationView
+              ref={locationViewRef}
+              locationId={location?._id.toString()}
+              onFocusName={() => innerRef.current?.expand()}
+              onBlurName={() => innerRef.current?.snapToIndex(1)}
+              onDelete={() => dismiss()}
+              onPressNotes={(text, title) => onPressNotes(text, title)}
+            />
+          ) : null}
         </BottomSheetScrollView>
       </BottomSheet>
       {!closed && enableSelection ? (

@@ -14,7 +14,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import SearchBar from 'components/atoms/SearchBar';
 // import clubs from 'lib/content/clubs/GA.json';
 import clubs from 'lib/content/clubs/MO.json';
-import { Club } from 'types/club';
+import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<ClubsNavigatorParamList, 'Clubs'>;
@@ -85,7 +85,7 @@ const ClubsScreen = ({ navigation }: Props) => {
         rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Club', {
-            clubId: club.id,
+            clubId: club._id.toString(),
           })
         }
       />
@@ -102,7 +102,7 @@ const ClubsScreen = ({ navigation }: Props) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <FlatList
-          data={(clubs as Club[]).sort((a, b) => {
+          data={clubs.sort((a, b) => {
             return a.name < b.name ? -1 : 1;
           })}
           renderItem={renderClub}

@@ -5,6 +5,7 @@ export * from './Battery';
 export * from './BatteryCycle';
 export * from './Checklist';
 export * from './ChecklistTemplate';
+export * from './Club';
 export * from './Commander';
 export * from './Event';
 export * from './EventsMaintenanceReport';

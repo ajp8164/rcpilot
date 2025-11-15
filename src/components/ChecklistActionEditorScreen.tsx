@@ -182,7 +182,6 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
   }, []);
 
   useEffect(() => {
-    console.log('hello');
     let following: ISODateString | string = '';
     let followingStr = '';
     const period = schedulePickerValue[1] as ChecklistActionSchedulePeriod;
@@ -251,14 +250,6 @@ const ChecklistActionEditorScreen = ({ navigation, route }: Props) => {
             followingStr = DateTime.now().toFormat('MMMM d, yyyy');
           }
         }
-        console.log('>>', {
-          following: followingStr,
-          whenPerform:
-            selectedSchedule.type === ChecklistActionScheduleType.NonRepeating
-              ? ChecklistActionScheduleWhenPerform.In
-              : ChecklistActionScheduleWhenPerform.Every,
-          whenPerformValue,
-        });
         setScheduleStr({
           following: followingStr,
           whenPerform:

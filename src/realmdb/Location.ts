@@ -1,5 +1,5 @@
+import { ISODateString } from '@react-native-hello/common';
 import { BSON, Object, ObjectSchema } from 'realm';
-import { ISODateString } from 'types/common';
 
 export class Location extends Object<Location> {
   _id!: BSON.ObjectId;

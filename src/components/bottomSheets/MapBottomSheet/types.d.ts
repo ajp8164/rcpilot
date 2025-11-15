@@ -9,9 +9,7 @@ declare const MapBottomSheet: React.MemoExoticComponent<
 >;
 
 export interface MapBottomSheetProps {
-  initialIndex?: number;
   onPressAddLocation: () => void;
-  snapPoints?: (string | number)[];
 }
 
 export interface MapBottomSheetMethods {

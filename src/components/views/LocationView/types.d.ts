@@ -13,8 +13,11 @@ export interface LocationViewProps {
   onFocusName: () => void;
   onBlurName: () => void;
   onPressNotes: (text?: string, title?: string) => void;
+  presentWithEditor?: boolean;
   titleRightContent?: ReactElement;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface LocationViewMethods {}
+export interface LocationViewMethods {
+  setEditMode: (mode: boolean) => void;
+}

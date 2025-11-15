@@ -1,7 +1,10 @@
 import React, { useImperativeHandle, useRef } from 'react';
 
-import BottomSheet from '@gorhom/bottom-sheet';
-import { useTheme } from '@react-native-hello/ui';
+import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import { Divider, useTheme } from '@react-native-hello/ui';
+import IconCloseX from 'components/atoms/IconCloseX';
+import { ModalHeader } from 'components/atoms/ModalHeader';
+import LocationsView from 'components/views/LocationsView';
 import MapActionsView from 'components/views/MapActionsView';
 
 import { MapBottomSheetMethods, MapBottomSheetProps } from './types';
@@ -10,11 +13,7 @@ type MapBottomSheet = MapBottomSheetMethods;
 
 const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
   (props, ref) => {
-    const {
-      initialIndex = 0,
-      onPressAddLocation,
-      snapPoints = [150, '45%', '92%'],
-    } = props;
+    const { onPressAddLocation } = props;
 
     const theme = useTheme();
 
@@ -36,16 +35,32 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
     };
 
     const present = () => {
-      innerRef.current?.snapToIndex(2);
+      innerRef.current?.snapToIndex(0);
     };
 
     return (
       <BottomSheet
         ref={innerRef}
-        snapPoints={snapPoints}
-        index={initialIndex}
+        snapPoints={['40%', '92%']}
+        index={-1}
+        enableDynamicSizing={false}
+        enablePanDownToClose={true}
         backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}>
-        <MapActionsView onPressAddLocation={onPressAddLocation} />
+        <ModalHeader
+          size={'small'}
+          title={'All Locations'}
+          titleStyle={{ alignSelf: 'flex-start' }}
+          containerStyle={{ backgroundColor: theme.colors.viewBackground }}
+          rightButtonIcon={<IconCloseX />}
+          onRightButtonPress={dismiss}
+        />
+        <BottomSheetScrollView
+          style={theme.styles.view}
+          showsVerticalScrollIndicator={false}>
+          <MapActionsView onPressAddLocation={onPressAddLocation} />
+          <Divider />
+          <LocationsView />
+        </BottomSheetScrollView>
       </BottomSheet>
     );
   },

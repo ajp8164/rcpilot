@@ -129,7 +129,6 @@ const SetupNavigator = () => {
         component={LocationNavigator}
         options={{
           headerShown: false,
-          presentation: 'fullScreenModal',
         }}
       />
       <SetupStack.Screen

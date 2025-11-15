@@ -1,12 +1,8 @@
 import React from 'react';
-import { Text, ViewStyle } from 'react-native';
+import { Text } from 'react-native';
 import VersionNumber from 'react-native-version-number';
 
 import { ThemeManager, useDevice } from '@react-native-hello/ui';
-
-export interface Props {
-  style?: ViewStyle | ViewStyle[];
-}
 
 const Version = () => {
   const s = useStyles();

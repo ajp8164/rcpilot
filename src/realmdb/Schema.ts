@@ -1,3 +1,4 @@
+import { Address } from './Address';
 import { Battery } from './Battery';
 import { BatteryCharge, BatteryCycle, BatteryDischarge } from './BatteryCycle';
 import {
@@ -9,6 +10,7 @@ import {
   ChecklistActionScheduleState,
 } from './Checklist';
 import { ChecklistTemplate } from './ChecklistTemplate';
+import { Club } from './Club';
 import { Achievement, Commander } from './Commander';
 import { Event } from './Event';
 import { EventStyle } from './EventStyle';
@@ -25,6 +27,7 @@ const Schema = [
   Battery,
   BatteryCycle,
   ChecklistTemplate,
+  Club,
   Commander,
   Event,
   EventsMaintenanceReport,
@@ -39,6 +42,7 @@ const Schema = [
 
   // Embedded objects
   Achievement,
+  Address,
   BatteryCharge,
   BatteryDischarge,
   Checklist,

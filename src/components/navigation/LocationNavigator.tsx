@@ -34,12 +34,19 @@ const LocationNavigator = () => {
             presentation: 'fullScreenModal',
           }}
         />
-        <LocationStack.Screen name="Events" component={EventsScreen} />
+        <LocationStack.Screen
+          name="Events"
+          component={EventsScreen}
+          options={{
+            presentation: 'modal',
+          }}
+        />
         <LocationStack.Screen
           name="NotesEditor"
           component={NotesEditorScreen}
           options={{
-            title: 'Fuel Notes',
+            presentation: 'modal',
+            gestureEnabled: false,
           }}
         />
       </LocationStack.Navigator>

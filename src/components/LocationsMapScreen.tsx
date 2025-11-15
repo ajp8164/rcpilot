@@ -3,10 +3,10 @@ import { Alert, View } from 'react-native';
 import MapView, {
   Camera,
   Details,
-  MapMarker,
   MapPressEvent,
   MapType,
   MarkerDragStartEndEvent,
+  MapMarker as RNMapMarker,
   Region,
 } from 'react-native-maps';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,16 +18,15 @@ import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
 import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
-import { NotesBottomSheet } from 'components/bottomSheets/NotesBottomSheet';
-import { MapMarkerCallout } from 'components/molecules/MapMarkerCallout';
+import { MapMarker } from 'components/molecules/MapMarker';
 import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
 import {
   CircleX,
+  LayoutList,
   Map,
   MapPinPlus,
-  MapPinned,
   Navigation2,
   Navigation,
   Satellite,
@@ -39,14 +38,8 @@ import { saveMapPreferences } from 'store/slices/appSettings';
 import { LocationPickerResult } from 'types/location';
 import { LocationNavigatorParamList } from 'types/navigation';
 
-enum RecenterButtonState {
-  Initial,
-  CurrentLocation,
-  CurrentLocationNorthUp,
-}
-
 type MapMarkerLocation = {
-  mapMarker: MapMarker;
+  mapMarker: RNMapMarker;
   location: Location;
 };
 
@@ -93,13 +86,11 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const [mapPresentation, setMapPresentation] = useState<MapType>(
     mapPreferences.presentation,
   );
-  const [recenterButtonState, setRecenterButtonState] = useState(
-    RecenterButtonState.Initial,
-  );
+  const [mapIsCentered, setMapIsCentered] = useState(true);
+  const [mapIsRotated, setMapIsRotated] = useState(false);
 
   const mapBottomSheetRef = useRef<MapBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
-  const notesBottomSheetRef = useRef<NotesBottomSheet>(null);
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -173,41 +164,40 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const changeRecenter = (coords: LocationCoords) => {
-    // Set button state and heading.
-    let heading;
-    switch (recenterButtonState) {
-      case RecenterButtonState.Initial:
-        setRecenterButtonState(RecenterButtonState.CurrentLocation);
-        break;
-      case RecenterButtonState.CurrentLocation:
-        setRecenterButtonState(RecenterButtonState.CurrentLocationNorthUp);
-        heading = 0;
-        break;
-      case RecenterButtonState.CurrentLocationNorthUp:
-        setRecenterButtonState(RecenterButtonState.Initial);
-        break;
-    }
-    recenterMap(coords, { heading });
-  };
-
-  const recenterMap = (coords: LocationCoords, opts?: { heading?: number }) => {
+  const recenterMap = (coords: LocationCoords) => {
     const partialCamera: Partial<Camera> = {
       center: {
         latitude: coords.latitude,
         longitude: coords.longitude,
       },
-      heading: opts?.heading,
       pitch: 0,
       zoom: 1,
     };
     // This is a hack to get the map to center on the specified location.
     // The first call only bring the location into the view.
     // The second call will bring the location to the center of the screen.
+
     mapViewRef.current?.animateCamera(partialCamera);
     setTimeout(() => {
       mapViewRef.current?.animateCamera(partialCamera);
     });
+
+    setMapIsCentered(true);
+  };
+
+  const northUpMap = () => {
+    const partialCamera: Partial<Camera> = {
+      heading: 0,
+      pitch: 0,
+      zoom: 1,
+    };
+
+    mapViewRef.current?.animateCamera(partialCamera);
+    setTimeout(() => {
+      mapViewRef.current?.animateCamera(partialCamera);
+    });
+
+    setMapIsRotated(false);
   };
 
   const toggleMapPresenation = () => {
@@ -243,17 +233,17 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       // Show the callout for only the new location.
       setTimeout(() => {
         markersRef.current.forEach(marker => {
-          marker.mapMarker.hideCallout();
+          marker.mapMarker?.hideCallout();
         });
         markersRef.current[
           markersRef.current.length - 1
-        ]?.mapMarker.showCallout();
+        ]?.mapMarker?.showCallout();
       }, 500); // Add for UX.
 
       // Show location bottom sheet for the new location.
       mapBottomSheetRef.current?.dismiss();
       requestAnimationFrame(() => {
-        locationBottomSheetRef.current?.present(newLocationId, 1);
+        locationBottomSheetRef.current?.present(newLocationId, 0, true);
       });
 
       // Update our user selection.
@@ -270,6 +260,15 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       latitude: region.latitude,
       longitude: region.longitude,
     } as LocationCoords;
+  };
+
+  const setUserMovedMap = async () => {
+    setMapIsCentered(false);
+  };
+
+  const checkUserRotatedMap = async () => {
+    const camera = await mapViewRef.current?.getCamera();
+    setMapIsRotated(camera?.heading !== 0);
   };
 
   const onMarkerDragEnd = (
@@ -290,17 +289,19 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressMarker = (locationId: string) => {
-    if (locationId !== userTappedLocationId.current) {
-      onChangeMapLocation({ locationId });
-
-      mapBottomSheetRef.current?.dismiss();
-      requestAnimationFrame(() => {
-        locationBottomSheetRef.current?.present(locationId);
-      });
+    // This check allows the location sheet to be dismissed if it is currently displayed and
+    // the user has tapped a marker other than the marker for the currently displayed location
+    // sheet. This effectively allows the location sheet to be dismissed as through a tap occurred
+    // anywhere on the map outside of the displatyed location.
+    const presentedLocationId = locationBottomSheetRef.current?.getLocationId();
+    if (presentedLocationId && presentedLocationId !== locationId) {
+      locationBottomSheetRef.current?.dismiss();
     }
   };
 
-  const onPressCallout = (_locationId: string) => {};
+  const onPressCallout = (locationId: string) => {
+    locationBottomSheetRef.current?.present(locationId);
+  };
 
   const onLocationSelect = (locationId: string) => {
     // Broadcast the users selected location.
@@ -315,53 +316,88 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const renderActionButtons = (): React.ReactElement => {
     return (
-      <View style={s.buttons}>
-        <Button
-          containerStyle={s.button}
-          buttonStyle={theme.styles.buttonScreenHeader}
-          icon={<CircleX color={theme.colors.clearButtonText} size={28} />}
-          onPress={() => navigation.goBack()}
-        />
-        <Button
-          containerStyle={[s.button, s.buttonFirst]}
-          buttonStyle={theme.styles.buttonScreenHeader}
-          icon={
-            <>
-              {recenterButtonState === RecenterButtonState.Initial ? (
-                <Navigation color={theme.colors.clearButtonText} size={28} />
-              ) : recenterButtonState ===
-                RecenterButtonState.CurrentLocation ? (
-                <MapPinned color={theme.colors.clearButtonText} size={28} />
+      <>
+        <View style={s.buttons}>
+          <Button
+            containerStyle={[s.button, s.buttonFirst, s.buttonLast]}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={<CircleX color={theme.colors.clearButtonText} size={28} />}
+            onPress={() => navigation.goBack()}
+          />
+          <Button
+            containerStyle={[s.button, s.buttonFirst]}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={
+              <Navigation
+                color={theme.colors.clearButtonText}
+                size={28}
+                fill={
+                  mapIsCentered
+                    ? theme.colors.clearButtonText
+                    : theme.colors.transparent
+                }
+              />
+            }
+            onPress={() => recenterMap(currentPosition.coords)}
+          />
+          <Button
+            containerStyle={s.button}
+            buttonStyle={{
+              ...theme.styles.buttonScreenHeader,
+              justifyContent: 'center',
+              width: 40,
+            }}
+            icon={
+              <>
+                <View style={s.northUp} />
+                <Navigation2
+                  color={theme.colors.clearButtonText}
+                  size={24}
+                  fill={
+                    mapIsRotated
+                      ? theme.colors.transparent
+                      : theme.colors.clearButtonText
+                  }
+                />
+              </>
+            }
+            onPress={() => northUpMap()}
+          />
+          <Button
+            containerStyle={[s.button, s.buttonLast]}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={
+              mapPresentation === 'standard' ? (
+                <Satellite color={theme.colors.clearButtonText} size={28} />
               ) : (
-                <View style={s.northUp}>
-                  <Navigation2 color={theme.colors.white} size={28} />
-                </View>
-              )}
-            </>
-          }
-          onPress={() => changeRecenter(currentPosition.coords)}
-        />
-        <Button
-          containerStyle={[s.button, s.buttonLast]}
-          buttonStyle={theme.styles.buttonScreenHeader}
-          icon={
-            mapPresentation === 'standard' ? (
-              <Satellite color={theme.colors.clearButtonText} size={28} />
-            ) : (
-              <Map color={theme.colors.clearButtonText} size={28} />
-            )
-          }
-          onPress={() => toggleMapPresenation()}
-        />
-        <Button
-          containerStyle={s.button}
-          buttonStyle={theme.styles.buttonScreenHeader}
-          icon={
-            <MapPinPlus color={theme.colors.screenHeaderButtonText} size={28} />
-          }
-          onPress={() => addLocation()}
-        />
-      </View>
+                <Map color={theme.colors.clearButtonText} size={28} />
+              )
+            }
+            onPress={() => toggleMapPresenation()}
+          />
+          <Button
+            containerStyle={[s.button, s.buttonFirst, s.buttonLast]}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={
+              <MapPinPlus
+                color={theme.colors.screenHeaderButtonText}
+                size={28}
+              />
+            }
+            onPress={() => addLocation()}
+          />
+        </View>
+        <View style={s.buttonShowList}>
+          <Button
+            title={'Show List'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            containerStyle={[s.button, s.buttonFirst, s.buttonLast]}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            icon={<LayoutList color={theme.colors.clearButtonText} size={18} />}
+            onPress={() => mapBottomSheetRef.current?.present()}
+          />
+        </View>
+      </>
     );
   };
 
@@ -371,7 +407,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         markersRef.current[index] = {} as MapMarkerLocation;
       }
       return (
-        <MapMarkerCallout
+        <MapMarker
           ref={ref => {
             // Wait to be sure this component is mounted and has a ref.
             setTimeout(() => {
@@ -431,6 +467,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           latitudeDelta: currentPosition.error ? 10 : 0.01,
           longitudeDelta: currentPosition.error ? 10 : 0.01,
         }}
+        onPanDrag={() => setUserMovedMap()}
+        onRegionChangeStart={() => checkUserRotatedMap()}
         onRegionChangeComplete={onRegionChangeComplete}
         onPress={onPressMap}
         onLongPress={e =>
@@ -441,17 +479,17 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       {renderActionButtons()}
       <MapBottomSheet
         ref={mapBottomSheetRef}
-        initialIndex={locationId ? -1 : 2}
         onPressAddLocation={addLocation}
       />
       <LocationBottomSheet
         ref={locationBottomSheetRef}
+        initialIndex={locationId ? 0 : -1}
         enableSelection={enableLocationSelection}
         onLocationSelect={onLocationSelect}
         onDismiss={byUser => {
           if (byUser) {
             // Re-present the "main" map bottom sheet.
-            mapBottomSheetRef.current?.present();
+            // mapBottomSheetRef.current?.present();
 
             // When the bottom sheet is dismissed by the user (close button) then
             // no other marker has been selected so we hide all the markers (includes
@@ -460,12 +498,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           }
         }}
         onPressNotes={(text, title) =>
-          notesBottomSheetRef.current?.present(text, title)
+          navigation.navigate('NotesEditor', {
+            title,
+            text,
+            eventName: 'location-notes',
+          })
         }
-      />
-      <NotesBottomSheet
-        ref={notesBottomSheetRef}
-        eventName={'location-notes'}
       />
     </>
   );
@@ -473,21 +511,29 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
 const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   button: {
-    width: 40,
-    height: 40,
     backgroundColor: theme.colors.white,
-  },
-  buttonFirst: {
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    borderBottomColor: theme.colors.listItemBorder,
-    borderBottomWidth: 1,
-    marginTop: 10,
-  },
-  buttonLast: {
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
+    borderBottomColor: theme.colors.listItemBorder,
+    borderBottomWidth: 1,
+  },
+  buttonFirst: {
+    borderTopLeftRadius: theme.radius.M,
+    borderTopRightRadius: theme.radius.M,
+  },
+  buttonLast: {
+    borderBottomLeftRadius: theme.radius.M,
+    borderBottomRightRadius: theme.radius.M,
+    borderBottomWidth: 0,
     marginBottom: 10,
+  },
+  buttonShowList: {
+    width: '100%',
+    position: 'absolute',
+    bottom: 15,
+    alignItems: 'center',
   },
   buttons: {
     position: 'absolute',
@@ -499,9 +545,12 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     height: '100%',
   },
   northUp: {
-    backgroundColor: theme.colors.clearButtonText,
-    borderRadius: 5,
-    padding: 3,
+    borderColor: theme.colors.clearButtonText,
+    borderWidth: 1,
+    borderRadius: 1,
+    width: 2,
+    height: 6,
+    alignSelf: 'center',
   },
 }));
 

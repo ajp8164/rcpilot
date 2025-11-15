@@ -1,13 +1,19 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
+import { Keyboard } from 'react-native';
 import { useSharedValue } from 'react-native-reanimated';
 
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { useRealm } from '@realm/react';
 import { BottomSheetFloatingButton } from 'components/atoms/BottomSheetFloatingButton';
-import { Button } from 'components/atoms/Button';
 import IconCloseX from 'components/atoms/IconCloseX';
-import LocationView from 'components/views/LocationView';
+import { ModalHeader } from 'components/atoms/ModalHeader';
+import LocationView, {
+  LocationViewMethods,
+} from 'components/views/LocationView';
 import { MapPinCheck } from 'lucide-react-native';
+import { BSON } from 'realm';
+import { Location } from 'realmdb';
 
 import { LocationBottomSheetMethods, LocationBottomSheetProps } from './types';
 
@@ -19,24 +25,28 @@ const LocationBottomSheet = React.forwardRef<
 >((props, ref) => {
   const {
     enableSelection,
+    initialIndex = -1,
     onDismiss,
     onLocationSelect,
     onPressNotes,
-    snapPoints = [150, '45%', '85%'],
   } = props;
 
   const theme = useTheme();
   const s = useStyles();
+  const realm = useRealm();
 
-  const [locationId, setLocationId] = useState<string>();
+  const [location, setLocation] = useState<Location>();
 
   const innerRef = useRef<BottomSheet>(null);
+  const locationViewRef = useRef<LocationViewMethods>(null);
   const animatedPosition = useSharedValue(0);
+  const [showEditor, setShowEditor] = useState(false);
   const [closed, setClosed] = useState(true);
 
   useImperativeHandle(ref, () => ({
     // These functions exposed to the parent component through the ref.
     dismiss,
+    getLocationId,
     present,
   }));
 
@@ -44,36 +54,63 @@ const LocationBottomSheet = React.forwardRef<
     innerRef.current?.close();
     onDismiss?.(byUser);
     setClosed(true);
+    Keyboard.dismiss();
+
+    // Reset state for next presentation.
+    setLocation(undefined);
+    locationViewRef.current?.setEditMode(false);
   };
 
-  const present = (locationId: string, index?: number) => {
-    setLocationId(locationId);
+  const present = (
+    locationId: string,
+    index?: number,
+    showEditor?: boolean,
+  ) => {
+    const location = realm.objectForPrimaryKey(
+      'Location',
+      new BSON.ObjectId(locationId),
+    ) as Location;
+
+    setLocation(location);
+    setShowEditor(!!showEditor);
     innerRef.current?.snapToIndex(index || 0);
     setClosed(false);
   };
 
+  // Returns the location id for this sheet if it is presented.
+  const getLocationId = () => {
+    return location?._id.toString();
+  };
+
   const selectLocation = () => {
-    if (locationId) onLocationSelect?.(locationId);
+    if (location) onLocationSelect?.(location._id.toString());
   };
 
   return (
     <>
       <BottomSheet
         ref={innerRef}
-        index={-1}
-        snapPoints={snapPoints}
+        index={initialIndex}
+        snapPoints={['40%', '92%']}
+        enableDynamicSizing={false}
+        enablePanDownToClose={true}
         backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
         animatedPosition={animatedPosition}>
-        <BottomSheetScrollView style={s.container}>
+        <ModalHeader
+          size={'small'}
+          title={location?.name}
+          titleStyle={{ alignSelf: 'flex-start' }}
+          containerStyle={{ backgroundColor: theme.colors.viewBackground }}
+          rightButtonIcon={<IconCloseX />}
+          onRightButtonPress={dismiss}
+        />
+        <BottomSheetScrollView
+          style={s.container}
+          showsVerticalScrollIndicator={false}>
           <LocationView
-            locationId={locationId}
-            titleRightContent={
-              <Button
-                buttonStyle={theme.styles.dividerIconButton}
-                icon={<IconCloseX />}
-                onPress={() => dismiss(true)}
-              />
-            }
+            ref={locationViewRef}
+            locationId={location?._id.toString()}
+            presentWithEditor={showEditor}
             onFocusName={() => innerRef.current?.expand()}
             onBlurName={() => innerRef.current?.snapToIndex(1)}
             onPressNotes={(text, title) => onPressNotes(text, title)}

@@ -2,9 +2,9 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { Text, View } from 'react-native';
 import {
   Callout,
-  MapMarker,
   Marker,
   MarkerDragStartEndEvent,
+  MapMarker as RNMapMarker,
 } from 'react-native-maps';
 import Animated, { SlideInUp } from 'react-native-reanimated';
 
@@ -13,7 +13,7 @@ import { useLocationSummary } from 'lib/location';
 import { MapPin } from 'lucide-react-native';
 import { Location } from 'realmdb';
 
-interface MapMarkerCalloutInterface {
+interface MapMarkerInterface {
   index: number;
   location: Location;
   onMarkerDragEnd: (event: MarkerDragStartEndEvent, location: Location) => void;
@@ -21,18 +21,18 @@ interface MapMarkerCalloutInterface {
   onPressMarker: () => void;
 }
 
-export const MapMarkerCallout = forwardRef(
-  (props: MapMarkerCalloutInterface, ref: React.Ref<MapMarker> | undefined) => {
+export const MapMarker = forwardRef(
+  (props: MapMarkerInterface, ref: React.Ref<RNMapMarker> | undefined) => {
     const { index, location, onMarkerDragEnd, onPressCallout, onPressMarker } =
       props;
     const theme = useTheme();
     const s = useStyles();
     const locationSummary = useLocationSummary(location);
 
-    const internalRef = useRef<MapMarker>(null);
+    const internalRef = useRef<RNMapMarker>(null);
 
     // Expose internalRef to parent if they passed a ref.
-    useImperativeHandle(ref, () => internalRef.current as MapMarker);
+    useImperativeHandle(ref, () => internalRef.current as RNMapMarker);
 
     return (
       <>
@@ -47,6 +47,7 @@ export const MapMarkerCallout = forwardRef(
           onDragEnd={event => {
             onMarkerDragEnd(event, location);
           }}
+          tracksViewChanges={false}
           onPress={() => onPressMarker()}>
           <Animated.View entering={SlideInUp.duration(400)}>
             <MapPin
@@ -89,7 +90,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     backgroundColor: theme.colors.stickyWhite,
   },
   calloutTextContainer: {
-    alignItems: 'center',
+    // alignItems: 'center',
   },
   calloutText1: {
     ...theme.text.normal,

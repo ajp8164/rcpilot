@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { ListRenderItem } from 'react-native';
+import { FlatList, ListRenderItem } from 'react-native';
 import { useSelector } from 'react-redux';
 
-import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { useEvent } from '@react-native-hello/core';
 import {
+  Divider,
   ListItemCheckBox,
   listItemPosition,
   useTheme,
 } from '@react-native-hello/ui';
 import { useQuery } from '@realm/react';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { Goal } from 'lucide-react-native';
+import { Goal, LandPlot } from 'lucide-react-native';
 import { Location } from 'realmdb';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
 import { LocationPickerResult } from 'types/location';
@@ -65,7 +65,9 @@ const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
             <>
               {currentLocation ? (
                 <Goal color={theme.colors.listItemIcon} />
-              ) : null}
+              ) : (
+                <LandPlot color={theme.colors.listItemIcon} />
+              )}
             </>
           }
           position={listItemPosition(index, allLocations.length)}
@@ -76,11 +78,13 @@ const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
     };
 
     return (
-      <BottomSheetFlatList
+      <FlatList
         data={allLocations}
         renderItem={renderLocation}
         keyExtractor={item => item._id.toString()}
+        scrollEnabled={false}
         showsVerticalScrollIndicator={false}
+        ListFooterComponent={<Divider />}
         ListEmptyComponent={
           <EmptyView
             info

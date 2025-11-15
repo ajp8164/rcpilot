@@ -1,5 +1,5 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { ScrollView, Text, View } from 'react-native';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Text, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
@@ -10,15 +10,18 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import { useQuery, useRealm } from '@realm/react';
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
+import { ClubView } from 'components/views/ClubView';
+import LocationActionsView, {
+  LocationActionsViewMethods,
+} from 'components/views/LocationActionsView';
 import formatcoords from 'formatcoords';
 import { useLocationSummary } from 'lib/location';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
-import { Location } from 'realmdb';
+import { Club, Location } from 'realmdb';
 import { selectLocation } from 'store/selectors/locationSelectors';
 import { saveCurrentLocation } from 'store/slices/location';
 import { FilterType } from 'types/filter';
@@ -36,7 +39,7 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
       onBlurName,
       onFocusName,
       onPressNotes,
-      titleRightContent,
+      presentWithEditor = false,
     } = props;
 
     const theme = useTheme();
@@ -53,6 +56,11 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
       new BSON.ObjectId(locationId),
     ) as Location;
 
+    const club = useQuery(Club).filtered(
+      'location._id == $0',
+      new BSON.ObjectId(locationId),
+    )?.[0];
+
     const [location, setLocation] = useState<Location>(_location);
     const currentLocationId = useSelector(selectLocation).locationId;
 
@@ -65,6 +73,23 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
           latLonSeparator: '|',
         })
         .split('|');
+
+    const [showEditor, setShowEditor] = useState(presentWithEditor);
+
+    const locationActionsViewRef = useRef<LocationActionsViewMethods>(null);
+
+    useImperativeHandle(ref, () => ({
+      // These functions exposed to the parent component through the ref.
+      setEditMode,
+    }));
+
+    const setEditMode = (value: boolean) => {
+      setShowEditor(value);
+    };
+
+    useEffect(() => {
+      setShowEditor(presentWithEditor);
+    }, [presentWithEditor]);
 
     useEffect(() => {
       refreshLocation();
@@ -122,78 +147,78 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
       });
     };
 
-    useImperativeHandle(ref, () => ({
-      //  These functions exposed to the parent component through the ref.
-    }));
+    const renderLocationView = () => {
+      return (
+        <>
+          {club ? (
+            <ClubView clubId={club._id.toString()} hideName={true} />
+          ) : null}
+          <ListItem
+            title={'Last Event'}
+            position={['first']}
+            value={locationSummary.date}
+          />
+          <ListItem
+            title={'Events'}
+            value={`${locationSummary.count}`}
+            position={['last']}
+            rightContent={'chevron-right'}
+            onPress={() =>
+              navigation.navigate('Events', {
+                filterType: FilterType.EventsModelFilter,
+                locationId,
+                readOnly: true,
+              })
+            }
+          />
+          <Divider />
+          <ListItem
+            title={'Coordinates'}
+            position={['first', 'last']}
+            subtitle={coords ? `${coords[0]}, ${coords[1]}` : ''}
+          />
+          <Divider text={'NOTES'} />
+          <ListItemNotes
+            notes={location.notes}
+            position={['first', 'last']}
+            onPress={() => onPressNotes(location.notes, 'Notes')}
+          />
+        </>
+      );
+    };
+
+    const renderEditView = () => {
+      return (
+        <View>
+          <Divider />
+          <ListItemInput
+            position={['first', 'last']}
+            inputProps={{
+              label: 'Name',
+              inputAccessoryViewID: 'keyboardAccessory',
+              onChangeText: onChangeName,
+              onFocus: () => onFocusName(),
+              onBlur: () => onBlurName(),
+              value: location.name,
+              placeholder: 'Location Name',
+              autoCapitalize: 'words',
+            }}
+          />
+        </View>
+      );
+    };
 
     return (
-      <>
-        <ScrollView
-          style={theme.styles.view}
-          showsVerticalScrollIndicator={false}
-          contentInsetAdjustmentBehavior={'automatic'}>
-          {location ? (
-            <>
-              <ListItemInput
-                position={['first', 'last']}
-                containerStyle={{
-                  backgroundColor: theme.colors.viewBackground,
-                }}
-                rightContent={titleRightContent}
-                inputProps={{
-                  inputStyle: s.title,
-                  inputAccessoryViewID: 'keyboardAccessory',
-                  onChangeText: onChangeName,
-                  onFocus: () => onFocusName(),
-                  onBlur: () => onBlurName(),
-                  value: location.name,
-                  placeholder: 'Location Name',
-                  autoCapitalize: 'words',
-                }}
-              />
-              <ListItem
-                title={'Last Event'}
-                position={['first']}
-                value={locationSummary.date}
-              />
-              <ListItem
-                title={'Events'}
-                value={`${locationSummary.count}`}
-                position={['last']}
-                rightContent={'chevron-right'}
-                onPress={() =>
-                  navigation.navigate('Events', {
-                    filterType: FilterType.EventsModelFilter,
-                    locationId,
-                    readOnly: true,
-                  })
-                }
-              />
-              <Divider />
-              <ListItemNotes
-                notes={location.notes}
-                position={['first', 'last']}
-                onPress={() => onPressNotes(location.notes, location.name)}
-              />
-              <Divider text={'COORDINATES'} />
-              <ListItem
-                title={'Latitude'}
-                position={['first']}
-                value={coords ? coords[0] : ''}
-              />
-              <ListItem
-                title={'Longitude'}
-                position={['last']}
-                value={coords ? coords[1] : ''}
-              />
-              <Divider />
-              <Button
-                title={'Delete Location'}
-                titleStyle={theme.styles.buttonOutlineAssertiveTitle}
-                buttonStyle={theme.styles.buttonOutlineAssertive}
-                containerStyle={theme.styles.buttonContainer}
-                outline
-                onPress={() => {
+      <View style={theme.styles.view}>
+        {location ? (
+          <>
+            {!club ? (
+              <LocationActionsView
+                ref={locationActionsViewRef}
+                mode={showEditor ? 'edit' : 'default'}
+                showDelete={!club}
+                style={{ marginVertical: 10 }}
+                onPressDelete={() => {
                   confirmAction(
                     {
                       label: 'Delete Location',
@@ -203,22 +228,24 @@ const LocationView = React.forwardRef<LocationView, LocationViewProps>(
                     deleteLocation,
                   );
                 }}
+                onPressEdit={() => setShowEditor(true)}
+                onPressDone={() => setShowEditor(false)}
               />
-              <Divider />
-            </>
-          ) : (
-            <View>
-              <Divider
-                note
-                text={'Location not found!'}
-                subHeaderStyle={s.title}
-                rightComponent={titleRightContent}
-              />
-              <Text style={s.message}>{'No location was found.'}</Text>
-            </View>
-          )}
-        </ScrollView>
-      </>
+            ) : null}
+            {showEditor ? renderEditView() : renderLocationView()}
+            <Divider />
+          </>
+        ) : (
+          <View>
+            <Divider
+              note
+              text={'Location not found!'}
+              subHeaderStyle={s.title}
+            />
+            <Text style={s.message}>{'No location was found.'}</Text>
+          </View>
+        )}
+      </View>
     );
   },
 );

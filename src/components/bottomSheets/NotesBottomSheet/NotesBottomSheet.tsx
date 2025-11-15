@@ -1,10 +1,14 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';
 
-import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
+import BottomSheet, {
+  BottomSheetScrollView,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
 import { useEvent } from '@react-native-hello/core';
-import { ModalHeader, ThemeManager, useTheme } from '@react-native-hello/ui';
+import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
 import IconCloseX from 'components/atoms/IconCloseX';
+import { ModalHeader } from 'components/atoms/ModalHeader';
 import { NotesEditorResult } from 'types/notes';
 
 import TextView from '../../views/TextView';
@@ -20,6 +24,7 @@ const NotesBottomSheet = React.forwardRef<
 
   const theme = useTheme();
   const s = useStyles();
+  const device = useDevice();
   const event = useEvent();
 
   const innerRef = useRef<BottomSheet>(null);
@@ -58,35 +63,35 @@ const NotesBottomSheet = React.forwardRef<
       snapPoints={snapPoints}
       enableHandlePanningGesture={false}
       enableContentPanningGesture={false}
+      enableDynamicSizing={false}
+      enablePanDownToClose={true}
       handleComponent={() => <View style={s.handle} />}>
       <ModalHeader
         title={title}
         size={'small'}
-        containerStyle={{ backgroundColor: theme.colors.viewBackground }}
         rightButtonIcon={<IconCloseX />}
         onRightButtonPress={dismiss}
       />
       <View
         style={{ flex: 1 }}
         onLayout={e => setTextViewHeight(e.nativeEvent.layout.height)}>
-        <BottomSheetScrollView>
+        <BottomSheetView>
           <TextView
             characterLimit={5000}
             placeholder={'Type your notes here.'}
             enableAutoKeyboard={enableAutoKeyboard}
             value={text}
             onTextChanged={setText}
-            height={textViewHeight}
+            height={textViewHeight + device.bottomTabBarHeight}
           />
-        </BottomSheetScrollView>
+        </BottomSheetView>
       </View>
     </BottomSheet>
   );
 });
 
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   handle: {
-    backgroundColor: theme.colors.viewBackground,
     paddingTop: 10,
   },
 }));

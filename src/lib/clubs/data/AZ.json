@@ -1,0 +1,191 @@
+[
+  {
+    "id": "d8f6a4c2-0e9b-7d5f-3a1c-9e7d5f3a1c9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Arizona Model Pilots Society (AMPS)",
+    "description": "An AMA Gold Charter Club offering a variety of RC activities including airshows and training.",
+    "websiteUrl": "https://ampsrc.com/",
+    "keyFeatures": "Airshows, training, FAA FRIA, club meetings",
+    "address": {
+      "street": "1234 Flying Way",
+      "city": "Phoenix",
+      "state": "AZ",
+      "zip": "85001"
+    },
+    "latitude": 33.4484,
+    "longitude": -112.074,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a3e1c9f7-5d3b-1a9e-7c5d-3b1f9e7c5d3b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Sun Lakes Model Airplane Club",
+    "description": "A community-oriented club embracing all aspects of RC hobby, from building to flying.",
+    "websiteUrl": "https://slrcc.org/",
+    "keyFeatures": "Model building, FPV, pylon racing, drone racing",
+    "address": {
+      "street": "456 Hobby Rd",
+      "city": "Florence",
+      "state": "AZ",
+      "zip": "85132"
+    },
+    "latitude": 33.0215,
+    "longitude": -111.5101,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f5b3d1a9-7e5c-3f1d-9b7e-5c3a1f9d7e5c",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Speedworld R.C. Flyers",
+    "description": "An AMA Chartered club located northwest of Surprise, AZ, with a dedicated flying site.",
+    "websiteUrl": "https://www.speedworldrcflyers.com/a/r/szz/rc/home",
+    "keyFeatures": "FAA FRIA, dedicated flying site, club meetings",
+    "address": {
+      "street": "789 Airstrip Ave",
+      "city": "Surprise",
+      "state": "AZ",
+      "zip": "85374"
+    },
+    "latitude": 33.626,
+    "longitude": -112.4555,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c7d5e3a1-9f7b-5d3c-1e9a-7f5d3c1a9f7d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Flagstaff Flyers R/C Club",
+    "description": "A club dedicated to helping people learn to fly RC aircraft in a safe environment.",
+    "websiteUrl": "https://flagstaffflyers.com/",
+    "keyFeatures": "Training, secure flying site, safe learning environment",
+    "address": {
+      "street": "101 Flying Blvd",
+      "city": "Flagstaff",
+      "state": "AZ",
+      "zip": "86001"
+    },
+    "latitude": 35.1983,
+    "longitude": -111.6513,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b9e7c5d3-1a9f-7e5c-3d1b-9f7e5c3d1a9f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Casa Grande RC Flyers",
+    "description": "A non-profit RC airplane club affiliated with the Academy of Model Aeronautics.",
+    "websiteUrl": "https://www.casagrandercflyers.com/",
+    "keyFeatures": "Non-profit, AMA affiliation, community events",
+    "address": {
+      "street": "202 Airfield Rd",
+      "city": "Casa Grande",
+      "state": "AZ",
+      "zip": "85122"
+    },
+    "latitude": 32.8795,
+    "longitude": -111.7574,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e4f2a0c8-6d4b-2e0f-8c6a-4d2b0e8f6c4a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Tucson Radio Control Club (TRCC)",
+    "description": "An AMA club promoting radio control flying, located at 10801 E Valencia Road, Tucson, AZ.",
+    "websiteUrl": "https://www.trccclub.org/a/r/szz/rc/home",
+    "keyFeatures": "AMA chartered, open membership, guest pilots welcome",
+    "address": {
+      "street": "10801 E Valencia Rd",
+      "city": "Tucson",
+      "state": "AZ",
+      "zip": "85747"
+    },
+    "latitude": 32.1285,
+    "longitude": -110.8694,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a1c9e7f5-3d1b-9f7e-5c3a-1d9f7e5c3a1d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Desert Hawks RC Club",
+    "description": "A non-profit club operated in conjunction with the Lake Havasu City Parks and Recreation Department.",
+    "websiteUrl": "https://deserthawksrc.club/",
+    "keyFeatures": "Non-profit, AMA chartered, community events",
+    "address": {
+      "street": "7200 Dub Campbell Pkwy",
+      "city": "Lake Havasu City",
+      "state": "AZ",
+      "zip": "86406"
+    },
+    "latitude": 34.4739,
+    "longitude": -114.3241,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d6b4f2a0-8e6c-4d2b-0f8a-6c4d2b0e8f6c",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Silver Creek Aeromodelers",
+    "description": "A club promoting the sport of radio controlled aircraft modeling, maintaining a dedicated flying field.",
+    "websiteUrl": "https://www.silvercreekaeromodelers.com/",
+    "keyFeatures": "AMA chartered, dedicated flying field, community involvement",
+    "address": {
+      "street": "1962 Mountain Highlands Blvd",
+      "city": "Snowflake",
+      "state": "AZ",
+      "zip": "85937"
+    },
+    "latitude": 34.5283,
+    "longitude": -110.1483,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f8c6a4d2-0e9b-7f5d-3c1a-9e7f5d3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Arizona Radio Control Society (ARCS)",
+    "description": "A club welcoming anyone interested in fixed or rotary wing aero-modeling, with 24/7 access to Mustang Field.",
+    "websiteUrl": "https://www.arcs1.com/",
+    "keyFeatures": "24/7 access, fixed and rotary wing, friendly members",
+    "address": {
+      "street": "3030 Mustang Dr",
+      "city": "Mesa",
+      "state": "AZ",
+      "zip": "85215"
+    },
+    "latitude": 33.4356,
+    "longitude": -111.7103,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

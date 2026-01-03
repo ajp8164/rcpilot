@@ -1,0 +1,296 @@
+[
+  {
+    "id": "3c8cfaf7-9381-4320-95fa-1b3d88f2a875",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Anoka County Radio Control Club",
+    "description": "An AMA Chartered Club #1255 located in Blaine, MN, dedicated to promoting the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.anoka-rc.com/",
+    "keyFeatures": "Paved runway, flight training, community events",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Blaine",
+      "state": "MN",
+      "zip": "55434"
+    },
+    "latitude": 45.1449,
+    "longitude": -93.2102,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "69c13e3f-6979-4a24-88e3-3dd177dd3741",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Owatonna R/C Modelers",
+    "description": "An AMA Charter #2367 club located in Owatonna, MN, offering a world-class flying facility for RC enthusiasts.",
+    "websiteUrl": "https://owatonna-rc-modelers.com/",
+    "keyFeatures": "Family-oriented, training programs, community events",
+    "address": {
+      "street": "Robert & Corinne Reul Memorial Field",
+      "city": "Owatonna",
+      "state": "MN",
+      "zip": "55060"
+    },
+    "latitude": 44.0785,
+    "longitude": -93.2276,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "dba20ce7-ab56-4a77-9a14-2936d85efd71",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Grassfield RC Club",
+    "description": "An AMA Charter #1405 club located in Brooklyn Park, MN, offering various RC flying activities and events.",
+    "websiteUrl": "https://grassfieldrc.org/",
+    "keyFeatures": "Pylon racing, combat flying, training sessions",
+    "address": {
+      "street": "8901 101st Ave N",
+      "city": "Brooklyn Park",
+      "state": "MN",
+      "zip": "55445"
+    },
+    "latitude": 45.0944,
+    "longitude": -93.3663,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "108e794c-314d-4a37-9952-13a2a23ccbfa",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Rochester Aero Model Society (RAMS)",
+    "description": "An AMA Chartered club in Rochester, MN, promoting the building and flying of model aircraft.",
+    "websiteUrl": "https://www.ramsminnesota.org/",
+    "keyFeatures": "Fuel and electric powered airplanes, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Rochester",
+      "state": "MN",
+      "zip": "55901"
+    },
+    "latitude": 44.0121,
+    "longitude": -92.4802,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c4e69ab7-8cae-4665-9d74-85b048775a8e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Minnesota Afterburners",
+    "description": "An AMA Charter #5457 club located in Minnesota, welcoming all types of RC aircraft enthusiasts.",
+    "websiteUrl": "https://minnesota-afterburners.com/",
+    "keyFeatures": "Multi-interest, scale models, helicopters, electric aircraft",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "ae19693c-5688-49d6-a9db-7c4c1f72a1fb",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Minnesota Area Radio Control Electric Enthusiasts (MARCEE)",
+    "description": "An AMA Charter #4118 club dedicated to electric-powered RC aircraft in Minnesota.",
+    "websiteUrl": "https://www.facebook.com/marceeflyers/",
+    "keyFeatures": "Electric aircraft, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "24a82940-a6eb-498c-a799-760f11bdc306",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Headwaters Radio Control Club",
+    "description": "A club in Minnesota dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://headwatersrcclub.org/",
+    "keyFeatures": "Community events, training programs, flying sessions",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "8253a10c-6641-4126-bb6c-35cff9ebb27c",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Princeton Flying Tigers R/C Club",
+    "description": "An RC airplane club located in Princeton, MN, offering training and flying sessions for enthusiasts.",
+    "websiteUrl": "https://sites.google.com/site/princetonflyingtigers/home",
+    "keyFeatures": "Training programs, community events, flying sessions",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Princeton",
+      "state": "MN",
+      "zip": "55371"
+    },
+    "latitude": 45.5891,
+    "longitude": -93.5872,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "8b1effb4-c48c-4294-81da-8105a89ccb33",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Crow River Aeromodelers",
+    "description": "An RC club located in Waverly, MN, dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Waverly",
+      "state": "MN",
+      "zip": "55390"
+    },
+    "latitude": 45.1463,
+    "longitude": -93.7864,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "79f13cf0-1690-469c-b030-0a9338a1b03b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Wright Flyers",
+    "description": "An RC club located in Monticello, MN, offering flying sessions and community events for enthusiasts.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Monticello",
+      "state": "MN",
+      "zip": "55362"
+    },
+    "latitude": 45.2994,
+    "longitude": -93.7912,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "26d82456-3c9d-4e65-8ccd-c9f0efa076e8",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Third Dimension Radio Control",
+    "description": "An RC club located in Nowthen, MN, dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Nowthen",
+      "state": "MN",
+      "zip": "55303"
+    },
+    "latitude": 45.3035,
+    "longitude": -93.5532,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "76972b5f-66d5-4d70-ae3d-ec32b294394b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "St. Paul RC Club",
+    "description": "An RC club located in Blaine, MN, offering flying sessions and community events for enthusiasts.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Blaine",
+      "state": "MN",
+      "zip": "55449"
+    },
+    "latitude": 45.1451,
+    "longitude": -93.2203,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "3510fa6f-502d-4b77-a28f-5beae6934c17",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Sodbusters",
+    "description": "An RC club located in Lake Elmo, MN, dedicated to the hobby of building and flying radio control model aircraft.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Lake Elmo",
+      "state": "MN",
+      "zip": "55042"
+    },
+    "latitude": 45.0291,
+    "longitude": -92.8903,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "71f2f02a-ad34-4463-9452-c374289a78ed",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Wilkin County Flyers",
+    "description": "An RC club located in Minnesota, offering flying sessions and community events for enthusiasts.",
+    "websiteUrl": "https://www.rc-airplane-world.com/minnesota-rc-airplane-clubs.html",
+    "keyFeatures": "Flying sessions, community events, training programs",
+    "address": {
+      "street": "Off the Chapman Road",
+      "city": "Minnesota",
+      "state": "MN",
+      "zip": "55110"
+    },
+    "latitude": 45.1349,
+    "longitude": -93.09,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

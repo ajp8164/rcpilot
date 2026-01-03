@@ -1,0 +1,233 @@
+[
+  {
+    "id": "f2a8c4d6-9e1b-5f3a-7c9d-1e5f3a7b9c1e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mid-Arkansas Radio Control Society (MARCS)",
+    "description": "Arkansas' oldest AMA chartered club, offering a variety of RC activities including airshows and training.",
+    "websiteUrl": "https://www.themarcs.org/",
+    "keyFeatures": "Airshows, training, FAA FRIA, club meetings",
+    "address": {
+      "street": "Bishop Field",
+      "city": "Little Rock",
+      "state": "AR",
+      "zip": "72209"
+    },
+    "latitude": 34.7465,
+    "longitude": -92.2896,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a7d3e1f9-4b6c-8a2d-0e5f-7b9c3a1d5e7f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Ozark Flyers Club",
+    "description": "An AMA chartered club in Fayetteville, dedicated to enjoying all aspects of building and flying model aircraft.",
+    "websiteUrl": "https://www.fayetteville-ar.gov/278/Ozark-Flyers-Club",
+    "keyFeatures": "Diverse aircraft types, community events, safety-focused",
+    "address": {
+      "street": "Chanault Field",
+      "city": "Fayetteville",
+      "state": "AR",
+      "zip": "72701"
+    },
+    "latitude": 36.0626,
+    "longitude": -94.1574,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c9b5d7e3-1f8a-6c4d-2e9b-5f7a3c1d9e5b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Hot Springs RC Flying Club",
+    "description": "A non-profit, open membership AMA chartered club located in Hot Springs National Park, Arkansas.",
+    "websiteUrl": "https://www.hsrcfc.com/",
+    "keyFeatures": "Open membership, airfield maintenance, social activities",
+    "address": {
+      "street": "461 Wildcat Road",
+      "city": "Hot Springs",
+      "state": "AR",
+      "zip": "71901"
+    },
+    "latitude": 34.5016,
+    "longitude": -93.0703,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e4f2a8c6-0d9b-7e5c-3a1f-9d7b5c3e1a9d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Arkansas Sky Tigers",
+    "description": "An AMA chartered club located in Mayflower, welcoming all types of RC models.",
+    "websiteUrl": "https://www.arskytigers.com/",
+    "keyFeatures": "Weekend flying, FAA approved flying site, community engagement",
+    "address": {
+      "street": "Arkansas River Trail Rd",
+      "city": "Mayflower",
+      "state": "AR",
+      "zip": "72106"
+    },
+    "latitude": 34.9816,
+    "longitude": -92.4284,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b8c6d4e2-0f9a-7c5d-3e1b-9f7c5d3a1e9b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Flightmasters Model Airplane Club",
+    "description": "An AMA chartered club located in Barling, Arkansas, offering a variety of RC flying activities.",
+    "websiteUrl": "https://www.facebook.com/groups/1054610201228315/",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "US Hwy 71 & Treece Road",
+      "city": "Barling",
+      "state": "AR",
+      "zip": "72923"
+    },
+    "latitude": 35.3014,
+    "longitude": -94.273,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "13d2f73b-3553-4463-937a-1f1f6cff49f6",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "River Valley Radio Control Club",
+    "description": "An AMA chartered club located in Russellville, Arkansas, offering a variety of RC flying activities.",
+    "websiteUrl": "https://www.facebook.com/groups/177292750830/",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Orbit Lane",
+      "city": "Russellville",
+      "state": "AR",
+      "zip": "72802"
+    },
+    "latitude": 35.2803,
+    "longitude": -93.1349,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f5c3a1d9-7e5b-3c1f-9a7d-5e3c1a9f7d5e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mena Radio Control Flying Club",
+    "description": "An AMA chartered club located in Mena, Arkansas, offering a variety of RC flying activities.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mena-radio-control-flying-club",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Polk Rd",
+      "city": "Mena",
+      "state": "AR",
+      "zip": "71953"
+    },
+    "latitude": 34.5891,
+    "longitude": -94.2352,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a9b7c5d3-1e9f-7c5a-3d1b-9e7c5a3f1d9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Conway RC Club",
+    "description": "A group of radio control pilots who fly in Conway, Arkansas, welcoming spectators to watch anytime.",
+    "websiteUrl": "https://www.conwayrc.com/",
+    "keyFeatures": "Open membership, spectator-friendly, community events",
+    "address": {
+      "street": "Conway, AR",
+      "city": "Conway",
+      "state": "AR",
+      "zip": "72032"
+    },
+    "latitude": 35.0887,
+    "longitude": -92.4421,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c2d0e8f6-4a2b-0c8d-6e4f-2a0c8d6e4f2a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Benton County Flying Tigers",
+    "description": "An independent RC flying club located in Rogers, Arkansas, offering a variety of flying activities.",
+    "websiteUrl": "",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Rogers, AR",
+      "city": "Rogers",
+      "state": "AR",
+      "zip": "72756"
+    },
+    "latitude": 36.332,
+    "longitude": -94.1185,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e6f4a2c0-8d6b-4e2f-0a8c-6d4b2f0a8c6d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Fly NWA-RC Club",
+    "description": "An independent RC flying club located in Rogers, Arkansas, offering a variety of flying activities.",
+    "websiteUrl": "",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "11036 High Sky Inn Rd, Hindsville",
+      "city": "Rogers",
+      "state": "AR",
+      "zip": "72738"
+    },
+    "latitude": 36.2061,
+    "longitude": -93.9397,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e173c6a3-18f2-4de1-9821-b0d1c190d5ac",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Siloam Springs R/C Modelers",
+    "description": "An independent RC flying club located in Siloam Springs, Arkansas, offering a variety of flying activities.",
+    "websiteUrl": "",
+    "keyFeatures": "Diverse flying activities, community events, open membership",
+    "address": {
+      "street": "Allen Field, 2500 block of Waukesha Road",
+      "city": "Siloam Springs",
+      "state": "AR",
+      "zip": "72761"
+    },
+    "latitude": 36.1854,
+    "longitude": -94.5393,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

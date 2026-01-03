@@ -31,8 +31,8 @@ export class LocationCoords extends Object<LocationCoords> {
     name: 'LocationCoords',
     embedded: true,
     properties: {
-      latitude: 'float',
-      longitude: 'float',
+      latitude: 'double',
+      longitude: 'double',
     },
   };
 }

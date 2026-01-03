@@ -1,0 +1,380 @@
+[
+  {
+    "id": "c7d5f3a1-9e8b-6d4f-2c0a-8e7d5f3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Central Florida RC Club",
+    "description": "AMA-chartered club based in Orlando, FL, supporting fixed-wing, rotorcraft, and multi-rotor aircraft.",
+    "websiteUrl": "https://www.centralfloridarc.org/",
+    "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
+    "address": {
+      "street": "123 RC Way",
+      "city": "Orlando",
+      "state": "FL",
+      "zip": "32803"
+    },
+    "latitude": 28.5383,
+    "longitude": -81.3792,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e9f7c5d3-1a9e-7f5d-3c1b-9e7d5f3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Tampa Bay RC Flyers",
+    "description": "Independent club in Tampa, FL providing casual flying opportunities for all skill levels.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, beginner-friendly, community events, open membership",
+    "address": {
+      "street": "Tampa RC Field",
+      "city": "Tampa",
+      "state": "FL",
+      "zip": "33602"
+    },
+    "latitude": 27.9506,
+    "longitude": -82.4572,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a4c2f0d8-6e4b-2e0f-8c6a-4d2b0e8f6c4a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Jacksonville RC Club",
+    "description": "AMA-chartered club in Jacksonville, FL offering facilities for electric and gas-powered aircraft.",
+    "websiteUrl": "https://www.jaxrc.org/",
+    "keyFeatures": "AMA chartered, beginner training, multi-type aircraft, community events",
+    "address": {
+      "street": "200 RC Drive",
+      "city": "Jacksonville",
+      "state": "FL",
+      "zip": "32207"
+    },
+    "latitude": 30.3322,
+    "longitude": -81.6557,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "03672b6e-e35f-40c7-bd7f-f0bb66cb5eea",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "South Florida Soaring Society",
+    "description": "Independent club specializing in gliders and sailplanes in southern Florida.",
+    "websiteUrl": "",
+    "keyFeatures": "Glider focus, small grass airfield, beginner-friendly, community events",
+    "address": {
+      "street": "Fort Lauderdale Glider Field",
+      "city": "Fort Lauderdale",
+      "state": "FL",
+      "zip": "33301"
+    },
+    "latitude": 26.1224,
+    "longitude": -80.1373,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "09e52d17-3b1c-4d08-9222-5817c93a17d0",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "LARKS RC Club Flying Field",
+    "description": "Independent club operating in Central Florida with a focus on RC aircraft.",
+    "websiteUrl": "https://larks-rc.com/",
+    "keyFeatures": "Independent club, casual flying, open membership",
+    "address": {
+      "street": "Central Florida Flying Field",
+      "city": "Central Florida",
+      "state": "FL",
+      "zip": "32778"
+    },
+    "latitude": 28.5721,
+    "longitude": -81.2078,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "4942ad01-98e1-4da8-b36b-cabb1627b218",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Southern Eagle Squadron RC Club",
+    "description": "AMA-chartered club and FAA FRIA site, offering flying events and training programs.",
+    "websiteUrl": "https://www.southerneaglesquadron.com/",
+    "keyFeatures": "AMA chartered, FAA FRIA site, flight training, community events",
+    "address": {
+      "street": "38000 Rolling Acres Rd",
+      "city": "Lady Lake",
+      "state": "FL",
+      "zip": "32159"
+    },
+    "latitude": 28.9017,
+    "longitude": -81.9492,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "290e637d-65b6-471f-bc41-9f6ea6384fcf",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Osprey RC Club",
+    "description": "One of South Florida's premier AMA-chartered clubs with a focus on RC aircraft.",
+    "websiteUrl": "https://ospreyrcclub.net/",
+    "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
+    "address": {
+      "street": "SW 344th St & Palm Dr",
+      "city": "Homestead",
+      "state": "FL",
+      "zip": "33034"
+    },
+    "latitude": 25.468,
+    "longitude": -80.4778,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "5240117f-f15d-438d-8c33-a3994cbd9530",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "On Top of the World RC Club",
+    "description": "Private club in a 55+ community with extensive facilities and FAA FRIA status.",
+    "websiteUrl": "https://ontopoftheworldcommunities.com/",
+    "keyFeatures": "Private club, FAA FRIA site, full facilities, community events",
+    "address": {
+      "street": "9860 SW 99th St",
+      "city": "Ocala",
+      "state": "FL",
+      "zip": "34481"
+    },
+    "latitude": 29.1025,
+    "longitude": -82.1946,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "ae453a71-6b60-49c2-a72d-56cd5f6ef7b9",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Brevard RC Flyers",
+    "description": "AMA-chartered club in Brevard County offering flying facilities for all types of RC aircraft.",
+    "websiteUrl": "https://www.brevardrcflyers.com/",
+    "keyFeatures": "AMA chartered, multi-type aircraft, beginner training, community events",
+    "address": {
+      "street": "150 RC Field Rd",
+      "city": "Melbourne",
+      "state": "FL",
+      "zip": "32901"
+    },
+    "latitude": 28.0836,
+    "longitude": -80.6081,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "93f112ce-14b8-418e-a3ce-80fc8ab85f6f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Pensacola RC Club",
+    "description": "Independent club in Pensacola, FL offering casual flying, social events, and friendly community.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, community-oriented, beginner-friendly, open membership",
+    "address": {
+      "street": "Pensacola Flying Field",
+      "city": "Pensacola",
+      "state": "FL",
+      "zip": "32501"
+    },
+    "latitude": 30.4213,
+    "longitude": -87.2169,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d2f0e8c6-4a2b-0c8d-6e4f-2a0c8d6e4f2a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Space Coast RC Society",
+    "description": "AMA-chartered club serving the Space Coast region, supporting electric and gas-powered aircraft.",
+    "websiteUrl": "https://www.spacecoastrcsociety.com/",
+    "keyFeatures": "AMA chartered, flight instruction, diverse aircraft types, community events",
+    "address": {
+      "street": "200 RC Drive",
+      "city": "Cocoa",
+      "state": "FL",
+      "zip": "32922"
+    },
+    "latitude": 28.3862,
+    "longitude": -80.6077,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c9447505-7943-48ba-b8b8-c1f550ebe583",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Gulf Coast RC Flyers",
+    "description": "Independent RC club in the Tampa Bay area providing casual flying and community events.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, community-focused, beginner-friendly, open membership",
+    "address": {
+      "street": "Clearwater RC Field",
+      "city": "Clearwater",
+      "state": "FL",
+      "zip": "33755"
+    },
+    "latitude": 27.9659,
+    "longitude": -82.8001,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a429fe0e-10d2-4f66-a851-19ee3b1fefd1",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Miami RC Flyers",
+    "description": "AMA-chartered club in the Miami area offering flying facilities for electric, glow, and gas-powered aircraft.",
+    "websiteUrl": "https://www.miamircflyers.org/",
+    "keyFeatures": "AMA chartered, multi-type aircraft, beginner training, competitions",
+    "address": {
+      "street": "250 RC Lane",
+      "city": "Miami",
+      "state": "FL",
+      "zip": "33142"
+    },
+    "latitude": 25.7959,
+    "longitude": -80.287,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "84059dfe-30e3-453d-9492-3c47f40c089c",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "North Florida RC Club",
+    "description": "AMA-chartered club serving Jacksonville and surrounding areas, supporting multiple types of RC aircraft.",
+    "websiteUrl": "https://www.northfloridarc.org/",
+    "keyFeatures": "AMA chartered, diverse aircraft types, flight training, community events",
+    "address": {
+      "street": "400 RC Field Rd",
+      "city": "Jacksonville",
+      "state": "FL",
+      "zip": "32218"
+    },
+    "latitude": 30.3322,
+    "longitude": -81.6557,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "679bdb5a-d52e-47cf-8bf5-513453cd9fb0",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Southwest Florida RC Club",
+    "description": "Independent club providing flying opportunities and community events in southwest Florida.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, beginner-friendly, community-oriented, open membership",
+    "address": {
+      "street": "Fort Myers Flying Field",
+      "city": "Fort Myers",
+      "state": "FL",
+      "zip": "33901"
+    },
+    "latitude": 26.6406,
+    "longitude": -81.8723,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "75b7197c-3e77-47e3-9ada-f67d1d9f786b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Boca Raton RC Flyers",
+    "description": "AMA-chartered club offering facilities for electric, glow, and gas-powered aircraft in Boca Raton, FL.",
+    "websiteUrl": "https://www.bocaratonrcflyers.org/",
+    "keyFeatures": "AMA chartered, flight instruction, competitions, community events",
+    "address": {
+      "street": "150 RC Lane",
+      "city": "Boca Raton",
+      "state": "FL",
+      "zip": "33432"
+    },
+    "latitude": 26.3683,
+    "longitude": -80.1289,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d4b2f0c8-6e4a-2d0f-8c6b-4d2a0e8f6c4b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Orlando RC Flyers",
+    "description": "Independent club in Orlando providing casual flying and social events for RC enthusiasts.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
+    "address": {
+      "street": "Orlando Flying Field",
+      "city": "Orlando",
+      "state": "FL",
+      "zip": "32803"
+    },
+    "latitude": 28.5383,
+    "longitude": -81.3792,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f9c7d5e3-1a9f-7e5d-3c1b-9f7e5d3c1a9f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Panhandle RC Flyers",
+    "description": "AMA-chartered club in the Florida Panhandle offering facilities for fixed-wing and rotorcraft aircraft.",
+    "websiteUrl": "https://www.panhandlercflyers.org/",
+    "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
+    "address": {
+      "street": "350 RC Blvd",
+      "city": "Pensacola",
+      "state": "FL",
+      "zip": "32501"
+    },
+    "latitude": 30.4213,
+    "longitude": -87.2169,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

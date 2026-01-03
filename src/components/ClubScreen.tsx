@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 
 import {
@@ -10,10 +10,10 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useRealm } from '@realm/react';
 import formatcoords from 'formatcoords';
-// import clubs from 'lib/content/clubs/GA.json';
-import clubs from 'lib/content/clubs/MO.json';
-import { Club } from 'types/club';
+import { BSON } from 'realm';
+import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<ClubsNavigatorParamList, 'Club'>;
@@ -23,29 +23,24 @@ const ClubScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles();
+  const realm = useRealm();
   const webviewModalRef = useRef<WebViewModal>(null);
 
-  const [club, setClub] = useState<Club>();
+  const club = realm.objectForPrimaryKey(Club, new BSON.ObjectId(clubId));
 
   const coords =
-    club?.latitude &&
-    club?.longitude &&
-    formatcoords(club.latitude, club.longitude)
+    club?.location?.coords.latitude &&
+    club?.location?.coords.longitude &&
+    formatcoords(club.location.coords.latitude, club.location.coords.longitude)
       .format({
         latLonSeparator: '|',
       })
       .split('|');
 
   useEffect(() => {
-    const club = clubs.find(c => {
-      return c.id === clubId;
-    }) as Club;
-    setClub(club);
-
     navigation.setOptions({
-      title: club?.name,
+      title: club?.name || 'Club',
     });
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,7 +89,7 @@ const ClubScreen = ({ navigation, route }: Props) => {
             theme.text.normal
           }>{`${club?.address.city}, ${club?.address.state} ${club?.address.zip}`}</Text>
         <Divider />
-        <Text style={theme.text.normal}>{club?.briefDescription}</Text>
+        <Text style={theme.text.normal}>{club?.description}</Text>
         <Divider />
         <Text style={theme.text.normal}>{club?.keyFeatures}</Text>
         <Divider />

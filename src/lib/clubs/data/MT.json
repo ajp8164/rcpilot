@@ -1,0 +1,443 @@
+[
+  {
+    "id": "14ebf50c-74cc-4ab3-9761-fbd7637bcd74",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Big Sky RC Modelers",
+    "description": "Large RC sports complex north of Great Falls with paved runway, car race track and community events.",
+    "websiteUrl": "http://bigskyrcm.org",
+    "keyFeatures": "500' paved runway, RC car dirt track, public fun-flies, training",
+    "address": {
+      "street": "101 Black Horse Lake Road",
+      "city": "Floweree",
+      "state": "MT",
+      "zip": "59440"
+    },
+    "latitude": 47.614228,
+    "longitude": -111.2346,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "17abdd41-bea0-4671-a0cc-262d75816f95",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Billings Flying Mustangs",
+    "description": "Long-established RC airplane club in Billings — fly-ins, training, youth programs and pylon racing.",
+    "websiteUrl": "https://billingsflyingmustangs.us/bfm/",
+    "keyFeatures": "Annual fly-in, training/BuddyBox lessons, cameras/weather info",
+    "address": {
+      "street": "8223 Grand Avenue",
+      "city": "Billings",
+      "state": "MT",
+      "zip": "59106"
+    },
+    "latitude": 45.785573,
+    "longitude": -108.726906,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "fb3e8ee0-fe9e-4e37-a0b3-edebe237d658",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Bitterroot Barnstormers",
+    "description": "R/C flying club serving the Bitterroot Valley (Victor area) with community events and flying instruction.",
+    "websiteUrl": "https://www.modelaircraft.org/club/bitterroot-barnstormers-inc",
+    "keyFeatures": "Public demonstrations, training programs, family-friendly events",
+    "address": {
+      "street": "145 Totem View Lane",
+      "city": "Victor",
+      "state": "MT",
+      "zip": "59875"
+    },
+    "latitude": 46.39333,
+    "longitude": -114.15,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f772916b-aae2-4339-8353-fc327fde3800",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Big Sky Thunderbirds",
+    "description": "Missoula-area RC model airplane club (operates Florence/Florence-field area); hosts local events and club flying.",
+    "websiteUrl": "https://www.bigskytbirds.com",
+    "keyFeatures": "Club fun-flies, field events, community pilots",
+    "address": {
+      "street": "7011 Saunders Way",
+      "city": "Missoula",
+      "state": "MT",
+      "zip": "59802"
+    },
+    "latitude": 46.947074,
+    "longitude": -114.17663,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f798f5a9-f6d0-48b5-ab8c-c5c8dafe429b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Glacier R/Cers",
+    "description": "Active Flathead Valley RC club (Kalispell / Whitefish area) — flying, jets, and club events.",
+    "websiteUrl": "https://glacierrcers.org/",
+    "keyFeatures": "Outdoor flying field, indoor events, youth instruction, jets & sport flying",
+    "address": {
+      "street": "115 K Lazy D Ranch Rd (field)",
+      "city": "Whitefish / Kalispell area",
+      "state": "MT",
+      "zip": "59937"
+    },
+    "latitude": 48.20083,
+    "longitude": -114.3283,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "15ad7c5d-277b-460e-9bbd-8d0efd5ef17b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Gallatin Eagles RC Flying Club",
+    "description": "Bozeman-based RC flying club offering flight instruction, public events and a well-known club field.",
+    "websiteUrl": "https://www.gallatineagles.org/",
+    "keyFeatures": "Full-size field, live field cam, flight instruction, community events",
+    "address": {
+      "street": "10927 Kelly Canyon Road",
+      "city": "Bozeman",
+      "state": "MT",
+      "zip": "59715"
+    },
+    "latitude": 45.67258,
+    "longitude": -110.9618,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "458df680-f398-419a-8033-e18c79472b4d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Glendive RC Bush Pilots",
+    "description": "Eastern Montana RC club based near Glendive — fields near the Dawson Community Airport area.",
+    "websiteUrl": "https://www.modelaircraft.org/club/glendive-rc-bush-pilots",
+    "keyFeatures": "Fun-flies, local club meetings, community outreach",
+    "address": {
+      "street": "Dawson Community Airport / 400 Airport Rd",
+      "city": "Glendive",
+      "state": "MT",
+      "zip": "59330"
+    },
+    "latitude": 47.138719,
+    "longitude": -104.807199,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "9af3dc1a-3f36-4699-bf96-82f1499e6556",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Helena Flying Tigers",
+    "description": "Helena-area RC club active in fixed-wing and heli activities and local competitions.",
+    "websiteUrl": "https://www.modelaircraft.org/club/helena-flying-tigers",
+    "keyFeatures": "Monthly contests, training, community fun-flies",
+    "address": {
+      "street": "Off York Rd / Eames Lane fields",
+      "city": "Helena",
+      "state": "MT",
+      "zip": "59601"
+    },
+    "latitude": 46.6917,
+    "longitude": -111.81865,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e10277cf-384e-4da5-b90f-6356777c9630",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Saddle Butte R.C. Club (The Stubble Jumpers)",
+    "description": "Hi-line/ HAvre area RC club serving northern Montana with flying events and member activities.",
+    "websiteUrl": "https://www.modelaircraft.org/site/saddle-butte-rc-club-1",
+    "keyFeatures": "Community club flying, local events",
+    "address": {
+      "street": "Beaver Creek Hwy area (approx.)",
+      "city": "Havre",
+      "state": "MT",
+      "zip": "59501"
+    },
+    "latitude": 48.52573,
+    "longitude": -109.6713,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "ce54c48e-3407-41a8-93f6-3086d6616984",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Kootenai RC Flyers",
+    "description": "Libby-area flying club with annual Fun Fly events and a well-used strip on Haul Road.",
+    "websiteUrl": "https://kootenaircflyers.wixsite.com/website",
+    "keyFeatures": "Fun-fly, family-oriented events, AMA-recognition & grants",
+    "address": {
+      "street": "Champion Haul Rd (club strip)",
+      "city": "Libby",
+      "state": "MT",
+      "zip": "59923"
+    },
+    "latitude": 48.376754,
+    "longitude": -115.444488,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "1ffe446c-69b6-422a-ac0a-c8f2a76f6bdd",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Flathead RC / Flathead Valley RC",
+    "description": "Flathead Valley RC racing & multi-discipline RC group (Kalispell area) — strong RC car racing presence.",
+    "websiteUrl": "https://www.facebook.com/flatheadvalleyrc/",
+    "keyFeatures": "RC car racing nights/seasonal events, community racing",
+    "address": {
+      "street": "",
+      "city": "Kalispell",
+      "state": "MT",
+      "zip": "59901"
+    },
+    "latitude": 48.1953,
+    "longitude": -114.3154,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c25e068f-ed48-4e25-b015-5cddbe3238ac",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Kootenai RC Racers (Snowshoe Speedway / Libby)",
+    "description": "Northwest Montana RC car racing club centered in Libby — weekly race nights and events.",
+    "websiteUrl": "https://www.facebook.com/KootenaiRCRacers/",
+    "keyFeatures": "Dirt track racing, club nights, regional racing events",
+    "address": {
+      "street": "Co-located at Scheer Bros. Hobbies / Snowshoe Speedway (private track)",
+      "city": "Libby",
+      "state": "MT",
+      "zip": "59923"
+    },
+    "latitude": 48.383,
+    "longitude": -115.441,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "8845cb10-feb4-43f8-93f4-5a5c0aaef1f4",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mission Valley Model Aviators",
+    "description": "Polson-area model aviators club (Keyser Field) on the east side of Flathead Lake — flying field and events.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mission-valley-model-aviators",
+    "keyFeatures": "Keyser Field flying site, community events, member training",
+    "address": {
+      "street": "Dubay Rd / Keyser Field",
+      "city": "Polson",
+      "state": "MT",
+      "zip": "59860"
+    },
+    "latitude": 47.640231,
+    "longitude": -114.068336,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "cfb85d17-aa68-4f56-af40-6d057c1dcef3",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Butte Plane Nutz",
+    "description": "Butte-area RC club with long local history — public demos and club gatherings.",
+    "websiteUrl": "https://www.modelaircraft.org/club/butte-plane-nutz",
+    "keyFeatures": "Demonstrations, club meetings, community events",
+    "address": {
+      "street": "Butte Industrial Park (approx) / 65 E Broadway St (mail/address listing)",
+      "city": "Butte",
+      "state": "MT",
+      "zip": "59701"
+    },
+    "latitude": 45.927155,
+    "longitude": -112.523036,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "4f7ed845-ebb3-47a3-8876-ded9cc344ee4",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Glacier RC Raceway",
+    "description": "RC car racing venue / club activity connected to Flathead-area RC community (used for regional events).",
+    "websiteUrl": "https://m.facebook.com/GlacierRCers/",
+    "keyFeatures": "RC car race events, regional meet-ups, club nights",
+    "address": {
+      "street": "",
+      "city": "Kalispell / Whitefish area",
+      "state": "MT",
+      "zip": "59937"
+    },
+    "latitude": 48.2008,
+    "longitude": -114.3283,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "bec6784d-69b2-41da-bf18-e3ebbb9a06c1",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Big Sky RC (RC Sports Complex) — (Great Falls car/racing ops)",
+    "description": "Part of Big Sky RC Modelers complex — specifically the RC car racing track used for dirt/grass racing events.",
+    "websiteUrl": "http://bigskyrcm.org",
+    "keyFeatures": "Dirt car racing, club series, events",
+    "address": {
+      "street": "Black Horse Lake Road (site)",
+      "city": "Floweree",
+      "state": "MT",
+      "zip": "59440"
+    },
+    "latitude": 47.614228,
+    "longitude": -111.2346,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "6e137c3d-de61-4f1b-93db-b51fbf1296b7",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Columbus Aero RC Club (regional listing)",
+    "description": "Local RC flying group listed in club directories — small community club offering flying and family events.",
+    "websiteUrl": "https://www.modelaircraft.org/club/columbus-aero-rc-club",
+    "keyFeatures": "Local field, pilot instruction, community activities",
+    "address": {
+      "street": "",
+      "city": "Columbus",
+      "state": "MT",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "8499d566-4e74-43de-ba82-502142e0e419",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Flathead / Glacier FPV & Multi-Discipline Groups (Crawl MT, local FB groups)",
+    "description": "Several informal Montana groups for FPV, rock-crawling and multi-discipline RC (social, meetups, events).",
+    "websiteUrl": "https://www.facebook.com/groups/flatheadradiocontrol/",
+    "keyFeatures": "FPV meetups, crawlers, off-road RC, Facebook community coordination",
+    "address": {
+      "street": "",
+      "city": "Kalispell / regional",
+      "state": "MT",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "1c4a352f-aec5-4305-92a0-4d5a754d3673",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Big Sky RC / Great Falls — Electric City RC (racing nights)",
+    "description": "Local Great Falls RC car racing group — weekly club practice and race nights.",
+    "websiteUrl": "https://www.facebook.com/ElectriccityRC/",
+    "keyFeatures": "Weekly race nights, club events, regional racers welcome",
+    "address": {
+      "street": "",
+      "city": "Great Falls",
+      "state": "MT",
+      "zip": "59401"
+    },
+    "latitude": 47.5,
+    "longitude": -111.3,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "9c3be8c5-794d-4355-8357-b245379b8e12",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Stubble Jumpers (Saddle Butte R.C. Club) — Havre",
+    "description": "Hi-Line club often referred to locally as 'Stubble Jumpers' — community flying and local meet-ups.",
+    "websiteUrl": "https://www.rc-airplane-world.com/montana-rc-airplane-clubs.html",
+    "keyFeatures": "Local flying meets, small club community",
+    "address": {
+      "street": "Beaver Creek Hwy (approx.)",
+      "city": "Havre",
+      "state": "MT",
+      "zip": "59501"
+    },
+    "latitude": 48.52573,
+    "longitude": -109.6713,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e1021b79-1d7f-4717-8a75-ebe08dfd3ed4",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Misc / Community Montana RC Groups (catch-all listing)",
+    "description": "Smaller, independent and hobby-shop-based groups across Montana (hobby-shop meetups, FB groups, seasonal tracks).",
+    "websiteUrl": "https://www.rc-airplane-world.com/montana-rc-airplane-clubs.html",
+    "keyFeatures": "Local meetups, hobby-shop centers, casual racing / flying",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "MT",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

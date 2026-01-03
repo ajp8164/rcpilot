@@ -1,0 +1,422 @@
+[
+  {
+    "id": "8c71c80a-ed7b-42a8-be31-11df0ba6c9cd",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "North Mississippi RC Club",
+    "description": "AMA-chartered RC club (Tale-Draggers) flying at field near Hernando, MS.",
+    "websiteUrl": "https://www.nmrcc.org",
+    "keyFeatures": "Large geo-textile runway, training, public events",
+    "address": {
+      "street": "8296 Mississippi 301",
+      "city": "Hernando",
+      "state": "ME",
+      "zip": "38632"
+    },
+    "latitude": 34.77562,
+    "longitude": -90.13823,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "fee4db3e-b212-49ec-a749-de3224b33568",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mississippi Coast Radio Control Club",
+    "description": "Active AMA chartered club on the Gulf Coast (Bob Miller Field) with frequent events and FPV activity.",
+    "websiteUrl": "https://mcrcc.net",
+    "keyFeatures": "Bob Miller Field, monthly meetings, FPV/race events, instructor program",
+    "address": {
+      "street": "14665 County Farm Road",
+      "city": "Gulfport",
+      "state": "MS",
+      "zip": "39503"
+    },
+    "latitude": 30.49895,
+    "longitude": -89.17511,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "6027fa5b-d41a-481c-9f69-52acbd98b9bd",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "South Mississippi RC Club",
+    "description": "AMA-chartered club serving the Poplarville / south Mississippi area.",
+    "websiteUrl": "https://www.modelaircraft.org/club/south-mississippi-rc-club",
+    "keyFeatures": "Public welcome, training, grass runway",
+    "address": {
+      "street": "9217 U.S. 11",
+      "city": "Poplarville",
+      "state": "MS",
+      "zip": "39470"
+    },
+    "latitude": 30.741083,
+    "longitude": -89.59491,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "82d5ae9a-cf80-4597-a63a-4ada4185e803",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mid Mississippi R/C Club",
+    "description": "AMA-chartered flying club in the Jackson metro area with a large grass runway and regular contests.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mid-mississippi-rc-club",
+    "keyFeatures": "Events/IMAC contests, youth programs, instruction",
+    "address": {
+      "street": "6765 Interstate 55",
+      "city": "Jackson",
+      "state": "MS",
+      "zip": "39272"
+    },
+    "latitude": 32.148587,
+    "longitude": -90.263781,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "dac6934f-3534-41fe-9e6b-ccb3f01fe223",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Capitol City Radio Control Club (CCRCC)",
+    "description": "Jackson-area AMA chartered club flying at Hinkle Field in Buddy Butts Park.",
+    "websiteUrl": "https://ccrcc-ms.weebly.com/",
+    "keyFeatures": "Public demonstrations, training, community outreach",
+    "address": {
+      "street": "6180 N McRaven Rd (Buddy Butts Park)",
+      "city": "Jackson",
+      "state": "MS",
+      "zip": "39209"
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b1c67c71-b76d-4375-85b6-a31adcf4f1eb",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Natchez Trace Bandits",
+    "description": "AMA-chartered model aviation club serving the Jackson metro area; facility includes paved runways.",
+    "websiteUrl": "https://natcheztracebandit.wixsite.com/website",
+    "keyFeatures": "Paved X-runways, events, instruction",
+    "address": {
+      "street": "Near 1580 Billy Bell Rd",
+      "city": "Jackson",
+      "state": "MS",
+      "zip": "39213"
+    },
+    "latitude": 32.4124,
+    "longitude": -90.2528,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "bb13c515-dedd-4b3a-9833-87be0f782882",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "River City Radio Control Club",
+    "description": "Vicksburg-based AMA chartered club flying at Crosswind Air Park / Halls Ferry Rd.",
+    "websiteUrl": "https://rivercityrcclub.weebly.com/",
+    "keyFeatures": "Public National Model Aviation Day events, training, family-friendly",
+    "address": {
+      "street": "7322 Halls Ferry Rd",
+      "city": "Vicksburg",
+      "state": "MS",
+      "zip": "39180"
+    },
+    "latitude": 32.270978,
+    "longitude": -90.816254,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "cbee0370-27e3-437f-9ec0-83d501fd19d6",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Meridian Aeromodelers",
+    "description": "AMA-chartered club near Meridian / Collinsville with a 24/7 flying site.",
+    "websiteUrl": "https://www.modelaircraft.org/club/meridian-aeromodelers",
+    "keyFeatures": "Open flying, scale, electric & glow, community events",
+    "address": {
+      "street": "7943 Mississippi 19",
+      "city": "Collinsville",
+      "state": "MS",
+      "zip": "39325"
+    },
+    "latitude": 32.455,
+    "longitude": -88.813888,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "bf3fbbe6-74f1-4a96-b5bc-bf4afa0e9a7d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Koast Air Modeling Society (Ludlow Field)",
+    "description": "Ocean Springs / Vancleave AMA-chartered club flying from Ludlow Field on Seaman Rd (Jackson County landfill site).",
+    "websiteUrl": "https://koastairms.com/",
+    "keyFeatures": "Events, community outreach, multi-discipline RC",
+    "address": {
+      "street": "10501 Seaman Rd (Jackson County Landfill)",
+      "city": "Vancleave",
+      "state": "MS",
+      "zip": "39565"
+    },
+    "latitude": 30.49496,
+    "longitude": -88.80825,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "ea53b806-28fc-449f-b945-3288b587c3e0",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Pine Belt R/C Association",
+    "description": "Hattiesburg / Purvis area RC club (listed on AMA site) offering local flying and instruction.",
+    "websiteUrl": "https://www.modelaircraft.org/site/pine-belt-rc-association-inc-purvis-oloh-rd",
+    "keyFeatures": "Local flying field, community events, youth outreach",
+    "address": {
+      "street": "Purvis Oloh Rd",
+      "city": "Purvis",
+      "state": "MS",
+      "zip": "39475"
+    },
+    "latitude": 31.2175,
+    "longitude": -89.5133,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "1d5ff425-ebc3-45e9-b075-6301d5e6049a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mississippi Jets",
+    "description": "AMA-chartered jet-focused RC club flying at Raymond / Jackson area field.",
+    "websiteUrl": "https://www.modelaircraft.org/club/mississippi-jets",
+    "keyFeatures": "Jet-capable field, advanced pilots, organized jet meets",
+    "address": {
+      "street": "4100 Airport Rd",
+      "city": "Raymond",
+      "state": "MS",
+      "zip": "39154"
+    },
+    "latitude": 32.303611,
+    "longitude": -90.41,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "09aea140-fb69-4574-8d1b-fe31dbb6e596",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Brandon R/C",
+    "description": "Local AMA-affiliated club flying near Brandon, MS (Brandon landfill / local field).",
+    "websiteUrl": "https://brandonrc.weebly.com/",
+    "keyFeatures": "Community club, instruction, family-friendly",
+    "address": {
+      "street": "351 North St (Brandon Landfill area)",
+      "city": "Brandon",
+      "state": "MS",
+      "zip": "39042"
+    },
+    "latitude": 32.281416,
+    "longitude": -89.986754,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "80e79e5b-ddf7-45b2-ac63-1a2b62b84af4",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mississippi State University - Eagle Aces",
+    "description": "University-affiliated RC club (listed on AMA site) — flying & student programs in Starkville.",
+    "websiteUrl": "https://www.modelaircraft.org/site/mississippi-state-university-eagle-aces-poor-house-rd",
+    "keyFeatures": "Student club, training, educational outreach",
+    "address": {
+      "street": "869 E. Poor House Rd",
+      "city": "Starkville",
+      "state": "MS",
+      "zip": "39759"
+    },
+    "latitude": 33.406,
+    "longitude": -88.794,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "5b337650-be98-41cf-8e35-215ba7d119c0",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "River City Drone / Mississippi Drone Pilot Groups (regional FPV)",
+    "description": "Local FPV / drone pilot groups (Facebook groups and MultiGP chapters) — informal meetup and racing groups across MS.",
+    "websiteUrl": "https://www.facebook.com/groups/mississippidronepilots/",
+    "keyFeatures": "FPV racing, MultiGP chapters, meetups (non-traditional club structure)",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "MS",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "56b0c7ef-ff0e-4a59-aab4-3a1d06bdea54",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "FPV Pirates (regional / Holly Springs area listing)",
+    "description": "FPV pilot group referenced in RC directories (Holly Springs area) — informal FPV club.",
+    "websiteUrl": "https://www.rc-airplane-world.com/mississippi-rc-airplane-clubs.html",
+    "keyFeatures": "FPV racing/meetups, local chapters",
+    "address": {
+      "street": "",
+      "city": "Holly Springs",
+      "state": "MS",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "df1ff02e-6a09-407c-aa5a-4a7a4e7e92a3",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mid-County RC Club (local club site)",
+    "description": "Active local RC club (club website present) — field & membership info on club site.",
+    "websiteUrl": "https://midcountyrc.org/",
+    "keyFeatures": "Full-discipline RC (planes, helis, drones), events, membership",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "MS",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "fd703347-3e80-4305-a142-2a7eb6448802",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mississippi Coast / Local Drone & FPV Meetup (Gulf Coast groups)",
+    "description": "Various Gulf Coast meetup groups and FPV pilots — informal, community-run.",
+    "websiteUrl": "https://mscoastrcclub.wordpress.com/",
+    "keyFeatures": "FPV evenings, community events, guest pilot welcome",
+    "address": {
+      "street": "",
+      "city": "Gulfport",
+      "state": "MS",
+      "zip": "39503"
+    },
+    "latitude": 30.49895,
+    "longitude": -89.17511,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "73b55b0f-476c-4c79-8a1f-38fc373271e5",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Mississippi Valley Soaring Association (MVSA)",
+    "description": "Soaring / glider-focused club listed on AMA club finder (regional activities).",
+    "websiteUrl": "https://www.modelaircraft.org/club/mississippi-valley-soaring-association",
+    "keyFeatures": "Glider/soaring events, club meetings",
+    "address": {
+      "street": "",
+      "city": "",
+      "state": "MS",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "135f6367-44f2-40c0-9c41-67437f95f191",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "North MS Radio Control Club (Senatobia listing)",
+    "description": "Local community RC club listing (map listing found); local flying and club activities.",
+    "websiteUrl": "",
+    "keyFeatures": "Local club meetups, community flying",
+    "address": {
+      "street": "112 Waverly Rd",
+      "city": "Senatobia",
+      "state": "MS",
+      "zip": "38668"
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e88963a5-9c7b-41c2-ab76-2fd4bc5f2cb0",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Natchez / Miss-Lou RC listings (regional clubs)",
+    "description": "Multiple small clubs and informal groups in the Natchez / Miss-Lou area (club directory references).",
+    "websiteUrl": "https://www.rc-airplane-world.com/mississippi-rc-airplane-clubs.html",
+    "keyFeatures": "Small community clubs, fly-ins, public demos",
+    "address": {
+      "street": "",
+      "city": "Natchez",
+      "state": "MS",
+      "zip": ""
+    },
+    "latitude": 0,
+    "longitude": 0,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

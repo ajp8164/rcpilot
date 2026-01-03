@@ -97,7 +97,7 @@ export const ClubView = ({ clubId, hideName }: ClubViewInterface) => {
           theme.text.normal
         }>{`${club?.address.city}, ${club?.address.state} ${club?.address.zip}`}</Text>
       <Divider />
-      <Text style={theme.text.normal}>{club?.briefDescription}</Text>
+      <Text style={theme.text.normal}>{club?.description}</Text>
       <Divider />
       <Text style={theme.text.normal}>{club?.keyFeatures}</Text>
       <Divider />

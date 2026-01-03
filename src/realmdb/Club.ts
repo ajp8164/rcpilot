@@ -8,9 +8,12 @@ export class Club extends Object<Club> {
   _id!: BSON.ObjectId;
   createdOn!: ISODateString;
   updatedOn!: ISODateString;
+  addedOn!: ISODateString;
+  modifiedOn!: ISODateString;
+  clubId!: string;
   name!: string;
-  briefDescription!: string;
-  location?: Location;
+  description!: string;
+  location!: Location;
   websiteUrl!: string;
   keyFeatures!: string;
   address!: Address;
@@ -25,9 +28,12 @@ export class Club extends Object<Club> {
       _id: { type: 'objectId', default: () => new BSON.ObjectId() },
       createdOn: 'string',
       updatedOn: 'string',
+      addedOn: 'string',
+      modifiedOn: 'string',
+      clubId: 'string',
       name: 'string',
-      briefDescription: 'string',
-      location: 'Location?',
+      description: 'string',
+      location: 'Location',
       websiteUrl: 'string',
       keyFeatures: 'string',
       address: 'Address',

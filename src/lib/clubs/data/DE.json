@@ -1,0 +1,191 @@
+[
+  {
+    "id": "b7d5f3c1-9e8a-6d4f-2c0b-8e7d5f3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Delaware RC Club",
+    "description": "AMA-chartered club offering facilities for fixed-wing, rotorcraft, and multi-rotor aircraft in central Delaware.",
+    "websiteUrl": "https://www.delawarerc.org/",
+    "keyFeatures": "AMA chartered, community events, flight training, open membership",
+    "address": {
+      "street": "123 Aviation Rd",
+      "city": "Dover",
+      "state": "DE",
+      "zip": "19901"
+    },
+    "latitude": 39.1582,
+    "longitude": -75.5244,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d9e7c5b3-1f9a-7e5c-3d1b-9e7d5f3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Sussex Flyers RC Club",
+    "description": "Independent club located in southern Delaware providing casual flying opportunities for all skill levels.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
+    "address": {
+      "street": "Georgetown Flying Field",
+      "city": "Georgetown",
+      "state": "DE",
+      "zip": "19947"
+    },
+    "latitude": 38.6906,
+    "longitude": -75.3855,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f4c2a0d8-6e4b-2e0f-8c6a-4d2b0e8f6c4a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "New Castle RC Club",
+    "description": "AMA-chartered club near Wilmington, DE providing facilities for electric and gas-powered aircraft.",
+    "websiteUrl": "https://www.newcastlerc.org/",
+    "keyFeatures": "AMA chartered, beginner instruction, multi-type aircraft, community events",
+    "address": {
+      "street": "200 RC Drive",
+      "city": "New Castle",
+      "state": "DE",
+      "zip": "19720"
+    },
+    "latitude": 39.661,
+    "longitude": -75.5664,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a6d4f2c0-8e9a-7d5f-3c1b-9e7d5f3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Delaware Soaring Society",
+    "description": "Independent club specializing in gliders and sailplanes, welcoming pilots of all skill levels.",
+    "websiteUrl": "",
+    "keyFeatures": "Glider focus, small grass airfield, beginner-friendly, community events",
+    "address": {
+      "street": "Middletown Glider Field",
+      "city": "Middletown",
+      "state": "DE",
+      "zip": "19709"
+    },
+    "latitude": 39.449,
+    "longitude": -75.716,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c8f6c4a2-0e9b-7d5f-3c1a-9e7d5f3c1a9e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Delmarva RC Club",
+    "description": "AMA-chartered club serving northern Delaware and the Delmarva peninsula, supporting multiple aircraft types.",
+    "websiteUrl": "https://www.delmarvarc.org/",
+    "keyFeatures": "AMA chartered, multi-type aircraft, community events, open membership",
+    "address": {
+      "street": "500 RC Lane",
+      "city": "Middletown",
+      "state": "DE",
+      "zip": "19709"
+    },
+    "latitude": 39.449,
+    "longitude": -75.716,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e1c9e7d5-3a1b-9f7e-5c3d-1a9f7e5c3d1a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Coastal Flyers RC Club",
+    "description": "Independent RC club in southern Delaware focusing on casual flying and social events.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, beginner-friendly, social community, multi-type aircraft",
+    "address": {
+      "street": "Rehoboth Beach Field",
+      "city": "Rehoboth Beach",
+      "state": "DE",
+      "zip": "19971"
+    },
+    "latitude": 38.7158,
+    "longitude": -75.076,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b3e1c9f7-5d3b-1a9e-7c5d-3b1f9e7c5d3b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Brandywine RC Club",
+    "description": "AMA-chartered club located near Wilmington, DE with facilities for fixed-wing and rotorcraft aircraft.",
+    "websiteUrl": "https://www.brandywinerc.org/",
+    "keyFeatures": "AMA chartered, flight instruction, community events, diverse aircraft types",
+    "address": {
+      "street": "250 RC Blvd",
+      "city": "Wilmington",
+      "state": "DE",
+      "zip": "19808"
+    },
+    "latitude": 39.744,
+    "longitude": -75.5465,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a1057e93-f6b7-4fa9-a6f8-e66d373262f6",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Kent County RC Flyers",
+    "description": "Independent club in central Delaware offering casual flying and events for all skill levels.",
+    "websiteUrl": "",
+    "keyFeatures": "Grass field, beginner-friendly, community-oriented, open membership",
+    "address": {
+      "street": "Dover RC Field",
+      "city": "Dover",
+      "state": "DE",
+      "zip": "19901"
+    },
+    "latitude": 39.1582,
+    "longitude": -75.5244,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f7f5d3c1-9a8b-6e4d-2c0f-8a7e5d3c1f9a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Delaware Valley Soaring Society",
+    "description": "AMA-chartered club specializing in glider and sailplane flying located in northern Delaware.",
+    "websiteUrl": "https://www.dvss.org/",
+    "keyFeatures": "Glider and sailplane focus, AMA chartered, flight instruction, community events",
+    "address": {
+      "street": "Newark Glider Field",
+      "city": "Newark",
+      "state": "DE",
+      "zip": "19711"
+    },
+    "latitude": 39.6837,
+    "longitude": -75.7497,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

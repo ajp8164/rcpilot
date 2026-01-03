@@ -11,9 +11,8 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useQuery } from '@realm/react';
 import SearchBar from 'components/atoms/SearchBar';
-// import clubs from 'lib/content/clubs/GA.json';
-import clubs from 'lib/content/clubs/MO.json';
 import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
 
@@ -23,6 +22,8 @@ const ClubsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
   const device = useDevice();
+
+  const clubs = useQuery<Club>('Club');
 
   const [query, setQuery] = useState('');
 
@@ -38,7 +39,6 @@ const ClubsScreen = ({ navigation }: Props) => {
   //   });
   // }, [navigation, query]);
 
-  console.log(clubs);
   const renderClub: ListRenderItem<Club> = ({ item: club, index }) => {
     return (
       <ListItem
@@ -102,9 +102,7 @@ const ClubsScreen = ({ navigation }: Props) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <FlatList
-          data={clubs.sort((a, b) => {
-            return a.name < b.name ? -1 : 1;
-          })}
+          data={clubs.sorted('name')}
           renderItem={renderClub}
           keyExtractor={(_item, index) => `${index}`}
           scrollEnabled={false}

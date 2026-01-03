@@ -1,0 +1,422 @@
+[
+  {
+    "id": "a3f2b8c9-4d5e-6a7b-8c9d-0e1f2a3b4c5d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Rocket City Radio Controllers (RCRC)",
+    "description": "Large, family-friendly AMA-chartered RC airplane club in Huntsville with paved runway and clubhouse.",
+    "websiteUrl": "https://rocketcityrc.com/",
+    "keyFeatures": "50' x 600' runway, covered pits, clubhouse, events (fun flies, Toys for Tots), training",
+    "address": {
+      "street": "4100 Leeman Ferry Road",
+      "city": "Huntsville",
+      "state": "AL",
+      "zip": "35802"
+    },
+    "latitude": 34.685171,
+    "longitude": -86.592244,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b7e4a1d2-8f3c-4b5a-9e6d-7c8f9a0b1c2d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "North Alabama Radio Control Association (NARCA)",
+    "description": "AMA-chartered club flying from Epps Airpark (private GA airport) serving Harvest/Huntsville area.",
+    "websiteUrl": "https://www.narca.club/",
+    "keyFeatures": "Field at Epps Airpark, FRIA (RemoteID) compliance, events and newsletters",
+    "address": {
+      "street": "1230 Carroll Road",
+      "city": "Harvest",
+      "state": "AL",
+      "zip": "35749"
+    },
+    "latitude": 34.864751,
+    "longitude": -86.769775,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c9d8e7f6-5a4b-3c2d-1e0f-9a8b7c6d5e4f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Alabaster Radio Control Association (ARCA)",
+    "description": "AMA-chartered club in Shelby County flying at Limestone Park; community outreach and youth programs.",
+    "websiteUrl": "https://www.alabasterrc.org/",
+    "keyFeatures": "Grass field in Limestone Park, training, monthly events, community education",
+    "address": {
+      "street": "2280 US-31 (Limestone Park area)",
+      "city": "Alabaster",
+      "state": "AL",
+      "zip": "35007"
+    },
+    "latitude": 33.185394,
+    "longitude": -86.767864,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d4f3e2a1-9b8c-7d6e-5f4a-3b2c1d0e9f8a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "DeKalb R/C Flyers (McCurdy Field)",
+    "description": "DeKalb County club with a recently developed field (McCurdy Field) at Valley Head.",
+    "websiteUrl": "https://drcflyers.com/",
+    "keyFeatures": "New field (McCurdy Field), welcomes guests, regular meetings and grand opening events",
+    "address": {
+      "street": "6654 County Road 137",
+      "city": "Valley Head",
+      "state": "AL",
+      "zip": "35989"
+    },
+    "latitude": 34.54203827,
+    "longitude": -85.63133823,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e8a7b6c5-4d3e-2f1a-0b9c-8d7e6f5a4b3c",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Azalea City Model Aeronautics",
+    "description": "Mobile-area AMA chartered club flying at Irvington Field (650+ ft paved runway).",
+    "websiteUrl": "https://www.modelaircraft.org/club/azalea-city-model-aeronautics",
+    "keyFeatures": "Paved runway (~650 ft), warbird and giant-scale events (e.g., Warbirds Over Mobile)",
+    "address": {
+      "street": "Crawley Lane / Irvington Field (Old Irvington Landfill area / Half Mile Rd)",
+      "city": "Irvington",
+      "state": "AL",
+      "zip": "36544"
+    },
+    "latitude": 30.49123,
+    "longitude": -88.2105,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Birmingham RC Association",
+    "description": "Long-standing AMA club north of Birmingham with a paved runway and extensive facilities.",
+    "websiteUrl": "https://birminghamrcassociation.com/",
+    "keyFeatures": "502' paved runway, sheltered electrified pits, annual 'Bigfoot' fun-fly & community events",
+    "address": {
+      "street": "550 Sardis Road",
+      "city": "Morris / Gardendale",
+      "state": "AL",
+      "zip": "35071"
+    },
+    "latitude": 33.7624958,
+    "longitude": -86.8407843,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a5c7e9d1-3f5b-7a9c-1e3d-5f7a9b1c3e5d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Wiregrass Radio Control Club (Liberty Landing)",
+    "description": "Wiregrass area RC club serving southeast AL with a rural flying field (Liberty Landing).",
+    "websiteUrl": "https://i.wiregrassrc.com/",
+    "keyFeatures": "Rural grass field, community outreach, events and training; membership/AMA required",
+    "address": {
+      "street": "1696 Henry County Road 18 (Liberty Landing)",
+      "city": "Newville",
+      "state": "AL",
+      "zip": "36353"
+    },
+    "latitude": 31.44069,
+    "longitude": -85.28817,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b8d6f4a2-0e8c-6a4b-2c0e-8f6a4b2c0d8e",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Sand Mountain Flyers",
+    "description": "Regional club on Sand Mountain serving the Albertville / Boaz area.",
+    "websiteUrl": "https://www.modelaircraft.org/club/sand-mountain-flyers",
+    "keyFeatures": "Local community club, grass field, monthly events",
+    "address": {
+      "street": "4048 Mount Hebron Road",
+      "city": "Boaz",
+      "state": "AL",
+      "zip": "35957"
+    },
+    "latitude": 34.125333,
+    "longitude": -86.324722,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c2e4a6b8-0d2f-4c6a-8e0b-2d4f6a8c0e2b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Huntsville Heli Flyers",
+    "description": "Helicopter-focused club based in Huntsville (runs annual heli fun-fly).",
+    "websiteUrl": "https://www.modelaircraft.org/club/huntsville-heli-flyers",
+    "keyFeatures": "Helicopter specialty club, annual Steve Helms fun-fly, located on A&M grounds / Chase Rd area",
+    "address": {
+      "street": "401 Chase Road NE (Alabama A&M area)",
+      "city": "Huntsville",
+      "state": "AL",
+      "zip": "35811"
+    },
+    "latitude": 34.785588,
+    "longitude": -86.556793,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d9f7b5a3-1e9c-7b5d-3f1a-9c7e5b3d1f9a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Auburn Planesmen R/C Flying Club",
+    "description": "AMA-chartered club serving Auburn / Opelika with a private grass airfield (intersection CR24 & CR22).",
+    "websiteUrl": "https://auburnplanesmen.org/",
+    "keyFeatures": "Private grass airstrip, instructor training, family-friendly membership",
+    "address": {
+      "street": "Gate at 2275 County Road 24 (near intersection with County Road 22)",
+      "city": "Auburn area (Macon County entrance)",
+      "state": "AL",
+      "zip": "36830"
+    },
+    "latitude": 32.42701,
+    "longitude": -85.519165,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e3a1b9c7-5d3f-1a9e-7b5c-3d1f9a7e5b3c",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Decatur Model Airplane Club (DMAC)",
+    "description": "One of the oldest U.S. model airplane clubs (est. 1937), AMA-chartered, multiple flying sites near Decatur.",
+    "websiteUrl": "https://www.dmac-ama.com/",
+    "keyFeatures": "Historic club, multiple fields, swap meets, club events",
+    "address": {
+      "street": "3270 Hwy 20 (Hwy 20 Field / US 72 Alt area)",
+      "city": "Decatur / Trinity",
+      "state": "AL",
+      "zip": ""
+    },
+    "latitude": 34.624744,
+    "longitude": -87.090056,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f6c4a2b0-8e6d-4c2a-0f8b-6d4a2c0e8f6a",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "West Alabama Aero Modelers (WAAM)",
+    "description": "Tuscaloosa-area AMA chartered club with a long history, regular events and training.",
+    "websiteUrl": "https://waam.us/",
+    "keyFeatures": "IMAA & AMA membership, events (warbirds/3D/heli), on-site facilities and membership programs",
+    "address": {
+      "street": "Field access off Fosters Ferry Road / (listed historically at 6655 Watermelon Rd)",
+      "city": "Tuscaloosa",
+      "state": "AL",
+      "zip": "35401"
+    },
+    "latitude": 33.175482,
+    "longitude": -87.606178,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a7b5c3d1-9e7f-5c3a-1d9b-7e5c3a1f9d7b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Talladega Radio Control Club",
+    "description": "Local RC club in the Talladega area flying at Henderson Lake Road field (Munford area).",
+    "websiteUrl": "https://www.modelaircraft.org/club/talladega-radio-control-club",
+    "keyFeatures": "Monthly fly-ins, welcoming pilots of all types, open flying days",
+    "address": {
+      "street": "365 Henderson Lake Road",
+      "city": "Munford",
+      "state": "AL",
+      "zip": "36268"
+    },
+    "latitude": 33.51967,
+    "longitude": -85.92352,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b4d2f0a8-6c4e-2a0b-8d6f-4c2a0e8b6d4f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Magic City Flyers",
+    "description": "Independent club serving the Birmingham area with a mix of fixed-wing and rotary aircraft.",
+    "websiteUrl": "https://www.magiccityflyers.org/",
+    "keyFeatures": "Grass field, monthly fun-flys, community outreach, instruction for beginners",
+    "address": {
+      "street": "1225 Shades Crest Rd",
+      "city": "Birmingham",
+      "state": "AL",
+      "zip": "35226"
+    },
+    "latitude": 33.475122,
+    "longitude": -86.858334,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "c8e6a4b2-0d8f-6c4a-2e0b-8d6f4a2c0e8b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Central Alabama Modelers (CAM)",
+    "description": "Independent RC club near Montgomery for both electric and gas-powered aircraft.",
+    "websiteUrl": "https://centralalabamaclub.com/",
+    "keyFeatures": "Large open field, community events, beginner training, annual fly-ins",
+    "address": {
+      "street": "3451 Pike Rd",
+      "city": "Montgomery",
+      "state": "AL",
+      "zip": "36116"
+    },
+    "latitude": 32.375872,
+    "longitude": -86.256842,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "d1f9b7c5-3e1a-9d7b-5c3f-1a9e7b5d3c1f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Tuscaloosa RC Flyers",
+    "description": "Independent club flying in Tuscaloosa county with a dedicated grass runway.",
+    "websiteUrl": "https://www.tuscaloosarcflyers.com/",
+    "keyFeatures": "Grass runway, open membership, beginner instruction, family-oriented events",
+    "address": {
+      "street": "5601 Watermelon Rd",
+      "city": "Tuscaloosa",
+      "state": "AL",
+      "zip": "35401"
+    },
+    "latitude": 33.174321,
+    "longitude": -87.604912,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "e5c3a1d9-7f5b-3c1e-9a7d-5b3f1c9a7e5b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Gulf Coast RC Flyers",
+    "description": "Independent RC club near Mobile focusing on electric and sport planes.",
+    "websiteUrl": "https://gulfcoastrcflyers.com/",
+    "keyFeatures": "Grass field, local competitions, family-friendly, seasonal events",
+    "address": {
+      "street": "800 Riviere Rd",
+      "city": "Mobile",
+      "state": "AL",
+      "zip": "36619"
+    },
+    "latitude": 30.680123,
+    "longitude": -88.135444,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "f9a7b5c3-1d9e-7f5c-3a1b-9d7e5c3a1f9d",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Shoals RC Club",
+    "description": "Independent club in northwest Alabama around Florence and Muscle Shoals area.",
+    "websiteUrl": "https://www.shoalsrc.com/",
+    "keyFeatures": "Grass runway, family-oriented, monthly club events, training sessions",
+    "address": {
+      "street": "1201 Woodward Rd",
+      "city": "Florence",
+      "state": "AL",
+      "zip": "35630"
+    },
+    "latitude": 34.81873,
+    "longitude": -87.67645,
+    "amaChartered": false,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "a2b0c8d6-4e2f-0a8c-6d4b-2f0e8c6a4d2b",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "South Alabama RC Modelers",
+    "description": "AMA-chartered club in Foley, AL, offering a welcoming environment for all skill levels.",
+    "websiteUrl": "https://www.modelaircraft.org/club/south-alabama-rc-modelers",
+    "keyFeatures": "Multiple flying fields, community events, training programs",
+    "address": {
+      "street": "911 S Cedar St",
+      "city": "Foley",
+      "state": "AL",
+      "zip": "36535"
+    },
+    "latitude": 30.390301,
+    "longitude": -87.691818,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  },
+  {
+    "id": "b6c4d2e0-8f6a-4c2d-0e8b-6f4a2c0d8e6f",
+    "addedOn": "2026-01-01",
+    "modifiedOn": "2026-01-01",
+    "name": "Central Alabama Sports Flyers",
+    "description": "AMA-chartered club in Clanton, AL, known for its large flying field and family-friendly atmosphere.",
+    "websiteUrl": "https://www.modelaircraft.org/club/central-alabama-sports-flyers",
+    "keyFeatures": "1000 ft runway, pavilions with power outlets, full bathrooms and showers",
+    "address": {
+      "street": "3704 County Rd 47",
+      "city": "Clanton",
+      "state": "AL",
+      "zip": "35045"
+    },
+    "latitude": 32.769017,
+    "longitude": -86.58495,
+    "amaChartered": true,
+    "driving": false,
+    "flying": false,
+    "boating": false
+  }
+]

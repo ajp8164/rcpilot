@@ -11,7 +11,7 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Plus, Trash2 } from 'lucide-react-native';
@@ -35,25 +35,21 @@ const ChecklistTemplatesScreen = ({ navigation }: Props) => {
   const listEditorRef = useRef<ListEditorMethods>(null);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            headerRight
-            icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-            }
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderIconButton
+            Icon={Plus}
             onPress={() =>
               navigation.navigate('NewChecklistNavigator', {
                 screen: 'NewChecklist',
                 params: {},
               })
             }
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

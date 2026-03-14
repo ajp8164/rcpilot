@@ -21,6 +21,7 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { actionScheduleState } from 'lib/checklist';
 import { HistoryEntry, useMaintenanceFilter } from 'lib/maintenance';
@@ -63,49 +64,33 @@ const MaintenanceHistoryScree = ({ navigation, route }: Props) => {
   const [listEditorState, setListEditorState] = useState<ListEditorState>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <>
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!entries.length || listEditorState?.enabled}
-              icon={
-                filterId ? (
-                  <FunnelPlus
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                ) : (
-                  <Funnel
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                )
-              }
-              onPress={() =>
-                navigation.navigate('MaintenanceFiltersNavigator', {
-                  screen: 'MaintenanceFilters',
-                  params: {
-                    filterType: FilterType.MaintenanceFilter,
-                    useGeneralFilter: true,
-                  },
-                })
-              }
-            />
-            <Button
-              title={listEditorState?.enabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!entries.length}
-              onPress={() => listEditorRef.current?.onToggleEditMode()}
-            />
-          </>
-        );
-      },
-    });
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderIconButton
+            disabled={!entries.length || listEditorState?.enabled}
+            Icon={filterId ? FunnelPlus : Funnel}
+            onPress={() =>
+              navigation.navigate('MaintenanceFiltersNavigator', {
+                screen: 'MaintenanceFilters',
+                params: {
+                  filterType: FilterType.MaintenanceFilter,
+                  useGeneralFilter: true,
+                },
+              })
+            }
+          />,
+          <Button
+            title={listEditorState?.enabled ? 'Done' : 'Edit'}
+            titleStyle={theme.styles.buttonScreenHeaderTitle}
+            buttonStyle={theme.styles.buttonScreenHeader}
+            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+            disabled={!entries.length}
+            onPress={() => listEditorRef.current?.onToggleEditMode()}
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterId, listEditorState?.enabled, entries]);
 

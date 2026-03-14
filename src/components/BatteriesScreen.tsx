@@ -24,6 +24,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Realm, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
   batteryIsCharged,
@@ -84,57 +85,39 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   const [listEditorState, setListEditorState] = useState<ListEditorState>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        if (listBatteries === 'all') {
-          return (
-            <Button
-              title={listEditorState?.enabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabled={!activeBatteries.length}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={() => listEditorRef.current?.onToggleEditMode()}
-            />
-          );
-        } else {
-          return null;
-        }
-      },
-      headerRight: () => {
-        return (
+    navigation.setOptions(
+      headerOptions({
+        left: [
           <>
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={
-                !filterId &&
-                (!activeBatteries.length || listEditorState?.enabled)
-              }
-              headerRight
-              icon={
-                filterId ? (
-                  <FunnelPlus
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                ) : (
-                  <Funnel
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                )
-              }
-              onPress={() =>
-                navigation.navigate('BatteryFiltersNavigator', {
-                  screen: 'BatteryFilters',
-                  params: {
-                    filterType: FilterType.BatteriesFilter,
-                    useGeneralFilter: true,
-                  },
-                })
-              }
-            />
+            {listBatteries === 'all' ? (
+              <Button
+                title={listEditorState?.enabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={theme.styles.buttonScreenHeader}
+                disabled={!activeBatteries.length}
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+                onPress={() => listEditorRef.current?.onToggleEditMode()}
+              />
+            ) : null}
+          </>,
+        ],
+        right: [
+          <HeaderIconButton
+            disabled={
+              !filterId && (!activeBatteries.length || listEditorState?.enabled)
+            }
+            Icon={filterId ? FunnelPlus : Funnel}
+            onPress={() =>
+              navigation.navigate('BatteryFiltersNavigator', {
+                screen: 'BatteryFilters',
+                params: {
+                  filterType: FilterType.BatteriesFilter,
+                  useGeneralFilter: true,
+                },
+              })
+            }
+          />,
+          <>
             {listBatteries !== 'all' ? (
               <Button
                 title={listEditorState?.enabled ? 'Done' : 'Edit'}
@@ -145,21 +128,16 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
                 onPress={() => listEditorRef.current?.onToggleEditMode()}
               />
             ) : (
-              <Button
-                buttonStyle={theme.styles.buttonScreenHeader}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              <HeaderIconButton
                 disabled={listEditorState?.enabled}
-                headerRight
-                icon={
-                  <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-                }
+                Icon={Plus}
                 onPress={addBattery}
               />
             )}
-          </>
-        );
-      },
-    });
+          </>,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     activeBatteries,

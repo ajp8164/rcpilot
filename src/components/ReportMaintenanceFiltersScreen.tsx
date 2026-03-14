@@ -11,8 +11,8 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { FiltersListHeader } from 'components/molecules/FiltersListHeader';
 import { filterSummary } from 'lib/filter';
 import { defaultFilter } from 'lib/reports/reportMaintenance';
@@ -62,15 +62,11 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
   const listEditorRef = useRef<ListEditorMethods>(null);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            headerRight
-            icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-            }
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderIconButton
+            Icon={Plus}
             onPress={() =>
               generalReportMaintenanceFilter &&
               navigation.navigate('ReportMaintenanceFilterEditor', {
@@ -81,10 +77,10 @@ const ReportMaintenanceFiltersScreen = ({ navigation, route }: Props) => {
                 requireFilterName: true,
               })
             }
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [generalReportMaintenanceFilter, generalReportMaintenanceFilterName]);
 

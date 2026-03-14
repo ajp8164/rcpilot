@@ -11,8 +11,8 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { useCommanderSummary } from 'lib/commander';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { Plus, Trash2 } from 'lucide-react-native';
@@ -48,20 +48,16 @@ const CommandersScreen = ({ navigation }: Props) => {
   const [listLayout, setListLayout] = useState<LayoutRectangle>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            headerRight
-            icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-            }
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderIconButton
+            Icon={Plus}
             onPress={() => navigation.navigate('NewCommander')}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

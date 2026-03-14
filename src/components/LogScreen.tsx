@@ -28,6 +28,7 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { modelTypeIconProps } from 'lib/model';
 import { eventSummary, useEventsFilter } from 'lib/modelEvent';
@@ -88,9 +89,9 @@ const LogScreen = ({ navigation }: Props) => {
   const sectionListRef = useRef<SectionList<Event>>(null);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
+    navigation.setOptions(
+      headerOptions({
+        left: [
           <Button
             title={'Today'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
@@ -100,38 +101,17 @@ const LogScreen = ({ navigation }: Props) => {
               calendarRef.current?.setDate(now.toISODate());
               scrollToSection(now.toFormat('MMMM dd, yyyy'));
             }}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <View style={s.arrowsContainer}>
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              headerRight
-              icon={
-                <ChevronLeft
-                  color={theme.colors.screenHeaderButtonText}
-                  size={33}
-                />
-              }
-              onPress={() => subtractMonth()}
-            />
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              headerRight
-              icon={
-                <ChevronRight
-                  color={theme.colors.screenHeaderButtonText}
-                  size={33}
-                />
-              }
-              onPress={() => addMonth()}
-            />
-          </View>
-        );
-      },
-    });
+          />,
+        ],
+        right: [
+          <HeaderIconButton
+            Icon={ChevronLeft}
+            onPress={() => subtractMonth()}
+          />,
+          <HeaderIconButton Icon={ChevronRight} onPress={() => addMonth()} />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [current, theme]);
 
@@ -444,10 +424,6 @@ const LogScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  arrowsContainer: {
-    flexDirection: 'row',
-    right: -5,
-  },
   calendar: {
     paddingLeft: 5,
     paddingRight: 5,

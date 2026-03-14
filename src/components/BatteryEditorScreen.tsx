@@ -295,9 +295,6 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
 
     navigation.setOptions({
       title: battery ? 'Battery' : 'New Battery',
-    });
-
-    navigation.setOptions({
       headerLeft: () => {
         return (
           <Button

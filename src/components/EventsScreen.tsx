@@ -22,6 +22,7 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
   eventKind,
@@ -87,56 +88,43 @@ const EventsScreen = ({ navigation, route }: Props) => {
   const [listLayout, setListLayout] = useState<LayoutRectangle>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        if (readOnly) return null;
-        return (
-          <>
-            {filterType !== FilterType.BypassFilter && (
+    navigation.setOptions(
+      headerOptions({
+        right: readOnly
+          ? []
+          : [
+              filterType !== FilterType.BypassFilter ? (
+                <HeaderIconButton
+                  disabled={
+                    (!filterId && !model?.events.length) ||
+                    listEditorState?.enabled
+                  }
+                  Icon={filterId ? FunnelPlus : Funnel}
+                  onPress={() =>
+                    navigation.navigate('EventFiltersNavigator', {
+                      screen: 'EventFilters',
+                      params: {
+                        filterType: FilterType.EventsModelFilter,
+                        modelType: model?.type,
+                        useGeneralFilter: true,
+                      },
+                    })
+                  }
+                />
+              ) : (
+                <></>
+              ),
               <Button
+                title={listEditorState?.enabled ? 'Done' : 'Edit'}
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
                 buttonStyle={theme.styles.buttonScreenHeader}
+                disabled={!events.length}
                 disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                disabled={
-                  (!filterId && !model?.events.length) ||
-                  listEditorState?.enabled
-                }
-                icon={
-                  filterId ? (
-                    <FunnelPlus
-                      color={theme.colors.screenHeaderButtonText}
-                      size={28}
-                    />
-                  ) : (
-                    <Funnel
-                      color={theme.colors.screenHeaderButtonText}
-                      size={28}
-                    />
-                  )
-                }
-                onPress={() =>
-                  navigation.navigate('EventFiltersNavigator', {
-                    screen: 'EventFilters',
-                    params: {
-                      filterType: FilterType.EventsModelFilter,
-                      modelType: model?.type,
-                      useGeneralFilter: true,
-                    },
-                  })
-                }
-              />
-            )}
-            <Button
-              title={listEditorState?.enabled ? 'Done' : 'Edit'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabled={!events.length}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={() => listEditorRef.current?.onToggleEditMode()}
-            />
-          </>
-        );
-      },
-    });
+                onPress={() => listEditorRef.current?.onToggleEditMode()}
+              />,
+            ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterId, listEditorState?.enabled]);
 

@@ -12,7 +12,7 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
@@ -36,24 +36,20 @@ const ModelPropellersScreen = ({ navigation }: Props) => {
   const [listEditorState, setListEditorState] = useState<ListEditorState>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            headerRight
-            icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-            }
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderIconButton
+            Icon={Plus}
             onPress={() =>
               navigation.navigate('NewModelPropellerNavigator', {
                 screen: 'NewModelPropeller',
               })
             }
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

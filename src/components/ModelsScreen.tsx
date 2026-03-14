@@ -21,6 +21,7 @@ import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelListItem } from 'components/molecules/ModelListItem';
@@ -84,98 +85,64 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   const [listEditorState, setListEditorState] = useState<ListEditorState>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        if (listModels === 'all' && modelsLayout === ModelsLayout.List) {
-          return (
-            <Button
-              title={
-                activeModels.length && listEditorState?.enabled
-                  ? 'Done'
-                  : 'Edit'
-              }
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabled={!activeModels.length}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              onPress={() => listEditorRef.current?.onToggleEditMode()}
-            />
-          );
-        } else {
-          return null;
-        }
-      },
-      headerRight: () => {
-        return (
+    navigation.setOptions(
+      headerOptions({
+        left: [
           <>
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!activeModels.length}
-              headerRight
-              icon={
-                modelsLayout === ModelsLayout.CardDeck ? (
-                  <GalleryHorizontalEnd
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                ) : modelsLayout === ModelsLayout.List ? (
-                  <LayoutList
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                ) : modelsLayout === ModelsLayout.PostCards ? (
-                  <Images
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                ) : (
-                  <></>
-                )
-              }
-              onPress={() => {
-                const presentation =
-                  modelsLayout === ModelsLayout.CardDeck
-                    ? ModelsLayout.List
-                    : modelsLayout === ModelsLayout.List
-                      ? ModelsLayout.PostCards
-                      : modelsLayout === ModelsLayout.PostCards
-                        ? ModelsLayout.CardDeck
-                        : ModelsLayout.List;
-
-                dispatch(saveModelsLayout({ presentation }));
-              }}
-            />
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={
-                !filterId && (!activeModels.length || listEditorState?.enabled)
-              }
-              headerRight
-              icon={
-                filterId ? (
-                  <FunnelPlus
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                ) : (
-                  <Funnel
-                    color={theme.colors.screenHeaderButtonText}
-                    size={28}
-                  />
-                )
-              }
-              onPress={() =>
-                navigation.navigate('ModelFiltersNavigator', {
-                  screen: 'ModelFilters',
-                  params: {
-                    filterType: FilterType.ModelsFilter,
-                    useGeneralFilter: true,
-                  },
-                })
-              }
-            />
+            {listModels === 'all' && modelsLayout === ModelsLayout.List ? (
+              <Button
+                title={
+                  activeModels.length && listEditorState?.enabled
+                    ? 'Done'
+                    : 'Edit'
+                }
+                titleStyle={theme.styles.buttonScreenHeaderTitle}
+                buttonStyle={theme.styles.buttonScreenHeader}
+                disabled={!activeModels.length}
+                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+                onPress={() => listEditorRef.current?.onToggleEditMode()}
+              />
+            ) : null}
+          </>,
+        ],
+        right: [
+          <HeaderIconButton
+            disabled={!activeModels.length}
+            Icon={
+              modelsLayout === ModelsLayout.CardDeck
+                ? GalleryHorizontalEnd
+                : modelsLayout === ModelsLayout.List
+                  ? LayoutList
+                  : Images
+            }
+            onPress={() => {
+              const presentation =
+                modelsLayout === ModelsLayout.CardDeck
+                  ? ModelsLayout.List
+                  : modelsLayout === ModelsLayout.List
+                    ? ModelsLayout.PostCards
+                    : modelsLayout === ModelsLayout.PostCards
+                      ? ModelsLayout.CardDeck
+                      : ModelsLayout.List;
+              dispatch(saveModelsLayout({ presentation }));
+            }}
+          />,
+          <HeaderIconButton
+            disabled={
+              !filterId && (!activeModels.length || listEditorState?.enabled)
+            }
+            Icon={filterId ? FunnelPlus : Funnel}
+            onPress={() =>
+              navigation.navigate('ModelFiltersNavigator', {
+                screen: 'ModelFilters',
+                params: {
+                  filterType: FilterType.ModelsFilter,
+                  useGeneralFilter: true,
+                },
+              })
+            }
+          />,
+          <>
             {listModels !== 'all' ? (
               <Button
                 title={
@@ -190,14 +157,9 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 onPress={() => listEditorRef.current?.onToggleEditMode()}
               />
             ) : (
-              <Button
-                buttonStyle={theme.styles.buttonScreenHeader}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+              <HeaderIconButton
                 disabled={!!activeModels.length && listEditorState?.enabled}
-                headerRight
-                icon={
-                  <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-                }
+                Icon={Plus}
                 onPress={() =>
                   navigation.navigate('NewModelNavigator', {
                     screen: 'NewModel',
@@ -206,10 +168,10 @@ const ModelsScreen = ({ navigation, route }: Props) => {
                 }
               />
             )}
-          </>
-        );
-      },
-    });
+          </>,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     activeModels.length,

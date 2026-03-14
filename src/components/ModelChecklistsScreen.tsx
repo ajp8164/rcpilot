@@ -15,7 +15,7 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { ChecklistTemplatePickerResult } from 'components/ChecklistTemplatePickerScreen';
-import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { appConfig } from 'config';
 import { useConfirmAction } from 'lib/useConfirmAction';
@@ -49,20 +49,11 @@ const ModelChecklistsScreen = ({ navigation, route }: Props) => {
   const [listEditorState, setListEditorState] = useState<ListEditorState>();
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            buttonStyle={theme.styles.buttonScreenHeader}
-            headerRight
-            icon={
-              <Plus color={theme.colors.screenHeaderButtonText} size={28} />
-            }
-            onPress={addChecklist}
-          />
-        );
-      },
-    });
+    navigation.setOptions(
+      headerOptions({
+        right: [<HeaderIconButton Icon={Plus} onPress={addChecklist} />],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

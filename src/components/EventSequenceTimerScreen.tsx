@@ -44,6 +44,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import TimerFace from 'components/atoms/TimerFace';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
   batteryPerformanceWithModel,
@@ -132,11 +133,11 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   }
 
   useEffect(() => {
-    navigation.setOptions({
-      headerBackVisible: timer.state.mode === TimerMode.Initial,
-      headerLeft: () => {
-        if (cancelable && timer.state.mode === TimerMode.Initial) {
-          return (
+    navigation.setOptions(
+      headerOptions({
+        headerBackVisible: timer.state.mode === TimerMode.Initial,
+        left: [
+          cancelable && timer.state.mode === TimerMode.Initial ? (
             <Button
               title={'Cancel'}
               titleStyle={{
@@ -146,27 +147,22 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
               buttonStyle={theme.styles.buttonScreenHeader}
               onPress={cancelEvent}
             />
-          );
-        }
-      },
-      headerRight: () => {
-        if (timer.state.mode === TimerMode.Initial) {
-          return (
-            <Button
-              buttonStyle={theme.styles.buttonScreenHeader}
-              icon={
-                countdownTimerEnabled ? (
-                  <ClockArrowDown color={theme.colors.stickyWhite} size={28} />
-                ) : (
-                  <ClockArrowUp color={theme.colors.stickyWhite} size={28} />
-                )
-              }
+          ) : (
+            <></>
+          ),
+        ],
+        right: [
+          timer.state.mode === TimerMode.Initial ? (
+            <HeaderIconButton
+              Icon={countdownTimerEnabled ? ClockArrowDown : ClockArrowUp}
               onPress={() => toggleCountdownTimer()}
             />
-          );
-        }
-      },
-    });
+          ) : (
+            <></>
+          ),
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdownTimerEnabled, timer.state.mode]);
 

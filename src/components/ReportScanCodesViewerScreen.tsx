@@ -6,6 +6,7 @@ import { openShareSheet, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Share } from 'lucide-react-native';
 import { BSON } from 'realm';
@@ -27,31 +28,28 @@ const ReportScanCodesViewerScreen = ({ route, navigation }: Props) => {
   const viewShotRef = useRef<ViewShot>(null);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
+    navigation.setOptions(
+      headerOptions({
+        left: [
           <Button
             title={'Close'}
             titleStyle={theme.styles.buttonScreenHeaderTitle}
             buttonStyle={theme.styles.buttonScreenHeader}
             onPress={navigation.goBack}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            icon={<Share color={theme.colors.screenHeaderButtonText} />}
-            buttonStyle={theme.styles.buttonScreenHeader}
+          />,
+        ],
+        right: [
+          <HeaderIconButton
+            Icon={Share}
             onPress={() =>
               viewShotRef.current?.capture
                 ? viewShotRef.current.capture()
                 : null
             }
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     theme.colors.screenHeaderButtonText,

@@ -18,6 +18,7 @@ import { useObject } from '@realm/react';
 import ActionBar from 'components/atoms/ActionBar';
 import { Button } from 'components/atoms/Button';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
@@ -85,10 +86,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
     });
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        if (cancelable) {
-          return (
+    navigation.setOptions(
+      headerOptions({
+        left: [
+          cancelable ? (
             <Button
               title={'Cancel'}
               titleStyle={{
@@ -106,26 +107,18 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
                 )
               }
             />
-          );
-        }
-      },
-      headerRight: () => {
-        return (
-          <Button
+          ) : (
+            <></>
+          ),
+        ],
+        right: [
+          <HeaderIconButton
             title={checklistType === ChecklistType.PreEvent ? 'Timer' : 'Log'}
             titleStyle={{
               ...theme.styles.buttonScreenHeaderTitle,
               ...s.buttonScreenHeaderTitleRight,
             }}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            iconRight
-            icon={
-              <ChevronRight
-                color={theme.colors.stickyWhite}
-                size={33}
-                style={{ right: 10 }}
-              />
-            }
+            Icon={ChevronRight}
             onPress={() => {
               if (checklistType === ChecklistType.PreEvent) {
                 navigation.navigate('EventSequenceTimer', {});
@@ -133,10 +126,10 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
                 navigation.navigate('EventSequenceNewEventEditor');
               }
             }}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

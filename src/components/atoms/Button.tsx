@@ -14,7 +14,6 @@ interface Button
   containerStyle?: ViewStyle | ViewStyle[];
   disabled?: boolean;
   disabledStyle?: ViewStyle | ViewStyle[];
-  headerRight?: boolean;
   loading?: boolean;
   onPress: (event: GestureResponderEvent) => void;
   outline?: boolean;
@@ -29,7 +28,6 @@ const Button = (props: Button) => {
     containerStyle,
     disabled,
     disabledStyle,
-    headerRight,
     loading,
     onPress,
     outline,
@@ -72,7 +70,6 @@ const Button = (props: Button) => {
         disabledStyle,
       ]}
       containerStyle={[
-        headerRight ? { right: -12 } : {},
         small ? theme.styles.buttonSmallContainer : {},
         containerStyle,
       ]}
@@ -83,6 +80,9 @@ const Button = (props: Button) => {
       loading={loading}
       onPress={onPress}
       {...rest}
+      iconContainerStyle={
+        !!rest.icon && [{ marginHorizontal: 0 }, rest.iconContainerStyle]
+      }
     />
   );
 };

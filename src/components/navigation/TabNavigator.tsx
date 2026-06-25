@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   BatteryFull,
   FileText,
+  LandPlot,
   Plane,
   ScanLine,
   Settings,
@@ -69,7 +70,7 @@ const TabNavigator = () => {
         component={ClubsNavigator}
         options={{
           tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => <FileText color={color} size={33} />,
+          tabBarIcon: ({ color }) => <LandPlot color={color} size={33} />,
         }}
       />
       <Tab.Screen

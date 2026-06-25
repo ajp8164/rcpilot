@@ -32,21 +32,19 @@ const App = () => {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
         <ThemeProvider>
-          <SafeAreaProvider>
-            <ReduxProvider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
-                <RealmProvider
-                  schema={Schema}
-                  schemaVersion={parseInt(appConfig.databaseVersion, 10)}
-                  // onMigration={migrateRealm}
-                  deleteRealmIfMigrationNeeded={true}>
-                  <KeyboardProvider>
-                    <AppMain />
-                  </KeyboardProvider>
-                </RealmProvider>
-              </PersistGate>
-            </ReduxProvider>
-          </SafeAreaProvider>
+          <ReduxProvider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <RealmProvider
+                schema={Schema}
+                schemaVersion={parseInt(appConfig.databaseVersion, 10)}
+                // onMigration={migrateRealm}
+                deleteRealmIfMigrationNeeded={true}>
+                <KeyboardProvider>
+                  <AppMain />
+                </KeyboardProvider>
+              </RealmProvider>
+            </PersistGate>
+          </ReduxProvider>
         </ThemeProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

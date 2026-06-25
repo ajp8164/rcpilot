@@ -37,7 +37,7 @@ export type MultipleNavigatorParamList = {
   };
 };
 
-export type BatteriesNavigatorParamList = {
+export type BatteriesNavigatorParamList = MultipleNavigatorParamList & {
   Batteries: {
     listBatteries?: ListBatteries;
   };
@@ -68,20 +68,9 @@ export type BatteriesNavigatorParamList = {
   BatteryCycleFiltersNavigator: NavigatorScreenParams<BatteryCycleFiltersNavigatorParamList>;
   BatteryPerformance: undefined;
   BatteryPerformanceComparisonPicker: undefined;
-  BatteryPicker: BatteryPickerInterface;
-  EnumPicker: EnumPickerInterface;
   EventFiltersNavigator: NavigatorScreenParams<EventFiltersNavigatorParamList>;
   NewBatteryNavigator: NavigatorScreenParams<NewBatteryNavigatorParamList>;
   NewBatteryCycleNavigator: NavigatorScreenParams<NewBatteryCycleNavigatorParamList>;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
 export type ClubsNavigatorParamList = {
@@ -109,12 +98,11 @@ export type MainNavigatorParamList = {
   Tabs: NavigatorScreenParams<TabNavigatorParamList>;
 };
 
-export type ModelsNavigatorParamList = {
+export type ModelsNavigatorParamList = MultipleNavigatorParamList & {
   BatteryCycleEditor: {
     batteryId: string;
     cycleNumber: number;
   };
-  BatteryPicker: BatteryPickerInterface;
   ChecklistTemplatePicker: {
     eventName: string;
   };
@@ -133,7 +121,6 @@ export type ModelsNavigatorParamList = {
     action: JChecklistAction;
     modelId: string;
   };
-  EnumPicker: EnumPickerInterface;
   Events: {
     filterType: FilterType;
     batteryId?: string;
@@ -189,19 +176,9 @@ export type ModelsNavigatorParamList = {
     actionRefId: string;
     historyRefId: string;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type EventFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type EventFiltersNavigatorParamList = MultipleNavigatorParamList & {
   EventFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -214,17 +191,9 @@ export type EventFiltersNavigatorParamList = {
     modelType?: ModelType;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type MaintenanceFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type MaintenanceFiltersNavigatorParamList = MultipleNavigatorParamList & {
   MaintenanceFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -237,17 +206,9 @@ export type MaintenanceFiltersNavigatorParamList = {
     modelType?: ModelType;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type ModelFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type ModelFiltersNavigatorParamList = MultipleNavigatorParamList & {
   ModelFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -259,16 +220,9 @@ export type ModelFiltersNavigatorParamList = {
     generalFilterName: string;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type BatteryFiltersNavigatorParamList = {
+export type BatteryFiltersNavigatorParamList = MultipleNavigatorParamList & {
   BatteryFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -280,10 +234,9 @@ export type BatteryFiltersNavigatorParamList = {
     generalFilterName: string;
     requireFilterName?: boolean;
   };
-  EnumPicker: EnumPickerInterface;
 };
 
-export type BatteryCycleFiltersNavigatorParamList = {
+export type BatteryCycleFiltersNavigatorParamList = MultipleNavigatorParamList & {
   BatteryCycleFilters: {
     useGeneralFilter?: boolean;
   };
@@ -292,18 +245,9 @@ export type BatteryCycleFiltersNavigatorParamList = {
     filterType: FilterType;
     requireFilterName?: boolean;
   };
-  EnumPicker: EnumPickerInterface;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type ReportEventFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type ReportEventFiltersNavigatorParamList = MultipleNavigatorParamList & {
   ReportEventFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -316,17 +260,9 @@ export type ReportEventFiltersNavigatorParamList = {
     modelType?: ModelType;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type ReportMaintenanceFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type ReportMaintenanceFiltersNavigatorParamList = MultipleNavigatorParamList & {
   ReportMaintenanceFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -339,17 +275,9 @@ export type ReportMaintenanceFiltersNavigatorParamList = {
     modelType?: ModelType;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type ReportModelScanCodeFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type ReportModelScanCodeFiltersNavigatorParamList = MultipleNavigatorParamList & {
   ReportModelScanCodeFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -362,17 +290,9 @@ export type ReportModelScanCodeFiltersNavigatorParamList = {
     modelType?: ModelType;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type ReportBatteryScanCodeFiltersNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type ReportBatteryScanCodeFiltersNavigatorParamList = MultipleNavigatorParamList & {
   ReportBatteryScanCodeFilters: {
     filterType: FilterType;
     modelType?: ModelType;
@@ -385,33 +305,16 @@ export type ReportBatteryScanCodeFiltersNavigatorParamList = {
     modelType?: ModelType;
     requireFilterName?: boolean;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    eventName: string;
-  };
 };
 
-export type NewBatteryNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type NewBatteryNavigatorParamList = MultipleNavigatorParamList & {
   NewBattery: {
     batteryId?: string;
     batteryTemplate?: BatteryTemplate;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type NewBatteryCycleNavigatorParamList = {
+export type NewBatteryCycleNavigatorParamList = MultipleNavigatorParamList & {
   NewBatteryCycle: {
     batteryIds: string[];
   };
@@ -423,35 +326,15 @@ export type NewBatteryCycleNavigatorParamList = {
     pCells: number;
     eventName: string;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type NewModelNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type NewModelNavigatorParamList = MultipleNavigatorParamList & {
   NewModel: {
     modelId?: string;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type EventSequenceNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type EventSequenceNavigatorParamList = MultipleNavigatorParamList & {
   EventSequenceNewEventEditor: undefined;
   EventSequenceBatteryPicker: {
     cancelable?: boolean;
@@ -476,18 +359,9 @@ export type EventSequenceNavigatorParamList = {
     eventName: string;
   };
   LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type LocationNavigatorParamList = {
+export type LocationNavigatorParamList = MultipleNavigatorParamList & {
   Events: {
     filterType: FilterType;
     batteryId?: string;
@@ -503,69 +377,31 @@ export type LocationNavigatorParamList = {
     eventName?: string;
     locationId?: string;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type NewModelFuelNavigatorParamList = {
+export type NewModelFuelNavigatorParamList = MultipleNavigatorParamList & {
   NewModelFuel: undefined;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type NewModelPropellerNavigatorParamList = {
-  EnumPicker: EnumPickerInterface;
+export type NewModelPropellerNavigatorParamList = MultipleNavigatorParamList & {
   NewModelPropeller: undefined;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type NewChecklistNavigatorParamList = {
+export type NewChecklistNavigatorParamList = MultipleNavigatorParamList & {
   ChecklistActionEditor: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
     modelId?: string;
     eventName: string;
   };
-  EnumPicker: EnumPickerInterface;
   NewChecklist: {
     checklistTemplateId?: string;
     modelId?: string;
     modelChecklistRefId?: string;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type NewChecklistActionNavigatorParamList = {
+export type NewChecklistActionNavigatorParamList = MultipleNavigatorParamList & {
   NewChecklistAction: {
     checklistAction?: JChecklistAction;
     checklistType: ChecklistType;
@@ -576,18 +412,9 @@ export type NewChecklistActionNavigatorParamList = {
     action: JChecklistAction;
     modelId: string;
   };
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
 };
 
-export type SetupNavigatorParamList = {
+export type SetupNavigatorParamList = MultipleNavigatorParamList & {
   About: undefined;
   AppSettings: undefined;
   BatteryCycleEditor: {
@@ -613,7 +440,6 @@ export type SetupNavigatorParamList = {
   DatabaseBackups: undefined;
   DatabaseReporting: undefined;
   DatabaseBackup: undefined;
-  EnumPicker: EnumPickerInterface;
   Events: {
     filterType: FilterType;
     batteryId?: string;
@@ -677,15 +503,6 @@ export type SetupNavigatorParamList = {
   NewModelFuelNavigator: NavigatorScreenParams<NewModelFuelNavigatorParamList>;
   NewModelPropellerNavigator: NavigatorScreenParams<NewModelPropellerNavigatorParamList>;
   NewReportNavigator: NavigatorScreenParams<NewReportNavigatorParamList>;
-  NotesEditor: {
-    title?: string;
-    headerButtonStyle?: TextStyle;
-    headerBackgroundColor?: string;
-    text?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    extraData?: any;
-    eventName: string;
-  };
   ReportEventsMaintenanceEditor: {
     reportId?: string;
   };
@@ -698,8 +515,7 @@ export type SetupNavigatorParamList = {
   WebServerAccess: undefined;
 };
 
-export type CommanderNavigatorParamList = {
-  ModelPicker: ModelPickerInterface;
+export type CommanderNavigatorParamList = MultipleNavigatorParamList & {
 };
 
 export type NewReportNavigatorParamList = {

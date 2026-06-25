@@ -45,6 +45,26 @@ target 'RCPilot' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+
+    # Workaround for Xcode 26 beta consteval error in fmt library.
+    # Patch fmt/base.h to disable consteval which breaks with Apple clang in Xcode 26.
+    fmt_base = File.join(__dir__, 'Pods/fmt/include/fmt/base.h')
+    if File.exist?(fmt_base)
+      content = File.read(fmt_base)
+      unless content.include?('Patched for Xcode 26')
+        content.gsub!('#  define FMT_CONSTEVAL consteval', '#  define FMT_CONSTEVAL // Patched for Xcode 26')
+        File.write(fmt_base, content)
+      end
+    end
+
+    # Workaround for VisionCamera UIWindowScene availability error in Xcode 26.
+    installer.pods_project.targets.each do |target|
+      if target.name == 'VisionCamera'
+        target.build_configurations.each do |config|
+          config.build_settings['GCC_TREAT_WARNINGS_AS_ERRORS'] = 'NO'
+        end
+      end
+    end
   end
 
 end

@@ -17,7 +17,6 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
-import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
   FormikWatcherState,
@@ -27,13 +26,14 @@ import {
   ListItemInputMethods,
   ListItemNotes,
 } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
 import { batterySummary, batteryTintIconProps } from 'lib/battery';
 import { batteryCycleStatisticsData } from 'lib/batteryCycle';
 import { MSSToSeconds, secondsToFormat } from 'lib/formatters';
 import { Masks } from 'lib/inputMasks';
-import { BatteryFull, BatteryLow } from 'lucide-react-native';
+import { BatteryFull, BatteryLow, Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
@@ -354,31 +354,18 @@ const BatteryCycleEditorScreen = ({ navigation, route }: Props) => {
     const canSubmit = next.dirty && isValid;
     setFormikCanSubmit(canSubmit);
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   if (!battery) {

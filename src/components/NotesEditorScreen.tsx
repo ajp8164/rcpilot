@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { View } from 'react-native';
 
 import { useEvent } from '@react-native-hello/core';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import TextView from 'components/views/TextView';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { Check, X } from 'lucide-react-native';
 import { MultipleNavigatorParamList } from 'types/navigation';
 import { NotesEditorResult } from 'types/notes';
 
@@ -13,10 +16,11 @@ export type Props = NativeStackScreenProps<
 >;
 
 const NotesEditorScreen = ({ navigation, route }: Props) => {
-  const { title, text, headerButtonStyle, extraData, eventName } = route.params;
+  const { title, text, headerButtonStyle, headerBackgroundColor, extraData, eventName } =
+    route.params;
 
   const event = useEvent();
-  const setScreenEditHeader = useScreenEditHeader();
+  const headerHeight = useHeaderHeight();
 
   const [newText, setNewText] = useState<string | undefined>(text);
 
@@ -31,21 +35,59 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    setScreenEditHeader(
-      { enabled: canSubmit, action: onDone, style: headerButtonStyle },
-      { style: headerButtonStyle },
-      title ? { title } : {},
+    const buttonColor = headerButtonStyle?.color as string | undefined;
+
+    // When a header background color is provided, use an opaque header.
+    const opaqueHeader = headerBackgroundColor
+      ? {
+          headerTransparent: false as const,
+          headerStyle: { backgroundColor: headerBackgroundColor },
+          headerShadowVisible: false,
+        }
+      : {};
+
+    navigation.setOptions(
+      headerOptions({
+        title,
+        ...opaqueHeader,
+        left: [
+          <HeaderIconButton
+            Icon={X}
+            color={buttonColor}
+            onPress={navigation.goBack}
+          />,
+        ],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
+            color={buttonColor}
+            disabled={!canSubmit}
+            onPress={onDone}
+          />,
+        ],
+      }),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newText]);
+  }, [
+    event,
+    eventName,
+    extraData,
+    headerBackgroundColor,
+    headerButtonStyle,
+    navigation,
+    newText,
+    text,
+    title,
+  ]);
 
   return (
-    <TextView
-      characterLimit={5000}
-      placeholder={'Type your notes here.'}
-      value={newText}
-      onTextChanged={setNewText}
-    />
+    <View style={{ flex: 1, paddingTop: headerBackgroundColor ? 0 : headerHeight }}>
+      <TextView
+        characterLimit={5000}
+        placeholder={'Type your notes here.'}
+        value={newText}
+        onTextChanged={setNewText}
+      />
+    </View>
   );
 };
 

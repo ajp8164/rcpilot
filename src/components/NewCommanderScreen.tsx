@@ -9,13 +9,14 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { Formik, FormikProps } from 'formik';
+import { Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { SetupNavigatorParamList } from 'types/navigation';
 import * as Yup from 'yup';
@@ -92,31 +93,18 @@ const NewCommanderScreen = ({ navigation }: Props) => {
       });
     }
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   return (

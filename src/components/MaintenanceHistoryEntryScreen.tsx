@@ -14,18 +14,19 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
 import { modelCostStatistics } from 'lib/analytics';
 import { Masks } from 'lib/inputMasks';
 import { eventKind } from 'lib/modelEvent';
 import lodash from 'lodash';
+import { Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Model } from 'realmdb/Model';
@@ -142,31 +143,18 @@ const MaintenanceHistoryEntryScreen = ({ navigation, route }: Props) => {
     const canSubmit = next.dirty && isValid;
     setFormikCanSubmit(canSubmit);
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   if (!action || !history) {

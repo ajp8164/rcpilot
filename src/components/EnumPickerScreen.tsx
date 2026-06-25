@@ -11,9 +11,10 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
 import lodash from 'lodash';
+import { Check } from 'lucide-react-native';
 import { BSON } from 'realm';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
@@ -29,6 +30,7 @@ export type EnumPickerInterface = {
   title: string;
   itemPlural?: string;
   headerBackTitle?: string;
+  headerBackgroundColor?: string;
   icons?: { [key in string]: EnumPickerIconProps }; // Key is a enum value as 'name:id'
   sectionName?: string;
   footer?: string;
@@ -53,6 +55,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
     title,
     itemPlural = 'Items',
     headerBackTitle,
+    headerBackgroundColor,
     icons,
     sectionName,
     footer,
@@ -65,7 +68,6 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
   const s = useStyles();
   const event = useEvent();
   const realm = useRealm();
-  const setScreenEditHeader = useScreenEditHeader();
 
   // All of these strings are object ids or enum values.
   const [list, setList] = useSetState<{
@@ -91,14 +93,38 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
       }
     };
 
-    navigation.setOptions({
-      title,
-      headerBackTitle,
-    });
+    const opaqueHeader = headerBackgroundColor
+      ? {
+          headerTransparent: false as const,
+          headerStyle: { backgroundColor: headerBackgroundColor },
+          headerShadowVisible: false,
+        }
+      : {};
+
+    let options = {};
 
     if (mode.includes('many')) {
-      setScreenEditHeader({ enabled: canSubmit, action: onDone });
+      options = headerOptions({
+        title,
+        headerBackTitle,
+        ...opaqueHeader,
+        right: [
+          <HeaderIconButton
+            Icon={Check}
+            disabled={!canSubmit}
+            onPress={onDone}
+          />,
+        ],
+      });
+    } else {
+      options = headerOptions({
+        title,
+        headerBackTitle,
+        ...opaqueHeader,
+      });
     }
+
+    navigation.setOptions(options);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 

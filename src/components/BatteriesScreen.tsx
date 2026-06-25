@@ -23,8 +23,11 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Realm, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
   batteryIsCharged,
@@ -87,20 +90,16 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions(
       headerOptions({
-        left: [
-          <>
-            {listBatteries === 'all' ? (
-              <Button
-                title={listEditorState?.enabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={theme.styles.buttonScreenHeader}
-                disabled={!activeBatteries.length}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={() => listEditorRef.current?.onToggleEditMode()}
-              />
-            ) : null}
-          </>,
-        ],
+        left:
+          listBatteries === 'all'
+            ? [
+                <HeaderButton
+                  label={listEditorState?.enabled ? 'Done' : 'Edit'}
+                  disabled={!activeBatteries.length}
+                  onPress={() => listEditorRef.current?.onToggleEditMode()}
+                />,
+              ]
+            : [],
         right: [
           <HeaderIconButton
             disabled={
@@ -117,24 +116,19 @@ const BatteriesScreen = ({ navigation, route }: Props) => {
               })
             }
           />,
-          <>
-            {listBatteries !== 'all' ? (
-              <Button
-                title={listEditorState?.enabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={theme.styles.buttonScreenHeader}
-                disabled={!retiredBatteries.length}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={() => listEditorRef.current?.onToggleEditMode()}
-              />
-            ) : (
-              <HeaderIconButton
-                disabled={listEditorState?.enabled}
-                Icon={Plus}
-                onPress={addBattery}
-              />
-            )}
-          </>,
+          listBatteries !== 'all' ? (
+            <HeaderButton
+              label={listEditorState?.enabled ? 'Done' : 'Edit'}
+              disabled={!retiredBatteries.length}
+              onPress={() => listEditorRef.current?.onToggleEditMode()}
+            />
+          ) : (
+            <HeaderIconButton
+              disabled={listEditorState?.enabled}
+              Icon={Plus}
+              onPress={addBattery}
+            />
+          ),
         ],
       }),
     );

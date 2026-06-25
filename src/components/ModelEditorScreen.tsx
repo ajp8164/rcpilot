@@ -33,6 +33,7 @@ import {
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { ModelHeader } from 'components/molecules/ModelHeader';
 import { Formik, FormikProps } from 'formik';
 import {
@@ -46,6 +47,7 @@ import { modelHasPropeller, modelTypeIcons } from 'lib/model';
 import { eventKind } from 'lib/modelEvent';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import lodash from 'lodash';
+import { Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Battery, toPlainArray, toPlainObject } from 'realmdb';
@@ -486,32 +488,19 @@ const ModelEditorScreen = ({ navigation, route }: Props) => {
       formikRef.current?.handleSubmit();
     }
 
-    navigation.setOptions({
-      title: model ? formikRef.current?.values.type || 'Model' : 'New Model',
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        title: model ? formikRef.current?.values.type || 'Model' : 'New Model',
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   return (

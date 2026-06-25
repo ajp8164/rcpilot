@@ -20,8 +20,7 @@ import {
 import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import { HeaderButton, HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { AchievementModal } from 'components/modals/AchievementModal';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { ModelListItem } from 'components/molecules/ModelListItem';
@@ -87,24 +86,20 @@ const ModelsScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions(
       headerOptions({
-        left: [
-          <>
-            {listModels === 'all' && modelsLayout === ModelsLayout.List ? (
-              <Button
-                title={
-                  activeModels.length && listEditorState?.enabled
-                    ? 'Done'
-                    : 'Edit'
-                }
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={theme.styles.buttonScreenHeader}
-                disabled={!activeModels.length}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={() => listEditorRef.current?.onToggleEditMode()}
-              />
-            ) : null}
-          </>,
-        ],
+        left:
+          listModels === 'all' && modelsLayout === ModelsLayout.List
+            ? [
+                <HeaderButton
+                  label={
+                    activeModels.length && listEditorState?.enabled
+                      ? 'Done'
+                      : 'Edit'
+                  }
+                  disabled={!activeModels.length}
+                  onPress={() => listEditorRef.current?.onToggleEditMode()}
+                />,
+              ]
+            : [],
         right: [
           <HeaderIconButton
             disabled={!activeModels.length}
@@ -142,33 +137,28 @@ const ModelsScreen = ({ navigation, route }: Props) => {
               })
             }
           />,
-          <>
-            {listModels !== 'all' ? (
-              <Button
-                title={
-                  activeModels.length && listEditorState?.enabled
-                    ? 'Done'
-                    : 'Edit'
-                }
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={theme.styles.buttonScreenHeader}
-                disabled={!retiredModels.length}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-                onPress={() => listEditorRef.current?.onToggleEditMode()}
-              />
-            ) : (
-              <HeaderIconButton
-                disabled={!!activeModels.length && listEditorState?.enabled}
-                Icon={Plus}
-                onPress={() =>
-                  navigation.navigate('NewModelNavigator', {
-                    screen: 'NewModel',
-                    params: {},
-                  })
-                }
-              />
-            )}
-          </>,
+          listModels !== 'all' ? (
+            <HeaderButton
+              label={
+                activeModels.length && listEditorState?.enabled
+                  ? 'Done'
+                  : 'Edit'
+              }
+              disabled={!retiredModels.length}
+              onPress={() => listEditorRef.current?.onToggleEditMode()}
+            />
+          ) : (
+            <HeaderIconButton
+              disabled={!!activeModels.length && listEditorState?.enabled}
+              Icon={Plus}
+              onPress={() =>
+                navigation.navigate('NewModelNavigator', {
+                  screen: 'NewModel',
+                  params: {},
+                })
+              }
+            />
+          ),
         ],
       }),
     );

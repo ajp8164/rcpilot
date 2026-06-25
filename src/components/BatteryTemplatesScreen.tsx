@@ -16,8 +16,9 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { groupItems } from 'lib/sectionList';
+import { Check, X } from 'lucide-react-native';
 import { Battery } from 'realmdb/Battery';
 import { BatteryTemplate } from 'types/battery';
 import { BatteriesNavigatorParamList } from 'types/navigation';
@@ -64,28 +65,12 @@ const BatteryTemplatesScreen = ({ navigation }: Props) => {
       });
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={navigation.goBack}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Create'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={onCreate}
-          />
-        );
-      },
-    });
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={navigation.goBack} />],
+        right: [<HeaderIconButton Icon={Check} onPress={onCreate} />],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 

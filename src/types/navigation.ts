@@ -29,6 +29,7 @@ export type MultipleNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -75,6 +76,7 @@ export type BatteriesNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -89,7 +91,7 @@ export type ClubsNavigatorParamList = {
   };
 };
 
-export type LogNavigatorParamList = {
+export type LogNavigatorParamList = MultipleNavigatorParamList & {
   Log: undefined;
   EventEditor: {
     eventId: string;
@@ -99,7 +101,6 @@ export type LogNavigatorParamList = {
     batteryId: string;
     cycleNumber: number;
   };
-  EnumPicker: EnumPickerInterface;
   LocationNavigator: NavigatorScreenParams<LocationNavigatorParamList>;
 };
 
@@ -191,6 +192,7 @@ export type ModelsNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -215,6 +217,7 @@ export type EventFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -237,6 +240,7 @@ export type MaintenanceFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -258,6 +262,7 @@ export type ModelFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -291,6 +296,7 @@ export type BatteryCycleFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -313,6 +319,7 @@ export type ReportEventFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -335,6 +342,7 @@ export type ReportMaintenanceFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -357,6 +365,7 @@ export type ReportModelScanCodeFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -379,6 +388,7 @@ export type ReportBatteryScanCodeFiltersNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     eventName: string;
   };
@@ -393,6 +403,7 @@ export type NewBatteryNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -415,6 +426,7 @@ export type NewBatteryCycleNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -430,6 +442,7 @@ export type NewModelNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -466,6 +479,7 @@ export type EventSequenceNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -492,6 +506,7 @@ export type LocationNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -504,6 +519,7 @@ export type NewModelFuelNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -517,6 +533,7 @@ export type NewModelPropellerNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -540,6 +557,7 @@ export type NewChecklistNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -561,6 +579,7 @@ export type NewChecklistActionNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;
@@ -661,6 +680,7 @@ export type SetupNavigatorParamList = {
   NotesEditor: {
     title?: string;
     headerButtonStyle?: TextStyle;
+    headerBackgroundColor?: string;
     text?: string;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extraData?: any;

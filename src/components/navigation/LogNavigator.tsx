@@ -6,6 +6,7 @@ import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
 import LogScreen from 'components/LogScreen';
+import NotesEditorScreen from 'components/NotesEditorScreen';
 import LocationNavigator from 'components/navigation/LocationNavigator';
 import { LogNavigatorParamList } from 'types/navigation';
 
@@ -61,6 +62,13 @@ const LogNavigator = () => {
       <LogStack.Screen
         name="EnumPicker"
         component={EnumPickerScreen}
+        options={{
+          title: '',
+        }}
+      />
+      <LogStack.Screen
+        name="NotesEditor"
+        component={NotesEditorScreen}
         options={{
           title: '',
         }}

@@ -31,10 +31,15 @@ import {
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { Formik, FormikProps } from 'formik';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { uuidv4 } from 'lib/utils';
-import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
+import { Check, CircleMinus, Plus, Trash2, X } from 'lucide-react-native';
 import { BSON } from 'realm';
 import {
   Checklist,
@@ -126,9 +131,12 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
   useEffect(() => {
     if (!formikRef.current?.values.actions.length) return;
-    navigation.setOptions({
-      headerRight: renderListEditButton,
-    });
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [renderListEditButton()],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listEditorState]);
 
@@ -199,35 +207,24 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
     const canSubmit = next.dirty && isValid;
     setFormikCanSubmit(canSubmit);
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        if (next.dirty || next.values.actions.length === 0) {
-          return (
-            <Button
-              title={'Save'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          next.dirty || next.values.actions.length === 0 ? (
+            <HeaderIconButton
+              Icon={Check}
               disabled={!canSubmit}
               onPress={save}
             />
-          );
-        } else if (next.values.actions.length > 0) {
-          return renderListEditButton();
-        }
-      },
-    });
+          ) : next.values.actions.length > 0 ? (
+            renderListEditButton()
+          ) : (
+            <></>
+          ),
+        ],
+      }),
+    );
   };
 
   useEffect(() => {
@@ -300,10 +297,8 @@ const ChecklistEditorScreen = ({ navigation, route }: Props) => {
 
   const renderListEditButton = () => {
     return (
-      <Button
-        title={listEditorState?.enabled ? 'Done' : 'Edit'}
-        titleStyle={theme.styles.buttonScreenHeaderTitle}
-        buttonStyle={theme.styles.buttonScreenHeader}
+      <HeaderButton
+        label={listEditorState?.enabled ? 'Done' : 'Edit'}
         onPress={() => listEditorRef.current?.onToggleEditMode()}
       />
     );

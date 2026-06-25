@@ -2,11 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { Text } from 'react-native';
 import ViewShot from 'react-native-view-shot';
 
-import { openShareSheet, useTheme } from '@react-native-hello/ui';
+import { openShareSheet } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
-import { Button } from 'components/atoms/Button';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import { HeaderButton, HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Share } from 'lucide-react-native';
 import { BSON } from 'realm';
@@ -21,8 +20,6 @@ export type Props = NativeStackScreenProps<
 const ReportScanCodesViewerScreen = ({ route, navigation }: Props) => {
   const { reportId } = route.params;
 
-  const theme = useTheme();
-
   const report = useObject(ScanCodesReport, new BSON.ObjectId(reportId));
 
   const viewShotRef = useRef<ViewShot>(null);
@@ -30,14 +27,7 @@ const ReportScanCodesViewerScreen = ({ route, navigation }: Props) => {
   useEffect(() => {
     navigation.setOptions(
       headerOptions({
-        left: [
-          <Button
-            title={'Close'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={navigation.goBack}
-          />,
-        ],
+        left: [<HeaderButton label={'Close'} onPress={navigation.goBack} />],
         right: [
           <HeaderIconButton
             Icon={Share}
@@ -51,11 +41,7 @@ const ReportScanCodesViewerScreen = ({ route, navigation }: Props) => {
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    theme.colors.screenHeaderButtonText,
-    theme.styles.buttonScreenHeader,
-    theme.styles.buttonScreenHeaderTitle,
-  ]);
+  }, []);
 
   const onCapture = (url: string) => {
     openShareSheet({

@@ -14,7 +14,6 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
   FormikWatcherState,
@@ -24,8 +23,10 @@ import {
   ListItemInputMethods,
   ListItemNotes,
 } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { Formik, FormikProps } from 'formik';
 import { Masks } from 'lib/inputMasks';
+import { Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { ModelPropeller } from 'realmdb/ModelPropeller';
@@ -201,31 +202,18 @@ const ModelPropellerEditorScreen = ({ navigation, route }: Props) => {
       });
     }
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   return (

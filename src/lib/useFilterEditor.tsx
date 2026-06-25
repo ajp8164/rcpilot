@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { useSetState } from '@react-native-hello/core';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useObject, useRealm } from '@realm/react';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { FilterState } from 'components/molecules/filters';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { Check } from 'lucide-react-native';
 import { BSON } from 'realm';
 import { Filter } from 'realmdb/Filter';
 import { eqObject } from 'realmdb/helpers';
@@ -47,7 +48,6 @@ export const useFilterEditor = <T extends AnyFilterValues>(
   const realm = useRealm();
   const navigation: NavigationProp<MultipleNavigatorParamList> =
     useNavigation();
-  const setScreenEditHeader = useScreenEditHeader();
 
   const filter = useObject(Filter, new BSON.ObjectId(filterId));
 
@@ -88,11 +88,17 @@ export const useFilterEditor = <T extends AnyFilterValues>(
       navigation.goBack();
     };
 
-    setScreenEditHeader({
-      enabled: canSubmit,
-      label: 'Save',
-      action: save,
-    });
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderIconButton
+            Icon={Check}
+            disabled={!canSubmit}
+            onPress={save}
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, customName, values, createSavedFilter]);
 

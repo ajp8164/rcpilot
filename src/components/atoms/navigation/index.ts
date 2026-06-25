@@ -1,2 +1,3 @@
+export * from './HeaderButton';
 export * from './HeaderIconButton';
-export * from './header';
+export * from './headerOptions';

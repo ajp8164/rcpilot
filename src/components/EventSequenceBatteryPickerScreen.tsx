@@ -2,13 +2,17 @@ import React, { useEffect } from 'react';
 import { View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import BatteryPickerView from 'components/views/BatteryPickerView';
 import { modelHasChecklists } from 'lib/model';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRight, X } from 'lucide-react-native';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
 import { Model } from 'realmdb/Model';
@@ -26,7 +30,6 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   const { cancelable } = route.params;
 
   const theme = useTheme();
-  const s = useStyles();
   const dispatch = useDispatch();
 
   const activeBatteries = useQuery(
@@ -43,50 +46,26 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
   );
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        if (cancelable) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={{
-                ...theme.styles.buttonScreenHeaderTitle,
-                ...s.buttonScreenHeaderTitleLeft,
-              }}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={cancelEvent}
-              // onPress={() =>
-              //   confirmAction(
-              //     {
-              //       label: `Do Not Log ${kind.name}`,
-              //       title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-              //     },
-              //     cancelEvent,
-              //   )
-              // }
-            />
-          );
-        }
-      },
-      headerRight: () => {
-        const hasChecklists =
-          model && modelHasChecklists(model, ChecklistType.PreEvent);
-        return (
-          <Button
-            title={hasChecklists ? 'Checklist' : 'Timer'}
-            titleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...s.buttonScreenHeaderTitleRight,
-            }}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            iconRight
-            icon={
-              <ChevronRight
+    const hasChecklists =
+      model && modelHasChecklists(model, ChecklistType.PreEvent);
+
+    navigation.setOptions(
+      headerOptions({
+        left: cancelable
+          ? [
+              <HeaderIconButton
+                Icon={X}
                 color={theme.colors.stickyWhite}
-                size={33}
-                style={{ right: -10 }}
-              />
-            }
+                onPress={cancelEvent}
+              />,
+            ]
+          : [],
+        right: [
+          <HeaderButton
+            label={hasChecklists ? 'Checklist' : 'Timer'}
+            Icon={ChevronRight}
+            iconRight
+            color={theme.colors.stickyWhite}
             onPress={() => {
               if (hasChecklists) {
                 navigation.navigate('EventSequenceChecklist', {
@@ -97,10 +76,10 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
                 navigation.navigate('EventSequenceTimer', {});
               }
             }}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -128,15 +107,5 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
     </View>
   );
 };
-
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  buttonScreenHeaderTitleLeft: {
-    color: theme.colors.stickyWhite,
-  },
-  buttonScreenHeaderTitleRight: {
-    right: 15,
-    color: theme.colors.stickyWhite,
-  },
-}));
 
 export default EventSequenceBatteryPickerScreen;

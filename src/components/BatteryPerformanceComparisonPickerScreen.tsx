@@ -10,9 +10,10 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { batterySummaryExtended } from 'lib/battery';
 import { groupItems } from 'lib/sectionList';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { Check } from 'lucide-react-native';
 import { Battery } from 'realmdb/Battery';
 import { BatteriesNavigatorParamList } from 'types/navigation';
 
@@ -26,12 +27,9 @@ export type Props = NativeStackScreenProps<
   'BatteryPerformanceComparisonPicker'
 >;
 
-const BatteryPerformanceComparisonPickerScreen = ({
-  navigation: _navigation,
-}: Props) => {
+const BatteryPerformanceComparisonPickerScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
-  const setScreenEditHeader = useScreenEditHeader();
 
   const batteries = useQuery<Battery>(Battery);
 
@@ -39,7 +37,12 @@ const BatteryPerformanceComparisonPickerScreen = ({
     const onDone = () => {
       return;
     };
-    setScreenEditHeader({ enabled: true, action: onDone });
+
+    navigation.setOptions(
+      headerOptions({
+        right: [<HeaderIconButton Icon={Check} onPress={onDone} />],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

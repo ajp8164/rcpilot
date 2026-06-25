@@ -40,9 +40,9 @@ import {
   useDevice,
   useTheme,
 } from '@react-native-hello/ui';
+import { useHeaderHeight } from '@react-navigation/elements';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
 import TimerFace from 'components/atoms/TimerFace';
 import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
@@ -69,6 +69,7 @@ import {
   ClockArrowUp,
   Fuel,
   TriangleAlert,
+  X,
 } from 'lucide-react-native';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
@@ -96,6 +97,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   const theme = useTheme();
   const s = useStyles();
   const device = useDevice();
+  const headerHeight = useHeaderHeight();
   const event = useEvent();
   const dispatch = useDispatch();
   const realm = useRealm();
@@ -136,25 +138,21 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
     navigation.setOptions(
       headerOptions({
         headerBackVisible: timer.state.mode === TimerMode.Initial,
-        left: [
-          cancelable && timer.state.mode === TimerMode.Initial ? (
-            <Button
-              title={'Cancel'}
-              titleStyle={{
-                ...theme.styles.buttonScreenHeaderTitle,
-                ...s.buttonScreenHeaderTitleLeft,
-              }}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={cancelEvent}
-            />
-          ) : (
-            <></>
-          ),
-        ],
+        left:
+          cancelable && timer.state.mode === TimerMode.Initial
+            ? [
+                <HeaderIconButton
+                  Icon={X}
+                  color={theme.colors.stickyWhite}
+                  onPress={cancelEvent}
+                />,
+              ]
+            : [],
         right: [
           timer.state.mode === TimerMode.Initial ? (
             <HeaderIconButton
               Icon={countdownTimerEnabled ? ClockArrowDown : ClockArrowUp}
+              color={theme.colors.stickyWhite}
               onPress={() => toggleCountdownTimer()}
             />
           ) : (
@@ -682,7 +680,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   }
 
   return (
-    <View style={s.view}>
+    <View style={[s.view, { paddingTop: headerHeight }]}>
       <View style={s.timer}>
         <TimerFace
           value={timer.state.value}
@@ -783,9 +781,6 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
 const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
   batteryIcon: {
     transform: [{ rotate: '-90deg' }],
-  },
-  buttonScreenHeaderTitleLeft: {
-    color: theme.colors.stickyWhite,
   },
   countdownSetupContainer: {
     position: 'absolute',

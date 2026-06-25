@@ -5,12 +5,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import {
-  InputAccessoryView,
-  LayoutChangeEvent,
-  Text,
-  View,
-} from 'react-native';
+import { LayoutChangeEvent, Text, View } from 'react-native';
 
 import {
   Input,
@@ -18,10 +13,13 @@ import {
   ThemeManager,
   useDevice,
 } from '@react-native-hello/ui';
+import { KeyboardAccessory } from 'components/atoms/KeyboardAccessory';
 import NavContext from 'components/navigation/NavContext';
 import { useKeyboardHeight } from 'lib/useKeyboardHeight';
 
 import { TextViewMethods, TextViewProps } from './types';
+
+const accessoryHeight = 20;
 
 type TextView = TextViewMethods;
 
@@ -56,13 +54,15 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 
   useEffect(() => {
     if (height) {
-      setVisibleHeight(height - kbHeight);
+      setVisibleHeight(height - kbHeight - accessoryHeight);
     } else {
       if (visibleHeight === 0 && kbHeight > 0) {
         if (isModal) {
-          setVisibleHeight(viewHeight.current - kbHeight);
+          setVisibleHeight(viewHeight.current - kbHeight - accessoryHeight);
         } else {
-          setVisibleHeight(viewHeight.current + tabBarHeight - kbHeight);
+          setVisibleHeight(
+            viewHeight.current + tabBarHeight - kbHeight - accessoryHeight,
+          );
         }
       }
     }
@@ -95,16 +95,15 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
 
   return (
     <View
-      style={[
-        s.view,
-        // View will initially open to 100% to get the layout height followed by sizing to the visible height.
-        { height: visibleHeight || '100%' },
-        containerStyle,
-      ]}
+      style={[s.view, containerStyle]}
       onLayout={(event: LayoutChangeEvent) => {
         viewHeight.current = event.nativeEvent.layout.height;
       }}>
-      <View>
+      <View
+        style={
+          // View will initially open to 100% to get the layout height followed by sizing to the visible height.
+          { height: visibleHeight || '100%' }
+        }>
         <Input
           ref={refInput}
           style={s.text}
@@ -112,25 +111,24 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
           inputStyle={s.input}
           multiline={true}
           placeholder={placeholder}
-          inputAccessoryViewID={'inputAccessoryViewID'}
           value={text || ''}
           onChangeText={t => {
             setText(t.slice(0, characterLimit));
             if (characterLimit) setCountRemaining(characterLimit - t.length);
             onTextChanged(t);
           }}
+          autoCorrect={false}
+          spellCheck={false}
         />
-        {characterLimit ? (
-          <InputAccessoryView nativeID={'inputAccessoryViewID'}>
-            <View style={s.remainingContainer}>
-              <Text
-                style={
-                  s.remaining
-                }>{`Characters left: ${countRemaining}`}</Text>
-            </View>
-          </InputAccessoryView>
-        ) : null}
       </View>
+      {characterLimit ? (
+        <KeyboardAccessory>
+          <View style={s.remainingContainer}>
+            <Text
+              style={s.remaining}>{`Characters left: ${countRemaining}`}</Text>
+          </View>
+        </KeyboardAccessory>
+      ) : null}
     </View>
   );
 });
@@ -151,7 +149,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
   remainingContainer: {
     justifyContent: 'center',
-    height: 20,
+    height: accessoryHeight,
     backgroundColor: theme.colors.wispGray,
   },
   text: {
@@ -159,7 +157,8 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     textAlignVertical: 'top',
   },
   view: {
-    backgroundColor: theme.colors.viewAltBackground,
+    flex: 1,
+    backgroundColor: theme.colors.wispGray, // Background behind kb, same color as accessory bar
   },
 }));
 

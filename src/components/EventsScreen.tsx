@@ -21,8 +21,11 @@ import {
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
   eventKind,
@@ -114,12 +117,9 @@ const EventsScreen = ({ navigation, route }: Props) => {
               ) : (
                 <></>
               ),
-              <Button
-                title={listEditorState?.enabled ? 'Done' : 'Edit'}
-                titleStyle={theme.styles.buttonScreenHeaderTitle}
-                buttonStyle={theme.styles.buttonScreenHeader}
+              <HeaderButton
+                label={listEditorState?.enabled ? 'Done' : 'Edit'}
                 disabled={!events.length}
-                disabledStyle={theme.styles.buttonScreenHeaderDisabled}
                 onPress={() => listEditorRef.current?.onToggleEditMode()}
               />,
             ],

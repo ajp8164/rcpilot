@@ -26,7 +26,6 @@ import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
   FormikWatcherState,
@@ -36,6 +35,7 @@ import {
   ListItemInputMethods,
   ListItemNotes,
 } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventRating } from 'components/molecules/EventRating';
 import { Formik, FormikProps } from 'formik';
@@ -49,6 +49,7 @@ import { Masks } from 'lib/inputMasks';
 import { modelHasPropeller, modelSummary, modelTypeIconProps } from 'lib/model';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import lodash from 'lodash';
+import { Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { BatteryCycle } from 'realmdb/BatteryCycle';
@@ -255,33 +256,20 @@ const EventEditorScreen = ({ navigation, route }: Props) => {
     const canSubmit = next.dirty && isValid;
     setFormikCanSubmit(canSubmit);
 
-    navigation.setOptions({
-      headerLeft: () => {
-        if (next?.dirty) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={cancel}
-            />
-          );
-        }
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: next.dirty
+          ? [<HeaderIconButton Icon={X} onPress={cancel} />]
+          : [],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   const onDateChange = (date?: Date) => {

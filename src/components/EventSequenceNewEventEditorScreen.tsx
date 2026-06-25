@@ -20,12 +20,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery, useRealm } from '@realm/react';
 import { BatteryCellValuesEditorResult } from 'components/BatteryCellValuesEditorScreen';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
-import { Button } from 'components/atoms/Button';
 import {
   FormikStateWatcher,
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemNotes } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventRating } from 'components/molecules/EventRating';
 import { Formik, FormikProps } from 'formik';
@@ -41,7 +41,7 @@ import { Masks, precisionFromMask } from 'lib/inputMasks';
 import { modelHasPropeller, modelSummary, modelTypeIconProps } from 'lib/model';
 import { eventKind, eventOutcomeIcons } from 'lib/modelEvent';
 import { useConfirmAction } from 'lib/useConfirmAction';
-import { BatteryLow } from 'lucide-react-native';
+import { BatteryLow, Check, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { toPlainObject } from 'realmdb';
@@ -382,16 +382,15 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
     const canSubmit = isValid;
     setFormikCanSubmit(canSubmit);
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...s.buttonScreenHeaderTitle,
-            }}
-            buttonStyle={theme.styles.buttonScreenHeader}
+    navigation.setOptions(
+      headerOptions({
+        headerTransparent: false,
+        headerStyle: { backgroundColor: theme.colors.brandPrimary },
+        headerShadowVisible: false,
+        left: [
+          <HeaderIconButton
+            Icon={X}
+            color={theme.colors.stickyWhite}
             onPress={() => {
               Keyboard.dismiss();
               confirmAction(
@@ -402,29 +401,18 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                 cancel,
               );
             }}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...s.buttonScreenHeaderTitle,
-            }}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...s.buttonScreenHeaderTitle,
-            }}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+          />,
+        ],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
+            color={theme.colors.stickyWhite}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   const onChangeModelFuel = (result: EnumPickerResult) => {
@@ -756,6 +744,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                     navigation.navigate('EnumPicker', {
                       title: `${kind.name} Outcome`,
                       headerBackTitle: `${kind.name}`,
+                      headerBackgroundColor: theme.colors.brandPrimary,
                       values: Object.values(EventOutcome),
                       icons: eventOutcomeIcons,
                       selected: values.outcome,
@@ -777,6 +766,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                           itemPlural: 'Propellers',
                           title: 'Default Propeller',
                           headerBackTitle: 'Model',
+                          headerBackgroundColor: theme.colors.brandPrimary,
                           footer:
                             'You can manage propellers through the Globals section in the Setup tab.',
                           values: modelPropellers.map(p => {
@@ -804,6 +794,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                           itemPlural: 'Fuel',
                           title: 'Fuel',
                           headerBackTitle: `${kind.name}`,
+                          headerBackgroundColor: theme.colors.brandPrimary,
                           footer:
                             'You can manage fuels through the Globals section in the Setup tab.',
                           values: modelFuels.map(f => {
@@ -854,6 +845,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                       title: 'Commander',
                       itemPlural: 'Commanders',
                       headerBackTitle: `${kind.name}`,
+                      headerBackgroundColor: theme.colors.brandPrimary,
                       footer:
                         'You can manage commanders through the Globals section in the Setup tab.',
                       values: commanders.map(c => {
@@ -875,6 +867,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                       title: 'Event Style',
                       itemPlural: 'Event Styles',
                       headerBackTitle: `${kind.name}`,
+                      headerBackgroundColor: theme.colors.brandPrimary,
                       footer:
                         'You can manage styles through the Globals section in the Setup tab.',
                       values: eventStyles.map(s => {
@@ -896,6 +889,7 @@ const EventSequenceNewEventEditorScreen = ({ navigation }: Props) => {
                       headerButtonStyle: {
                         color: theme.colors.stickyWhite,
                       },
+                      headerBackgroundColor: theme.colors.brandPrimary,
                       text: values.notes,
                       eventName: 'event-notes',
                     })
@@ -937,9 +931,6 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
   batteryTint: {
     borderLeftWidth: 8,
-  },
-  buttonScreenHeaderTitle: {
-    color: theme.colors.stickyWhite,
   },
   modelIcon: {
     transform: [{ rotate: '-45deg' }],

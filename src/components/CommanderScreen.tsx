@@ -39,6 +39,11 @@ import {
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput, ListItemInputMethods } from 'components/atoms/List';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Formik, FormikProps } from 'formik';
 import {
@@ -51,7 +56,7 @@ import {
   eventStyleSummaryCommander,
 } from 'lib/modelEvent';
 import lodash from 'lodash';
-import { CircleMinus, Plus, StarOff } from 'lucide-react-native';
+import { Check, CircleMinus, Plus, StarOff, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Commander } from 'realmdb/Commander';
@@ -129,10 +134,15 @@ const CommanderScreen = ({ navigation, route }: Props) => {
   const [listLayout, setListLayout] = useState<LayoutRectangle>();
 
   useEffect(() => {
-    navigation.setOptions({
-      title: commander?.name,
-      headerRight: renderListEditButton,
-    });
+    navigation.setOptions(
+      headerOptions({
+        title: commander?.name,
+        right:
+          commander?.favoriteModels && commander.favoriteModels.length > 0
+            ? [renderListEditButton() || <></>]
+            : [],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listEditorState, commander?.favoriteModels.length]);
 
@@ -214,49 +224,31 @@ const CommanderScreen = ({ navigation, route }: Props) => {
       });
     }
 
-    navigation.setOptions({
-      headerLeft: () => {
-        if (next.dirty) {
-          return (
-            <Button
-              title={'Cancel'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={cancel}
-            />
-          );
-        }
-      },
-      headerRight: () => {
-        if (next.dirty) {
-          return (
-            <Button
-              title={'Save'}
-              titleStyle={theme.styles.buttonScreenHeaderTitle}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-              disabledStyle={theme.styles.buttonScreenHeaderDisabled}
-              disabled={!canSubmit}
-              onPress={save}
-            />
-          );
-        } else if (
-          commander?.favoriteModels &&
-          commander.favoriteModels.length > 0
-        ) {
-          return renderListEditButton();
-        }
-      },
-    });
+    navigation.setOptions(
+      headerOptions({
+        left: next.dirty
+          ? [<HeaderIconButton Icon={X} onPress={cancel} />]
+          : [],
+        right: next.dirty
+          ? [
+              <HeaderIconButton
+                Icon={Check}
+                disabled={!canSubmit}
+                onPress={save}
+              />,
+            ]
+          : commander?.favoriteModels && commander.favoriteModels.length > 0
+            ? [renderListEditButton() || <></>]
+            : [],
+      }),
+    );
   };
 
   const renderListEditButton = () => {
     if (!commander?.favoriteModels.length) return null;
     return (
-      <Button
-        title={listEditorState?.enabled ? 'Done' : 'Edit'}
-        titleStyle={theme.styles.buttonScreenHeaderTitle}
-        buttonStyle={theme.styles.buttonScreenHeader}
+      <HeaderButton
+        label={listEditorState?.enabled ? 'Done' : 'Edit'}
         onPress={() => listEditorRef.current?.onToggleEditMode()}
       />
     );

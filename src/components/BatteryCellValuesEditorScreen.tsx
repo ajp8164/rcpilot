@@ -19,10 +19,11 @@ import {
 } from '@react-native-hello/ui';
 import { CompositeScreenProps } from '@react-navigation/core';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button } from 'components/atoms/Button';
 import { ListItemInput } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { precisionFromMask } from 'lib/inputMasks';
 import lodash from 'lodash';
+import { Check, X } from 'lucide-react-native';
 import {
   BatteriesNavigatorParamList,
   NewBatteryCycleNavigatorParamList,
@@ -107,41 +108,23 @@ const BatteryCellValuesEditorScreen = ({ navigation, route }: Props) => {
       navigation.goBack();
     };
 
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...config.headerButtonStyle,
-            }}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...config.headerButtonStyle,
-            }}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...config.headerButtonStyle,
-            }}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    const buttonColor = config.headerButtonStyle?.color as string | undefined;
+
+    navigation.setOptions(
+      headerOptions({
+        left: [
+          <HeaderIconButton Icon={X} color={buttonColor} onPress={cancel} />,
+        ],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
+            color={buttonColor}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
-
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cellValues, packValue]);
 

@@ -19,8 +19,11 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import {
   batteryCycleDescription,
@@ -81,11 +84,8 @@ const BatteryCyclesScreen = ({ navigation, route }: Props) => {
               })
             }
           />,
-          <Button
-            title={listEditorState?.enabled ? 'Done' : 'Edit'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+          <HeaderButton
+            label={listEditorState?.enabled ? 'Done' : 'Edit'}
             disabled={!batteryCycles.length}
             onPress={() => listEditorRef.current?.onToggleEditMode()}
           />,

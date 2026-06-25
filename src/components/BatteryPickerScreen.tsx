@@ -5,9 +5,10 @@ import { useEvent } from '@react-native-hello/core';
 import { useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import BatteryPickerView from 'components/views/BatteryPickerView';
-import { useScreenEditHeader } from 'lib/useScreenEditHeader';
+import { Check } from 'lucide-react-native';
 import { Battery } from 'realmdb/Battery';
 import { MultipleNavigatorParamList } from 'types/navigation';
 
@@ -42,7 +43,6 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
   } = route.params;
   const theme = useTheme();
   const event = useEvent();
-  const setScreenEditHeader = useScreenEditHeader();
 
   let pickerBatteries = useQuery(
     Battery,
@@ -67,10 +67,13 @@ const BatteryPickerScreen = ({ navigation, route }: Props) => {
       });
     };
 
-    setScreenEditHeader({ label: 'Done', action: onDone }, undefined, {
-      title,
-      headerBackTitle: backTitle,
-    });
+    navigation.setOptions(
+      headerOptions({
+        title,
+        headerBackTitle: backTitle,
+        right: [<HeaderIconButton Icon={Check} onPress={onDone} />],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

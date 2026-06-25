@@ -25,6 +25,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { EnumPickerResult } from 'components/EnumPickerScreen';
 import { Button } from 'components/atoms/Button';
+import { HeaderButton, headerOptions } from 'components/atoms/navigation';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { CircleMinus, Plus, Trash2 } from 'lucide-react-native';
 import { BSON } from 'realm';
@@ -107,21 +108,19 @@ const DatabaseReportingScreen = ({ navigation }: Props) => {
   }, [scReports]);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        if (!emReports.length && !scReports.length) {
-          return null;
-        }
-        return (
-          <Button
-            title={listEditorState?.enabled ? 'Done' : 'Edit'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={() => listEditorRef.current?.onToggleEditMode()}
-          />
-        );
-      },
-    });
+    navigation.setOptions(
+      headerOptions({
+        right:
+          emReports.length || scReports.length
+            ? [
+                <HeaderButton
+                  label={listEditorState?.enabled ? 'Done' : 'Edit'}
+                  onPress={() => listEditorRef.current?.onToggleEditMode()}
+                />,
+              ]
+            : [],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listEditorState?.enabled, emReports, scReports]);
 

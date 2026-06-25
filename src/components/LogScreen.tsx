@@ -27,8 +27,11 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { Button } from 'components/atoms/Button';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { modelTypeIconProps } from 'lib/model';
 import { eventSummary, useEventsFilter } from 'lib/modelEvent';
@@ -92,10 +95,8 @@ const LogScreen = ({ navigation }: Props) => {
     navigation.setOptions(
       headerOptions({
         left: [
-          <Button
-            title={'Today'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
+          <HeaderButton
+            label={'Today'}
             onPress={() => {
               const now = DateTime.now();
               calendarRef.current?.setDate(now.toISODate());
@@ -104,11 +105,8 @@ const LogScreen = ({ navigation }: Props) => {
           />,
         ],
         right: [
-          <HeaderIconButton
-            Icon={ChevronLeft}
-            onPress={() => subtractMonth()}
-          />,
-          <HeaderIconButton Icon={ChevronRight} onPress={() => addMonth()} />,
+          <HeaderIconButton Icon={ChevronLeft} onPress={subtractMonth} />,
+          <HeaderIconButton Icon={ChevronRight} onPress={addMonth} />,
         ],
       }),
     );

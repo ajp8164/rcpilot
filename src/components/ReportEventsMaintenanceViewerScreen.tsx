@@ -13,7 +13,11 @@ import ViewShot from 'react-native-view-shot';
 import { ThemeManager, openShareSheet, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject, useQuery } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { EventRating } from 'components/molecules/EventRating';
 import { rql } from 'components/molecules/filters';
@@ -113,37 +117,23 @@ const ReportEventsMaintenanceViewerScreen = ({ route, navigation }: Props) => {
   const viewShotRef = useRef<ViewShot>(null);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Close'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={navigation.goBack}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            icon={<Share color={theme.colors.screenHeaderButtonText} />}
-            buttonStyle={theme.styles.buttonScreenHeader}
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderButton label={'Close'} onPress={navigation.goBack} />],
+        right: [
+          <HeaderIconButton
+            Icon={Share}
             onPress={() =>
               viewShotRef.current?.capture
                 ? viewShotRef.current.capture()
                 : null
             }
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    theme.colors.screenHeaderButtonText,
-    theme.styles.buttonScreenHeader,
-    theme.styles.buttonScreenHeaderTitle,
-  ]);
+  }, []);
 
   // Create report rows from the database query.
   useEffect(() => {

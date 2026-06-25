@@ -53,6 +53,7 @@ import ReportEventFiltersNavigator from 'components/navigation/ReportEventFilter
 import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
 import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
+import { BackButton } from 'components/atoms/navigation/headerOptions';
 import { appConfig } from 'config';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -70,6 +71,15 @@ const SetupNavigator = () => {
         },
         headerTitleStyle: { color: theme.colors.screenHeaderTitle },
         headerTintColor: theme.colors.screenHeaderButtonText,
+        headerBackButtonDisplayMode: 'minimal',
+        headerBackVisible: false,
+        unstable_headerLeftItems: (props) => [
+          {
+            type: 'custom',
+            element: <BackButton color={props.tintColor} />,
+            hidesSharedBackground: true,
+          },
+        ],
       }}>
       <SetupStack.Screen
         name="Setup"
@@ -77,6 +87,7 @@ const SetupNavigator = () => {
         options={{
           title: 'Setup',
           headerLeft: () => null,
+          unstable_headerLeftItems: () => [],
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: {

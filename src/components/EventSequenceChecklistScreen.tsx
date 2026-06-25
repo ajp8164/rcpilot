@@ -16,15 +16,18 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useObject } from '@realm/react';
 import ActionBar from 'components/atoms/ActionBar';
-import { Button } from 'components/atoms/Button';
 import { ListItemCheckBoxInfo } from 'components/atoms/List';
-import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
+import {
+  HeaderButton,
+  HeaderIconButton,
+  headerOptions,
+} from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { eventKind } from 'lib/modelEvent';
 import { groupItems } from 'lib/sectionList';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { uuidv4 } from 'lib/utils';
-import { ChevronRight } from 'lucide-react-native';
+import { ChevronRight, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import {
@@ -88,37 +91,29 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions(
       headerOptions({
-        left: [
-          cancelable ? (
-            <Button
-              title={'Cancel'}
-              titleStyle={{
-                ...theme.styles.buttonScreenHeaderTitle,
-                ...s.buttonScreenHeaderTitleLeft,
-              }}
-              buttonStyle={theme.styles.buttonScreenHeader}
-              onPress={() =>
-                confirmAction(
-                  {
-                    label: `Do Not Log ${kind.name}`,
-                    title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
-                  },
-                  cancelEvent,
-                )
-              }
-            />
-          ) : (
-            <></>
-          ),
-        ],
+        left: cancelable
+          ? [
+              <HeaderIconButton
+                Icon={X}
+                color={theme.colors.stickyWhite}
+                onPress={() =>
+                  confirmAction(
+                    {
+                      label: `Do Not Log ${kind.name}`,
+                      title: `This action cannot be undone.\nAre you sure you don't want to log this ${kind.name}?`,
+                    },
+                    cancelEvent,
+                  )
+                }
+              />,
+            ]
+          : [],
         right: [
-          <HeaderIconButton
-            title={checklistType === ChecklistType.PreEvent ? 'Timer' : 'Log'}
-            titleStyle={{
-              ...theme.styles.buttonScreenHeaderTitle,
-              ...s.buttonScreenHeaderTitleRight,
-            }}
+          <HeaderButton
+            label={checklistType === ChecklistType.PreEvent ? 'Timer' : 'Log'}
             Icon={ChevronRight}
+            iconRight
+            color={theme.colors.stickyWhite}
             onPress={() => {
               if (checklistType === ChecklistType.PreEvent) {
                 navigation.navigate('EventSequenceTimer', {});
@@ -325,14 +320,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  buttonScreenHeaderTitleLeft: {
-    color: theme.colors.stickyWhite,
-  },
-  buttonScreenHeaderTitleRight: {
-    right: 10,
-    color: theme.colors.stickyWhite,
-  },
+const useStyles = ThemeManager.createStyleSheet(() => ({
   sectionList: {
     flex: 1,
     flexGrow: 1,

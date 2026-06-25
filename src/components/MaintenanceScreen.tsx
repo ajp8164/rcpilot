@@ -23,6 +23,7 @@ import {
   ListItemInput,
   ListItemNotes,
 } from 'components/atoms/List';
+import { HeaderButton, headerOptions } from 'components/atoms/navigation';
 import { modelCostStatistics } from 'lib/analytics';
 import { actionScheduleState } from 'lib/checklist';
 import { Masks } from 'lib/inputMasks';
@@ -88,20 +89,17 @@ const MaintenanceScreen = ({ navigation, route }: Props) => {
   const listEditorRef = useRef<ListEditorMethods>(null);
 
   useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => {
-        return (
-          <Button
-            title={'Perform'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
+    navigation.setOptions(
+      headerOptions({
+        right: [
+          <HeaderButton
+            label={'Perform'}
             disabled={selectedMaintenanceActions.length === 0}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
             onPress={onPerform}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedMaintenanceActions]);
 

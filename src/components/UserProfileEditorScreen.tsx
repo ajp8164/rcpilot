@@ -21,11 +21,12 @@ import {
   FormikWatcherState,
 } from 'components/atoms/FormikStateWatcher';
 import { ListItemInput } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { Avatar } from 'components/molecules/Avatar';
 import { updateDocument } from 'firebase/firestore';
 import { Formik, FormikProps } from 'formik';
 import { useUserProfile } from 'lib/auth';
-import { Camera } from 'lucide-react-native';
+import { Camera, Check, X } from 'lucide-react-native';
 import {
   MainNavigatorParamList,
   SetupNavigatorParamList,
@@ -168,39 +169,18 @@ const UserProfileEditorScreen = ({ navigation }: Props) => {
     const { next, isValid = false } = state;
     const canSubmit = next.dirty && isValid;
 
-    navigation.setOptions({
-      headerLeft: () => {
-        if (canSubmit) {
-          return (
-            <>
-              {canSubmit ? (
-                <Button
-                  title={'Cancel'}
-                  titleStyle={theme.styles.buttonScreenHeaderTitle}
-                  buttonStyle={theme.styles.buttonScreenHeader}
-                  onPress={cancel}
-                />
-              ) : null}
-            </>
-          );
-        } else {
-          return null;
-        }
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        left: canSubmit ? [<HeaderIconButton Icon={X} onPress={cancel} />] : [],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
-            onPress={() => save()}
-          />
-        );
-      },
-    });
+            onPress={save}
+          />,
+        ],
+      }),
+    );
   };
 
   const renderHeader = () => {

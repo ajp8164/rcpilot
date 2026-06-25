@@ -29,6 +29,7 @@ import {
   ListItemInputMethods,
   ListItemNotes,
 } from 'components/atoms/List';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { Formik, FormikProps } from 'formik';
 import {
   batteryCellConfigurationToString,
@@ -41,7 +42,7 @@ import {
 import { Masks } from 'lib/inputMasks';
 import { useConfirmAction } from 'lib/useConfirmAction';
 import { useCurrencyFormatter } from 'lib/useCurrencyFormatter';
-import { BatteryFull, BatteryLow, Circle } from 'lucide-react-native';
+import { BatteryFull, BatteryLow, Check, Circle, X } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { BSON } from 'realm';
 import { Battery } from 'realmdb/Battery';
@@ -293,32 +294,19 @@ const BatteryEditorScreen = ({ navigation, route }: Props) => {
     const canSubmit = next.dirty && isValid;
     setFormikCanSubmit(canSubmit);
 
-    navigation.setOptions({
-      title: battery ? 'Battery' : 'New Battery',
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={cancel}
-          />
-        );
-      },
-      headerRight: () => {
-        return (
-          <Button
-            title={'Save'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            disabledTitleStyle={theme.styles.buttonScreenHeaderTitle}
-            disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+    navigation.setOptions(
+      headerOptions({
+        title: battery ? 'Battery' : 'New Battery',
+        left: [<HeaderIconButton Icon={X} onPress={cancel} />],
+        right: [
+          <HeaderIconButton
+            Icon={Check}
             disabled={!canSubmit}
             onPress={save}
-          />
-        );
-      },
-    });
+          />,
+        ],
+      }),
+    );
   };
 
   return (

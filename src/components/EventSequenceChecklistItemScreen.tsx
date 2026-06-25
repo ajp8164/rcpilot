@@ -145,6 +145,7 @@ const EventSequenceChecklistItemScreen = ({ navigation, route }: Props) => {
                   headerButtonStyle: {
                     color: theme.colors.stickyWhite,
                   },
+                  headerBackgroundColor: theme.colors.brandPrimary,
                   eventName: 'event-checklist-item-notes',
                 })
               }

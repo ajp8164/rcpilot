@@ -10,8 +10,9 @@ import {
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
-import { Button } from 'components/atoms/Button';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { X } from 'lucide-react-native';
 import { ChecklistTemplate } from 'realmdb/ChecklistTemplate';
 import { ChecklistType } from 'types/checklist';
 import { ModelsNavigatorParamList } from 'types/navigation';
@@ -43,18 +44,11 @@ const ChecklistTemplatePickerScreen = ({ navigation, route }: Props) => {
   });
 
   useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => {
-        return (
-          <Button
-            title={'Cancel'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            onPress={navigation.goBack}
-          />
-        );
-      },
-    });
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={navigation.goBack} />],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

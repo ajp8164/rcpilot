@@ -87,6 +87,7 @@ const LogScreen = ({ navigation }: Props) => {
   const [current, setCurrent] = useState<ISODateString>(
     DateTime.now().toISODate(),
   );
+  const [calendarExpanded, setCalendarExpanded] = useState(false);
 
   const calendarRef = useRef<CalendarContextProviderImperativeMethods>(null);
   const sectionListRef = useRef<SectionList<Event>>(null);
@@ -105,13 +106,13 @@ const LogScreen = ({ navigation }: Props) => {
           />,
         ],
         right: [
-          <HeaderIconButton Icon={ChevronLeft} onPress={subtractMonth} />,
-          <HeaderIconButton Icon={ChevronRight} onPress={addMonth} />,
+          <HeaderIconButton Icon={ChevronLeft} onPress={subtractPeriod} />,
+          <HeaderIconButton Icon={ChevronRight} onPress={addPeriod} />,
         ],
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current, theme]);
+  }, [current, theme, calendarExpanded]);
 
   useEffect(() => {
     setGroupedEvents(groupEvents(modelEvents) as SectionListData<Event>[]);
@@ -133,21 +134,19 @@ const LogScreen = ({ navigation }: Props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupedEvents]);
 
-  const addMonth = () => {
-    const newDate = DateTime.fromISO(current).plus({ month: 1 }).toISODate();
+  const navigateCalendar = (duration: { week?: number; month?: number }) => {
+    const newDate = DateTime.fromISO(current).plus(duration).toISODate();
     if (newDate) {
       calendarRef.current?.setDate(newDate);
       setCurrent(newDate);
     }
   };
 
-  const subtractMonth = () => {
-    const newDate = DateTime.fromISO(current).minus({ month: 1 }).toISODate();
-    if (newDate) {
-      calendarRef.current?.setDate(newDate);
-      setCurrent(newDate);
-    }
-  };
+  const addPeriod = () =>
+    navigateCalendar(calendarExpanded ? { month: 1 } : { week: 1 });
+
+  const subtractPeriod = () =>
+    navigateCalendar(calendarExpanded ? { month: -1 } : { week: -1 });
 
   const groupEvents = (
     events: Realm.Results<Event>,
@@ -366,6 +365,7 @@ const LogScreen = ({ navigation }: Props) => {
           date={DateTime.now().toISODate()}
           headerStyle={{ display: 'none' }}
           customHeader={CalendarHeader}
+          onCalendarToggled={setCalendarExpanded}
           onDayPress={day => {
             const sectionTitle = DateTime.fromISO(day.dateString).toFormat(
               'MMMM dd, yyyy',

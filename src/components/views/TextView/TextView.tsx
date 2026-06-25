@@ -122,11 +122,9 @@ const TextView = React.forwardRef<TextView, TextViewProps>((props, ref) => {
         />
       </View>
       {characterLimit ? (
-        <KeyboardAccessory>
-          <View style={s.remainingContainer}>
-            <Text
-              style={s.remaining}>{`Characters left: ${countRemaining}`}</Text>
-          </View>
+        <KeyboardAccessory style={s.remainingContainer}>
+          <Text
+            style={s.remaining}>{`Characters left: ${countRemaining}`}</Text>
         </KeyboardAccessory>
       ) : null}
     </View>
@@ -144,7 +142,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   remaining: {
     ...theme.text.small,
     ...theme.styles.textDim,
-    textAlign: 'left',
+    textAlign: 'center',
     paddingLeft: 10,
   },
   remainingContainer: {

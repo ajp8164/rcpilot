@@ -9,6 +9,7 @@ import { RealmProvider } from '@realm/react';
 import AppMain from 'components/AppMain';
 import { appConfig } from 'config';
 import Realm from 'realm';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import Schema from 'realmdb/Schema';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor, store } from 'store';
@@ -39,7 +40,9 @@ const App = () => {
                   schemaVersion={parseInt(appConfig.databaseVersion, 10)}
                   // onMigration={migrateRealm}
                   deleteRealmIfMigrationNeeded={true}>
-                  <AppMain />
+                  <KeyboardProvider>
+                    <AppMain />
+                  </KeyboardProvider>
                 </RealmProvider>
               </PersistGate>
             </ReduxProvider>

@@ -18,6 +18,17 @@ export type SearchResult = LocationResult | ClubResult;
 
 const MAX_LOCATIONS = 5;
 
+// Resolve a string to a state abbreviation if it matches (abbreviation or full name).
+const resolveState = (value: string): string | undefined => {
+  const upper = value.toUpperCase();
+  if (US_STATES[upper]) return upper;
+  const lower = value.toLowerCase();
+  for (const [abbr, name] of Object.entries(US_STATES)) {
+    if (name.toLowerCase() === lower) return abbr;
+  }
+  return undefined;
+};
+
 export const useClubSearch = (
   clubs: Realm.Results<Club>,
   query: string,
@@ -26,39 +37,87 @@ export const useClubSearch = (
     const trimmed = query.trim();
     if (trimmed.length < 2) return [];
 
-    const q = trimmed.toLowerCase();
+    // Normalized query (no commas, lowercase) for general matching.
+    const q = trimmed.replace(/,/g, '').trim().toLowerCase();
 
-    // --- Location matches (max 5) ---
+    // Parse "city state" or "city, state" pattern.
+    const parts = trimmed
+      .replace(/,/g, ' ')
+      .split(/\s+/)
+      .filter(Boolean);
+
+    let hasCityState = false;
+    let cityPart: string | undefined;
+    let statePart: string | undefined;
+
+    if (parts.length >= 2) {
+      // Try last word as state.
+      const resolved = resolveState(parts[parts.length - 1]);
+      if (resolved) {
+        hasCityState = true;
+        cityPart = parts.slice(0, -1).join(' ').toLowerCase();
+        statePart = resolved;
+      }
+      // Try last two words as state (e.g. "New York").
+      if (!hasCityState && parts.length >= 3) {
+        const resolved2 = resolveState(parts.slice(-2).join(' '));
+        if (resolved2) {
+          hasCityState = true;
+          cityPart = parts.slice(0, -2).join(' ').toLowerCase();
+          statePart = resolved2;
+        }
+      }
+    }
+
+    // --- Location matches (max 5, alpha sorted) ---
     const locationSet = new Set<string>();
     const matchedStateAbbr: string[] = [];
 
-    // Match state abbreviation (exact, case-insensitive)
-    const upperQuery = trimmed.toUpperCase();
+    // Match state abbreviation (exact).
+    const upperQuery = trimmed.replace(/,/g, '').trim().toUpperCase();
     if (US_STATES[upperQuery]) {
       locationSet.add(`${US_STATES[upperQuery]}, USA`);
       matchedStateAbbr.push(upperQuery);
     }
 
-    // Match state full name (starts-with, case-insensitive)
+    // Match state full name (starts-with).
     for (const [abbr, name] of Object.entries(US_STATES)) {
-      if (name.toLowerCase().startsWith(q) && !matchedStateAbbr.includes(abbr)) {
+      if (
+        name.toLowerCase().startsWith(q) &&
+        !matchedStateAbbr.includes(abbr)
+      ) {
         locationSet.add(`${name}, USA`);
         matchedStateAbbr.push(abbr);
       }
     }
 
-    // Match cities starting with the query
+    // Include the resolved state from city+state parsing.
+    if (hasCityState && statePart && !matchedStateAbbr.includes(statePart)) {
+      matchedStateAbbr.push(statePart);
+    }
+
+    // Match cities (starts-with query or city+state combo).
     for (const club of clubs) {
       if (locationSet.size >= MAX_LOCATIONS) break;
       const city = club.address?.city || '';
-      if (city.toLowerCase().startsWith(q)) {
-        const state = club.address?.state || '';
+      const state = club.address?.state || '';
+
+      if (hasCityState && cityPart && statePart) {
+        if (city.toLowerCase().startsWith(cityPart) && state === statePart) {
+          locationSet.add(`${city}, ${state}`);
+        }
+      } else if (city.toLowerCase().startsWith(q)) {
         locationSet.add(`${city}, ${state}`);
       }
     }
 
-    // Include cities from matched states to fill up to MAX_LOCATIONS
-    if (matchedStateAbbr.length > 0 && locationSet.size < MAX_LOCATIONS) {
+    // Fill remaining location slots with cities from matched states
+    // (only when not doing a specific city+state search).
+    if (
+      !hasCityState &&
+      matchedStateAbbr.length > 0 &&
+      locationSet.size < MAX_LOCATIONS
+    ) {
       for (const club of clubs) {
         if (locationSet.size >= MAX_LOCATIONS) break;
         const state = club.address?.state || '';
@@ -76,17 +135,25 @@ export const useClubSearch = (
       .slice(0, MAX_LOCATIONS)
       .map(label => ({ type: 'location', label }));
 
-    // --- Club matches (all, partial/contains on name, city, or state) ---
+    // --- Club matches (all, alpha sorted) ---
     const clubResults: ClubResult[] = clubs
       .filter(club => {
         const name = club.name.toLowerCase();
         const city = (club.address?.city || '').toLowerCase();
-        const state = (club.address?.state || '').toLowerCase();
+        const state = club.address?.state || '';
+
+        if (hasCityState && cityPart && statePart) {
+          return (
+            (city.startsWith(cityPart) && state === statePart) ||
+            name.includes(q)
+          );
+        }
+
         return (
           name.includes(q) ||
           city.startsWith(q) ||
-          state === q ||
-          matchedStateAbbr.includes(club.address?.state || '')
+          state.toLowerCase() === q ||
+          matchedStateAbbr.includes(state)
         );
       })
       .sort((a, b) => a.name.localeCompare(b.name))

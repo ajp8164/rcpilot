@@ -16,6 +16,7 @@ import { Location } from 'realmdb';
 interface MapMarkerInterface {
   index: number;
   location: Location;
+  coordinate: { latitude: number; longitude: number };
   onMarkerDragEnd: (event: MarkerDragStartEndEvent, location: Location) => void;
   onPressCallout: () => void;
   onPressMarker: () => void;
@@ -25,6 +26,7 @@ export const MapMarker = forwardRef(
   (props: MapMarkerInterface, ref: React.Ref<RNMapMarker> | undefined) => {
     const { index, location, onMarkerDragEnd, onPressCallout, onPressMarker } =
       props;
+    // coordinate is passed for clustering detection (used by react-native-map-clustering).
     const theme = useTheme();
     const s = useStyles();
     const locationSummary = useLocationSummary(location);

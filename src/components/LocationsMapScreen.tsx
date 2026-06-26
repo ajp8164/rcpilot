@@ -1,5 +1,7 @@
+
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Alert, View } from 'react-native';
+import ClusteredMapView from 'react-native-map-clustering';
 import MapView, {
   Camera,
   Details,
@@ -151,7 +153,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       );
 
       if (marker) {
-        marker.mapMarker.showCallout();
+        marker.mapMarker?.showCallout();
       }
 
       const newLocationId = newLocation._id.toString();
@@ -420,7 +422,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
               if (!initialized.current) {
                 setTimeout(() => {
                   if (locationId === initialLocation?._id.toString()) {
-                    markersRef.current[index].mapMarker.showCallout();
+                    markersRef.current[index].mapMarker?.showCallout();
 
                     locationBottomSheetRef.current?.present(locationId);
                     requestAnimationFrame(() => {
@@ -436,6 +438,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           key={index}
           index={index}
           location={location}
+          coordinate={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          }}
           onMarkerDragEnd={onMarkerDragEnd}
           onPressMarker={() => {
             onPressMarker(location._id.toString());
@@ -450,7 +456,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   return (
     <>
-      <MapView
+      <ClusteredMapView
         ref={mapViewRef}
         style={s.map}
         showsUserLocation={true}
@@ -473,7 +479,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           addLocation(e.nativeEvent.coordinate as LocationCoords)
         }>
         {renderMapMarkers()}
-      </MapView>
+      </ClusteredMapView>
       {renderActionButtons()}
       <MapBottomSheet
         ref={mapBottomSheetRef}
@@ -489,7 +495,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
             // When the bottom sheet is dismissed by the user (close button) then
             // no other marker has been selected so we hide all the markers (includes
             // the marker for the location bottom sheet just closed).
-            markersRef.current.forEach(m => m.mapMarker.hideCallout());
+            markersRef.current.forEach(m => m.mapMarker?.hideCallout());
           }
         }}
         onPressNotes={(text, title) =>

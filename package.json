@@ -93,6 +93,7 @@
     "react-native-keyboard-controller": "^1.21.12",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-logs": "^5.0.1",
+    "react-native-map-clustering": "^4.0.0",
     "react-native-maps": "^1.26.18",
     "react-native-mask-input": "^1.2.3",
     "react-native-qrcode-svg": "^6.2.0",

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FlatList, ListRenderItem, Pressable, Text, View } from 'react-native';
 
 import {
@@ -10,25 +10,18 @@ import {
   useDevice,
   useTheme,
 } from '@react-native-hello/ui';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import SearchBar from 'components/atoms/SearchBar';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { getDeviceCountry } from 'lib/clubs/deviceCountry';
+import { COUNTRY_NAMES, countryFlag } from 'lib/clubs/countryNames';
 import { SearchResult, useClubSearch } from 'lib/clubs/useClubSearch';
 import { LocateFixed } from 'lucide-react-native';
 import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
-
-// Convert a 2-letter country code to its flag emoji.
-const countryFlag = (code: string): string => {
-  const base = 0x1f1e6 - 65;
-  return String.fromCodePoint(
-    base + code.charCodeAt(0),
-    base + code.charCodeAt(1),
-  );
-};
+import * as DropdownMenu from 'zeego/dropdown-menu';
 
 export type Props = NativeStackScreenProps<ClubsNavigatorParamList, 'Clubs'>;
 
@@ -40,8 +33,20 @@ const ClubsScreen = ({ navigation }: Props) => {
 
   const clubs = useQuery<Club>('Club');
   const [query, setQuery] = useState('');
-  // TODO: wire up country picker to call setSelectedCountry
   const [selectedCountry, setSelectedCountry] = useState(() => getDeviceCountry());
+
+  // Derive available countries from the club data.
+  const availableCountries = useMemo(() => {
+    const codes = new Set<string>();
+    for (const club of clubs) {
+      const country = club.address?.country;
+      if (country) codes.add(country);
+    }
+    return [...codes]
+      .map(code => ({ code, name: COUNTRY_NAMES[code] || code }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [clubs]);
+
   const results = useClubSearch(clubs, query, selectedCountry);
 
   const renderItem: ListRenderItem<SearchResult> = ({ item, index }) => {
@@ -122,13 +127,26 @@ const ClubsScreen = ({ navigation }: Props) => {
         },
       ]}>
       <View style={s.searchRow}>
-        <Pressable
-          style={s.countryChip}
-          onPress={() => {
-            // TODO: country picker
-          }}>
-          <Text style={s.countryFlag}>{countryFlag(selectedCountry)}</Text>
-        </Pressable>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Pressable style={s.countryChip}>
+              <Text style={s.countryFlag}>{countryFlag(selectedCountry)}</Text>
+            </Pressable>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            {availableCountries.map(country => (
+              <DropdownMenu.CheckboxItem
+                key={country.code}
+                value={selectedCountry === country.code ? 'on' : 'off'}
+                onValueChange={() => setSelectedCountry(country.code)}>
+                <DropdownMenu.ItemIndicator />
+                <DropdownMenu.ItemTitle>
+                  {`${countryFlag(country.code)} ${country.name}`}
+                </DropdownMenu.ItemTitle>
+              </DropdownMenu.CheckboxItem>
+            ))}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
         <SearchBar
           value={query}
           onChangeText={setQuery}

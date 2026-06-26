@@ -1,0 +1,68 @@
+[
+  {
+    "id": "intl-001",
+    "addedOn": "2026-06-25",
+    "modifiedOn": "2026-06-25",
+    "name": "London Model Flying Club",
+    "description": "One of the UK's oldest model flying clubs, operating since 1946.",
+    "websiteUrl": "https://www.londonmfc.co.uk/",
+    "keyFeatures": "Fixed-wing, helicopter, FPV, all-weather grass strip",
+    "address": {
+      "addressLine1": "123 Airfield Lane",
+      "city": "London",
+      "state": "",
+      "postalCode": "SW1A 1AA",
+      "country": "GB"
+    },
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "intl-002",
+    "addedOn": "2026-06-25",
+    "modifiedOn": "2026-06-25",
+    "name": "Sydney RC Flyers",
+    "description": "Australia's premier RC flying club with ocean views.",
+    "websiteUrl": "https://www.sydneyrcflyers.com.au/",
+    "keyFeatures": "Paved runway, ocean-side location, training programs",
+    "address": {
+      "addressLine1": "45 Coastal Drive",
+      "city": "Sydney",
+      "state": "NSW",
+      "postalCode": "2000",
+      "country": "AU"
+    },
+    "latitude": -33.8688,
+    "longitude": 151.2093,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  },
+  {
+    "id": "intl-003",
+    "addedOn": "2026-06-25",
+    "modifiedOn": "2026-06-25",
+    "name": "Toronto Model Aeroclub",
+    "description": "Canada's largest model aircraft club with year-round flying.",
+    "websiteUrl": "https://www.torontomodelaero.ca/",
+    "keyFeatures": "Indoor winter flying, outdoor summer field, FPV racing",
+    "address": {
+      "addressLine1": "789 Aviation Rd",
+      "city": "Toronto",
+      "state": "ON",
+      "postalCode": "M5V 2T6",
+      "country": "CA"
+    },
+    "latitude": 43.6532,
+    "longitude": -79.3832,
+    "amaChartered": false,
+    "driving": false,
+    "flying": true,
+    "boating": false
+  }
+]

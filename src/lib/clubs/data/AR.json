@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.themarcs.org/",
     "keyFeatures": "Airshows, training, FAA FRIA, club meetings",
     "address": {
-      "street": "Bishop Field",
+      "addressLine1": "Bishop Field",
       "city": "Little Rock",
       "state": "AR",
-      "zip": "72209"
+      "postalCode": "72209",
+      "country": "US"
     },
     "latitude": 34.7465,
     "longitude": -92.2896,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://www.fayetteville-ar.gov/278/Ozark-Flyers-Club",
     "keyFeatures": "Diverse aircraft types, community events, safety-focused",
     "address": {
-      "street": "Chanault Field",
+      "addressLine1": "Chanault Field",
       "city": "Fayetteville",
       "state": "AR",
-      "zip": "72701"
+      "postalCode": "72701",
+      "country": "US"
     },
     "latitude": 36.0626,
     "longitude": -94.1574,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.hsrcfc.com/",
     "keyFeatures": "Open membership, airfield maintenance, social activities",
     "address": {
-      "street": "461 Wildcat Road",
+      "addressLine1": "461 Wildcat Road",
       "city": "Hot Springs",
       "state": "AR",
-      "zip": "71901"
+      "postalCode": "71901",
+      "country": "US"
     },
     "latitude": 34.5016,
     "longitude": -93.0703,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.arskytigers.com/",
     "keyFeatures": "Weekend flying, FAA approved flying site, community engagement",
     "address": {
-      "street": "Arkansas River Trail Rd",
+      "addressLine1": "Arkansas River Trail Rd",
       "city": "Mayflower",
       "state": "AR",
-      "zip": "72106"
+      "postalCode": "72106",
+      "country": "US"
     },
     "latitude": 34.9816,
     "longitude": -92.4284,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.facebook.com/groups/1054610201228315/",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "US Hwy 71 & Treece Road",
+      "addressLine1": "US Hwy 71 & Treece Road",
       "city": "Barling",
       "state": "AR",
-      "zip": "72923"
+      "postalCode": "72923",
+      "country": "US"
     },
     "latitude": 35.3014,
     "longitude": -94.273,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.facebook.com/groups/177292750830/",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "Orbit Lane",
+      "addressLine1": "Orbit Lane",
       "city": "Russellville",
       "state": "AR",
-      "zip": "72802"
+      "postalCode": "72802",
+      "country": "US"
     },
     "latitude": 35.2803,
     "longitude": -93.1349,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/mena-radio-control-flying-club",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "Polk Rd",
+      "addressLine1": "Polk Rd",
       "city": "Mena",
       "state": "AR",
-      "zip": "71953"
+      "postalCode": "71953",
+      "country": "US"
     },
     "latitude": 34.5891,
     "longitude": -94.2352,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.conwayrc.com/",
     "keyFeatures": "Open membership, spectator-friendly, community events",
     "address": {
-      "street": "Conway, AR",
+      "addressLine1": "Conway, AR",
       "city": "Conway",
       "state": "AR",
-      "zip": "72032"
+      "postalCode": "72032",
+      "country": "US"
     },
     "latitude": 35.0887,
     "longitude": -92.4421,
@@ -176,10 +184,11 @@
     "websiteUrl": "",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "Rogers, AR",
+      "addressLine1": "Rogers, AR",
       "city": "Rogers",
       "state": "AR",
-      "zip": "72756"
+      "postalCode": "72756",
+      "country": "US"
     },
     "latitude": 36.332,
     "longitude": -94.1185,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "11036 High Sky Inn Rd, Hindsville",
+      "addressLine1": "11036 High Sky Inn Rd, Hindsville",
       "city": "Rogers",
       "state": "AR",
-      "zip": "72738"
+      "postalCode": "72738",
+      "country": "US"
     },
     "latitude": 36.2061,
     "longitude": -93.9397,
@@ -218,10 +228,11 @@
     "websiteUrl": "",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "Allen Field, 2500 block of Waukesha Road",
+      "addressLine1": "Allen Field, 2500 block of Waukesha Road",
       "city": "Siloam Springs",
       "state": "AR",
-      "zip": "72761"
+      "postalCode": "72761",
+      "country": "US"
     },
     "latitude": 36.1854,
     "longitude": -94.5393,

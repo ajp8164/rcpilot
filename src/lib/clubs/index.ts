@@ -48,6 +48,7 @@ import WA from './data/WA.json';
 import WI from './data/WI.json';
 import WV from './data/WV.json';
 import WY from './data/WY.json';
+import INTL from './data/INTL.json';
 
 export * from './useClubs';
 
@@ -102,4 +103,5 @@ export const allClubs = [
   WV,
   WI,
   WY,
+  INTL,
 ].flat();

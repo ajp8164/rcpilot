@@ -8,10 +8,11 @@
     "websiteUrl": "https://aerorcclub.com/",
     "keyFeatures": "Monthly meetings, community events, training programs",
     "address": {
-      "street": "2039 South Sheridan Road (M-13)",
+      "addressLine1": "2039 South Sheridan Road (M-13)",
       "city": "Lennon",
       "state": "MI",
-      "zip": "48449"
+      "postalCode": "48449",
+      "country": "US"
     },
     "latitude": 42.914,
     "longitude": -83.907,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://baycityflyers.org/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Bay City",
       "state": "MI",
-      "zip": "48706"
+      "postalCode": "48706",
+      "country": "US"
     },
     "latitude": 43.589,
     "longitude": -83.888,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.fraserflyingclub.com/a/r/szz/rc/home",
     "keyFeatures": "Diverse flying disciplines, community events, training programs",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Fraser",
       "state": "MI",
-      "zip": "48026"
+      "postalCode": "48026",
+      "country": "US"
     },
     "latitude": 42.586,
     "longitude": -82.939,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://rccd.org/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Detroit",
       "state": "MI",
-      "zip": "48226"
+      "postalCode": "48226",
+      "country": "US"
     },
     "latitude": 42.331,
     "longitude": -83.045,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.scioflyers.com/about.html",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Ann Arbor",
       "state": "MI",
-      "zip": "48103"
+      "postalCode": "48103",
+      "country": "US"
     },
     "latitude": 42.28,
     "longitude": -83.748,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.theampeer.org/midwest/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "7 Mile Road just east of Tower Road",
+      "addressLine1": "7 Mile Road just east of Tower Road",
       "city": "Salem Township",
       "state": "MI",
-      "zip": "48167"
+      "postalCode": "48167",
+      "country": "US"
     },
     "latitude": 42.338,
     "longitude": -83.531,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://www.signalseekers.org/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Not specified",
       "state": "MI",
-      "zip": "Not specified"
+      "postalCode": "Not specified",
+      "country": "US"
     },
     "latitude": 0,
     "longitude": 0,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://jacksonrc.com/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Jackson",
       "state": "MI",
-      "zip": "49201"
+      "postalCode": "49201",
+      "country": "US"
     },
     "latitude": 42.24,
     "longitude": -84.409,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://en.wikipedia.org/wiki/Grand_Haven_Memorial_Airpark",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "16446 Comstock St.",
+      "addressLine1": "16446 Comstock St.",
       "city": "Grand Haven",
       "state": "MI",
-      "zip": "49417"
+      "postalCode": "49417",
+      "country": "US"
     },
     "latitude": 43.067,
     "longitude": -86.226,
@@ -197,10 +206,11 @@
     "websiteUrl": "https://en.wikipedia.org/wiki/Baldwin_Municipal_Airport",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Baldwin",
       "state": "MI",
-      "zip": "49304"
+      "postalCode": "49304",
+      "country": "US"
     },
     "latitude": 43.955,
     "longitude": -85.849,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.romeoskyhawks.org/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Ray",
       "state": "MI",
-      "zip": "48096"
+      "postalCode": "48096",
+      "country": "US"
     },
     "latitude": 42.748,
     "longitude": -83.026,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/skymasters-rc-club-michigan",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Not specified",
       "state": "MI",
-      "zip": "Not specified"
+      "postalCode": "Not specified",
+      "country": "US"
     },
     "latitude": 0,
     "longitude": 0,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.rc-airplane-world.com/michigan-rc-airplane-clubs.html",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Not specified",
       "state": "MI",
-      "zip": "Not specified"
+      "postalCode": "Not specified",
+      "country": "US"
     },
     "latitude": 0,
     "longitude": 0,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://www.rc-airplane-world.com/michigan-rc-airplane-clubs.html",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Not specified",
       "state": "MI",
-      "zip": "Not specified"
+      "postalCode": "Not specified",
+      "country": "US"
     },
     "latitude": 0,
     "longitude": 0,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://www.rc-airplane-world.com/michigan-rc-airplane-clubs.html",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Not specified",
+      "addressLine1": "Not specified",
       "city": "Not specified",
       "state": "MI",
-      "zip": "Not specified"
+      "postalCode": "Not specified",
+      "country": "US"
     },
     "latitude": 0,
     "longitude": 0,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://aerorcclub.com/about.php",
     "keyFeatures": "Owned field, monthly meetings, community events",
     "address": {
-      "street": "2039 South Sheridan Road (M-13)",
+      "addressLine1": "2039 South Sheridan Road (M-13)",
       "city": "Lennon",
       "state": "MI",
-      "zip": "48449"
+      "postalCode": "48449",
+      "country": "US"
     },
     "latitude": 42.9825,
     "longitude": -83.8772,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://www.scioflyers.com/about.html",
     "keyFeatures": "Training programs, community events, safety-focused",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Ann Arbor",
       "state": "MI",
-      "zip": "48103"
+      "postalCode": "48103",
+      "country": "US"
     },
     "latitude": 42.2808,
     "longitude": -83.743,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://www.theampeer.org/midwest/",
     "keyFeatures": "Regular meetings, flying events, community involvement",
     "address": {
-      "street": "7 Mile Road just east of Tower Road",
+      "addressLine1": "7 Mile Road just east of Tower Road",
       "city": "Salem Township",
       "state": "MI",
-      "zip": "48168"
+      "postalCode": "48168",
+      "country": "US"
     },
     "latitude": 42.3625,
     "longitude": -83.5125,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.pmac-rc.com/",
     "keyFeatures": "Diverse membership, training programs, community events",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Clarkston",
       "state": "MI",
-      "zip": "48348"
+      "postalCode": "48348",
+      "country": "US"
     },
     "latitude": 42.7347,
     "longitude": -83.4195,
@@ -407,10 +426,11 @@
     "websiteUrl": "https://www.benziearearc.com/",
     "keyFeatures": "Indoor flying sessions, trainer aircraft, community events",
     "address": {
-      "street": "Thompsonville Airport, Lindy Rd",
+      "addressLine1": "Thompsonville Airport, Lindy Rd",
       "city": "Thompsonville",
       "state": "MI",
-      "zip": "49683"
+      "postalCode": "49683",
+      "country": "US"
     },
     "latitude": 44.5725,
     "longitude": -85.99,
@@ -428,10 +448,11 @@
     "websiteUrl": "https://www.signalseekers.org/",
     "keyFeatures": "Building workshops, instructional programs, flying events",
     "address": {
-      "street": "Between Merriman Rd. and Henry Ruff",
+      "addressLine1": "Between Merriman Rd. and Henry Ruff",
       "city": "Westland",
       "state": "MI",
-      "zip": "48185"
+      "postalCode": "48185",
+      "country": "US"
     },
     "latitude": 42.32,
     "longitude": -83.4,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://jacksonrc.com/",
     "keyFeatures": "Community engagement, training programs, flying events",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Jackson",
       "state": "MI",
-      "zip": "49201"
+      "postalCode": "49201",
+      "country": "US"
     },
     "latitude": 42.245,
     "longitude": -84.409,
@@ -470,10 +492,11 @@
     "websiteUrl": "https://wwswmi.org/wordpress/",
     "keyFeatures": "Dedicated flying field, community events, member support",
     "address": {
-      "street": "9974 Miller Road",
+      "addressLine1": "9974 Miller Road",
       "city": "Baroda",
       "state": "MI",
-      "zip": "49101"
+      "postalCode": "49101",
+      "country": "US"
     },
     "latitude": 41.95,
     "longitude": -86.563,
@@ -491,10 +514,11 @@
     "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
     "keyFeatures": "New pilot training, community events, flying sessions",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Allendale",
       "state": "MI",
-      "zip": "49401"
+      "postalCode": "49401",
+      "country": "US"
     },
     "latitude": 42.965,
     "longitude": -85.939,
@@ -512,10 +536,11 @@
     "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
     "keyFeatures": "Flying sessions, community events, training programs",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Saranac",
       "state": "MI",
-      "zip": "48881"
+      "postalCode": "48881",
+      "country": "US"
     },
     "latitude": 42.978,
     "longitude": -85.16,
@@ -533,10 +558,11 @@
     "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
     "keyFeatures": "Flying sessions, community events, training programs",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Grand Rapids",
       "state": "MI",
-      "zip": "49503"
+      "postalCode": "49503",
+      "country": "US"
     },
     "latitude": 42.9634,
     "longitude": -85.6681,
@@ -554,10 +580,11 @@
     "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
     "keyFeatures": "Flying sessions, community events, training programs",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Wyoming",
       "state": "MI",
-      "zip": "49509"
+      "postalCode": "49509",
+      "country": "US"
     },
     "latitude": 42.9135,
     "longitude": -85.7053,
@@ -575,10 +602,11 @@
     "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
     "keyFeatures": "Flying sessions, community events, training programs",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Grand Rapids",
       "state": "MI",
-      "zip": "49504"
+      "postalCode": "49504",
+      "country": "US"
     },
     "latitude": 42.9634,
     "longitude": -85.6681,
@@ -596,10 +624,11 @@
     "websiteUrl": "https://www.wmparkflyers.com/Clubs-Events_ep_45.html",
     "keyFeatures": "Flying sessions, community events, training programs",
     "address": {
-      "street": "Off the Chapman Road",
+      "addressLine1": "Off the Chapman Road",
       "city": "Alto",
       "state": "MI",
-      "zip": "49302"
+      "postalCode": "49302",
+      "country": "US"
     },
     "latitude": 42.876,
     "longitude": -85.5145,

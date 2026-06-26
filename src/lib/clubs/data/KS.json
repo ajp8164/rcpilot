@@ -8,10 +8,11 @@
     "websiteUrl": "https://kansascityrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Kansas City",
       "state": "KS",
-      "zip": "66106"
+      "postalCode": "66106",
+      "country": "US"
     },
     "latitude": 39.1141,
     "longitude": -94.6275,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Wichita Flying Field",
+      "addressLine1": "Wichita Flying Field",
       "city": "Wichita",
       "state": "KS",
-      "zip": "67205"
+      "postalCode": "67205",
+      "country": "US"
     },
     "latitude": 37.6872,
     "longitude": -97.3301,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://topekarcflyers.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Topeka",
       "state": "KS",
-      "zip": "66604"
+      "postalCode": "66604",
+      "country": "US"
     },
     "latitude": 39.0489,
     "longitude": -95.678,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Lawrence Flying Field",
+      "addressLine1": "Lawrence Flying Field",
       "city": "Lawrence",
       "state": "KS",
-      "zip": "66044"
+      "postalCode": "66044",
+      "country": "US"
     },
     "latitude": 38.9717,
     "longitude": -95.2353,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://manhattanrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Manhattan",
       "state": "KS",
-      "zip": "66502"
+      "postalCode": "66502",
+      "country": "US"
     },
     "latitude": 39.1836,
     "longitude": -96.5717,
@@ -113,10 +118,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Hutchinson Flying Field",
+      "addressLine1": "Hutchinson Flying Field",
       "city": "Hutchinson",
       "state": "KS",
-      "zip": "67501"
+      "postalCode": "67501",
+      "country": "US"
     },
     "latitude": 38.0608,
     "longitude": -97.9298,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://salinarcflyers.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Salina",
       "state": "KS",
-      "zip": "67401"
+      "postalCode": "67401",
+      "country": "US"
     },
     "latitude": 38.8403,
     "longitude": -97.6114,
@@ -155,10 +162,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Garden City Flying Field",
+      "addressLine1": "Garden City Flying Field",
       "city": "Garden City",
       "state": "KS",
-      "zip": "67846"
+      "postalCode": "67846",
+      "country": "US"
     },
     "latitude": 37.9717,
     "longitude": -100.872,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://dodgecityrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Dodge City",
       "state": "KS",
-      "zip": "67801"
+      "postalCode": "67801",
+      "country": "US"
     },
     "latitude": 37.7528,
     "longitude": -100.0171,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Leavenworth Flying Field",
+      "addressLine1": "Leavenworth Flying Field",
       "city": "Leavenworth",
       "state": "KS",
-      "zip": "66048"
+      "postalCode": "66048",
+      "country": "US"
     },
     "latitude": 39.3117,
     "longitude": -94.9225,
@@ -218,10 +228,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Hays Flying Field",
+      "addressLine1": "Hays Flying Field",
       "city": "Hays",
       "state": "KS",
-      "zip": "67601"
+      "postalCode": "67601",
+      "country": "US"
     },
     "latitude": 38.8794,
     "longitude": -99.326,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://greatbendrc.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Great Bend",
       "state": "KS",
-      "zip": "67530"
+      "postalCode": "67530",
+      "country": "US"
     },
     "latitude": 38.3647,
     "longitude": -98.7642,
@@ -260,10 +272,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Emporia Flying Field",
+      "addressLine1": "Emporia Flying Field",
       "city": "Emporia",
       "state": "KS",
-      "zip": "66801"
+      "postalCode": "66801",
+      "country": "US"
     },
     "latitude": 38.4039,
     "longitude": -96.1817,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://salinaelectricrc.org/",
     "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Salina",
       "state": "KS",
-      "zip": "67401"
+      "postalCode": "67401",
+      "country": "US"
     },
     "latitude": 38.8403,
     "longitude": -97.6114,
@@ -302,10 +316,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Garden City Flying Field",
+      "addressLine1": "Garden City Flying Field",
       "city": "Garden City",
       "state": "KS",
-      "zip": "67846"
+      "postalCode": "67846",
+      "country": "US"
     },
     "latitude": 37.9717,
     "longitude": -100.872,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://independencerc.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Independence",
       "state": "KS",
-      "zip": "67301"
+      "postalCode": "67301",
+      "country": "US"
     },
     "latitude": 37.225,
     "longitude": -95.7608,
@@ -344,10 +360,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Pratt Flying Field",
+      "addressLine1": "Pratt Flying Field",
       "city": "Pratt",
       "state": "KS",
-      "zip": "67124"
+      "postalCode": "67124",
+      "country": "US"
     },
     "latitude": 37.6358,
     "longitude": -98.7393,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://hutchinsonelectricrc.org/",
     "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Hutchinson",
       "state": "KS",
-      "zip": "67501"
+      "postalCode": "67501",
+      "country": "US"
     },
     "latitude": 38.0608,
     "longitude": -97.9298,
@@ -386,10 +404,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Lawrence Flying Field",
+      "addressLine1": "Lawrence Flying Field",
       "city": "Lawrence",
       "state": "KS",
-      "zip": "66044"
+      "postalCode": "66044",
+      "country": "US"
     },
     "latitude": 38.9717,
     "longitude": -95.2353,
@@ -407,10 +426,11 @@
     "websiteUrl": "https://olatherc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Olathe",
       "state": "KS",
-      "zip": "66061"
+      "postalCode": "66061",
+      "country": "US"
     },
     "latitude": 38.8814,
     "longitude": -94.8191,
@@ -428,10 +448,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Salina Flying Field",
+      "addressLine1": "Salina Flying Field",
       "city": "Salina",
       "state": "KS",
-      "zip": "67401"
+      "postalCode": "67401",
+      "country": "US"
     },
     "latitude": 38.8403,
     "longitude": -97.6114,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://haysrc.org/",
     "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Hays",
       "state": "KS",
-      "zip": "67601"
+      "postalCode": "67601",
+      "country": "US"
     },
     "latitude": 38.8794,
     "longitude": -99.326,
@@ -470,10 +492,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Great Bend Flying Field",
+      "addressLine1": "Great Bend Flying Field",
       "city": "Great Bend",
       "state": "KS",
-      "zip": "67530"
+      "postalCode": "67530",
+      "country": "US"
     },
     "latitude": 38.3647,
     "longitude": -98.7642,
@@ -491,10 +514,11 @@
     "websiteUrl": "https://dodgecityelectricrc.org/",
     "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Dodge City",
       "state": "KS",
-      "zip": "67801"
+      "postalCode": "67801",
+      "country": "US"
     },
     "latitude": 37.7528,
     "longitude": -100.0171,
@@ -512,10 +536,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Wichita Flying Field",
+      "addressLine1": "Wichita Flying Field",
       "city": "Wichita",
       "state": "KS",
-      "zip": "67205"
+      "postalCode": "67205",
+      "country": "US"
     },
     "latitude": 37.6872,
     "longitude": -97.3301,
@@ -533,10 +558,11 @@
     "websiteUrl": "https://emporiaelectricrc.org/",
     "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Emporia",
       "state": "KS",
-      "zip": "66801"
+      "postalCode": "66801",
+      "country": "US"
     },
     "latitude": 38.4039,
     "longitude": -96.1817,
@@ -554,10 +580,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Independence Flying Field",
+      "addressLine1": "Independence Flying Field",
       "city": "Independence",
       "state": "KS",
-      "zip": "67301"
+      "postalCode": "67301",
+      "country": "US"
     },
     "latitude": 37.225,
     "longitude": -95.7608,
@@ -575,10 +602,11 @@
     "websiteUrl": "https://olatherelectricrc.org/",
     "keyFeatures": "AMA chartered, private field, electric aircraft, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Olathe",
       "state": "KS",
-      "zip": "66061"
+      "postalCode": "66061",
+      "country": "US"
     },
     "latitude": 38.8814,
     "longitude": -94.8191,
@@ -596,10 +624,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Lawrence Flying Field",
+      "addressLine1": "Lawrence Flying Field",
       "city": "Lawrence",
       "state": "KS",
-      "zip": "66044"
+      "postalCode": "66044",
+      "country": "US"
     },
     "latitude": 38.9717,
     "longitude": -95.2353,
@@ -617,10 +646,11 @@
     "websiteUrl": "https://manhattanelectricrc.org/",
     "keyFeatures": "AMA chartered, electric aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Manhattan",
       "state": "KS",
-      "zip": "66502"
+      "postalCode": "66502",
+      "country": "US"
     },
     "latitude": 39.1836,
     "longitude": -96.5717,

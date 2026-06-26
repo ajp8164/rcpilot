@@ -8,10 +8,11 @@
     "websiteUrl": "https://millismodelaircraftclub.com/",
     "keyFeatures": "FAA FRIA field, Gold Leader Club, training programs",
     "address": {
-      "street": "Bill Martin Field, Charles River Reservation",
+      "addressLine1": "Bill Martin Field, Charles River Reservation",
       "city": "Medfield",
       "state": "MA",
-      "zip": "02052"
+      "postalCode": "02052",
+      "country": "US"
     },
     "latitude": 42.1956,
     "longitude": -71.2906,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://www.cmrcm.org/",
     "keyFeatures": "Introductory Pilot Program, monthly meetings, fun fly events",
     "address": {
-      "street": "Lyman Street",
+      "addressLine1": "Lyman Street",
       "city": "Northborough",
       "state": "MA",
-      "zip": "01532"
+      "postalCode": "01532",
+      "country": "US"
     },
     "latitude": 42.2926,
     "longitude": -71.6131,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.burlington-rc.com/",
     "keyFeatures": "Instructor-led training, bimonthly meetings, community outreach",
     "address": {
-      "street": "Adjacent to Blanchard Road",
+      "addressLine1": "Adjacent to Blanchard Road",
       "city": "Burlington",
       "state": "MA",
-      "zip": "01803"
+      "postalCode": "01803",
+      "country": "US"
     },
     "latitude": 42.505,
     "longitude": -71.1956,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.bristolcountyrc.org/",
     "keyFeatures": "Free training, monthly meetings, float fly events",
     "address": {
-      "street": "South Dartmouth",
+      "addressLine1": "South Dartmouth",
       "city": "South Dartmouth",
       "state": "MA",
-      "zip": "02748"
+      "postalCode": "02748",
+      "country": "US"
     },
     "latitude": 41.5528,
     "longitude": -70.9673,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.franklinrc.com/",
     "keyFeatures": "Dedicated flying field, training programs, community events",
     "address": {
-      "street": "110 Industrial Blvd",
+      "addressLine1": "110 Industrial Blvd",
       "city": "Turners Falls",
       "state": "MA",
-      "zip": "01376"
+      "postalCode": "01376",
+      "country": "US"
     },
     "latitude": 42.5894,
     "longitude": -72.5581,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.carcmc.org/",
     "keyFeatures": "Diverse aircraft disciplines, weekend flying, open membership",
     "address": {
-      "street": "11 Pond Hill Rd",
+      "addressLine1": "11 Pond Hill Rd",
       "city": "Amesbury",
       "state": "MA",
-      "zip": "01913"
+      "postalCode": "01913",
+      "country": "US"
     },
     "latitude": 42.8406,
     "longitude": -70.9444,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://charlesriverrc.org/",
     "keyFeatures": "Scale flight focus, educational programs, community events",
     "address": {
-      "street": "Various fields",
+      "addressLine1": "Various fields",
       "city": "Various",
       "state": "MA",
-      "zip": "Various"
+      "postalCode": "Various",
+      "country": "US"
     },
     "latitude": 42.3601,
     "longitude": -71.0589,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.discoverflyingrc.com/",
     "keyFeatures": "Veteran-focused events, public demonstrations, training programs",
     "address": {
-      "street": "Route 149",
+      "addressLine1": "Route 149",
       "city": "Marstons Mills",
       "state": "MA",
-      "zip": "02648"
+      "postalCode": "02648",
+      "country": "US"
     },
     "latitude": 41.6694,
     "longitude": -70.4528,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.otismodelaero.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "Crane Fish Wildlife Mgmt Area, Rt. 151",
+      "addressLine1": "Crane Fish Wildlife Mgmt Area, Rt. 151",
       "city": "East Falmouth",
       "state": "MA",
-      "zip": "02536"
+      "postalCode": "02536",
+      "country": "US"
     },
     "latitude": 41.6358,
     "longitude": -70.5511,
@@ -197,10 +206,11 @@
     "websiteUrl": "https://www.107thrcflyers.com/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Southbound Rt. 107 between Lynn and Revere",
+      "addressLine1": "Southbound Rt. 107 between Lynn and Revere",
       "city": "Saugus",
       "state": "MA",
-      "zip": "01906"
+      "postalCode": "01906",
+      "country": "US"
     },
     "latitude": 42.4653,
     "longitude": -71.0176,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.goddardrcflyers.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "1020 North Broadway",
+      "addressLine1": "1020 North Broadway",
       "city": "Haverhill",
       "state": "MA",
-      "zip": "01832"
+      "postalCode": "01832",
+      "country": "US"
     },
     "latitude": 42.7764,
     "longitude": -71.0773,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://www.mama.org/",
     "keyFeatures": "Community outreach, training programs, diverse aircraft activities",
     "address": {
-      "street": "Crescent Farm",
+      "addressLine1": "Crescent Farm",
       "city": "Bradford",
       "state": "MA",
-      "zip": "01835"
+      "postalCode": "01835",
+      "country": "US"
     },
     "latitude": 42.7486,
     "longitude": -71.1,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.nercclub.com/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Elmwood St.",
+      "addressLine1": "Elmwood St.",
       "city": "Salisbury",
       "state": "MA",
-      "zip": "01952"
+      "postalCode": "01952",
+      "country": "US"
     },
     "latitude": 42.85,
     "longitude": -70.8269,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://www.wachusettflyers.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "Sterling",
+      "addressLine1": "Sterling",
       "city": "Sterling",
       "state": "MA",
-      "zip": "01564"
+      "postalCode": "01564",
+      "country": "US"
     },
     "latitude": 42.435,
     "longitude": -71.71,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://www.bristolcountyrc.org/",
     "keyFeatures": "Free training, monthly meetings, float fly events",
     "address": {
-      "street": "South Dartmouth",
+      "addressLine1": "South Dartmouth",
       "city": "South Dartmouth",
       "state": "MA",
-      "zip": "02748"
+      "postalCode": "02748",
+      "country": "US"
     },
     "latitude": 41.5528,
     "longitude": -70.9673,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://www.franklinrc.com/",
     "keyFeatures": "Dedicated flying field, training programs, community events",
     "address": {
-      "street": "110 Industrial Blvd",
+      "addressLine1": "110 Industrial Blvd",
       "city": "Turners Falls",
       "state": "MA",
-      "zip": "01376"
+      "postalCode": "01376",
+      "country": "US"
     },
     "latitude": 42.5894,
     "longitude": -72.5581,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://www.carcmc.org/",
     "keyFeatures": "Diverse aircraft disciplines, weekend flying, open membership",
     "address": {
-      "street": "11 Pond Hill Rd",
+      "addressLine1": "11 Pond Hill Rd",
       "city": "Amesbury",
       "state": "MA",
-      "zip": "01913"
+      "postalCode": "01913",
+      "country": "US"
     },
     "latitude": 42.8406,
     "longitude": -70.9444,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://charlesriverrc.org/",
     "keyFeatures": "Scale flight focus, educational programs, community events",
     "address": {
-      "street": "Various fields",
+      "addressLine1": "Various fields",
       "city": "Various",
       "state": "MA",
-      "zip": "Various"
+      "postalCode": "Various",
+      "country": "US"
     },
     "latitude": 42.3601,
     "longitude": -71.0589,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.discoverflying.org/a/r/szz/rc/home",
     "keyFeatures": "Veteran-focused events, public demonstrations, training programs",
     "address": {
-      "street": "Route 149",
+      "addressLine1": "Route 149",
       "city": "Marstons Mills",
       "state": "MA",
-      "zip": "02648"
+      "postalCode": "02648",
+      "country": "US"
     },
     "latitude": 41.6694,
     "longitude": -70.4528,
@@ -407,10 +426,11 @@
     "websiteUrl": "https://www.otismodelaero.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "Crane Fish Wildlife Mgmt Area, Rt. 151",
+      "addressLine1": "Crane Fish Wildlife Mgmt Area, Rt. 151",
       "city": "East Falmouth",
       "state": "MA",
-      "zip": "02536"
+      "postalCode": "02536",
+      "country": "US"
     },
     "latitude": 41.6358,
     "longitude": -70.5511,
@@ -428,10 +448,11 @@
     "websiteUrl": "https://www.107thrcflyers.com/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Southbound Rt. 107 between Lynn and Revere",
+      "addressLine1": "Southbound Rt. 107 between Lynn and Revere",
       "city": "Saugus",
       "state": "MA",
-      "zip": "01906"
+      "postalCode": "01906",
+      "country": "US"
     },
     "latitude": 42.4653,
     "longitude": -71.0176,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://www.goddardrcflyers.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "1020 North Broadway",
+      "addressLine1": "1020 North Broadway",
       "city": "Haverhill",
       "state": "MA",
-      "zip": "01832"
+      "postalCode": "01832",
+      "country": "US"
     },
     "latitude": 42.7764,
     "longitude": -71.0773,
@@ -470,10 +492,11 @@
     "websiteUrl": "https://www.mama.org/",
     "keyFeatures": "Community outreach, training programs, diverse aircraft activities",
     "address": {
-      "street": "Crescent Farm",
+      "addressLine1": "Crescent Farm",
       "city": "Bradford",
       "state": "MA",
-      "zip": "01835"
+      "postalCode": "01835",
+      "country": "US"
     },
     "latitude": 42.7486,
     "longitude": -71.1,
@@ -491,10 +514,11 @@
     "websiteUrl": "https://www.nercclub.com/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Elmwood St.",
+      "addressLine1": "Elmwood St.",
       "city": "Salisbury",
       "state": "MA",
-      "zip": "01952"
+      "postalCode": "01952",
+      "country": "US"
     },
     "latitude": 42.85,
     "longitude": -70.8269,
@@ -512,10 +536,11 @@
     "websiteUrl": "https://www.wachusettflyers.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "Sterling",
+      "addressLine1": "Sterling",
       "city": "Sterling",
       "state": "MA",
-      "zip": "01564"
+      "postalCode": "01564",
+      "country": "US"
     },
     "latitude": 42.435,
     "longitude": -71.71,
@@ -533,10 +558,11 @@
     "websiteUrl": "https://www.quinapoxetmfc.org/",
     "keyFeatures": "Community outreach, training programs, diverse aircraft activities",
     "address": {
-      "street": "Off Rt. 110",
+      "addressLine1": "Off Rt. 110",
       "city": "Lancaster",
       "state": "MA",
-      "zip": "01523"
+      "postalCode": "01523",
+      "country": "US"
     },
     "latitude": 42.4472,
     "longitude": -71.7556,
@@ -554,10 +580,11 @@
     "websiteUrl": "https://www.495thrcs.org/",
     "keyFeatures": "Public demonstrations, training programs, community events",
     "address": {
-      "street": "Tewksbury and Groton",
+      "addressLine1": "Tewksbury and Groton",
       "city": "Tewksbury and Groton",
       "state": "MA",
-      "zip": "01876"
+      "postalCode": "01876",
+      "country": "US"
     },
     "latitude": 42.6195,
     "longitude": -71.1972,
@@ -575,10 +602,11 @@
     "websiteUrl": "https://www.bogshogrc.com/",
     "keyFeatures": "Diverse aircraft activities, community events, training programs",
     "address": {
-      "street": "85 High Street on the back bog",
+      "addressLine1": "85 High Street on the back bog",
       "city": "Rochester",
       "state": "MA",
-      "zip": "02770"
+      "postalCode": "02770",
+      "country": "US"
     },
     "latitude": 41.7419,
     "longitude": -70.9533,
@@ -596,10 +624,11 @@
     "websiteUrl": "https://www.southshorercc.org/",
     "keyFeatures": "Community outreach, training programs, diverse aircraft activities",
     "address": {
-      "street": "Bridgewater",
+      "addressLine1": "Bridgewater",
       "city": "Bridgewater",
       "state": "MA",
-      "zip": "02324"
+      "postalCode": "02324",
+      "country": "US"
     },
     "latitude": 41.9974,
     "longitude": -70.9784,

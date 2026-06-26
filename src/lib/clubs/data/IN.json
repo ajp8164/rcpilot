@@ -8,10 +8,11 @@
     "websiteUrl": "https://indianapolisrcclub.org/",
     "keyFeatures": "AMA chartered, large flying field, community events, flight training",
     "address": {
-      "street": "Private Field near I-70",
+      "addressLine1": "Private Field near I-70",
       "city": "Indianapolis",
       "state": "IN",
-      "zip": "46219"
+      "postalCode": "46219",
+      "country": "US"
     },
     "latitude": 39.7684,
     "longitude": -86.1581,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://www.fortwayne-rc.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, community events",
     "address": {
-      "street": "East State Blvd Field",
+      "addressLine1": "East State Blvd Field",
       "city": "Fort Wayne",
       "state": "IN",
-      "zip": "46815"
+      "postalCode": "46815",
+      "country": "US"
     },
     "latitude": 41.0793,
     "longitude": -85.1394,
@@ -50,10 +52,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, open membership, community events",
     "address": {
-      "street": "Evansville Flying Field",
+      "addressLine1": "Evansville Flying Field",
       "city": "Evansville",
       "state": "IN",
-      "zip": "47715"
+      "postalCode": "47715",
+      "country": "US"
     },
     "latitude": 37.9716,
     "longitude": -87.5711,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.bloomingtonrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private RC Field",
+      "addressLine1": "Private RC Field",
       "city": "Bloomington",
       "state": "IN",
-      "zip": "47408"
+      "postalCode": "47408",
+      "country": "US"
     },
     "latitude": 39.1653,
     "longitude": -86.5264,
@@ -92,10 +96,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "South Bend Flying Field",
+      "addressLine1": "South Bend Flying Field",
       "city": "South Bend",
       "state": "IN",
-      "zip": "46614"
+      "postalCode": "46614",
+      "country": "US"
     },
     "latitude": 41.6764,
     "longitude": -86.252,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.carmelrcclub.org/",
     "keyFeatures": "AMA chartered, dedicated field, flight training, community events",
     "address": {
-      "street": "Private Field, Carmel",
+      "addressLine1": "Private Field, Carmel",
       "city": "Carmel",
       "state": "IN",
-      "zip": "46032"
+      "postalCode": "46032",
+      "country": "US"
     },
     "latitude": 39.9784,
     "longitude": -86.118,
@@ -134,10 +140,11 @@
     "websiteUrl": "",
     "keyFeatures": "Community-focused, grass field, open membership",
     "address": {
-      "street": "Lafayette Flying Field",
+      "addressLine1": "Lafayette Flying Field",
       "city": "Lafayette",
       "state": "IN",
-      "zip": "47904"
+      "postalCode": "47904",
+      "country": "US"
     },
     "latitude": 40.4167,
     "longitude": -86.8753,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.columbusrc.org/",
     "keyFeatures": "AMA chartered, private field, events for all skill levels",
     "address": {
-      "street": "Private Field, Columbus",
+      "addressLine1": "Private Field, Columbus",
       "city": "Columbus",
       "state": "IN",
-      "zip": "47201"
+      "postalCode": "47201",
+      "country": "US"
     },
     "latitude": 39.2014,
     "longitude": -85.9214,
@@ -176,10 +184,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, beginner-friendly",
     "address": {
-      "street": "Richmond Flying Field",
+      "addressLine1": "Richmond Flying Field",
       "city": "Richmond",
       "state": "IN",
-      "zip": "47374"
+      "postalCode": "47374",
+      "country": "US"
     },
     "latitude": 39.8289,
     "longitude": -84.8902,
@@ -197,10 +206,11 @@
     "websiteUrl": "https://www.greenfieldrc.org/",
     "keyFeatures": "AMA chartered, private field, flight instruction, community events",
     "address": {
-      "street": "Private Field, Greenfield",
+      "addressLine1": "Private Field, Greenfield",
       "city": "Greenfield",
       "state": "IN",
-      "zip": "46140"
+      "postalCode": "46140",
+      "country": "US"
     },
     "latitude": 39.7917,
     "longitude": -85.7719,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://andersonrcflyers.org/",
     "keyFeatures": "AMA chartered, dedicated field, community events, flight training",
     "address": {
-      "street": "Anderson Flying Field",
+      "addressLine1": "Anderson Flying Field",
       "city": "Anderson",
       "state": "IN",
-      "zip": "46012"
+      "postalCode": "46012",
+      "country": "US"
     },
     "latitude": 40.1053,
     "longitude": -85.68,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Muncie Flying Field",
+      "addressLine1": "Muncie Flying Field",
       "city": "Muncie",
       "state": "IN",
-      "zip": "47306"
+      "postalCode": "47306",
+      "country": "US"
     },
     "latitude": 40.1934,
     "longitude": -85.3864,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.evansvilleflyers.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Evansville",
       "state": "IN",
-      "zip": "47715"
+      "postalCode": "47715",
+      "country": "US"
     },
     "latitude": 37.9716,
     "longitude": -87.5711,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://hammondrc.org/",
     "keyFeatures": "AMA chartered, dedicated field, events, flight instruction",
     "address": {
-      "street": "Hammond Field",
+      "addressLine1": "Hammond Field",
       "city": "Hammond",
       "state": "IN",
-      "zip": "46320"
+      "postalCode": "46320",
+      "country": "US"
     },
     "latitude": 41.5834,
     "longitude": -87.5,
@@ -302,10 +316,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft focus, community events",
     "address": {
-      "street": "Evansville Electric Field",
+      "addressLine1": "Evansville Electric Field",
       "city": "Evansville",
       "state": "IN",
-      "zip": "47715"
+      "postalCode": "47715",
+      "country": "US"
     },
     "latitude": 37.97,
     "longitude": -87.57,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://www.greenfieldrc.org/",
     "keyFeatures": "AMA chartered, private field, flight instruction, community events",
     "address": {
-      "street": "Private Field, Greenfield",
+      "addressLine1": "Private Field, Greenfield",
       "city": "Greenfield",
       "state": "IN",
-      "zip": "46140"
+      "postalCode": "46140",
+      "country": "US"
     },
     "latitude": 39.7917,
     "longitude": -85.7719,
@@ -344,10 +360,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Crawfordsville Flying Field",
+      "addressLine1": "Crawfordsville Flying Field",
       "city": "Crawfordsville",
       "state": "IN",
-      "zip": "47933"
+      "postalCode": "47933",
+      "country": "US"
     },
     "latitude": 40.0375,
     "longitude": -86.8969,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://www.plainfieldrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Plainfield",
       "state": "IN",
-      "zip": "46168"
+      "postalCode": "46168",
+      "country": "US"
     },
     "latitude": 39.6981,
     "longitude": -86.3386,
@@ -386,10 +404,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, beginner-friendly",
     "address": {
-      "street": "Elkhart Flying Field",
+      "addressLine1": "Elkhart Flying Field",
       "city": "Elkhart",
       "state": "IN",
-      "zip": "46516"
+      "postalCode": "46516",
+      "country": "US"
     },
     "latitude": 41.6814,
     "longitude": -85.9767,
@@ -407,10 +426,11 @@
     "websiteUrl": "https://www.lintonrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Linton",
       "state": "IN",
-      "zip": "47441"
+      "postalCode": "47441",
+      "country": "US"
     },
     "latitude": 39.0967,
     "longitude": -87.1422,
@@ -428,10 +448,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Huntingburg Flying Field",
+      "addressLine1": "Huntingburg Flying Field",
       "city": "Huntingburg",
       "state": "IN",
-      "zip": "47542"
+      "postalCode": "47542",
+      "country": "US"
     },
     "latitude": 38.275,
     "longitude": -86.9375,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://www.laporterc.org/",
     "keyFeatures": "AMA chartered, private field, events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "LaPorte",
       "state": "IN",
-      "zip": "46350"
+      "postalCode": "46350",
+      "country": "US"
     },
     "latitude": 41.6089,
     "longitude": -86.7227,
@@ -470,10 +492,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Frankfort Flying Field",
+      "addressLine1": "Frankfort Flying Field",
       "city": "Frankfort",
       "state": "IN",
-      "zip": "46041"
+      "postalCode": "46041",
+      "country": "US"
     },
     "latitude": 40.2792,
     "longitude": -86.5103,
@@ -491,10 +514,11 @@
     "websiteUrl": "https://www.newcastlerc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "New Castle",
       "state": "IN",
-      "zip": "47362"
+      "postalCode": "47362",
+      "country": "US"
     },
     "latitude": 39.9234,
     "longitude": -85.3653,
@@ -512,10 +536,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Kokomo Flying Field",
+      "addressLine1": "Kokomo Flying Field",
       "city": "Kokomo",
       "state": "IN",
-      "zip": "46901"
+      "postalCode": "46901",
+      "country": "US"
     },
     "latitude": 40.4864,
     "longitude": -86.1336,
@@ -533,10 +558,11 @@
     "websiteUrl": "https://www.crawfordsvillerc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Crawfordsville",
       "state": "IN",
-      "zip": "47933"
+      "postalCode": "47933",
+      "country": "US"
     },
     "latitude": 40.0375,
     "longitude": -86.8969,
@@ -554,10 +580,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Warsaw Flying Field",
+      "addressLine1": "Warsaw Flying Field",
       "city": "Warsaw",
       "state": "IN",
-      "zip": "46580"
+      "postalCode": "46580",
+      "country": "US"
     },
     "latitude": 41.2389,
     "longitude": -85.8536,
@@ -575,10 +602,11 @@
     "websiteUrl": "https://valparaisorcflyers.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Valparaiso",
       "state": "IN",
-      "zip": "46383"
+      "postalCode": "46383",
+      "country": "US"
     },
     "latitude": 41.4731,
     "longitude": -87.0611,
@@ -596,10 +624,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Michigan City Flying Field",
+      "addressLine1": "Michigan City Flying Field",
       "city": "Michigan City",
       "state": "IN",
-      "zip": "46360"
+      "postalCode": "46360",
+      "country": "US"
     },
     "latitude": 41.7081,
     "longitude": -86.8936,
@@ -617,10 +646,11 @@
     "websiteUrl": "https://www.monticellorc.org/",
     "keyFeatures": "AMA chartered, private field, flight instruction, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Monticello",
       "state": "IN",
-      "zip": "47960"
+      "postalCode": "47960",
+      "country": "US"
     },
     "latitude": 40.7595,
     "longitude": -86.7672,
@@ -638,10 +668,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, open membership, community events",
     "address": {
-      "street": "Carmel Flying Field",
+      "addressLine1": "Carmel Flying Field",
       "city": "Carmel",
       "state": "IN",
-      "zip": "46032"
+      "postalCode": "46032",
+      "country": "US"
     },
     "latitude": 39.9784,
     "longitude": -86.118,
@@ -659,10 +690,11 @@
     "websiteUrl": "https://www.evansvillewarbirds.org/",
     "keyFeatures": "AMA chartered, scale aircraft, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Evansville",
       "state": "IN",
-      "zip": "47715"
+      "postalCode": "47715",
+      "country": "US"
     },
     "latitude": 37.97,
     "longitude": -87.57,
@@ -680,10 +712,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Greenwood Flying Field",
+      "addressLine1": "Greenwood Flying Field",
       "city": "Greenwood",
       "state": "IN",
-      "zip": "46142"
+      "postalCode": "46142",
+      "country": "US"
     },
     "latitude": 39.6136,
     "longitude": -86.1067,
@@ -701,10 +734,11 @@
     "websiteUrl": "https://www.warsawflyers.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Warsaw",
       "state": "IN",
-      "zip": "46580"
+      "postalCode": "46580",
+      "country": "US"
     },
     "latitude": 41.2389,
     "longitude": -85.8536,
@@ -722,10 +756,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "New Albany Flying Field",
+      "addressLine1": "New Albany Flying Field",
       "city": "New Albany",
       "state": "IN",
-      "zip": "47150"
+      "postalCode": "47150",
+      "country": "US"
     },
     "latitude": 38.2856,
     "longitude": -85.8241,
@@ -743,10 +778,11 @@
     "websiteUrl": "https://www.logansportrc.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Logansport",
       "state": "IN",
-      "zip": "46947"
+      "postalCode": "46947",
+      "country": "US"
     },
     "latitude": 40.7548,
     "longitude": -86.3569,
@@ -764,10 +800,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, open membership, community events",
     "address": {
-      "street": "Kendallville Flying Field",
+      "addressLine1": "Kendallville Flying Field",
       "city": "Kendallville",
       "state": "IN",
-      "zip": "46755"
+      "postalCode": "46755",
+      "country": "US"
     },
     "latitude": 41.437,
     "longitude": -85.2586,
@@ -785,10 +822,11 @@
     "websiteUrl": "https://sites.google.com/site/galvestonrcfunflyers",
     "keyFeatures": "AMA chartered, community-focused, beginner-friendly",
     "address": {
-      "street": "Galveston Flying Field",
+      "addressLine1": "Galveston Flying Field",
       "city": "Galveston",
       "state": "IN",
-      "zip": "46932"
+      "postalCode": "46932",
+      "country": "US"
     },
     "latitude": 40.5365,
     "longitude": -86.3533,
@@ -806,10 +844,11 @@
     "websiteUrl": "http://mishawakapilotsclub.com",
     "keyFeatures": "Public airport, diverse aircraft, community events",
     "address": {
-      "street": "Mishawaka Pilots Club Airport",
+      "addressLine1": "Mishawaka Pilots Club Airport",
       "city": "Osceola",
       "state": "IN",
-      "zip": "46561"
+      "postalCode": "46561",
+      "country": "US"
     },
     "latitude": 41.6714,
     "longitude": -86.0736,
@@ -827,10 +866,11 @@
     "websiteUrl": "https://tuscarorarcflyingclub.com",
     "keyFeatures": "Family-friendly, community involvement, training programs",
     "address": {
-      "street": "Tuscarora Flying Field",
+      "addressLine1": "Tuscarora Flying Field",
       "city": "Indiana",
       "state": "IN",
-      "zip": "47852"
+      "postalCode": "47852",
+      "country": "US"
     },
     "latitude": 39.7562,
     "longitude": -87.3808,
@@ -848,10 +888,11 @@
     "websiteUrl": "https://en.wikipedia.org/wiki/Lee_Bottom_Airport",
     "keyFeatures": "Scenic location, community events, public-use airport",
     "address": {
-      "street": "Lee Bottom Airport",
+      "addressLine1": "Lee Bottom Airport",
       "city": "Hanover",
       "state": "IN",
-      "zip": "47243"
+      "postalCode": "47243",
+      "country": "US"
     },
     "latitude": 38.7075,
     "longitude": -85.4533,
@@ -869,10 +910,11 @@
     "websiteUrl": "https://fortwaynerc.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Fort Wayne",
       "state": "IN",
-      "zip": "46835"
+      "postalCode": "46835",
+      "country": "US"
     },
     "latitude": 41.0793,
     "longitude": -85.1394,
@@ -890,10 +932,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "South Bend Flying Field",
+      "addressLine1": "South Bend Flying Field",
       "city": "South Bend",
       "state": "IN",
-      "zip": "46619"
+      "postalCode": "46619",
+      "country": "US"
     },
     "latitude": 41.6764,
     "longitude": -86.252,
@@ -911,10 +954,11 @@
     "websiteUrl": "https://evansvillercc.org/",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Evansville",
       "state": "IN",
-      "zip": "47712"
+      "postalCode": "47712",
+      "country": "US"
     },
     "latitude": 37.9716,
     "longitude": -87.5711,
@@ -932,10 +976,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Seymour Flying Field",
+      "addressLine1": "Seymour Flying Field",
       "city": "Seymour",
       "state": "IN",
-      "zip": "47274"
+      "postalCode": "47274",
+      "country": "US"
     },
     "latitude": 38.959,
     "longitude": -85.8909,
@@ -953,10 +998,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Jeffersonville",
       "state": "IN",
-      "zip": "47130"
+      "postalCode": "47130",
+      "country": "US"
     },
     "latitude": 38.2772,
     "longitude": -85.7376,

@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.denverrcflyers.org/",
     "keyFeatures": "AMA chartered, open membership, pilot training, community events",
     "address": {
-      "street": "1001 E 62nd Ave",
+      "addressLine1": "1001 E 62nd Ave",
       "city": "Denver",
       "state": "CO",
-      "zip": "80216"
+      "postalCode": "80216",
+      "country": "US"
     },
     "latitude": 39.7863,
     "longitude": -104.922,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, multi-type aircraft, beginner-friendly, social events",
     "address": {
-      "street": "1100 Aviation Blvd",
+      "addressLine1": "1100 Aviation Blvd",
       "city": "Colorado Springs",
       "state": "CO",
-      "zip": "80916"
+      "postalCode": "80916",
+      "country": "US"
     },
     "latitude": 38.8339,
     "longitude": -104.8214,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.pikespeakrc.com/",
     "keyFeatures": "AMA chartered, open membership, events for all skill levels, scenic location",
     "address": {
-      "street": "Mount Herman Field",
+      "addressLine1": "Mount Herman Field",
       "city": "Colorado Springs",
       "state": "CO",
-      "zip": "80923"
+      "postalCode": "80923",
+      "country": "US"
     },
     "latitude": 38.905,
     "longitude": -104.777,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Beginner-friendly, small community, grass airfield, multi-type aircraft",
     "address": {
-      "street": "Foothills Flying Field",
+      "addressLine1": "Foothills Flying Field",
       "city": "Golden",
       "state": "CO",
-      "zip": "80401"
+      "postalCode": "80401",
+      "country": "US"
     },
     "latitude": 39.7555,
     "longitude": -105.2211,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.cssc.org/",
     "keyFeatures": "Glider focus, AMA chartered, pilot instruction, competitions",
     "address": {
-      "street": "Swope Field",
+      "addressLine1": "Swope Field",
       "city": "Colorado Springs",
       "state": "CO",
-      "zip": "80904"
+      "postalCode": "80904",
+      "country": "US"
     },
     "latitude": 38.81,
     "longitude": -104.783,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.loveairrc.org/",
     "keyFeatures": "Gold Leader Club, FAA FRIA site, Buddy Box training, community events",
     "address": {
-      "street": "12760 Hwy 14",
+      "addressLine1": "12760 Hwy 14",
       "city": "Ault",
       "state": "CO",
-      "zip": "80610"
+      "postalCode": "80610",
+      "country": "US"
     },
     "latitude": 40.5825,
     "longitude": -104.6972,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://www.modeleers.org/",
     "keyFeatures": "Established 1954, large field, diverse aircraft types, flight instruction",
     "address": {
-      "street": "Near Wellington, CO",
+      "addressLine1": "Near Wellington, CO",
       "city": "Wellington",
       "state": "CO",
-      "zip": "80549"
+      "postalCode": "80549",
+      "country": "US"
     },
     "latitude": 40.6889,
     "longitude": -105.0686,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.denverrceagles.org/",
     "keyFeatures": "Gold Leader Club, paved runways, rotorcraft facilities, public events",
     "address": {
-      "street": "Suhaka Field, Cherry Creek State Park",
+      "addressLine1": "Suhaka Field, Cherry Creek State Park",
       "city": "Denver",
       "state": "CO",
-      "zip": "80246"
+      "postalCode": "80246",
+      "country": "US"
     },
     "latitude": 39.5761,
     "longitude": -104.8764,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/pikes-peak-rc-club",
     "keyFeatures": "24/7 access, diverse flying activities, open membership",
     "address": {
-      "street": "17425 Judge Orr Road",
+      "addressLine1": "17425 Judge Orr Road",
       "city": "Peyton",
       "state": "CO",
-      "zip": "80831"
+      "postalCode": "80831",
+      "country": "US"
     },
     "latitude": 38.9577,
     "longitude": -104.4989,
@@ -197,10 +206,11 @@
     "websiteUrl": "https://jeffcoaeromodlers.com/",
     "keyFeatures": "Gold Leader Club, two paved runways, diverse flying disciplines, flight instruction",
     "address": {
-      "street": "Chatfield State Park Aerodrome",
+      "addressLine1": "Chatfield State Park Aerodrome",
       "city": "Littleton",
       "state": "CO",
-      "zip": "80128"
+      "postalCode": "80128",
+      "country": "US"
     },
     "latitude": 39.565,
     "longitude": -105.073,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.skycorralrcclub.com/",
     "keyFeatures": "Two large runways, event hosting, diverse flying activities",
     "address": {
-      "street": "Col. Brad Dolliver Field",
+      "addressLine1": "Col. Brad Dolliver Field",
       "city": "Pueblo",
       "state": "CO",
-      "zip": "81001"
+      "postalCode": "81001",
+      "country": "US"
     },
     "latitude": 38.2544,
     "longitude": -104.6097,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://www.boulderaero.org/",
     "keyFeatures": "Diverse flying activities, community events, open membership",
     "address": {
-      "street": "Boulder, CO",
+      "addressLine1": "Boulder, CO",
       "city": "Boulder",
       "state": "CO",
-      "zip": "80301"
+      "postalCode": "80301",
+      "country": "US"
     },
     "latitude": 40.015,
     "longitude": -105.2705,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.milehirc.com/",
     "keyFeatures": "Gold Leader Club, diverse flying activities, community events",
     "address": {
-      "street": "52599-53699 County Road 30",
+      "addressLine1": "52599-53699 County Road 30",
       "city": "Strasburg",
       "state": "CO",
-      "zip": "80136"
+      "postalCode": "80136",
+      "country": "US"
     },
     "latitude": 39.7497,
     "longitude": -104.3583,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://www.themmmclub.com/",
     "keyFeatures": "Free flight specialization, open membership, community events",
     "address": {
-      "street": "Aurora, CO",
+      "addressLine1": "Aurora, CO",
       "city": "Aurora",
       "state": "CO",
-      "zip": "80010"
+      "postalCode": "80010",
+      "country": "US"
     },
     "latitude": 39.7392,
     "longitude": -104.9903,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://www.gjmodeleers.com/",
     "keyFeatures": "Regional service area, open membership, community events",
     "address": {
-      "street": "3320 Whitewater Hill",
+      "addressLine1": "3320 Whitewater Hill",
       "city": "Grand Junction",
       "state": "CO",
-      "zip": "81504"
+      "postalCode": "81504",
+      "country": "US"
     },
     "latitude": 39.0639,
     "longitude": -108.55,

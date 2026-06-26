@@ -91,11 +91,11 @@ export const ClubView = ({ clubId, hideName }: ClubViewInterface) => {
           />
         ) : null}
       </View>
-      <Text style={theme.text.normal}>{club?.address.street}</Text>
+      <Text style={theme.text.normal}>{club?.address.addressLine1}</Text>
       <Text
         style={
           theme.text.normal
-        }>{`${club?.address.city}, ${club?.address.state} ${club?.address.zip}`}</Text>
+        }>{`${club?.address.city}, ${club?.address.state} ${club?.address.postalCode}`}</Text>
       <Divider />
       <Text style={theme.text.normal}>{club?.description}</Text>
       <Divider />

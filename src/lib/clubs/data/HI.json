@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.aloharcclub.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, flight training, community events",
     "address": {
-      "street": "123 Diamond Head Rd",
+      "addressLine1": "123 Diamond Head Rd",
       "city": "Honolulu",
       "state": "HI",
-      "zip": "96815"
+      "postalCode": "96815",
+      "country": "US"
     },
     "latitude": 21.3069,
     "longitude": -157.8583,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Hilo Flying Field",
+      "addressLine1": "Hilo Flying Field",
       "city": "Hilo",
       "state": "HI",
-      "zip": "96720"
+      "postalCode": "96720",
+      "country": "US"
     },
     "latitude": 19.7297,
     "longitude": -155.09,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.mauircclub.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, training programs, community events",
     "address": {
-      "street": "200 RC Lane",
+      "addressLine1": "200 RC Lane",
       "city": "Kahului",
       "state": "HI",
-      "zip": "96732"
+      "postalCode": "96732",
+      "country": "US"
     },
     "latitude": 20.8947,
     "longitude": -156.496,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Lihue Flying Field",
+      "addressLine1": "Lihue Flying Field",
       "city": "Lihue",
       "state": "HI",
-      "zip": "96766"
+      "postalCode": "96766",
+      "country": "US"
     },
     "latitude": 21.9833,
     "longitude": -159.3667,
@@ -92,10 +96,11 @@
     "websiteUrl": "",
     "keyFeatures": "Glider and sailplane focus, beginner-friendly, small grass airfield, community events",
     "address": {
-      "street": "Honolulu Glider Field",
+      "addressLine1": "Honolulu Glider Field",
       "city": "Honolulu",
       "state": "HI",
-      "zip": "96815"
+      "postalCode": "96815",
+      "country": "US"
     },
     "latitude": 21.3069,
     "longitude": -157.8583,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.bigislandrcsoaring.org/",
     "keyFeatures": "AMA chartered, glider focus, flight training, community events",
     "address": {
-      "street": "Hilo Soaring Field",
+      "addressLine1": "Hilo Soaring Field",
       "city": "Hilo",
       "state": "HI",
-      "zip": "96720"
+      "postalCode": "96720",
+      "country": "US"
     },
     "latitude": 19.7297,
     "longitude": -155.09,
@@ -134,10 +140,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Lahaina Flying Field",
+      "addressLine1": "Lahaina Flying Field",
       "city": "Lahaina",
       "state": "HI",
-      "zip": "96761"
+      "postalCode": "96761",
+      "country": "US"
     },
     "latitude": 20.8783,
     "longitude": -156.6823,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.kauaircsoaring.org/",
     "keyFeatures": "AMA chartered, glider and sailplane focus, community events, training programs",
     "address": {
-      "street": "Lihue Soaring Field",
+      "addressLine1": "Lihue Soaring Field",
       "city": "Lihue",
       "state": "HI",
-      "zip": "96766"
+      "postalCode": "96766",
+      "country": "US"
     },
     "latitude": 21.9833,
     "longitude": -159.3667,

@@ -8,10 +8,11 @@
     "websiteUrl": "https://jolietrc.com/",
     "keyFeatures": "AMA chartered, private field, diverse aircraft types, community events",
     "address": {
-      "street": "Private Property",
+      "addressLine1": "Private Property",
       "city": "Joliet",
       "state": "IL",
-      "zip": "60436"
+      "postalCode": "60436",
+      "country": "US"
     },
     "latitude": 41.525,
     "longitude": -88.081,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://washingtonrcflyers.org/",
     "keyFeatures": "AMA registered, flight training, community events, open membership",
     "address": {
-      "street": "Washington area",
+      "addressLine1": "Washington area",
       "city": "Washington",
       "state": "IL",
-      "zip": "61571"
+      "postalCode": "61571",
+      "country": "US"
     },
     "latitude": 40.6764,
     "longitude": -89.4132,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.streatorrcflyers.com/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "1248 E 15th Rd",
+      "addressLine1": "1248 E 15th Rd",
       "city": "Streator",
       "state": "IL",
-      "zip": "61364"
+      "postalCode": "61364",
+      "country": "US"
     },
     "latitude": 41.1214,
     "longitude": -88.8392,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://lakecountyrcclub.org/",
     "keyFeatures": "AMA chartered, flight training, community events",
     "address": {
-      "street": "Russell Road",
+      "addressLine1": "Russell Road",
       "city": "Lindenhurst",
       "state": "IL",
-      "zip": "60046"
+      "postalCode": "60046",
+      "country": "US"
     },
     "latitude": 42.3967,
     "longitude": -88.0714,
@@ -92,10 +96,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, flight training, community events",
     "address": {
-      "street": "Holmes Field",
+      "addressLine1": "Holmes Field",
       "city": "Springfield",
       "state": "IL",
-      "zip": "62701"
+      "postalCode": "62701",
+      "country": "US"
     },
     "latitude": 39.7817,
     "longitude": -89.6501,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.palosrc.com/",
     "keyFeatures": "AMA chartered, dedicated flying field, open membership",
     "address": {
-      "street": "107th and LaGrange Road",
+      "addressLine1": "107th and LaGrange Road",
       "city": "Palos Park",
       "state": "IL",
-      "zip": "60464"
+      "postalCode": "60464",
+      "country": "US"
     },
     "latitude": 41.69,
     "longitude": -87.7974,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://skylarksrc.wixsite.com/skylarksrc",
     "keyFeatures": "AMA chartered, private flying field, learn-to-fly program",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Champaign",
       "state": "IL",
-      "zip": "61820"
+      "postalCode": "61820",
+      "country": "US"
     },
     "latitude": 40.1164,
     "longitude": -88.2434,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://aurorabarnstormers.org/",
     "keyFeatures": "AMA chartered, groomed flying site, community events",
     "address": {
-      "street": "6S209 Hankes Road",
+      "addressLine1": "6S209 Hankes Road",
       "city": "Aurora",
       "state": "IL",
-      "zip": "60506"
+      "postalCode": "60506",
+      "country": "US"
     },
     "latitude": 41.7813,
     "longitude": -88.3957,
@@ -176,10 +184,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, open membership",
     "address": {
-      "street": "321 Flight Path",
+      "addressLine1": "321 Flight Path",
       "city": "Rockford",
       "state": "IL",
-      "zip": "61101"
+      "postalCode": "61101",
+      "country": "US"
     },
     "latitude": 42.2711,
     "longitude": -89.094,
@@ -197,10 +206,11 @@
     "websiteUrl": "https://washingtonrcflyers.org/",
     "keyFeatures": "AMA registered, flight training, community events, open membership",
     "address": {
-      "street": "Washington area",
+      "addressLine1": "Washington area",
       "city": "Washington",
       "state": "IL",
-      "zip": "61571"
+      "postalCode": "61571",
+      "country": "US"
     },
     "latitude": 40.6764,
     "longitude": -89.4132,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/columbia-rc-flying-club-inc",
     "keyFeatures": "AMA chartered, pilot instruction, open membership, guest pilots welcome",
     "address": {
-      "street": "Columbia area",
+      "addressLine1": "Columbia area",
       "city": "Columbia",
       "state": "IL",
-      "zip": "62236"
+      "postalCode": "62236",
+      "country": "US"
     },
     "latitude": 38.4583,
     "longitude": -90.1825,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://propmastersrc.org/",
     "keyFeatures": "AMA chartered, free flight training, family-friendly, building and radio setup assistance",
     "address": {
-      "street": "Springbrook Prairie Model Aircraft Field",
+      "addressLine1": "Springbrook Prairie Model Aircraft Field",
       "city": "Naperville",
       "state": "IL",
-      "zip": "60540"
+      "postalCode": "60540",
+      "country": "US"
     },
     "latitude": 41.7489,
     "longitude": -88.1732,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.bellevillercflyers.com/",
     "keyFeatures": "AMA chartered, nearly 50 years of history, community events, open membership",
     "address": {
-      "street": "Belleville area",
+      "addressLine1": "Belleville area",
       "city": "Belleville",
       "state": "IL",
-      "zip": "62220"
+      "postalCode": "62220",
+      "country": "US"
     },
     "latitude": 38.52,
     "longitude": -89.9833,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://foxvalleyaero.com/",
     "keyFeatures": "AMA Gold Leader Club, various RC events, well-maintained flying field",
     "address": {
-      "street": "St. Charles area",
+      "addressLine1": "St. Charles area",
       "city": "St. Charles",
       "state": "IL",
-      "zip": "60174"
+      "postalCode": "60174",
+      "country": "US"
     },
     "latitude": 41.91,
     "longitude": -88.306,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://www.suburbanaeroclub.com/",
     "keyFeatures": "AMA Gold Leader Club, founded in 1962, flying site, various RC events",
     "address": {
-      "street": "Tinley Creek Model Airplane Field",
+      "addressLine1": "Tinley Creek Model Airplane Field",
       "city": "Matteson",
       "state": "IL",
-      "zip": "60443"
+      "postalCode": "60443",
+      "country": "US"
     },
     "latitude": 41.5264,
     "longitude": -87.7419,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://www.suburbanrcbarnstormers.com/",
     "keyFeatures": "AMA chartered, deep history, various RC aircraft types and sizes",
     "address": {
-      "street": "Northeastern Illinois area",
+      "addressLine1": "Northeastern Illinois area",
       "city": "Northeastern Illinois",
       "state": "IL",
-      "zip": "60000"
+      "postalCode": "60000",
+      "country": "US"
     },
     "latitude": 41.9784,
     "longitude": -87.9073,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://www.auroraflyersrc.org/",
     "keyFeatures": "AMA chartered, dedicated field, community events, flight training",
     "address": {
-      "street": "6S209 Hankes Road",
+      "addressLine1": "6S209 Hankes Road",
       "city": "Aurora",
       "state": "IL",
-      "zip": "60506"
+      "postalCode": "60506",
+      "country": "US"
     },
     "latitude": 41.7813,
     "longitude": -88.3957,
@@ -365,10 +382,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, open membership, community-focused",
     "address": {
-      "street": "321 Flight Path",
+      "addressLine1": "321 Flight Path",
       "city": "Rockford",
       "state": "IL",
-      "zip": "61101"
+      "postalCode": "61101",
+      "country": "US"
     },
     "latitude": 42.2711,
     "longitude": -89.094,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.peoriaflyersrc.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
     "address": {
-      "street": "789 Airfield Rd",
+      "addressLine1": "789 Airfield Rd",
       "city": "Peoria",
       "state": "IL",
-      "zip": "61602"
+      "postalCode": "61602",
+      "country": "US"
     },
     "latitude": 40.6936,
     "longitude": -89.589,
@@ -407,10 +426,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "456 Flying Field Rd",
+      "addressLine1": "456 Flying Field Rd",
       "city": "Springfield",
       "state": "IL",
-      "zip": "62701"
+      "postalCode": "62701",
+      "country": "US"
     },
     "latitude": 39.7817,
     "longitude": -89.6501,
@@ -428,10 +448,11 @@
     "websiteUrl": "https://www.napervilleaeroclub.org/",
     "keyFeatures": "AMA chartered, flight training, community events",
     "address": {
-      "street": "Springbrook Prairie Model Aircraft Field",
+      "addressLine1": "Springbrook Prairie Model Aircraft Field",
       "city": "Naperville",
       "state": "IL",
-      "zip": "60540"
+      "postalCode": "60540",
+      "country": "US"
     },
     "latitude": 41.7489,
     "longitude": -88.1732,

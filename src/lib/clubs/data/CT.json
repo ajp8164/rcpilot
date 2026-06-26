@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.ctrcflyers.org/",
     "keyFeatures": "AMA chartered, open membership, beginner training, community events",
     "address": {
-      "street": "123 Elmwood Dr",
+      "addressLine1": "123 Elmwood Dr",
       "city": "Hartford",
       "state": "CT",
-      "zip": "06106"
+      "postalCode": "06106",
+      "country": "US"
     },
     "latitude": 41.7658,
     "longitude": -72.6734,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Fairfield Flying Field",
+      "addressLine1": "Fairfield Flying Field",
       "city": "Fairfield",
       "state": "CT",
-      "zip": "06824"
+      "postalCode": "06824",
+      "country": "US"
     },
     "latitude": 41.14,
     "longitude": -73.2612,
@@ -50,10 +52,11 @@
     "websiteUrl": "",
     "keyFeatures": "Glider focus, small grass airfield, beginner-friendly, community events",
     "address": {
-      "street": "Hartford Glider Field",
+      "addressLine1": "Hartford Glider Field",
       "city": "Hartford",
       "state": "CT",
-      "zip": "06106"
+      "postalCode": "06106",
+      "country": "US"
     },
     "latitude": 41.7658,
     "longitude": -72.6734,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.northhavenrc.org/",
     "keyFeatures": "AMA chartered, community events, flight training, open membership",
     "address": {
-      "street": "45 Flying Field Road",
+      "addressLine1": "45 Flying Field Road",
       "city": "North Haven",
       "state": "CT",
-      "zip": "06473"
+      "postalCode": "06473",
+      "country": "US"
     },
     "latitude": 41.37,
     "longitude": -72.86,
@@ -92,10 +96,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, beginner-friendly, open membership",
     "address": {
-      "street": "Stamford Flying Field",
+      "addressLine1": "Stamford Flying Field",
       "city": "Stamford",
       "state": "CT",
-      "zip": "06902"
+      "postalCode": "06902",
+      "country": "US"
     },
     "latitude": 41.0534,
     "longitude": -73.5387,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.bridgeportrc.org/",
     "keyFeatures": "AMA chartered, diverse aircraft types, events for all skill levels, training available",
     "address": {
-      "street": "100 RC Drive",
+      "addressLine1": "100 RC Drive",
       "city": "Bridgeport",
       "state": "CT",
-      "zip": "06605"
+      "postalCode": "06605",
+      "country": "US"
     },
     "latitude": 41.1865,
     "longitude": -73.1952,
@@ -134,10 +140,11 @@
     "websiteUrl": "",
     "keyFeatures": "Small grass field, friendly community, beginner instruction, open membership",
     "address": {
-      "street": "New London Field",
+      "addressLine1": "New London Field",
       "city": "New London",
       "state": "CT",
-      "zip": "06320"
+      "postalCode": "06320",
+      "country": "US"
     },
     "latitude": 41.3557,
     "longitude": -72.0995,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.easternctsoaring.org/",
     "keyFeatures": "Glider and sailplane focus, AMA chartered, flight instruction, community events",
     "address": {
-      "street": "Willimantic Glider Field",
+      "addressLine1": "Willimantic Glider Field",
       "city": "Willimantic",
       "state": "CT",
-      "zip": "06226"
+      "postalCode": "06226",
+      "country": "US"
     },
     "latitude": 41.7198,
     "longitude": -72.2141,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.ctrcflyers.org/",
     "keyFeatures": "AMA chartered, open membership, beginner training, community events",
     "address": {
-      "street": "123 Elmwood Dr",
+      "addressLine1": "123 Elmwood Dr",
       "city": "Hartford",
       "state": "CT",
-      "zip": "06106"
+      "postalCode": "06106",
+      "country": "US"
     },
     "latitude": 41.7658,
     "longitude": -72.6734,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Fairfield Flying Field",
+      "addressLine1": "Fairfield Flying Field",
       "city": "Fairfield",
       "state": "CT",
-      "zip": "06824"
+      "postalCode": "06824",
+      "country": "US"
     },
     "latitude": 41.14,
     "longitude": -73.2612,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.newhavenrc.org/",
     "keyFeatures": "AMA chartered, diverse aircraft types, training, competitions",
     "address": {
-      "street": "200 RC Lane",
+      "addressLine1": "200 RC Lane",
       "city": "New Haven",
       "state": "CT",
-      "zip": "06511"
+      "postalCode": "06511",
+      "country": "US"
     },
     "latitude": 41.3083,
     "longitude": -72.9279,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "Glider focus, small grass airfield, beginner-friendly, community events",
     "address": {
-      "street": "Hartford Glider Field",
+      "addressLine1": "Hartford Glider Field",
       "city": "Hartford",
       "state": "CT",
-      "zip": "06106"
+      "postalCode": "06106",
+      "country": "US"
     },
     "latitude": 41.7658,
     "longitude": -72.6734,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.northhavenrc.org/",
     "keyFeatures": "AMA chartered, community events, flight training, open membership",
     "address": {
-      "street": "45 Flying Field Road",
+      "addressLine1": "45 Flying Field Road",
       "city": "North Haven",
       "state": "CT",
-      "zip": "06473"
+      "postalCode": "06473",
+      "country": "US"
     },
     "latitude": 41.37,
     "longitude": -72.86,
@@ -281,10 +294,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, beginner-friendly, open membership",
     "address": {
-      "street": "Stamford Flying Field",
+      "addressLine1": "Stamford Flying Field",
       "city": "Stamford",
       "state": "CT",
-      "zip": "06902"
+      "postalCode": "06902",
+      "country": "US"
     },
     "latitude": 41.0534,
     "longitude": -73.5387,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://www.bridgeportrc.org/",
     "keyFeatures": "AMA chartered, diverse aircraft types, events for all skill levels, training available",
     "address": {
-      "street": "100 RC Drive",
+      "addressLine1": "100 RC Drive",
       "city": "Bridgeport",
       "state": "CT",
-      "zip": "06605"
+      "postalCode": "06605",
+      "country": "US"
     },
     "latitude": 41.1865,
     "longitude": -73.1952,
@@ -323,10 +338,11 @@
     "websiteUrl": "",
     "keyFeatures": "Small grass field, friendly community, beginner instruction, open membership",
     "address": {
-      "street": "New London Field",
+      "addressLine1": "New London Field",
       "city": "New London",
       "state": "CT",
-      "zip": "06320"
+      "postalCode": "06320",
+      "country": "US"
     },
     "latitude": 41.3557,
     "longitude": -72.0995,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://www.easternctsoaring.org/",
     "keyFeatures": "Glider and sailplane focus, AMA chartered, flight instruction, community events",
     "address": {
-      "street": "Willimantic Glider Field",
+      "addressLine1": "Willimantic Glider Field",
       "city": "Willimantic",
       "state": "CT",
-      "zip": "06226"
+      "postalCode": "06226",
+      "country": "US"
     },
     "latitude": 41.7198,
     "longitude": -72.2141,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/central-connecticut-rc-club",
     "keyFeatures": "Flight instruction, AMA chartered, community events, guest pilots welcome",
     "address": {
-      "street": "Central Connecticut Flying Field",
+      "addressLine1": "Central Connecticut Flying Field",
       "city": "Berlin",
       "state": "CT",
-      "zip": "06037"
+      "postalCode": "06037",
+      "country": "US"
     },
     "latitude": 41.6215,
     "longitude": -72.7451,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.ncrcc.org/",
     "keyFeatures": "AMA chartered, large field, scale models, jets, drones, community events",
     "address": {
-      "street": "Suffield RC Field",
+      "addressLine1": "Suffield RC Field",
       "city": "Suffield",
       "state": "CT",
-      "zip": "06078"
+      "postalCode": "06078",
+      "country": "US"
     },
     "latitude": 41.97,
     "longitude": -72.7611,
@@ -407,10 +426,11 @@
     "websiteUrl": "https://www.rcpropbusters.com/",
     "keyFeatures": "Gold Leader Club, AMA chartered, scale models, jets, drones, training available",
     "address": {
-      "street": "Salem RC Field",
+      "addressLine1": "Salem RC Field",
       "city": "Salem",
       "state": "CT",
-      "zip": "06420"
+      "postalCode": "06420",
+      "country": "US"
     },
     "latitude": 41.3315,
     "longitude": -72.3712,
@@ -428,10 +448,11 @@
     "websiteUrl": "https://www.facebook.com/SimsburyRCClub/",
     "keyFeatures": "AMA chartered, diverse membership, community events",
     "address": {
-      "street": "Simsbury Flying Field",
+      "addressLine1": "Simsbury Flying Field",
       "city": "Simsbury",
       "state": "CT",
-      "zip": "06070"
+      "postalCode": "06070",
+      "country": "US"
     },
     "latitude": 41.823,
     "longitude": -72.7617,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://www.ncrcs.org/",
     "keyFeatures": "AMA chartered, diverse aircraft types, community events, pilot instruction",
     "address": {
-      "street": "New Canaan RC Field",
+      "addressLine1": "New Canaan RC Field",
       "city": "New Canaan",
       "state": "CT",
-      "zip": "06840"
+      "postalCode": "06840",
+      "country": "US"
     },
     "latitude": 41.146,
     "longitude": -73.4901,
@@ -470,10 +492,11 @@
     "websiteUrl": "https://www.swampflyersrc.org/",
     "keyFeatures": "AMA chartered, community events, beginner-friendly, pilot instruction",
     "address": {
-      "street": "Northford RC Field",
+      "addressLine1": "Northford RC Field",
       "city": "Northford",
       "state": "CT",
-      "zip": "06472"
+      "postalCode": "06472",
+      "country": "US"
     },
     "latitude": 41.3478,
     "longitude": -72.8427,

@@ -8,10 +8,11 @@
     "websiteUrl": "https://louisvillerc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Louisville",
       "state": "KY",
-      "zip": "40245"
+      "postalCode": "40245",
+      "country": "US"
     },
     "latitude": 38.2527,
     "longitude": -85.7585,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Lexington Flying Field",
+      "addressLine1": "Lexington Flying Field",
       "city": "Lexington",
       "state": "KY",
-      "zip": "40511"
+      "postalCode": "40511",
+      "country": "US"
     },
     "latitude": 38.0406,
     "longitude": -84.5037,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://bowlinggreenrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Bowling Green",
       "state": "KY",
-      "zip": "42101"
+      "postalCode": "42101",
+      "country": "US"
     },
     "latitude": 36.9685,
     "longitude": -86.4808,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Covington Flying Field",
+      "addressLine1": "Covington Flying Field",
       "city": "Covington",
       "state": "KY",
-      "zip": "41011"
+      "postalCode": "41011",
+      "country": "US"
     },
     "latitude": 39.0837,
     "longitude": -84.5086,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://owensbororc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Owensboro",
       "state": "KY",
-      "zip": "42301"
+      "postalCode": "42301",
+      "country": "US"
     },
     "latitude": 37.771,
     "longitude": -87.1112,
@@ -113,10 +118,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Frankfort Flying Field",
+      "addressLine1": "Frankfort Flying Field",
       "city": "Frankfort",
       "state": "KY",
-      "zip": "40601"
+      "postalCode": "40601",
+      "country": "US"
     },
     "latitude": 38.2009,
     "longitude": -84.8733,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://paducahrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Paducah",
       "state": "KY",
-      "zip": "42001"
+      "postalCode": "42001",
+      "country": "US"
     },
     "latitude": 37.0834,
     "longitude": -88.6,
@@ -155,10 +162,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Georgetown Flying Field",
+      "addressLine1": "Georgetown Flying Field",
       "city": "Georgetown",
       "state": "KY",
-      "zip": "40324"
+      "postalCode": "40324",
+      "country": "US"
     },
     "latitude": 38.2098,
     "longitude": -84.5582,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://elizabethtownrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Elizabethtown",
       "state": "KY",
-      "zip": "42701"
+      "postalCode": "42701",
+      "country": "US"
     },
     "latitude": 37.6939,
     "longitude": -85.859,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Nicholasville Flying Field",
+      "addressLine1": "Nicholasville Flying Field",
       "city": "Nicholasville",
       "state": "KY",
-      "zip": "40356"
+      "postalCode": "40356",
+      "country": "US"
     },
     "latitude": 37.8839,
     "longitude": -84.6369,
@@ -218,10 +228,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Florence",
       "state": "KY",
-      "zip": "41042"
+      "postalCode": "41042",
+      "country": "US"
     },
     "latitude": 39.0039,
     "longitude": -84.6266,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "16040 Hwy 351",
+      "addressLine1": "16040 Hwy 351",
       "city": "Henderson",
       "state": "KY",
-      "zip": "42420"
+      "postalCode": "42420",
+      "country": "US"
     },
     "latitude": 37.8176,
     "longitude": -87.5795,
@@ -260,10 +272,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Bowling Green",
       "state": "KY",
-      "zip": "42101"
+      "postalCode": "42101",
+      "country": "US"
     },
     "latitude": 36.9685,
     "longitude": -86.4808,
@@ -281,10 +294,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "EP Tom Sawyer Park",
+      "addressLine1": "EP Tom Sawyer Park",
       "city": "Louisville",
       "state": "KY",
-      "zip": "40299"
+      "postalCode": "40299",
+      "country": "US"
     },
     "latitude": 38.1868,
     "longitude": -85.6023,
@@ -302,10 +316,11 @@
     "websiteUrl": "",
     "keyFeatures": "Private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Louisville",
       "state": "KY",
-      "zip": "40245"
+      "postalCode": "40245",
+      "country": "US"
     },
     "latitude": 38.2527,
     "longitude": -85.7585,
@@ -323,10 +338,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, asphalt runway, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Lexington",
       "state": "KY",
-      "zip": "40511"
+      "postalCode": "40511",
+      "country": "US"
     },
     "latitude": 38.0406,
     "longitude": -84.5037,
@@ -344,10 +360,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "Adjacent to StoneCrest Golf Club",
+      "addressLine1": "Adjacent to StoneCrest Golf Club",
       "city": "Prestonsburg",
       "state": "KY",
-      "zip": "41653"
+      "postalCode": "41653",
+      "country": "US"
     },
     "latitude": 37.6736,
     "longitude": -82.7796,
@@ -365,10 +382,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "8284 Short Station Road",
+      "addressLine1": "8284 Short Station Road",
       "city": "Philpot",
       "state": "KY",
-      "zip": "42366"
+      "postalCode": "42366",
+      "country": "US"
     },
     "latitude": 37.7801,
     "longitude": -87.1148,
@@ -386,10 +404,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Georgetown Flying Field",
+      "addressLine1": "Georgetown Flying Field",
       "city": "Georgetown",
       "state": "KY",
-      "zip": "40324"
+      "postalCode": "40324",
+      "country": "US"
     },
     "latitude": 38.2098,
     "longitude": -84.5582,
@@ -407,10 +426,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Nicholasville Flying Field",
+      "addressLine1": "Nicholasville Flying Field",
       "city": "Nicholasville",
       "state": "KY",
-      "zip": "40356"
+      "postalCode": "40356",
+      "country": "US"
     },
     "latitude": 37.8839,
     "longitude": -84.6369,
@@ -428,10 +448,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Madisonville Flying Field",
+      "addressLine1": "Madisonville Flying Field",
       "city": "Madisonville",
       "state": "KY",
-      "zip": "42431"
+      "postalCode": "42431",
+      "country": "US"
     },
     "latitude": 37.3326,
     "longitude": -87.4989,
@@ -449,10 +470,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Somerset",
       "state": "KY",
-      "zip": "42501"
+      "postalCode": "42501",
+      "country": "US"
     },
     "latitude": 37.0911,
     "longitude": -84.6046,
@@ -470,10 +492,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Hazard Flying Field",
+      "addressLine1": "Hazard Flying Field",
       "city": "Hazard",
       "state": "KY",
-      "zip": "41701"
+      "postalCode": "41701",
+      "country": "US"
     },
     "latitude": 37.2492,
     "longitude": -83.1936,
@@ -491,10 +514,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Winchester",
       "state": "KY",
-      "zip": "40391"
+      "postalCode": "40391",
+      "country": "US"
     },
     "latitude": 38.062,
     "longitude": -84.1604,
@@ -512,10 +536,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Elkton Flying Field",
+      "addressLine1": "Elkton Flying Field",
       "city": "Elkton",
       "state": "KY",
-      "zip": "42220"
+      "postalCode": "42220",
+      "country": "US"
     },
     "latitude": 36.7826,
     "longitude": -87.1252,
@@ -533,10 +558,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Ashland",
       "state": "KY",
-      "zip": "41101"
+      "postalCode": "41101",
+      "country": "US"
     },
     "latitude": 38.4781,
     "longitude": -82.6379,
@@ -554,10 +580,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Cynthiana Flying Field",
+      "addressLine1": "Cynthiana Flying Field",
       "city": "Cynthiana",
       "state": "KY",
-      "zip": "41031"
+      "postalCode": "41031",
+      "country": "US"
     },
     "latitude": 38.3906,
     "longitude": -84.2933,
@@ -575,10 +602,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Campbellsville",
       "state": "KY",
-      "zip": "42718"
+      "postalCode": "42718",
+      "country": "US"
     },
     "latitude": 37.344,
     "longitude": -85.3413,
@@ -596,10 +624,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "London Flying Field",
+      "addressLine1": "London Flying Field",
       "city": "London",
       "state": "KY",
-      "zip": "40741"
+      "postalCode": "40741",
+      "country": "US"
     },
     "latitude": 37.1289,
     "longitude": -84.0833,
@@ -617,10 +646,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Maysville",
       "state": "KY",
-      "zip": "41056"
+      "postalCode": "41056",
+      "country": "US"
     },
     "latitude": 38.6417,
     "longitude": -83.7437,
@@ -638,10 +668,11 @@
     "websiteUrl": "https://hcrcm.org/our-club/",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Elizabethtown",
       "state": "KY",
-      "zip": "42701"
+      "postalCode": "42701",
+      "country": "US"
     },
     "latitude": 37.7036,
     "longitude": -85.8592,
@@ -659,10 +690,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass runway, control line flying, community events",
     "address": {
-      "street": "Coffee Industrial Park",
+      "addressLine1": "Coffee Industrial Park",
       "city": "Ashland",
       "state": "KY",
-      "zip": "41101"
+      "postalCode": "41101",
+      "country": "US"
     },
     "latitude": 38.4743,
     "longitude": -82.6332,
@@ -680,10 +712,11 @@
     "websiteUrl": "",
     "keyFeatures": "Private field, community events, beginner-friendly",
     "address": {
-      "street": "192-798 Hackett Dr.",
+      "addressLine1": "192-798 Hackett Dr.",
       "city": "Murray",
       "state": "KY",
-      "zip": "42071"
+      "postalCode": "42071",
+      "country": "US"
     },
     "latitude": 36.6138,
     "longitude": -88.3141,
@@ -701,10 +734,11 @@
     "websiteUrl": "https://owensbororcclub.org/",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "8284 Short Station Rd.",
+      "addressLine1": "8284 Short Station Rd.",
       "city": "Philpot",
       "state": "KY",
-      "zip": "42366"
+      "postalCode": "42366",
+      "country": "US"
     },
     "latitude": 37.7801,
     "longitude": -87.1148,
@@ -722,10 +756,11 @@
     "websiteUrl": "https://www.lmacky.org/membership.html",
     "keyFeatures": "AMA chartered, asphalt runway, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Lexington",
       "state": "KY",
-      "zip": "40511"
+      "postalCode": "40511",
+      "country": "US"
     },
     "latitude": 38.0406,
     "longitude": -84.5037,
@@ -743,10 +778,11 @@
     "websiteUrl": "https://www.stonecrestrcflyers.com/a/r/szz/rc/home",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "Adjacent to StoneCrest Golf Club",
+      "addressLine1": "Adjacent to StoneCrest Golf Club",
       "city": "Prestonsburg",
       "state": "KY",
-      "zip": "41653"
+      "postalCode": "41653",
+      "country": "US"
     },
     "latitude": 37.6736,
     "longitude": -82.7796,
@@ -764,10 +800,11 @@
     "websiteUrl": "https://rcrcky.com/",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "EP Tom Sawyer Park",
+      "addressLine1": "EP Tom Sawyer Park",
       "city": "Louisville",
       "state": "KY",
-      "zip": "40299"
+      "postalCode": "40299",
+      "country": "US"
     },
     "latitude": 38.1868,
     "longitude": -85.6023,
@@ -785,10 +822,11 @@
     "websiteUrl": "",
     "keyFeatures": "Private field, community events, beginner-friendly",
     "address": {
-      "street": "6711 Mt Washington Rd.",
+      "addressLine1": "6711 Mt Washington Rd.",
       "city": "Louisville",
       "state": "KY",
-      "zip": "40229"
+      "postalCode": "40229",
+      "country": "US"
     },
     "latitude": 38.0971,
     "longitude": -85.6464,
@@ -806,10 +844,11 @@
     "websiteUrl": "",
     "keyFeatures": "Private field, community events, beginner-friendly",
     "address": {
-      "street": "Bowling Green Flying Field",
+      "addressLine1": "Bowling Green Flying Field",
       "city": "Bowling Green",
       "state": "KY",
-      "zip": "42101"
+      "postalCode": "42101",
+      "country": "US"
     },
     "latitude": 36.99,
     "longitude": -86.4436,
@@ -827,10 +866,11 @@
     "websiteUrl": "",
     "keyFeatures": "Private field, community events, beginner-friendly",
     "address": {
-      "street": "Somerset Flying Field",
+      "addressLine1": "Somerset Flying Field",
       "city": "Somerset",
       "state": "KY",
-      "zip": "42501"
+      "postalCode": "42501",
+      "country": "US"
     },
     "latitude": 37.0911,
     "longitude": -84.6046,

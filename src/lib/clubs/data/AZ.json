@@ -8,10 +8,11 @@
     "websiteUrl": "https://ampsrc.com/",
     "keyFeatures": "Airshows, training, FAA FRIA, club meetings",
     "address": {
-      "street": "1234 Flying Way",
+      "addressLine1": "1234 Flying Way",
       "city": "Phoenix",
       "state": "AZ",
-      "zip": "85001"
+      "postalCode": "85001",
+      "country": "US"
     },
     "latitude": 33.4484,
     "longitude": -112.074,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://slrcc.org/",
     "keyFeatures": "Model building, FPV, pylon racing, drone racing",
     "address": {
-      "street": "456 Hobby Rd",
+      "addressLine1": "456 Hobby Rd",
       "city": "Florence",
       "state": "AZ",
-      "zip": "85132"
+      "postalCode": "85132",
+      "country": "US"
     },
     "latitude": 33.0215,
     "longitude": -111.5101,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.speedworldrcflyers.com/a/r/szz/rc/home",
     "keyFeatures": "FAA FRIA, dedicated flying site, club meetings",
     "address": {
-      "street": "789 Airstrip Ave",
+      "addressLine1": "789 Airstrip Ave",
       "city": "Surprise",
       "state": "AZ",
-      "zip": "85374"
+      "postalCode": "85374",
+      "country": "US"
     },
     "latitude": 33.626,
     "longitude": -112.4555,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://flagstaffflyers.com/",
     "keyFeatures": "Training, secure flying site, safe learning environment",
     "address": {
-      "street": "101 Flying Blvd",
+      "addressLine1": "101 Flying Blvd",
       "city": "Flagstaff",
       "state": "AZ",
-      "zip": "86001"
+      "postalCode": "86001",
+      "country": "US"
     },
     "latitude": 35.1983,
     "longitude": -111.6513,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.casagrandercflyers.com/",
     "keyFeatures": "Non-profit, AMA affiliation, community events",
     "address": {
-      "street": "202 Airfield Rd",
+      "addressLine1": "202 Airfield Rd",
       "city": "Casa Grande",
       "state": "AZ",
-      "zip": "85122"
+      "postalCode": "85122",
+      "country": "US"
     },
     "latitude": 32.8795,
     "longitude": -111.7574,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.trccclub.org/a/r/szz/rc/home",
     "keyFeatures": "AMA chartered, open membership, guest pilots welcome",
     "address": {
-      "street": "10801 E Valencia Rd",
+      "addressLine1": "10801 E Valencia Rd",
       "city": "Tucson",
       "state": "AZ",
-      "zip": "85747"
+      "postalCode": "85747",
+      "country": "US"
     },
     "latitude": 32.1285,
     "longitude": -110.8694,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://deserthawksrc.club/",
     "keyFeatures": "Non-profit, AMA chartered, community events",
     "address": {
-      "street": "7200 Dub Campbell Pkwy",
+      "addressLine1": "7200 Dub Campbell Pkwy",
       "city": "Lake Havasu City",
       "state": "AZ",
-      "zip": "86406"
+      "postalCode": "86406",
+      "country": "US"
     },
     "latitude": 34.4739,
     "longitude": -114.3241,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.silvercreekaeromodelers.com/",
     "keyFeatures": "AMA chartered, dedicated flying field, community involvement",
     "address": {
-      "street": "1962 Mountain Highlands Blvd",
+      "addressLine1": "1962 Mountain Highlands Blvd",
       "city": "Snowflake",
       "state": "AZ",
-      "zip": "85937"
+      "postalCode": "85937",
+      "country": "US"
     },
     "latitude": 34.5283,
     "longitude": -110.1483,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.arcs1.com/",
     "keyFeatures": "24/7 access, fixed and rotary wing, friendly members",
     "address": {
-      "street": "3030 Mustang Dr",
+      "addressLine1": "3030 Mustang Dr",
       "city": "Mesa",
       "state": "AZ",
-      "zip": "85215"
+      "postalCode": "85215",
+      "country": "US"
     },
     "latitude": 33.4356,
     "longitude": -111.7103,

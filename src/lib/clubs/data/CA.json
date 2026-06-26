@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.barcs.org/",
     "keyFeatures": "Multiple runways, training, social events, annual competitions",
     "address": {
-      "street": "1950 Mowry Ave",
+      "addressLine1": "1950 Mowry Ave",
       "city": "Fremont",
       "state": "CA",
-      "zip": "94538"
+      "postalCode": "94538",
+      "country": "US"
     },
     "latitude": 37.5552,
     "longitude": -121.9836,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://sandiegorcflyers.com/",
     "keyFeatures": "Open membership, community events, beginner instruction, competitions",
     "address": {
-      "street": "3707 Aviation Way",
+      "addressLine1": "3707 Aviation Way",
       "city": "San Diego",
       "state": "CA",
-      "zip": "92123"
+      "postalCode": "92123",
+      "country": "US"
     },
     "latitude": 32.8353,
     "longitude": -117.1345,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.larcclub.org/",
     "keyFeatures": "Grass and paved runways, club events, training for beginners, social gatherings",
     "address": {
-      "street": "13550 McBean Pkwy",
+      "addressLine1": "13550 McBean Pkwy",
       "city": "Los Angeles",
       "state": "CA",
-      "zip": "91342"
+      "postalCode": "91342",
+      "country": "US"
     },
     "latitude": 34.3432,
     "longitude": -118.5562,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.ocrcf.com/",
     "keyFeatures": "Runways, club meetings, beginner instruction, seasonal events",
     "address": {
-      "street": "1100 E Yale Loop",
+      "addressLine1": "1100 E Yale Loop",
       "city": "Irvine",
       "state": "CA",
-      "zip": "92618"
+      "postalCode": "92618",
+      "country": "US"
     },
     "latitude": 33.6705,
     "longitude": -117.757,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.centralcoastrcflyers.org/",
     "keyFeatures": "Grass field, community-focused, club events, monthly meetings",
     "address": {
-      "street": "123 Flying Lane",
+      "addressLine1": "123 Flying Lane",
       "city": "San Luis Obispo",
       "state": "CA",
-      "zip": "93401"
+      "postalCode": "93401",
+      "country": "US"
     },
     "latitude": 35.2828,
     "longitude": -120.6596,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.redbarons.org/",
     "keyFeatures": "Over 25 acres of open flying space, established in 1967, AMA Gold Leader Club",
     "address": {
-      "street": "Private Property",
+      "addressLine1": "Private Property",
       "city": "Northern California",
       "state": "CA",
-      "zip": "N/A"
+      "postalCode": "N/A",
+      "country": "US"
     },
     "latitude": 37.7749,
     "longitude": -122.4194,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://trabucoflyers.com/",
     "keyFeatures": "Scenic location, diverse aircraft types, AMA membership required",
     "address": {
-      "street": "Trabuco Canyon",
+      "addressLine1": "Trabuco Canyon",
       "city": "Orange County",
       "state": "CA",
-      "zip": "N/A"
+      "postalCode": "N/A",
+      "country": "US"
     },
     "latitude": 33.703,
     "longitude": -117.593,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.harborsoaringsociety.org/",
     "keyFeatures": "Specializes in gliders, winch launch, AMA chartered",
     "address": {
-      "street": "Newport Beach",
+      "addressLine1": "Newport Beach",
       "city": "Orange County",
       "state": "CA",
-      "zip": "N/A"
+      "postalCode": "N/A",
+      "country": "US"
     },
     "latitude": 33.6189,
     "longitude": -117.9292,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.circlecityflyers.com/",
     "keyFeatures": "Open to all RC aircraft types, beginner-friendly, AMA membership required",
     "address": {
-      "street": "Off 15 Freeway & Temescal Canyon",
+      "addressLine1": "Off 15 Freeway & Temescal Canyon",
       "city": "Corona",
       "state": "CA",
-      "zip": "N/A"
+      "postalCode": "N/A",
+      "country": "US"
     },
     "latitude": 33.875,
     "longitude": -117.575,
@@ -197,10 +206,11 @@
     "websiteUrl": "http://www.wingmasters.org/",
     "keyFeatures": "AMA-accredited, beginner instruction, community events",
     "address": {
-      "street": "San Diego",
+      "addressLine1": "San Diego",
       "city": "San Diego",
       "state": "CA",
-      "zip": "92127"
+      "postalCode": "92127",
+      "country": "US"
     },
     "latitude": 32.955,
     "longitude": -117.151,
@@ -218,10 +228,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, casual flying, small friendly community",
     "address": {
-      "street": "Glendora Mountain Road",
+      "addressLine1": "Glendora Mountain Road",
       "city": "Glendora",
       "state": "CA",
-      "zip": "91741"
+      "postalCode": "91741",
+      "country": "US"
     },
     "latitude": 34.1361,
     "longitude": -117.8653,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "Multi-rotor friendly, fixed-wing flying, open membership",
     "address": {
-      "street": "Central Ave Field",
+      "addressLine1": "Central Ave Field",
       "city": "Chino",
       "state": "CA",
-      "zip": "91710"
+      "postalCode": "91710",
+      "country": "US"
     },
     "latitude": 34.0121,
     "longitude": -117.6889,
@@ -260,10 +272,11 @@
     "websiteUrl": "http://www.sierrarfclub.com/",
     "keyFeatures": "Large field, electric and gas aircraft, community-focused",
     "address": {
-      "street": "Natomas Field",
+      "addressLine1": "Natomas Field",
       "city": "Sacramento",
       "state": "CA",
-      "zip": "95834"
+      "postalCode": "95834",
+      "country": "US"
     },
     "latitude": 38.6306,
     "longitude": -121.5033,
@@ -281,10 +294,11 @@
     "websiteUrl": "http://www.temeculavalleyrc.org/",
     "keyFeatures": "Large field, helicopters and airplanes, community-oriented",
     "address": {
-      "street": "Temecula Field",
+      "addressLine1": "Temecula Field",
       "city": "Temecula",
       "state": "CA",
-      "zip": "92590"
+      "postalCode": "92590",
+      "country": "US"
     },
     "latitude": 33.4936,
     "longitude": -117.1484,
@@ -302,10 +316,11 @@
     "websiteUrl": "http://www.coachellarc.com",
     "keyFeatures": "Gold-certified AMA club, 865-foot runway, rich history since 1938",
     "address": {
-      "street": "Avenue 54 & Pierce Street",
+      "addressLine1": "Avenue 54 & Pierce Street",
       "city": "Coachella",
       "state": "CA",
-      "zip": "92236"
+      "postalCode": "92236",
+      "country": "US"
     },
     "latitude": 33.6781,
     "longitude": -116.1844,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://www.sanjosewavemastersrc.org/",
     "keyFeatures": "FAA FRIA site, diverse aircraft types, recreational flying",
     "address": {
-      "street": "Near Frazer Lake Airport",
+      "addressLine1": "Near Frazer Lake Airport",
       "city": "Hollister",
       "state": "CA",
-      "zip": "95023"
+      "postalCode": "95023",
+      "country": "US"
     },
     "latitude": 36.8499,
     "longitude": -121.4025,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://www.palomarrcflyers.com/",
     "keyFeatures": "600'x40' asphalt runway, four helicopter pads, RV parking",
     "address": {
-      "street": "San Marcos, CA",
+      "addressLine1": "San Marcos, CA",
       "city": "San Marcos",
       "state": "CA",
-      "zip": "92069"
+      "postalCode": "92069",
+      "country": "US"
     },
     "latitude": 33.08,
     "longitude": -117.166,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://www.scalesquadron.com/",
     "keyFeatures": "Focus on scale R/C modeling, monthly meetings, AMA chartered",
     "address": {
-      "street": "Southern California",
+      "addressLine1": "Southern California",
       "city": "Southern California",
       "state": "CA",
-      "zip": "N/A"
+      "postalCode": "N/A",
+      "country": "US"
     },
     "latitude": 34.0522,
     "longitude": -118.2437,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.iercc.net/",
     "keyFeatures": "Diverse aircraft types, designated U-Control area, community-focused",
     "address": {
-      "street": "Riverside, CA",
+      "addressLine1": "Riverside, CA",
       "city": "Riverside",
       "state": "CA",
-      "zip": "92504"
+      "postalCode": "92504",
+      "country": "US"
     },
     "latitude": 33.9533,
     "longitude": -117.3962,
@@ -407,10 +426,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass airfield, friendly community, all skill levels welcome",
     "address": {
-      "street": "Thousand Oaks Field",
+      "addressLine1": "Thousand Oaks Field",
       "city": "Thousand Oaks",
       "state": "CA",
-      "zip": "91360"
+      "postalCode": "91360",
+      "country": "US"
     },
     "latitude": 34.1706,
     "longitude": -118.8376,
@@ -428,10 +448,11 @@
     "websiteUrl": "http://www.santaclaritarc.com/",
     "keyFeatures": "AMA chartered, multi-aircraft types, beginner-friendly, community events",
     "address": {
-      "street": "23320 McBean Parkway",
+      "addressLine1": "23320 McBean Parkway",
       "city": "Santa Clarita",
       "state": "CA",
-      "zip": "91321"
+      "postalCode": "91321",
+      "country": "US"
     },
     "latitude": 34.3917,
     "longitude": -118.5426,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://www.paloaltorc.org/",
     "keyFeatures": "Electric and glow aircraft, AMA chartered, social events, training",
     "address": {
-      "street": "Palo Alto Field",
+      "addressLine1": "Palo Alto Field",
       "city": "Palo Alto",
       "state": "CA",
-      "zip": "94303"
+      "postalCode": "94303",
+      "country": "US"
     },
     "latitude": 37.4419,
     "longitude": -122.143,
@@ -470,10 +492,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass airfield, all skill levels welcome, community-focused",
     "address": {
-      "street": "Redlands Field",
+      "addressLine1": "Redlands Field",
       "city": "Redlands",
       "state": "CA",
-      "zip": "92373"
+      "postalCode": "92373",
+      "country": "US"
     },
     "latitude": 34.0556,
     "longitude": -117.1825,
@@ -491,10 +514,11 @@
     "websiteUrl": "http://www.modestorcflyers.com/",
     "keyFeatures": "AMA chartered, large field, multi-aircraft types, community-oriented",
     "address": {
-      "street": "Modesto Field",
+      "addressLine1": "Modesto Field",
       "city": "Modesto",
       "state": "CA",
-      "zip": "95350"
+      "postalCode": "95350",
+      "country": "US"
     },
     "latitude": 37.6391,
     "longitude": -120.9969,
@@ -512,10 +536,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass airfield, open membership, beginner-friendly",
     "address": {
-      "street": "Bakersfield Field",
+      "addressLine1": "Bakersfield Field",
       "city": "Bakersfield",
       "state": "CA",
-      "zip": "93307"
+      "postalCode": "93307",
+      "country": "US"
     },
     "latitude": 35.3733,
     "longitude": -119.0187,
@@ -533,10 +558,11 @@
     "websiteUrl": "http://www.sacramentorceagles.com/",
     "keyFeatures": "AMA chartered, open membership, electric and glow aircraft, community events",
     "address": {
-      "street": "Sacramento Field",
+      "addressLine1": "Sacramento Field",
       "city": "Sacramento",
       "state": "CA",
-      "zip": "95823"
+      "postalCode": "95823",
+      "country": "US"
     },
     "latitude": 38.5816,
     "longitude": -121.4944,
@@ -554,10 +580,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused",
     "address": {
-      "street": "Santa Maria Field",
+      "addressLine1": "Santa Maria Field",
       "city": "Santa Maria",
       "state": "CA",
-      "zip": "93454"
+      "postalCode": "93454",
+      "country": "US"
     },
     "latitude": 34.953,
     "longitude": -120.4357,
@@ -575,10 +602,11 @@
     "websiteUrl": "http://www.ocsoaring.com/",
     "keyFeatures": "Glider and sailplane focus, AMA chartered, community events, competitions",
     "address": {
-      "street": "Orange County Field",
+      "addressLine1": "Orange County Field",
       "city": "Orange",
       "state": "CA",
-      "zip": "92868"
+      "postalCode": "92868",
+      "country": "US"
     },
     "latitude": 33.7879,
     "longitude": -117.8531,
@@ -596,10 +624,11 @@
     "websiteUrl": "http://www.baycitiesrc.org/",
     "keyFeatures": "Electric and nitro aircraft, beginner training, competitions, social events",
     "address": {
-      "street": "2500 Coleman Ave",
+      "addressLine1": "2500 Coleman Ave",
       "city": "San Jose",
       "state": "CA",
-      "zip": "95125"
+      "postalCode": "95125",
+      "country": "US"
     },
     "latitude": 37.3352,
     "longitude": -121.8811,
@@ -617,10 +646,11 @@
     "websiteUrl": "",
     "keyFeatures": "Multi-rotor friendly, gliders and fixed-wing, open membership",
     "address": {
-      "street": "Riverside Field",
+      "addressLine1": "Riverside Field",
       "city": "Riverside",
       "state": "CA",
-      "zip": "92501"
+      "postalCode": "92501",
+      "country": "US"
     },
     "latitude": 33.9806,
     "longitude": -117.3755,
@@ -638,10 +668,11 @@
     "websiteUrl": "http://www.coachellarc.com",
     "keyFeatures": "Gold-certified AMA club, extensive runway, community outreach programs",
     "address": {
-      "street": "Avenue 54 & Pierce Street",
+      "addressLine1": "Avenue 54 & Pierce Street",
       "city": "Coachella",
       "state": "CA",
-      "zip": "92236"
+      "postalCode": "92236",
+      "country": "US"
     },
     "latitude": 33.68,
     "longitude": -116.173,
@@ -659,10 +690,11 @@
     "websiteUrl": "https://www.sanjosewavemastersrc.org/",
     "keyFeatures": "Wind-powered aircraft focus, FAA FRIA site, open membership",
     "address": {
-      "street": "Frazer Lake Airport",
+      "addressLine1": "Frazer Lake Airport",
       "city": "Hollister",
       "state": "CA",
-      "zip": "95023"
+      "postalCode": "95023",
+      "country": "US"
     },
     "latitude": 36.85,
     "longitude": -121.4,
@@ -680,10 +712,11 @@
     "websiteUrl": "https://chollasrc.com/",
     "keyFeatures": "Unobstructed flying area, friendly community, all aircraft types welcome",
     "address": {
-      "street": "Chollas Lake Park",
+      "addressLine1": "Chollas Lake Park",
       "city": "San Diego",
       "state": "CA",
-      "zip": "92105"
+      "postalCode": "92105",
+      "country": "US"
     },
     "latitude": 32.726,
     "longitude": -117.078,
@@ -701,10 +734,11 @@
     "websiteUrl": "https://www.ourmodelaviation.club/",
     "keyFeatures": "Aeronautics education, community events, all skill levels welcome",
     "address": {
-      "street": "12800 Maclay St",
+      "addressLine1": "12800 Maclay St",
       "city": "Sylmar",
       "state": "CA",
-      "zip": "91342"
+      "postalCode": "91342",
+      "country": "US"
     },
     "latitude": 34.289,
     "longitude": -118.448,
@@ -722,10 +756,11 @@
     "websiteUrl": "https://www.latimes.com/socal/daily-pilot/news/story/2023-06-03/huntington-beach-man-reviving-abandoned-rc-tank-club-to-keep-hobby-alive-in-orange-county",
     "keyFeatures": "RC tank battles, family-friendly events, community engagement",
     "address": {
-      "street": "Huntington Central Park",
+      "addressLine1": "Huntington Central Park",
       "city": "Huntington Beach",
       "state": "CA",
-      "zip": "92648"
+      "postalCode": "92648",
+      "country": "US"
     },
     "latitude": 33.66,
     "longitude": -118.0,
@@ -743,10 +778,11 @@
     "websiteUrl": "https://www.venturacountyrcc.com/",
     "keyFeatures": "Community-focused, grass airfield, beginner instruction, local events",
     "address": {
-      "street": "567 Aviation Dr",
+      "addressLine1": "567 Aviation Dr",
       "city": "Ventura",
       "state": "CA",
-      "zip": "93001"
+      "postalCode": "93001",
+      "country": "US"
     },
     "latitude": 34.28,
     "longitude": -119.294,
@@ -764,10 +800,11 @@
     "websiteUrl": "https://www.tehachapicrosswinds.com/",
     "keyFeatures": "Community-focused, multi-type aircraft, open membership",
     "address": {
-      "street": "Tehachapi Field",
+      "addressLine1": "Tehachapi Field",
       "city": "Tehachapi",
       "state": "CA",
-      "zip": "93561"
+      "postalCode": "93561",
+      "country": "US"
     },
     "latitude": 35.132,
     "longitude": -118.151,

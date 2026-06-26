@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.delawarerc.org/",
     "keyFeatures": "AMA chartered, community events, flight training, open membership",
     "address": {
-      "street": "123 Aviation Rd",
+      "addressLine1": "123 Aviation Rd",
       "city": "Dover",
       "state": "DE",
-      "zip": "19901"
+      "postalCode": "19901",
+      "country": "US"
     },
     "latitude": 39.1582,
     "longitude": -75.5244,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Georgetown Flying Field",
+      "addressLine1": "Georgetown Flying Field",
       "city": "Georgetown",
       "state": "DE",
-      "zip": "19947"
+      "postalCode": "19947",
+      "country": "US"
     },
     "latitude": 38.6906,
     "longitude": -75.3855,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.newcastlerc.org/",
     "keyFeatures": "AMA chartered, beginner instruction, multi-type aircraft, community events",
     "address": {
-      "street": "200 RC Drive",
+      "addressLine1": "200 RC Drive",
       "city": "New Castle",
       "state": "DE",
-      "zip": "19720"
+      "postalCode": "19720",
+      "country": "US"
     },
     "latitude": 39.661,
     "longitude": -75.5664,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Glider focus, small grass airfield, beginner-friendly, community events",
     "address": {
-      "street": "Middletown Glider Field",
+      "addressLine1": "Middletown Glider Field",
       "city": "Middletown",
       "state": "DE",
-      "zip": "19709"
+      "postalCode": "19709",
+      "country": "US"
     },
     "latitude": 39.449,
     "longitude": -75.716,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.delmarvarc.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, community events, open membership",
     "address": {
-      "street": "500 RC Lane",
+      "addressLine1": "500 RC Lane",
       "city": "Middletown",
       "state": "DE",
-      "zip": "19709"
+      "postalCode": "19709",
+      "country": "US"
     },
     "latitude": 39.449,
     "longitude": -75.716,
@@ -113,10 +118,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, social community, multi-type aircraft",
     "address": {
-      "street": "Rehoboth Beach Field",
+      "addressLine1": "Rehoboth Beach Field",
       "city": "Rehoboth Beach",
       "state": "DE",
-      "zip": "19971"
+      "postalCode": "19971",
+      "country": "US"
     },
     "latitude": 38.7158,
     "longitude": -75.076,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://www.brandywinerc.org/",
     "keyFeatures": "AMA chartered, flight instruction, community events, diverse aircraft types",
     "address": {
-      "street": "250 RC Blvd",
+      "addressLine1": "250 RC Blvd",
       "city": "Wilmington",
       "state": "DE",
-      "zip": "19808"
+      "postalCode": "19808",
+      "country": "US"
     },
     "latitude": 39.744,
     "longitude": -75.5465,
@@ -155,10 +162,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-oriented, open membership",
     "address": {
-      "street": "Dover RC Field",
+      "addressLine1": "Dover RC Field",
       "city": "Dover",
       "state": "DE",
-      "zip": "19901"
+      "postalCode": "19901",
+      "country": "US"
     },
     "latitude": 39.1582,
     "longitude": -75.5244,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.dvss.org/",
     "keyFeatures": "Glider and sailplane focus, AMA chartered, flight instruction, community events",
     "address": {
-      "street": "Newark Glider Field",
+      "addressLine1": "Newark Glider Field",
       "city": "Newark",
       "state": "DE",
-      "zip": "19711"
+      "postalCode": "19711",
+      "country": "US"
     },
     "latitude": 39.6837,
     "longitude": -75.7497,

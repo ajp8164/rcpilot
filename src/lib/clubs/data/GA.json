@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.atlrcclub.org/",
     "keyFeatures": "Paved runway; AMA #223; FRIA field; community events.",
     "address": {
-      "street": "1600 Constitution Rd SE",
+      "addressLine1": "1600 Constitution Rd SE",
       "city": "Atlanta",
       "state": "GA",
-      "zip": "30316"
+      "postalCode": "30316",
+      "country": "US"
     },
     "latitude": 33.690382,
     "longitude": -84.326219,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://ccrc.clubexpress.com/",
     "keyFeatures": "Multiple runways; cameras; training; float-fly site.",
     "address": {
-      "street": "2302 Pitner Rd",
+      "addressLine1": "2302 Pitner Rd",
       "city": "Acworth",
       "state": "GA",
-      "zip": "30101"
+      "postalCode": "30101",
+      "country": "US"
     },
     "latitude": 34.001389,
     "longitude": -84.693889,
@@ -48,12 +50,13 @@
     "name": "Georgia Jets Flying Club",
     "description": "Premier turbine/EDF-focused site with a long asphalt runway in Meriwether County.",
     "websiteUrl": "https://georgiajets.org/",
-    "keyFeatures": "1000'×60' asphalt runway; adjacent 1400' grass runway; major jet events.",
+    "keyFeatures": "1000'\u00d760' asphalt runway; adjacent 1400' grass runway; major jet events.",
     "address": {
-      "street": "1443 Lillie Patrick Rd",
+      "addressLine1": "1443 Lillie Patrick Rd",
       "city": "Gay",
       "state": "GA",
-      "zip": "30218"
+      "postalCode": "30218",
+      "country": "US"
     },
     "latitude": 33.16461,
     "longitude": -84.53326,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.ngmarc.org/",
     "keyFeatures": "Training, events, on-site cameras, FRIA.",
     "address": {
-      "street": "553 Geirrein Rd",
+      "addressLine1": "553 Geirrein Rd",
       "city": "Dawsonville",
       "state": "GA",
-      "zip": "30534"
+      "postalCode": "30534",
+      "country": "US"
     },
     "latitude": 34.37671,
     "longitude": -84.10177,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.fayetteflyers.com/",
     "keyFeatures": "FRIA field; instruction program; hosts large electric events; family friendly.",
     "address": {
-      "street": "139 Woods Rd",
+      "addressLine1": "139 Woods Rd",
       "city": "Brooks",
       "state": "GA",
-      "zip": "30205"
+      "postalCode": "30205",
+      "country": "US"
     },
     "latitude": 33.29954,
     "longitude": -84.48326,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.flyinggriffins.club/",
     "keyFeatures": "FRIA field; welcoming to visitors; regular meetings and events.",
     "address": {
-      "street": "423 Ward Rd",
+      "addressLine1": "423 Ward Rd",
       "city": "Williamson",
       "state": "GA",
-      "zip": "30292"
+      "postalCode": "30292",
+      "country": "US"
     },
     "latitude": 33.179425,
     "longitude": -84.436017,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://henrycountyrc.org/",
     "keyFeatures": "AMA-chartered; club field with regular flying and events.",
     "address": {
-      "street": "West Asbury Rd",
+      "addressLine1": "West Asbury Rd",
       "city": "McDonough",
       "state": "GA",
-      "zip": "30253"
+      "postalCode": "30253",
+      "country": "US"
     },
     "latitude": 33.429757,
     "longitude": -84.169893,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://newtoncountyrcflyers.org/",
     "keyFeatures": "FRIA-status club; training; family-friendly environment.",
     "address": {
-      "street": "236 Lackey Rd",
+      "addressLine1": "236 Lackey Rd",
       "city": "Covington",
       "state": "GA",
-      "zip": "30014"
+      "postalCode": "30014",
+      "country": "US"
     },
     "latitude": 33.51484,
     "longitude": -83.822708,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.facebook.com/TriCountyRCFliers/",
     "keyFeatures": "Grass field; community events; convenient to Savannah/Chatham area.",
     "address": {
-      "street": "Speedway Blvd",
+      "addressLine1": "Speedway Blvd",
       "city": "Savannah",
       "state": "GA",
-      "zip": "31408"
+      "postalCode": "31408",
+      "country": "US"
     },
     "latitude": 32.059059,
     "longitude": -81.169248,
@@ -192,15 +201,16 @@
     "id": "3ddecd49-6855-4eea-b135-8460d0fed12a",
     "addedOn": "2026-01-01",
     "modifiedOn": "2026-01-01",
-    "name": "CSRA Flyers – Carl Walker Memorial RC Airfield",
+    "name": "CSRA Flyers \u2013 Carl Walker Memorial RC Airfield",
     "description": "Augusta club with a long-established flying site south of the city.",
     "websiteUrl": "https://www.csraflyers.club/",
     "keyFeatures": "AMA #226; weekend flying; club events and community outreach.",
     "address": {
-      "street": "1199 Horseshoe Rd",
+      "addressLine1": "1199 Horseshoe Rd",
       "city": "Augusta",
       "state": "GA",
-      "zip": "30906"
+      "postalCode": "30906",
+      "country": "US"
     },
     "latitude": 33.287312,
     "longitude": -81.958626,
@@ -216,12 +226,13 @@
     "name": "Saraf Farms RC",
     "description": "Private FRIA RC facility in Good Hope with a full-length paved runway.",
     "websiteUrl": "https://www.saraffarmsrc.com/",
-    "keyFeatures": "1000'×60' paved runway; hosts jet and mixed fly-ins; open space.",
+    "keyFeatures": "1000'\u00d760' paved runway; hosts jet and mixed fly-ins; open space.",
     "address": {
-      "street": "300 Indian Creek Rd",
+      "addressLine1": "300 Indian Creek Rd",
       "city": "Good Hope",
       "state": "GA",
-      "zip": "30641"
+      "postalCode": "30641",
+      "country": "US"
     },
     "latitude": 33.722729,
     "longitude": -83.467101,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/georgia-aircraft-modelers-association-inc",
     "keyFeatures": "Club field at Camp John Hope; AMA-chartered; community events.",
     "address": {
-      "street": "985 Camp John Hope Rd",
+      "addressLine1": "985 Camp John Hope Rd",
       "city": "Fort Valley",
       "state": "GA",
-      "zip": "31030"
+      "postalCode": "31030",
+      "country": "US"
     },
     "latitude": 32.464889,
     "longitude": -83.832189,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/southwest-georgia-rc-club",
     "keyFeatures": "Grass runway; AMA-chartered; relaxed flying environment.",
     "address": {
-      "street": "500 Mitchell Suber Rd",
+      "addressLine1": "500 Mitchell Suber Rd",
       "city": "Coolidge",
       "state": "GA",
-      "zip": "31738"
+      "postalCode": "31738",
+      "country": "US"
     },
     "latitude": 31.07155,
     "longitude": -83.8009,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://www.facebook.com/GeorgiaMountainRCClub/",
     "keyFeatures": "Grass field; active membership; training and community events.",
     "address": {
-      "street": "3310 Brookton Lula Rd",
+      "addressLine1": "3310 Brookton Lula Rd",
       "city": "Gainesville",
       "state": "GA",
-      "zip": "30506"
+      "postalCode": "30506",
+      "country": "US"
     },
     "latitude": 34.423252,
     "longitude": -83.737458,

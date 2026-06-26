@@ -8,10 +8,11 @@
     "websiteUrl": "https://rocketcityrc.com/",
     "keyFeatures": "50' x 600' runway, covered pits, clubhouse, events (fun flies, Toys for Tots), training",
     "address": {
-      "street": "4100 Leeman Ferry Road",
+      "addressLine1": "4100 Leeman Ferry Road",
       "city": "Huntsville",
       "state": "AL",
-      "zip": "35802"
+      "postalCode": "35802",
+      "country": "US"
     },
     "latitude": 34.685171,
     "longitude": -86.592244,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://www.narca.club/",
     "keyFeatures": "Field at Epps Airpark, FRIA (RemoteID) compliance, events and newsletters",
     "address": {
-      "street": "1230 Carroll Road",
+      "addressLine1": "1230 Carroll Road",
       "city": "Harvest",
       "state": "AL",
-      "zip": "35749"
+      "postalCode": "35749",
+      "country": "US"
     },
     "latitude": 34.864751,
     "longitude": -86.769775,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.alabasterrc.org/",
     "keyFeatures": "Grass field in Limestone Park, training, monthly events, community education",
     "address": {
-      "street": "2280 US-31 (Limestone Park area)",
+      "addressLine1": "2280 US-31 (Limestone Park area)",
       "city": "Alabaster",
       "state": "AL",
-      "zip": "35007"
+      "postalCode": "35007",
+      "country": "US"
     },
     "latitude": 33.185394,
     "longitude": -86.767864,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://drcflyers.com/",
     "keyFeatures": "New field (McCurdy Field), welcomes guests, regular meetings and grand opening events",
     "address": {
-      "street": "6654 County Road 137",
+      "addressLine1": "6654 County Road 137",
       "city": "Valley Head",
       "state": "AL",
-      "zip": "35989"
+      "postalCode": "35989",
+      "country": "US"
     },
     "latitude": 34.54203827,
     "longitude": -85.63133823,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/azalea-city-model-aeronautics",
     "keyFeatures": "Paved runway (~650 ft), warbird and giant-scale events (e.g., Warbirds Over Mobile)",
     "address": {
-      "street": "Crawley Lane / Irvington Field (Old Irvington Landfill area / Half Mile Rd)",
+      "addressLine1": "Crawley Lane / Irvington Field (Old Irvington Landfill area / Half Mile Rd)",
       "city": "Irvington",
       "state": "AL",
-      "zip": "36544"
+      "postalCode": "36544",
+      "country": "US"
     },
     "latitude": 30.49123,
     "longitude": -88.2105,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://birminghamrcassociation.com/",
     "keyFeatures": "502' paved runway, sheltered electrified pits, annual 'Bigfoot' fun-fly & community events",
     "address": {
-      "street": "550 Sardis Road",
+      "addressLine1": "550 Sardis Road",
       "city": "Morris / Gardendale",
       "state": "AL",
-      "zip": "35071"
+      "postalCode": "35071",
+      "country": "US"
     },
     "latitude": 33.7624958,
     "longitude": -86.8407843,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://i.wiregrassrc.com/",
     "keyFeatures": "Rural grass field, community outreach, events and training; membership/AMA required",
     "address": {
-      "street": "1696 Henry County Road 18 (Liberty Landing)",
+      "addressLine1": "1696 Henry County Road 18 (Liberty Landing)",
       "city": "Newville",
       "state": "AL",
-      "zip": "36353"
+      "postalCode": "36353",
+      "country": "US"
     },
     "latitude": 31.44069,
     "longitude": -85.28817,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/sand-mountain-flyers",
     "keyFeatures": "Local community club, grass field, monthly events",
     "address": {
-      "street": "4048 Mount Hebron Road",
+      "addressLine1": "4048 Mount Hebron Road",
       "city": "Boaz",
       "state": "AL",
-      "zip": "35957"
+      "postalCode": "35957",
+      "country": "US"
     },
     "latitude": 34.125333,
     "longitude": -86.324722,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/huntsville-heli-flyers",
     "keyFeatures": "Helicopter specialty club, annual Steve Helms fun-fly, located on A&M grounds / Chase Rd area",
     "address": {
-      "street": "401 Chase Road NE (Alabama A&M area)",
+      "addressLine1": "401 Chase Road NE (Alabama A&M area)",
       "city": "Huntsville",
       "state": "AL",
-      "zip": "35811"
+      "postalCode": "35811",
+      "country": "US"
     },
     "latitude": 34.785588,
     "longitude": -86.556793,
@@ -197,10 +206,11 @@
     "websiteUrl": "https://auburnplanesmen.org/",
     "keyFeatures": "Private grass airstrip, instructor training, family-friendly membership",
     "address": {
-      "street": "Gate at 2275 County Road 24 (near intersection with County Road 22)",
+      "addressLine1": "Gate at 2275 County Road 24 (near intersection with County Road 22)",
       "city": "Auburn area (Macon County entrance)",
       "state": "AL",
-      "zip": "36830"
+      "postalCode": "36830",
+      "country": "US"
     },
     "latitude": 32.42701,
     "longitude": -85.519165,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.dmac-ama.com/",
     "keyFeatures": "Historic club, multiple fields, swap meets, club events",
     "address": {
-      "street": "3270 Hwy 20 (Hwy 20 Field / US 72 Alt area)",
+      "addressLine1": "3270 Hwy 20 (Hwy 20 Field / US 72 Alt area)",
       "city": "Decatur / Trinity",
       "state": "AL",
-      "zip": ""
+      "postalCode": "",
+      "country": "US"
     },
     "latitude": 34.624744,
     "longitude": -87.090056,
@@ -239,10 +250,11 @@
     "websiteUrl": "https://waam.us/",
     "keyFeatures": "IMAA & AMA membership, events (warbirds/3D/heli), on-site facilities and membership programs",
     "address": {
-      "street": "Field access off Fosters Ferry Road / (listed historically at 6655 Watermelon Rd)",
+      "addressLine1": "Field access off Fosters Ferry Road / (listed historically at 6655 Watermelon Rd)",
       "city": "Tuscaloosa",
       "state": "AL",
-      "zip": "35401"
+      "postalCode": "35401",
+      "country": "US"
     },
     "latitude": 33.175482,
     "longitude": -87.606178,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/talladega-radio-control-club",
     "keyFeatures": "Monthly fly-ins, welcoming pilots of all types, open flying days",
     "address": {
-      "street": "365 Henderson Lake Road",
+      "addressLine1": "365 Henderson Lake Road",
       "city": "Munford",
       "state": "AL",
-      "zip": "36268"
+      "postalCode": "36268",
+      "country": "US"
     },
     "latitude": 33.51967,
     "longitude": -85.92352,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://www.magiccityflyers.org/",
     "keyFeatures": "Grass field, monthly fun-flys, community outreach, instruction for beginners",
     "address": {
-      "street": "1225 Shades Crest Rd",
+      "addressLine1": "1225 Shades Crest Rd",
       "city": "Birmingham",
       "state": "AL",
-      "zip": "35226"
+      "postalCode": "35226",
+      "country": "US"
     },
     "latitude": 33.475122,
     "longitude": -86.858334,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://centralalabamaclub.com/",
     "keyFeatures": "Large open field, community events, beginner training, annual fly-ins",
     "address": {
-      "street": "3451 Pike Rd",
+      "addressLine1": "3451 Pike Rd",
       "city": "Montgomery",
       "state": "AL",
-      "zip": "36116"
+      "postalCode": "36116",
+      "country": "US"
     },
     "latitude": 32.375872,
     "longitude": -86.256842,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://www.tuscaloosarcflyers.com/",
     "keyFeatures": "Grass runway, open membership, beginner instruction, family-oriented events",
     "address": {
-      "street": "5601 Watermelon Rd",
+      "addressLine1": "5601 Watermelon Rd",
       "city": "Tuscaloosa",
       "state": "AL",
-      "zip": "35401"
+      "postalCode": "35401",
+      "country": "US"
     },
     "latitude": 33.174321,
     "longitude": -87.604912,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://gulfcoastrcflyers.com/",
     "keyFeatures": "Grass field, local competitions, family-friendly, seasonal events",
     "address": {
-      "street": "800 Riviere Rd",
+      "addressLine1": "800 Riviere Rd",
       "city": "Mobile",
       "state": "AL",
-      "zip": "36619"
+      "postalCode": "36619",
+      "country": "US"
     },
     "latitude": 30.680123,
     "longitude": -88.135444,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://www.shoalsrc.com/",
     "keyFeatures": "Grass runway, family-oriented, monthly club events, training sessions",
     "address": {
-      "street": "1201 Woodward Rd",
+      "addressLine1": "1201 Woodward Rd",
       "city": "Florence",
       "state": "AL",
-      "zip": "35630"
+      "postalCode": "35630",
+      "country": "US"
     },
     "latitude": 34.81873,
     "longitude": -87.67645,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/south-alabama-rc-modelers",
     "keyFeatures": "Multiple flying fields, community events, training programs",
     "address": {
-      "street": "911 S Cedar St",
+      "addressLine1": "911 S Cedar St",
       "city": "Foley",
       "state": "AL",
-      "zip": "36535"
+      "postalCode": "36535",
+      "country": "US"
     },
     "latitude": 30.390301,
     "longitude": -87.691818,
@@ -407,10 +426,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/central-alabama-sports-flyers",
     "keyFeatures": "1000 ft runway, pavilions with power outlets, full bathrooms and showers",
     "address": {
-      "street": "3704 County Rd 47",
+      "addressLine1": "3704 County Rd 47",
       "city": "Clanton",
       "state": "AL",
-      "zip": "35045"
+      "postalCode": "35045",
+      "country": "US"
     },
     "latitude": 32.769017,
     "longitude": -86.58495,

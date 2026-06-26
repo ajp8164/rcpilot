@@ -8,10 +8,11 @@
     "websiteUrl": "https://brrcflyers.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Baton Rouge",
       "state": "LA",
-      "zip": "70816"
+      "postalCode": "70816",
+      "country": "US"
     },
     "latitude": 30.4583,
     "longitude": -91.1403,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "New Orleans Flying Field",
+      "addressLine1": "New Orleans Flying Field",
       "city": "New Orleans",
       "state": "LA",
-      "zip": "70123"
+      "postalCode": "70123",
+      "country": "US"
     },
     "latitude": 29.9511,
     "longitude": -90.0715,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://shreveportrc.com/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Shreveport",
       "state": "LA",
-      "zip": "71106"
+      "postalCode": "71106",
+      "country": "US"
     },
     "latitude": 32.5252,
     "longitude": -93.7502,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Lafayette Flying Field",
+      "addressLine1": "Lafayette Flying Field",
       "city": "Lafayette",
       "state": "LA",
-      "zip": "70501"
+      "postalCode": "70501",
+      "country": "US"
     },
     "latitude": 30.2241,
     "longitude": -92.0198,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://bossierrc.com/",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Bossier City",
       "state": "LA",
-      "zip": "71111"
+      "postalCode": "71111",
+      "country": "US"
     },
     "latitude": 32.5157,
     "longitude": -93.7321,
@@ -113,10 +118,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Monroe Flying Field",
+      "addressLine1": "Monroe Flying Field",
       "city": "Monroe",
       "state": "LA",
-      "zip": "71201"
+      "postalCode": "71201",
+      "country": "US"
     },
     "latitude": 32.5093,
     "longitude": -92.1193,
@@ -134,10 +140,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Lake Charles",
       "state": "LA",
-      "zip": "70601"
+      "postalCode": "70601",
+      "country": "US"
     },
     "latitude": 30.2266,
     "longitude": -93.2174,
@@ -155,10 +162,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Houma Flying Field",
+      "addressLine1": "Houma Flying Field",
       "city": "Houma",
       "state": "LA",
-      "zip": "70360"
+      "postalCode": "70360",
+      "country": "US"
     },
     "latitude": 29.5959,
     "longitude": -90.7195,
@@ -176,10 +184,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Kenner",
       "state": "LA",
-      "zip": "70062"
+      "postalCode": "70062",
+      "country": "US"
     },
     "latitude": 29.994,
     "longitude": -90.241,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Alexandria Flying Field",
+      "addressLine1": "Alexandria Flying Field",
       "city": "Alexandria",
       "state": "LA",
-      "zip": "71301"
+      "postalCode": "71301",
+      "country": "US"
     },
     "latitude": 31.3113,
     "longitude": -92.4451,
@@ -218,10 +228,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Ruston Flying Field",
+      "addressLine1": "Ruston Flying Field",
       "city": "Ruston",
       "state": "LA",
-      "zip": "71270"
+      "postalCode": "71270",
+      "country": "US"
     },
     "latitude": 32.5298,
     "longitude": -92.6367,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Crowley Flying Field",
+      "addressLine1": "Crowley Flying Field",
       "city": "Crowley",
       "state": "LA",
-      "zip": "70526"
+      "postalCode": "70526",
+      "country": "US"
     },
     "latitude": 30.2243,
     "longitude": -92.3862,
@@ -260,10 +272,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Morgan City",
       "state": "LA",
-      "zip": "70380"
+      "postalCode": "70380",
+      "country": "US"
     },
     "latitude": 29.6991,
     "longitude": -91.2086,
@@ -281,10 +294,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Opelousas Flying Field",
+      "addressLine1": "Opelousas Flying Field",
       "city": "Opelousas",
       "state": "LA",
-      "zip": "70570"
+      "postalCode": "70570",
+      "country": "US"
     },
     "latitude": 30.5333,
     "longitude": -92.0771,
@@ -302,10 +316,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "West Monroe",
       "state": "LA",
-      "zip": "71291"
+      "postalCode": "71291",
+      "country": "US"
     },
     "latitude": 32.5093,
     "longitude": -92.1234,
@@ -323,10 +338,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Gonzales Flying Field",
+      "addressLine1": "Gonzales Flying Field",
       "city": "Gonzales",
       "state": "LA",
-      "zip": "70737"
+      "postalCode": "70737",
+      "country": "US"
     },
     "latitude": 30.2122,
     "longitude": -90.9181,
@@ -344,10 +360,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Franklin",
       "state": "LA",
-      "zip": "70538"
+      "postalCode": "70538",
+      "country": "US"
     },
     "latitude": 29.7856,
     "longitude": -91.514,
@@ -365,10 +382,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Houma Flying Field",
+      "addressLine1": "Houma Flying Field",
       "city": "Houma",
       "state": "LA",
-      "zip": "70360"
+      "postalCode": "70360",
+      "country": "US"
     },
     "latitude": 29.5959,
     "longitude": -90.7195,
@@ -386,10 +404,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Bossier City",
       "state": "LA",
-      "zip": "71111"
+      "postalCode": "71111",
+      "country": "US"
     },
     "latitude": 32.5157,
     "longitude": -93.7321,
@@ -407,10 +426,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Alexandria Flying Field",
+      "addressLine1": "Alexandria Flying Field",
       "city": "Alexandria",
       "state": "LA",
-      "zip": "71301"
+      "postalCode": "71301",
+      "country": "US"
     },
     "latitude": 31.3113,
     "longitude": -92.4451,
@@ -428,10 +448,11 @@
     "websiteUrl": "https://brrcflyers.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Baton Rouge",
       "state": "LA",
-      "zip": "70816"
+      "postalCode": "70816",
+      "country": "US"
     },
     "latitude": 30.4583,
     "longitude": -91.1403,
@@ -449,10 +470,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "New Orleans Flying Field",
+      "addressLine1": "New Orleans Flying Field",
       "city": "New Orleans",
       "state": "LA",
-      "zip": "70123"
+      "postalCode": "70123",
+      "country": "US"
     },
     "latitude": 29.9511,
     "longitude": -90.0715,
@@ -470,10 +492,11 @@
     "websiteUrl": "https://shreveportrc.com/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Shreveport",
       "state": "LA",
-      "zip": "71106"
+      "postalCode": "71106",
+      "country": "US"
     },
     "latitude": 32.5252,
     "longitude": -93.7502,
@@ -491,10 +514,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Lafayette Flying Field",
+      "addressLine1": "Lafayette Flying Field",
       "city": "Lafayette",
       "state": "LA",
-      "zip": "70501"
+      "postalCode": "70501",
+      "country": "US"
     },
     "latitude": 30.2241,
     "longitude": -92.0198,
@@ -512,10 +536,11 @@
     "websiteUrl": "https://bossierrc.com/",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Bossier City",
       "state": "LA",
-      "zip": "71111"
+      "postalCode": "71111",
+      "country": "US"
     },
     "latitude": 32.5157,
     "longitude": -93.7321,
@@ -533,10 +558,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Monroe Flying Field",
+      "addressLine1": "Monroe Flying Field",
       "city": "Monroe",
       "state": "LA",
-      "zip": "71201"
+      "postalCode": "71201",
+      "country": "US"
     },
     "latitude": 32.5093,
     "longitude": -92.1193,
@@ -554,10 +580,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Lake Charles",
       "state": "LA",
-      "zip": "70601"
+      "postalCode": "70601",
+      "country": "US"
     },
     "latitude": 30.2266,
     "longitude": -93.2174,
@@ -575,10 +602,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Houma Flying Field",
+      "addressLine1": "Houma Flying Field",
       "city": "Houma",
       "state": "LA",
-      "zip": "70360"
+      "postalCode": "70360",
+      "country": "US"
     },
     "latitude": 29.5959,
     "longitude": -90.7195,
@@ -596,10 +624,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Kenner",
       "state": "LA",
-      "zip": "70062"
+      "postalCode": "70062",
+      "country": "US"
     },
     "latitude": 29.994,
     "longitude": -90.241,
@@ -617,10 +646,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Alexandria Flying Field",
+      "addressLine1": "Alexandria Flying Field",
       "city": "Alexandria",
       "state": "LA",
-      "zip": "71301"
+      "postalCode": "71301",
+      "country": "US"
     },
     "latitude": 31.3113,
     "longitude": -92.4451,
@@ -638,10 +668,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Ruston Flying Field",
+      "addressLine1": "Ruston Flying Field",
       "city": "Ruston",
       "state": "LA",
-      "zip": "71270"
+      "postalCode": "71270",
+      "country": "US"
     },
     "latitude": 32.5298,
     "longitude": -92.6367,
@@ -659,10 +690,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Crowley Flying Field",
+      "addressLine1": "Crowley Flying Field",
       "city": "Crowley",
       "state": "LA",
-      "zip": "70526"
+      "postalCode": "70526",
+      "country": "US"
     },
     "latitude": 30.2243,
     "longitude": -92.3862,
@@ -680,10 +712,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Opelousas Flying Field",
+      "addressLine1": "Opelousas Flying Field",
       "city": "Opelousas",
       "state": "LA",
-      "zip": "70570"
+      "postalCode": "70570",
+      "country": "US"
     },
     "latitude": 30.5333,
     "longitude": -92.0771,
@@ -701,10 +734,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "West Monroe",
       "state": "LA",
-      "zip": "71291"
+      "postalCode": "71291",
+      "country": "US"
     },
     "latitude": 32.5093,
     "longitude": -92.1234,
@@ -722,10 +756,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Gonzales Flying Field",
+      "addressLine1": "Gonzales Flying Field",
       "city": "Gonzales",
       "state": "LA",
-      "zip": "70737"
+      "postalCode": "70737",
+      "country": "US"
     },
     "latitude": 30.2122,
     "longitude": -90.9181,
@@ -743,10 +778,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused",
     "address": {
-      "street": "Abbeville Flying Field",
+      "addressLine1": "Abbeville Flying Field",
       "city": "Abbeville",
       "state": "LA",
-      "zip": "70510"
+      "postalCode": "70510",
+      "country": "US"
     },
     "latitude": 29.9747,
     "longitude": -92.1063,
@@ -764,10 +800,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "DeRidder Flying Field",
+      "addressLine1": "DeRidder Flying Field",
       "city": "DeRidder",
       "state": "LA",
-      "zip": "70634"
+      "postalCode": "70634",
+      "country": "US"
     },
     "latitude": 30.8494,
     "longitude": -93.2922,
@@ -785,10 +822,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, local events, beginner-friendly",
     "address": {
-      "street": "Bogalusa Flying Field",
+      "addressLine1": "Bogalusa Flying Field",
       "city": "Bogalusa",
       "state": "LA",
-      "zip": "70427"
+      "postalCode": "70427",
+      "country": "US"
     },
     "latitude": 30.7891,
     "longitude": -89.8694,
@@ -806,10 +844,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, organized events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Ponchatoula",
       "state": "LA",
-      "zip": "70454"
+      "postalCode": "70454",
+      "country": "US"
     },
     "latitude": 30.4389,
     "longitude": -90.4617,
@@ -827,10 +866,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Slidell Flying Field",
+      "addressLine1": "Slidell Flying Field",
       "city": "Slidell",
       "state": "LA",
-      "zip": "70460"
+      "postalCode": "70460",
+      "country": "US"
     },
     "latitude": 30.275,
     "longitude": -89.7812,
@@ -848,10 +888,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Westlake",
       "state": "LA",
-      "zip": "70669"
+      "postalCode": "70669",
+      "country": "US"
     },
     "latitude": 30.2123,
     "longitude": -93.3254,
@@ -869,10 +910,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Thibodaux Flying Field",
+      "addressLine1": "Thibodaux Flying Field",
       "city": "Thibodaux",
       "state": "LA",
-      "zip": "70301"
+      "postalCode": "70301",
+      "country": "US"
     },
     "latitude": 29.7952,
     "longitude": -90.8222,
@@ -890,10 +932,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused",
     "address": {
-      "street": "Covington Flying Field",
+      "addressLine1": "Covington Flying Field",
       "city": "Covington",
       "state": "LA",
-      "zip": "70433"
+      "postalCode": "70433",
+      "country": "US"
     },
     "latitude": 30.4757,
     "longitude": -90.1009,
@@ -911,10 +954,11 @@
     "websiteUrl": "",
     "keyFeatures": "AMA chartered, private field, flight training",
     "address": {
-      "street": "Private Field 2",
+      "addressLine1": "Private Field 2",
       "city": "Morgan City",
       "state": "LA",
-      "zip": "70380"
+      "postalCode": "70380",
+      "country": "US"
     },
     "latitude": 29.698,
     "longitude": -91.2095,
@@ -932,10 +976,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Private Field 2",
+      "addressLine1": "Private Field 2",
       "city": "Franklin",
       "state": "LA",
-      "zip": "70538"
+      "postalCode": "70538",
+      "country": "US"
     },
     "latitude": 29.7865,
     "longitude": -91.513,
@@ -953,10 +998,11 @@
     "websiteUrl": "https://www.facebook.com/BayoulandRC/",
     "keyFeatures": "AMA chartered, dedicated flying field, community events",
     "address": {
-      "street": "1161 Bayouland Rd",
+      "addressLine1": "1161 Bayouland Rd",
       "city": "Thibodaux",
       "state": "LA",
-      "zip": "70301"
+      "postalCode": "70301",
+      "country": "US"
     },
     "latitude": 29.7952,
     "longitude": -90.8222,
@@ -974,10 +1020,11 @@
     "websiteUrl": "https://www.facebook.com/groups/181021065804206/",
     "keyFeatures": "AMA chartered, community-focused, diverse model aviation activities",
     "address": {
-      "street": "Breaux Bridge Area",
+      "addressLine1": "Breaux Bridge Area",
       "city": "Breaux Bridge",
       "state": "LA",
-      "zip": "70517"
+      "postalCode": "70517",
+      "country": "US"
     },
     "latitude": 30.275,
     "longitude": -91.7812,
@@ -995,10 +1042,11 @@
     "websiteUrl": "https://www.larksrc.org/",
     "keyFeatures": "AMA chartered, community events, model aviation promotion",
     "address": {
-      "street": "Lake Charles Area",
+      "addressLine1": "Lake Charles Area",
       "city": "Lake Charles",
       "state": "LA",
-      "zip": "70601"
+      "postalCode": "70601",
+      "country": "US"
     },
     "latitude": 30.2131,
     "longitude": -93.2044,
@@ -1016,10 +1064,11 @@
     "websiteUrl": "https://www.facebook.com/groups/BRRCC/",
     "keyFeatures": "AMA chartered, FAA FRIA approved, remote ID exempt",
     "address": {
-      "street": "Hwy 190, near Erwinville",
+      "addressLine1": "Hwy 190, near Erwinville",
       "city": "Baton Rouge",
       "state": "LA",
-      "zip": "70801"
+      "postalCode": "70801",
+      "country": "US"
     },
     "latitude": 30.497,
     "longitude": -91.167,
@@ -1037,10 +1086,11 @@
     "websiteUrl": "https://www.modelaircraft.org/club/tangi-rc-flyers-association",
     "keyFeatures": "Independent club, community-focused, model aviation activities",
     "address": {
-      "street": "1035 Bennett Rd",
+      "addressLine1": "1035 Bennett Rd",
       "city": "Hammond",
       "state": "LA",
-      "zip": "70403"
+      "postalCode": "70403",
+      "country": "US"
     },
     "latitude": 30.5033,
     "longitude": -90.3847,
@@ -1058,10 +1108,11 @@
     "websiteUrl": "https://www.bigboytoyslaf.com/community/local-fly-fields-rc-tracks",
     "keyFeatures": "Independent club, dedicated flying field, community events",
     "address": {
-      "street": "North Richfield Rd",
+      "addressLine1": "North Richfield Rd",
       "city": "Duson",
       "state": "LA",
-      "zip": "70529"
+      "postalCode": "70529",
+      "country": "US"
     },
     "latitude": 30.225,
     "longitude": -92.015,
@@ -1079,10 +1130,11 @@
     "websiteUrl": "https://www.bigboytoyslaf.com/community/local-fly-fields-rc-tracks",
     "keyFeatures": "Independent club, community-focused, model aviation activities",
     "address": {
-      "street": "North of I-10 East Exit 82",
+      "addressLine1": "North of I-10 East Exit 82",
       "city": "Crowley",
       "state": "LA",
-      "zip": "70526"
+      "postalCode": "70526",
+      "country": "US"
     },
     "latitude": 30.2131,
     "longitude": -92.374,
@@ -1100,10 +1152,11 @@
     "websiteUrl": "https://www.xtraactionsports.com/rc-flying-fields/louisiana-rc-flying-fields.htm",
     "keyFeatures": "AMA chartered, control line flying, community events",
     "address": {
-      "street": "Harrison Ave & Mona Lisa Dr",
+      "addressLine1": "Harrison Ave & Mona Lisa Dr",
       "city": "New Orleans",
       "state": "LA",
-      "zip": "70124"
+      "postalCode": "70124",
+      "country": "US"
     },
     "latitude": 30.013,
     "longitude": -90.1,
@@ -1121,10 +1174,11 @@
     "websiteUrl": "https://en.wikipedia.org/wiki/St._Charles_Airport_(Louisiana)",
     "keyFeatures": "Private airport, turf runway, general aviation services",
     "address": {
-      "street": "Ama Area",
+      "addressLine1": "Ama Area",
       "city": "Ama",
       "state": "LA",
-      "zip": "70031"
+      "postalCode": "70031",
+      "country": "US"
     },
     "latitude": 29.95,
     "longitude": -90.3,

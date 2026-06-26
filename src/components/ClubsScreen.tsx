@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, ListRenderItem, View } from 'react-native';
+import { FlatList, ListRenderItem, Pressable, Text, View } from 'react-native';
 
 import {
   Chip,
@@ -15,10 +15,20 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useQuery } from '@realm/react';
 import SearchBar from 'components/atoms/SearchBar';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { getDeviceCountry } from 'lib/clubs/deviceCountry';
 import { SearchResult, useClubSearch } from 'lib/clubs/useClubSearch';
 import { LocateFixed } from 'lucide-react-native';
 import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
+
+// Convert a 2-letter country code to its flag emoji.
+const countryFlag = (code: string): string => {
+  const base = 0x1f1e6 - 65;
+  return String.fromCodePoint(
+    base + code.charCodeAt(0),
+    base + code.charCodeAt(1),
+  );
+};
 
 export type Props = NativeStackScreenProps<ClubsNavigatorParamList, 'Clubs'>;
 
@@ -30,7 +40,9 @@ const ClubsScreen = ({ navigation }: Props) => {
 
   const clubs = useQuery<Club>('Club');
   const [query, setQuery] = useState('');
-  const results = useClubSearch(clubs, query);
+  // TODO: wire up country picker to call setSelectedCountry
+  const [selectedCountry, setSelectedCountry] = useState(() => getDeviceCountry());
+  const results = useClubSearch(clubs, query, selectedCountry);
 
   const renderItem: ListRenderItem<SearchResult> = ({ item, index }) => {
     if (item.type === 'location') {
@@ -109,12 +121,21 @@ const ClubsScreen = ({ navigation }: Props) => {
           marginBottom: tabBarHeight,
         },
       ]}>
-      <SearchBar
-        value={query}
-        onChangeText={setQuery}
-        placeholder={'Find a Club'}
-        style={{ zIndex: 1 }}
-      />
+      <View style={s.searchRow}>
+        <Pressable
+          style={s.countryChip}
+          onPress={() => {
+            // TODO: country picker
+          }}>
+          <Text style={s.countryFlag}>{countryFlag(selectedCountry)}</Text>
+        </Pressable>
+        <SearchBar
+          value={query}
+          onChangeText={setQuery}
+          placeholder={'Find a Club'}
+          style={{ flex: 1 }}
+        />
+      </View>
       {results.length > 0 ? (
         <FlatList
           style={{ flex: 1 }}
@@ -147,6 +168,23 @@ const ClubsScreen = ({ navigation }: Props) => {
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+  searchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  countryChip: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: theme.colors.white,
+    width: 46,
+    height: 46,
+    borderRadius: 23,
+    marginRight: 6,
+  },
+  countryFlag: {
+    fontSize: 18,
+  },
   chip: {
     marginRight: 5,
   },

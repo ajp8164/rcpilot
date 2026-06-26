@@ -2,11 +2,12 @@ import { useMemo } from 'react';
 
 import { Club } from 'realmdb';
 
+import { resolveState } from './resolvers';
 import { US_STATES } from './usStates';
 
 export type LocationResult = {
   type: 'location';
-  label: string; // e.g. "Dallas, TX" or "Arkansas, USA"
+  label: string; // e.g. "Dallas, TX" or "Arkansas"
 };
 
 export type ClubResult = {
@@ -18,26 +19,16 @@ export type SearchResult = LocationResult | ClubResult;
 
 const MAX_LOCATIONS = 5;
 
-// Resolve a string to a state abbreviation if it matches (abbreviation or full name).
-const resolveState = (value: string): string | undefined => {
-  const upper = value.toUpperCase();
-  if (US_STATES[upper]) return upper;
-  const lower = value.toLowerCase();
-  for (const [abbr, name] of Object.entries(US_STATES)) {
-    if (name.toLowerCase() === lower) return abbr;
-  }
-  return undefined;
-};
-
 export const useClubSearch = (
   clubs: Realm.Results<Club>,
   query: string,
+  country: string,
 ): SearchResult[] => {
   return useMemo(() => {
     const trimmed = query.trim();
     if (trimmed.length < 2) return [];
 
-    // Normalized query (no commas, lowercase) for general matching.
+    // Normalized query (no commas, lowercase).
     const q = trimmed.replace(/,/g, '').trim().toLowerCase();
 
     // Parse "city state" or "city, state" pattern.
@@ -69,25 +60,33 @@ export const useClubSearch = (
       }
     }
 
+    // Filter clubs by selected country.
+    const countryClubs = clubs.filter(
+      club => (club.address?.country || 'US') === country,
+    );
+
     // --- Location matches (max 5, alpha sorted) ---
     const locationSet = new Set<string>();
     const matchedStateAbbr: string[] = [];
 
-    // Match state abbreviation (exact).
-    const upperQuery = trimmed.replace(/,/g, '').trim().toUpperCase();
-    if (US_STATES[upperQuery]) {
-      locationSet.add(`${US_STATES[upperQuery]}, USA`);
-      matchedStateAbbr.push(upperQuery);
-    }
+    // State matching only applies for US.
+    if (country === 'US') {
+      // Match state abbreviation (exact).
+      const upperQuery = trimmed.replace(/,/g, '').trim().toUpperCase();
+      if (US_STATES[upperQuery]) {
+        locationSet.add(US_STATES[upperQuery]);
+        matchedStateAbbr.push(upperQuery);
+      }
 
-    // Match state full name (starts-with).
-    for (const [abbr, name] of Object.entries(US_STATES)) {
-      if (
-        name.toLowerCase().startsWith(q) &&
-        !matchedStateAbbr.includes(abbr)
-      ) {
-        locationSet.add(`${name}, USA`);
-        matchedStateAbbr.push(abbr);
+      // Match state full name (starts-with).
+      for (const [abbr, name] of Object.entries(US_STATES)) {
+        if (
+          name.toLowerCase().startsWith(q) &&
+          !matchedStateAbbr.includes(abbr)
+        ) {
+          locationSet.add(name);
+          matchedStateAbbr.push(abbr);
+        }
       }
     }
 
@@ -97,7 +96,7 @@ export const useClubSearch = (
     }
 
     // Match cities (starts-with query or city+state combo).
-    for (const club of clubs) {
+    for (const club of countryClubs) {
       if (locationSet.size >= MAX_LOCATIONS) break;
       const city = club.address?.city || '';
       const state = club.address?.state || '';
@@ -107,7 +106,7 @@ export const useClubSearch = (
           locationSet.add(`${city}, ${state}`);
         }
       } else if (city.toLowerCase().startsWith(q)) {
-        locationSet.add(`${city}, ${state}`);
+        locationSet.add(state ? `${city}, ${state}` : city);
       }
     }
 
@@ -118,7 +117,7 @@ export const useClubSearch = (
       matchedStateAbbr.length > 0 &&
       locationSet.size < MAX_LOCATIONS
     ) {
-      for (const club of clubs) {
+      for (const club of countryClubs) {
         if (locationSet.size >= MAX_LOCATIONS) break;
         const state = club.address?.state || '';
         if (matchedStateAbbr.includes(state)) {
@@ -136,7 +135,7 @@ export const useClubSearch = (
       .map(label => ({ type: 'location', label }));
 
     // --- Club matches (all, alpha sorted) ---
-    const clubResults: ClubResult[] = clubs
+    const clubResults: ClubResult[] = countryClubs
       .filter(club => {
         const name = club.name.toLowerCase();
         const city = (club.address?.city || '').toLowerCase();
@@ -160,5 +159,5 @@ export const useClubSearch = (
       .map(club => ({ type: 'club', club }));
 
     return [...locationResults, ...clubResults];
-  }, [query, clubs]);
+  }, [query, clubs, country]);
 };

@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.anchoragerc.org/",
     "keyFeatures": "Paved and grass runways, member training, family-friendly events, annual fun-fly",
     "address": {
-      "street": "2701 E Northern Lights Blvd",
+      "addressLine1": "2701 E Northern Lights Blvd",
       "city": "Anchorage",
       "state": "AK",
-      "zip": "99508"
+      "postalCode": "99508",
+      "country": "US"
     },
     "latitude": 61.1986,
     "longitude": -149.8263,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://www.fairbanksrcflyers.com/",
     "keyFeatures": "Grass runway, annual winter and summer events, youth training program",
     "address": {
-      "street": "1000 Airport Way",
+      "addressLine1": "1000 Airport Way",
       "city": "Fairbanks",
       "state": "AK",
-      "zip": "99701"
+      "postalCode": "99701",
+      "country": "US"
     },
     "latitude": 64.8378,
     "longitude": -147.7164,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.facebook.com/KenaiRCFlyers/",
     "keyFeatures": "Grass field, open membership, monthly club events, beginner instruction",
     "address": {
-      "street": "23515 K-Beach Rd",
+      "addressLine1": "23515 K-Beach Rd",
       "city": "Soldotna",
       "state": "AK",
-      "zip": "99669"
+      "postalCode": "99669",
+      "country": "US"
     },
     "latitude": 60.4875,
     "longitude": -151.0744,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.matsurcflyers.org/",
     "keyFeatures": "Grass runway, family-friendly, summer flying events, beginner training",
     "address": {
-      "street": "1200 S Knik River Rd",
+      "addressLine1": "1200 S Knik River Rd",
       "city": "Palmer",
       "state": "AK",
-      "zip": "99645"
+      "postalCode": "99645",
+      "country": "US"
     },
     "latitude": 61.5997,
     "longitude": -149.1127,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://www.juneaurcflyers.org/",
     "keyFeatures": "Community-oriented, small grass airfield, regular meetups",
     "address": {
-      "street": "45 Glacier Hwy",
+      "addressLine1": "45 Glacier Hwy",
       "city": "Juneau",
       "state": "AK",
-      "zip": "99801"
+      "postalCode": "99801",
+      "country": "US"
     },
     "latitude": 58.3019,
     "longitude": -134.4197,

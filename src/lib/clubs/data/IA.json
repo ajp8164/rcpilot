@@ -8,10 +8,11 @@
     "websiteUrl": "https://desmoinesrcflyers.org/",
     "keyFeatures": "AMA chartered, dedicated field, flight training, community events",
     "address": {
-      "street": "Private Field, Des Moines",
+      "addressLine1": "Private Field, Des Moines",
       "city": "Des Moines",
       "state": "IA",
-      "zip": "50317"
+      "postalCode": "50317",
+      "country": "US"
     },
     "latitude": 41.5868,
     "longitude": -93.625,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Cedar Rapids Flying Field",
+      "addressLine1": "Cedar Rapids Flying Field",
       "city": "Cedar Rapids",
       "state": "IA",
-      "zip": "52404"
+      "postalCode": "52404",
+      "country": "US"
     },
     "latitude": 41.9779,
     "longitude": -91.6656,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.iowacityrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Iowa City",
       "state": "IA",
-      "zip": "52240"
+      "postalCode": "52240",
+      "country": "US"
     },
     "latitude": 41.6611,
     "longitude": -91.5302,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, open membership, community events",
     "address": {
-      "street": "Davenport Flying Field",
+      "addressLine1": "Davenport Flying Field",
       "city": "Davenport",
       "state": "IA",
-      "zip": "52803"
+      "postalCode": "52803",
+      "country": "US"
     },
     "latitude": 41.5236,
     "longitude": -90.5776,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://siouxcityrc.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Sioux City",
       "state": "IA",
-      "zip": "51103"
+      "postalCode": "51103",
+      "country": "US"
     },
     "latitude": 42.5,
     "longitude": -96.4,
@@ -113,10 +118,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Ames Flying Field",
+      "addressLine1": "Ames Flying Field",
       "city": "Ames",
       "state": "IA",
-      "zip": "50010"
+      "postalCode": "50010",
+      "country": "US"
     },
     "latitude": 42.0347,
     "longitude": -93.6206,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://waterloorcflyers.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Waterloo",
       "state": "IA",
-      "zip": "50701"
+      "postalCode": "50701",
+      "country": "US"
     },
     "latitude": 42.4928,
     "longitude": -92.3426,
@@ -155,10 +162,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Council Bluffs Flying Field",
+      "addressLine1": "Council Bluffs Flying Field",
       "city": "Council Bluffs",
       "state": "IA",
-      "zip": "51501"
+      "postalCode": "51501",
+      "country": "US"
     },
     "latitude": 41.2619,
     "longitude": -95.8608,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://bettendorfrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Bettendorf",
       "state": "IA",
-      "zip": "52722"
+      "postalCode": "52722",
+      "country": "US"
     },
     "latitude": 41.5456,
     "longitude": -90.4933,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Mason City Flying Field",
+      "addressLine1": "Mason City Flying Field",
       "city": "Mason City",
       "state": "IA",
-      "zip": "50401"
+      "postalCode": "50401",
+      "country": "US"
     },
     "latitude": 43.153,
     "longitude": -93.201,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.fortdodgercflyers.org/",
     "keyFeatures": "AMA chartered, private field, community events, flight training",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Fort Dodge",
       "state": "IA",
-      "zip": "50501"
+      "postalCode": "50501",
+      "country": "US"
     },
     "latitude": 42.5031,
     "longitude": -94.1696,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, open membership, community events",
     "address": {
-      "street": "Burlington Flying Field",
+      "addressLine1": "Burlington Flying Field",
       "city": "Burlington",
       "state": "IA",
-      "zip": "52601"
+      "postalCode": "52601",
+      "country": "US"
     },
     "latitude": 40.8073,
     "longitude": -91.1129,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.clintonrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Clinton",
       "state": "IA",
-      "zip": "52732"
+      "postalCode": "52732",
+      "country": "US"
     },
     "latitude": 41.844,
     "longitude": -90.1889,
@@ -281,10 +294,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Marshalltown Flying Field",
+      "addressLine1": "Marshalltown Flying Field",
       "city": "Marshalltown",
       "state": "IA",
-      "zip": "50158"
+      "postalCode": "50158",
+      "country": "US"
     },
     "latitude": 42.0351,
     "longitude": -92.9132,
@@ -302,10 +316,11 @@
     "websiteUrl": "https://www.fortmadisonrc.org/",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Fort Madison",
       "state": "IA",
-      "zip": "52627"
+      "postalCode": "52627",
+      "country": "US"
     },
     "latitude": 40.6294,
     "longitude": -91.3249,
@@ -323,10 +338,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Ottumwa Flying Field",
+      "addressLine1": "Ottumwa Flying Field",
       "city": "Ottumwa",
       "state": "IA",
-      "zip": "52501"
+      "postalCode": "52501",
+      "country": "US"
     },
     "latitude": 41.022,
     "longitude": -92.4092,
@@ -344,10 +360,11 @@
     "websiteUrl": "https://www.siouxcityelectric.org/",
     "keyFeatures": "AMA chartered, electric aircraft focus, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Sioux City",
       "state": "IA",
-      "zip": "51103"
+      "postalCode": "51103",
+      "country": "US"
     },
     "latitude": 42.5,
     "longitude": -96.4,
@@ -365,10 +382,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Ottawa Flying Field",
+      "addressLine1": "Ottawa Flying Field",
       "city": "Ottawa",
       "state": "IA",
-      "zip": "52346"
+      "postalCode": "52346",
+      "country": "US"
     },
     "latitude": 41.3172,
     "longitude": -91.2478,
@@ -386,10 +404,11 @@
     "websiteUrl": "https://www.carrollrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Carroll",
       "state": "IA",
-      "zip": "51401"
+      "postalCode": "51401",
+      "country": "US"
     },
     "latitude": 42.0656,
     "longitude": -94.8676,
@@ -407,10 +426,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Sioux Center Flying Field",
+      "addressLine1": "Sioux Center Flying Field",
       "city": "Sioux Center",
       "state": "IA",
-      "zip": "51250"
+      "postalCode": "51250",
+      "country": "US"
     },
     "latitude": 43.0745,
     "longitude": -96.178,
@@ -428,10 +448,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Grinnell Flying Field",
+      "addressLine1": "Grinnell Flying Field",
       "city": "Grinnell",
       "state": "IA",
-      "zip": "50112"
+      "postalCode": "50112",
+      "country": "US"
     },
     "latitude": 41.7431,
     "longitude": -92.7237,
@@ -449,10 +470,11 @@
     "websiteUrl": "https://www.newtonrc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Newton",
       "state": "IA",
-      "zip": "50208"
+      "postalCode": "50208",
+      "country": "US"
     },
     "latitude": 41.6995,
     "longitude": -93.0473,
@@ -470,10 +492,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Spencer Flying Field",
+      "addressLine1": "Spencer Flying Field",
       "city": "Spencer",
       "state": "IA",
-      "zip": "51301"
+      "postalCode": "51301",
+      "country": "US"
     },
     "latitude": 43.145,
     "longitude": -95.145,
@@ -491,10 +514,11 @@
     "websiteUrl": "https://www.fortdodgeelectric.org/",
     "keyFeatures": "AMA chartered, electric aircraft focus, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Fort Dodge",
       "state": "IA",
-      "zip": "50501"
+      "postalCode": "50501",
+      "country": "US"
     },
     "latitude": 42.5031,
     "longitude": -94.1696,
@@ -512,10 +536,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Decorah Flying Field",
+      "addressLine1": "Decorah Flying Field",
       "city": "Decorah",
       "state": "IA",
-      "zip": "52101"
+      "postalCode": "52101",
+      "country": "US"
     },
     "latitude": 43.3036,
     "longitude": -91.7892,
@@ -533,10 +558,11 @@
     "websiteUrl": "https://www.muscatinerc.org/",
     "keyFeatures": "AMA chartered, private field, flight training, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Muscatine",
       "state": "IA",
-      "zip": "52761"
+      "postalCode": "52761",
+      "country": "US"
     },
     "latitude": 41.4249,
     "longitude": -91.0436,
@@ -554,10 +580,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events",
     "address": {
-      "street": "Iowa Falls Flying Field",
+      "addressLine1": "Iowa Falls Flying Field",
       "city": "Iowa Falls",
       "state": "IA",
-      "zip": "50126"
+      "postalCode": "50126",
+      "country": "US"
     },
     "latitude": 42.5222,
     "longitude": -93.2622,
@@ -575,10 +602,11 @@
     "websiteUrl": "https://www.stormlakerc.org/",
     "keyFeatures": "AMA chartered, private field, community events",
     "address": {
-      "street": "Private Field",
+      "addressLine1": "Private Field",
       "city": "Storm Lake",
       "state": "IA",
-      "zip": "50588"
+      "postalCode": "50588",
+      "country": "US"
     },
     "latitude": 42.639,
     "longitude": -95.2019,
@@ -596,10 +624,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, electric aircraft, community events",
     "address": {
-      "street": "Ottawa Flying Field",
+      "addressLine1": "Ottawa Flying Field",
       "city": "Ottawa",
       "state": "IA",
-      "zip": "52346"
+      "postalCode": "52346",
+      "country": "US"
     },
     "latitude": 41.3172,
     "longitude": -91.2478,
@@ -617,10 +646,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, beginner-friendly",
     "address": {
-      "street": "Algona Flying Field",
+      "addressLine1": "Algona Flying Field",
       "city": "Algona",
       "state": "IA",
-      "zip": "50511"
+      "postalCode": "50511",
+      "country": "US"
     },
     "latitude": 43.0683,
     "longitude": -94.2358,

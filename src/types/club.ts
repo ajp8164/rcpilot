@@ -7,10 +7,11 @@ export type Club = {
   name: string;
   description: string;
   address: {
-    street: string;
+    addressLine1: string;
     city: string;
     state: string;
-    zip: string;
+    postalCode: string;
+    country: string;
   };
   latitude: number;
   longitude: number;

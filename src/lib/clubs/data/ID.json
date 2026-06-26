@@ -8,10 +8,11 @@
     "websiteUrl": "https://deserteaglesrcclub.com/",
     "keyFeatures": "AMA chartered, flight training, community events, open membership",
     "address": {
-      "street": "Woodville/New Sweden area, off I-15 exit 113",
+      "addressLine1": "Woodville/New Sweden area, off I-15 exit 113",
       "city": "Idaho Falls",
       "state": "ID",
-      "zip": "83402"
+      "postalCode": "83402",
+      "country": "US"
     },
     "latitude": 43.4995,
     "longitude": -112.0245,
@@ -29,10 +30,11 @@
     "websiteUrl": "https://pocatellorc.com/",
     "keyFeatures": "AMA chartered, flight training, community events, open membership",
     "address": {
-      "street": "Near Pocatello Regional Airport",
+      "addressLine1": "Near Pocatello Regional Airport",
       "city": "Pocatello",
       "state": "ID",
-      "zip": "83201"
+      "postalCode": "83201",
+      "country": "US"
     },
     "latitude": 42.8713,
     "longitude": -112.6011,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.barks.us/",
     "keyFeatures": "Open to public, multi-type aircraft, community events, open membership",
     "address": {
-      "street": "Off Kuna Mora Rd",
+      "addressLine1": "Off Kuna Mora Rd",
       "city": "Boise",
       "state": "ID",
-      "zip": "83707"
+      "postalCode": "83707",
+      "country": "US"
     },
     "latitude": 43.5888,
     "longitude": -116.2635,
@@ -71,10 +74,11 @@
     "websiteUrl": "https://www.magicvalleyaeroclub.com/",
     "keyFeatures": "Non-profit, well-maintained aircraft, open membership",
     "address": {
-      "street": "Twin Falls area",
+      "addressLine1": "Twin Falls area",
       "city": "Twin Falls",
       "state": "ID",
-      "zip": "83301"
+      "postalCode": "83301",
+      "country": "US"
     },
     "latitude": 42.5629,
     "longitude": -114.4609,
@@ -92,10 +96,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, open membership",
     "address": {
-      "street": "4888 W Aeronca St",
+      "addressLine1": "4888 W Aeronca St",
       "city": "Boise",
       "state": "ID",
-      "zip": "83705"
+      "postalCode": "83705",
+      "country": "US"
     },
     "latitude": 43.5646,
     "longitude": -116.2276,
@@ -113,10 +118,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community events, open membership",
     "address": {
-      "street": "Coeur d'Alene area",
+      "addressLine1": "Coeur d'Alene area",
       "city": "Coeur d'Alene",
       "state": "ID",
-      "zip": "83814"
+      "postalCode": "83814",
+      "country": "US"
     },
     "latitude": 47.6777,
     "longitude": -116.7805,
@@ -134,10 +140,11 @@
     "websiteUrl": "",
     "keyFeatures": "Dedicated flying field, community-focused, open membership",
     "address": {
-      "street": "Pope Road",
+      "addressLine1": "Pope Road",
       "city": "Athol",
       "state": "ID",
-      "zip": "83801"
+      "postalCode": "83801",
+      "country": "US"
     },
     "latitude": 47.9785,
     "longitude": -116.5861,
@@ -155,10 +162,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, open membership",
     "address": {
-      "street": "Potlatch area",
+      "addressLine1": "Potlatch area",
       "city": "Potlatch",
       "state": "ID",
-      "zip": "83855"
+      "postalCode": "83855",
+      "country": "US"
     },
     "latitude": 46.7667,
     "longitude": -116.7528,

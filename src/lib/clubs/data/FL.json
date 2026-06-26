@@ -8,10 +8,11 @@
     "websiteUrl": "https://www.centralfloridarc.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
     "address": {
-      "street": "123 RC Way",
+      "addressLine1": "123 RC Way",
       "city": "Orlando",
       "state": "FL",
-      "zip": "32803"
+      "postalCode": "32803",
+      "country": "US"
     },
     "latitude": 28.5383,
     "longitude": -81.3792,
@@ -29,10 +30,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community events, open membership",
     "address": {
-      "street": "Tampa RC Field",
+      "addressLine1": "Tampa RC Field",
       "city": "Tampa",
       "state": "FL",
-      "zip": "33602"
+      "postalCode": "33602",
+      "country": "US"
     },
     "latitude": 27.9506,
     "longitude": -82.4572,
@@ -50,10 +52,11 @@
     "websiteUrl": "https://www.jaxrc.org/",
     "keyFeatures": "AMA chartered, beginner training, multi-type aircraft, community events",
     "address": {
-      "street": "200 RC Drive",
+      "addressLine1": "200 RC Drive",
       "city": "Jacksonville",
       "state": "FL",
-      "zip": "32207"
+      "postalCode": "32207",
+      "country": "US"
     },
     "latitude": 30.3322,
     "longitude": -81.6557,
@@ -71,10 +74,11 @@
     "websiteUrl": "",
     "keyFeatures": "Glider focus, small grass airfield, beginner-friendly, community events",
     "address": {
-      "street": "Fort Lauderdale Glider Field",
+      "addressLine1": "Fort Lauderdale Glider Field",
       "city": "Fort Lauderdale",
       "state": "FL",
-      "zip": "33301"
+      "postalCode": "33301",
+      "country": "US"
     },
     "latitude": 26.1224,
     "longitude": -80.1373,
@@ -92,10 +96,11 @@
     "websiteUrl": "https://larks-rc.com/",
     "keyFeatures": "Independent club, casual flying, open membership",
     "address": {
-      "street": "Central Florida Flying Field",
+      "addressLine1": "Central Florida Flying Field",
       "city": "Central Florida",
       "state": "FL",
-      "zip": "32778"
+      "postalCode": "32778",
+      "country": "US"
     },
     "latitude": 28.5721,
     "longitude": -81.2078,
@@ -113,10 +118,11 @@
     "websiteUrl": "https://www.southerneaglesquadron.com/",
     "keyFeatures": "AMA chartered, FAA FRIA site, flight training, community events",
     "address": {
-      "street": "38000 Rolling Acres Rd",
+      "addressLine1": "38000 Rolling Acres Rd",
       "city": "Lady Lake",
       "state": "FL",
-      "zip": "32159"
+      "postalCode": "32159",
+      "country": "US"
     },
     "latitude": 28.9017,
     "longitude": -81.9492,
@@ -134,10 +140,11 @@
     "websiteUrl": "https://ospreyrcclub.net/",
     "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
     "address": {
-      "street": "SW 344th St & Palm Dr",
+      "addressLine1": "SW 344th St & Palm Dr",
       "city": "Homestead",
       "state": "FL",
-      "zip": "33034"
+      "postalCode": "33034",
+      "country": "US"
     },
     "latitude": 25.468,
     "longitude": -80.4778,
@@ -155,10 +162,11 @@
     "websiteUrl": "https://ontopoftheworldcommunities.com/",
     "keyFeatures": "Private club, FAA FRIA site, full facilities, community events",
     "address": {
-      "street": "9860 SW 99th St",
+      "addressLine1": "9860 SW 99th St",
       "city": "Ocala",
       "state": "FL",
-      "zip": "34481"
+      "postalCode": "34481",
+      "country": "US"
     },
     "latitude": 29.1025,
     "longitude": -82.1946,
@@ -176,10 +184,11 @@
     "websiteUrl": "https://www.brevardrcflyers.com/",
     "keyFeatures": "AMA chartered, multi-type aircraft, beginner training, community events",
     "address": {
-      "street": "150 RC Field Rd",
+      "addressLine1": "150 RC Field Rd",
       "city": "Melbourne",
       "state": "FL",
-      "zip": "32901"
+      "postalCode": "32901",
+      "country": "US"
     },
     "latitude": 28.0836,
     "longitude": -80.6081,
@@ -197,10 +206,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-oriented, beginner-friendly, open membership",
     "address": {
-      "street": "Pensacola Flying Field",
+      "addressLine1": "Pensacola Flying Field",
       "city": "Pensacola",
       "state": "FL",
-      "zip": "32501"
+      "postalCode": "32501",
+      "country": "US"
     },
     "latitude": 30.4213,
     "longitude": -87.2169,
@@ -218,10 +228,11 @@
     "websiteUrl": "https://www.spacecoastrcsociety.com/",
     "keyFeatures": "AMA chartered, flight instruction, diverse aircraft types, community events",
     "address": {
-      "street": "200 RC Drive",
+      "addressLine1": "200 RC Drive",
       "city": "Cocoa",
       "state": "FL",
-      "zip": "32922"
+      "postalCode": "32922",
+      "country": "US"
     },
     "latitude": 28.3862,
     "longitude": -80.6077,
@@ -239,10 +250,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, community-focused, beginner-friendly, open membership",
     "address": {
-      "street": "Clearwater RC Field",
+      "addressLine1": "Clearwater RC Field",
       "city": "Clearwater",
       "state": "FL",
-      "zip": "33755"
+      "postalCode": "33755",
+      "country": "US"
     },
     "latitude": 27.9659,
     "longitude": -82.8001,
@@ -260,10 +272,11 @@
     "websiteUrl": "https://www.miamircflyers.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, beginner training, competitions",
     "address": {
-      "street": "250 RC Lane",
+      "addressLine1": "250 RC Lane",
       "city": "Miami",
       "state": "FL",
-      "zip": "33142"
+      "postalCode": "33142",
+      "country": "US"
     },
     "latitude": 25.7959,
     "longitude": -80.287,
@@ -281,10 +294,11 @@
     "websiteUrl": "https://www.northfloridarc.org/",
     "keyFeatures": "AMA chartered, diverse aircraft types, flight training, community events",
     "address": {
-      "street": "400 RC Field Rd",
+      "addressLine1": "400 RC Field Rd",
       "city": "Jacksonville",
       "state": "FL",
-      "zip": "32218"
+      "postalCode": "32218",
+      "country": "US"
     },
     "latitude": 30.3322,
     "longitude": -81.6557,
@@ -302,10 +316,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-oriented, open membership",
     "address": {
-      "street": "Fort Myers Flying Field",
+      "addressLine1": "Fort Myers Flying Field",
       "city": "Fort Myers",
       "state": "FL",
-      "zip": "33901"
+      "postalCode": "33901",
+      "country": "US"
     },
     "latitude": 26.6406,
     "longitude": -81.8723,
@@ -323,10 +338,11 @@
     "websiteUrl": "https://www.bocaratonrcflyers.org/",
     "keyFeatures": "AMA chartered, flight instruction, competitions, community events",
     "address": {
-      "street": "150 RC Lane",
+      "addressLine1": "150 RC Lane",
       "city": "Boca Raton",
       "state": "FL",
-      "zip": "33432"
+      "postalCode": "33432",
+      "country": "US"
     },
     "latitude": 26.3683,
     "longitude": -80.1289,
@@ -344,10 +360,11 @@
     "websiteUrl": "",
     "keyFeatures": "Grass field, beginner-friendly, community-focused, open membership",
     "address": {
-      "street": "Orlando Flying Field",
+      "addressLine1": "Orlando Flying Field",
       "city": "Orlando",
       "state": "FL",
-      "zip": "32803"
+      "postalCode": "32803",
+      "country": "US"
     },
     "latitude": 28.5383,
     "longitude": -81.3792,
@@ -365,10 +382,11 @@
     "websiteUrl": "https://www.panhandlercflyers.org/",
     "keyFeatures": "AMA chartered, multi-type aircraft, community events, flight training",
     "address": {
-      "street": "350 RC Blvd",
+      "addressLine1": "350 RC Blvd",
       "city": "Pensacola",
       "state": "FL",
-      "zip": "32501"
+      "postalCode": "32501",
+      "country": "US"
     },
     "latitude": 30.4213,
     "longitude": -87.2169,

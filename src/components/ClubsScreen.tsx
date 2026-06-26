@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FlatList, ListRenderItem, ScrollView, View } from 'react-native';
+import { FlatList, ListRenderItem, View } from 'react-native';
 
 import {
   Chip,
@@ -11,8 +11,12 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useQuery } from '@realm/react';
 import SearchBar from 'components/atoms/SearchBar';
+import { EmptyView } from 'components/molecules/EmptyView';
+import { SearchResult, useClubSearch } from 'lib/clubs/useClubSearch';
+import { LocateFixed } from 'lucide-react-native';
 import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
 
@@ -22,29 +26,33 @@ const ClubsScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
   const device = useDevice();
+  const tabBarHeight = useBottomTabBarHeight();
 
   const clubs = useQuery<Club>('Club');
-
   const [query, setQuery] = useState('');
+  const results = useClubSearch(clubs, query);
 
-  // useLayoutEffect(() => {
-  //   navigation.setOptions({
-  //     headerTitle: () => (
-  //       <SearchBar
-  //         value={query}
-  //         onChangeText={setQuery}
-  //         placeholder={'Find a Club'}
-  //       />
-  //     ),
-  //   });
-  // }, [navigation, query]);
+  const renderItem: ListRenderItem<SearchResult> = ({ item, index }) => {
+    if (item.type === 'location') {
+      return (
+        <ListItem
+          title={item.label}
+          position={listItemPosition(index, results.length)}
+          leftContent={
+            <LocateFixed color={theme.colors.listItemIcon} />
+          }
+          rightContent={'chevron-right'}
+          onPress={() => {
+            // TODO: handle location tap
+          }}
+        />
+      );
+    }
 
-  const renderClub: ListRenderItem<Club> = ({ item: club, index }) => {
+    const { club } = item;
     return (
       <ListItem
         title={club.name}
-        // subtitle={club.amaChartered ? 'AMA Chartered' : undefined}
-        // subtitle={`${club.amaChartered ? 'AMA Chartered' : ''} ${club.boating ? 'Boating' : ''} ${club.driving ? 'Driving' : ''} ${club.flying ? 'Flying' : ''}`}
         subtitle={
           <View style={s.chips}>
             {club?.amaChartered ? (
@@ -81,7 +89,7 @@ const ClubsScreen = ({ navigation }: Props) => {
             ) : null}
           </View>
         }
-        position={listItemPosition(index, clubs.length)}
+        position={listItemPosition(index, results.length)}
         rightContent={'chevron-right'}
         onPress={() =>
           navigation.navigate('Club', {
@@ -93,31 +101,52 @@ const ClubsScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <View style={[theme.styles.view, { marginTop: device.insets.top }]}>
+    <View
+      style={[
+        theme.styles.view,
+        {
+          paddingTop: device.insets.top,
+          marginBottom: tabBarHeight,
+        },
+      ]}>
       <SearchBar
         value={query}
         onChangeText={setQuery}
         placeholder={'Find a Club'}
-        style={{}}
+        style={{ zIndex: 1 }}
       />
-      <ScrollView showsVerticalScrollIndicator={false}>
+      {results.length > 0 ? (
         <FlatList
-          data={clubs.sorted('name')}
-          renderItem={renderClub}
-          keyExtractor={(_item, index) => `${index}`}
-          scrollEnabled={false}
+          style={{ flex: 1 }}
+          data={results}
+          renderItem={renderItem}
+          keyExtractor={(item, index) =>
+            item.type === 'location' ? `loc-${item.label}` : `club-${index}`
+          }
           showsVerticalScrollIndicator={false}
-          ListFooterComponent={<Divider style={s.divider} />}
+          ListFooterComponent={<Divider />}
         />
-      </ScrollView>
+      ) : null}
+      {results.length === 0 ? (
+        <View
+          pointerEvents="none"
+          style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }}>
+          <EmptyView
+            info
+            message={query.trim().length >= 2 ? 'No Results' : 'Search Clubs'}
+            details={
+              query.trim().length >= 2
+                ? 'Try a different search.'
+                : 'Enter a club name, city, or state.'
+            }
+          />
+        </View>
+      ) : null}
     </View>
   );
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  divider: {
-    marginBottom: 15,
-  },
   chip: {
     marginRight: 5,
   },

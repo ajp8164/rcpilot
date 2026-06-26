@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import BatteriesScreen from 'components/BatteriesScreen';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
@@ -31,13 +32,7 @@ const BatteriesNavigator = () => {
   return (
     <BatteriesStack.Navigator
       initialRouteName="Batteries"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <BatteriesStack.Screen
         name="Batteries"
         component={BatteriesScreen}
@@ -55,6 +50,7 @@ const BatteriesNavigator = () => {
           headerLargeStyle: {
             backgroundColor: theme.colors.viewBackground,
           },
+          unstable_headerLeftItems: () => [],
         })}
       />
       <BatteriesStack.Screen

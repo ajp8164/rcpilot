@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import ScanScreen from 'components/ScanScreen';
 import { ScanNavigatorParamList } from 'types/navigation';
 
@@ -13,13 +14,7 @@ const ScanNavigator = () => {
   return (
     <ScanStack.Navigator
       initialRouteName="Scan"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <ScanStack.Screen
         name="Scan"
         component={ScanScreen}

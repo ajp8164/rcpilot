@@ -1,32 +1,13 @@
 import React from 'react';
-import { Pressable, View } from 'react-native';
+import { View } from 'react-native';
 
-import { useTheme } from '@react-native-hello/ui';
-import { useNavigation } from '@react-navigation/native';
 import type {
   NativeStackHeaderItem,
   NativeStackHeaderItemProps,
   NativeStackNavigationOptions,
 } from '@react-navigation/native-stack';
-import { ChevronLeft } from 'lucide-react-native';
 
-// A minimal back button (chevron only, no glass pill) rendered when no explicit
-// left items are provided to headerOptions.
-export const BackButton = ({ color }: { color?: string }) => {
-  const theme = useTheme();
-  const navigation = useNavigation();
-
-  return (
-    <Pressable onPress={() => navigation.goBack()} hitSlop={8}>
-      <ChevronLeft
-        size={36}
-        strokeWidth={2}
-        color={color || theme.colors.screenHeaderButtonText}
-        style={{ marginLeft: -16 }}
-      />
-    </Pressable>
-  );
-};
+import { BackButton } from './BackButton';
 
 export type HeaderItemProps = {
   // Position of the item within its left/right group. Injected by headerOptions
@@ -142,3 +123,4 @@ export const headerOptions = ({
     ...rest,
   };
 };
+

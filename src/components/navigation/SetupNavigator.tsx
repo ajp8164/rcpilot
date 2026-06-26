@@ -53,7 +53,7 @@ import ReportEventFiltersNavigator from 'components/navigation/ReportEventFilter
 import ReportMaintenanceFiltersNavigator from 'components/navigation/ReportMaintenanceFiltersNavigator';
 import ReportModelScanCodeFiltersNavigator from 'components/navigation/ReportModelScanCodeFiltersNavigator';
 import ReportViewerNavigator from 'components/navigation/ReportViewerNavigator';
-import { BackButton } from 'components/atoms/navigation/headerOptions';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import { appConfig } from 'config';
 import { SetupNavigatorParamList } from 'types/navigation';
 
@@ -65,22 +65,7 @@ const SetupNavigator = () => {
   return (
     <SetupStack.Navigator
       initialRouteName="Setup"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-        headerBackButtonDisplayMode: 'minimal',
-        headerBackVisible: false,
-        unstable_headerLeftItems: (props) => [
-          {
-            type: 'custom',
-            element: <BackButton color={props.tintColor} />,
-            hidesSharedBackground: true,
-          },
-        ],
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <SetupStack.Screen
         name="Setup"
         component={SetupScreen}

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import EventsScreen from 'components/EventsScreen';
 import LocationsMapScreen from 'components/LocationsMapScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
@@ -18,13 +19,7 @@ const LocationNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <LocationStack.Navigator
         initialRouteName="LocationsMap"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <LocationStack.Screen
           name="LocationsMap"
           component={LocationsMapScreen}

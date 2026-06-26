@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import BatteryPickerScreen from 'components/BatteryPickerScreen';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
@@ -39,13 +40,7 @@ const ModelsNavigator = () => {
   return (
     <ModelsStack.Navigator
       initialRouteName="Models"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <ModelsStack.Screen
         name="Models"
         component={ModelsScreen}
@@ -57,6 +52,7 @@ const ModelsNavigator = () => {
           headerLargeStyle: {
             backgroundColor: theme.colors.viewBackground,
           },
+          unstable_headerLeftItems: () => [],
         })}
       />
       <ModelsStack.Screen

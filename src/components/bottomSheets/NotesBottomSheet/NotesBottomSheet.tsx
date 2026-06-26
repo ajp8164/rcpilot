@@ -2,11 +2,10 @@ import React, { useImperativeHandle, useRef, useState } from 'react';
 import { View } from 'react-native';
 
 import BottomSheet, {
-  BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet';
 import { useEvent } from '@react-native-hello/core';
-import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
+import { ThemeManager, useDevice } from '@react-native-hello/ui';
 import IconCloseX from 'components/atoms/IconCloseX';
 import { ModalHeader } from 'components/atoms/ModalHeader';
 import { NotesEditorResult } from 'types/notes';
@@ -22,7 +21,6 @@ const NotesBottomSheet = React.forwardRef<
 >((props, ref) => {
   const { eventName, snapPoints = ['92%'] } = props;
 
-  const theme = useTheme();
   const s = useStyles();
   const device = useDevice();
   const event = useEvent();

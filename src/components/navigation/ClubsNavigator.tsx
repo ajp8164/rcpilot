@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import ClubScreen from 'components/ClubScreen';
 import ClubsScreen from 'components/ClubsScreen';
 import { ClubsNavigatorParamList } from 'types/navigation';
@@ -14,13 +15,7 @@ const ClubsNavigator = () => {
   return (
     <ClubsStack.Navigator
       initialRouteName="Clubs"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <ClubsStack.Screen
         name="Clubs"
         component={ClubsScreen}

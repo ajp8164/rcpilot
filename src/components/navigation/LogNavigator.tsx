@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import BatteryCycleEditorScreen from 'components/BatteryCycleEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventEditorScreen from 'components/EventEditorScreen';
@@ -18,13 +19,7 @@ const LogNavigator = () => {
   return (
     <LogStack.Navigator
       initialRouteName="Log"
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <LogStack.Screen
         name="Log"
         component={LogScreen}
@@ -35,6 +30,7 @@ const LogNavigator = () => {
           headerLargeStyle: {
             backgroundColor: theme.colors.viewBackground,
           },
+          unstable_headerLeftItems: () => [],
         }}
       />
       <LogStack.Screen

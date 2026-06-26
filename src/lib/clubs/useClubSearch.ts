@@ -8,6 +8,7 @@ import { US_STATES } from './usStates';
 export type LocationResult = {
   type: 'location';
   label: string; // e.g. "Dallas, TX" or "Arkansas"
+  count: number; // number of clubs at this location
 };
 
 export type ClubResult = {
@@ -129,10 +130,30 @@ export const useClubSearch = (
       }
     }
 
+    // Build a count map for club locations (single pass).
+    const locationCountMap = new Map<string, number>();
+    for (const club of countryClubs) {
+      const city = club.address?.city || '';
+      const state = club.address?.state || '';
+      const loc = state ? `${city}, ${state}` : city;
+      locationCountMap.set(loc, (locationCountMap.get(loc) || 0) + 1);
+      // Also count by state for state-level labels.
+      if (state) {
+        const stateName = US_STATES[state];
+        if (stateName) {
+          locationCountMap.set(stateName, (locationCountMap.get(stateName) || 0) + 1);
+        }
+      }
+    }
+
     const locationResults: LocationResult[] = [...locationSet]
       .sort()
       .slice(0, MAX_LOCATIONS)
-      .map(label => ({ type: 'location', label }));
+      .map(label => ({
+        type: 'location',
+        label,
+        count: locationCountMap.get(label) || 0,
+      }));
 
     // --- Club matches (all, alpha sorted) ---
     const clubResults: ClubResult[] = countryClubs

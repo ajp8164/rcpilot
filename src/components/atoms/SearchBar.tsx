@@ -26,6 +26,11 @@ const SearchBar = ({
 
   const [internalValue, setInternalValue] = useState(value);
 
+  // Sync internal value when the external value changes (e.g. autocomplete).
+  useEffect(() => {
+    setInternalValue(value);
+  }, [value]);
+
   // Debounce effect: delay calling onChangeText until user stops typing.
   useEffect(() => {
     const handler = setTimeout(() => {

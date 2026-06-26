@@ -58,9 +58,9 @@ const ClubsScreen = ({ navigation }: Props) => {
           leftContent={
             <LocateFixed color={theme.colors.listItemIcon} />
           }
-          rightContent={'chevron-right'}
+          value={`${item.count}`}
           onPress={() => {
-            // TODO: handle location tap
+            setQuery(item.label);
           }}
         />
       );

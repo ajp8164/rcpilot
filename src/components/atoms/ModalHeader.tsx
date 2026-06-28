@@ -134,6 +134,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
     marginHorizontal: 10,
     marginBottom: 10,
     alignItems: 'center',
+    overflow: 'visible',
   },
   containerLeftLarge: {
     position: 'absolute',
@@ -151,7 +152,7 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   containerRightSmall: {
     position: 'absolute',
     right: 0,
-    top: 7,
+    top: -3,
   },
   buttonLarge: {
     paddingLeft: 0,

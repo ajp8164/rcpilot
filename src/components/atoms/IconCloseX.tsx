@@ -1,7 +1,7 @@
 import React from 'react';
-import { View } from 'react-native';
 
 import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { BlurView } from '@react-native-community/blur';
 import { X } from 'lucide-react-native';
 
 export const IconCloseX = () => {
@@ -9,17 +9,20 @@ export const IconCloseX = () => {
   const s = useStyles();
 
   return (
-    <View style={s.container}>
+    <BlurView blurType="ultraThinMaterial" style={s.container}>
       <X color={theme.colors.midGray} size={18} strokeWidth={3} />
-    </View>
+    </BlurView>
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+const useStyles = ThemeManager.createStyleSheet(() => ({
   container: {
-    backgroundColor: theme.colors.subtleGray,
-    borderRadius: 18,
-    padding: 5,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }));
 

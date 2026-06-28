@@ -14,8 +14,8 @@ interface HeaderIconButtonProps extends Omit<Button, 'size'> {
 
 const ICON_SIZES: Record<string, number> = {
   Check: 28,
-  ChevronLeft: 36,
-  ChevronRight: 36,
+  ChevronLeft: 30,
+  ChevronRight: 30,
   ClockArrowDown: 28,
   ClockArrowUp: 28,
   Funnel: 24,
@@ -56,6 +56,7 @@ export const HeaderIconButton = ({
         <Icon
           size={iconSize}
           color={color || theme.colors.screenHeaderButtonText}
+          style={{top: -2}}
         />
       }
       onPress={onPress}
@@ -72,5 +73,6 @@ const useStyles = ThemeManager.createStyleSheet(() => ({
   forIcon: {
     width: 36,
     justifyContent: 'center',
+    alignItems: 'center',
   },
 }));

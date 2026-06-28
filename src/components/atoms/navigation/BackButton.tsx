@@ -8,15 +8,21 @@ import { ChevronLeft } from 'lucide-react-native';
 // A minimal back button (chevron only) for use in navigatorScreenOptions.
 // Root screen visibility is controlled by the canGoBack guard in the item
 // callback, so this component always renders when mounted.
-export const BackButton = ({ color }: { color?: string }) => {
+// Pass onPress to override the default goBack behavior (e.g. nested navigators).
+export const BackButton = ({
+  color,
+  onPress,
+}: {
+  color?: string;
+  onPress?: () => void;
+}) => {
   const theme = useTheme();
   const navigation = useNavigation();
 
   return (
-    <Pressable onPress={() => navigation.goBack()} hitSlop={8}>
+    <Pressable onPress={onPress || (() => navigation.goBack())} hitSlop={8}>
       <ChevronLeft
-        size={36}
-        strokeWidth={2}
+        size={33}
         color={color || theme.colors.screenHeaderButtonText}
       />
     </Pressable>

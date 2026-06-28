@@ -25,7 +25,6 @@ import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
 import {
-  CircleX,
   LayoutList,
   Map,
   MapPinPlus,
@@ -320,12 +319,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     return (
       <>
         <View style={s.buttons}>
-          <Button
-            containerStyle={[s.button, s.buttonFirst, s.buttonLast]}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<CircleX color={theme.colors.clearButtonText} size={28} />}
-            onPress={() => navigation.goBack()}
-          />
           <Button
             containerStyle={[s.button, s.buttonFirst]}
             buttonStyle={theme.styles.buttonScreenHeader}

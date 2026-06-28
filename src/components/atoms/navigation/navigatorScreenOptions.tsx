@@ -2,10 +2,9 @@ import React from 'react';
 
 import { BackButton } from './BackButton';
 
-// Standard navigator-level screenOptions. Renders a custom blue chevron back
-// button inside a glass pill. The BackButton component self-hides on root
-// screens, and we use a wrapper that returns an empty item array on root
-// to prevent an empty pill from rendering.
+// Standard navigator-level screenOptions. Renders a custom chevron back
+// button inside a glass pill. Returns an empty item array on root screens
+// (canGoBack === false) to prevent an empty pill from rendering.
 export const navigatorScreenOptions = (theme: {
   colors: {
     screenHeaderBackground: string;

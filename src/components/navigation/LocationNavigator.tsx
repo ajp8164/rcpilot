@@ -2,6 +2,8 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { BackButton } from 'components/atoms/navigation/BackButton';
+import { headerOptions } from 'components/atoms/navigation/headerOptions';
 import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import EventsScreen from 'components/EventsScreen';
 import LocationsMapScreen from 'components/LocationsMapScreen';
@@ -23,11 +25,17 @@ const LocationNavigator = () => {
         <LocationStack.Screen
           name="LocationsMap"
           component={LocationsMapScreen}
-          options={{
-            title: 'Map',
-            headerShown: false,
-            presentation: 'fullScreenModal',
-          }}
+          options={({ navigation }) => ({
+            title: '',
+            ...headerOptions({
+              headerTransparent: true,
+              left: [
+                <BackButton
+                  onPress={() => navigation.getParent()?.goBack()}
+                />,
+              ],
+            }),
+          })}
         />
         <LocationStack.Screen
           name="Events"

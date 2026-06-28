@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
 import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
-import { BlurView } from '@react-native-community/blur';
+import { GlassView } from 'components/atoms/GlassView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -340,8 +340,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         <Animated.View
           style={[s.buttons, buttonsAnimatedStyle]}
           onLayout={e => setButtonsHeight(e.nativeEvent.layout.height)}>
-          <BlurView
-            blurType="ultraThinMaterial"
+          <GlassView
             style={s.buttonGroup}>
             <Button
               containerStyle={s.buttonGlass}
@@ -354,9 +353,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
               }
               onPress={() => addLocation()}
             />
-          </BlurView>
-          <BlurView
-            blurType="ultraThinMaterial"
+          </GlassView>
+          <GlassView
             style={[s.buttonGroup, s.buttonGroupLast]}>
             <Button
               containerStyle={s.buttonGlass}
@@ -407,7 +405,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
               }
               onPress={() => toggleMapPresenation()}
             />
-          </BlurView>
+          </GlassView>
         </Animated.View>
       </>
     );

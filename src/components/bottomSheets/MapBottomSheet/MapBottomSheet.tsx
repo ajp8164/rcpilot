@@ -2,7 +2,6 @@ import React, { useImperativeHandle, useRef } from 'react';
 
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Divider, useTheme } from '@react-native-hello/ui';
-import IconCloseX from 'components/atoms/IconCloseX';
 import { ModalHeader } from 'components/atoms/ModalHeader';
 import LocationsView from 'components/views/LocationsView';
 import MapActionsView from 'components/views/MapActionsView';
@@ -13,46 +12,40 @@ type MapBottomSheet = MapBottomSheetMethods;
 
 const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
   (props, ref) => {
-    const { onPressAddLocation } = props;
+    const { animatedPosition, topInset = 0, onPressAddLocation } = props;
 
     const theme = useTheme();
 
     const innerRef = useRef<BottomSheet>(null);
 
     useImperativeHandle(ref, () => ({
-      // These functions exposed to the parent component through the ref.
-      collapse,
       dismiss,
       present,
     }));
 
-    const collapse = () => {
-      innerRef.current?.collapse();
-    };
-
     const dismiss = () => {
-      innerRef.current?.close();
+      innerRef.current?.snapToIndex(0);
     };
 
     const present = () => {
-      innerRef.current?.snapToIndex(0);
+      innerRef.current?.snapToIndex(1);
     };
 
     return (
       <BottomSheet
         ref={innerRef}
-        snapPoints={['40%', '92%']}
-        index={-1}
+        animatedPosition={animatedPosition}
+        snapPoints={[65, '40%', '92%']}
+        topInset={topInset + 44}
+        index={0}
         enableDynamicSizing={false}
-        enablePanDownToClose={true}
+        enablePanDownToClose={false}
         backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}>
         <ModalHeader
           size={'small'}
           title={'All Locations'}
           titleStyle={{ alignSelf: 'flex-start' }}
           containerStyle={{ backgroundColor: theme.colors.viewBackground }}
-          rightButtonIcon={<IconCloseX />}
-          onRightButtonPress={dismiss}
         />
         <BottomSheetScrollView
           style={theme.styles.view}

@@ -1,4 +1,5 @@
 import React from 'react';
+import { SharedValue } from 'react-native-reanimated';
 
 export declare type MapBottomSheet = MapBottomSheetMethods;
 
@@ -9,11 +10,12 @@ declare const MapBottomSheet: React.MemoExoticComponent<
 >;
 
 export interface MapBottomSheetProps {
+  animatedPosition?: SharedValue<number>;
+  topInset?: number;
   onPressAddLocation: () => void;
 }
 
 export interface MapBottomSheetMethods {
   dismiss: () => void;
-  collapse: () => void;
   present: () => void;
 }

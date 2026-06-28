@@ -11,10 +11,14 @@ import MapView, {
   MapMarker as RNMapMarker,
   Region,
 } from 'react-native-maps';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
-import { ThemeManager, useTheme } from '@react-native-hello/ui';
+import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -25,7 +29,6 @@ import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
 import {
-  LayoutList,
   Map,
   MapPinPlus,
   Navigation2,
@@ -58,6 +61,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const theme = useTheme();
   const s = useStyles();
+  const device = useDevice();
   const event = useEvent();
   const realm = useRealm();
   const dispatch = useDispatch();
@@ -92,6 +96,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const mapBottomSheetRef = useRef<MapBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
+  const bottomSheetPosition = useSharedValue(0);
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -315,10 +320,18 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     navigation.goBack();
   };
 
+  const [buttonsHeight, setButtonsHeight] = useState(0);
+
+  const buttonsAnimatedStyle = useAnimatedStyle(() => ({
+    top: bottomSheetPosition.value - buttonsHeight - 15,
+  }));
+
   const renderActionButtons = (): React.ReactElement => {
     return (
       <>
-        <View style={s.buttons}>
+        <Animated.View
+          style={[s.buttons, buttonsAnimatedStyle]}
+          onLayout={e => setButtonsHeight(e.nativeEvent.layout.height)}>
           <Button
             containerStyle={[s.button, s.buttonFirst]}
             buttonStyle={theme.styles.buttonScreenHeader}
@@ -381,17 +394,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
             }
             onPress={() => addLocation()}
           />
-        </View>
-        <View style={s.buttonShowList}>
-          <Button
-            title={'Show List'}
-            titleStyle={theme.styles.buttonScreenHeaderTitle}
-            containerStyle={[s.button, s.buttonFirst, s.buttonLast]}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={<LayoutList color={theme.colors.clearButtonText} size={18} />}
-            onPress={() => mapBottomSheetRef.current?.present()}
-          />
-        </View>
+        </Animated.View>
       </>
     );
   };
@@ -476,6 +479,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       {renderActionButtons()}
       <MapBottomSheet
         ref={mapBottomSheetRef}
+        animatedPosition={bottomSheetPosition}
+        topInset={device.insets.top}
         onPressAddLocation={addLocation}
       />
       <LocationBottomSheet
@@ -503,7 +508,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   button: {
     backgroundColor: theme.colors.white,
     borderBottomLeftRadius: 0,
@@ -523,15 +528,8 @@ const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
     borderBottomWidth: 0,
     marginBottom: 10,
   },
-  buttonShowList: {
-    width: '100%',
-    position: 'absolute',
-    bottom: 15,
-    alignItems: 'center',
-  },
   buttons: {
     position: 'absolute',
-    top: device.insets.top,
     right: 15,
   },
   map: {

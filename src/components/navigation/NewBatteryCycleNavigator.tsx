@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import NewBatteryCycleScreen from 'components/NewBatteryCycleScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
@@ -20,13 +21,7 @@ const NewBatteryCycleNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <NewBatteryCycleStack.Navigator
         initialRouteName="NewBatteryCycle"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <NewBatteryCycleStack.Screen
           name="NewBatteryCycle"
           component={NewBatteryCycleScreen}

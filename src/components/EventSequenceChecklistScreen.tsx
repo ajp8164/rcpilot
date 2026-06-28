@@ -91,6 +91,7 @@ const EventSequenceChecklistScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions(
       headerOptions({
+        headerTransparent: true,
         left: cancelable
           ? [
               <HeaderIconButton

@@ -30,7 +30,6 @@ const LogNavigator = () => {
           headerLargeStyle: {
             backgroundColor: theme.colors.viewBackground,
           },
-          unstable_headerLeftItems: () => [],
         }}
       />
       <LogStack.Screen

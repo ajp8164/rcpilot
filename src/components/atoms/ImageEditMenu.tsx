@@ -1,9 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { ThemeManager } from '@react-native-hello/ui';
-import * as DropdownMenu from 'zeego/dropdown-menu';
-
-// const itemHeight = 25;
+import { MenuView, MenuAction } from '@react-native-menu/menu';
 
 export enum ImageSize {
   Short = '100',
@@ -26,85 +23,64 @@ const ImageEditMenu = ({
   onHeightSelect,
   onRemoveImage,
 }: ImageEditMenuInterface) => {
-  const s = useStyles();
+  const actions: MenuAction[] = [
+    {
+      id: 'change-image',
+      title: 'Change Image',
+    },
+    {
+      id: 'image-height',
+      title: 'Image Height',
+      subactions: [
+        {
+          id: `height-${ImageSize.Short}`,
+          title: 'Short',
+          state: heightValue === ImageSize.Short ? 'on' : 'off',
+        },
+        {
+          id: `height-${ImageSize.Medium}`,
+          title: 'Medium',
+          state: heightValue === ImageSize.Medium ? 'on' : 'off',
+        },
+        {
+          id: `height-${ImageSize.Tall}`,
+          title: 'Tall',
+          state: heightValue === ImageSize.Tall ? 'on' : 'off',
+        },
+      ],
+    },
+    {
+      id: 'remove-image',
+      title: 'Remove Image',
+      attributes: { destructive: true },
+    },
+  ];
 
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <>{children}</>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content style={s.content}>
-        <DropdownMenu.Item key={'change-image'} onSelect={onChangeImage}>
-          <DropdownMenu.ItemTitle>{'Change Image'}</DropdownMenu.ItemTitle>
-        </DropdownMenu.Item>
-        {/* @ts-ignore property is incorrectly typed */}
-        <DropdownMenu.Sub>
-          <DropdownMenu.SubTrigger style={s.item} key={'image-height'}>
-            <DropdownMenu.ItemTitle>Image Height</DropdownMenu.ItemTitle>
-          </DropdownMenu.SubTrigger>
-          <DropdownMenu.SubContent style={s.content}>
-            <DropdownMenu.CheckboxItem
-              style={s.item}
-              key={'image-short'}
-              value={heightValue === ImageSize.Short}
-              onValueChange={() => onHeightSelect(ImageSize.Short)}>
-              <DropdownMenu.ItemIndicator>
-                {/* <Ionicons name="checkmark" size={19} /> */}
-              </DropdownMenu.ItemIndicator>
-              <DropdownMenu.ItemTitle>{'Short'}</DropdownMenu.ItemTitle>
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              style={s.item}
-              key={'image-medium'}
-              value={heightValue === ImageSize.Medium}
-              onValueChange={() => onHeightSelect(ImageSize.Medium)}>
-              <DropdownMenu.ItemIndicator>
-                {/* <Ionicons name="checkmark" size={19} /> */}
-              </DropdownMenu.ItemIndicator>
-              <DropdownMenu.ItemTitle>{'medium'}</DropdownMenu.ItemTitle>
-            </DropdownMenu.CheckboxItem>
-            <DropdownMenu.CheckboxItem
-              style={s.item}
-              key={'image-tall'}
-              value={heightValue === ImageSize.Tall}
-              onValueChange={() => onHeightSelect(ImageSize.Tall)}>
-              <DropdownMenu.ItemIndicator>
-                {/* <Ionicons name="checkmark" size={19} /> */}
-              </DropdownMenu.ItemIndicator>
-              <DropdownMenu.ItemTitle>{'Tall'}</DropdownMenu.ItemTitle>
-            </DropdownMenu.CheckboxItem>
-          </DropdownMenu.SubContent>
-        </DropdownMenu.Sub>
-        <DropdownMenu.Separator />
-        <DropdownMenu.Group>
-          <DropdownMenu.Item
-            key={'remove-image'}
-            destructive
-            onSelect={onRemoveImage}>
-            <DropdownMenu.ItemTitle>{'Remove Image'}</DropdownMenu.ItemTitle>
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+    <MenuView
+      actions={actions}
+      onPressAction={({ nativeEvent }) => {
+        switch (nativeEvent.event) {
+          case 'change-image':
+            onChangeImage();
+            break;
+          case `height-${ImageSize.Short}`:
+            onHeightSelect(ImageSize.Short);
+            break;
+          case `height-${ImageSize.Medium}`:
+            onHeightSelect(ImageSize.Medium);
+            break;
+          case `height-${ImageSize.Tall}`:
+            onHeightSelect(ImageSize.Tall);
+            break;
+          case 'remove-image':
+            onRemoveImage();
+            break;
+        }
+      }}>
+      {children}
+    </MenuView>
   );
 };
-
-const useStyles = ThemeManager.createStyleSheet(() => ({
-  item: {
-    // borderRadius: 3,
-    // justifyContent: 'center',
-    // paddingRight: 5,
-    // paddingLeft: itemHeight,
-    // height: itemHeight,
-  },
-  content: {
-    // minWidth: 220,
-    // backgroundColor: theme.colors.assertive,
-    // borderRadius: 6,
-    // padding: 5,
-    // borderWidth: 1,
-    // borderColor: 'red', // theme.colors.whiteTransparentMid,
-  },
-}));
 
 export default ImageEditMenu;

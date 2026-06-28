@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
 import ReportModelScanCodeFilterEditorScreen from 'components/ReportModelScanCodeFilterEditorScreen';
@@ -20,13 +21,7 @@ const ReportModelScanCodeFiltersNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <ReportModelScanCodeFiltersStack.Navigator
         initialRouteName="ReportModelScanCodeFilters"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <ReportModelScanCodeFiltersStack.Screen
           name="EnumPicker"
           component={EnumPickerScreen}

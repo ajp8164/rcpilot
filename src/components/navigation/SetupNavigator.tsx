@@ -71,8 +71,6 @@ const SetupNavigator = () => {
         component={SetupScreen}
         options={{
           title: 'Setup',
-          headerLeft: () => null,
-          unstable_headerLeftItems: () => [],
           headerLargeTitle: true,
           headerLargeTitleShadowVisible: false,
           headerLargeStyle: {

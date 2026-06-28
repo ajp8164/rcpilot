@@ -52,7 +52,6 @@ const ModelsNavigator = () => {
           headerLargeStyle: {
             backgroundColor: theme.colors.viewBackground,
           },
-          unstable_headerLeftItems: () => [],
         })}
       />
       <ModelsStack.Screen

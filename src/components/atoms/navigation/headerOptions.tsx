@@ -7,7 +7,7 @@ import type {
   NativeStackNavigationOptions,
 } from '@react-navigation/native-stack';
 
-import { BackButton } from './BackButton';
+import { GLASS_UI } from './config';
 
 export type HeaderItemProps = {
   // Position of the item within its left/right group. Injected by headerOptions
@@ -35,10 +35,8 @@ const item = (
 });
 
 // Clones each element to attach a stable key and, for recognized header items,
-// the buttonIndex used for consistent spacing. Items hide the shared (glass)
-// background so headers render plain buttons rather than the iOS 26 "pill".
-// Edge items get a negative margin to compensate for the extra inset iOS applies
-// when the pill background is hidden.
+// the buttonIndex used for consistent spacing. When GLASS_UI is disabled, items
+// hide the shared background and get edge margin offsets.
 const mapItems = (elements?: HeaderItemElement[], side?: 'left' | 'right') =>
   elements?.length
     ? (_props: NativeStackHeaderItemProps) =>
@@ -47,6 +45,10 @@ const mapItems = (elements?: HeaderItemElement[], side?: 'left' | 'right') =>
             key: element.key ?? index,
             ...(isHeaderItem(element) ? { buttonIndex: index } : {}),
           });
+
+          if (GLASS_UI) {
+            return item(cloned, false);
+          }
 
           // Wrap edge items with a margin offset to align with screen edges.
           const isFirstLeft = index === 0 && side === 'left';
@@ -73,16 +75,15 @@ const mapItems = (elements?: HeaderItemElement[], side?: 'left' | 'right') =>
 
 interface HeaderOptionsInterface extends NativeStackNavigationOptions {
   tintColor?: string;
-  // When left is undefined, a custom back chevron is rendered (no pill).
+  // When left is undefined, the navigator-level back button applies.
   // Pass an explicit empty array [] to hide the back button entirely.
   left?: HeaderItemElement[];
   right?: HeaderItemElement[];
 }
 
-// Provides a uniform set of native stack header options for the app. Renders the
-// supplied left/right elements via the stack's header item API and applies the
-// standard transparent header treatment. Introduced for iOS 26+ compatibility
-// when not wanting to use the button glass ui "pill" effect.
+// Provides per-screen header options for the native stack. Renders the supplied
+// left/right elements via the stack's header item API. Supports transparent
+// headers and consistent button styling across GLASS_UI on/off modes.
 export const headerOptions = ({
   tintColor,
   left,
@@ -90,34 +91,30 @@ export const headerOptions = ({
   ...rest
 }: HeaderOptionsInterface): Partial<NativeStackNavigationOptions> => {
   // When left is explicitly provided (even empty []), use it directly.
-  // When left is undefined, render a custom back button without the glass pill.
+  // When left is undefined, don't set unstable_headerLeftItems so the
+  // navigator-level custom back button (from navigatorScreenOptions) applies.
   const leftItems =
     left !== undefined
       ? mapItems(left, 'left')
-      : (props: NativeStackHeaderItemProps) => [
-          item(
-            <BackButton color={tintColor || props.tintColor} />,
-            true,
-          ),
-        ];
+      : undefined;
 
-  const isOpaque = rest.headerTransparent === false;
+  const isTransparent = rest.headerTransparent === true;
 
   return {
-    ...(isOpaque
-      ? { headerTransparent: false }
-      : {
+    ...(isTransparent
+      ? {
           headerTransparent: true,
           headerBlurEffect: 'none',
           headerBackground: () => null,
           headerStyle: { backgroundColor: 'transparent' },
-        }),
+        }
+      : {}),
     headerShadowVisible: false,
     ...(tintColor ? { headerTintColor: tintColor } : {}),
-    headerBackButtonDisplayMode: 'minimal',
-    headerBackVisible: false,
 
-    unstable_headerLeftItems: leftItems,
+    ...(leftItems !== undefined
+      ? { unstable_headerLeftItems: leftItems }
+      : {}),
     unstable_headerRightItems: mapItems(right, 'right'),
 
     ...rest,

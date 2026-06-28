@@ -38,18 +38,19 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
     const buttonColor = headerButtonStyle?.color as string | undefined;
 
     // When a header background color is provided, use an opaque header.
-    const opaqueHeader = headerBackgroundColor
+    // Otherwise use transparent (notes screen content fills behind header).
+    const headerStyle = headerBackgroundColor
       ? {
           headerTransparent: false as const,
           headerStyle: { backgroundColor: headerBackgroundColor },
           headerShadowVisible: false,
         }
-      : {};
+      : { headerTransparent: true as const };
 
     navigation.setOptions(
       headerOptions({
         title,
-        ...opaqueHeader,
+        ...headerStyle,
         left: [
           <HeaderIconButton
             Icon={X}

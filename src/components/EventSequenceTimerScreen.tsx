@@ -137,6 +137,7 @@ const EventSequenceTimerScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     navigation.setOptions(
       headerOptions({
+        headerTransparent: true,
         headerBackVisible: timer.state.mode === TimerMode.Initial,
         left:
           cancelable && timer.state.mode === TimerMode.Initial

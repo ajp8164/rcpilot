@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventFilterEditorScreen from 'components/EventFilterEditorScreen';
 import EventFiltersScreen from 'components/EventFiltersScreen';
@@ -21,13 +22,7 @@ const EventFiltersNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <EventFiltersStack.Navigator
         initialRouteName="EventFilters"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <EventFiltersStack.Screen
           name="EnumPicker"
           component={EnumPickerScreen}

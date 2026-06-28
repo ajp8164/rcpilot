@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import ChecklistActionEditorScreen from 'components/ChecklistActionEditorScreen';
 import ChecklistActionHistoryScreen from 'components/ChecklistActionHistoryScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
@@ -19,13 +20,7 @@ const NewChecklistActionNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <NewChecklistActionStack.Navigator
         initialRouteName="NewChecklistAction"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <NewChecklistActionStack.Screen
           name="NewChecklistAction"
           // @ts-expect-error

@@ -5,6 +5,7 @@ import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import ModelPickerScreen from 'components/ModelPickerScreen';
 import { CommanderNavigatorParamList } from 'types/navigation';
 
@@ -18,13 +19,7 @@ const CommanderNavigator = () => {
 
   return (
     <CommanderStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <CommanderStack.Screen
         name="ModelPicker"
         component={ModelPickerScreen}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Text, View } from 'react-native';
 
 import {
@@ -8,7 +8,9 @@ import {
   useTheme,
 } from '@react-native-hello/ui';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { HeaderIconButton, headerOptions } from 'components/atoms/navigation';
 import { appConfig } from 'config';
+import { X } from 'lucide-react-native';
 import { SetupNavigatorParamList } from 'types/navigation';
 
 export type Props = NativeStackScreenProps<
@@ -16,9 +18,18 @@ export type Props = NativeStackScreenProps<
   'WebServerAccess'
 >;
 
-const WebServerAccessScreen = () => {
+const WebServerAccessScreen = ({ navigation }: Props) => {
   const theme = useTheme();
   const s = useStyles();
+
+  useEffect(() => {
+    navigation.setOptions(
+      headerOptions({
+        left: [<HeaderIconButton Icon={X} onPress={navigation.goBack} />],
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <View style={[theme.styles.view, s.viewContainer]}>

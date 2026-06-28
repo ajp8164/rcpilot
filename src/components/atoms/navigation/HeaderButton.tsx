@@ -39,12 +39,12 @@ export const HeaderButton = ({
     <Button
       title={label}
       titleStyle={{ ...theme.styles.buttonScreenHeaderTitle, ...colorStyle }}
-      buttonStyle={theme.styles.buttonScreenHeader}
+      buttonStyle={{ ...theme.styles.buttonScreenHeader, paddingHorizontal: 12 }}
       disabledTitleStyle={{
         ...theme.styles.buttonScreenHeaderTitle,
         ...colorStyle,
       }}
-      disabledStyle={theme.styles.buttonScreenHeaderDisabled}
+      disabledStyle={{ ...theme.styles.buttonScreenHeaderDisabled, paddingHorizontal: 12 }}
       iconRight={iconRight}
       icon={
         Icon ? (

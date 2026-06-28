@@ -51,6 +51,7 @@ const EventSequenceBatteryPickerScreen = ({ navigation, route }: Props) => {
 
     navigation.setOptions(
       headerOptions({
+        headerTransparent: true,
         left: cancelable
           ? [
               <HeaderIconButton

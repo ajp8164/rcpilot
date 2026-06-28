@@ -244,12 +244,12 @@ const SetupScreen = ({ navigation, route }: Props) => {
       /> */}
       {/* {databaseAccessWith === DatabaseAccessWith.Dropbox ? (
         <ListItem title={'Dropbox Access'} onPress={() => navigation.navigate('DatabaseBackup')} />
-      ) : (
+      ) : ( */}
         <ListItem
           title={'Web Server Access'}
           onPress={() => navigation.navigate('WebServerAccess')}
         />
-      )} */}
+      {/* )} */}
       <ListItem
         title={'Backup & Export'}
         leftContent={<Archive color={theme.colors.listItemIcon} />}

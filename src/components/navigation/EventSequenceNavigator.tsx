@@ -3,6 +3,7 @@ import React from 'react';
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useRealm } from '@realm/react';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import BatteryCellValuesEditorScreen from 'components/BatteryCellValuesEditorScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import EventSequenceBatteryPickerScreen from 'components/EventSequenceBatteryPickerScreen';
@@ -32,13 +33,7 @@ const EventSequenceNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <EventSequenceStack.Navigator
         initialRouteName="EventSequenceBatteryPicker"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.brandPrimary,
-          },
-          headerTitleStyle: { color: theme.colors.stickyWhite },
-          headerTintColor: theme.colors.stickyWhite,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <EventSequenceStack.Screen
           name="EventSequenceBatteryPicker"
           component={EventSequenceBatteryPickerScreen}

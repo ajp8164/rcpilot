@@ -50,7 +50,6 @@ const BatteriesNavigator = () => {
           headerLargeStyle: {
             backgroundColor: theme.colors.viewBackground,
           },
-          unstable_headerLeftItems: () => [],
         })}
       />
       <BatteriesStack.Screen

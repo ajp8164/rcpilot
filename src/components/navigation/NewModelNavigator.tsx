@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import EnumPickerScreen from 'components/EnumPickerScreen';
 import ModelEditorScreen from 'components/ModelEditorScreen';
 import NotesEditorScreen from 'components/NotesEditorScreen';
@@ -19,12 +20,8 @@ const NewModelNavigator = () => {
       <NewModelStack.Navigator
         initialRouteName="NewModel"
         screenOptions={{
+          ...navigatorScreenOptions(theme),
           headerBackTitle: 'Model',
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
         }}>
         <NewModelStack.Screen
           name="NewModel"

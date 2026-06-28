@@ -12,27 +12,27 @@ interface HeaderIconButtonProps extends Omit<Button, 'size'> {
   size?: number;
 }
 
-const ICON_PROPS: Record<string, { size: number; offsetX: number }> = {
-  Check: { size: 28, offsetX: 0 },
-  ChevronLeft: { size: 36, offsetX: 0 },
-  ChevronRight: { size: 36, offsetX: 0 },
-  ClockArrowDown: { size: 28, offsetX: 0 },
-  ClockArrowUp: { size: 28, offsetX: 0 },
-  Funnel: { size: 24, offsetX: 0 },
-  FunnelPlus: { size: 24, offsetX: 0 },
-  GalleryHorizontalEnd: { size: 28, offsetX: 0 },
-  Images: { size: 28, offsetX: 0 },
-  LayoutList: { size: 28, offsetX: 0 },
-  Plus: { size: 28, offsetX: 0 },
-  Share: { size: 28, offsetX: 0 },
-  X: { size: 28, offsetX: 0 },
+const ICON_SIZES: Record<string, number> = {
+  Check: 28,
+  ChevronLeft: 36,
+  ChevronRight: 36,
+  ClockArrowDown: 28,
+  ClockArrowUp: 28,
+  Funnel: 24,
+  FunnelPlus: 24,
+  GalleryHorizontalEnd: 28,
+  Images: 28,
+  LayoutList: 28,
+  Plus: 28,
+  Share: 28,
+  X: 28,
 };
 
 export const HeaderIconButton = ({
   Icon,
   onPress,
   color,
-  buttonIndex = 0,
+  buttonIndex: _buttonIndex = 0,
   size = 28,
   ...rest
 }: HeaderIconButtonProps) => {
@@ -40,7 +40,7 @@ export const HeaderIconButton = ({
   const s = useStyles();
 
   const iconName = Icon.displayName || Icon.name || '';
-  const iconProps = ICON_PROPS[iconName] ?? { size, offsetX: 0 };
+  const iconSize = ICON_SIZES[iconName] ?? size;
 
   return (
     <Button
@@ -54,9 +54,8 @@ export const HeaderIconButton = ({
       }}
       icon={
         <Icon
-          size={iconProps.size}
+          size={iconSize}
           color={color || theme.colors.screenHeaderButtonText}
-          style={{ marginLeft: buttonIndex > 0 ? 0 : iconProps.offsetX }}
         />
       }
       onPress={onPress}

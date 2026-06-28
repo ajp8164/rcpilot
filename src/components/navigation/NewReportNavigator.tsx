@@ -6,6 +6,7 @@ import {
   NativeStackScreenProps,
   createNativeStackNavigator,
 } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import ReportEventsMaintenaceEditorScreen from 'components/ReportEventsMaintenaceEditorScreen';
 import ReportScanCodesEditorScreen from 'components/ReportScanCodesEditorScreen';
 import ReportBatteryScanCodeFiltersNavigator from 'components/navigation/ReportBatteryScanCodeFiltersNavigator';
@@ -30,13 +31,7 @@ const NewReportNavigator = () => {
 
   return (
     <NewReportStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          backgroundColor: theme.colors.screenHeaderBackground,
-        },
-        headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-        headerTintColor: theme.colors.screenHeaderButtonText,
-      }}>
+      screenOptions={navigatorScreenOptions(theme)}>
       <NewReportStack.Screen
         name="ReportEventsMaintenanceEditor"
         component={ReportEventsMaintenaceEditorScreen}

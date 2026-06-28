@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useTheme } from '@react-native-hello/ui';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { navigatorScreenOptions } from 'components/atoms/navigation/navigatorScreenOptions';
 import BatteryFilterEditorScreen from 'components/BatteryFilterEditorScreen';
 import BatteryFiltersScreen from 'components/BatteryFiltersScreen';
 import EnumPickerScreen from 'components/EnumPickerScreen';
@@ -19,13 +20,7 @@ const BatteryFiltersNavigator = () => {
     <NavContext.Provider value={{ isModal: true }}>
       <BatteryFiltersStack.Navigator
         initialRouteName="BatteryFilters"
-        screenOptions={{
-          headerStyle: {
-            backgroundColor: theme.colors.screenHeaderBackground,
-          },
-          headerTitleStyle: { color: theme.colors.screenHeaderTitle },
-          headerTintColor: theme.colors.screenHeaderButtonText,
-        }}>
+        screenOptions={navigatorScreenOptions(theme)}>
         <BatteryFiltersStack.Screen
           name="BatteryFilters"
           component={BatteryFiltersScreen}

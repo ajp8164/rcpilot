@@ -15,13 +15,13 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery } from '@realm/react';
 import SearchBar from 'components/atoms/SearchBar';
 import { EmptyView } from 'components/molecules/EmptyView';
+import { MenuView } from '@react-native-menu/menu';
 import { getDeviceCountry } from 'lib/clubs/deviceCountry';
 import { COUNTRY_NAMES, countryFlag } from 'lib/clubs/countryNames';
 import { SearchResult, useClubSearch } from 'lib/clubs/useClubSearch';
 import { LocateFixed } from 'lucide-react-native';
 import { Club } from 'realmdb';
 import { ClubsNavigatorParamList } from 'types/navigation';
-import * as DropdownMenu from 'zeego/dropdown-menu';
 
 export type Props = NativeStackScreenProps<ClubsNavigatorParamList, 'Clubs'>;
 
@@ -127,26 +127,19 @@ const ClubsScreen = ({ navigation }: Props) => {
         },
       ]}>
       <View style={s.searchRow}>
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger>
-            <Pressable style={s.countryChip}>
-              <Text style={s.countryFlag}>{countryFlag(selectedCountry)}</Text>
-            </Pressable>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Content>
-            {availableCountries.map(country => (
-              <DropdownMenu.CheckboxItem
-                key={country.code}
-                value={selectedCountry === country.code ? 'on' : 'off'}
-                onValueChange={() => setSelectedCountry(country.code)}>
-                <DropdownMenu.ItemIndicator />
-                <DropdownMenu.ItemTitle>
-                  {`${countryFlag(country.code)} ${country.name}`}
-                </DropdownMenu.ItemTitle>
-              </DropdownMenu.CheckboxItem>
-            ))}
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
+        <MenuView
+          actions={availableCountries.map(country => ({
+            id: country.code,
+            title: `${countryFlag(country.code)} ${country.name}`,
+            state: selectedCountry === country.code ? 'on' : 'off',
+          }))}
+          onPressAction={({ nativeEvent }) => {
+            setSelectedCountry(nativeEvent.event);
+          }}>
+          <Pressable style={s.countryChip}>
+            <Text style={s.countryFlag}>{countryFlag(selectedCountry)}</Text>
+          </Pressable>
+        </MenuView>
         <SearchBar
           value={query}
           onChangeText={setQuery}

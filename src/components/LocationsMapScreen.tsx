@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Alert, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import ClusteredMapView from 'react-native-map-clustering';
 import MapView, {
   Camera,
@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
 import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
+import { BlurView } from '@react-native-community/blur';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
@@ -170,19 +171,26 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const recenterMap = (coords: LocationCoords) => {
+  const recenterMap = async (coords: LocationCoords) => {
+    // Get current map boundaries to calculate the visible latitude span.
+    const boundaries = await mapViewRef.current?.getMapBoundaries();
+    const latDelta = boundaries
+      ? boundaries.northEast.latitude - boundaries.southWest.latitude
+      : 0.01;
+
+    // Offset the center southward so the pin appears in the upper third
+    // of the screen instead of dead center (above the bottom sheet).
+    const offsetLat = coords.latitude - latDelta * 0.20;
+
     const partialCamera: Partial<Camera> = {
       center: {
-        latitude: coords.latitude,
+        latitude: offsetLat,
         longitude: coords.longitude,
       },
       pitch: 0,
       zoom: 1,
     };
 
-    // This is a hack to get the map to center on the specified location.
-    // The first call only bring the location into the view.
-    // The second call will bring the location to the center of the screen.
     mapViewRef.current?.animateCamera(partialCamera);
     setTimeout(() => {
       mapViewRef.current?.animateCamera(partialCamera);
@@ -332,68 +340,74 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         <Animated.View
           style={[s.buttons, buttonsAnimatedStyle]}
           onLayout={e => setButtonsHeight(e.nativeEvent.layout.height)}>
-          <Button
-            containerStyle={[s.button, s.buttonFirst]}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={
-              <Navigation
-                color={theme.colors.clearButtonText}
-                size={28}
-                fill={
-                  mapIsCentered
-                    ? theme.colors.clearButtonText
-                    : theme.colors.transparent
-                }
-              />
-            }
-            onPress={() => recenterMap(currentPosition.coords)}
-          />
-          <Button
-            containerStyle={s.button}
-            buttonStyle={{
-              ...theme.styles.buttonScreenHeader,
-              justifyContent: 'center',
-              width: 40,
-            }}
-            icon={
-              <>
-                <View style={s.northUp} />
-                <Navigation2
+          <BlurView
+            blurType="ultraThinMaterial"
+            style={s.buttonGroup}>
+            <Button
+              containerStyle={s.buttonGlass}
+              buttonStyle={s.buttonGlassInner}
+              icon={
+                <MapPinPlus
+                  color={theme.colors.screenHeaderButtonText}
+                  size={22}
+                />
+              }
+              onPress={() => addLocation()}
+            />
+          </BlurView>
+          <BlurView
+            blurType="ultraThinMaterial"
+            style={[s.buttonGroup, s.buttonGroupLast]}>
+            <Button
+              containerStyle={s.buttonGlass}
+              buttonStyle={s.buttonGlassInner}
+              icon={
+                <Navigation
                   color={theme.colors.clearButtonText}
-                  size={24}
+                  size={22}
                   fill={
-                    mapIsRotated
-                      ? theme.colors.transparent
-                      : theme.colors.clearButtonText
+                    mapIsCentered
+                      ? theme.colors.clearButtonText
+                      : theme.colors.transparent
                   }
                 />
-              </>
-            }
-            onPress={() => northUpMap()}
-          />
-          <Button
-            containerStyle={[s.button, s.buttonLast]}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={
-              mapPresentation === 'standard' ? (
-                <Satellite color={theme.colors.clearButtonText} size={28} />
-              ) : (
-                <Map color={theme.colors.clearButtonText} size={28} />
-              )
-            }
-            onPress={() => toggleMapPresenation()}
-          />
-          <Button
-            containerStyle={[s.button, s.buttonFirst, s.buttonLast]}
-            buttonStyle={theme.styles.buttonScreenHeader}
-            icon={
-              <MapPinPlus
-                color={theme.colors.screenHeaderButtonText}
-                size={28}
-              />
-            }
-            onPress={() => addLocation()}
-          />
+              }
+              onPress={() => recenterMap(currentPosition.coords)}
+            />
+            <View style={s.buttonSeparator} />
+            <Button
+              containerStyle={s.buttonGlass}
+              buttonStyle={s.buttonGlassInner}
+              icon={
+                <>
+                  <View style={s.northUp} />
+                  <Navigation2
+                    color={theme.colors.clearButtonText}
+                    size={20}
+                    fill={
+                      mapIsRotated
+                        ? theme.colors.transparent
+                        : theme.colors.clearButtonText
+                    }
+                  />
+                </>
+              }
+              onPress={() => northUpMap()}
+            />
+            <View style={s.buttonSeparator} />
+            <Button
+              containerStyle={s.buttonGlass}
+              buttonStyle={s.buttonGlassInner}
+              icon={
+                mapPresentation === 'standard' ? (
+                  <Satellite color={theme.colors.clearButtonText} size={22} />
+                ) : (
+                  <Map color={theme.colors.clearButtonText} size={22} />
+                )
+              }
+              onPress={() => toggleMapPresenation()}
+            />
+          </BlurView>
         </Animated.View>
       </>
     );
@@ -509,24 +523,28 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  button: {
-    backgroundColor: theme.colors.white,
-    borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0,
-    borderTopLeftRadius: 0,
-    borderTopRightRadius: 0,
-    borderBottomColor: theme.colors.listItemBorder,
-    borderBottomWidth: 1,
+  buttonGlass: {
+    backgroundColor: 'transparent',
   },
-  buttonFirst: {
-    borderTopLeftRadius: theme.radius.M,
-    borderTopRightRadius: theme.radius.M,
+  buttonGlassInner: {
+    backgroundColor: 'transparent',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  buttonLast: {
-    borderBottomLeftRadius: theme.radius.M,
-    borderBottomRightRadius: theme.radius.M,
-    borderBottomWidth: 0,
+  buttonGroup: {
+    borderRadius: 22,
+    overflow: 'hidden',
     marginBottom: 10,
+  },
+  buttonGroupLast: {
+    marginBottom: 0,
+  },
+  buttonSeparator: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: theme.colors.blackTransparentLight,
   },
   buttons: {
     position: 'absolute',

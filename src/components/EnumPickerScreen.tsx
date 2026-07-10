@@ -95,7 +95,7 @@ const EnumPickerScreen = ({ route, navigation }: Props) => {
 
     const opaqueHeader = headerBackgroundColor
       ? {
-          headerTransparent: false as const,
+          headerTransparent: false,
           headerStyle: { backgroundColor: headerBackgroundColor },
           headerShadowVisible: false,
         }

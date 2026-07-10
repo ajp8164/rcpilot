@@ -41,11 +41,11 @@ const NotesEditorScreen = ({ navigation, route }: Props) => {
     // Otherwise use transparent (notes screen content fills behind header).
     const headerStyle = headerBackgroundColor
       ? {
-          headerTransparent: false as const,
+          headerTransparent: false,
           headerStyle: { backgroundColor: headerBackgroundColor },
           headerShadowVisible: false,
         }
-      : { headerTransparent: true as const };
+      : { headerTransparent: true };
 
     navigation.setOptions(
       headerOptions({

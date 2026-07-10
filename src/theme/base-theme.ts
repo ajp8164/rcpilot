@@ -5,7 +5,9 @@ import { IBaseThemeSchema } from '@react-native-hello/ui';
 import { fonts } from './fonts';
 
 export const baseTheme: DeepPartial<IBaseThemeSchema> = {
-  radius: {},
+  radius: {
+    XL: 40,
+  },
   fontSize: {
     giant: 54,
     medium: 14,

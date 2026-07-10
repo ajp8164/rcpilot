@@ -8,8 +8,9 @@ declare const LocationsView: React.MemoExoticComponent<
   >
 >;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface LocationsViewProps {}
+export interface LocationsViewProps {
+  ListHeaderComponent?: React.ReactElement;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LocationsViewMethods {}

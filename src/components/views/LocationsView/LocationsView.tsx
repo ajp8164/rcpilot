@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, ListRenderItem } from 'react-native';
+import { ListRenderItem } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
 import {
   Divider,
   ListItemCheckBox,
+  ThemeManager,
   listItemPosition,
   useTheme,
 } from '@react-native-hello/ui';
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 import { useQuery } from '@realm/react';
 import { EmptyView } from 'components/molecules/EmptyView';
 import { Goal, LandPlot } from 'lucide-react-native';
@@ -21,8 +23,10 @@ import { LocationsViewMethods, LocationsViewProps } from './types';
 type LocationsView = LocationsViewMethods;
 
 const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
-  (_props, _ref) => {
+  (props, _ref) => {
+    const { ListHeaderComponent } = props;
     const theme = useTheme();
+    const s = useStyles();
     const event = useEvent();
 
     const currentLocationId = useSelector(_selectLocation).locationId;
@@ -78,12 +82,13 @@ const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
     };
 
     return (
-      <FlatList
+      <BottomSheetFlatList
         data={allLocations}
         renderItem={renderLocation}
         keyExtractor={item => item._id.toString()}
-        scrollEnabled={false}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={s.contentContainer}
+        ListHeaderComponent={ListHeaderComponent}
         ListFooterComponent={<Divider />}
         ListEmptyComponent={
           <EmptyView
@@ -99,3 +104,9 @@ const LocationsView = React.forwardRef<LocationsView, LocationsViewProps>(
 );
 
 export default LocationsView;
+
+const useStyles = ThemeManager.createStyleSheet(() => ({
+  contentContainer: {
+    paddingHorizontal: 10,
+  },
+}));

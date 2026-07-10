@@ -24,6 +24,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
 import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
+import { ClubBottomSheet } from 'components/bottomSheets/ClubBottomSheet';
 import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
 import { MapMarker } from 'components/molecules/MapMarker';
 import { appConfig } from 'config';
@@ -97,7 +98,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const mapBottomSheetRef = useRef<MapBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
+  const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
   const bottomSheetPosition = useSharedValue(0);
+  const mapSheetSnapIndexBeforeClub = useRef(1);
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -267,6 +270,17 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
       userTappedLocationId.current = newLocationId;
     }
+  };
+
+  const onPressClub = (clubId: string) => {
+    mapBottomSheetRef.current?.dismiss();
+    requestAnimationFrame(() => {
+      clubBottomSheetRef.current?.present(clubId);
+    });
+  };
+
+  const onClubBottomSheetDismiss = () => {
+    mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClub.current);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {
@@ -494,6 +508,16 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         animatedPosition={bottomSheetPosition}
         topInset={device.insets.top}
         onPressAddLocation={addLocation}
+        onPressClub={onPressClub}
+        onSnapChange={(index: number) => {
+          if (index > 0) {
+            mapSheetSnapIndexBeforeClub.current = index;
+          }
+        }}
+      />
+      <ClubBottomSheet
+        ref={clubBottomSheetRef}
+        onDismiss={onClubBottomSheetDismiss}
       />
       <LocationBottomSheet
         ref={locationBottomSheetRef}
@@ -507,6 +531,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
             // the marker for the location bottom sheet just closed).
             markersRef.current.forEach(m => m.mapMarker?.hideCallout());
           }
+          mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClub.current);
         }}
         onPressNotes={(text, title) =>
           navigation.navigate('NotesEditor', {

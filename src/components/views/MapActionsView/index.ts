@@ -1,2 +1,2 @@
 export { default } from './MapActionsView';
-export type { MapActionsViewProps, MapActionsViewMethods } from './types';
+export type { MapActionsViewProps } from './types';

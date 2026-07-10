@@ -7,7 +7,7 @@ import BottomSheet, {
 import { Divider, ThemeManager } from '@react-native-hello/ui';
 import { GlassBackground } from 'components/atoms/GlassBackground';
 import { ModalHeader } from 'components/atoms/ModalHeader';
-import LocationsView from 'components/views/LocationsView';
+import ClubsListView from 'components/views/ClubsListView';
 import MapActionsView from 'components/views/MapActionsView';
 
 import { MapBottomSheetMethods, MapBottomSheetProps } from './types';
@@ -22,7 +22,8 @@ type MapBottomSheet = MapBottomSheetMethods;
 
 const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
   (props, ref) => {
-    const { animatedPosition, topInset = 0, onPressAddLocation } = props;
+    const { animatedPosition, topInset = 0, onPressAddLocation, onPressClub, onSnapChange } =
+      props;
 
     const s = useStyles();
     const innerRef = useRef<BottomSheet>(null);
@@ -31,6 +32,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
     useImperativeHandle(ref, () => ({
       dismiss,
       present,
+      snapToIndex,
     }));
 
     const dismiss = () => {
@@ -39,6 +41,10 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
 
     const present = () => {
       innerRef.current?.snapToIndex(1);
+    };
+
+    const snapToIndex = (index: number) => {
+      innerRef.current?.snapToIndex(index);
     };
 
     // Background: glass blur base with animated opacity overlay that
@@ -67,19 +73,18 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
         enableDynamicSizing={false}
         enablePanDownToClose={false}
         handleIndicatorStyle={s.handleIndicator}
+        onChange={onSnapChange}
         backgroundComponent={Background}>
         <ModalHeader
           size={'small'}
           title={'All Locations'}
           titleStyle={s.title}
         />
-        <LocationsView
-          ListHeaderComponent={
-            <>
-              <MapActionsView onPressAddLocation={onPressAddLocation} />
-              <Divider />
-            </>
-          }
+        <MapActionsView onPressAddLocation={onPressAddLocation} />
+        <Divider />
+        <ClubsListView
+          useBottomSheetList
+          onPressClub={onPressClub}
         />
       </BottomSheet>
     );

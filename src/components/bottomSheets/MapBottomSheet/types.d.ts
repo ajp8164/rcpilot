@@ -13,9 +13,12 @@ export interface MapBottomSheetProps {
   animatedPosition?: SharedValue<number>;
   topInset?: number;
   onPressAddLocation: () => void;
+  onPressClub?: (clubId: string) => void;
+  onSnapChange?: (index: number) => void;
 }
 
 export interface MapBottomSheetMethods {
   dismiss: () => void;
   present: () => void;
+  snapToIndex: (index: number) => void;
 }

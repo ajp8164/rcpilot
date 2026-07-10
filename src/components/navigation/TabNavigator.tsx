@@ -7,7 +7,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {
   BatteryFull,
   FileText,
-  LandPlot,
   Plane,
   ScanLine,
   Settings,
@@ -15,7 +14,6 @@ import {
 import { TabNavigatorParamList } from 'types/navigation';
 
 import BatteriesNavigator from './BatteriesNavigator';
-import ClubsNavigator from './ClubsNavigator';
 import LogNavigator from './LogNavigator';
 import ModelsNavigator from './ModelsNavigator';
 import ScanNavigator from './ScanNavigator';
@@ -63,14 +61,6 @@ const TabNavigator = () => {
         options={{
           tabBarShowLabel: false,
           tabBarIcon: ({ color }) => <FileText color={color} size={33} />,
-        }}
-      />
-      <Tab.Screen
-        name="ClubsTab"
-        component={ClubsNavigator}
-        options={{
-          tabBarShowLabel: false,
-          tabBarIcon: ({ color }) => <LandPlot color={color} size={33} />,
         }}
       />
       <Tab.Screen

@@ -6,14 +6,11 @@ import {
   Divider,
   ListItem,
   ThemeManager,
-  // WebViewModal,
   useTheme,
 } from '@react-native-hello/ui';
 import { useRealm } from '@realm/react';
 import { BSON } from 'realm';
 import { Club } from 'realmdb';
-
-// import formatcoords from 'formatcoords';
 
 interface ClubViewInterface {
   clubId: string;
@@ -24,35 +21,11 @@ export const ClubView = ({ clubId, hideName }: ClubViewInterface) => {
   const theme = useTheme();
   const s = useStyles();
   const realm = useRealm();
-  // const webviewModalRef = useRef<WebViewModal>(null);
 
-  // const [club, setClub] = useState<Club>();
   const club = realm.objectForPrimaryKey(
     'Club',
     new BSON.ObjectId(clubId),
   ) as Club;
-
-  // const coords =
-  //   location.coords.latitude &&
-  //   location.coords.longitude &&
-  //   formatcoords(location.coords.latitude, location.coords.longitude)
-  //     .format({
-  //       latLonSeparator: '|',
-  //     })
-  //     .split('|');
-
-  // useEffect(() => {
-  //   const club = clubs.find(c => {
-  //     return c.id === clubId;
-  //   }) as Club;
-  //   setClub(club);
-
-  //   navigation.setOptions({
-  //     title: club?.name,
-  //   });
-
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   return (
     <>
@@ -107,21 +80,9 @@ export const ClubView = ({ clubId, hideName }: ClubViewInterface) => {
           subtitle={club.websiteUrl}
           position={['first', 'last']}
           rightContent={'chevron-right'}
-          // onPress={() => webviewModalRef.current?.present(club.websiteUrl)}
           onPress={() => Linking.openURL(club.websiteUrl)}
         />
       )}
-      {/* <ListItem
-          title={'Latitude'}
-          position={['first']}
-          value={coords ? coords[0] : ''}
-        />
-        <ListItem
-          title={'Longitude'}
-          position={['last']}
-          value={coords ? coords[1] : ''}
-        /> */}
-      {/* <WebViewModal ref={webviewModalRef} /> */}
     </>
   );
 };

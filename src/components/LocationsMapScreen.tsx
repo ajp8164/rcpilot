@@ -100,6 +100,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
   const [mapIsCentered, setMapIsCentered] = useState(true);
   const [mapIsRotated, setMapIsRotated] = useState(false);
+  const [markerRevision, setMarkerRevision] = useState(0);
 
   const mapBottomSheetRef = useRef<MapBottomSheet>(null);
   const clubsBottomSheetRef = useRef<ClubsBottomSheet>(null);
@@ -335,10 +336,31 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     event: MarkerDragStartEndEvent,
     location: Location,
   ) => {
-    realm.write(() => {
-      location.coords.latitude = event.nativeEvent.coordinate.latitude;
-      location.coords.longitude = event.nativeEvent.coordinate.longitude;
-    });
+    const { latitude, longitude } = event.nativeEvent.coordinate;
+
+    Alert.alert(
+      'Move Location',
+      `Move "${location.name}" to new position?`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => {
+            setMarkerRevision(prev => prev + 1);
+          },
+        },
+        {
+          text: 'Move',
+          style: 'destructive',
+          onPress: () => {
+            realm.write(() => {
+              location.coords.latitude = latitude;
+              location.coords.longitude = longitude;
+            });
+          },
+        },
+      ],
+    );
   };
 
   const onPressMap = (event: MapPressEvent) => {
@@ -520,7 +542,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
               }
             });
           }}
-          key={index}
+          key={`${index}-${markerRevision}`}
           index={index}
           location={location}
           coordinate={{

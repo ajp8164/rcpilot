@@ -45,7 +45,7 @@ export const MapMarker = forwardRef(
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
           }}
-          draggable
+          draggable={location.kind === 'user'}
           onDragEnd={event => {
             onMarkerDragEnd(event, location);
           }}

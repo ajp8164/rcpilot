@@ -61,10 +61,8 @@ export const useClubSearch = (
       }
     }
 
-    // Filter clubs by selected country.
-    const countryClubs = clubs.filter(
-      club => (club.address?.country || 'US') === country,
-    );
+    // Filter clubs by selected country using Realm RQL (runs natively).
+    const countryClubs = clubs.filtered('address.country == $0', country);
 
     // --- Location matches (max 5, alpha sorted) ---
     const locationSet = new Set<string>();

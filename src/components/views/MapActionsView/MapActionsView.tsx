@@ -12,7 +12,7 @@ const MapActionsView = ({ onPressAddLocation }: MapActionsViewProps) => {
   const s = useStyles();
 
   return (
-    <View style={{ flexDirection: 'row', paddingHorizontal: 15 }}>
+    <View style={{ flexDirection: 'row' }}>
       <Button
         buttonStyle={s.actionButton}
         iconContainerStyle={{ marginLeft: 0 }}

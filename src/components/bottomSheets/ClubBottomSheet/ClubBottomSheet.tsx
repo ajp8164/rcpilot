@@ -60,7 +60,7 @@ const ClubBottomSheet = React.forwardRef<
     <BottomSheet
       ref={innerRef}
       index={-1}
-      snapPoints={['40%', '92%']}
+      snapPoints={['40%', '80%']}
       enableDynamicSizing={false}
       enablePanDownToClose={true}
       onClose={() => dismiss()}
@@ -86,7 +86,7 @@ export { ClubBottomSheet };
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   container: {
-    paddingHorizontal: 15,
+    paddingHorizontal: theme.spacing.M,
     marginTop: -15,
   },
   handleIndicator: {

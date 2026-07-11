@@ -1,11 +1,14 @@
 import { ISODateString } from '@react-native-hello/common';
 import { BSON, Object, ObjectSchema } from 'realm';
 
+export type LocationKind = 'club' | 'user';
+
 export class Location extends Object<Location> {
   _id!: BSON.ObjectId;
   createdOn!: ISODateString;
   updatedOn!: ISODateString;
   name!: string;
+  kind!: LocationKind;
   coords!: LocationCoords;
   notes?: string;
 
@@ -16,6 +19,7 @@ export class Location extends Object<Location> {
       createdOn: 'string',
       updatedOn: 'string',
       name: 'string',
+      kind: { type: 'string', default: 'user' },
       coords: 'LocationCoords',
       notes: 'string?',
     },

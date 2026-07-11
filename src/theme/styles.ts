@@ -158,17 +158,17 @@ export const createElementsStyles = ({
 
   view: {
     height: '100%',
-    paddingHorizontal: 7,
+    paddingHorizontal: theme.spacing.M,
     backgroundColor: theme.colors.viewBackground,
   },
   viewAlt: {
     height: '100%',
-    paddingHorizontal: 7,
+    paddingHorizontal: theme.spacing.M,
     backgroundColor: theme.colors.viewAltBackground,
   },
   viewInv: {
     height: '100%',
-    paddingHorizontal: 7,
+    paddingHorizontal: theme.spacing.M,
     backgroundColor: theme.colors.viewInvBackground,
   },
 });

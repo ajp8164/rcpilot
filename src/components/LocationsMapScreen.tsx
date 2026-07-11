@@ -12,6 +12,8 @@ import MapView, {
   Region,
 } from 'react-native-maps';
 import Animated, {
+  interpolate,
+  Extrapolation,
   useAnimatedStyle,
   useSharedValue,
 } from 'react-native-reanimated';
@@ -23,8 +25,9 @@ import { GlassView } from 'components/atoms/GlassView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
-import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
 import { ClubBottomSheet } from 'components/bottomSheets/ClubBottomSheet';
+import { ClubsBottomSheet } from 'components/bottomSheets/ClubsBottomSheet';
+import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
 import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
 import { MapMarker } from 'components/molecules/MapMarker';
 import { appConfig } from 'config';
@@ -97,10 +100,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const [mapIsRotated, setMapIsRotated] = useState(false);
 
   const mapBottomSheetRef = useRef<MapBottomSheet>(null);
-  const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
+  const clubsBottomSheetRef = useRef<ClubsBottomSheet>(null);
   const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
-  const bottomSheetPosition = useSharedValue(0);
-  const mapSheetSnapIndexBeforeClub = useRef(1);
+  const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
+  const bottomSheetPosition = useSharedValue(475);
+  const mapSheetSnapIndexBeforeClubs = useRef(1);
+  const clubsSheetSnapIndexBeforeDetail = useRef(1);
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -181,9 +186,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       ? boundaries.northEast.latitude - boundaries.southWest.latitude
       : 0.01;
 
-    // Offset the center southward so the pin appears in the upper third
-    // of the screen instead of dead center (above the bottom sheet).
-    const offsetLat = coords.latitude - latDelta * 0.20;
+    // Offset the center southward so the pin appears at ~30% from top
+    // regardless of zoom level.
+    const offsetLat = coords.latitude - latDelta * 0.25;
 
     const partialCamera: Partial<Camera> = {
       center: {
@@ -195,10 +200,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     };
 
     mapViewRef.current?.animateCamera(partialCamera);
-    setTimeout(() => {
-      mapViewRef.current?.animateCamera(partialCamera);
-    });
-
     setMapIsCentered(true);
   };
 
@@ -238,6 +239,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         createdOn: now,
         updatedOn: now,
         name: 'Location-' + id.substring(id.length - 5),
+        kind: 'user',
         coords: coords || mapLocation.current,
         notes: '',
       });
@@ -272,15 +274,28 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const onPressClub = (clubId: string) => {
+  const onPressClubs = () => {
     mapBottomSheetRef.current?.dismiss();
+    setTimeout(() => {
+      clubsBottomSheetRef.current?.present();
+    }, 200);
+  };
+
+  const onPressClub = (clubId: string) => {
+    clubsSheetSnapIndexBeforeDetail.current =
+      clubsBottomSheetRef.current?.getCurrentIndex() ?? 1;
+    clubsBottomSheetRef.current?.dismiss(false);
     requestAnimationFrame(() => {
       clubBottomSheetRef.current?.present(clubId);
     });
   };
 
   const onClubBottomSheetDismiss = () => {
-    mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClub.current);
+    clubsBottomSheetRef.current?.snapToIndex(clubsSheetSnapIndexBeforeDetail.current);
+  };
+
+  const onClubsBottomSheetDismiss = () => {
+    mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClubs.current);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {
@@ -343,15 +358,30 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const [buttonsHeight, setButtonsHeight] = useState(0);
+  const [buttonsDisabled, setButtonsDisabled] = useState(false);
+  // At 40% snap, position is ~475. Fade from 475 (visible) to 435 (hidden).
+  const fadeStartY = 475;
+  const fadeEndY = 435;
 
-  const buttonsAnimatedStyle = useAnimatedStyle(() => ({
-    top: bottomSheetPosition.value - buttonsHeight - 15,
-  }));
+  const buttonsAnimatedStyle = useAnimatedStyle(() => {
+    const opacity = interpolate(
+      bottomSheetPosition.value,
+      [fadeEndY, fadeStartY],
+      [0, 1],
+      Extrapolation.CLAMP,
+    );
+
+    return {
+      top: bottomSheetPosition.value - buttonsHeight - 15,
+      opacity,
+    };
+  });
 
   const renderActionButtons = (): React.ReactElement => {
     return (
       <>
         <Animated.View
+          pointerEvents={buttonsDisabled ? 'none' : 'auto'}
           style={[s.buttons, buttonsAnimatedStyle]}
           onLayout={e => setButtonsHeight(e.nativeEvent.layout.height)}>
           <GlassView
@@ -484,9 +514,15 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         showsUserLocation={true}
         mapType={mapPresentation}
         userInterfaceStyle={ThemeManager.name}
+        // Offset the map center southward so the user's location appears at ~30%
+        // from the top of the screen rather than dead center. This accounts for the
+        // bottom sheet covering the lower 40% of the screen on load. The factor 0.349
+        // is calibrated to match recenterMap() which uses actual map boundaries; minor
+        // per-device variance (~2-5px) is expected due to aspect ratio differences.
         initialRegion={{
           latitude:
-            initialLocation?.coords.latitude || currentPosition.coords.latitude,
+            (initialLocation?.coords.latitude || currentPosition.coords.latitude) -
+            (currentPosition.error ? 10 : 0.01) * 0.349,
           longitude:
             initialLocation?.coords.longitude ||
             currentPosition.coords.longitude,
@@ -508,12 +544,18 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         animatedPosition={bottomSheetPosition}
         topInset={device.insets.top}
         onPressAddLocation={addLocation}
-        onPressClub={onPressClub}
+        onPressClubs={onPressClubs}
         onSnapChange={(index: number) => {
           if (index > 0) {
-            mapSheetSnapIndexBeforeClub.current = index;
+            mapSheetSnapIndexBeforeClubs.current = index;
           }
+          setButtonsDisabled(index > 1);
         }}
+      />
+      <ClubsBottomSheet
+        ref={clubsBottomSheetRef}
+        onDismiss={onClubsBottomSheetDismiss}
+        onPressClub={onPressClub}
       />
       <ClubBottomSheet
         ref={clubBottomSheetRef}
@@ -531,7 +573,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
             // the marker for the location bottom sheet just closed).
             markersRef.current.forEach(m => m.mapMarker?.hideCallout());
           }
-          mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClub.current);
+          mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClubs.current);
         }}
         onPressNotes={(text, title) =>
           navigation.navigate('NotesEditor', {

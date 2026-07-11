@@ -126,12 +126,12 @@ const ModalHeader = ({
 
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   viewLarge: {
-    marginLeft: 10,
+    marginLeft: theme.spacing.M,
     marginBottom: 10,
     flexDirection: 'row',
   },
   viewSmall: {
-    marginHorizontal: 10,
+    marginHorizontal: theme.spacing.M,
     marginBottom: 10,
     alignItems: 'center',
     overflow: 'visible',

@@ -74,6 +74,7 @@ export const useClubs = (props: Props = {}) => {
               createdOn: now,
               updatedOn: now,
               name: c.name,
+              kind: 'club',
               coords: {
                 latitude: c.latitude || 0,
                 longitude: c.longitude || 0,

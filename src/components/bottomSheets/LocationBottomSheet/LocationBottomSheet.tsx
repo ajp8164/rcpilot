@@ -94,7 +94,7 @@ const LocationBottomSheet = React.forwardRef<
       <BottomSheet
         ref={innerRef}
         index={initialIndex}
-        snapPoints={['40%', '92%']}
+        snapPoints={['40%', '80%']}
         enableDynamicSizing={false}
         enablePanDownToClose={true}
         backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}

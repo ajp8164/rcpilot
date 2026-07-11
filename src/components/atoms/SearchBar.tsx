@@ -52,13 +52,20 @@ const SearchBar = ({
         placeholderTextColor={theme.colors.textPlaceholder}
         selectTextOnFocus={true}
         autoFocus={autoFocus}
+        autoCorrect={false}
+        spellCheck={false}
+        autoComplete={'off'}
+        textContentType={'none'}
         style={[internalValue.length ? { top: 0.8 } : {}, s.input]}
         returnKeyType={'search'}
       />
       {internalValue?.length > 0 && (
         <Pressable onPress={() => setInternalValue('')}>
-          <CircleX size={18} color={theme.colors.midGray} />
+          <CircleX size={22} color={theme.colors.white} fill={theme.colors.darkGray} />
         </Pressable>
+      )}
+      {!internalValue?.length && (
+        <View style={{ width: 22, height: 22 }} />
       )}
     </View>
   );

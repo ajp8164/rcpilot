@@ -25,6 +25,7 @@ import { GlassView } from 'components/atoms/GlassView';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
+import { BackButton } from 'components/atoms/navigation/BackButton';
 import { ClubBottomSheet } from 'components/bottomSheets/ClubBottomSheet';
 import { ClubsBottomSheet } from 'components/bottomSheets/ClubsBottomSheet';
 import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
@@ -594,6 +595,13 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         {renderMapMarkers()}
       </ClusteredMapView>
       {renderActionButtons()}
+      <View style={s.backButton}>
+        <GlassView style={s.backButtonGlass}>
+          <BackButton
+            onPress={() => navigation.getParent()?.goBack()}
+          />
+        </GlassView>
+      </View>
       {mapSheetVisible && (
         <MapBottomSheet
           ref={mapBottomSheetRef}
@@ -644,7 +652,20 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
+const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
+  backButton: {
+    position: 'absolute',
+    top: device.insets.top,
+    left: 15,
+  },
+  backButtonGlass: {
+    borderRadius: 22,
+    overflow: 'hidden',
+    width: 44,
+    height: 44,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonGlass: {
     backgroundColor: 'transparent',
   },

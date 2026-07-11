@@ -24,7 +24,7 @@ import { Club } from 'realmdb';
 
 import { ClubsBottomSheetMethods, ClubsBottomSheetProps } from './types';
 
-const SNAP_POINTS = [65, '40%', '80%'];
+const SNAP_POINTS = ['40%', '80%'];
 
 type ClubsBottomSheet = ClubsBottomSheetMethods;
 
@@ -77,7 +77,7 @@ const ClubsBottomSheet = React.forwardRef<
 
   const present = () => {
     dismissing.current = false;
-    innerRef.current?.snapToIndex(2);
+    innerRef.current?.snapToIndex(1);
   };
 
   const snapToIndex = (index: number) => {
@@ -131,8 +131,7 @@ const ClubsBottomSheet = React.forwardRef<
       index={-1}
       snapPoints={SNAP_POINTS}
       enableDynamicSizing={false}
-      enablePanDownToClose={true}
-      onClose={() => dismiss()}
+      enablePanDownToClose={false}
       onChange={(index) => {
         if (index >= 0) currentIndexRef.current = index;
       }}

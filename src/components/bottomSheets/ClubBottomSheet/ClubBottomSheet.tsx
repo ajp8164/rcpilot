@@ -62,8 +62,7 @@ const ClubBottomSheet = React.forwardRef<
       index={-1}
       snapPoints={['40%', '80%']}
       enableDynamicSizing={false}
-      enablePanDownToClose={true}
-      onClose={() => dismiss()}
+      enablePanDownToClose={false}
       backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
       handleIndicatorStyle={s.handleIndicator}>
       <ModalHeader

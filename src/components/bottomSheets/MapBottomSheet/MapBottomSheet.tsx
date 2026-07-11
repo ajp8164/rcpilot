@@ -37,6 +37,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
   (props, ref) => {
     const {
       animatedPosition,
+      initialIndex = 1,
       topInset = 0,
       onPressAddLocation,
       onPressClubs,
@@ -113,9 +114,11 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
         ref={innerRef}
         animatedPosition={animatedPosition}
         snapPoints={SNAP_POINTS}
-        index={1}
+        index={initialIndex}
+        animateOnMount={false}
         enableDynamicSizing={false}
         enablePanDownToClose={false}
+        enableContentPanningGesture={true}
         handleIndicatorStyle={s.handleIndicator}
         onChange={onSnapChange}
         backgroundComponent={Background}>

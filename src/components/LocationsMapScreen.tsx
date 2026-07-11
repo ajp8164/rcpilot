@@ -42,6 +42,8 @@ import {
 } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { Location, LocationCoords } from 'realmdb/Location';
+import { Club } from 'realmdb/Club';
+import { BSON } from 'realm';
 import { selectMapPreferences } from 'store/selectors/appSettingsSelectors';
 import { saveMapPreferences } from 'store/slices/appSettings';
 import { LocationPickerResult } from 'types/location';
@@ -104,6 +106,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
   const bottomSheetPosition = useSharedValue(475);
+  const [mapSheetVisible, setMapSheetVisible] = useState(true);
   const mapSheetSnapIndexBeforeClubs = useRef(1);
   const clubsSheetSnapIndexBeforeDetail = useRef(1);
 
@@ -275,7 +278,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressClubs = () => {
-    mapBottomSheetRef.current?.dismiss();
+    setMapSheetVisible(false);
     setTimeout(() => {
       clubsBottomSheetRef.current?.present();
     }, 200);
@@ -288,6 +291,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     requestAnimationFrame(() => {
       clubBottomSheetRef.current?.present(clubId);
     });
+
+    // Recenter map on the club's location.
+    const club = realm.objectForPrimaryKey(Club, new BSON.ObjectId(clubId));
+    if (club?.location?.coords) {
+      recenterMap(club.location.coords);
+    }
   };
 
   const onClubBottomSheetDismiss = () => {
@@ -295,7 +304,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onClubsBottomSheetDismiss = () => {
-    mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClubs.current);
+    setMapSheetVisible(true);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {
@@ -358,7 +367,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const [buttonsHeight, setButtonsHeight] = useState(0);
-  const [buttonsDisabled, setButtonsDisabled] = useState(false);
   // At 40% snap, position is ~475. Fade from 475 (visible) to 435 (hidden).
   const fadeStartY = 475;
   const fadeEndY = 435;
@@ -381,7 +389,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     return (
       <>
         <Animated.View
-          pointerEvents={buttonsDisabled ? 'none' : 'auto'}
           style={[s.buttons, buttonsAnimatedStyle]}
           onLayout={e => setButtonsHeight(e.nativeEvent.layout.height)}>
           <GlassView
@@ -539,19 +546,21 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         {renderMapMarkers()}
       </ClusteredMapView>
       {renderActionButtons()}
-      <MapBottomSheet
-        ref={mapBottomSheetRef}
-        animatedPosition={bottomSheetPosition}
-        topInset={device.insets.top}
-        onPressAddLocation={addLocation}
-        onPressClubs={onPressClubs}
-        onSnapChange={(index: number) => {
-          if (index > 0) {
-            mapSheetSnapIndexBeforeClubs.current = index;
-          }
-          setButtonsDisabled(index > 1);
-        }}
-      />
+      {mapSheetVisible && (
+        <MapBottomSheet
+          ref={mapBottomSheetRef}
+          animatedPosition={bottomSheetPosition}
+          initialIndex={mapSheetSnapIndexBeforeClubs.current}
+          topInset={device.insets.top}
+          onPressAddLocation={addLocation}
+          onPressClubs={onPressClubs}
+          onSnapChange={(index: number) => {
+            if (index > 0) {
+              mapSheetSnapIndexBeforeClubs.current = index;
+            }
+          }}
+        />
+      )}
       <ClubsBottomSheet
         ref={clubsBottomSheetRef}
         onDismiss={onClubsBottomSheetDismiss}

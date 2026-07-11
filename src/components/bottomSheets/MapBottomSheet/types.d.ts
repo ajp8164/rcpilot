@@ -11,6 +11,7 @@ declare const MapBottomSheet: React.MemoExoticComponent<
 
 export interface MapBottomSheetProps {
   animatedPosition?: SharedValue<number>;
+  initialIndex?: number;
   topInset?: number;
   onPressAddLocation: () => void;
   onPressClubs?: () => void;

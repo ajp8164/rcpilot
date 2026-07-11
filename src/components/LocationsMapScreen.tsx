@@ -109,6 +109,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const [mapSheetVisible, setMapSheetVisible] = useState(true);
   const mapSheetSnapIndexBeforeClubs = useRef(1);
   const clubsSheetSnapIndexBeforeDetail = useRef(1);
+  const clubDetailSource = useRef<'search' | 'callout'>('search');
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -285,6 +286,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressClub = (clubId: string) => {
+    clubDetailSource.current = 'search';
     clubsSheetSnapIndexBeforeDetail.current =
       clubsBottomSheetRef.current?.getCurrentIndex() ?? 1;
     clubsBottomSheetRef.current?.dismiss(false);
@@ -300,7 +302,13 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onClubBottomSheetDismiss = () => {
-    clubsBottomSheetRef.current?.snapToIndex(clubsSheetSnapIndexBeforeDetail.current);
+    if (clubDetailSource.current === 'search') {
+      // Came from clubs search — restore the clubs search sheet.
+      clubsBottomSheetRef.current?.snapToIndex(clubsSheetSnapIndexBeforeDetail.current);
+    } else {
+      // Came from a map callout — restore the map sheet.
+      setMapSheetVisible(true);
+    }
   };
 
   const onClubsBottomSheetDismiss = () => {
@@ -351,8 +359,26 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const onPressCallout = (locationId: string) => {
-    locationBottomSheetRef.current?.present(locationId);
+  const onPressCallout = (location: Location) => {
+    if (location.kind === 'club') {
+      // Find the club that owns this location.
+      const club = realm
+        .objects(Club)
+        .filtered('location._id == $0', location._id)[0];
+      if (club) {
+        clubDetailSource.current = 'callout';
+        // Dismiss clubs search if open (forget the search context).
+        clubsBottomSheetRef.current?.dismiss(false);
+        // Forget map sheet position — will remount at peek.
+        mapSheetSnapIndexBeforeClubs.current = 0;
+        // Hide map sheet.
+        setMapSheetVisible(false);
+        // Present the club detail (replaces any currently shown club).
+        clubBottomSheetRef.current?.present(club._id.toString());
+      }
+    } else {
+      locationBottomSheetRef.current?.present(location._id.toString());
+    }
   };
 
   const onLocationSelect = (locationId: string) => {
@@ -506,7 +532,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
             onPressMarker(location._id.toString());
           }}
           onPressCallout={() => {
-            onPressCallout(location._id.toString());
+            onPressCallout(location);
           }}
         />
       );

@@ -235,10 +235,24 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const addLocation = (coords?: LocationCoords) => {
+  const addLocation = async (coords?: LocationCoords) => {
     const now = DateTime.now().toISO();
     const id = uuidv4();
     let newLocation: Location | undefined;
+
+    // When no coords provided (button press), place the pin at the visual
+    // center point (above map center, matching recenterMap offset).
+    let pinCoords = coords;
+    if (!pinCoords) {
+      const boundaries = await mapViewRef.current?.getMapBoundaries();
+      const latDelta = boundaries
+        ? boundaries.northEast.latitude - boundaries.southWest.latitude
+        : 0.01;
+      pinCoords = {
+        latitude: mapLocation.current.latitude + latDelta * 0.25,
+        longitude: mapLocation.current.longitude,
+      } as LocationCoords;
+    }
 
     realm.write(() => {
       newLocation = realm.create(Location, {
@@ -246,7 +260,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         updatedOn: now,
         name: 'Location-' + id.substring(id.length - 5),
         kind: 'user',
-        coords: coords || mapLocation.current,
+        coords: pinCoords!,
         notes: '',
       });
     });

@@ -1,5 +1,5 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { Dimensions, Text, type ViewStyle } from 'react-native';
+import { Dimensions, type ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
@@ -18,6 +18,7 @@ import {
 import { useQuery } from '@realm/react';
 import { GlassBackground } from 'components/atoms/GlassBackground';
 import { ModalHeader } from 'components/atoms/ModalHeader';
+import { EmptyView } from 'components/molecules/EmptyView';
 import MapActionsView from 'components/views/MapActionsView';
 import { Globe, Goal, LandPlot } from 'lucide-react-native';
 import { Location } from 'realmdb';
@@ -157,9 +158,12 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
               );
             })
           ) : (
-            <Text style={s.emptyMessage}>
-              {'No locations. Tap Add Location or press on the map.'}
-            </Text>
+            <EmptyView
+              info
+              message={'No Locations'}
+              details={'Tap Add Location or press on the map.'}
+              positionTop
+            />
           )}
           <Divider />
           {/* Clubs nav item */}

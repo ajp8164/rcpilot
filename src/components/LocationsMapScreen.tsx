@@ -22,10 +22,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEvent } from '@react-native-hello/core';
 import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
 import { GlassView } from 'components/atoms/GlassView';
+import { GlassBackButton } from 'components/atoms/navigation/GlassBackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
 import { Button } from 'components/atoms/Button';
-import { BackButton } from 'components/atoms/navigation/BackButton';
 import { ClubBottomSheet } from 'components/bottomSheets/ClubBottomSheet';
 import { ClubsBottomSheet } from 'components/bottomSheets/ClubsBottomSheet';
 import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
@@ -595,13 +595,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         {renderMapMarkers()}
       </ClusteredMapView>
       {renderActionButtons()}
-      <View style={s.backButton}>
-        <GlassView style={s.backButtonGlass}>
-          <BackButton
-            onPress={() => navigation.getParent()?.goBack()}
-          />
-        </GlassView>
-      </View>
+      <GlassBackButton
+        onPress={() => navigation.getParent()?.goBack()}
+      />
       {mapSheetVisible && (
         <MapBottomSheet
           ref={mapBottomSheetRef}
@@ -652,20 +648,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme, device }) => ({
-  backButton: {
-    position: 'absolute',
-    top: device.insets.top,
-    left: 15,
-  },
-  backButtonGlass: {
-    borderRadius: 22,
-    overflow: 'hidden',
-    width: 44,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   buttonGlass: {
     backgroundColor: 'transparent',
   },

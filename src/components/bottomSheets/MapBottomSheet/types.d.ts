@@ -15,6 +15,7 @@ export interface MapBottomSheetProps {
   topInset?: number;
   onPressAddLocation: () => void;
   onPressClubs?: () => void;
+  onPressRecentLocation?: (locationId: string, kind: string) => void;
   onSnapChange?: (index: number) => void;
 }
 

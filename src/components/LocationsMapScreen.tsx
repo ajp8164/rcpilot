@@ -5,7 +5,6 @@ import ClusteredMapView from 'react-native-map-clustering';
 import MapView, {
   Camera,
   Details,
-  MapPressEvent,
   MapType,
   MarkerDragStartEndEvent,
   MapMarker as RNMapMarker,
@@ -108,8 +107,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
   const bottomSheetPosition = useSharedValue(475);
-  const [mapSheetVisible, setMapSheetVisible] = useState(true);
-  const mapSheetSnapIndexBeforeClubs = useRef(1);
+  const mapSheetSnapIndexBeforeDetail = useRef(1);
+  const detailSheetOpen = useRef(false);
   const clubsSheetSnapIndexBeforeDetail = useRef(1);
   const clubDetailSource = useRef<'search' | 'callout'>('search');
 
@@ -295,10 +294,38 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressClubs = () => {
-    setMapSheetVisible(false);
+    detailSheetOpen.current = true;
+    mapBottomSheetRef.current?.snapToIndex(1);
     setTimeout(() => {
       clubsBottomSheetRef.current?.present();
     }, 200);
+  };
+
+  const onPressRecentLocation = (locationId: string, kind: string) => {
+    const loc = locations.find(l => l._id.toString() === locationId);
+    if (!loc) return;
+
+    recenterMap(loc.coords);
+    presentLocationDetail(locationId, kind, loc);
+  };
+
+  // Collapses the map sheet to 40% and presents the appropriate detail sheet.
+  const presentLocationDetail = (locationId: string, kind: string, loc: Location) => {
+    // Collapse map sheet to 40%. The restore index is already tracked via onSnapChange.
+    detailSheetOpen.current = true;
+    mapBottomSheetRef.current?.snapToIndex(1);
+
+    if (kind === 'club') {
+      const club = realm
+        .objects(Club)
+        .filtered('location._id == $0', loc._id)[0];
+      if (club) {
+        clubDetailSource.current = 'callout';
+        clubBottomSheetRef.current?.present(club._id.toString());
+      }
+    } else {
+      locationBottomSheetRef.current?.present(locationId);
+    }
   };
 
   const onPressClub = (clubId: string) => {
@@ -318,17 +345,19 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onClubBottomSheetDismiss = () => {
+    detailSheetOpen.current = false;
     if (clubDetailSource.current === 'search') {
       // Came from clubs search — restore the clubs search sheet.
       clubsBottomSheetRef.current?.snapToIndex(clubsSheetSnapIndexBeforeDetail.current);
     } else {
-      // Came from a map callout — restore the map sheet.
-      setMapSheetVisible(true);
+      // Came from a map callout/recent — restore the map sheet to last position.
+      mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeDetail.current);
     }
   };
 
   const onClubsBottomSheetDismiss = () => {
-    setMapSheetVisible(true);
+    detailSheetOpen.current = false;
+    mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeDetail.current);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {
@@ -378,13 +407,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     );
   };
 
-  const onPressMap = (event: MapPressEvent) => {
-    // Perform only if press is not on a marker.
-    if (event.nativeEvent.action === 'press') {
-      locationBottomSheetRef.current?.dismiss(true);
-    }
-  };
-
   const onPressMarker = (locationId: string) => {
     // This check allows the location sheet to be dismissed if it is currently displayed and
     // the user has tapped a marker other than the marker for the currently displayed location
@@ -397,25 +419,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressCallout = (location: Location) => {
-    if (location.kind === 'club') {
-      // Find the club that owns this location.
-      const club = realm
-        .objects(Club)
-        .filtered('location._id == $0', location._id)[0];
-      if (club) {
-        clubDetailSource.current = 'callout';
-        // Dismiss clubs search if open (forget the search context).
-        clubsBottomSheetRef.current?.dismiss(false);
-        // Forget map sheet position — will remount at peek.
-        mapSheetSnapIndexBeforeClubs.current = 0;
-        // Hide map sheet.
-        setMapSheetVisible(false);
-        // Present the club detail (replaces any currently shown club).
-        clubBottomSheetRef.current?.present(club._id.toString());
-      }
-    } else {
-      locationBottomSheetRef.current?.present(location._id.toString());
-    }
+    presentLocationDetail(location._id.toString(), location.kind, location);
   };
 
   const onLocationSelect = (locationId: string) => {
@@ -602,7 +606,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         onPanDrag={() => setUserMovedMap()}
         onRegionChangeStart={() => checkUserRotatedMap()}
         onRegionChangeComplete={onRegionChangeComplete}
-        onPress={onPressMap}
         onLongPress={e =>
           addLocation(e.nativeEvent.coordinate as LocationCoords)
         }>
@@ -612,21 +615,20 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       <GlassBackButton
         onPress={() => navigation.getParent()?.goBack()}
       />
-      {mapSheetVisible && (
-        <MapBottomSheet
-          ref={mapBottomSheetRef}
-          animatedPosition={bottomSheetPosition}
-          initialIndex={mapSheetSnapIndexBeforeClubs.current}
-          topInset={device.insets.top}
-          onPressAddLocation={addLocation}
-          onPressClubs={onPressClubs}
-          onSnapChange={(index: number) => {
-            if (index > 0) {
-              mapSheetSnapIndexBeforeClubs.current = index;
-            }
-          }}
-        />
-      )}
+      <MapBottomSheet
+        ref={mapBottomSheetRef}
+        animatedPosition={bottomSheetPosition}
+        initialIndex={1}
+        topInset={device.insets.top}
+        onPressAddLocation={addLocation}
+        onPressClubs={onPressClubs}
+        onPressRecentLocation={onPressRecentLocation}
+        onSnapChange={(index: number) => {
+          if (index > 0 && !detailSheetOpen.current) {
+            mapSheetSnapIndexBeforeDetail.current = index;
+          }
+        }}
+      />
       <ClubsBottomSheet
         ref={clubsBottomSheetRef}
         onDismiss={onClubsBottomSheetDismiss}
@@ -643,12 +645,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         onLocationSelect={onLocationSelect}
         onDismiss={byUser => {
           if (byUser) {
-            // When the bottom sheet is dismissed by the user (close button) then
-            // no other marker has been selected so we hide all the markers (includes
-            // the marker for the location bottom sheet just closed).
             markersRef.current.forEach(m => m.mapMarker?.hideCallout());
           }
-          mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeClubs.current);
+          detailSheetOpen.current = false;
+          mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeDetail.current);
         }}
         onPressNotes={(text, title) =>
           navigation.navigate('NotesEditor', {

@@ -96,7 +96,7 @@ const LocationBottomSheet = React.forwardRef<
         index={initialIndex}
         snapPoints={['40%', '80%']}
         enableDynamicSizing={false}
-        enablePanDownToClose={true}
+        enablePanDownToClose={false}
         backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
         animatedPosition={animatedPosition}>
         <ModalHeader

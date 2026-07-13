@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { Dimensions, type ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -20,8 +20,9 @@ import { GlassBackground } from 'components/atoms/GlassBackground';
 import { ModalHeader } from 'components/atoms/ModalHeader';
 import { EmptyView } from 'components/molecules/EmptyView';
 import MapActionsView from 'components/views/MapActionsView';
-import { Globe, Goal, LandPlot } from 'lucide-react-native';
+import { Clock, Globe, Goal, LandPlot } from 'lucide-react-native';
 import { Location } from 'realmdb';
+import { Event } from 'realmdb/Event';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
 import { LocationPickerResult } from 'types/location';
 
@@ -31,6 +32,7 @@ const screenHeight = Dimensions.get('window').height;
 const PEEK_SNAP = 65;
 const MID_SNAP = 0.4;
 const SNAP_POINTS = [PEEK_SNAP, `${MID_SNAP * 100}%`, '80%'];
+const RECENT_LOCATIONS_EVENT_LIMIT = 50;
 
 type MapBottomSheet = MapBottomSheetMethods;
 
@@ -42,6 +44,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
       topInset = 0,
       onPressAddLocation,
       onPressClubs,
+      onPressRecentLocation,
       onSnapChange,
     } = props;
 
@@ -50,6 +53,28 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
     const event = useEvent();
     const innerRef = useRef<BottomSheet>(null);
     const fullY = topInset + 44;
+
+    // Recent locations - last 3 unique locations from events, most recent first.
+    const allEvents = useQuery(Event, events => {
+      return events.sorted('createdOn', true);
+    });
+
+    const recentLocations = useMemo(() => {
+      const seen = new Set<string>();
+      const result: Location[] = [];
+      let checked = 0;
+      for (const ev of allEvents) {
+        if (checked >= RECENT_LOCATIONS_EVENT_LIMIT) break;
+        checked++;
+        if (!ev.location) continue;
+        const id = ev.location._id.toString();
+        if (seen.has(id)) continue;
+        seen.add(id);
+        result.push(ev.location);
+        if (result.length >= 3) break;
+      }
+      return result;
+    }, [allEvents]);
 
     // Locations state - only show user-created locations.
     const currentLocationId = useSelector(_selectLocation).locationId;
@@ -116,10 +141,8 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
         animatedPosition={animatedPosition}
         snapPoints={SNAP_POINTS}
         index={initialIndex}
-        animateOnMount={false}
         enableDynamicSizing={false}
         enablePanDownToClose={false}
-        enableContentPanningGesture={true}
         handleIndicatorStyle={s.handleIndicator}
         onChange={onSnapChange}
         backgroundComponent={Background}>
@@ -134,6 +157,22 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
           {/* Action buttons */}
           <MapActionsView onPressAddLocation={onPressAddLocation} />
           <Divider />
+          {/* Recent locations */}
+          {recentLocations.length > 0 && (
+            <>
+              <Divider text={'RECENT'} />
+              {recentLocations.map((location, index) => (
+                <ListItem
+                  key={location._id.toString()}
+                  title={location.name}
+                  leftContent={<Clock color={theme.colors.listItemIcon} size={22} />}
+                  position={listItemPosition(index, recentLocations.length)}
+                  onPress={() => onPressRecentLocation?.(location._id.toString(), location.kind)}
+                />
+              ))}
+              <Divider />
+            </>
+          )}
           {/* Manual locations */}
           {manualLocations.length > 0 ? (
             manualLocations.map((location, index) => {
@@ -185,12 +224,6 @@ export { MapBottomSheet };
 const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   contentContainer: {
     paddingHorizontal: theme.spacing.M,
-  },
-  emptyMessage: {
-    ...theme.text.small,
-    color: theme.colors.disabled,
-    textAlign: 'center',
-    paddingVertical: 20,
   },
   handleIndicator: {
     backgroundColor: theme.colors.lightGray,

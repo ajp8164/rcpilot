@@ -278,8 +278,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         ]?.mapMarker?.showCallout();
       }, 500); // Add for UX.
 
-      // Show location bottom sheet for the new location.
-      mapBottomSheetRef.current?.dismiss();
+      // Dismiss any open detail/search sheets and show location editor.
+      detailSheetOpen.current = true;
+      clubBottomSheetRef.current?.dismiss();
+      detailSheetOpen.current = true; // Re-assert after dismiss callback.
+      clubsBottomSheetRef.current?.dismiss(false);
+      mapBottomSheetRef.current?.snapToIndex(1);
       requestAnimationFrame(() => {
         locationBottomSheetRef.current?.present(newLocationId, 0, true);
       });

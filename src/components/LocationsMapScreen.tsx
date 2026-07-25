@@ -107,10 +107,18 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
   const bottomSheetPosition = useSharedValue(475);
-  const mapSheetSnapIndexBeforeDetail = useRef(1);
-  const detailSheetOpen = useRef(false);
-  const clubsSheetSnapIndexBeforeDetail = useRef(1);
-  const clubDetailSource = useRef<'search' | 'callout'>('search');
+
+  // Sheet orchestration state machine.
+  // Tracks which overlay is active so dismiss/restore logic is deterministic.
+  type SheetMode =
+    | { type: 'idle' }
+    | { type: 'clubs_search'; mapSnapIndex: number }
+    | { type: 'club_detail'; source: 'search' | 'callout'; mapSnapIndex: number; clubsSnapIndex: number }
+    | { type: 'location_detail'; mapSnapIndex: number }
+    | { type: 'adding_location'; mapSnapIndex: number };
+
+  const sheetMode = useRef<SheetMode>({ type: 'idle' });
+  const mapSheetUserIndex = useRef(1); // Last user-set map sheet snap index.
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -162,7 +170,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       recenterMap(newLocation.coords);
 
       // Show the bottom sheet for the new location.
-      mapBottomSheetRef.current?.dismiss();
+      sheetMode.current = { type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current };
+      mapBottomSheetRef.current?.snapToIndex(0);
       locationBottomSheetRef.current?.present(result.locationId);
 
       // Find and show the location callout.
@@ -279,11 +288,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       }, 500); // Add for UX.
 
       // Dismiss any open detail/search sheets and show location editor.
-      detailSheetOpen.current = true;
+      sheetMode.current = { type: 'adding_location', mapSnapIndex: mapSheetUserIndex.current };
       clubBottomSheetRef.current?.dismiss();
-      detailSheetOpen.current = true; // Re-assert after dismiss callback.
       clubsBottomSheetRef.current?.dismiss(false);
-      mapBottomSheetRef.current?.snapToIndex(1);
+      mapBottomSheetRef.current?.snapToIndex(0);
       requestAnimationFrame(() => {
         locationBottomSheetRef.current?.present(newLocationId, 0, true);
       });
@@ -298,7 +306,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressClubs = () => {
-    detailSheetOpen.current = true;
+    sheetMode.current = { type: 'clubs_search', mapSnapIndex: mapSheetUserIndex.current };
     mapBottomSheetRef.current?.snapToIndex(1);
     setTimeout(() => {
       clubsBottomSheetRef.current?.present();
@@ -315,16 +323,15 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   // Collapses the map sheet to 40% and presents the appropriate detail sheet.
   const presentLocationDetail = (locationId: string, kind: string, loc: Location) => {
-    // Collapse map sheet to 40%. The restore index is already tracked via onSnapChange.
-    detailSheetOpen.current = true;
-    mapBottomSheetRef.current?.snapToIndex(1);
+    sheetMode.current = { type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current };
+    mapBottomSheetRef.current?.snapToIndex(0);
 
     if (kind === 'club') {
       const club = realm
         .objects(Club)
         .filtered('location._id == $0', loc._id)[0];
       if (club) {
-        clubDetailSource.current = 'callout';
+        sheetMode.current = { type: 'club_detail', source: 'callout', mapSnapIndex: mapSheetUserIndex.current, clubsSnapIndex: 0 };
         clubBottomSheetRef.current?.present(club._id.toString());
       }
     } else {
@@ -333,9 +340,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressClub = (clubId: string) => {
-    clubDetailSource.current = 'search';
-    clubsSheetSnapIndexBeforeDetail.current =
-      clubsBottomSheetRef.current?.getCurrentIndex() ?? 1;
+    const clubsSnapIndex = clubsBottomSheetRef.current?.getCurrentIndex() ?? 1;
+    sheetMode.current = { type: 'club_detail', source: 'search', mapSnapIndex: mapSheetUserIndex.current, clubsSnapIndex };
     clubsBottomSheetRef.current?.dismiss(false);
     requestAnimationFrame(() => {
       clubBottomSheetRef.current?.present(clubId);
@@ -349,19 +355,22 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onClubBottomSheetDismiss = () => {
-    detailSheetOpen.current = false;
-    if (clubDetailSource.current === 'search') {
-      // Came from clubs search — restore the clubs search sheet.
-      clubsBottomSheetRef.current?.snapToIndex(clubsSheetSnapIndexBeforeDetail.current);
+    const mode = sheetMode.current;
+    if (mode.type !== 'club_detail') return; // Another flow took over.
+    if (mode.source === 'search') {
+      sheetMode.current = { type: 'clubs_search', mapSnapIndex: mode.mapSnapIndex };
+      clubsBottomSheetRef.current?.snapToIndex(mode.clubsSnapIndex);
     } else {
-      // Came from a map callout/recent — restore the map sheet to last position.
-      mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeDetail.current);
+      sheetMode.current = { type: 'idle' };
+      mapBottomSheetRef.current?.snapToIndex(mode.mapSnapIndex);
     }
   };
 
   const onClubsBottomSheetDismiss = () => {
-    detailSheetOpen.current = false;
-    mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeDetail.current);
+    const mode = sheetMode.current;
+    if (mode.type !== 'clubs_search') return; // Another flow took over.
+    sheetMode.current = { type: 'idle' };
+    mapBottomSheetRef.current?.snapToIndex(mode.mapSnapIndex);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {
@@ -554,10 +563,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
                   if (locationId === initialLocation?._id.toString()) {
                     markersRef.current[index].mapMarker?.showCallout();
 
+                    sheetMode.current = { type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current };
+                    mapBottomSheetRef.current?.snapToIndex(0);
                     locationBottomSheetRef.current?.present(locationId);
-                    requestAnimationFrame(() => {
-                      mapBottomSheetRef.current?.dismiss();
-                    });
 
                     initialized.current = true;
                   }
@@ -628,8 +636,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         onPressClubs={onPressClubs}
         onPressRecentLocation={onPressRecentLocation}
         onSnapChange={(index: number) => {
-          if (index > 0 && !detailSheetOpen.current) {
-            mapSheetSnapIndexBeforeDetail.current = index;
+          if (sheetMode.current.type === 'idle') {
+            mapSheetUserIndex.current = index;
           }
         }}
       />
@@ -651,8 +659,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           if (byUser) {
             markersRef.current.forEach(m => m.mapMarker?.hideCallout());
           }
-          detailSheetOpen.current = false;
-          mapBottomSheetRef.current?.snapToIndex(mapSheetSnapIndexBeforeDetail.current);
+          const mode = sheetMode.current;
+          const mapSnapIndex = (mode.type === 'location_detail' || mode.type === 'adding_location')
+            ? mode.mapSnapIndex
+            : mapSheetUserIndex.current;
+          sheetMode.current = { type: 'idle' };
+          mapBottomSheetRef.current?.snapToIndex(mapSnapIndex);
         }}
         onPressNotes={(text, title) =>
           navigation.navigate('NotesEditor', {

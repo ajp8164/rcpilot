@@ -24,6 +24,7 @@ const LocationBottomSheet = React.forwardRef<
   LocationBottomSheetProps
 >((props, ref) => {
   const {
+    animatedPosition: externalPosition,
     enableSelection,
     initialIndex = -1,
     onDismiss,
@@ -39,7 +40,8 @@ const LocationBottomSheet = React.forwardRef<
 
   const innerRef = useRef<BottomSheet>(null);
   const locationViewRef = useRef<LocationViewMethods>(null);
-  const animatedPosition = useSharedValue(0);
+  const localPosition = useSharedValue(0);
+  const animatedPosition = externalPosition ?? localPosition;
   const [closed, setClosed] = useState(true);
 
   useImperativeHandle(ref, () => ({

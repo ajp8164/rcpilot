@@ -14,6 +14,7 @@ import Animated, {
   interpolate,
   Extrapolation,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
@@ -107,6 +108,20 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
   const bottomSheetPosition = useSharedValue(475);
+  const locationSheetPosition = useSharedValue(0);
+  const clubSheetPosition = useSharedValue(0);
+
+  // Determines which sheet the action buttons track.
+  // 0 = map sheet, 1 = location/adding sheet, 2 = club detail sheet.
+  const activeSheetSource = useSharedValue(0);
+
+  const buttonTrackingPosition = useDerivedValue(() => {
+    switch (activeSheetSource.value) {
+      case 1: return locationSheetPosition.value;
+      case 2: return clubSheetPosition.value;
+      default: return bottomSheetPosition.value;
+    }
+  });
 
   // Sheet orchestration state machine.
   // Tracks which overlay is active so dismiss/restore logic is deterministic.
@@ -119,6 +134,22 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const sheetMode = useRef<SheetMode>({ type: 'idle' });
   const mapSheetUserIndex = useRef(1); // Last user-set map sheet snap index.
+
+  // Transition the sheet state machine. Updates mode and button tracking source atomically.
+  const setSheetMode = (mode: SheetMode) => {
+    sheetMode.current = mode;
+    switch (mode.type) {
+      case 'location_detail':
+      case 'adding_location':
+        activeSheetSource.value = 1;
+        break;
+      case 'club_detail':
+        activeSheetSource.value = 2;
+        break;
+      default:
+        activeSheetSource.value = 0;
+    }
+  };
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -170,7 +201,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       recenterMap(newLocation.coords);
 
       // Show the bottom sheet for the new location.
-      sheetMode.current = { type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current };
+      setSheetMode({ type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current });
       mapBottomSheetRef.current?.snapToIndex(0);
       locationBottomSheetRef.current?.present(result.locationId);
 
@@ -288,7 +319,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       }, 500); // Add for UX.
 
       // Dismiss any open detail/search sheets and show location editor.
-      sheetMode.current = { type: 'adding_location', mapSnapIndex: mapSheetUserIndex.current };
+      setSheetMode({ type: 'adding_location', mapSnapIndex: mapSheetUserIndex.current });
       clubBottomSheetRef.current?.dismiss();
       clubsBottomSheetRef.current?.dismiss(false);
       mapBottomSheetRef.current?.snapToIndex(0);
@@ -306,8 +337,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   };
 
   const onPressClubs = () => {
-    sheetMode.current = { type: 'clubs_search', mapSnapIndex: mapSheetUserIndex.current };
-    mapBottomSheetRef.current?.snapToIndex(1);
+    setSheetMode({ type: 'clubs_search', mapSnapIndex: mapSheetUserIndex.current });
+    mapBottomSheetRef.current?.snapToIndex(0);
     setTimeout(() => {
       clubsBottomSheetRef.current?.present();
     }, 200);
@@ -321,9 +352,9 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     presentLocationDetail(locationId, kind, loc);
   };
 
-  // Collapses the map sheet to 40% and presents the appropriate detail sheet.
+  // Presents the appropriate detail sheet for the given location.
   const presentLocationDetail = (locationId: string, kind: string, loc: Location) => {
-    sheetMode.current = { type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current };
+    setSheetMode({ type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current });
     mapBottomSheetRef.current?.snapToIndex(0);
 
     if (kind === 'club') {
@@ -331,7 +362,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         .objects(Club)
         .filtered('location._id == $0', loc._id)[0];
       if (club) {
-        sheetMode.current = { type: 'club_detail', source: 'callout', mapSnapIndex: mapSheetUserIndex.current, clubsSnapIndex: 0 };
+        setSheetMode({ type: 'club_detail', source: 'callout', mapSnapIndex: mapSheetUserIndex.current, clubsSnapIndex: 0 });
         clubBottomSheetRef.current?.present(club._id.toString());
       }
     } else {
@@ -341,7 +372,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const onPressClub = (clubId: string) => {
     const clubsSnapIndex = clubsBottomSheetRef.current?.getCurrentIndex() ?? 1;
-    sheetMode.current = { type: 'club_detail', source: 'search', mapSnapIndex: mapSheetUserIndex.current, clubsSnapIndex };
+    setSheetMode({ type: 'club_detail', source: 'search', mapSnapIndex: mapSheetUserIndex.current, clubsSnapIndex });
     clubsBottomSheetRef.current?.dismiss(false);
     requestAnimationFrame(() => {
       clubBottomSheetRef.current?.present(clubId);
@@ -358,10 +389,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     const mode = sheetMode.current;
     if (mode.type !== 'club_detail') return; // Another flow took over.
     if (mode.source === 'search') {
-      sheetMode.current = { type: 'clubs_search', mapSnapIndex: mode.mapSnapIndex };
+      setSheetMode({ type: 'clubs_search', mapSnapIndex: mode.mapSnapIndex });
       clubsBottomSheetRef.current?.snapToIndex(mode.clubsSnapIndex);
     } else {
-      sheetMode.current = { type: 'idle' };
+      setSheetMode({ type: 'idle' });
       mapBottomSheetRef.current?.snapToIndex(mode.mapSnapIndex);
     }
   };
@@ -369,7 +400,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const onClubsBottomSheetDismiss = () => {
     const mode = sheetMode.current;
     if (mode.type !== 'clubs_search') return; // Another flow took over.
-    sheetMode.current = { type: 'idle' };
+    setSheetMode({ type: 'idle' });
     mapBottomSheetRef.current?.snapToIndex(mode.mapSnapIndex);
   };
 
@@ -453,14 +484,14 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
 
   const buttonsAnimatedStyle = useAnimatedStyle(() => {
     const opacity = interpolate(
-      bottomSheetPosition.value,
+      buttonTrackingPosition.value,
       [fadeEndY, fadeStartY],
       [0, 1],
       Extrapolation.CLAMP,
     );
 
     return {
-      top: bottomSheetPosition.value - buttonsHeight - 15,
+      top: buttonTrackingPosition.value - buttonsHeight - 15,
       opacity,
     };
   });
@@ -563,7 +594,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
                   if (locationId === initialLocation?._id.toString()) {
                     markersRef.current[index].mapMarker?.showCallout();
 
-                    sheetMode.current = { type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current };
+                    setSheetMode({ type: 'location_detail', mapSnapIndex: mapSheetUserIndex.current });
                     mapBottomSheetRef.current?.snapToIndex(0);
                     locationBottomSheetRef.current?.present(locationId);
 
@@ -648,10 +679,12 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       />
       <ClubBottomSheet
         ref={clubBottomSheetRef}
+        animatedPosition={clubSheetPosition}
         onDismiss={onClubBottomSheetDismiss}
       />
       <LocationBottomSheet
         ref={locationBottomSheetRef}
+        animatedPosition={locationSheetPosition}
         initialIndex={locationId ? 0 : -1}
         enableSelection={enableLocationSelection}
         onLocationSelect={onLocationSelect}
@@ -663,7 +696,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
           const mapSnapIndex = (mode.type === 'location_detail' || mode.type === 'adding_location')
             ? mode.mapSnapIndex
             : mapSheetUserIndex.current;
-          sheetMode.current = { type: 'idle' };
+          setSheetMode({ type: 'idle' });
           mapBottomSheetRef.current?.snapToIndex(mapSnapIndex);
         }}
         onPressNotes={(text, title) =>

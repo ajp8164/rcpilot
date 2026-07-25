@@ -17,7 +17,7 @@ const ClubBottomSheet = React.forwardRef<
   ClubBottomSheet,
   ClubBottomSheetProps
 >((props, ref) => {
-  const { onDismiss } = props;
+  const { animatedPosition, onDismiss } = props;
 
   const theme = useTheme();
   const s = useStyles();
@@ -63,6 +63,7 @@ const ClubBottomSheet = React.forwardRef<
       snapPoints={['40%', '80%']}
       enableDynamicSizing={false}
       enablePanDownToClose={false}
+      animatedPosition={animatedPosition}
       backgroundStyle={{ backgroundColor: theme.colors.viewBackground }}
       handleIndicatorStyle={s.handleIndicator}>
       <ModalHeader

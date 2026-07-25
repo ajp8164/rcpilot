@@ -213,6 +213,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
             rightContent={'chevron-right'}
             onPress={onPressClubs}
           />
+          <Divider />
         </BottomSheetScrollView>
       </BottomSheet>
     );

@@ -1,6 +1,6 @@
 
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert } from 'react-native';
 import ClusteredMapView from 'react-native-map-clustering';
 import MapView, {
   Camera,
@@ -10,36 +10,23 @@ import MapView, {
   MapMarker as RNMapMarker,
   Region,
 } from 'react-native-maps';
-import Animated, {
-  interpolate,
-  Extrapolation,
-  useAnimatedStyle,
-} from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useEvent } from '@react-native-hello/core';
-import { ThemeManager, useDevice, useTheme } from '@react-native-hello/ui';
-import { GlassView } from 'components/atoms/GlassView';
+import { ThemeManager, useDevice } from '@react-native-hello/ui';
 import { GlassBackButton } from 'components/atoms/navigation/GlassBackButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useQuery, useRealm } from '@realm/react';
-import { Button } from 'components/atoms/Button';
 import { ClubBottomSheet } from 'components/bottomSheets/ClubBottomSheet';
 import { ClubsBottomSheet } from 'components/bottomSheets/ClubsBottomSheet';
 import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
 import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
 import { MapMarker } from 'components/molecules/MapMarker';
 import { useMapSheetOrchestration } from 'components/hooks/useMapSheetOrchestration';
+import { MapActionButtons } from 'components/molecules/MapActionButtons';
 import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
-import {
-  Map,
-  MapPinPlus,
-  Navigation2,
-  Navigation,
-  Satellite,
-} from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { Location, LocationCoords } from 'realmdb/Location';
 import { Club } from 'realmdb/Club';
@@ -66,7 +53,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     locationId,
   } = route.params;
 
-  const theme = useTheme();
   const s = useStyles();
   const device = useDevice();
   const event = useEvent();
@@ -427,102 +413,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     navigation.goBack();
   };
 
-  const [buttonsHeight, setButtonsHeight] = useState(0);
-  // At 40% snap, position is ~475. Fade from 475 (visible) to 435 (hidden).
-  const fadeStartY = 475;
-  const fadeEndY = 435;
-
-  const buttonsAnimatedStyle = useAnimatedStyle(() => {
-    const opacity = interpolate(
-      buttonTrackingPosition.value,
-      [fadeEndY, fadeStartY],
-      [0, 1],
-      Extrapolation.CLAMP,
-    );
-
-    return {
-      top: buttonTrackingPosition.value - buttonsHeight - 15,
-      opacity,
-    };
-  });
-
-  const renderActionButtons = (): React.ReactElement => {
-    return (
-      <>
-        <Animated.View
-          style={[s.buttons, buttonsAnimatedStyle]}
-          onLayout={e => setButtonsHeight(e.nativeEvent.layout.height)}>
-          <GlassView
-            style={s.buttonGroup}>
-            <Button
-              containerStyle={s.buttonGlass}
-              buttonStyle={s.buttonGlassInner}
-              icon={
-                <MapPinPlus
-                  color={theme.colors.screenHeaderButtonText}
-                  size={22}
-                />
-              }
-              onPress={() => addLocation()}
-            />
-          </GlassView>
-          <GlassView
-            style={[s.buttonGroup, s.buttonGroupLast]}>
-            <Button
-              containerStyle={s.buttonGlass}
-              buttonStyle={s.buttonGlassInner}
-              icon={
-                <Navigation
-                  color={theme.colors.clearButtonText}
-                  size={22}
-                  fill={
-                    mapIsCentered
-                      ? theme.colors.clearButtonText
-                      : theme.colors.transparent
-                  }
-                />
-              }
-              onPress={() => recenterMap(currentPosition.coords)}
-            />
-            <View style={s.buttonSeparator} />
-            <Button
-              containerStyle={s.buttonGlass}
-              buttonStyle={s.buttonGlassInner}
-              icon={
-                <>
-                  <View style={s.northUp} />
-                  <Navigation2
-                    color={theme.colors.clearButtonText}
-                    size={20}
-                    fill={
-                      mapIsRotated
-                        ? theme.colors.transparent
-                        : theme.colors.clearButtonText
-                    }
-                  />
-                </>
-              }
-              onPress={() => northUpMap()}
-            />
-            <View style={s.buttonSeparator} />
-            <Button
-              containerStyle={s.buttonGlass}
-              buttonStyle={s.buttonGlassInner}
-              icon={
-                mapPresentation === 'standard' ? (
-                  <Satellite color={theme.colors.clearButtonText} size={22} />
-                ) : (
-                  <Map color={theme.colors.clearButtonText} size={22} />
-                )
-              }
-              onPress={() => toggleMapPresenation()}
-            />
-          </GlassView>
-        </Animated.View>
-      </>
-    );
-  };
-
   const renderMapMarkers = (): React.ReactElement[] => {
     return locations.map((location, index) => {
       const locationId = location._id.toString();
@@ -604,7 +494,16 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         }>
         {renderMapMarkers()}
       </ClusteredMapView>
-      {renderActionButtons()}
+      <MapActionButtons
+        animatedPosition={buttonTrackingPosition}
+        mapIsCentered={mapIsCentered}
+        mapIsRotated={mapIsRotated}
+        mapPresentation={mapPresentation}
+        onAddLocation={() => addLocation()}
+        onRecenter={() => recenterMap(currentPosition.coords)}
+        onNorthUp={northUpMap}
+        onTogglePresentation={toggleMapPresenation}
+      />
       <GlassBackButton
         onPress={() => navigation.getParent()?.goBack()}
       />
@@ -657,45 +556,10 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
-  buttonGlass: {
-    backgroundColor: 'transparent',
-  },
-  buttonGlassInner: {
-    backgroundColor: 'transparent',
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonGroup: {
-    borderRadius: 22,
-    overflow: 'hidden',
-    marginBottom: 10,
-  },
-  buttonGroupLast: {
-    marginBottom: 0,
-  },
-  buttonSeparator: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: theme.colors.blackTransparentLight,
-  },
-  buttons: {
-    position: 'absolute',
-    right: 15,
-  },
+const useStyles = ThemeManager.createStyleSheet(() => ({
   map: {
     width: '100%',
     height: '100%',
-  },
-  northUp: {
-    borderColor: theme.colors.clearButtonText,
-    borderWidth: 1,
-    borderRadius: 1,
-    width: 2,
-    height: 6,
-    alignSelf: 'center',
   },
 }));
 

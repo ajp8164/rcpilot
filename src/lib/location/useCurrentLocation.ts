@@ -17,6 +17,9 @@ import { Collection, CollectionChangeSet } from 'realm';
 import { Location, LocationCoords } from 'realmdb/Location';
 import { saveCurrentLocation } from 'store/slices/location';
 
+const LOCATION_RADIUS_MI = 0.1;
+const LOCATION_RADIUS_M = 160; // ~0.1 mile in meters
+
 export type PositionError = {
   code: 'PERMISSION_DENIED' | 'POSITION_UNAVAILABLE' | 'TIMEOUT';
   message: string;
@@ -48,7 +51,7 @@ export const useCurrentLocation = () => {
     Geolocation.watchPosition(onWatch, onWatchError, {
       interval: 5 * 60 * 1000, // 5 mins
       enableHighAccuracy: true,
-      distanceFilter: 805, // Half mile (in meters)
+      distanceFilter: LOCATION_RADIUS_M,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -70,7 +73,7 @@ export const useCurrentLocation = () => {
       }
     });
 
-    if (closest.dist.mi < 0.5) {
+    if (closest.dist.mi < LOCATION_RADIUS_MI) {
       dispatch(
         saveCurrentLocation({ locationId: closest.location._id.toString() }),
       );

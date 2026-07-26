@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
+import React, { useContext, useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { Dimensions, type ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -19,8 +19,9 @@ import { GlassBackground } from 'components/atoms/GlassBackground';
 import { ModalHeader } from 'components/atoms/ModalHeader';
 import { EmptyView } from 'components/molecules/EmptyView';
 import MapActionsView from 'components/views/MapActionsView';
-import { Clock, Globe, Goal, LandPlot } from 'lucide-react-native';
+import { Clock, Goal, LandPlot } from 'lucide-react-native';
 import { DateTime } from 'luxon';
+import { GeoPositionContext, distanceBetweenLocations } from 'lib/location';
 import { Location } from 'realmdb';
 import { Event } from 'realmdb/Event';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
@@ -78,9 +79,19 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
 
     // Locations state - only show user-created locations.
     const currentLocationId = useSelector(_selectLocation).locationId;
+    const currentPosition = useContext(GeoPositionContext);
     const manualLocations = useQuery(Location, locs => {
       return locs.filtered('kind == "user"');
     });
+
+    const sortedLocations = useMemo(() => {
+      return [...manualLocations]
+        .map(location => ({
+          location,
+          distance: distanceBetweenLocations(currentPosition.coords, location.coords),
+        }))
+        .sort((a, b) => a.distance.mi - b.distance.mi);
+    }, [manualLocations, currentPosition.coords]);
 
     useEffect(() => {
       event.on('map-location', onChangeMapLocation);
@@ -152,7 +163,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
           showsVerticalScrollIndicator={false}
           contentContainerStyle={s.contentContainer}>
           {/* Action buttons */}
-          <MapActionsView onPressAddLocation={onPressAddLocation} />
+          <MapActionsView onPressAddLocation={onPressAddLocation} onPressClubs={onPressClubs ?? (() => {})} />
           <Divider />
           {/* Recent locations */}
           {recentLocations.length > 0 && (
@@ -169,19 +180,23 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
                   onPress={() => onPressRecentLocation?.(location._id.toString(), location.kind)}
                 />
               ))}
-              <Divider />
             </>
           )}
-          {/* Manual locations */}
-          {manualLocations.length > 0 ? (
-            manualLocations.map((location, index) => {
+          {/* Saved locations */}
+          <Divider text={'SAVED LOCATIONS'} />
+          {sortedLocations.length > 0 ? (
+            sortedLocations.map(({ location, distance }, index) => {
               const currentLocation =
                 location._id.toString() === currentLocationId;
+              const distanceText = distance.mi < 0.1
+                ? `${Math.round(distance.mi * 5280)} ft`
+                : `${distance.mi.toFixed(1)} mi`;
               return (
                 <ListItem
                   key={location._id.toString()}
                   title={location.name}
                   subtitle={currentLocation ? 'Current location' : null}
+                  value={distanceText}
                   leftContent={
                     currentLocation ? (
                       <Goal color={theme.colors.listItemIcon} />
@@ -190,7 +205,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
                     )
                   }
                   rightContent={'chevron-right'}
-                  position={listItemPosition(index, manualLocations.length)}
+                  position={listItemPosition(index, sortedLocations.length)}
                   onPress={() => selectLocation(location)}
                 />
               );
@@ -203,15 +218,6 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
               positionTop
             />
           )}
-          <Divider />
-          {/* Clubs nav item */}
-          <ListItem
-            title={'Club Finder'}
-            leftContent={<Globe color={theme.colors.listItemIcon} />}
-            position={['first', 'last']}
-            rightContent={'chevron-right'}
-            onPress={onPressClubs}
-          />
           <Divider />
         </BottomSheetScrollView>
       </BottomSheet>

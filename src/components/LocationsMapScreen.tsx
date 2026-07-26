@@ -14,8 +14,6 @@ import Animated, {
   interpolate,
   Extrapolation,
   useAnimatedStyle,
-  useDerivedValue,
-  useSharedValue,
 } from 'react-native-reanimated';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -31,6 +29,7 @@ import { ClubsBottomSheet } from 'components/bottomSheets/ClubsBottomSheet';
 import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet';
 import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
 import { MapMarker } from 'components/molecules/MapMarker';
+import { useMapSheetOrchestration } from 'components/hooks/useMapSheetOrchestration';
 import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
@@ -107,49 +106,19 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   const clubsBottomSheetRef = useRef<ClubsBottomSheet>(null);
   const clubBottomSheetRef = useRef<ClubBottomSheet>(null);
   const locationBottomSheetRef = useRef<LocationBottomSheet>(null);
-  const bottomSheetPosition = useSharedValue(475);
-  const locationSheetPosition = useSharedValue(0);
-  const clubSheetPosition = useSharedValue(0);
 
-  // Determines which sheet the action buttons track.
-  // 0 = map sheet, 1 = location/adding sheet, 2 = club detail sheet.
-  const activeSheetSource = useSharedValue(0);
-
-  const buttonTrackingPosition = useDerivedValue(() => {
-    switch (activeSheetSource.value) {
-      case 1: return locationSheetPosition.value;
-      case 2: return clubSheetPosition.value;
-      default: return bottomSheetPosition.value;
-    }
-  });
-
-  // Sheet orchestration state machine.
-  // Tracks which overlay is active so dismiss/restore logic is deterministic.
-  type SheetMode =
-    | { type: 'idle' }
-    | { type: 'clubs_search'; mapSnapIndex: number }
-    | { type: 'club_detail'; source: 'search' | 'callout'; mapSnapIndex: number; clubsSnapIndex: number }
-    | { type: 'location_detail'; mapSnapIndex: number }
-    | { type: 'adding_location'; mapSnapIndex: number };
-
-  const sheetMode = useRef<SheetMode>({ type: 'idle' });
-  const mapSheetUserIndex = useRef(1); // Last user-set map sheet snap index.
-
-  // Transition the sheet state machine. Updates mode and button tracking source atomically.
-  const setSheetMode = (mode: SheetMode) => {
-    sheetMode.current = mode;
-    switch (mode.type) {
-      case 'location_detail':
-      case 'adding_location':
-        activeSheetSource.value = 1;
-        break;
-      case 'club_detail':
-        activeSheetSource.value = 2;
-        break;
-      default:
-        activeSheetSource.value = 0;
-    }
-  };
+  const {
+    sheetMode,
+    mapSheetUserIndex,
+    bottomSheetPosition,
+    locationSheetPosition,
+    clubSheetPosition,
+    buttonTrackingPosition,
+    setSheetMode,
+    onMapSheetSnapChange,
+    onClubBottomSheetDismiss,
+    onClubsBottomSheetDismiss,
+  } = useMapSheetOrchestration({ mapBottomSheetRef, clubsBottomSheetRef, clubBottomSheetRef });
 
   useEffect(() => {
     if (currentPosition.error) {
@@ -383,25 +352,6 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     if (club?.location?.coords) {
       recenterMap(club.location.coords);
     }
-  };
-
-  const onClubBottomSheetDismiss = () => {
-    const mode = sheetMode.current;
-    if (mode.type !== 'club_detail') return; // Another flow took over.
-    if (mode.source === 'search') {
-      setSheetMode({ type: 'clubs_search', mapSnapIndex: mode.mapSnapIndex });
-      clubsBottomSheetRef.current?.snapToIndex(mode.clubsSnapIndex);
-    } else {
-      setSheetMode({ type: 'idle' });
-      mapBottomSheetRef.current?.snapToIndex(mode.mapSnapIndex);
-    }
-  };
-
-  const onClubsBottomSheetDismiss = () => {
-    const mode = sheetMode.current;
-    if (mode.type !== 'clubs_search') return; // Another flow took over.
-    setSheetMode({ type: 'idle' });
-    mapBottomSheetRef.current?.snapToIndex(mode.mapSnapIndex);
   };
 
   const onRegionChangeComplete = (region: Region, _details: Details) => {
@@ -666,11 +616,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         onPressAddLocation={addLocation}
         onPressClubs={onPressClubs}
         onPressRecentLocation={onPressRecentLocation}
-        onSnapChange={(index: number) => {
-          if (sheetMode.current.type === 'idle') {
-            mapSheetUserIndex.current = index;
-          }
-        }}
+        onSnapChange={onMapSheetSnapChange}
       />
       <ClubsBottomSheet
         ref={clubsBottomSheetRef}

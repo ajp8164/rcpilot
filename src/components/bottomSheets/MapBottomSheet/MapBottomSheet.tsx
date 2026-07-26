@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useMemo, useRef } from 'react';
 import { Dimensions, type ViewStyle } from 'react-native';
 import { useSelector } from 'react-redux';
 
@@ -10,7 +10,6 @@ import BottomSheet, {
 import {
   Divider,
   ListItem,
-  ListItemCheckBox,
   ThemeManager,
   listItemPosition,
   useTheme,
@@ -21,6 +20,7 @@ import { ModalHeader } from 'components/atoms/ModalHeader';
 import { EmptyView } from 'components/molecules/EmptyView';
 import MapActionsView from 'components/views/MapActionsView';
 import { Clock, Globe, Goal, LandPlot } from 'lucide-react-native';
+import { DateTime } from 'luxon';
 import { Location } from 'realmdb';
 import { Event } from 'realmdb/Event';
 import { selectLocation as _selectLocation } from 'store/selectors/locationSelectors';
@@ -61,7 +61,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
 
     const recentLocations = useMemo(() => {
       const seen = new Set<string>();
-      const result: Location[] = [];
+      const result: { location: Location; date: string }[] = [];
       let checked = 0;
       for (const ev of allEvents) {
         if (checked >= RECENT_LOCATIONS_EVENT_LIMIT) break;
@@ -70,7 +70,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
         const id = ev.location._id.toString();
         if (seen.has(id)) continue;
         seen.add(id);
-        result.push(ev.location);
+        result.push({ location: ev.location, date: ev.date });
         if (result.length >= 3) break;
       }
       return result;
@@ -82,8 +82,6 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
       return locs.filtered('kind == "user"');
     });
 
-    const [selectedLocation, setSelectedLocation] = useState(currentLocationId);
-
     useEffect(() => {
       event.on('map-location', onChangeMapLocation);
       return () => {
@@ -92,13 +90,12 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const onChangeMapLocation = (result: LocationPickerResult) => {
-      setSelectedLocation(result.locationId);
+    const onChangeMapLocation = (_result: LocationPickerResult) => {
+      // Selection visual removed; event still drives map positioning.
     };
 
     const selectLocation = (location: Location) => {
       const id = location._id.toString();
-      setSelectedLocation(id);
       event.emit('select-map-location', { locationId: id } as LocationPickerResult);
     };
 
@@ -160,12 +157,14 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
           {/* Recent locations */}
           {recentLocations.length > 0 && (
             <>
-              <Divider text={'RECENT'} />
-              {recentLocations.map((location, index) => (
+              <Divider text={'RECENT EVENTS'} />
+              {recentLocations.map(({ location, date }, index) => (
                 <ListItem
                   key={location._id.toString()}
                   title={location.name}
+                  subtitle={DateTime.fromISO(date).toLocaleString(DateTime.DATE_MED)}
                   leftContent={<Clock color={theme.colors.listItemIcon} size={22} />}
+                  rightContent={'chevron-right'}
                   position={listItemPosition(index, recentLocations.length)}
                   onPress={() => onPressRecentLocation?.(location._id.toString(), location.kind)}
                 />
@@ -179,7 +178,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
               const currentLocation =
                 location._id.toString() === currentLocationId;
               return (
-                <ListItemCheckBox
+                <ListItem
                   key={location._id.toString()}
                   title={location.name}
                   subtitle={currentLocation ? 'Current location' : null}
@@ -190,9 +189,9 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
                       <LandPlot color={theme.colors.listItemIcon} />
                     )
                   }
+                  rightContent={'chevron-right'}
                   position={listItemPosition(index, manualLocations.length)}
-                  checked={location._id.toString() === selectedLocation}
-                  onChange={() => selectLocation(location)}
+                  onPress={() => selectLocation(location)}
                 />
               );
             })

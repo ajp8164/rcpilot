@@ -173,4 +173,4 @@ const useStyles = ThemeManager.createStyleSheet(({ theme }) => ({
   },
 }));
 
-export { MapActionButtons };
+export default React.memo(MapActionButtons);

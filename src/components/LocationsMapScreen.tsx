@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import ClusteredMapView from 'react-native-map-clustering';
 import MapView, {
@@ -23,7 +23,7 @@ import { LocationBottomSheet } from 'components/bottomSheets/LocationBottomSheet
 import { MapBottomSheet } from 'components/bottomSheets/MapBottomSheet';
 import { MapMarker } from 'components/molecules/MapMarker';
 import { useMapSheetOrchestration } from 'components/hooks/useMapSheetOrchestration';
-import { MapActionButtons } from 'components/molecules/MapActionButtons';
+import MapActionButtons from 'components/molecules/MapActionButtons';
 import { appConfig } from 'config';
 import { GeoPositionContext } from 'lib/location';
 import { uuidv4 } from 'lib/utils';
@@ -413,7 +413,15 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     navigation.goBack();
   };
 
-  const renderMapMarkers = (): React.ReactElement[] => {
+  // Stable callbacks for MapActionButtons (avoids re-renders from new references).
+  const handleAddLocation = useCallback(() => addLocation(), []);
+  const handleRecenter = useCallback(
+    () => recenterMap(currentPosition.coords),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [currentPosition.coords],
+  );
+
+  const mapMarkers = useMemo(() => {
     return locations.map((location, index) => {
       const locationId = location._id.toString();
 
@@ -461,7 +469,8 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         />
       );
     });
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [locations, markerRevision]);
 
   return (
     <>
@@ -492,15 +501,15 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
         onLongPress={e =>
           addLocation(e.nativeEvent.coordinate as LocationCoords)
         }>
-        {renderMapMarkers()}
+        {mapMarkers}
       </ClusteredMapView>
       <MapActionButtons
         animatedPosition={buttonTrackingPosition}
         mapIsCentered={mapIsCentered}
         mapIsRotated={mapIsRotated}
         mapPresentation={mapPresentation}
-        onAddLocation={() => addLocation()}
-        onRecenter={() => recenterMap(currentPosition.coords)}
+        onAddLocation={handleAddLocation}
+        onRecenter={handleRecenter}
         onNorthUp={northUpMap}
         onTogglePresentation={toggleMapPresenation}
       />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { SharedValue } from 'react-native-reanimated';
 
 export declare type ClubsBottomSheet = ClubsBottomSheetMethods;
 
@@ -9,6 +10,7 @@ declare const ClubsBottomSheet: React.MemoExoticComponent<
 >;
 
 export interface ClubsBottomSheetProps {
+  animatedPosition?: SharedValue<number>;
   onDismiss?: () => void;
   onPressClub?: (clubId: string) => void;
 }

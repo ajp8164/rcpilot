@@ -32,7 +32,7 @@ const ClubsBottomSheet = React.forwardRef<
   ClubsBottomSheet,
   ClubsBottomSheetProps
 >((props, ref) => {
-  const { onDismiss, onPressClub } = props;
+  const { animatedPosition, onDismiss, onPressClub } = props;
 
   const theme = useTheme();
   const s = useStyles();
@@ -132,6 +132,7 @@ const ClubsBottomSheet = React.forwardRef<
       snapPoints={SNAP_POINTS}
       enableDynamicSizing={false}
       enablePanDownToClose={false}
+      animatedPosition={animatedPosition}
       onChange={(index) => {
         if (index >= 0) currentIndexRef.current = index;
       }}

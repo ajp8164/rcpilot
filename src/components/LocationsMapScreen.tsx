@@ -99,6 +99,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     bottomSheetPosition,
     locationSheetPosition,
     clubSheetPosition,
+    clubsSearchSheetPosition,
     buttonTrackingPosition,
     setSheetMode,
     onMapSheetSnapChange,
@@ -528,6 +529,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
       />
       <ClubsBottomSheet
         ref={clubsBottomSheetRef}
+        animatedPosition={clubsSearchSheetPosition}
         onDismiss={onClubsBottomSheetDismiss}
         onPressClub={onPressClub}
       />

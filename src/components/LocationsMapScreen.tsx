@@ -180,7 +180,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const recenterMap = async (coords: LocationCoords) => {
+  const recenterMap = async (coords: LocationCoords, isCurrentPosition = false) => {
     // Get current map boundaries to calculate the visible latitude span.
     const boundaries = await mapViewRef.current?.getMapBoundaries();
     const latDelta = boundaries
@@ -201,7 +201,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
     };
 
     mapViewRef.current?.animateCamera(partialCamera);
-    setMapIsCentered(true);
+    setMapIsCentered(isCurrentPosition);
   };
 
   const northUpMap = () => {
@@ -417,7 +417,7 @@ const LocationsMapScreen = ({ navigation, route }: Props) => {
   // Stable callbacks for MapActionButtons (avoids re-renders from new references).
   const handleAddLocation = useCallback(() => addLocation(), []);
   const handleRecenter = useCallback(
-    () => recenterMap(currentPosition.coords),
+    () => recenterMap(currentPosition.coords, true),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentPosition.coords],
   );

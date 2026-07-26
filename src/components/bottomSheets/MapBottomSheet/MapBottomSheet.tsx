@@ -19,7 +19,7 @@ import { GlassBackground } from 'components/atoms/GlassBackground';
 import { ModalHeader } from 'components/atoms/ModalHeader';
 import { EmptyView } from 'components/molecules/EmptyView';
 import MapActionsView from 'components/views/MapActionsView';
-import { Clock, Goal, LandPlot } from 'lucide-react-native';
+import { Clock, LandPlot, Navigation } from 'lucide-react-native';
 import { DateTime } from 'luxon';
 import { GeoPositionContext, distanceBetweenLocations } from 'lib/location';
 import { Location } from 'realmdb';
@@ -199,7 +199,7 @@ const MapBottomSheet = React.forwardRef<MapBottomSheet, MapBottomSheetProps>(
                   value={distanceText}
                   leftContent={
                     currentLocation ? (
-                      <Goal color={theme.colors.listItemIcon} />
+                      <Navigation color={theme.colors.listItemIcon} size={22} fill={theme.colors.listItemIcon} />
                     ) : (
                       <LandPlot color={theme.colors.listItemIcon} />
                     )
